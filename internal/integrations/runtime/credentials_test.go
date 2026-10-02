@@ -284,7 +284,7 @@ func TestReconcileNilInstallation(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
-	err := rt.Reconcile(context.Background(), nil, nil, types.CredentialSlotID{}, nil, nil)
+	err := rt.Reconcile(context.Background(), nil, nil, nil, types.CredentialSlotID{}, nil, nil)
 	if !errors.Is(err, ErrInstallationRequired) {
 		t.Fatalf("expected ErrInstallationRequired, got %v", err)
 	}
@@ -296,7 +296,7 @@ func TestReconcileMissingDefinition(t *testing.T) {
 	rt := NewForTesting(registry.New())
 	err := rt.Reconcile(context.Background(), &ent.Integration{
 		DefinitionID: "nonexistent",
-	}, nil, types.CredentialSlotID{}, nil, nil)
+	}, nil, nil, types.CredentialSlotID{}, nil, nil)
 	if !errors.Is(err, registry.ErrDefinitionNotFound) {
 		t.Fatalf("expected ErrDefinitionNotFound, got %v", err)
 	}
@@ -314,7 +314,7 @@ func TestReconcileNoInputNoCredential(t *testing.T) {
 	err := rt.Reconcile(context.Background(), &ent.Integration{
 		DefinitionID:      "test-def",
 		DefinitionVersion: reg.Version("test-def"),
-	}, nil, types.CredentialSlotID{}, nil, nil)
+	}, nil, nil, types.CredentialSlotID{}, nil, nil)
 	if err != nil {
 		t.Fatalf("expected no error for no-op reconcile, got %v", err)
 	}
@@ -332,7 +332,7 @@ func TestReconcileEmptyInputNoCredential(t *testing.T) {
 	err := rt.Reconcile(context.Background(), &ent.Integration{
 		DefinitionID:      "test-def",
 		DefinitionVersion: reg.Version("test-def"),
-	}, json.RawMessage(`null`), types.CredentialSlotID{}, nil, nil)
+	}, json.RawMessage(`null`), nil, types.CredentialSlotID{}, nil, nil)
 	if err != nil {
 		t.Fatalf("expected no error for null input reconcile, got %v", err)
 	}

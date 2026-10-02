@@ -27,9 +27,6 @@ const (
 	findingsMaxPageSize = 1000
 )
 
-// findingsCollectOperation is the operation ref for GCP SCC findings collection
-var findingsCollectOperation = types.OperationRefOf[FindingsSync]().Ingests(sccClient, runFindingsCollect)
-
 // runFindingsCollect collects GCP SCC findings from configured sources
 func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
 	scope, err := resolveScope(request.Credentials)

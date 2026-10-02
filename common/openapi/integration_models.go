@@ -3,6 +3,7 @@ package openapi
 import (
 	"bytes"
 	"encoding/json"
+	"maps"
 
 	"github.com/theopenlane/utils/rout"
 )
@@ -76,6 +77,36 @@ type IntegrationProviderState struct {
 	Providers map[string]json.RawMessage `json:"providers,omitempty"`
 }
 
+// IntegrationUserInput stores the installation-scoped user input under the layout name it was collected with
+type IntegrationUserInput struct {
+	// Layout is the reflected type name of the user input layout the data conforms to
+	Layout string `json:"layout,omitempty"`
+	// Data is the stored user input document
+	Data json.RawMessage `json:"data,omitempty"`
+}
+
+// IntegrationOperationConfig stores the installation-scoped operation input keyed by operation name
+type IntegrationOperationConfig struct {
+	// Operations maps each operation name to its stored input document
+	Operations map[string]json.RawMessage `json:"operations,omitempty"`
+}
+
+// For returns the stored input document for one operation name, nil when none is stored
+func (c IntegrationOperationConfig) For(name string) json.RawMessage {
+	return c.Operations[name]
+}
+
+// With returns a copy of the operation config with the named operation's document replaced
+func (c IntegrationOperationConfig) With(name string, doc json.RawMessage) IntegrationOperationConfig {
+	operations := make(map[string]json.RawMessage, len(c.Operations)+1)
+
+	maps.Copy(operations, c.Operations)
+
+	operations[name] = doc
+
+	return IntegrationOperationConfig{Operations: operations}
+}
+
 // ConfigureIntegrationRequest is the request type for configuring a non-OAuth provider.
 type ConfigureIntegrationRequest struct {
 	// DefinitionID is the canonical integration definition ID from the path.
@@ -88,6 +119,8 @@ type ConfigureIntegrationRequest struct {
 	Body json.RawMessage `json:"body"`
 	// UserInput holds optional installation-scoped provider configuration.
 	UserInput json.RawMessage `json:"userInput,omitempty"`
+	// OperationConfig holds optional per-operation input documents keyed by operation name.
+	OperationConfig map[string]json.RawMessage `json:"operationConfig,omitempty"`
 }
 
 // RunIntegrationOperationBody is the request body for triggering a provider operation.
@@ -190,6 +223,8 @@ type IntegrationAuthStartRequest struct {
 	CredentialRef string `json:"credentialRef"`
 	// UserInput holds optional installation-scoped provider configuration.
 	UserInput json.RawMessage `json:"userInput,omitempty"`
+	// OperationConfig holds optional per-operation input documents keyed by operation name.
+	OperationConfig map[string]json.RawMessage `json:"operationConfig,omitempty"`
 }
 
 // Validate validates the ConfigureIntegrationRequest.

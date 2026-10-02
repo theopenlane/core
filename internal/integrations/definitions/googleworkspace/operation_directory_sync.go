@@ -18,9 +18,6 @@ const directoryDefaultPageSize = int64(200)
 // defaultCustomerID is Google's alias for the authorized account's own customer
 const defaultCustomerID = "my_customer"
 
-// directorySyncOperation is the Google Workspace directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(workspaceClient, runDirectorySync)
-
 // runDirectorySync collects Google Workspace directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, request types.OperationRequest, svc *admin.Service, _ DirectorySync) ([]types.IngestPayloadSet, error) {
 	var meta InstallationMetadata

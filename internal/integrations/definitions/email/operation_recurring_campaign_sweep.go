@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -21,7 +20,7 @@ import (
 type RecurringCampaignSweep struct{}
 
 // RecurringCampaignOp is the operation ref for the global recurring campaign sweep, which runs without a client
-var RecurringCampaignOp = types.OperationRefOf[RecurringCampaignSweep]().HandlesRequest(runRecurringCampaignSweep) //nolint:revive
+var RecurringCampaignOp = types.OperationRefOf[RecurringCampaignSweep]().HandlesRequest(runRecurringCampaignSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
 
 // runRecurringCampaignSweep runs one recurring campaign sweep cycle and encodes the processed count
 func runRecurringCampaignSweep(ctx context.Context, req types.OperationRequest, sweep RecurringCampaignSweep) (json.RawMessage, error) {
@@ -113,7 +112,7 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		return err
 	}
 
-	integrationID, err := operations.ResolveOwnerIntegration(ctx, req.DB, DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
+	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {

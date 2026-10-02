@@ -20,21 +20,18 @@ func Builder(cfg Config) registry.Builder {
 		app := App{Config: cfg}
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "GitHub",
-				DisplayName: "GitHub App",
-				Description: "Install the Openlane GitHub App to collect repository metadata and security alerts",
-				Category:    "source-control",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app",
-				Tags:        []string{"vulnerabilities", "assets", "directory"},
-				Active:      true,
-				Visible:     true,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "GitHub",
+			DisplayName: "GitHub App",
+			Description: "Install the Openlane GitHub App to collect repository metadata and security alerts",
+			Category:    "source-control",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app",
+			Tags:        []string{"vulnerabilities", "assets", "directory"},
+			Active:      true,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput:    userInput.Registration(),
 			HealthCheck:  gitHubClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
@@ -44,9 +41,10 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				gitHubAppConnection.Registration(types.ConnectionRegistration{
-					Name:        "GitHub App installation",
-					Description: "Install the Openlane GitHub App into your GitHub organization.",
+				{
+					CredentialRef: gitHubAppCredential.ID(),
+					Name:          "GitHub App installation",
+					Description:   "Install the Openlane GitHub App into your GitHub organization.",
 					Auth: &types.AuthRegistration{
 						CredentialRef: gitHubAppCredential.ID(),
 						Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
@@ -57,7 +55,8 @@ func Builder(cfg Config) registry.Builder {
 						},
 					},
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Uninstall the Openlane GitHub App from your GitHub organization settings. Openlane will complete the removal after GitHub confirms the uninstall.",
+						CredentialRef: gitHubAppCredential.ID(),
+						Description:   "Uninstall the Openlane GitHub App from your GitHub organization settings. Openlane will complete the removal after GitHub confirms the uninstall.",
 						Disconnect: func(ctx context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
 							integrationID, name, err := disconnectInstallationID(ctx, req)
 							if err != nil {
@@ -84,7 +83,7 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				gitHubClient.Registration(Client{AppConfig: cfg}.Build, types.ClientRegistration{
@@ -92,32 +91,30 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				repositorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Collect repository inventory from the installation as assets",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaAsset.Name,
-						},
-					},
-					SkipDefaultLookback: true,
-				}),
-				vulnerabilityCollectOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Collect vulnerability alerts from the installation",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaVulnerability.Name,
-						},
-					},
-				}),
-				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description:         "Collect organization members, teams, and team memberships",
-					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest:              providerkit.DirectoryIngestContracts(),
-					SkipDefaultLookback: true,
-					Schedule:            gala.NewFullFetchSchedule(),
-				}),
+				types.OperationRefOf[RepositorySync]().
+					Ingests(gitHubClient, runRepositorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaAsset.Name}).
+					SkipDefaultLookback().
+					Registration(DefinitionID, types.OperationRegistration{
+						Description: "Collect repository inventory from the installation as assets",
+					}),
+				types.OperationRefOf[VulnerabilitySync]().
+					Ingests(gitHubClient, runVulnerabilityCollect).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
+					Registration(DefinitionID, types.OperationRegistration{
+						Description: "Collect vulnerability alerts from the installation",
+					}),
+				types.OperationRefOf[DirectorySync]().
+					Ingests(gitHubClient, runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Schedule(gala.NewFullFetchSchedule()).
+					SkipDefaultLookback().
+					Registration(DefinitionID, types.OperationRegistration{
+						Description: "Collect organization members, teams, and team memberships",
+					}),
 			},
 			Mappings: append([]types.MappingRegistration{
 				{

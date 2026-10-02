@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/theopenlane/core/common/enums"
 
@@ -15,7 +16,14 @@ import (
 )
 
 // DomainScanRequestOp is the operation ref for requesting a domain scan
-var DomainScanRequestOp = types.OperationRefOf[DomainScanRequest]().HandlesRequest(runDomainScanRequest) //nolint:revive
+//
+//nolint:revive
+var DomainScanRequestOp = types.OperationRefOf[DomainScanRequest]().
+	HandlesRequest(runDomainScanRequest).
+	Policy(types.ExecutionPolicy{Inline: true, SkipRunRecord: true}).
+	RateLimit(types.RateLimitPolicy{Window: time.Hour}).
+	CustomerSelectable(false).
+	RequiresPaymentMethod()
 
 // DomainScanRequest queues a domain scan by creating a pending Scan record
 type DomainScanRequest struct {

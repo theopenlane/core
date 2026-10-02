@@ -15,9 +15,6 @@ import (
 // deviceAssetVariant is the mapping variant for device asset payloads
 const deviceAssetVariant = "DEVICE"
 
-// assetSyncOperation is the operation ref for the asset sync operation
-var assetSyncOperation = types.OperationRefOf[AssetSync]().Ingests(tailscaleClient, runAssetSync)
-
 // runAssetSync collects Tailscale devices and emits asset ingest payloads
 func runAssetSync(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, _ AssetSync) ([]types.IngestPayloadSet, error) {
 	devices, err := listTailscaleDevices(ctx, client)

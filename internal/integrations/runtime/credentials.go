@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/samber/lo"
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keymaker"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -33,11 +35,6 @@ func (r *Runtime) CompleteAuth(ctx context.Context, req keymaker.CompleteRequest
 	return r.keymaker().CompleteAuth(ctx, req)
 }
 
-// LoadCredential resolves one persisted credential slot for one installation
-func (r *Runtime) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.CredentialSet, bool, error) {
-	return r.keystore().LoadCredential(ctx, installation, credentialRef)
-}
-
 // loadCredentials resolves the requested credential slots for one installation
 func (r *Runtime) loadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
 	if err := r.ensureCurrentVersion(ctx, installation); err != nil {
@@ -47,14 +44,9 @@ func (r *Runtime) loadCredentials(ctx context.Context, installation *ent.Integra
 	return r.keystore().LoadCredentials(ctx, installation, credentialRefs)
 }
 
-// deleteCredential removes credentials for one installation identifier and evicts cached clients
-func (r *Runtime) deleteCredential(ctx context.Context, integrationID string) error {
-	return r.keystore().DeleteCredential(ctx, integrationID)
-}
-
 // cleanupInstallation removes credentials and the installation record for one installation
 func (r *Runtime) cleanupInstallation(ctx context.Context, integrationID string) error {
-	if err := r.deleteCredential(ctx, integrationID); err != nil {
+	if err := r.keystore().DeleteCredential(ctx, integrationID); err != nil {
 		return err
 	}
 
@@ -72,7 +64,7 @@ func (r *Runtime) ReapExpiredInstallation(ctx context.Context, integrationID str
 		return false, nil
 	}
 
-	return true, r.deleteCredential(ctx, integrationID)
+	return true, r.keystore().DeleteCredential(ctx, integrationID)
 }
 
 // Disconnect executes the teardown flow for one installation
@@ -99,7 +91,7 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 			Integration: installation,
 			Connection:  connection,
 			Credentials: credentials,
-			Config:      installation.Config,
+			UserInput:   installation.UserInput.Data,
 		})
 		if err != nil {
 			return types.DisconnectResult{}, err
@@ -119,8 +111,8 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 	return result, nil
 }
 
-// Reconcile reconciles installation user input and/or one credential update
-func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, userInput json.RawMessage, credentialRef types.CredentialSlotID, credential *types.CredentialSet, installationInput json.RawMessage) error {
+// Reconcile reconciles installation user input, per-operation input, and/or one credential update
+func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, userInput json.RawMessage, operationConfig map[string]json.RawMessage, credentialRef types.CredentialSlotID, credential *types.CredentialSet, installationInput json.RawMessage) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
 		return err
@@ -138,20 +130,44 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 
 	wasErrored := installation.Status == enums.IntegrationStatusErrored
 
+	req, _, err := r.installationRequest(ctx, installation, def)
+	if err != nil {
+		return err
+	}
+
 	if !jsonx.IsEmptyRawMessage(userInput) {
-		if err := r.reconcileUserInput(ctx, installation, def, userInput); err != nil {
+		if err := r.reconcileUserInput(ctx, req, installation, def, userInput); err != nil {
+			return err
+		}
+
+		req.UserInput = installation.UserInput.Data
+	}
+
+	if len(operationConfig) > 0 {
+		if err := r.reconcileOperationConfig(ctx, req, installation, def, operationConfig); err != nil {
 			return err
 		}
 	}
 
 	if credential != nil {
-		if err := r.reconcileCredential(ctx, installation, def, credentialRef, *credential, installationInput); err != nil {
+		if err := r.reconcileCredential(ctx, req, installation, def, credentialRef, *credential, installationInput); err != nil {
 			return err
 		}
 	}
 
 	if wasErrored {
-		if err := r.recoverErroredInstallation(ctx, installation, def, credential == nil); err != nil {
+		if credential == nil {
+			checkErr, err := r.verifyConnection(ctx, installation, def)
+			if err != nil {
+				return err
+			}
+
+			if checkErr != nil {
+				return checkErr
+			}
+		}
+
+		if err := r.ClearIntegrationUnhealthy(ctx, installation); err != nil {
 			return err
 		}
 	}
@@ -163,28 +179,67 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 	return nil
 }
 
-// recoverErroredInstallation clears an errored installation's unhealthy state
-func (r *Runtime) recoverErroredInstallation(ctx context.Context, installation *ent.Integration, def types.Definition, verify bool) error {
-	if verify {
-		if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
-			return err
-		}
+// installationRequest bundles the installation, its persisted connection, every stored credential, and stored user input for validation and upgrade hooks
+func (r *Runtime) installationRequest(ctx context.Context, installation *ent.Integration, def types.Definition) (types.InstallationRequest, map[types.CredentialSlotID]types.CredentialSet, error) {
+	connection, err := r.resolvePersistedConnection(def, installation)
+	if err != nil && !errors.Is(err, ErrConnectionRequired) && !errors.Is(err, ErrConnectionNotFound) {
+		return types.InstallationRequest{}, nil, err
 	}
 
-	return r.ClearIntegrationUnhealthy(ctx, installation)
+	records, err := r.keystore().LoadAllCredentials(ctx, installation)
+	if err != nil {
+		return types.InstallationRequest{}, nil, err
+	}
+
+	return types.InstallationRequest{
+		Integration: installation,
+		Connection:  connection,
+		Credentials: lo.MapToSlice(records, func(slot types.CredentialSlotID, credential types.CredentialSet) types.CredentialBinding {
+			return types.CredentialBinding{Ref: slot, Credential: credential}
+		}),
+		UserInput: installation.UserInput.Data,
+	}, records, nil
 }
 
-// reconcileUserInput validates and persists user input for one installation
-func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Integration, def types.Definition, userInput json.RawMessage) error {
-	if def.UserInput != nil {
-		if err := validatePayload(ctx, def.UserInput.Schema, userInput, ErrUserInputInvalid); err != nil {
-			return err
-		}
+// persistUserInput writes the stored user input, mirrors it on the record, and evicts cached clients built from it
+func (r *Runtime) persistUserInput(ctx context.Context, installation *ent.Integration, next types.IntegrationUserInput, update *ent.IntegrationUpdateOne) error {
+	if err := update.SetUserInput(next).Exec(ctx); err != nil {
+		return err
 	}
 
-	installation.Config.ClientConfig = jsonx.CloneRawMessage(userInput)
+	installation.UserInput = next
 
-	update := r.DB().Integration.UpdateOneID(installation.ID).SetConfig(installation.Config)
+	r.keystore().InvalidateClients(installation.ID)
+
+	return nil
+}
+
+// persistOperationConfig writes the stored operation input, mirrors it on the record, and evicts cached clients built from it
+func (r *Runtime) persistOperationConfig(ctx context.Context, installation *ent.Integration, next types.IntegrationOperationConfig) error {
+	if err := r.DB().Integration.UpdateOneID(installation.ID).SetOperationConfig(next).Exec(ctx); err != nil {
+		return err
+	}
+
+	installation.OperationConfig = next
+
+	r.keystore().InvalidateClients(installation.ID)
+
+	return nil
+}
+
+// reconcileUserInput validates and persists user input for one installation under the current layout name
+func (r *Runtime) reconcileUserInput(ctx context.Context, req types.InstallationRequest, installation *ent.Integration, def types.Definition, userInput json.RawMessage) error {
+	stored := types.IntegrationUserInput{Data: jsonx.CloneRawMessage(userInput)}
+
+	if def.UserInput != nil {
+		if err := operations.ValidateInput(ctx, req, def.UserInput.Schema, def.UserInput.Validate, userInput, ErrUserInputInvalid); err != nil {
+			return err
+		}
+
+		stored.Layout = def.UserInput.Name
+	}
+
+	update := r.DB().Integration.UpdateOneID(installation.ID)
 
 	decoded := jsonx.DecodeAnyOrNil(userInput)
 	if m, ok := decoded.(map[string]any); ok {
@@ -197,13 +252,35 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 		}
 	}
 
-	if err := update.Exec(ctx); err != nil {
+	if err := r.persistUserInput(ctx, installation, stored, update); err != nil {
 		return err
 	}
 
-	r.keystore().InvalidateClients(installation.ID)
-
 	return r.RefreshInstallationMetadata(ctx, installation)
+}
+
+// reconcileOperationConfig validates and persists per-operation input documents for one installation
+func (r *Runtime) reconcileOperationConfig(ctx context.Context, req types.InstallationRequest, installation *ent.Integration, def types.Definition, operationConfig map[string]json.RawMessage) error {
+	next := installation.OperationConfig
+
+	names := lo.Keys(operationConfig)
+
+	slices.Sort(names)
+
+	for _, name := range names {
+		operation, found := def.Operation(name)
+		if !found || operation.Input == nil {
+			return fmt.Errorf("%w: %s", ErrOperationNotFound, name)
+		}
+
+		if err := operations.ValidateInput(ctx, req, operation.Input.Schema, operation.Input.Validate, operationConfig[name], types.ErrOperationConfigInvalid); err != nil {
+			return fmt.Errorf("%w: operation %s", err, name)
+		}
+
+		next = next.With(name, jsonx.CloneRawMessage(operationConfig[name]))
+	}
+
+	return r.persistOperationConfig(ctx, installation, next)
 }
 
 // selfInstanceMetadata identifies an installation with no external instance by its own id
@@ -221,7 +298,7 @@ func resolveConnectionIdentity(ctx context.Context, installation *ent.Integratio
 		Integration: installation,
 		Connection:  connection,
 		Credentials: bindings,
-		Config:      installation.Config,
+		UserInput:   installation.UserInput.Data,
 		Input:       input,
 	})
 	if err != nil {
@@ -265,31 +342,26 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 	return nil
 }
 
-// RefreshInstallationMetadata re-resolves and persists installation metadata from its credential
+// RefreshInstallationMetadata re-resolves and persists installation metadata from its persisted connection
 func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
 		return err
 	}
 
-	state, err := def.ProviderState(installation.ProviderState)
+	connection, found, err := r.resolveConnectionFromState(def, installation)
 	if err != nil {
 		return err
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	if state.CredentialRef == (types.CredentialSlotID{}) {
+	if !found {
 		if len(def.Connections) > 0 {
 			return nil
 		}
 
 		return r.saveInstallationMetadata(systemCtx, installation, selfInstanceMetadata(installation))
-	}
-
-	connection, err := def.ConnectionRegistration(state.CredentialRef)
-	if err != nil {
-		return err
 	}
 
 	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
@@ -302,13 +374,13 @@ func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation 
 		return err
 	}
 
-	metadata.Display.CredentialRef = state.CredentialRef.String()
+	metadata.Display.CredentialRef = connection.CredentialRef.String()
 
 	return r.saveInstallationMetadata(systemCtx, installation, metadata)
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
-func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Integration, def types.Definition, credentialRef types.CredentialSlotID, credential types.CredentialSet, installationInput json.RawMessage) error {
+func (r *Runtime) reconcileCredential(ctx context.Context, req types.InstallationRequest, installation *ent.Integration, def types.Definition, credentialRef types.CredentialSlotID, credential types.CredentialSet, installationInput json.RawMessage) error {
 	registration, err := def.CredentialRegistration(credentialRef)
 	if err != nil {
 		return err
@@ -319,7 +391,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	if err := validatePayload(ctx, registration.Schema, credential.Data, ErrCredentialInvalid); err != nil {
+	if err := operations.ValidateInput(ctx, req, registration.Schema, registration.Validate, credential.Data, ErrCredentialInvalid); err != nil {
 		return err
 	}
 

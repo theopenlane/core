@@ -3,7 +3,6 @@ package operations
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -27,49 +26,6 @@ type RunResult struct {
 	Error string
 	// Metrics is the structured metrics payload stored on the run
 	Metrics map[string]any
-}
-
-// IngestRunSummary renders a compact one-line record-count summary for an ingest run
-func IngestRunSummary(result IngestResult) string {
-	return fmt.Sprintf("attempted %d, persisted %d, changed %d, failed %d, removed %d, excluded %d", result.Attempted, result.Persisted, result.Changed, result.Failed, result.Removed, result.Excluded)
-}
-
-// metricAttempted is the attempted-count key in an ingest run's metrics payload
-const metricAttempted = "attempted"
-
-// metricPersisted is the persisted-count key in an ingest run's metrics payload
-const metricPersisted = "persisted"
-
-// metricChanged is the changed-count key in an ingest run's metrics payload
-const metricChanged = "changed"
-
-// metricSkipped is the skipped-count key in an ingest run's metrics payload
-const metricSkipped = "skipped"
-
-// metricFailed is the failed-count key in an ingest run's metrics payload
-const metricFailed = "failed"
-
-// metricFiltered is the filtered-count key in an ingest run's metrics payload
-const metricFiltered = "filtered"
-
-// metricRemoved is the removed-count key in an ingest run's metrics payload
-const metricRemoved = "removed"
-
-// metricExcluded is the excluded-count key in an ingest run's metrics payload
-const metricExcluded = "excluded"
-
-// IngestMetrics renders one ingest run's record counters as a structured metrics payload
-func IngestMetrics(result IngestResult) map[string]any {
-	return map[string]any{
-		metricAttempted: result.Attempted,
-		metricPersisted: result.Persisted,
-		metricChanged:   result.Changed,
-		metricSkipped:   result.Skipped,
-		metricFailed:    result.Failed,
-		metricFiltered:  result.Filtered,
-		metricRemoved:   result.Removed,
-		metricExcluded:  result.Excluded,
-	}
 }
 
 // operationKind classifies an operation's execution shape as an IntegrationOperationKind

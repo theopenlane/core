@@ -6,7 +6,6 @@ import (
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
@@ -15,7 +14,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// ConfigureIntegrationProvider stores non-OAuth credentials, creating an installation if needed
+// ConfigureIntegrationProvider stores non-OAuth credentials for a provider definition.
+// When installation_id is provided the credentials on that installation are updated.
+// When omitted a new installation is created and its ID is returned in the response
 func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	payload, err := BindAndValidate[ConfigureIntegrationRequest](ctx)
 	if err != nil {
@@ -57,7 +58,8 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		credential = &types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}
 	}
 
-	if err := h.IntegrationsRuntime.Reconcile(systemCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
+	if err := h.IntegrationsRuntime.Reconcile(systemCtx, installationRec, payload.UserInput, payload.OperationConfig, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
+		// do not log payload, it can contain secrets
 		logx.FromContext(requestCtx).Error().Err(err).Msg("reconcile failed")
 
 		return h.BadRequest(ctx, err)
@@ -77,7 +79,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	}
 
 	resp := ConfigureIntegrationResponse{
-		Reply:                rout.Reply{Success: true},
+		Success:              true,
 		Provider:             def.ID,
 		IntegrationID:        installationRec.ID,
 		HealthStatus:         "ok",
@@ -107,6 +109,9 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		resp.WebhookSecret = primaryWebhookSecret
 	}
 
+	// ensure all reconcile jobs exist after any config update; a previously-disabled
+	// operation that was just re-enabled needs a new job seeded - this is a no-op
+	// when all jobs are already active
 	if lo.Contains(enums.IntegrationOperationalStatuses, installationRec.Status) {
 		if err := h.IntegrationsRuntime.ResetReconcileLoops(systemCtx, installationRec); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to seed missing reconcile jobs after config update")

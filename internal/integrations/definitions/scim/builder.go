@@ -3,7 +3,6 @@ package scim
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -12,18 +11,16 @@ import (
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "scim",
-				DisplayName: "SCIM 2.0",
-				Description: "Synchronize directory objects through SCIM",
-				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/scim",
-				Tags:        []string{"directory"},
-				Active:      true,
-				Visible:     false,
-			},
-			UserInput: userInput.Registration(),
+			ID:          DefinitionID.ID(),
+			Family:      "scim",
+			DisplayName: "SCIM 2.0",
+			Description: "Synchronize directory objects through SCIM",
+			Category:    "identity",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/scim",
+			Tags:        []string{"directory"},
+			Active:      true,
+			Visible:     false,
+			UserInput:   userInput.Registration(),
 			Webhooks: []types.WebhookRegistration{
 				SCIMAuthWebhook.Registration(types.WebhookRegistration{
 					EndpointURLTemplate: "/v1/integrations/scim/{endpointID}/v2",
@@ -31,10 +28,7 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description:         "Synchronize directory state through SCIM",
-					Policy:              types.ExecutionPolicy{Inline: true},
-					Ingest:              providerkit.DirectoryIngestContracts(),
-					SkipDefaultLookback: true,
+					Description: "Synchronize directory state through SCIM",
 				}),
 			},
 			Mappings: []types.MappingRegistration{

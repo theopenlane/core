@@ -116,9 +116,6 @@ type orgNode struct {
 	Login string
 }
 
-// directorySyncOperation is the operation ref for the GitHub directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(gitHubClient, runDirectorySync)
-
 // runDirectorySync collects GitHub org members, teams, and team memberships for directory ingest
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, client GraphQLClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	orgs, err := queryViewerOrganizations(ctx, client)

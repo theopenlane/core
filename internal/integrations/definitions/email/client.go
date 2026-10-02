@@ -57,7 +57,7 @@ func buildCustomerClient(_ context.Context, req types.ClientBuildRequest) (*Clie
 
 	var userInput UserInput
 	if req.Integration != nil {
-		if err := jsonx.UnmarshalIfPresent(req.Integration.Config.ClientConfig, &userInput); err != nil {
+		if err := jsonx.UnmarshalIfPresent(req.Integration.UserInput.Data, &userInput); err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 		}
 	}

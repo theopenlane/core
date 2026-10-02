@@ -81,7 +81,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, err
 	}
 
-	if operation.DisabledFor(installation.Config.ClientConfig) {
+	if operation.DisabledFor(installation.OperationConfig.For(operation.Name)) {
 		logx.FromContext(ctx).Debug().Msg("operation is disabled, stopping reconcile cycle")
 
 		return 0, operations.ErrOperationDisabled
@@ -209,10 +209,63 @@ func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCyc
 	return delta, nil
 }
 
+// metricAttempted is the attempted-count key in an ingest run's metrics payload
+const metricAttempted = "attempted"
+
+// metricPersisted is the persisted-count key in an ingest run's metrics payload
+const metricPersisted = "persisted"
+
+// metricChanged is the changed-count key in an ingest run's metrics payload
+const metricChanged = "changed"
+
+// metricSkipped is the skipped-count key in an ingest run's metrics payload
+const metricSkipped = "skipped"
+
+// metricFailed is the failed-count key in an ingest run's metrics payload
+const metricFailed = "failed"
+
+// metricFiltered is the filtered-count key in an ingest run's metrics payload
+const metricFiltered = "filtered"
+
+// metricRemoved is the removed-count key in an ingest run's metrics payload
+const metricRemoved = "removed"
+
+// metricExcluded is the excluded-count key in an ingest run's metrics payload
+const metricExcluded = "excluded"
+
+// metricResponse is the decoded operation response key in a run's metrics payload
+const metricResponse = "response"
+
+// IngestMetrics renders one ingest run's record counters as a structured metrics payload
+func IngestMetrics(result operations.IngestResult) map[string]any {
+	return map[string]any{
+		metricAttempted: result.Attempted,
+		metricPersisted: result.Persisted,
+		metricChanged:   result.Changed,
+		metricSkipped:   result.Skipped,
+		metricFailed:    result.Failed,
+		metricFiltered:  result.Filtered,
+		metricRemoved:   result.Removed,
+		metricExcluded:  result.Excluded,
+	}
+}
+
+// IngestRunSummary renders a compact one-line record-count summary for an ingest run
+func IngestRunSummary(result operations.IngestResult) string {
+	return fmt.Sprintf("attempted %d, persisted %d, changed %d, failed %d, removed %d, excluded %d", result.Attempted, result.Persisted, result.Changed, result.Failed, result.Removed, result.Excluded)
+}
+
+// RecordFailureSummary renders a compact summary of a run's failed records
+func RecordFailureSummary(result operations.IngestResult) string {
+	first := result.Failures[0]
+
+	return fmt.Sprintf("%d of %d records failed to import; first failure: %s %s: %v", result.Failed, result.Attempted, first.Schema, first.Resource, first.Err)
+}
+
 // executionRunResult renders one execution's terminal run result from its response and error
 func executionRunResult(ingest bool, response json.RawMessage, ingestResult operations.IngestResult, execErr error) operations.RunResult {
-	metrics := operations.IngestMetrics(ingestResult)
-	metrics["response"] = jsonx.DecodeAnyOrNil(response)
+	metrics := IngestMetrics(ingestResult)
+	metrics[metricResponse] = jsonx.DecodeAnyOrNil(response)
 
 	if execErr != nil {
 		return operations.RunResult{Status: enums.IntegrationRunStatusFailed, Error: execErr.Error(), Metrics: metrics}
@@ -221,11 +274,11 @@ func executionRunResult(ingest bool, response json.RawMessage, ingestResult oper
 	result := operations.RunResult{Status: enums.IntegrationRunStatusSuccess, Summary: operationCompletedSummary, Metrics: metrics}
 
 	if ingest {
-		result.Summary = operations.IngestRunSummary(ingestResult)
+		result.Summary = IngestRunSummary(ingestResult)
 	}
 
 	if ingestResult.Failed > 0 {
-		result.Error = operations.RecordFailureSummary(ingestResult)
+		result.Error = RecordFailureSummary(ingestResult)
 	}
 
 	return result
@@ -260,7 +313,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 			DefinitionID: definitionID,
 			Runtime:      true,
 		}))
-	case operation.DisabledFor(integration.Config.ClientConfig):
+	case operation.DisabledFor(integration.OperationConfig.For(operation.Name)):
 		return nil, operations.ErrOperationDisabled
 	default:
 		ctx = intobvs.WithInstallation(ctx, integration)
@@ -269,7 +322,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 	ctx = intobvs.WithOperation(ctx, operation.Name)
 
 	if len(config) > 0 {
-		if err := validatePayload(ctx, operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
+		if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: integration}, operation.ConfigSchema, nil, config, types.ErrOperationConfigInvalid); err != nil {
 			return nil, err
 		}
 	}
@@ -363,7 +416,7 @@ func (r *Runtime) resumeTrackedRun(ctx context.Context, oc *gala.OperationContex
 			return ctx, err
 		}
 
-		logx.FromContext(ctx).Info().Str("retry_of", run.ID).Str("run_id", retry.ID).Msg("operation attempt continues under a new run")
+		logx.FromContext(ctx).Info().Str("retry_of", run.ID).Str(intobvs.FieldRunID, retry.ID).Msg("operation attempt continues under a new run")
 
 		src.RunID = retry.ID
 		_ = gala.SetAttributes(oc, *src)
@@ -399,13 +452,13 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		return nil, operations.IngestResult{}, err
 	}
 
-	if len(config) == 0 && integration != nil && operation.ConfigResolver != nil {
-		config = operation.ConfigResolver(integration.Config.ClientConfig)
+	if len(config) == 0 && integration != nil {
+		config = integration.OperationConfig.For(operation.Name)
 	}
 
 	var lastRunAt *time.Time
 
-	if db := r.dbOrNil(); db != nil && db.IntegrationRun != nil && integration != nil {
+	if db := r.DB(); db != nil && db.IntegrationRun != nil && integration != nil {
 		var lastRunErr error
 
 		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(ctx, db, integration.ID, operation.Name)
@@ -531,7 +584,7 @@ func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID strin
 		return 0, err
 	}
 
-	ingestJobs, err := types.PropertiesFragment(map[string]string{"integration_id": integrationID})
+	ingestJobs, err := types.PropertiesFragment(map[string]string{intobvs.FieldIntegrationID: integrationID})
 	if err != nil {
 		return 0, err
 	}

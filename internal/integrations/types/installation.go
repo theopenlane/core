@@ -2,8 +2,11 @@ package types //nolint:revive
 
 import openapi "github.com/theopenlane/core/common/openapi"
 
-// IntegrationConfig is the per-installation runtime configuration
-type IntegrationConfig = openapi.IntegrationConfig
+// IntegrationUserInput stores the installation-scoped user input under its layout name
+type IntegrationUserInput = openapi.IntegrationUserInput
+
+// IntegrationOperationConfig stores the installation-scoped operation input keyed by operation name
+type IntegrationOperationConfig = openapi.IntegrationOperationConfig
 
 // IntegrationInstallationMetadata stores stable installation identity metadata
 type IntegrationInstallationMetadata = openapi.IntegrationInstallationMetadata

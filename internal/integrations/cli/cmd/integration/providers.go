@@ -57,12 +57,7 @@ func listProviders(ctx context.Context) error {
 
 	rows := make([][]string, 0, len(providers))
 	for _, p := range providers {
-		active := "false"
-		if p.Spec.Active {
-			active = "true"
-		}
-
-		rows = append(rows, []string{p.Spec.ID, p.Spec.DisplayName, p.Spec.Category, active})
+		rows = append(rows, []string{p.Spec.ID, p.Spec.DisplayName, p.Spec.Category, cmd.BoolStr(p.Spec.Active)})
 	}
 
 	return cmd.RenderTable(resp, []string{"ID", "DisplayName", "Category", "Active"}, rows)

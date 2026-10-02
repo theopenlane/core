@@ -8,6 +8,7 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
@@ -31,57 +32,92 @@ type refTestRetiredInput struct {
 	Zone string `json:"zone"`
 }
 
-// refTestConvertCredential maps the retired credential layout onto the current one
-func refTestConvertCredential(r refTestRetiredCredential) refTestCredential {
-	return refTestCredential{Token: r.AccessToken}
+// refTestUpgradeCredential maps a payload stored under the retired credential slot onto the current layout
+func refTestUpgradeCredential(_ context.Context, _ InstallationRequest, from string, stored json.RawMessage) (refTestCredential, error) {
+	switch from {
+	case "refTestRetiredCredential":
+		old, err := jsonx.Decode[refTestRetiredCredential](stored)
+		if err != nil {
+			return refTestCredential{}, err
+		}
+
+		return refTestCredential{Token: old.AccessToken}, nil
+	default:
+		return jsonx.Decode[refTestCredential](stored)
+	}
 }
 
-// refTestConvertInput maps the retired user input layout onto the current one
-func refTestConvertInput(r refTestRetiredInput) refTestInput {
-	return refTestInput{Region: r.Zone}
+// refTestUpgradeInput maps a document stored under the retired user input layout onto the current one
+func refTestUpgradeInput(_ context.Context, _ InstallationRequest, from string, stored json.RawMessage) (refTestInput, error) {
+	switch from {
+	case "refTestRetiredInput":
+		old, err := jsonx.Decode[refTestRetiredInput](stored)
+		if err != nil {
+			return refTestInput{}, err
+		}
+
+		return refTestInput{Region: old.Zone}, nil
+	default:
+		return jsonx.Decode[refTestInput](stored)
+	}
 }
 
-// refTestSwitchConfig is an operation config type carrying its own disable toggle
-type refTestSwitchConfig struct {
-	// Disable switches the operation off for the installation
-	Disable bool `json:"disable,omitempty"`
+// refTestConfig is an operation config type the operation ref tests reflect
+type refTestConfig struct {
 	// Limit bounds the number of records the operation reads
 	Limit int `json:"limit"`
 }
 
-func TestCredentialRefReplacingConvert(t *testing.T) {
+// refTestRetiredConfig is the shape an earlier definition version stored the limit under
+type refTestRetiredConfig struct {
+	// Max is the retired name of the limit
+	Max int `json:"max"`
+}
+
+// refTestZetaConfig is an empty retired config named to sort last
+type refTestZetaConfig struct{}
+
+// refTestAlphaConfig is an empty retired config named to sort first
+type refTestAlphaConfig struct{}
+
+// refTestUpgradeConfig maps a document stored under the retired operation onto the current config layout
+func refTestUpgradeConfig(_ context.Context, _ InstallationRequest, from string, stored json.RawMessage) (refTestConfig, error) {
+	switch from {
+	case "refTestRetiredConfig":
+		old, err := jsonx.Decode[refTestRetiredConfig](stored)
+		if err != nil {
+			return refTestConfig{}, err
+		}
+
+		return refTestConfig{Limit: old.Max}, nil
+	default:
+		return jsonx.Decode[refTestConfig](stored)
+	}
+}
+
+func TestCredentialRefUpgraded(t *testing.T) {
 	t.Parallel()
 
 	retired := NewCredentialRef[refTestRetiredCredential]("refTestRetiredCredential")
+	reg := NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired).Upgraded(refTestUpgradeCredential).Registration(CredentialRegistration{})
 
 	tests := []struct {
 		name    string
-		ref     CredentialRef[refTestCredential]
 		from    CredentialSlotID
 		payload string
 		want    string
-		wantErr error
 	}{
 		{
-			name:    "payload outside the retired layout is rejected",
-			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, refTestConvertCredential),
-			from:    retired.ID(),
-			payload: `{"token":"t"}`,
-			wantErr: ErrLayoutMismatch,
-		},
-		{
-			name:    "convert maps fields",
-			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, refTestConvertCredential),
+			name:    "payload stored under the retired slot is mapped",
 			from:    retired.ID(),
 			payload: `{"accessToken":"t"}`,
 			want:    `{"token":"t"}`,
 		},
 		{
-			name:    "undeclared slot is not replaced",
-			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, refTestConvertCredential),
-			from:    NewCredentialSlotID("unknown"),
+			name:    "payload stored under the current slot passes through",
+			from:    reg.Ref,
 			payload: `{"token":"t"}`,
-			wantErr: ErrNotReplaced,
+			want:    `{"token":"t"}`,
 		},
 	}
 
@@ -89,22 +125,13 @@ func TestCredentialRefReplacingConvert(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := tc.ref.Convert(tc.from, json.RawMessage(tc.payload))
-
-			if tc.wantErr != nil {
-				if !errors.Is(err, tc.wantErr) {
-					t.Fatalf("expected %v, got %v", tc.wantErr, err)
-				}
-
-				return
-			}
-
+			got, err := reg.Upgrade(context.Background(), InstallationRequest{}, tc.from.String(), json.RawMessage(tc.payload))
 			if err != nil {
-				t.Fatalf("Convert() error = %v", err)
+				t.Fatalf("Upgrade() error = %v", err)
 			}
 
 			if string(got) != tc.want {
-				t.Fatalf("Convert() = %s, want %s", got, tc.want)
+				t.Fatalf("Upgrade() = %s, want %s", got, tc.want)
 			}
 		})
 	}
@@ -113,8 +140,8 @@ func TestCredentialRefReplacingConvert(t *testing.T) {
 func TestCredentialRefReplacingDoesNotAliasTheSource(t *testing.T) {
 	t.Parallel()
 
-	base := NewCredentialRef[refTestCredential]("refTestCredential").Replacing(NewCredentialRef[refTestRetiredCredential]("refTestRetiredCredential"), refTestConvertCredential)
-	extended := base.Replacing(NewCredentialRef[struct{}]("other"), func(struct{}) refTestCredential { return refTestCredential{} })
+	base := NewCredentialRef[refTestCredential]("refTestCredential").Replacing(NewCredentialRef[refTestRetiredCredential]("refTestRetiredCredential"))
+	extended := base.Replacing(NewCredentialRef[struct{}]("other"))
 
 	if got := len(base.Replaces()); got != 1 {
 		t.Fatalf("expected the source ref to keep one replacement, got %d", got)
@@ -125,40 +152,38 @@ func TestCredentialRefReplacingDoesNotAliasTheSource(t *testing.T) {
 	}
 }
 
-func TestCredentialRefBackfillWithoutDeclarationReturnsPayloadUnchanged(t *testing.T) {
+func TestCredentialRefWithoutUpgradeProjectsNone(t *testing.T) {
 	t.Parallel()
 
-	plain := NewCredentialRef[refTestCredential]("refTestCredential")
+	reg := NewCredentialRef[refTestCredential]("refTestCredential").Registration(CredentialRegistration{})
 
-	unchanged, err := plain.Backfill(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":""}`))
-	if err != nil || string(unchanged) != `{"token":""}` {
-		t.Fatalf("expected the payload unchanged, got %s, %v", unchanged, err)
+	if reg.Upgrade != nil {
+		t.Fatal("expected no upgrade projected on a plain slot")
 	}
 }
 
-func TestCredentialRefBackfilledReceivesTheInstallationRequest(t *testing.T) {
+func TestCredentialRefUpgradedReceivesTheInstallationRequest(t *testing.T) {
 	t.Parallel()
 
 	var seen InstallationRequest
 
-	ref := NewCredentialRef[refTestCredential]("refTestCredential").Backfilled(func(_ context.Context, req InstallationRequest, c *refTestCredential) error {
+	reg := NewCredentialRef[refTestCredential]("refTestCredential").Upgraded(func(_ context.Context, req InstallationRequest, _ string, _ json.RawMessage) (refTestCredential, error) {
 		seen = req
-		c.Token = "derived"
 
-		return nil
-	})
+		return refTestCredential{Token: "derived"}, nil
+	}).Registration(CredentialRegistration{})
 
-	got, err := ref.Backfill(context.Background(), InstallationRequest{Input: json.RawMessage(`{"marker":true}`)}, json.RawMessage(`{"token":""}`))
+	got, err := reg.Upgrade(context.Background(), InstallationRequest{Input: json.RawMessage(`{"marker":true}`)}, "refTestCredential", json.RawMessage(`{"token":""}`))
 	if err != nil {
-		t.Fatalf("Backfill() error = %v", err)
+		t.Fatalf("Upgrade() error = %v", err)
 	}
 
 	if string(got) != `{"token":"derived"}` {
-		t.Fatalf("Backfill() = %s", got)
+		t.Fatalf("Upgrade() = %s", got)
 	}
 
 	if string(seen.Input) != `{"marker":true}` {
-		t.Fatalf("expected the backfill to receive the explicit request, got %s", seen.Input)
+		t.Fatalf("expected the upgrade to receive the explicit request, got %s", seen.Input)
 	}
 }
 
@@ -181,35 +206,49 @@ func TestNewCredentialRefKeepsNameAsSlotID(t *testing.T) {
 	}
 }
 
-func TestUserInputRefReplacingConvert(t *testing.T) {
+func TestUserInputRefOfDerivesNameFromSchema(t *testing.T) {
 	t.Parallel()
 
-	retired := NewUserInputRef[refTestRetiredInput]("refTestRetiredInput")
+	ref := UserInputRefOf[refTestInput]()
+
+	if ref.Name() != "refTestInput" {
+		t.Fatalf("Name() = %q", ref.Name())
+	}
+
+	if jsonx.SchemaID(ref.Registration().Schema) != "refTestInput" {
+		t.Fatalf("expected the reflected schema retained, got %s", ref.Registration().Schema)
+	}
+}
+
+func TestUserInputRefUpgraded(t *testing.T) {
+	t.Parallel()
+
+	retired := UserInputRefOf[refTestRetiredInput]()
+	reg := UserInputRefOf[refTestInput]().Upgraded(refTestUpgradeInput).Registration()
 
 	tests := []struct {
 		name    string
-		ref     UserInputRef[refTestInput]
+		from    string
 		payload string
 		want    string
-		wantErr error
 	}{
 		{
-			name:    "convert maps fields",
-			ref:     NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, refTestConvertInput),
+			name:    "document stored under the retired layout is mapped",
+			from:    retired.Name(),
 			payload: `{"zone":"eu"}`,
 			want:    `{"region":"eu"}`,
 		},
 		{
-			name:    "payload matching no retired layout is rejected",
-			ref:     NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, refTestConvertInput),
+			name:    "document stored under the current layout passes through",
+			from:    reg.Name,
 			payload: `{"region":"eu"}`,
-			wantErr: ErrLayoutMismatch,
+			want:    `{"region":"eu"}`,
 		},
 		{
-			name:    "layout without replacements rejects every payload",
-			ref:     NewUserInputRef[refTestInput]("refTestInput"),
-			payload: `{"zone":"eu"}`,
-			wantErr: ErrLayoutMismatch,
+			name:    "document stored without a layout passes through",
+			from:    "",
+			payload: `{"region":"eu"}`,
+			want:    `{"region":"eu"}`,
 		},
 	}
 
@@ -217,65 +256,40 @@ func TestUserInputRefReplacingConvert(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := tc.ref.Convert(json.RawMessage(tc.payload))
-
-			if tc.wantErr != nil {
-				if !errors.Is(err, tc.wantErr) {
-					t.Fatalf("expected %v, got %v", tc.wantErr, err)
-				}
-
-				return
-			}
-
+			got, err := reg.Upgrade(context.Background(), InstallationRequest{}, tc.from, json.RawMessage(tc.payload))
 			if err != nil {
-				t.Fatalf("Convert() error = %v", err)
+				t.Fatalf("Upgrade() error = %v", err)
 			}
 
 			if string(got) != tc.want {
-				t.Fatalf("Convert() = %s, want %s", got, tc.want)
+				t.Fatalf("Upgrade() = %s, want %s", got, tc.want)
 			}
 		})
 	}
 }
 
-func TestUserInputRefReplacingDoesNotAliasTheSource(t *testing.T) {
-	t.Parallel()
-
-	base := NewUserInputRef[refTestInput]("refTestInput").Replacing(NewUserInputRef[refTestRetiredInput]("refTestRetiredInput"), refTestConvertInput)
-	extended := base.Replacing(NewUserInputRef[struct{}]("other"), func(struct{}) refTestInput { return refTestInput{} })
-
-	if got := len(base.Replaces()); got != 1 {
-		t.Fatalf("expected the source ref to keep one replacement, got %d", got)
-	}
-
-	if got := extended.Replaces(); len(got) != 2 || got[0] != "other" || got[1] != "refTestRetiredInput" {
-		t.Fatalf("expected sorted replacements on the extended ref, got %v", got)
-	}
-}
-
-func TestUserInputRefBackfilledReceivesTheInstallationRequest(t *testing.T) {
+func TestUserInputRefUpgradedReceivesTheInstallationRequest(t *testing.T) {
 	t.Parallel()
 
 	var seen InstallationRequest
 
-	ref := NewUserInputRef[refTestInput]("refTestInput").Backfilled(func(_ context.Context, req InstallationRequest, in *refTestInput) error {
+	reg := UserInputRefOf[refTestInput]().Upgraded(func(_ context.Context, req InstallationRequest, _ string, _ json.RawMessage) (refTestInput, error) {
 		seen = req
-		in.Region = "derived"
 
-		return nil
-	})
+		return refTestInput{Region: "derived"}, nil
+	}).Registration()
 
-	got, err := ref.Backfill(context.Background(), InstallationRequest{Input: json.RawMessage(`{"marker":true}`)}, json.RawMessage(`{"region":""}`))
+	got, err := reg.Upgrade(context.Background(), InstallationRequest{Input: json.RawMessage(`{"marker":true}`)}, "refTestInput", json.RawMessage(`{"region":""}`))
 	if err != nil {
-		t.Fatalf("Backfill() error = %v", err)
+		t.Fatalf("Upgrade() error = %v", err)
 	}
 
 	if string(got) != `{"region":"derived"}` {
-		t.Fatalf("Backfill() = %s", got)
+		t.Fatalf("Upgrade() = %s", got)
 	}
 
 	if string(seen.Input) != `{"marker":true}` {
-		t.Fatalf("expected the backfill to receive the explicit request, got %s", seen.Input)
+		t.Fatalf("expected the upgrade to receive the explicit request, got %s", seen.Input)
 	}
 }
 
@@ -379,7 +393,7 @@ func TestOperationRefHandles(t *testing.T) {
 	definition := NewDefinitionRef("def_001")
 	client := NewClientRef[string]("client")
 
-	ref := NewOperationRef[refTestSwitchConfig]("sync").Handles(client, func(_ context.Context, _ OperationRequest, c string, cfg refTestSwitchConfig) (json.RawMessage, error) {
+	ref := NewOperationRef[refTestConfig]("sync").Handles(client, func(_ context.Context, _ OperationRequest, c string, cfg refTestConfig) (json.RawMessage, error) {
 		return json.Marshal(struct {
 			Client string `json:"client"`
 			Limit  int    `json:"limit"`
@@ -439,7 +453,7 @@ func TestOperationRefIngests(t *testing.T) {
 	definition := NewDefinitionRef("def_001")
 	client := NewClientRef[string]("client")
 
-	ref := NewOperationRef[refTestSwitchConfig]("sync").Ingests(client, func(_ context.Context, _ OperationRequest, c string, cfg refTestSwitchConfig) ([]IngestPayloadSet, error) {
+	ref := NewOperationRef[refTestConfig]("sync").Ingests(client, func(_ context.Context, _ OperationRequest, c string, cfg refTestConfig) ([]IngestPayloadSet, error) {
 		return []IngestPayloadSet{{Schema: c, Envelopes: make([]MappingEnvelope, cfg.Limit)}}, nil
 	})
 
@@ -488,7 +502,7 @@ func TestOperationRefHandlesRequest(t *testing.T) {
 
 	definition := NewDefinitionRef("def_001")
 
-	ref := NewOperationRef[refTestSwitchConfig]("sweep").HandlesRequest(func(_ context.Context, _ OperationRequest, cfg refTestSwitchConfig) (json.RawMessage, error) {
+	ref := NewOperationRef[refTestConfig]("sweep").HandlesRequest(func(_ context.Context, _ OperationRequest, cfg refTestConfig) (json.RawMessage, error) {
 		return json.Marshal(cfg.Limit)
 	})
 
@@ -512,15 +526,120 @@ func TestOperationRefReplacing(t *testing.T) {
 	t.Parallel()
 
 	definition := NewDefinitionRef("def_001")
-	base := NewOperationRef[refTestInput]("current")
-	replaced := base.Replacing(NewOperationRef[struct{}]("zeta")).Replacing(NewOperationRef[refTestRetiredInput]("alpha")).Replacing(NewOperationRef[struct{}]("zeta"))
+	base := OperationRefOf[refTestConfig]()
+	zeta := OperationRefOf[refTestZetaConfig]()
+	alpha := OperationRefOf[refTestAlphaConfig]()
+	replaced := base.Replacing(zeta).Replacing(alpha).Replacing(zeta)
 
-	if got := replaced.Registration(definition, OperationRegistration{}).Replaces; !slices.Equal(got, []string{"alpha", "zeta"}) {
-		t.Fatalf("Replaces = %v, want sorted unique [alpha zeta]", got)
+	reg := replaced.Registration(definition, OperationRegistration{})
+
+	if got := reg.Replaces; !slices.Equal(got, []string{"refTestAlphaConfig", "refTestZetaConfig"}) {
+		t.Fatalf("Replaces = %v, want sorted unique names", got)
 	}
 
-	if got := base.Registration(definition, OperationRegistration{}).Replaces; got != nil {
-		t.Fatalf("expected the source ref to stay without replacements, got %v", got)
+	if reg.Input.Upgrade != nil {
+		t.Fatal("expected no upgrade projected from identity replacements alone")
+	}
+
+	source := base.Registration(definition, OperationRegistration{})
+
+	if source.Replaces != nil {
+		t.Fatalf("expected the source ref to stay without replacements, got %+v", source.Replaces)
+	}
+}
+
+func TestOperationRefUpgradedKeepsSettings(t *testing.T) {
+	t.Parallel()
+
+	definition := NewDefinitionRef("def_001")
+	retired := OperationRefOf[refTestRetiredConfig]()
+	reg := OperationRefOf[refTestConfig]().Replacing(retired).Upgraded(refTestUpgradeConfig).Registration(definition, OperationRegistration{})
+
+	tests := []struct {
+		name    string
+		from    string
+		payload string
+		want    string
+	}{
+		{name: "settings survive the upgrade", from: retired.Name(), payload: `{"disable":true,"filterExpr":"x","max":3}`, want: `{"disable":true,"filterExpr":"x","limit":3}`},
+		{name: "config without settings upgrades", from: retired.Name(), payload: `{"max":3}`, want: `{"limit":3}`},
+		{name: "document stored under the current operation passes through with its settings", from: reg.Name, payload: `{"disable":true,"limit":3}`, want: `{"disable":true,"limit":3}`},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := reg.Input.Upgrade(context.Background(), InstallationRequest{}, tc.from, json.RawMessage(tc.payload))
+			if err != nil {
+				t.Fatalf("Upgrade() error = %v", err)
+			}
+
+			if string(got) != tc.want {
+				t.Fatalf("Upgrade() = %s, want %s", got, tc.want)
+			}
+		})
+	}
+
+	plain := OperationRefOf[refTestConfig]().Registration(definition, OperationRegistration{})
+
+	if plain.Input.Upgrade != nil {
+		t.Fatal("expected no upgrade projected on a plain operation")
+	}
+}
+
+func TestOperationRefChainProjectsBehavior(t *testing.T) {
+	t.Parallel()
+
+	definition := NewDefinitionRef("def_001")
+	schedule := &gala.Schedule{}
+
+	ref := OperationRefOf[refTestConfig]().
+		Policy(ExecutionPolicy{Reconcile: true, Snapshot: true}).
+		Ingest(IngestContract{Schema: "User"}, IngestContract{Schema: "Group"}).
+		Permissions("read:users", "read:groups").
+		Schedule(schedule).
+		SkipDefaultLookback().
+		RateLimit(RateLimitPolicy{Limit: 2}).
+		Internal().
+		CustomerSelectable(false).
+		RequiresPaymentMethod().
+		DisabledForAll(true)
+
+	reg := ref.Registration(definition, OperationRegistration{Description: "sync", Policy: ExecutionPolicy{Inline: true}, Replaces: []string{"stale"}})
+
+	if reg.Description != "sync" {
+		t.Fatalf("expected the base description preserved, got %+v", reg)
+	}
+
+	if !reg.Policy.Reconcile || !reg.Policy.Snapshot || reg.Policy.Inline {
+		t.Fatalf("expected the chain policy to replace the base policy, got %+v", reg.Policy)
+	}
+
+	if len(reg.Ingest) != 2 || reg.Ingest[0].Schema != "User" || reg.Ingest[1].Schema != "Group" {
+		t.Fatalf("Ingest = %+v", reg.Ingest)
+	}
+
+	if !slices.Equal(reg.RequiredPermissions, []string{"read:users", "read:groups"}) {
+		t.Fatalf("RequiredPermissions = %v", reg.RequiredPermissions)
+	}
+
+	if reg.Schedule != schedule || !reg.SkipDefaultLookback || reg.RateLimit == nil || reg.RateLimit.Limit != 2 {
+		t.Fatalf("expected schedule, lookback, and rate limit projected, got %+v", reg)
+	}
+
+	if !reg.Internal || reg.CustomerSelectable == nil || *reg.CustomerSelectable || !reg.RequiresPaymentMethod || !reg.DisabledForAll {
+		t.Fatalf("expected internal, selectable, payment, and disabled flags projected, got %+v", reg)
+	}
+
+	if reg.Replaces != nil {
+		t.Fatalf("expected the base replacements discarded, got %v", reg.Replaces)
+	}
+
+	plain := OperationRefOf[refTestConfig]().Registration(definition, OperationRegistration{})
+
+	if plain.Policy != (ExecutionPolicy{}) || plain.Ingest != nil || plain.CustomerSelectable != nil || plain.Schedule != nil || plain.RateLimit != nil {
+		t.Fatalf("expected an unconfigured ref to project zero behavior, got %+v", plain)
 	}
 }
 
@@ -605,21 +724,15 @@ func TestCredentialRefRegistration(t *testing.T) {
 			t.Fatalf("expected StoredSchema from the ref, got %s", reg.StoredSchema)
 		}
 
-		if len(reg.Replaces) != 0 || reg.Convert != nil || reg.Backfill != nil {
+		if len(reg.Replaces) != 0 || reg.Upgrade != nil {
 			t.Fatalf("expected no lifecycle on a plain slot, got %+v", reg)
 		}
 	})
 
-	t.Run("lifecycle slot projects convert and backfill", func(t *testing.T) {
+	t.Run("lifecycle slot projects replaced slots and the upgrade", func(t *testing.T) {
 		t.Parallel()
 
-		ref := plain.Replacing(retired, func(r refTestRetiredCredential) refTestCredential {
-			return refTestCredential{Token: r.AccessToken}
-		}).Backfilled(func(_ context.Context, _ InstallationRequest, c *refTestCredential) error {
-			c.Token = "derived"
-
-			return nil
-		})
+		ref := plain.Replacing(retired).Upgraded(refTestUpgradeCredential)
 
 		reg := ref.Registration(base)
 
@@ -627,18 +740,13 @@ func TestCredentialRefRegistration(t *testing.T) {
 			t.Fatalf("Replaces = %v", reg.Replaces)
 		}
 
-		if reg.Convert == nil || reg.Backfill == nil {
-			t.Fatal("expected Convert and Backfill projected")
+		if reg.Upgrade == nil {
+			t.Fatal("expected Upgrade projected")
 		}
 
-		converted, err := reg.Convert(retired.ID(), json.RawMessage(`{"accessToken":"t"}`))
-		if err != nil || string(converted) != `{"token":"t"}` {
-			t.Fatalf("Convert() = %s, %v", converted, err)
-		}
-
-		filled, err := reg.Backfill(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":""}`))
-		if err != nil || string(filled) != `{"token":"derived"}` {
-			t.Fatalf("Backfill() = %s, %v", filled, err)
+		upgraded, err := reg.Upgrade(context.Background(), InstallationRequest{}, retired.ID().String(), json.RawMessage(`{"accessToken":"t"}`))
+		if err != nil || string(upgraded) != `{"token":"t"}` {
+			t.Fatalf("Upgrade() = %s, %v", upgraded, err)
 		}
 	})
 
@@ -760,7 +868,7 @@ func TestOperationRefRegistration(t *testing.T) {
 
 	definition := NewDefinitionRef("def_001")
 	client := NewClientRef[string]("client")
-	base := OperationRegistration{Description: "sync", Policy: ExecutionPolicy{Reconcile: true}, Replaces: []string{"old"}}
+	base := OperationRegistration{Description: "sync", UISchema: json.RawMessage(`{"order":[]}`)}
 
 	t.Run("without a client", func(t *testing.T) {
 		t.Parallel()
@@ -780,12 +888,20 @@ func TestOperationRefRegistration(t *testing.T) {
 			t.Fatalf("ConfigSchema = %s", reg.ConfigSchema)
 		}
 
+		if reg.Input == nil || reg.Input.Name != "refTestInput" || string(reg.Input.Schema) != string(ref.Schema()) {
+			t.Fatalf("Input = %+v, want the reflected layout", reg.Input)
+		}
+
+		if reg.Input.Upgrade != nil {
+			t.Fatalf("expected no upgrade on a plain operation, got %+v", reg.Input)
+		}
+
 		if reg.ClientRef.Valid() {
 			t.Fatal("expected no client ref")
 		}
 
-		if reg.Description != "sync" || !reg.Policy.Reconcile || !slices.Equal(reg.Replaces, []string{"old"}) {
-			t.Fatalf("expected base fields preserved, got %+v", reg)
+		if reg.Description != "sync" || string(reg.UISchema) != `{"order":[]}` {
+			t.Fatalf("expected base prose preserved, got %+v", reg)
 		}
 	})
 
@@ -863,14 +979,6 @@ func TestWebhookRefReplacing(t *testing.T) {
 	}
 }
 
-func TestWebhookEventRefOfDerivesNameFromSchema(t *testing.T) {
-	t.Parallel()
-
-	if ref := WebhookEventRefOf[refTestInput](); ref.Name() != "refTestInput" {
-		t.Fatalf("Name() = %q", ref.Name())
-	}
-}
-
 func TestWebhookEventRefRegistration(t *testing.T) {
 	t.Parallel()
 
@@ -888,60 +996,6 @@ func TestWebhookEventRefRegistration(t *testing.T) {
 	if len(reg.Ingest) != 1 || reg.Ingest[0].Schema != "User" {
 		t.Fatalf("expected base fields preserved, got %+v", reg)
 	}
-}
-
-func TestConnectionRefRegistration(t *testing.T) {
-	t.Parallel()
-
-	cred := NewCredentialRef[refTestCredential]("refTestCredential")
-	other := NewCredentialRef[refTestRetiredCredential]("other")
-	client := NewClientRef[string]("client")
-	ref := NewConnectionRef(cred).Enables(client)
-
-	t.Run("derives the credential and clients", func(t *testing.T) {
-		t.Parallel()
-
-		reg := ref.Registration(ConnectionRegistration{Name: "Token", CredentialRefs: []CredentialSlotID{other.ID()}})
-
-		if reg.CredentialRef != cred.ID() {
-			t.Fatalf("CredentialRef = %q, want %q", reg.CredentialRef, cred.ID())
-		}
-
-		if !slices.Equal(reg.ClientRefs, []ClientID{client.ID()}) {
-			t.Fatalf("ClientRefs = %v", reg.ClientRefs)
-		}
-
-		if !slices.Equal(reg.CredentialRefs, []CredentialSlotID{cred.ID()}) {
-			t.Fatalf("expected CredentialRefs derived from the selecting slot, got %v", reg.CredentialRefs)
-		}
-
-		if reg.Name != "Token" {
-			t.Fatalf("expected base fields preserved, got %+v", reg)
-		}
-	})
-
-	t.Run("projects the credential onto the disconnect flow without aliasing base", func(t *testing.T) {
-		t.Parallel()
-
-		disconnect := &DisconnectRegistration{Description: "teardown"}
-		reg := ref.Registration(ConnectionRegistration{Disconnect: disconnect})
-
-		if reg.Disconnect == nil || reg.Disconnect.CredentialRef != cred.ID() || reg.Disconnect.Description != "teardown" {
-			t.Fatalf("Disconnect = %+v", reg.Disconnect)
-		}
-
-		if disconnect.CredentialRef != (CredentialSlotID{}) {
-			t.Fatal("expected the authored disconnect registration left unmodified")
-		}
-	})
-
-	t.Run("leaves an absent disconnect absent", func(t *testing.T) {
-		t.Parallel()
-
-		if reg := ref.Registration(ConnectionRegistration{}); reg.Disconnect != nil {
-			t.Fatalf("expected nil Disconnect, got %+v", reg.Disconnect)
-		}
-	})
 }
 
 func TestClientRefHealthCheck(t *testing.T) {
@@ -986,68 +1040,114 @@ func TestCredentialHealthCheck(t *testing.T) {
 func TestUserInputRefRegistration(t *testing.T) {
 	t.Parallel()
 
-	t.Run("plain layout projects only the schema", func(t *testing.T) {
+	t.Run("plain layout projects the name and schema", func(t *testing.T) {
 		t.Parallel()
 
-		reg := NewUserInputRef[refTestInput]("refTestInput").Registration()
+		reg := UserInputRefOf[refTestInput]().Registration()
 
-		if jsonx.SchemaID(reg.Schema) != "refTestInput" {
-			t.Fatalf("expected the reflected schema, got %s", reg.Schema)
+		if reg.Name != "refTestInput" || jsonx.SchemaID(reg.Schema) != "refTestInput" {
+			t.Fatalf("expected the reflected name and schema, got %+v", reg)
 		}
 
-		if len(reg.Replaces) != 0 || reg.Convert != nil || reg.Backfill != nil {
-			t.Fatalf("expected no lifecycle on a plain layout, got %+v", reg)
+		if reg.Upgrade != nil {
+			t.Fatalf("expected no upgrade on a plain layout, got %+v", reg)
 		}
 	})
 
-	t.Run("lifecycle layout projects convert and backfill", func(t *testing.T) {
+	t.Run("upgraded layout projects the upgrade", func(t *testing.T) {
 		t.Parallel()
 
-		reg := NewUserInputRef[refTestInput]("refTestInput").Replacing(NewUserInputRef[refTestRetiredInput]("refTestRetiredInput"), func(r refTestRetiredInput) refTestInput {
-			return refTestInput{Region: r.Zone}
-		}).Backfilled(func(_ context.Context, _ InstallationRequest, in *refTestInput) error {
-			in.Region = "derived"
+		retired := UserInputRefOf[refTestRetiredInput]()
 
-			return nil
-		}).Registration()
+		reg := UserInputRefOf[refTestInput]().Upgraded(refTestUpgradeInput).Registration()
 
-		if !slices.Equal(reg.Replaces, []string{"refTestRetiredInput"}) {
-			t.Fatalf("Replaces = %v", reg.Replaces)
+		if reg.Upgrade == nil {
+			t.Fatal("expected Upgrade projected")
 		}
 
-		converted, err := reg.Convert(json.RawMessage(`{"zone":"eu"}`))
-		if err != nil || string(converted) != `{"region":"eu"}` {
-			t.Fatalf("Convert() = %s, %v", converted, err)
-		}
-
-		filled, err := reg.Backfill(context.Background(), InstallationRequest{}, json.RawMessage(`{"region":""}`))
-		if err != nil || string(filled) != `{"region":"derived"}` {
-			t.Fatalf("Backfill() = %s, %v", filled, err)
+		upgraded, err := reg.Upgrade(context.Background(), InstallationRequest{}, retired.Name(), json.RawMessage(`{"zone":"eu"}`))
+		if err != nil || string(upgraded) != `{"region":"eu"}` {
+			t.Fatalf("Upgrade() = %s, %v", upgraded, err)
 		}
 	})
 }
 
-func TestConnectionRefEnablesDoesNotAliasTheReceiver(t *testing.T) {
+// errRefTestRegion is the semantic failure the Validated tests expect
+var errRefTestRegion = errors.New("region is not reachable")
+
+// refTestValidateRegion rejects any region other than eu
+func refTestValidateRegion(_ context.Context, _ InstallationRequest, input *refTestInput) error {
+	if input.Region != "eu" {
+		return errRefTestRegion
+	}
+
+	return nil
+}
+
+func TestUserInputRefValidated(t *testing.T) {
 	t.Parallel()
 
-	cred := NewCredentialRef[refTestCredential]("refTestCredential")
-	first := NewClientRef[string]("first")
-	second := NewClientRef[int]("second")
-	third := NewClientRef[bool]("third")
+	reg := UserInputRefOf[refTestInput]().Validated(refTestValidateRegion).Registration()
 
-	base := NewConnectionRef(cred).Enables(first)
-	withSecond := base.Enables(second)
-	withThird := base.Enables(third)
-
-	if got := base.Registration(ConnectionRegistration{}).ClientRefs; !slices.Equal(got, []ClientID{first.ID()}) {
-		t.Fatalf("expected the source ref to keep one client, got %v", got)
+	if err := reg.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"region":"eu"}`)); err != nil {
+		t.Fatalf("Validate() error = %v", err)
 	}
 
-	if got := withSecond.Registration(ConnectionRegistration{}).ClientRefs; !slices.Equal(got, []ClientID{first.ID(), second.ID()}) {
-		t.Fatalf("expected [first second], got %v", got)
+	if err := reg.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"region":"us"}`)); !errors.Is(err, errRefTestRegion) {
+		t.Fatalf("Validate() error = %v, want %v", err, errRefTestRegion)
 	}
 
-	if got := withThird.Registration(ConnectionRegistration{}).ClientRefs; !slices.Equal(got, []ClientID{first.ID(), third.ID()}) {
-		t.Fatalf("expected [first third], got %v", got)
+	if UserInputRefOf[refTestInput]().Registration().Validate != nil {
+		t.Fatal("expected no validation projected on a plain layout")
+	}
+}
+
+func TestCredentialRefValidated(t *testing.T) {
+	t.Parallel()
+
+	reg := CredentialRefOf[refTestCredential]().Validated(func(_ context.Context, _ InstallationRequest, credential *refTestCredential) error {
+		if credential.Token == "" {
+			return errRefTestRegion
+		}
+
+		return nil
+	}).Registration(CredentialRegistration{})
+
+	if err := reg.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":"t"}`)); err != nil {
+		t.Fatalf("Validate() error = %v", err)
+	}
+
+	if err := reg.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":""}`)); !errors.Is(err, errRefTestRegion) {
+		t.Fatalf("Validate() error = %v, want %v", err, errRefTestRegion)
+	}
+
+	if CredentialRefOf[refTestCredential]().Registration(CredentialRegistration{}).Validate != nil {
+		t.Fatal("expected no validation projected on a plain credential")
+	}
+}
+
+func TestOperationRefValidatedIgnoresSettingsKeys(t *testing.T) {
+	t.Parallel()
+
+	definition := NewDefinitionRef("def_001")
+
+	reg := OperationRefOf[refTestConfig]().Validated(func(_ context.Context, _ InstallationRequest, config *refTestConfig) error {
+		if config.Limit > 10 {
+			return errRefTestRegion
+		}
+
+		return nil
+	}).Registration(definition, OperationRegistration{})
+
+	if err := reg.Input.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"disable":true,"filterExpr":"x","limit":3}`)); err != nil {
+		t.Fatalf("Validate() error = %v", err)
+	}
+
+	if err := reg.Input.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"limit":11}`)); !errors.Is(err, errRefTestRegion) {
+		t.Fatalf("Validate() error = %v, want %v", err, errRefTestRegion)
+	}
+
+	if OperationRefOf[refTestConfig]().Registration(definition, OperationRegistration{}).Input.Validate != nil {
+		t.Fatal("expected no validation projected on a plain operation")
 	}
 }

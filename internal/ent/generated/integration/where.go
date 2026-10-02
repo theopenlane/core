@@ -1611,6 +1611,26 @@ func ProviderStateNotNil() predicate.Integration {
 	return predicate.Integration(sql.FieldNotNull(FieldProviderState))
 }
 
+// UserInputIsNil applies the IsNil predicate on the "user_input" field.
+func UserInputIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldUserInput))
+}
+
+// UserInputNotNil applies the NotNil predicate on the "user_input" field.
+func UserInputNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldUserInput))
+}
+
+// OperationConfigIsNil applies the IsNil predicate on the "operation_config" field.
+func OperationConfigIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldOperationConfig))
+}
+
+// OperationConfigNotNil applies the NotNil predicate on the "operation_config" field.
+func OperationConfigNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldOperationConfig))
+}
+
 // MetadataIsNil applies the IsNil predicate on the "metadata" field.
 func MetadataIsNil() predicate.Integration {
 	return predicate.Integration(sql.FieldIsNull(FieldMetadata))

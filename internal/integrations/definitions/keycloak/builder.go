@@ -10,17 +10,15 @@ import (
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Keycloak",
-				DisplayName: "Keycloak",
-				Description: "Collect Keycloak realm users, groups, and memberships for identity posture and access governance.",
-				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/keycloak",
-				Tags:        []string{"directory"},
-				Active:      false,
-				Visible:     true,
-			},
+			ID:           definitionID.ID(),
+			Family:       "Keycloak",
+			DisplayName:  "Keycloak",
+			Description:  "Collect Keycloak realm users, groups, and memberships for identity posture and access governance.",
+			Category:     "identity",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/keycloak",
+			Tags:         []string{"directory"},
+			Active:       false,
+			Visible:      true,
 			UserInput:    userInput.Registration(),
 			HealthCheck:  keycloakClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
@@ -31,13 +29,15 @@ func Builder() registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				keycloakConnection.Registration(types.ConnectionRegistration{
-					Name:        "Keycloak Client Credentials",
-					Description: "Configure Keycloak access using client credentials from your realm.",
+				{
+					CredentialRef: keycloakCredential.ID(),
+					Name:          "Keycloak Client Credentials",
+					Description:   "Configure Keycloak access using client credentials from your realm.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.",
+						CredentialRef: keycloakCredential.ID(),
+						Description:   "Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				keycloakClient.Registration(Client{}.Build, types.ClientRegistration{
@@ -45,13 +45,15 @@ func Builder() registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description:         "Collect Keycloak realm users, groups, and memberships as directory accounts",
-					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"view-realm", "view-users", "query-groups", "view-events"},
-					Ingest:              providerkit.DirectoryIngestContracts(),
-				}),
+				types.OperationRefOf[DirectorySync]().
+					Ingests(keycloakClient, runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					SkipDefaultLookback().
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Permissions("view-realm", "view-users", "query-groups", "view-events").
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Collect Keycloak realm users, groups, and memberships as directory accounts",
+					}),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

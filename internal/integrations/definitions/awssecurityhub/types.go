@@ -18,63 +18,27 @@ var (
 	// awsServiceAccountCredential is the credential slot for static service account credentials
 	awsServiceAccountCredential = types.CredentialRefOf[ServiceAccountCredentialSchema]()
 	// securityHubClient is the client ref for the AWS Security Hub client used by this definition
-	securityHubClient = types.ClientRefOf[*securityhub.Client]().Using(awsAssumeRoleCredential).Using(awsServiceAccountCredential)
+	securityHubClient = types.ClientRefOf[*securityhub.Client]()
 	// configServiceClient is the client ref for the AWS Config client
-	configServiceClient = types.ClientRefOf[*configservice.Client]().Using(awsAssumeRoleCredential).Using(awsServiceAccountCredential)
+	configServiceClient = types.ClientRefOf[*configservice.Client]()
 	// iamClient is the client ref for the AWS IAM client used by directory sync operations
-	iamClient = types.ClientRefOf[*iam.Client]().Using(awsAssumeRoleCredential).Using(awsServiceAccountCredential)
-	// awsAssumeRoleConnection is the connection mode selected by the assume-role credential
-	awsAssumeRoleConnection = types.NewConnectionRef(awsAssumeRoleCredential).Enables(securityHubClient)
-	// awsServiceAccountConnection is the connection mode for the static service account credential
-	awsServiceAccountConnection = types.NewConnectionRef(awsServiceAccountCredential).Enables(securityHubClient)
-	// userInput is the installation user input layout for the AWS Security Hub definition
-	userInput = types.NewUserInputRef[UserInput]("awssecurityhub")
+	iamClient = types.ClientRefOf[*iam.Client]()
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// FindingSync includes the configuration for findings from AWS Security Hub
-	FindingSync FindingSync `json:"findingSync,omitempty" jsonschema:"title=AWS Security Hub Sync"`
-	// DirectorySync includes the configuration for identity accounts from AWS IAM
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
-	// CheckSync includes the configuration for rules from AWS Config
-	CheckSync CheckSync `json:"checkSync,omitempty" jsonschema:"title=AWS Config Rule Sync"`
-	// AssetSync includes the configuration for assets from AWS
-	AssetSync AssetSync `json:"assetSync,omitempty" jsonschema:"title=AWS Asset Sync"`
-}
-
+// DirectorySync are the configuration settings for the directory sync from AWS IAM
 type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from AWS IAM"`
 	// DisableGroupSync will just sync users and no groups or group memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from AWS IAM, disable groups sync operations"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.path.startsWith('/engineering/')"`
 }
 
 // FindingSync are configuration settings for the findings sync
-type FindingSync struct {
-	// Disable switches the findings sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from AWS Security Hub"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.Severity.Label == 'CRITICAL' || payload.Severity.Label == 'HIGH'"`
-}
+type FindingSync struct{}
 
 // CheckSync are the configuration settings for the check sync from AWS Config
-type CheckSync struct {
-	// Disable switches the check sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of checks from AWS Config"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.ComplianceType == 'NON_COMPLIANT' || payload.ComplianceType == 'COMPLIANT'"`
-}
+type CheckSync struct{}
 
 // AssetSync are the configuration settings for the asset sync
-type AssetSync struct {
-	// Disable switches the asset sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of assets from AWS"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
-}
+type AssetSync struct{}
 
 // AssumeRoleCredentialSchema holds the AWS assume-role and collection-scope inputs
 type AssumeRoleCredentialSchema struct {

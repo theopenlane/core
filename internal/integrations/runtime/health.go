@@ -8,11 +8,14 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/notifications"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -25,6 +28,15 @@ const integrationHealthyObjectType = "INTEGRATION_RECONNECTED"
 
 // integrationDegradedObjectType is the notification type for a partially working installation
 const integrationDegradedObjectType = "INTEGRATION_OPERATION_DEGRADED"
+
+// notificationFieldReason is the notification data key carrying the failure reason
+const notificationFieldReason = "reason"
+
+// notificationFieldOperation is the notification data key carrying the affected operation name
+const notificationFieldOperation = "operation"
+
+// notificationFieldURL is the notification data key carrying the console link
+const notificationFieldURL = "url"
 
 // ConnectionHealthResult reports the connection-level health check outcome
 type ConnectionHealthResult struct {
@@ -54,42 +66,80 @@ type HealthAssessment struct {
 	Operations []OperationHealthResult `json:"operations,omitempty"`
 }
 
+// transitionStatus conditionally moves the installation to status with the given health, mirroring the row on the record when it transitioned
+func (r *Runtime) transitionStatus(ctx context.Context, installation *ent.Integration, from predicate.Integration, status enums.IntegrationStatus, health models.IntegrationHealth, clearExpiry bool) (bool, error) {
+	update := r.DB().Integration.Update().
+		Where(integration.ID(installation.ID), from).
+		SetStatus(status).
+		SetHealth(health)
+
+	if clearExpiry {
+		update = update.ClearExpiresAt()
+	}
+
+	transitioned, err := update.Save(privacy.DecisionContext(ctx, privacy.Allow))
+	if err != nil {
+		return false, err
+	}
+
+	if transitioned == 0 {
+		return false, nil
+	}
+
+	installation.Status = status
+	installation.Health = health
+
+	return true, nil
+}
+
+// notifyHealthChange sends a health notification carrying the installation identity, console link, and any extra fields
+func (r *Runtime) notifyHealthChange(ctx context.Context, installation *ent.Integration, objectType, title, body string, extra map[string]any) error {
+	data := lo.Assign(map[string]any{
+		intobvs.FieldIntegrationID: installation.ID,
+		intobvs.FieldDefinitionID:  installation.DefinitionID,
+		notificationFieldURL:       entityops.ConsoleObjectPath(ent.TypeIntegration, installation.DefinitionID),
+	}, extra)
+
+	ids, err := notifications.OrgUserIDsByRole(ctx, r.DB(), installation.OwnerID, enums.RoleOwner, enums.RoleSuperAdmin)
+	if err != nil {
+		return err
+	}
+
+	if len(ids) == 0 {
+		return nil
+	}
+
+	topic := enums.NotificationTopicIntegration
+
+	return entityops.CreateNotifications(ctx, r.DB(), ids, &ent.CreateNotificationInput{
+		NotificationType: enums.NotificationTypeOrganization,
+		ObjectType:       objectType,
+		Title:            title,
+		Body:             body,
+		Data:             data,
+		Topic:            &topic,
+		OwnerID:          &installation.OwnerID,
+	})
+}
+
 // MarkIntegrationUnhealthy flags an installation errored and notifies the owning organization
 func (r *Runtime) MarkIntegrationUnhealthy(ctx context.Context, installation *ent.Integration, reason string) error {
 	health := installation.Health
 	health.UnhealthyReason = reason
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	transitioned, err := r.DB().Integration.Update().
-		Where(integration.ID(installation.ID), integration.StatusNEQ(enums.IntegrationStatusErrored)).
-		SetStatus(enums.IntegrationStatusErrored).
-		SetHealth(health).
-		Save(systemCtx)
-	if err != nil {
+	transitioned, err := r.transitionStatus(ctx, installation, integration.StatusNEQ(enums.IntegrationStatusErrored), enums.IntegrationStatusErrored, health, false)
+	if err != nil || !transitioned {
 		return err
 	}
 
-	if transitioned == 0 {
-		return nil
-	}
-
-	installation.Status = enums.IntegrationStatusErrored
-	installation.Health = health
-
 	displayName := r.integrationDisplayName(installation)
 
-	logx.FromContext(ctx).Warn().Str("reason", reason).Msg("integration marked unhealthy, recurring operations will stop")
+	logx.FromContext(ctx).Warn().Str(notificationFieldReason, reason).Msg("integration marked unhealthy, recurring operations will stop")
 
-	return r.notifyIntegrationHealth(systemCtx, installation, integrationUnhealthyObjectType,
+	return r.notifyHealthChange(privacy.DecisionContext(ctx, privacy.Allow), installation, integrationUnhealthyObjectType,
 		fmt.Sprintf("%s has stopped syncing", displayName),
 		fmt.Sprintf("The %s integration has stopped syncing: %s. Reconnect it to resume.", displayName, reason),
-		map[string]any{
-			"integration_id": installation.ID,
-			"definition_id":  installation.DefinitionID,
-			"reason":         reason,
-			"url":            entityops.ConsoleObjectPath(ent.TypeIntegration, installation.DefinitionID),
-		})
+		map[string]any{notificationFieldReason: reason})
 }
 
 // ClearIntegrationUnhealthy returns an errored installation to connected and reseeds its loops
@@ -98,37 +148,21 @@ func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *e
 	health.UnhealthyReason = ""
 	health.UnhealthyOperations = nil
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	transitioned, err := r.DB().Integration.Update().
-		Where(integration.ID(installation.ID), integration.StatusEQ(enums.IntegrationStatusErrored)).
-		SetStatus(enums.IntegrationStatusConnected).
-		ClearExpiresAt().
-		SetHealth(health).
-		Save(systemCtx)
-	if err != nil {
+	transitioned, err := r.transitionStatus(ctx, installation, integration.StatusEQ(enums.IntegrationStatusErrored), enums.IntegrationStatusConnected, health, true)
+	if err != nil || !transitioned {
 		return err
 	}
-
-	if transitioned == 0 {
-		return nil
-	}
-
-	installation.Status = enums.IntegrationStatusConnected
-	installation.Health = health
 
 	displayName := r.integrationDisplayName(installation)
 
 	logx.FromContext(ctx).Info().Msg("integration recovered, recurring operations resume")
 
-	if err := r.notifyIntegrationHealth(systemCtx, installation, integrationHealthyObjectType,
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	if err := r.notifyHealthChange(systemCtx, installation, integrationHealthyObjectType,
 		fmt.Sprintf("%s is syncing again", displayName),
 		fmt.Sprintf("The %s integration reconnected and syncing has resumed.", displayName),
-		map[string]any{
-			"integration_id": installation.ID,
-			"definition_id":  installation.DefinitionID,
-			"url":            entityops.ConsoleObjectPath(ent.TypeIntegration, installation.DefinitionID),
-		}); err != nil {
+		nil); err != nil {
 		return err
 	}
 
@@ -149,7 +183,6 @@ func (r *Runtime) MarkOperationUnhealthy(ctx context.Context, installation *ent.
 
 	unhealthy := lo.Assign(health.UnhealthyOperations, map[string]string{operationName: reason})
 	health.UnhealthyOperations = unhealthy
-	installation.Health = health
 
 	healthyRemain := lo.SomeBy(workloadOperations(def, installation), func(op types.OperationRegistration) bool {
 		_, failing := unhealthy[op.Name]
@@ -158,49 +191,28 @@ func (r *Runtime) MarkOperationUnhealthy(ctx context.Context, installation *ent.
 	})
 
 	if !healthyRemain {
+		installation.Health = health
+
 		return r.MarkIntegrationUnhealthy(ctx, installation, reason)
 	}
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	transitioned, err := r.DB().Integration.Update().
-		Where(integration.ID(installation.ID), integration.StatusIn(enums.IntegrationOperationalStatuses...)).
-		SetStatus(enums.IntegrationStatusDegraded).
-		SetHealth(health).
-		Save(systemCtx)
-	if err != nil {
+	transitioned, err := r.transitionStatus(ctx, installation, integration.StatusIn(enums.IntegrationOperationalStatuses...), enums.IntegrationStatusDegraded, health, false)
+	if err != nil || !transitioned {
 		return err
 	}
 
-	if transitioned == 0 {
-		return nil
-	}
-
-	installation.Status = enums.IntegrationStatusDegraded
-
-	fragment, err := reconcileLoopFragment(installation.ID, operationName)
-	if err != nil {
-		return err
-	}
-
-	if _, err := r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("operation", operationName).Msg("failed purging unhealthy operation jobs")
+	if _, err := r.purgeReconcileLoop(ctx, installation.ID, operationName); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str(notificationFieldOperation, operationName).Msg("failed purging unhealthy operation jobs")
 	}
 
 	displayName := r.integrationDisplayName(installation)
 
-	logx.FromContext(ctx).Warn().Str("operation", operationName).Str("reason", reason).Msg("integration operation marked unhealthy, its recurring loop will stop")
+	logx.FromContext(ctx).Warn().Str(notificationFieldOperation, operationName).Str(notificationFieldReason, reason).Msg("integration operation marked unhealthy, its recurring loop will stop")
 
-	return r.notifyIntegrationHealth(systemCtx, installation, integrationDegradedObjectType,
+	return r.notifyHealthChange(privacy.DecisionContext(ctx, privacy.Allow), installation, integrationDegradedObjectType,
 		fmt.Sprintf("%s is partially working", displayName),
 		fmt.Sprintf("The %s integration's %s operation has stopped: %s. Other operations continue to run.", displayName, operationName, reason),
-		map[string]any{
-			"integration_id": installation.ID,
-			"definition_id":  installation.DefinitionID,
-			"operation":      operationName,
-			"reason":         reason,
-			"url":            entityops.ConsoleObjectPath(ent.TypeIntegration, installation.DefinitionID),
-		})
+		map[string]any{notificationFieldOperation: operationName, notificationFieldReason: reason})
 }
 
 // ClearOperationUnhealthy clears an operation's failure record and resumes its recurring loop
@@ -219,43 +231,33 @@ func (r *Runtime) ClearOperationUnhealthy(ctx context.Context, installation *ent
 
 	installation.Health = health
 
-	if health.UnhealthyOperations == nil {
-		transitioned, err := r.DB().Integration.Update().
-			Where(integration.ID(installation.ID), integration.StatusEQ(enums.IntegrationStatusDegraded)).
-			SetStatus(enums.IntegrationStatusConnected).
-			SetHealth(health).
-			Save(systemCtx)
-		if err != nil {
+	if health.UnhealthyOperations != nil {
+		if err := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).Exec(systemCtx); err != nil {
 			return err
 		}
 
-		if transitioned == 0 {
-			return r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).Exec(systemCtx)
-		}
+		logx.FromContext(ctx).Info().Str(notificationFieldOperation, operationName).Msg("operation recovered, its recurring loop resumes")
 
-		installation.Status = enums.IntegrationStatusConnected
-
-		logx.FromContext(ctx).Info().Str("operation", operationName).Msg("all operations recovered, integration returns to connected")
-
-		displayName := r.integrationDisplayName(installation)
-
-		return r.notifyIntegrationHealth(systemCtx, installation, integrationHealthyObjectType,
-			fmt.Sprintf("%s is fully operational", displayName),
-			fmt.Sprintf("The %s integration's operations all recovered and syncing has resumed.", displayName),
-			map[string]any{
-				"integration_id": installation.ID,
-				"definition_id":  installation.DefinitionID,
-				"url":            entityops.ConsoleObjectPath(ent.TypeIntegration, installation.DefinitionID),
-			})
+		return r.ResetReconcileLoops(ctx, installation)
 	}
 
-	if err := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).Exec(systemCtx); err != nil {
+	transitioned, err := r.transitionStatus(ctx, installation, integration.StatusEQ(enums.IntegrationStatusDegraded), enums.IntegrationStatusConnected, health, false)
+	if err != nil {
 		return err
 	}
 
-	logx.FromContext(ctx).Info().Str("operation", operationName).Msg("operation recovered, its recurring loop resumes")
+	if !transitioned {
+		return r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).Exec(systemCtx)
+	}
 
-	return r.ResetReconcileLoops(ctx, installation)
+	logx.FromContext(ctx).Info().Str(notificationFieldOperation, operationName).Msg("all operations recovered, integration returns to connected")
+
+	displayName := r.integrationDisplayName(installation)
+
+	return r.notifyHealthChange(systemCtx, installation, integrationHealthyObjectType,
+		fmt.Sprintf("%s is fully operational", displayName),
+		fmt.Sprintf("The %s integration's operations all recovered and syncing has resumed.", displayName),
+		nil)
 }
 
 // RunHealthAssessment runs the connection and operation health checks and returns the assessment
@@ -269,13 +271,21 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 		return HealthAssessment{}, err
 	}
 
-	failed, err := r.checkConnectionHealth(ctx, installation, def)
+	checkErr, err := r.verifyConnection(ctx, installation, def)
 	if err != nil {
 		return HealthAssessment{}, err
 	}
 
-	if failed != nil {
-		return *failed, nil
+	if checkErr != nil {
+		if markErr := r.MarkIntegrationUnhealthy(ctx, installation, checkErr.Error()); markErr != nil {
+			logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after failed health check")
+		}
+
+		return HealthAssessment{
+			Status:     enums.IntegrationStatusErrored,
+			Connection: ConnectionHealthResult{Reason: checkErr.Error()},
+			Operations: appendRecordedResults(nil, installation),
+		}, nil
 	}
 
 	if err := r.RefreshInstallationMetadata(ctx, installation); err != nil {
@@ -301,26 +311,23 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 	}, nil
 }
 
-// checkConnectionHealth runs the persisted connection's health check, returning it on failure
-func (r *Runtime) checkConnectionHealth(ctx context.Context, installation *ent.Integration, def types.Definition) (*HealthAssessment, error) {
-	if len(def.Connections) == 0 {
+// verifyConnection runs the persisted connection's health check under stored credentials; checkErr is the check's own failure, err a resolution failure
+func (r *Runtime) verifyConnection(ctx context.Context, installation *ent.Integration, def types.Definition) (checkErr, err error) {
+	if len(def.Connections) == 0 || def.HealthCheck == nil {
 		return nil, nil
 	}
 
-	checkErr, err := r.runPersistedHealthCheck(ctx, installation, def)
-	if err != nil || checkErr == nil {
+	connection, err := r.resolvePersistedConnection(def, installation)
+	if err != nil {
 		return nil, err
 	}
 
-	if markErr := r.MarkIntegrationUnhealthy(ctx, installation, checkErr.Error()); markErr != nil {
-		logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after failed health check")
+	bindings, err := r.loadCredentials(privacy.DecisionContext(ctx, privacy.Allow), installation, connection.CredentialRefs)
+	if err != nil {
+		return nil, err
 	}
 
-	return &HealthAssessment{
-		Status:     enums.IntegrationStatusErrored,
-		Connection: ConnectionHealthResult{Reason: checkErr.Error()},
-		Operations: appendRecordedResults(nil, installation),
-	}, nil
+	return r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings), nil
 }
 
 // assessOperationHealth probes workload operations and records each outcome
@@ -337,7 +344,7 @@ func (r *Runtime) assessOperationHealth(ctx context.Context, installation *ent.I
 			results = append(results, OperationHealthResult{Name: op.Name, Healthy: true})
 
 			if clearErr := r.ClearOperationUnhealthy(ctx, installation, op.Name); clearErr != nil {
-				logx.FromContext(ctx).Error().Err(clearErr).Str("operation", op.Name).Msg("failed clearing recovered operation")
+				logx.FromContext(ctx).Error().Err(clearErr).Str(notificationFieldOperation, op.Name).Msg("failed clearing recovered operation")
 			}
 
 			continue
@@ -351,7 +358,7 @@ func (r *Runtime) assessOperationHealth(ctx context.Context, installation *ent.I
 		results = append(results, OperationHealthResult{Name: op.Name, Healthy: false, Reason: reason})
 
 		if markErr := r.MarkOperationUnhealthy(ctx, installation, op.Name, reason); markErr != nil {
-			logx.FromContext(ctx).Error().Err(markErr).Str("operation", op.Name).Msg("failed marking operation unhealthy")
+			logx.FromContext(ctx).Error().Err(markErr).Str(notificationFieldOperation, op.Name).Msg("failed marking operation unhealthy")
 		}
 	}
 
@@ -403,35 +410,6 @@ func (r *Runtime) runOperationProbe(ctx context.Context, installation *ent.Integ
 	return err
 }
 
-// verifyInstallationHealth runs the persisted connection's health check under stored credentials
-func (r *Runtime) verifyInstallationHealth(ctx context.Context, installation *ent.Integration, def types.Definition) error {
-	checkErr, err := r.runPersistedHealthCheck(ctx, installation, def)
-	if err != nil {
-		return err
-	}
-
-	return checkErr
-}
-
-// runPersistedHealthCheck loads the persisted connection's credentials and runs its health check
-func (r *Runtime) runPersistedHealthCheck(ctx context.Context, installation *ent.Integration, def types.Definition) (checkErr, err error) {
-	connection, err := r.resolvePersistedConnection(def, installation)
-	if err != nil {
-		return nil, err
-	}
-
-	if def.HealthCheck == nil {
-		return nil, nil
-	}
-
-	bindings, err := r.loadCredentials(privacy.DecisionContext(ctx, privacy.Allow), installation, connection.CredentialRefs)
-	if err != nil {
-		return nil, err
-	}
-
-	return r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings), nil
-}
-
 // stampHealthCheck records the assessment time on the installation health record
 func (r *Runtime) stampHealthCheck(ctx context.Context, installation *ent.Integration) error {
 	now := time.Now().UTC()
@@ -463,31 +441,7 @@ func appendRecordedResults(results []OperationHealthResult, installation *ent.In
 // workloadOperations returns operations that do work, excluding internal or disabled ones
 func workloadOperations(def types.Definition, installation *ent.Integration) []types.OperationRegistration {
 	return lo.Filter(def.Operations, func(op types.OperationRegistration, _ int) bool {
-		return !op.Internal && !op.DisabledFor(installation.Config.ClientConfig)
-	})
-}
-
-// notifyIntegrationHealth sends a health notification to the organization's owners and admins
-func (r *Runtime) notifyIntegrationHealth(ctx context.Context, installation *ent.Integration, objectType, title, body string, data map[string]any) error {
-	ids, err := notifications.OrgUserIDsByRole(ctx, r.DB(), installation.OwnerID, enums.RoleOwner, enums.RoleSuperAdmin)
-	if err != nil {
-		return err
-	}
-
-	if len(ids) == 0 {
-		return nil
-	}
-
-	topic := enums.NotificationTopicIntegration
-
-	return entityops.CreateNotifications(ctx, r.DB(), ids, &ent.CreateNotificationInput{
-		NotificationType: enums.NotificationTypeOrganization,
-		ObjectType:       objectType,
-		Title:            title,
-		Body:             body,
-		Data:             data,
-		Topic:            &topic,
-		OwnerID:          &installation.OwnerID,
+		return !op.Internal && !op.DisabledFor(installation.OperationConfig.For(op.Name))
 	})
 }
 

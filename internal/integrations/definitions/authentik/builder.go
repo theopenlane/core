@@ -10,17 +10,15 @@ import (
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Authentik",
-				DisplayName: "Authentik",
-				Description: "Collect Authentik directory users, groups, and memberships for identity posture and access governance.",
-				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/authentik",
-				Tags:        []string{"directory"},
-				Active:      true,
-				Visible:     true,
-			},
+			ID:           definitionID.ID(),
+			Family:       "Authentik",
+			DisplayName:  "Authentik",
+			Description:  "Collect Authentik directory users, groups, and memberships for identity posture and access governance.",
+			Category:     "identity",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/authentik",
+			Tags:         []string{"directory"},
+			Active:       true,
+			Visible:      true,
 			UserInput:    userInput.Registration(),
 			HealthCheck:  authentikClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
@@ -31,13 +29,15 @@ func Builder() registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				authentikConnection.Registration(types.ConnectionRegistration{
-					Name:        "Authentik API Token",
-					Description: "Configure Authentik access using an API token from your instance.",
+				{
+					CredentialRef: authentikCredential.ID(),
+					Name:          "Authentik API Token",
+					Description:   "Configure Authentik access using an API token from your instance.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
+						CredentialRef: authentikCredential.ID(),
+						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				authentikClient.Registration(Client{}.Build, types.ClientRegistration{
@@ -45,11 +45,13 @@ func Builder() registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Collect Authentik directory users, groups, and memberships as directory accounts",
-					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest:      providerkit.DirectoryIngestContracts(),
-				}),
+				types.OperationRefOf[DirectorySync]().
+					Ingests(authentikClient, runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Collect Authentik directory users, groups, and memberships as directory accounts",
+					}),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

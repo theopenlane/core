@@ -36,21 +36,3 @@ func BoolStr(b bool) string {
 
 	return "false"
 }
-
-// StrPtr dereferences a *string for table cells; nil becomes ""
-func StrPtr(s *string) string {
-	if s == nil {
-		return ""
-	}
-
-	return *s
-}
-
-// BoolPtrStr dereferences a *bool for table cells; nil becomes ""
-func BoolPtrStr(b *bool) string {
-	if b == nil {
-		return ""
-	}
-
-	return BoolStr(*b)
-}

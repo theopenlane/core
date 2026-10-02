@@ -14,9 +14,7 @@ var (
 	// gitHubAppCredential is the credential slot for GitHub App installation credentials
 	gitHubAppCredential = types.CredentialRefOf[githubAppCredential]()
 	// gitHubClient is the client ref for the GitHub GraphQL client used by this definition
-	gitHubClient = types.ClientRefOf[GraphQLClient]().Using(gitHubAppCredential)
-	// gitHubAppConnection is the GitHub App installation connection mode enabling the GraphQL client
-	gitHubAppConnection = types.NewConnectionRef(gitHubAppCredential).Enables(gitHubClient)
+	gitHubClient = types.ClientRefOf[GraphQLClient]()
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// pingWebhookEvent is the webhook event ref for GitHub ping events
@@ -31,8 +29,6 @@ var (
 	codeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
 	// secretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
 	secretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
-	// userInput is the installation user input layout for the GitHub App definition
-	userInput = types.NewUserInputRef[UserInput]("githubapp")
 )
 
 const (
@@ -60,41 +56,20 @@ type githubAppCredential struct {
 	OrganizationName string `json:"organizationName,omitempty"`
 }
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// VulnerabilitySync includes the configuration for findings from GitHub Security
-	VulnerabilitySync VulnerabilitySync `json:"findingSync,omitempty" jsonschema:"title=GitHub Security Hub Sync"`
-	// DirectorySync includes the configuration for identity accounts from GitHub organization members
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
-	// RepositorySync included the configuration of repos as assets from GitHub
-	RepositorySync RepositorySync `json:"repositorySync,omitempty" jsonschema:"title=Repository Account Sync"`
-}
-
+// DirectorySync controls the directory sync operation
 type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from GitHub"`
 	// DisableGroupSync will just sync users and no groups or group memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from GitHub, disable groups sync operations"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.Org == 'my-org'"`
 }
 
 // VulnerabilitySync controls the vulnerability collect operation
 type VulnerabilitySync struct {
-	// Disable switches the vulnerability collect operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from GitHub"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.state == 'open'"`
 	// MaxRepos caps the number of repositories scanned during one run
 	MaxRepos int `json:"maxRepos,omitempty" jsonschema:"title=Max Repositories,description=Optional cap on the number of repositories to scan."`
 }
 
-type RepositorySync struct {
-	// Disable switches the repository sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of repositories from GitHub"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.IsPrivate == 'true'"`
-}
+// RepositorySync controls the repository sync operation
+type RepositorySync struct{}
 
 // InstallationMetadata holds the stable GitHub App installation identity attributes
 type InstallationMetadata struct {

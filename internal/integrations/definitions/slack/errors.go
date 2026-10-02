@@ -15,8 +15,6 @@ var (
 	ErrMessageEmpty = errors.New("slack: message must have text, blocks, or attachments")
 	// ErrAuthTestFailed indicates auth.test failed
 	ErrAuthTestFailed = errors.New("slack: auth test failed")
-	// ErrOperationConfigInvalid indicates operation config could not be decoded
-	ErrOperationConfigInvalid = errors.New("slack: operation config invalid")
 	// ErrMessageSendFailed indicates chat.postMessage failed
 	ErrMessageSendFailed = errors.New("slack: message send failed")
 	// ErrResultEncode indicates an operation result could not be serialized

@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keymaker"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -65,18 +67,22 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 	// install authorizes successfully and then fails every sync it runs
 	effectiveInput := in.UserInput
 	if jsonx.IsEmptyRawMessage(effectiveInput) {
-		effectiveInput = installationRec.Config.ClientConfig
+		effectiveInput = installationRec.UserInput.Data
 	}
 
-	if err := h.IntegrationsRuntime.ValidateUserInput(requestCtx, def, effectiveInput); err != nil {
-		logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Msg("integration user input incomplete, refusing to start auth flow")
+	if def.UserInput != nil {
+		req := types.InstallationRequest{Integration: installationRec, UserInput: installationRec.UserInput.Data}
 
-		return h.BadRequest(ctx, ErrIntegrationUserInputRequired)
+		if err := operations.ValidateInput(requestCtx, req, def.UserInput.Schema, def.UserInput.Validate, effectiveInput, integrationsruntime.ErrUserInputInvalid); err != nil {
+			logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Msg("integration user input incomplete, refusing to start auth flow")
+
+			return h.BadRequest(ctx, ErrIntegrationUserInputRequired)
+		}
 	}
 
 	// if we got optional config with the input, persist it
-	if !jsonx.IsEmptyRawMessage(in.UserInput) {
-		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, types.CredentialSlotID{}, nil, nil); err != nil {
+	if !jsonx.IsEmptyRawMessage(in.UserInput) || len(in.OperationConfig) > 0 {
+		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, in.OperationConfig, types.CredentialSlotID{}, nil, nil); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to reconcile user input")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest)

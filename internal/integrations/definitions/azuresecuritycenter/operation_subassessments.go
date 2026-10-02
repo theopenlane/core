@@ -53,9 +53,6 @@ type SubAssessmentPayload struct {
 	CVSSScore *float32 `json:"cvss_score,omitempty"`
 }
 
-// subAssessmentsCollectOperation is the sub-assessments collect operation ref
-var subAssessmentsCollectOperation = types.OperationRefOf[SubAssessmentsCollect]().Ingests(securityCenterClient, runSubAssessmentsCollect)
-
 // SubAssessmentsCollect collects Azure Defender for Cloud sub-assessment findings for ingest
 type SubAssessmentsCollect struct{}
 

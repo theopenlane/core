@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -17,22 +15,21 @@ import (
 // Builder returns the Cloudflare definition builder with the supplied runtime config applied
 func Builder(runtime *RuntimeConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		domainScanRequestOp := DomainScanRequestOp.DisabledForAll(!runtime.Provisioned())
+
 		def := types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "Cloudflare",
-				DisplayName: "Cloudflare",
-				Description: "Perform directory sync and asset collection from Cloudflare.",
-				Category:    "security-posture",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/cloudflare",
-				Tags:        []string{"directory", "assets"},
-				Active:      true,
-				Visible:     true,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "Cloudflare",
+			DisplayName: "Cloudflare",
+			Description: "Perform directory sync and asset collection from Cloudflare.",
+			Category:    "security-posture",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/cloudflare",
+			Tags:        []string{"directory", "assets"},
+			Active:      true,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[RuntimeConfig](),
 			},
-			UserInput:    userInput.Registration(),
 			HealthCheck:  cloudflareClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
@@ -42,13 +39,15 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				cloudflareConnection.Registration(types.ConnectionRegistration{
-					Name:        "Cloudflare API Token",
-					Description: "Configure Cloudflare access using an API token scoped to your account and zones.",
+				{
+					CredentialRef: cloudflareCredential.ID(),
+					Name:          "Cloudflare API Token",
+					Description:   "Configure Cloudflare access using an API token scoped to your account and zones.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Cloudflare dashboard.",
+						CredentialRef: cloudflareCredential.ID(),
+						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Cloudflare dashboard.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				cloudflareClient.Registration(Client{}.Build, types.ClientRegistration{
@@ -56,77 +55,55 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description:         "Collect account members as directory accounts",
-					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest:              providerkit.DirectoryIngestContracts(),
-					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
-					Schedule:            gala.NewFullFetchSchedule(),
-				}),
-				findingsSyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Collect Cloudflare Security Center insights as findings",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaFinding.Name,
-						},
-					},
-					RequiredPermissions: []string{"Account Security Center Insights Read"},
-				}),
-				assetSyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Collect Cloudflare domain registrations as assets",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaAsset.Name,
-						},
-					},
-					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"Registrar Domains Read"},
-					Schedule: &gala.Schedule{
+				types.OperationRefOf[DirectorySync]().
+					Ingests(cloudflareClient, runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Permissions("Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read").
+					Schedule(gala.NewFullFetchSchedule()).
+					SkipDefaultLookback().
+					Registration(DefinitionID, types.OperationRegistration{
+						Description: "Collect account members as directory accounts",
+					}),
+				types.OperationRefOf[FindingsSync]().
+					Ingests(cloudflareClient, runFindingsCollect).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaFinding.Name}).
+					Permissions("Account Security Center Insights Read").
+					Registration(DefinitionID, types.OperationRegistration{
+						Description: "Collect Cloudflare Security Center insights as findings",
+					}),
+				types.OperationRefOf[AssetSync]().
+					Ingests(cloudflareClient, runAssetCollect).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaAsset.Name}).
+					Permissions("Registrar Domains Read").
+					Schedule(&gala.Schedule{
 						MinInterval:        assetSyncMinIntervalHours * time.Hour,
 						MaxInterval:        assetSyncMaxIntervalDays * assetSyncMinIntervalHours * time.Hour,
 						HighDriftThreshold: gala.FullHighDriftThreshold,
-					},
-				}),
+					}).
+					SkipDefaultLookback().
+					Registration(DefinitionID, types.OperationRegistration{
+						Description: "Collect Cloudflare domain registrations as assets",
+					}),
 				DomainScanSubmitOp.Registration(DefinitionID, types.OperationRegistration{
-					Description:        "Submit domains to Cloudflare's URL Scanner for scanning",
-					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
+					Description: "Submit domains to Cloudflare's URL Scanner for scanning",
 				}),
 				DomainScanPollOp.Registration(DefinitionID, types.OperationRegistration{
-					Description:        "Poll a previously submitted Cloudflare URL Scanner result",
-					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
+					Description: "Poll a previously submitted Cloudflare URL Scanner result",
 				}),
 				DomainScanEnrichmentOp.Registration(DefinitionID, types.OperationRegistration{
-					Description:        "Gather company profile, compliance, and DNS vendor data for a domain",
-					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
+					Description: "Gather company profile, compliance, and DNS vendor data for a domain",
 				}),
 				DomainScanBuildReportOp.Registration(DefinitionID, types.OperationRegistration{
-					Description:        "Build the onboarding domain scan report from a completed URL Scanner result and gathered enrichment",
-					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
+					Description: "Build the onboarding domain scan report from a completed URL Scanner result and gathered enrichment",
 				}),
-				DomainScanRequestOp.Registration(DefinitionID, types.OperationRegistration{
-					Description:           "Request a domain scan for a single domain",
-					Policy:                types.ExecutionPolicy{Inline: true, SkipRunRecord: true},
-					DisabledForAll:        !runtime.Provisioned(),
-					RateLimit:             &types.RateLimitPolicy{Window: time.Hour},
-					CustomerSelectable:    lo.ToPtr(false),
-					RequiresPaymentMethod: true,
+				domainScanRequestOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Request a domain scan for a single domain",
 				}),
 				DomainScanImportOp.Registration(DefinitionID, types.OperationRegistration{
-					Description:        "Import a reviewer-accepted domain scan report into real records",
-					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
+					Description: "Import a reviewer-accepted domain scan report into real records",
 				}),
 			},
 			GalaListeners: []types.GalaListenerRegistration{

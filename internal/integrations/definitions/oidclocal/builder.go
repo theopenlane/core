@@ -21,16 +21,14 @@ func Builder(cfg Config) registry.Builder {
 			cfg.RedirectURL != ""
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "oidc",
-				DisplayName: "Local OIDC (Dex)",
-				Description: "Dex-backed local OpenID Connect provider used to exercise integration OAuth start, callback, validation, and credential persistence flows end to end.",
-				Category:    "identity",
-				Tags:        []string{"oidc", "oauth", "local", "testing"},
-				Active:      active,
-				Visible:     active,
-			},
+			ID:          definitionID.ID(),
+			Family:      "oidc",
+			DisplayName: "Local OIDC (Dex)",
+			Description: "Dex-backed local OpenID Connect provider used to exercise integration OAuth start, callback, validation, and credential persistence flows end to end.",
+			Category:    "identity",
+			Tags:        []string{"oidc", "oauth", "local", "testing"},
+			Active:      active,
+			Visible:     active,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
@@ -43,9 +41,10 @@ func Builder(cfg Config) registry.Builder {
 			HealthCheck:  types.CredentialHealthCheck(checkHealth),
 			Installation: installation.Registration(),
 			Connections: []types.ConnectionRegistration{
-				oidcConnection.Registration(types.ConnectionRegistration{
-					Name:        "Local Dex OIDC",
-					Description: "Connect through the local Dex development provider to test integration OAuth callback flows end to end.",
+				{
+					CredentialRef: oidcCredential.ID(),
+					Name:          "Local Dex OIDC",
+					Description:   "Connect through the local Dex development provider to test integration OAuth callback flows end to end.",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[oidcLocalCred]{
 						CredentialRef: oidcCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -87,15 +86,18 @@ func Builder(cfg Config) registry.Builder {
 						EncodeCredentialError: ErrCredentialEncode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored local Dex credential from Openlane.",
+						CredentialRef: oidcCredential.ID(),
+						Description:   "Removes the stored local Dex credential from Openlane.",
 					},
-				}),
+				},
 			},
 			Operations: []types.OperationRegistration{
-				claimsInspectOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Return the raw OIDC ID token claims stored with the auth-managed credential.",
-					Policy:      types.ExecutionPolicy{Inline: true},
-				}),
+				types.OperationRefOf[ClaimsInspect]().
+					HandlesRequest(inspectClaims).
+					Policy(types.ExecutionPolicy{Inline: true}).
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Return the raw OIDC ID token claims stored with the auth-managed credential.",
+					}),
 			},
 		}, nil
 	})

@@ -3,6 +3,7 @@ package slack
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/samber/lo"
 	slackgo "github.com/slack-go/slack"
@@ -13,7 +14,7 @@ import (
 )
 
 // MessageSendOp is the operation ref for the Slack message send operation
-var MessageSendOp = types.OperationRefOf[MessageSendOperation]().Handles(slackClient, MessageSend{}.Run) //nolint:revive
+var MessageSendOp = types.OperationRefOf[MessageSendOperation]().Handles(slackClient, MessageSend{}.Run).Permissions(scopes...) //nolint:revive
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
@@ -81,10 +82,10 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *Slack
 		var blocks slackgo.Blocks
 		encoded, err := json.Marshal(cfg.Blocks)
 		if err != nil {
-			return nil, ErrOperationConfigInvalid
+			return nil, fmt.Errorf("%w: %w", types.ErrOperationConfigInvalid, err)
 		}
 		if err := json.Unmarshal(encoded, &blocks); err != nil {
-			return nil, ErrOperationConfigInvalid
+			return nil, fmt.Errorf("%w: %w", types.ErrOperationConfigInvalid, err)
 		}
 
 		opts = append(opts, slackgo.MsgOptionBlocks(blocks.BlockSet...))

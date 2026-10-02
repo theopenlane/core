@@ -15,9 +15,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// assetSyncOperation is the operation ref for the domain asset sync operation
-var assetSyncOperation = types.OperationRefOf[AssetSync]().Ingests(cloudflareClient, runAssetCollect)
-
 // runAssetCollect collects Cloudflare domain registrations and emits asset ingest payloads
 func runAssetCollect(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ AssetSync) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(request.Credentials)

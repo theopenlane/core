@@ -14,13 +14,9 @@ var (
 	// workspaceCredential is the credential slot for Google Workspace OAuth credentials
 	workspaceCredential = types.CredentialRefOf[googleWorkspaceCred]()
 	// workspaceClient is the client ref for the Google Workspace Admin SDK
-	workspaceClient = types.ClientRefOf[*admin.Service]().Using(workspaceCredential)
-	// workspaceConnection is the OAuth connection mode enabling the Admin SDK client
-	workspaceConnection = types.NewConnectionRef(workspaceCredential).Enables(workspaceClient)
-	// userInput is the installation user input layout, replacing the flat v1 layout
-	userInput = types.NewUserInputRef[UserInput]("googleworkspace").Replacing(types.NewUserInputRef[oldUserInput]("googleworkspace-v1"), func(old oldUserInput) UserInput {
-		return UserInput{PrimaryDirectory: old.PrimaryDirectory, DirectorySync: DirectorySync{FilterExpr: old.FilterExpr}}
-	})
+	workspaceClient = types.ClientRefOf[*admin.Service]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // googleWorkspaceCred holds provider-owned credential material for the installation
@@ -37,25 +33,10 @@ type googleWorkspaceCred struct {
 type UserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative directory source
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
-	// DirectorySync configures the directory sync operation
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
 }
 
 // DirectorySync configures collection of Google Workspace directory users, groups, and memberships
-type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Google Workspace"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.orgUnitPath.startsWith('/engineering/')"`
-}
-
-// oldUserInput is the flat v1 installation user input layout
-type oldUserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative directory source
-	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.orgUnitPath.startsWith('/engineering/')"`
-}
+type DirectorySync struct{}
 
 // InstallationMetadata holds the Google Workspace directory target for an installation
 type InstallationMetadata struct {

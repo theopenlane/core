@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"encoding/json"
 	"encoding/json/jsontext"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -23,7 +24,7 @@ func (r *integrationResolver) WebhookURLs(ctx context.Context, obj *generated.In
 		return nil, nil
 	}
 
-	def, ok := r.integrationsRuntime.Definition(obj.DefinitionID)
+	def, ok := r.integrationsRuntime.Registry().Definition(obj.DefinitionID)
 	if !ok {
 		return nil, nil
 	}
@@ -47,7 +48,7 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 		return nil, nil
 	}
 
-	def, ok := r.integrationsRuntime.Definition(obj.DefinitionID)
+	def, ok := r.integrationsRuntime.Registry().Definition(obj.DefinitionID)
 	if !ok {
 		return nil, nil
 	}
@@ -100,7 +101,7 @@ func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integra
 		return nil, nil
 	}
 
-	def, ok := r.integrationsRuntime.Definition(obj.DefinitionID)
+	def, ok := r.integrationsRuntime.Registry().Definition(obj.DefinitionID)
 	if !ok {
 		return nil, nil
 	}
@@ -109,7 +110,7 @@ func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integra
 		return nil, nil
 	}
 
-	currentConfig, err := jsonx.ToMap(obj.Config.ClientConfig)
+	currentConfig, err := jsonx.ToMap(obj.UserInput.Data)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Msg("error getting current config, returning full schema")
 
@@ -117,4 +118,51 @@ func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integra
 	}
 
 	return jsonx.InjectDefaults(def.UserInput.Schema, currentConfig)
+}
+
+// OperationConfig is the resolver for the operationConfig field.
+func (r *integrationResolver) OperationConfig(ctx context.Context, obj *generated.Integration) (jsontext.Value, error) {
+	if r.integrationsRuntime == nil {
+		return nil, nil
+	}
+
+	def, ok := r.integrationsRuntime.Registry().Definition(obj.DefinitionID)
+	if !ok {
+		return nil, nil
+	}
+
+	schemas := map[string]json.RawMessage{}
+
+	for _, operation := range def.Operations {
+		if operation.Input == nil || operation.Internal || operation.DisabledForAll {
+			continue
+		}
+
+		stored, err := jsonx.ToMap(obj.OperationConfig.For(operation.Name))
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Str("operation", operation.Name).Msg("error getting stored operation config, returning full schema")
+
+			schemas[operation.Name] = operation.Input.Schema
+
+			continue
+		}
+
+		schema, err := jsonx.InjectDefaults(operation.Input.Schema, stored)
+		if err != nil {
+			return nil, err
+		}
+
+		schemas[operation.Name] = schema
+	}
+
+	if len(schemas) == 0 {
+		return nil, nil
+	}
+
+	out, err := jsonx.ToRawMessage(schemas)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsontext.Value(out), nil
 }

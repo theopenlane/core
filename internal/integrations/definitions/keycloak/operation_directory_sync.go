@@ -10,9 +10,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// directorySyncOperation is the Keycloak directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(keycloakClient, runDirectorySync)
-
 // runDirectorySync collects Keycloak directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, request types.OperationRequest, gc *gocloak.GoCloak, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	cred, err := resolveCredential(request.Credentials)

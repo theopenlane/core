@@ -460,6 +460,46 @@ func (_u *IntegrationUpdate) ClearProviderState() *IntegrationUpdate {
 	return _u
 }
 
+// SetUserInput sets the "user_input" field.
+func (_u *IntegrationUpdate) SetUserInput(v openapi.IntegrationUserInput) *IntegrationUpdate {
+	_u.mutation.SetUserInput(v)
+	return _u
+}
+
+// SetNillableUserInput sets the "user_input" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableUserInput(v *openapi.IntegrationUserInput) *IntegrationUpdate {
+	if v != nil {
+		_u.SetUserInput(*v)
+	}
+	return _u
+}
+
+// ClearUserInput clears the value of the "user_input" field.
+func (_u *IntegrationUpdate) ClearUserInput() *IntegrationUpdate {
+	_u.mutation.ClearUserInput()
+	return _u
+}
+
+// SetOperationConfig sets the "operation_config" field.
+func (_u *IntegrationUpdate) SetOperationConfig(v openapi.IntegrationOperationConfig) *IntegrationUpdate {
+	_u.mutation.SetOperationConfig(v)
+	return _u
+}
+
+// SetNillableOperationConfig sets the "operation_config" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableOperationConfig(v *openapi.IntegrationOperationConfig) *IntegrationUpdate {
+	if v != nil {
+		_u.SetOperationConfig(*v)
+	}
+	return _u
+}
+
+// ClearOperationConfig clears the value of the "operation_config" field.
+func (_u *IntegrationUpdate) ClearOperationConfig() *IntegrationUpdate {
+	_u.mutation.ClearOperationConfig()
+	return _u
+}
+
 // SetMetadata sets the "metadata" field.
 func (_u *IntegrationUpdate) SetMetadata(v map[string]interface{}) *IntegrationUpdate {
 	_u.mutation.SetMetadata(v)
@@ -1633,6 +1673,18 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.ProviderStateCleared() {
 		_spec.ClearField(integration.FieldProviderState, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.UserInput(); ok {
+		_spec.SetField(integration.FieldUserInput, field.TypeJSON, value)
+	}
+	if _u.mutation.UserInputCleared() {
+		_spec.ClearField(integration.FieldUserInput, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.OperationConfig(); ok {
+		_spec.SetField(integration.FieldOperationConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.OperationConfigCleared() {
+		_spec.ClearField(integration.FieldOperationConfig, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)
@@ -3149,6 +3201,46 @@ func (_u *IntegrationUpdateOne) ClearProviderState() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetUserInput sets the "user_input" field.
+func (_u *IntegrationUpdateOne) SetUserInput(v openapi.IntegrationUserInput) *IntegrationUpdateOne {
+	_u.mutation.SetUserInput(v)
+	return _u
+}
+
+// SetNillableUserInput sets the "user_input" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableUserInput(v *openapi.IntegrationUserInput) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetUserInput(*v)
+	}
+	return _u
+}
+
+// ClearUserInput clears the value of the "user_input" field.
+func (_u *IntegrationUpdateOne) ClearUserInput() *IntegrationUpdateOne {
+	_u.mutation.ClearUserInput()
+	return _u
+}
+
+// SetOperationConfig sets the "operation_config" field.
+func (_u *IntegrationUpdateOne) SetOperationConfig(v openapi.IntegrationOperationConfig) *IntegrationUpdateOne {
+	_u.mutation.SetOperationConfig(v)
+	return _u
+}
+
+// SetNillableOperationConfig sets the "operation_config" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableOperationConfig(v *openapi.IntegrationOperationConfig) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetOperationConfig(*v)
+	}
+	return _u
+}
+
+// ClearOperationConfig clears the value of the "operation_config" field.
+func (_u *IntegrationUpdateOne) ClearOperationConfig() *IntegrationUpdateOne {
+	_u.mutation.ClearOperationConfig()
+	return _u
+}
+
 // SetMetadata sets the "metadata" field.
 func (_u *IntegrationUpdateOne) SetMetadata(v map[string]interface{}) *IntegrationUpdateOne {
 	_u.mutation.SetMetadata(v)
@@ -4352,6 +4444,18 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if _u.mutation.ProviderStateCleared() {
 		_spec.ClearField(integration.FieldProviderState, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.UserInput(); ok {
+		_spec.SetField(integration.FieldUserInput, field.TypeJSON, value)
+	}
+	if _u.mutation.UserInputCleared() {
+		_spec.ClearField(integration.FieldUserInput, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.OperationConfig(); ok {
+		_spec.SetField(integration.FieldOperationConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.OperationConfigCleared() {
+		_spec.ClearField(integration.FieldOperationConfig, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)

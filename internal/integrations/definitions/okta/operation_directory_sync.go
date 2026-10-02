@@ -28,9 +28,6 @@ type directoryMembershipPayload struct {
 	Member *oktagosdk.User `json:"member,omitempty"`
 }
 
-// directorySyncOperation is the Okta directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(oktaClient, runDirectorySync)
-
 // runDirectorySync collects Okta directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *oktagosdk.APIClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c, cfg)

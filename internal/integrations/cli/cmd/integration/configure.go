@@ -20,15 +20,17 @@ var configureCmd = &cobra.Command{
 organization resolved from the authenticated session.
 
 --body carries the provider-specific credential JSON (required on create);
---user-input carries the installation-scoped configuration JSON. Either flag
-may be a raw JSON string or an @path/to/file.json reference.
+--user-input carries the installation-scoped configuration JSON;
+--operation-config carries per-operation input keyed by operation name. Each
+flag may be a raw JSON string or an @path/to/file.json reference.
 
 Example (email / resend):
   integrations integration configure \
     --definition-id def_01EMAILINT00000000000000001 \
     --credential-ref email-api-key \
     --body '{"apiKey":"re_xxx","provider":"resend"}' \
-    --user-input '{"fromEmail":"noreply@example.com","companyName":"Acme"}'`,
+    --user-input '{"fromEmail":"noreply@example.com","companyName":"Acme"}' \
+    --operation-config '{"DirectorySync":{"disable":false,"filterExpr":"true"}}'`,
 	RunE: func(c *cobra.Command, _ []string) error {
 		return configure(c.Context())
 	},
@@ -42,6 +44,7 @@ func init() {
 	configureCmd.Flags().String("credential-ref", "", "credential slot identifier for this configuration")
 	configureCmd.Flags().String("body", "", "provider-specific credential fields as JSON (or @file.json)")
 	configureCmd.Flags().String("user-input", "", "optional installation-scoped configuration as JSON (or @file.json)")
+	configureCmd.Flags().String("operation-config", "", "optional per-operation input as a JSON object keyed by operation name (or @file.json)")
 }
 
 // configure dispatches the configure request
@@ -100,6 +103,17 @@ func buildConfigureRequest() (*api.ConfigureIntegrationRequest, error) {
 	}
 
 	req.UserInput = userInput
+
+	operationConfig, err := loadJSONFlag(cmd.Config.String("operation-config"))
+	if err != nil {
+		return nil, ErrInvalidOperationConfig
+	}
+
+	if operationConfig != nil {
+		if err := json.Unmarshal(operationConfig, &req.OperationConfig); err != nil {
+			return nil, ErrInvalidOperationConfig
+		}
+	}
 
 	return req, nil
 }

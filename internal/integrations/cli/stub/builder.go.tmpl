@@ -9,18 +9,15 @@ import (
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "{{ family }}",
-				DisplayName: "{{ display }}",
-				Description: "Collect data from {{ display }}.",
-				Category:    "{{ category }}",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/{{ slug }}",
-				Tags:        []string{"assets"},
-				Active:      false,
-				Visible:     true,
-			},
-			UserInput:    userInput.Registration(),
+			ID:           definitionID.ID(),
+			Family:       "{{ family }}",
+			DisplayName:  "{{ display }}",
+			Description:  "Collect data from {{ display }}.",
+			Category:     "{{ category }}",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/{{ slug }}",
+			Tags:         []string{"assets"},
+			Active:       false,
+			Visible:      true,
 			HealthCheck:  {{ name }}Client.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
@@ -30,13 +27,15 @@ func Builder() registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{{ name }}Connection.Registration(types.ConnectionRegistration{
-					Name:        "{{ display }} API Token",
-					Description: "Configure {{ display }} access using an API token scoped to your account.",
+				{
+					CredentialRef: {{ name }}Credential.ID(),
+					Name:          "{{ display }} API Token",
+					Description:   "Configure {{ display }} access using an API token scoped to your account.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your {{ display }} account.",
+						CredentialRef: {{ name }}Credential.ID(),
+						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your {{ display }} account.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				{{ name }}Client.Registration(Client{}.Build, types.ClientRegistration{

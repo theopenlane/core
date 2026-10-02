@@ -10,6 +10,8 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // DefinitionID is the id of the shared test integration definition
@@ -19,44 +21,48 @@ var (
 	// RepoSyncOp is the async client-resolving operation
 	RepoSyncOp = types.OperationRefOf[repoSync]().Handles(testClient, repoSyncHandler)
 	// ValidatedOp is the inline operation with a required config field
-	ValidatedOp = types.OperationRefOf[validatedRun]().HandlesRequest(validatedHandler)
+	ValidatedOp = types.OperationRefOf[validatedRun]().HandlesRequest(validatedHandler).Policy(types.ExecutionPolicy{Inline: true})
 	// RecurringOp is the healthy idle loop
-	RecurringOp = types.OperationRefOf[recurringCycle]().HandlesRequest(idleCycle[recurringCycle])
+	RecurringOp = types.OperationRefOf[recurringCycle]().
+			HandlesRequest(idleCycle[recurringCycle]).
+			Policy(types.ExecutionPolicy{Reconcile: true}).
+			Schedule(&gala.Schedule{MinInterval: recurringInterval})
 	// ExhaustingOp is the always-failing loop
-	ExhaustingOp = types.OperationRefOf[exhaustingCycle]().HandlesRequest(failingCycle)
+	ExhaustingOp = types.OperationRefOf[exhaustingCycle]().
+			HandlesRequest(failingCycle).
+			Policy(types.ExecutionPolicy{Reconcile: true}).
+			Schedule(&gala.Schedule{MinInterval: exhaustingInterval, MaxErrorStreak: exhaustingMaxErrorStreak})
 	// UnresolvableOp is the client-resolving loop seeded without a credential
-	UnresolvableOp = types.OperationRefOf[unresolvableCycle]().Handles(testClient, idleClientCycle)
+	UnresolvableOp = types.OperationRefOf[unresolvableCycle]().
+			Handles(testClient, idleClientCycle).
+			Policy(types.ExecutionPolicy{Reconcile: true}).
+			Schedule(&gala.Schedule{MinInterval: recurringInterval})
 
 	// LegacyTokenCredential is the unregistered legacy token credential slot
 	LegacyTokenCredential = types.CredentialRefOf[legacyTokenCred]()
-	// TokenCredential is the token slot the test client is built from
-	TokenCredential = types.CredentialRefOf[tokenCred]().Replacing(LegacyTokenCredential, func(l legacyTokenCred) tokenCred { return tokenCred{Token: l.AccessToken} })
+	// TokenCredential is the token slot the test client is built from, taking over the legacy slot's payloads
+	TokenCredential = types.CredentialRefOf[tokenCred]().Replacing(LegacyTokenCredential).Upgraded(upgradeLegacyToken)
 	// OAuthCredential is the auth-managed slot filled by the OAuth fixture
 	OAuthCredential = types.CredentialRefOf[oauthTokenCred]()
 	// ServiceAccountCredential is the strict-schema service account credential slot
-	ServiceAccountCredential = types.CredentialRefOf[serviceAccountCred]().Backfilled(func(_ context.Context, req types.InstallationRequest, c *serviceAccountCred) error {
+	ServiceAccountCredential = types.CredentialRefOf[serviceAccountCred]().Upgraded(func(_ context.Context, req types.InstallationRequest, _ string, stored json.RawMessage) (serviceAccountCred, error) {
+		c, err := jsonx.Decode[serviceAccountCred](stored)
+		if err != nil {
+			return serviceAccountCred{}, err
+		}
+
 		if c.ServiceAccountEmail == "" {
 			c.ServiceAccountEmail = req.Integration.ID + "@backfilled.example.com"
 		}
 
-		return nil
+		return c, nil
 	})
 
 	// testClient is the client built from the token credential
 	testClient = types.ClientRefOf[*Client]().Using(TokenCredential)
 
-	// oauthConnection is the OAuth connection mode
-	oauthConnection = types.NewConnectionRef(OAuthCredential)
-	// tokenConnection is the token connection mode
-	tokenConnection = types.NewConnectionRef(TokenCredential)
-	// serviceAccountConnection is the service account connection mode
-	serviceAccountConnection = types.NewConnectionRef(ServiceAccountCredential)
-
 	// WebhookAlertCreated is the webhook event contract
 	WebhookAlertCreated = types.NewWebhookEventRef[webhookAlertEnvelope]("alert.created")
-
-	// userInput is the shared test definition's user input layout
-	userInput = types.NewUserInputRef[UserInput]("test-input")
 )
 
 const (
@@ -117,25 +123,44 @@ type serviceAccountCred struct {
 	ServiceAccountEmail string `json:"serviceAccountEmail" jsonschema:"required"`
 }
 
-// UserInput is the installation-scoped user input for the test definition
-type UserInput struct {
-	// Mode is the recurring loop operation selector
-	Mode string `json:"mode,omitempty" jsonschema:"title=Scheduling Mode"`
-	// FilterExpr is a free-form filter expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression"`
-}
-
 type webhookAlertEnvelope struct{}
 
-// ModeInput returns the installation user input selecting one scheduling mode
-func ModeInput(mode string) json.RawMessage {
-	return lo.Must(json.Marshal(UserInput{Mode: mode}))
+// ModeOperationConfig returns the per-operation input disabling every reconcile loop except the one selected by mode
+func ModeOperationConfig(mode string) map[string]json.RawMessage {
+	loops := map[string]string{
+		ModeRecurring:    RecurringOp.Name(),
+		ModeExhausting:   ExhaustingOp.Name(),
+		ModeUnresolvable: UnresolvableOp.Name(),
+	}
+
+	config := make(map[string]json.RawMessage, len(loops))
+
+	for loopMode, operation := range loops {
+		config[operation] = lo.Must(json.Marshal(types.OperationSettings{Disable: loopMode != mode}))
+	}
+
+	return config
 }
 
 // legacyTokenCred is the token shape stored under the retired slot
 type legacyTokenCred struct {
 	// AccessToken is the legacy field name for the token
 	AccessToken string `json:"accessToken"`
+}
+
+// upgradeLegacyToken maps a payload stored under the legacy token slot onto the current token shape
+func upgradeLegacyToken(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (tokenCred, error) {
+	switch from {
+	case LegacyTokenCredential.ID().String():
+		legacy, err := jsonx.Decode[legacyTokenCred](stored)
+		if err != nil {
+			return tokenCred{}, err
+		}
+
+		return tokenCred{Token: legacy.AccessToken}, nil
+	default:
+		return jsonx.Decode[tokenCred](stored)
+	}
 }
 
 // credentialSet returns a credential payload marshaled from value

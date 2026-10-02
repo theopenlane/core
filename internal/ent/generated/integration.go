@@ -74,6 +74,10 @@ type Integration struct {
 	InstallationMetadata openapi.IntegrationInstallationMetadata `json:"installation_metadata,omitempty"`
 	// provider-specific integration state captured during auth/config
 	ProviderState openapi.IntegrationProviderState `json:"provider_state,omitempty"`
+	// installation-scoped user input stored under the layout name it was collected with
+	UserInput openapi.IntegrationUserInput `json:"user_input,omitempty"`
+	// installation-scoped operation input keyed by operation name
+	OperationConfig openapi.IntegrationOperationConfig `json:"operation_config,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// runtime health state recorded by health checks and reconcile failures
@@ -423,7 +427,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldHealth, integration.FieldProviderMetadataSnapshot:
+		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldUserInput, integration.FieldOperationConfig, integration.FieldMetadata, integration.FieldHealth, integration.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory, integration.FieldCampaignEmail:
 			values[i] = new(sql.NullBool)
@@ -617,6 +621,22 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.ProviderState); err != nil {
 					return fmt.Errorf("unmarshal field provider_state: %w", err)
+				}
+			}
+		case integration.FieldUserInput:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field user_input", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.UserInput); err != nil {
+					return fmt.Errorf("unmarshal field user_input: %w", err)
+				}
+			}
+		case integration.FieldOperationConfig:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field operation_config", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.OperationConfig); err != nil {
+					return fmt.Errorf("unmarshal field operation_config: %w", err)
 				}
 			}
 		case integration.FieldMetadata:
@@ -947,6 +967,12 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("provider_state=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderState))
+	builder.WriteString(", ")
+	builder.WriteString("user_input=")
+	builder.WriteString(fmt.Sprintf("%v", _m.UserInput))
+	builder.WriteString(", ")
+	builder.WriteString("operation_config=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OperationConfig))
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))

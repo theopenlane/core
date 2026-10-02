@@ -39,7 +39,16 @@ type configTestCredential struct {
 	ServiceAccountEmail string `json:"serviceAccountEmail" jsonschema:"required"`
 }
 
-var configTestCredentialRef = types.CredentialRefOf[configTestCredential]()
+// configTestUserInput is the installation-scoped user input layout stored by the config test definitions
+type configTestUserInput struct {
+	// FilterExpr is a free-form filter expression
+	FilterExpr string `json:"filterExpr,omitempty"`
+}
+
+var (
+	configTestCredentialRef = types.CredentialRefOf[configTestCredential]()
+	configTestUserInputRef  = types.UserInputRefOf[configTestUserInput]()
+)
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	t := suite.T()
@@ -80,11 +89,95 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 		).
 		OnlyX(testUser.UserCtx)
 
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
+	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
 	assert.NoError(t, err)
 	assert.True(t, ok)
 	assert.Contains(t, string(credential.Data), "projectId")
-	assert.Equal(t, `payload.severity == "HIGH"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
+	assert.Equal(t, configTestUserInputRef.Name(), stored.UserInput.Layout)
+	assert.Equal(t, `payload.severity == "HIGH"`, decodeUserInputField(t, stored.UserInput.Data, "filterExpr"))
+}
+
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderStoresOperationConfig() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	resp := performIntegrationConfigRequest(t, suite, testUser.UserCtx, operationTestDefinitionID, handlers.ConfigureIntegrationRequest{
+		DefinitionID:  operationTestDefinitionID,
+		CredentialRef: operationTestCredentialRef.ID().String(),
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"token": "test-token"})),
+		OperationConfig: map[string]json.RawMessage{
+			opTestValidatedOperation.Name(): json.RawMessage(`{"target":"repo","disable":true}`),
+		},
+	})
+
+	stored := suite.db.Integration.GetX(testUser.UserCtx, resp.IntegrationID)
+	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
+	assert.JSONEq(t, `{"target":"repo","disable":true}`, string(stored.OperationConfig.For(opTestValidatedOperation.Name())))
+	assert.Nil(t, stored.OperationConfig.For(opTestRepoSyncOperation.Name()))
+}
+
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInvalidOperationConfig() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+		DefinitionID:  operationTestDefinitionID,
+		CredentialRef: operationTestCredentialRef.ID().String(),
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"token": "test-token"})),
+		OperationConfig: map[string]json.RawMessage{
+			opTestValidatedOperation.Name(): json.RawMessage(`{"target":1}`),
+		},
+	})
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInvalidFilterExpr() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+		DefinitionID:  operationTestDefinitionID,
+		CredentialRef: operationTestCredentialRef.ID().String(),
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"token": "test-token"})),
+		OperationConfig: map[string]json.RawMessage{
+			opTestValidatedOperation.Name(): json.RawMessage(`{"target":"repo","filterExpr":"payload."}`),
+		},
+	})
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Contains(t, rec.Body.String(), "filter expression invalid")
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderReturnsSCIMEndpointDetails() {
@@ -263,7 +356,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	assert.Equal(t, first.IntegrationID, second.IntegrationID)
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, first.IntegrationID)
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
+	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
 	assert.NoError(t, err)
 	assert.True(t, ok)
 
@@ -299,9 +392,9 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, first.IntegrationID)
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
-	assert.Equal(t, `payload.category == "critical"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
+	assert.Equal(t, `payload.category == "critical"`, decodeUserInputField(t, stored.UserInput.Data, "filterExpr"))
 
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
+	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
 	assert.NoError(t, err)
 	assert.True(t, ok)
 
@@ -340,9 +433,9 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, first.IntegrationID)
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
-	assert.Equal(t, `payload.category == "critical"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
+	assert.Equal(t, `payload.category == "critical"`, decodeUserInputField(t, stored.UserInput.Data, "filterExpr"))
 
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
+	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
 	assert.NoError(t, err)
 	assert.True(t, ok)
 
@@ -386,7 +479,8 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOn
 	assert.Equal(t, http.StatusOK, httpRec.Code)
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, rec.ID)
-	assert.Equal(t, `payload.actor == "service-account"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
+	assert.Equal(t, configTestUserInputRef.Name(), stored.UserInput.Layout)
+	assert.Equal(t, `payload.actor == "service-account"`, decodeUserInputField(t, stored.UserInput.Data, "filterExpr"))
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
 }
 
@@ -459,7 +553,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	assert.Len(t, records, 1, "expected one PENDING installation row after failed setup")
 	assert.Equal(t, enums.IntegrationStatusPending, records[0].Status)
 
-	_, credOk, credErr := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, records[0], configTestCredentialRef.ID())
+	_, credOk, credErr := suite.keystore.LoadCredential(testUser.UserCtx, records[0], configTestCredentialRef.ID())
 	assert.NoError(t, credErr)
 	assert.False(t, credOk, "credential must not be stored after a failed health check")
 }
@@ -481,9 +575,7 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 				Active:      true,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
-			},
+			UserInput: configTestUserInputRef.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				configTestCredentialRef.Registration(types.CredentialRegistration{
 					Name:        "Config Test Credential",
@@ -516,9 +608,7 @@ func userInputOnlyTestDefinitionBuilder(definitionID string) registry.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
-			},
+			UserInput: configTestUserInputRef.Registration(),
 		}, nil
 	})
 }
@@ -556,7 +646,7 @@ func mustMarshalJSON(t *testing.T, value any) []byte {
 	return body
 }
 
-func decodeClientConfigField(t *testing.T, raw json.RawMessage, key string) string {
+func decodeUserInputField(t *testing.T, raw json.RawMessage, key string) string {
 	t.Helper()
 
 	document, err := jsonx.ToMap(raw)

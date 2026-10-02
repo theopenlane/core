@@ -12,18 +12,8 @@ var (
 	// securityCenterCredential is the typed credential slot for the Azure service principal
 	securityCenterCredential = types.CredentialRefOf[CredentialSchema]()
 	// securityCenterClient is the client ref for the Azure Security Center client
-	securityCenterClient = types.ClientRefOf[*SecurityClient]().Using(securityCenterCredential)
-	// securityCenterConnection is the connection mode for the Azure service principal
-	securityCenterConnection = types.NewConnectionRef(securityCenterCredential).Enables(securityCenterClient)
-	// userInput is the installation user input layout for the Azure Security Center definition
-	userInput = types.NewUserInputRef[UserInput]("azuresecuritycenter")
+	securityCenterClient = types.ClientRefOf[*SecurityClient]()
 )
-
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
-}
 
 // CredentialSchema holds the Azure service principal credentials for one installation
 type CredentialSchema struct {

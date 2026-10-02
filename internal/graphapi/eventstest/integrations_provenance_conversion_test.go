@@ -18,7 +18,9 @@ import (
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
-// provenanceConversionDefinitionID is the shared test definition id for conversion fixtures
+// provenanceConversionDefinitionID is the shared test integration definition every conversion
+// fixture installation installs under; it is registered on suite.IntegrationsRT at harness setup
+// so BackfillInstallationProvenance can resolve a definition for both installations
 var provenanceConversionDefinitionID = testint.DefinitionID.ID()
 
 // provenanceConversionTenant is the primary installation's pre-resolved instance id
@@ -27,10 +29,11 @@ const provenanceConversionTenant = "tenant-provconv"
 // provenanceConversionOtherTenant is the second installation's pre-resolved instance id
 const provenanceConversionOtherTenant = "tenant-provconv-other"
 
-// provenanceConversionStaleTenant is a stale instance id stored on a managed row
+// provenanceConversionStaleTenant is an old-format instance id already stored on a managed row, distinct
+// from the installation's current resolved instance id
 const provenanceConversionStaleTenant = "tenant-provconv-stale"
 
-// provenanceSnapshot is one row's provenance state plus its updated_at
+// provenanceSnapshot is the provenance state of one row plus its updated_at, for before/after comparison
 type provenanceSnapshot struct {
 	// DefinitionID is the row's source_definition_id
 	DefinitionID string
@@ -76,7 +79,9 @@ func findingProvenance(ctx context.Context, t *testing.T, id string) provenanceS
 	}
 }
 
-// provenanceConversionProviderState returns the provider state fixture installations must persist
+// provenanceConversionProviderState returns the provider state every fixture installation must
+// persist so it resolves as connected through the shared definition's OAuth connection instead of
+// as never-connected, which is what lets BackfillInstallationProvenance stamp its rows
 func provenanceConversionProviderState(t *testing.T) openapi.IntegrationProviderState {
 	t.Helper()
 
@@ -89,7 +94,13 @@ func provenanceConversionProviderState(t *testing.T) openapi.IntegrationProvider
 	return state
 }
 
-// TestBackfillInstallationProvenanceStampsOrganizationRows verifies provenance backfill stamps and is idempotent
+// TestBackfillInstallationProvenanceStampsOrganizationRows verifies BackfillInstallationProvenance fills
+// source_definition_id, source_definition_version, source_instance_id, and managed_by on rows linked
+// to exactly one installation whose provenance is missing, re-stamps rows already managed by any
+// installation in the caller's organization onto that installation's current resolved instance id
+// regardless of which installation they are linked to, leaves rows linked to several installations
+// untouched, persists the resolved instance id on every installation
+// it converts in the caller's organization, and is idempotent on a second call
 func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)

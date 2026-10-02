@@ -16,11 +16,9 @@ var (
 	// teamsCredential is the auth-managed credential slot used by the Teams client
 	teamsCredential = types.CredentialRefOf[teamsCred]()
 	// teamsClient is the client ref for the Microsoft Graph service client used by this definition
-	teamsClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]().Using(teamsCredential)
-	// teamsConnection is the connection mode selected by the Teams OAuth credential slot
-	teamsConnection = types.NewConnectionRef(teamsCredential).Enables(teamsClient)
+	teamsClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]()
 	// userInput is the installation user input layout for the Microsoft Teams definition
-	userInput = types.NewUserInputRef[UserInput]("microsoftteams")
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // teamsCred holds the provider-owned credential material for a Microsoft Teams installation
@@ -37,8 +35,6 @@ type teamsCred struct {
 type UserInput struct {
 	// DefaultMessaging marks this installation as the preferred tenant for messaging
 	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // InstallationMetadata holds the stable Microsoft tenant identity for one Teams installation

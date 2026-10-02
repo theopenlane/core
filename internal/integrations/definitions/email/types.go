@@ -13,11 +13,9 @@ var (
 	// emailCredentialRef is the typed credential ref for customer-provisioned email
 	emailCredentialRef = types.CredentialRefOf[Credential]()
 	// emailClientRef is the client ref for the email client used by this definition
-	emailClientRef = types.ClientRefOf[*Client]().Using(emailCredentialRef)
-	// emailConnection is the API key connection mode enabling the email client
-	emailConnection = types.NewConnectionRef(emailCredentialRef).Enables(emailClientRef)
+	emailClientRef = types.ClientRefOf[*Client]()
 	// userInput is the installation user input layout for customer-provisioned email
-	userInput = types.NewUserInputRef[UserInput]("email")
+	userInput = types.UserInputRefOf[UserInput]()
 	// resendWebhookRef is the webhook ref for inbound Resend delivery events
 	resendWebhookRef = types.NewWebhookRef("resend.delivery")
 	// resendEmailSentEvent is the webhook event ref for Resend email.sent deliveries

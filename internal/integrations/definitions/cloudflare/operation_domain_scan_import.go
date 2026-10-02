@@ -97,7 +97,13 @@ type DomainScanImport struct {
 }
 
 // DomainScanImportOp is the operation ref for importing an accepted domain scan review
-var DomainScanImportOp = types.OperationRefOf[DomainScanImport]().HandlesRequest(runDomainScanImport) //nolint:revive
+//
+//nolint:revive
+var DomainScanImportOp = types.OperationRefOf[DomainScanImport]().
+	HandlesRequest(runDomainScanImport).
+	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+	CustomerSelectable(false).
+	Internal()
 
 // runDomainScanImport imports the reviewer-accepted domain scan report through the domain scan saga
 func runDomainScanImport(ctx context.Context, request types.OperationRequest, cfg DomainScanImport) (json.RawMessage, error) {

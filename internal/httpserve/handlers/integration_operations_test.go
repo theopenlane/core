@@ -47,9 +47,9 @@ type operationTestCredential struct {
 
 var (
 	operationTestCredentialRef = types.CredentialRefOf[operationTestCredential]()
-	opTestHealthCheckOperation = types.OperationRefOf[OperationTestHealthCheck]()
+	opTestHealthCheckOperation = types.OperationRefOf[OperationTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
 	opTestRepoSyncOperation    = types.OperationRefOf[OperationTestRepoSync]()
-	opTestValidatedOperation   = types.OperationRefOf[OperationTestValidated]()
+	opTestValidatedOperation   = types.OperationRefOf[OperationTestValidated]().Policy(types.ExecutionPolicy{Inline: true})
 )
 
 func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
@@ -81,21 +81,18 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 			Operations: []types.OperationRegistration{
 				opTestHealthCheckOperation.Registration(definition, types.OperationRegistration{
 					Description: "Validate the test credential",
-					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
 				}),
-				opTestRepoSyncOperation.Registration(definition, types.OperationRegistration{
+				opTestRepoSyncOperation.Policy(types.ExecutionPolicy{Inline: inlineNonHealth}).Registration(definition, types.OperationRegistration{
 					Description: "Sync repositories",
-					Policy:      types.ExecutionPolicy{Inline: inlineNonHealth},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"synced":true}`), nil
 					},
 				}),
 				opTestValidatedOperation.Registration(definition, types.OperationRegistration{
 					Description: "Operation with config schema",
-					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"validated":true}`), nil
 					},
@@ -375,7 +372,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
 	t.Helper()
 
-	def, ok := suite.h.IntegrationsRuntime.Definition(definitionID)
+	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
 	require.True(t, ok)
 
 	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
@@ -385,7 +382,7 @@ func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx 
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, operationTestCredentialRef.ID(), &credential, nil)
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, nil, operationTestCredentialRef.ID(), &credential, nil)
 	require.NoError(t, err)
 
 	return rec.ID

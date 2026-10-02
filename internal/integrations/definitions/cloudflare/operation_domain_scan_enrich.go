@@ -30,7 +30,13 @@ type DomainScanBuildReportResult struct {
 }
 
 // DomainScanBuildReportOp is the operation ref for building the scan report
-var DomainScanBuildReportOp = types.OperationRefOf[DomainScanBuildReport]().Handles(cloudflareClient, runDomainScanBuildReport) //nolint:revive
+//
+//nolint:revive
+var DomainScanBuildReportOp = types.OperationRefOf[DomainScanBuildReport]().
+	Handles(cloudflareClient, runDomainScanBuildReport).
+	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+	CustomerSelectable(false).
+	Internal()
 
 // runDomainScanBuildReport builds the structured scan report and encodes it
 func runDomainScanBuildReport(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanBuildReport) (json.RawMessage, error) {
@@ -50,7 +56,7 @@ func (DomainScanBuildReport) Run(ctx context.Context, client *CloudflareClient, 
 		scanResult = &url_scanner.ScanGetResponse{}
 		if err := json.Unmarshal(cfg.Result, scanResult); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("domainscan: invalid config")
-			return DomainScanBuildReportResult{}, fmt.Errorf("%w: %w", ErrOperationConfigInvalid, err)
+			return DomainScanBuildReportResult{}, fmt.Errorf("%w: %w", types.ErrOperationConfigInvalid, err)
 		}
 	}
 

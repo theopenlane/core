@@ -15,27 +15,13 @@ var (
 	// ociCredential is the typed credential slot for OCI API signing key credentials
 	ociCredential = types.CredentialRefOf[CredentialSchema]()
 	// identityClient is the client ref for the OCI Identity client used by the health check
-	identityClient = types.ClientRefOf[*identity.IdentityClient]().Using(ociCredential)
+	identityClient = types.ClientRefOf[*identity.IdentityClient]()
 	// cloudGuardClient is the client ref for the OCI Cloud Guard client used by findings collection
-	cloudGuardClient = types.ClientRefOf[*cloudguard.CloudGuardClient]().Using(ociCredential)
-	// ociConnection is the connection mode selected by the OCI API key credential slot
-	ociConnection = types.NewConnectionRef(ociCredential).Enables(identityClient).Enables(cloudGuardClient)
-	// userInput is the installation user input layout for the Oracle Cloud Infrastructure definition
-	userInput = types.NewUserInputRef[UserInput]("oci")
+	cloudGuardClient = types.ClientRefOf[*cloudguard.CloudGuardClient]()
 )
-
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// FindingsSync includes the configuration for findings from OCI Cloud Guard
-	FindingsSync FindingsSync `json:"findingsSync" jsonschema:"title=Cloud Guard Findings Sync"`
-}
 
 // FindingsSync holds installation-specific configuration for OCI Cloud Guard problem collection
 type FindingsSync struct {
-	// Disable switches the findings sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of problems from OCI Cloud Guard"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.riskLevel == 'CRITICAL' || payload.riskLevel == 'HIGH'"`
 	// SkipProblemDetails collects only the list response and skips the per-problem detail lookup
 	SkipProblemDetails bool `json:"skipProblemDetails,omitempty" jsonschema:"title=Skip Problem Details,description=Skip the per-problem detail lookup. Far fewer API calls on large tenancies, but findings arrive without a description or recommendation"`
 }

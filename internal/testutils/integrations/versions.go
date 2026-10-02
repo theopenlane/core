@@ -38,21 +38,60 @@ var (
 	// TokenV1 is the version 1 token credential slot
 	TokenV1 = types.CredentialRefOf[tokenV1]()
 	// TokenV2 is the version 2 token credential slot
-	TokenV2 = types.CredentialRefOf[tokenV2]().Replacing(TokenV1, func(o tokenV1) tokenV2 { return tokenV2{Token: o.AccessToken} })
+	TokenV2 = types.CredentialRefOf[tokenV2]().Replacing(TokenV1).Upgraded(upgradeTokenV2)
 	// TokenV4 is the version 4 token credential slot
 	TokenV4 = types.CredentialRefOf[tokenV3]()
 	// TokenV3 is the version 3 token credential slot
-	TokenV3 = TokenV4.
-		Replacing(TokenV2, func(o tokenV2) tokenV3 { return tokenV3{Token: o.Token} }).
-		Replacing(TokenV1, func(o tokenV1) tokenV3 { return tokenV3{Token: o.AccessToken} }).
-		Backfilled(func(_ context.Context, req types.InstallationRequest, c *tokenV3) error {
-			if c.Region == "" {
-				c.Region = req.Integration.ID
-			}
-
-			return nil
-		})
+	TokenV3 = TokenV4.Replacing(TokenV2).Replacing(TokenV1).Upgraded(upgradeTokenV3)
 )
+
+// upgradeTokenV2 maps a version 1 payload onto the version 2 token shape
+func upgradeTokenV2(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (tokenV2, error) {
+	switch from {
+	case TokenV1.ID().String():
+		old, err := jsonx.Decode[tokenV1](stored)
+		if err != nil {
+			return tokenV2{}, err
+		}
+
+		return tokenV2{Token: old.AccessToken}, nil
+	default:
+		return jsonx.Decode[tokenV2](stored)
+	}
+}
+
+// upgradeTokenV3 maps version 1 and 2 payloads onto the version 3 token shape and fills the region from the installation
+func upgradeTokenV3(_ context.Context, req types.InstallationRequest, from string, stored json.RawMessage) (tokenV3, error) {
+	var (
+		current tokenV3
+		err     error
+	)
+
+	switch from {
+	case TokenV1.ID().String():
+		var old tokenV1
+
+		old, err = jsonx.Decode[tokenV1](stored)
+		current = tokenV3{Token: old.AccessToken}
+	case TokenV2.ID().String():
+		var old tokenV2
+
+		old, err = jsonx.Decode[tokenV2](stored)
+		current = tokenV3{Token: old.Token}
+	default:
+		current, err = jsonx.Decode[tokenV3](stored)
+	}
+
+	if err != nil {
+		return tokenV3{}, err
+	}
+
+	if current.Region == "" {
+		current.Region = req.Integration.ID
+	}
+
+	return current, nil
+}
 
 // TokenV1Set returns the version 1 token credential payload
 func TokenV1Set(token string) types.CredentialSet {
@@ -86,25 +125,64 @@ type userInputV3 struct {
 	Filter string `json:"filter" jsonschema:"required"`
 }
 
-// userInputV1Ref is the version 1 user input layout ref
-var userInputV1Ref = types.NewUserInputRef[userInputV1]("version-input.v1")
+var (
+	// UserInputV1 is the version 1 user input layout
+	UserInputV1 = types.UserInputRefOf[userInputV1]()
+	// UserInputV2 is the version 2 user input layout, taking over version 1 documents
+	UserInputV2 = types.UserInputRefOf[userInputV2]().Upgraded(upgradeUserInputV2)
+	// UserInputV4 is the version 4 user input layout, the version 3 layout with its upgrade removed
+	UserInputV4 = types.UserInputRefOf[userInputV3]()
+	// UserInputV3 is the version 3 user input layout, taking over version 1 and 2 documents
+	UserInputV3 = UserInputV4.Upgraded(upgradeUserInputV3)
+)
 
-// userInputV2Ref is the version 2 user input layout ref
-var userInputV2Ref = types.NewUserInputRef[userInputV2]("version-input.v2")
-
-// userInputV4Ref is the version 4 user input layout ref
-var userInputV4Ref = types.NewUserInputRef[userInputV3]("version-input.v3")
-
-// UserInputV3 is the version 3 user input layout ref
-var UserInputV3 = userInputV4Ref.
-	Replacing(userInputV2Ref, func(o userInputV2) userInputV3 { return userInputV3{Mode: o.Mode, Filter: o.FilterExpr} }).
-	Backfilled(func(_ context.Context, _ types.InstallationRequest, c *userInputV3) error {
-		if c.Filter == "" {
-			c.Filter = backfilledFilter
+// upgradeUserInputV2 maps a version 1 document onto the version 2 user input layout
+func upgradeUserInputV2(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (userInputV2, error) {
+	switch from {
+	case UserInputV1.Name():
+		old, err := jsonx.Decode[userInputV1](stored)
+		if err != nil {
+			return userInputV2{}, err
 		}
 
-		return nil
-	})
+		return userInputV2{FilterExpr: old.FilterExpr}, nil
+	default:
+		return jsonx.Decode[userInputV2](stored)
+	}
+}
+
+// upgradeUserInputV3 maps version 1 and 2 documents onto the version 3 user input layout and defaults the filter
+func upgradeUserInputV3(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (userInputV3, error) {
+	var (
+		current userInputV3
+		err     error
+	)
+
+	switch from {
+	case UserInputV1.Name():
+		var old userInputV1
+
+		old, err = jsonx.Decode[userInputV1](stored)
+		current = userInputV3{Filter: old.FilterExpr}
+	case UserInputV2.Name():
+		var old userInputV2
+
+		old, err = jsonx.Decode[userInputV2](stored)
+		current = userInputV3{Mode: old.Mode, Filter: old.FilterExpr}
+	default:
+		current, err = jsonx.Decode[userInputV3](stored)
+	}
+
+	if err != nil {
+		return userInputV3{}, err
+	}
+
+	if current.Filter == "" {
+		current.Filter = backfilledFilter
+	}
+
+	return current, nil
+}
 
 // versionMetadata is the version 3 installation metadata
 type versionMetadata struct {
@@ -129,23 +207,41 @@ var versionMetadataV3 = types.NewInstallationRef(func(_ context.Context, req typ
 	return versionMetadata{ExternalID: req.Integration.ID, Region: cred.Region}, true, nil
 })
 
-// syncCfg is the config for the reconcile operation shared by versions 1 and 2
-type syncCfg struct{}
+// syncCfg is the stored input layout of the reconcile operation shared by versions 1 and 2
+type syncCfg struct {
+	// Pattern is the record pattern the version 1 and 2 operation filters on
+	Pattern string `json:"pattern,omitempty"`
+}
 
-// syncCfgV3 is the resolved config for the version 3 reconcile operation
+// syncCfgV3 is the stored input layout of the version 3 reconcile operation
 type syncCfgV3 struct {
-	// Filter is the filter from the installation's user input
+	// Filter is the record filter the version 3 operation applies
 	Filter string `json:"filter,omitempty"`
 }
 
 var (
-	// SyncOp is the reconcile operation name used by versions 1 and 2
-	SyncOp = types.OperationRefOf[syncCfg]().HandlesRequest(idleCycle[syncCfg])
-	// SyncOpV4 is the version 4 reconcile operation
-	SyncOpV4 = types.OperationRefOf[syncCfgV3]().HandlesRequest(syncHandlerV3)
-	// SyncOpV3 is the version 3 reconcile operation
-	SyncOpV3 = SyncOpV4.Replacing(SyncOp)
+	// SyncOp is the reconcile operation used by versions 1 and 2
+	SyncOp = types.OperationRefOf[syncCfg]().HandlesRequest(idleCycle[syncCfg]).Policy(types.ExecutionPolicy{Inline: true})
+	// SyncOpV4 is the version 4 reconcile operation, the version 3 operation with its replacement removed
+	SyncOpV4 = types.OperationRefOf[syncCfgV3]().HandlesRequest(syncHandlerV3).Policy(types.ExecutionPolicy{Inline: true})
+	// SyncOpV3 is the version 3 reconcile operation, taking over the stored input, runs, and health of SyncOp
+	SyncOpV3 = SyncOpV4.Replacing(SyncOp).Upgraded(upgradeSyncCfgV3)
 )
+
+// upgradeSyncCfgV3 maps a document stored under the version 1 and 2 operation onto the version 3 config layout
+func upgradeSyncCfgV3(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (syncCfgV3, error) {
+	switch from {
+	case SyncOp.Name():
+		old, err := jsonx.Decode[syncCfg](stored)
+		if err != nil {
+			return syncCfgV3{}, err
+		}
+
+		return syncCfgV3{Filter: old.Pattern}, nil
+	default:
+		return jsonx.Decode[syncCfgV3](stored)
+	}
+}
 
 // SyncConfigV3 is the channel receiving each version 3 reconcile handler's resolved config
 var SyncConfigV3 = make(chan json.RawMessage, 4)
@@ -155,22 +251,6 @@ func syncHandlerV3(_ context.Context, req types.OperationRequest, _ syncCfgV3) (
 	SyncConfigV3 <- jsonx.CloneRawMessage(req.Config)
 
 	return nil, nil
-}
-
-// syncConfigV3From returns the version 3 reconcile config from the user input
-func syncConfigV3From(userInput json.RawMessage) json.RawMessage {
-	var input userInputV3
-
-	if err := jsonx.UnmarshalIfPresent(userInput, &input); err != nil {
-		return nil
-	}
-
-	config, err := jsonx.ToRawMessage(syncCfgV3{Filter: input.Filter})
-	if err != nil {
-		return nil
-	}
-
-	return config
 }
 
 var (
@@ -184,12 +264,12 @@ var (
 
 // BuilderV1 returns the version 1 shared test definition
 func BuilderV1() registry.Builder {
-	return sharedVersionBuilder(userInputV1Ref, TokenV1, func(c tokenV1) string { return c.AccessToken })
+	return sharedVersionBuilder(UserInputV1, TokenV1, func(c tokenV1) string { return c.AccessToken })
 }
 
 // BuilderV2 returns the version 2 shared test definition
 func BuilderV2() registry.Builder {
-	return sharedVersionBuilder(userInputV2Ref, TokenV2, func(c tokenV2) string { return c.Token })
+	return sharedVersionBuilder(UserInputV2, TokenV2, func(c tokenV2) string { return c.Token })
 }
 
 // sharedVersionBuilder returns a shared test definition builder for one version
@@ -208,10 +288,11 @@ func sharedVersionBuilder[In, Cred any](input types.UserInputRef[In], token type
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				types.NewConnectionRef(token).Registration(types.ConnectionRegistration{
-					Name:       "Test Token",
-					Disconnect: &types.DisconnectRegistration{},
-				}),
+				{
+					CredentialRef: token.ID(),
+					Name:          "Test Token",
+					Disconnect:    &types.DisconnectRegistration{CredentialRef: token.ID()},
+				},
 			},
 			HealthCheck: types.CredentialHealthCheck(healthHandler),
 			Clients: []types.ClientRegistration{
@@ -220,9 +301,7 @@ func sharedVersionBuilder[In, Cred any](input types.UserInputRef[In], token type
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				SyncOp.Registration(DefinitionID, types.OperationRegistration{
-					Policy: types.ExecutionPolicy{Inline: true},
-				}),
+				SyncOp.Registration(DefinitionID, types.OperationRegistration{}),
 			},
 			Webhooks: []types.WebhookRegistration{
 				WebhookV1V2.Registration(types.WebhookRegistration{}),
@@ -238,7 +317,7 @@ func BuilderV3() registry.Builder {
 
 // BuilderV4 returns the version 4 shared test definition
 func BuilderV4() registry.Builder {
-	return latestVersionBuilder(userInputV4Ref, TokenV4, SyncOpV4, WebhookV4)
+	return latestVersionBuilder(UserInputV4, TokenV4, SyncOpV4, WebhookV4)
 }
 
 // latestVersionBuilder returns a shared test definition builder for the latest version
@@ -257,10 +336,11 @@ func latestVersionBuilder(input types.UserInputRef[userInputV3], token types.Cre
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				types.NewConnectionRef(token).Registration(types.ConnectionRegistration{
-					Name:       "Test Token",
-					Disconnect: &types.DisconnectRegistration{},
-				}),
+				{
+					CredentialRef: token.ID(),
+					Name:          "Test Token",
+					Disconnect:    &types.DisconnectRegistration{CredentialRef: token.ID()},
+				},
 			},
 			HealthCheck:  types.CredentialHealthCheck(healthHandler),
 			Installation: versionMetadataV3.Registration(),
@@ -270,10 +350,7 @@ func latestVersionBuilder(input types.UserInputRef[userInputV3], token types.Cre
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				operation.Registration(DefinitionID, types.OperationRegistration{
-					Policy:         types.ExecutionPolicy{Inline: true},
-					ConfigResolver: syncConfigV3From,
-				}),
+				operation.Registration(DefinitionID, types.OperationRegistration{}),
 			},
 			Webhooks: []types.WebhookRegistration{
 				webhook.Registration(types.WebhookRegistration{}),

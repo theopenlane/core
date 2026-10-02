@@ -17,13 +17,9 @@ var (
 	// oneDriveCredential is the auth-managed credential slot for OneDrive OAuth credentials
 	oneDriveCredential = types.CredentialRefOf[oneDriveCred]()
 	// oneDriveClient is the client ref for the wrapped OneDrive graph client
-	oneDriveClient = types.ClientRefOf[*DriveClient]().Using(oneDriveCredential)
-	// oneDriveConnection is the connection mode selected by the OneDrive OAuth credential slot
-	oneDriveConnection = types.NewConnectionRef(oneDriveCredential).Enables(oneDriveClient)
-	// userInput is the installation user input layout, replacing the flat v1 layout
-	userInput = types.NewUserInputRef[UserInput]("onedrive").Replacing(types.NewUserInputRef[oldUserInput]("onedrive-v1"), func(old oldUserInput) UserInput {
-		return UserInput{Primary: old.Primary, FolderSync: FolderSync{FolderID: old.FolderID, FilterExpr: old.FilterExpr}}
-	})
+	oneDriveClient = types.ClientRefOf[*DriveClient]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // oneDriveCred holds the provider-owned credential material for a OneDrive installation
@@ -50,18 +46,6 @@ type DriveClient struct {
 type UserInput struct {
 	// Primary marks this installation as the authoritative OneDrive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderSync configures the folder sync operation
-	FolderSync FolderSync `json:"folderSync,omitempty" jsonschema:"title=Folder Sync"`
-}
-
-// oldUserInput is the flat v1 installation user input layout replaced by UserInput
-type oldUserInput struct {
-	// Primary marks this installation as the authoritative OneDrive source for live document exports
-	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderID is the folder path relative to the drive root; empty syncs the root
-	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."`
-	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`
 }
 
 // InstallationMetadata holds the stable OneDrive target selected for one installation

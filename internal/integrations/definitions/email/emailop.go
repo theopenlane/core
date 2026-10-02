@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
@@ -229,10 +228,9 @@ func (e Operation[T]) renderToMessage(client *Client, input T, extraOpts ...newm
 func (e Operation[T]) Registration() types.OperationRegistration {
 	return e.Op.Handles(emailClientRef, func(ctx context.Context, req types.OperationRequest, client *Client, input T) (json.RawMessage, error) {
 		return nil, e.dispatch(ctx, req, client, input)
-	}).Registration(DefinitionID, types.OperationRegistration{
-		Description:        e.Description,
-		CustomerSelectable: lo.ToPtr(e.CustomerSelectable != nil && *e.CustomerSelectable),
-	})
+	}).
+		CustomerSelectable(e.CustomerSelectable != nil && *e.CustomerSelectable).
+		Registration(DefinitionID, types.OperationRegistration{Description: e.Description})
 }
 
 // RenderCatalogPreview renders a customer-selectable catalog entry to HTML for UI preview

@@ -9,4 +9,8 @@ var (
 	ErrKeyRequired = errors.New("json key is required")
 	// ErrSchemaRefUnresolved is returned when a schema $ref points outside the schema document
 	ErrSchemaRefUnresolved = errors.New("json schema ref could not be resolved")
+	// ErrSchemaPropertyConflict is returned when merged schemas declare the same root property
+	ErrSchemaPropertyConflict = errors.New("json schema property declared by both schemas")
+	// ErrSchemaInvalid is returned when a document does not satisfy its JSON schema
+	ErrSchemaInvalid = errors.New("json document does not satisfy schema")
 )

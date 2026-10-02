@@ -23,8 +23,6 @@ var (
 	ErrPayloadEncode = errors.New("cloudflare: ingest payload encode failed")
 	// ErrAccountIDMissing indicates the account ID is missing from user input
 	ErrAccountIDMissing = errors.New("cloudflare: account id missing")
-	// ErrOperationConfigInvalid indicates operation configuration could not be decoded
-	ErrOperationConfigInvalid = errors.New("cloudflare: operation config invalid")
 	// ErrFindingsFetchFailed indicates the Security Center insights list request failed
 	ErrFindingsFetchFailed = errors.New("cloudflare: findings fetch failed")
 	// ErrAssetsFetchFailed indicates the Registrar registrations list request failed

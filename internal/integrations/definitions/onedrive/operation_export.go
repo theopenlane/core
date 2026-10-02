@@ -19,7 +19,9 @@ import (
 )
 
 // documentExportOperation is the operation ref for the document export operation
-var documentExportOperation = types.OperationRefOf[operations.DocumentExport]().Handles(oneDriveClient, operations.ExportDocument[*DriveClient])
+var documentExportOperation = types.OperationRefOf[operations.DocumentExport]().
+	Handles(oneDriveClient, operations.ExportDocument[*DriveClient]).
+	Policy(types.ExecutionPolicy{Inline: true})
 
 // Export fetches OneDrive item metadata and returns either an iframe embed or PDF bytes
 func (c DriveClient) Export(ctx context.Context, cfg *operations.DocumentExport) error {

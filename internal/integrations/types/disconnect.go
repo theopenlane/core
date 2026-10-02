@@ -15,8 +15,8 @@ type DisconnectRequest struct {
 	Connection ConnectionRegistration
 	// Credentials are the persisted credentials participating in this connection mode
 	Credentials CredentialBindings
-	// Config is the installation-scoped configuration payload
-	Config IntegrationConfig
+	// UserInput is the stored installation-scoped user input document
+	UserInput json.RawMessage
 }
 
 // DisconnectResult captures the output of a disconnect flow

@@ -73,11 +73,9 @@ var BrandedMessageOp = types.OperationRefOf[BrandedMessageRequest]() //nolint:re
 
 // brandedMessageExample is a representative input used to render the catalog preview and to seed the form preview with demo values for fields the author has not yet filled
 var brandedMessageExample = BrandedMessageRequest{
-	RecipientInfo: RecipientInfo{
-		Email:     "jordan.avery@example.com",
-		FirstName: "Jordan",
-		LastName:  "Avery",
-	},
+	Email:           "jordan.avery@example.com",
+	FirstName:       "Jordan",
+	LastName:        "Avery",
 	Subject:         "A note from Acme Security",
 	Preheader:       "A quick update from the Acme Security team",
 	Title:           "Hi {{ .firstName }}, welcome aboard",

@@ -22,9 +22,6 @@ const (
 	vulnerabilityType = "Software and Configuration Checks/Vulnerabilities/CVE"
 )
 
-// findingsCollectOperation is the AWS Security Hub findings collection operation
-var findingsCollectOperation = types.OperationRefOf[FindingSync]().Ingests(securityHubClient, runFindingsCollect)
-
 // runFindingsCollect collects Security Hub findings
 func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *securityhub.Client, _ FindingSync) ([]types.IngestPayloadSet, error) {
 	var (

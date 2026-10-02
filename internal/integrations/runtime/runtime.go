@@ -2,7 +2,6 @@ package runtime
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -87,16 +86,6 @@ func (r *Runtime) DB() *ent.Client {
 	return do.MustInvoke[*ent.Client](r.injector)
 }
 
-// dbOrNil returns the Ent client if registered, nil otherwise
-func (r *Runtime) dbOrNil() *ent.Client {
-	db, err := do.Invoke[*ent.Client](r.injector)
-	if err != nil {
-		return nil
-	}
-
-	return db
-}
-
 // keystore returns the credential store from the injector
 func (r *Runtime) keystore() *keystore.Store {
 	return do.MustInvoke[*keystore.Store](r.injector)
@@ -107,8 +96,8 @@ func (r *Runtime) Gala() *gala.Gala {
 	return do.MustInvoke[*gala.Gala](r.injector)
 }
 
-// Redis returns the shared Redis client from the injector, nil when Redis isn't configured
-func (r *Runtime) Redis() *redis.Client {
+// redisClient returns the shared Redis client from the injector, nil when Redis isn't configured
+func (r *Runtime) redisClient() *redis.Client {
 	return do.MustInvoke[*redis.Client](r.injector)
 }
 
@@ -122,48 +111,13 @@ func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
 }
 
-// Catalog returns all registered definition specs in stable id order
-func (r *Runtime) Catalog() []types.DefinitionSpec {
-	return r.Registry().Catalog()
-}
-
-// Definition returns one definition by canonical identifier
-func (r *Runtime) Definition(id string) (types.Definition, bool) {
-	return r.Registry().Definition(id)
-}
-
-// Dispatch enqueues one integration operation through the runtime-managed dispatcher
-func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (types.DispatchResult, error) {
-	result, err := operations.Dispatch(ctx, r.Registry(), r.DB(), r.Gala(), req)
-	if err != nil {
-		return types.DispatchResult{}, normalizeDispatchError(err)
-	}
-
-	return result, err
-}
-
-// normalizeDispatchError translates registry-level dispatch errors into runtime sentinel errors
-func normalizeDispatchError(err error) error {
-	switch {
-	case err == nil:
-		return nil
-	case errors.Is(err, registry.ErrDefinitionNotFound):
-		return ErrDefinitionNotFound
-	case errors.Is(err, registry.ErrOperationNotFound):
-		return ErrOperationNotFound
-	case errors.Is(err, operations.ErrDispatchInputInvalid):
-		return operations.ErrDispatchInputInvalid
-	default:
-		return err
-	}
-}
-
 // NewForTesting constructs a Runtime backed by the supplied registry and a stub DB client
 func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()
 	do.ProvideValue(injector, reg)
 	do.ProvideValue(injector, &ent.Client{})
 	do.ProvideValue(injector, (*redis.Client)(nil))
+	do.ProvideValue(injector, (*gala.Gala)(nil))
 
 	return &Runtime{
 		injector:        injector,
@@ -218,7 +172,9 @@ func New(config Config) (*Runtime, error) {
 		return registryInstance, nil
 	})
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
-		return keymaker.NewService(rt.Definition, func(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
+		lookupDefinition := func(id string) (types.Definition, bool) { return rt.Registry().Definition(id) }
+
+		return keymaker.NewService(lookupDefinition, func(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
 			installation, err := rt.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: integrationID, DefinitionID: def.ID})
 			if err != nil {
 				return err
@@ -229,7 +185,7 @@ func New(config Config) (*Runtime, error) {
 				return err
 			}
 
-			if err := rt.Reconcile(ctx, installation, nil, connection.Auth.CredentialRef, &result.Credential, result.InstallationInput); err != nil {
+			if err := rt.Reconcile(ctx, installation, nil, nil, connection.Auth.CredentialRef, &result.Credential, result.InstallationInput); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("installation_id", installation.ID).Msg("failed to reconcile completed auth credential")
 
 				return err
@@ -247,11 +203,7 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt, rt.HandleOperation, rt.HandleWebhookEvent); err != nil {
-		return nil, err
-	}
-
-	if _, err := gala.Register(rt.Gala(), operations.ReconcileDefinition(rt.Registry(), rt.HandleReconcile, rt.markReconcileExhausted, gala.Schedule{})); err != nil {
+	if err := rt.registerListeners(); err != nil {
 		return nil, err
 	}
 

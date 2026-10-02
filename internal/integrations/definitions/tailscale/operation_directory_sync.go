@@ -27,16 +27,8 @@ type tailscaleMembershipPayload struct {
 	UserID string `json:"user_id"`
 }
 
-// directorySyncOperation is the operation ref for the directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(tailscaleClient, runDirectorySync)
-
 // runDirectorySync collects Tailscale users and optionally role-based groups and memberships
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
-	if cfg.Disable {
-		logx.FromContext(ctx).Debug().Msg("tailscale: directory sync is disabled")
-		return nil, nil
-	}
-
 	users, err := listTailscaleUsers(ctx, client)
 	if err != nil {
 		return nil, err

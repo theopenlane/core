@@ -80,7 +80,13 @@ func (e ScanTaskErrors) Error() string {
 }
 
 // DomainScanPollOp is the operation ref for polling a submitted URL Scanner result
-var DomainScanPollOp = types.OperationRefOf[DomainScanPoll]().Handles(cloudflareClient, runDomainScanPoll) //nolint:revive
+//
+//nolint:revive
+var DomainScanPollOp = types.OperationRefOf[DomainScanPoll]().
+	Handles(cloudflareClient, runDomainScanPoll).
+	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+	CustomerSelectable(false).
+	Internal()
 
 // runDomainScanPoll retrieves the configured URL Scanner result and encodes it
 func runDomainScanPoll(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanPoll) (json.RawMessage, error) {

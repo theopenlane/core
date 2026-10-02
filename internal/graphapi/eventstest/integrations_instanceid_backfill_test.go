@@ -56,7 +56,7 @@ func connectMockInstall(ctx context.Context, t *testing.T, server *testint.MockH
 	th.RequireNoError(t, err)
 
 	credential := testint.MockHTTPCredentialSet(mockProviderToken, server.URL())
-	th.RequireNoError(t, suite.IntegrationsRT.Reconcile(ctx, install, nil, testint.MockHTTPCredential.ID(), &credential, nil))
+	th.RequireNoError(t, suite.IntegrationsRT.Reconcile(ctx, install, nil, nil, testint.MockHTTPCredential.ID(), &credential, nil))
 
 	return reloadIntegration(t, ctx, install.ID)
 }
@@ -229,7 +229,7 @@ func TestReconnectRefreshesChangedInstanceID(t *testing.T) {
 	server.SetInstanceID("tenant-v2")
 
 	credential := testint.MockHTTPCredentialSet(mockProviderToken, server.URL())
-	th.RequireNoError(t, suite.IntegrationsRT.Reconcile(ctx, reloadIntegration(t, ctx, install.ID), nil, testint.MockHTTPCredential.ID(), &credential, nil))
+	th.RequireNoError(t, suite.IntegrationsRT.Reconcile(ctx, reloadIntegration(t, ctx, install.ID), nil, nil, testint.MockHTTPCredential.ID(), &credential, nil))
 
 	assert.Check(t, is.Equal("tenant-v2", reloadIntegration(t, ctx, install.ID).InstallationMetadata.Display.ExternalID), "reconnect refreshes the changed instance id instead of rejecting it as a mismatch")
 }
