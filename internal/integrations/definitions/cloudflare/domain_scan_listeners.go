@@ -79,9 +79,14 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesign
 	if result.Enrichment.Branding == nil {
 		logx.FromContext(ctx).Info().Msg("domain scan: no brand design found")
 
-		return s.services.DB().Scan.UpdateOneID(opts.scanID).
+		err := s.services.DB().Scan.UpdateOneID(opts.scanID).
 			SetStatus(enums.ScanStatusCompleted).
 			Exec(systemCtx)
+		if err != nil {
+			return err
+		}
+
+		return s.maybeNotifyDomainScanGroup(ctx, opts.organizationID, []string{opts.scanID})
 	}
 
 	if result.Enrichment.Branding.Error == "" {
@@ -121,7 +126,7 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesign
 		return err
 	}
 
-	return nil
+	return s.maybeNotifyDomainScanGroup(ctx, opts.organizationID, []string{opts.scanID})
 }
 
 // domainScanListeners declares the standalone gala listeners implementing the domain scan saga
