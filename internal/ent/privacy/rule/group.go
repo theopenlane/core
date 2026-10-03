@@ -37,7 +37,7 @@ func checkCreateAccess(ctx context.Context, m generated.Mutation, serviceOnly bo
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.IsAnonymous() {
+	if !ok || caller.IsAnonymous() {
 		logx.FromContext(ctx).Error().Msg("unable to get caller from context for group create access")
 
 		return auth.ErrNoAuthUser

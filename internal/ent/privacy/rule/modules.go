@@ -131,20 +131,12 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 
 // GetOrgFeatures returns the enabled features for the authenticated organization
 func GetOrgFeatures(ctx context.Context) ([]string, error) {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		// this intentionally returns nil for the error
 		// this is so requests that aren't yet authenticated, but only require the base module
 		// e.g. sso login, will continue
 		return nil, nil
-	}
-
-	orgID := caller.OrganizationID
-
-	// if there is only one authorized org on the pat, set it as the authorized organization
-	// more organizations require using the X-Organization-ID header
-	if orgID == "" && len(caller.OrgIDs()) == 1 {
-		orgID = caller.OrgIDs()[0]
 	}
 
 	return GetFeaturesForSpecificOrganization(ctx, orgID)
@@ -264,14 +256,13 @@ func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRu
 // ShouldSkipFeatureCheck determines if module access checks should be bypassed based
 // on the available context
 func ShouldSkipFeatureCheck(ctx context.Context) bool {
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
-		if caller.Has(auth.CapSystemAdmin) {
-			return true
-		}
+	if auth.HasAnyInContextCaller(ctx, auth.CapSystemAdmin|auth.CapInternalOperation|auth.CapBypassFeatureCheck) {
+		return true
+	}
 
-		if caller.Has(auth.CapInternalOperation) || caller.Has(auth.CapBypassFeatureCheck) || caller.OrganizationRole == auth.AnonymousRole {
-			return true
-		}
+	// bypass module checks on anonymous trust center and questionnaire users
+	if auth.IsAnonymousFromContext(ctx) {
+		return true
 	}
 
 	if _, allowCtx := privacy.DecisionFromContext(ctx); allowCtx {
@@ -282,20 +273,7 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 		return true
 	}
 
-	// bypass module checks on anonymous trust center and questionnaire users
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.IsAnonymous() {
-		return true
-	}
-
-	skipTokenType := []token.PrivacyToken{
-		&token.OauthTooToken{},
-		&token.VerifyToken{},
-		&token.SignUpToken{},
-		&token.OrgInviteToken{},
-		&token.ResetToken{},
-	}
-
-	return SkipTokenInContext(ctx, skipTokenType)
+	return HasPublicFlowToken(ctx)
 }
 
 // DenyIfMissingAllModules acts as a prerequisite check - denies if features missing, Allows if present

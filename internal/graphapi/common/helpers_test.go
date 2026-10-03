@@ -614,20 +614,10 @@ func TestSetOrganizationForUploads(t *testing.T) {
 			expectedErr: ErrNoOrganizationID,
 		},
 		{
-			name: "Non-PAT single authorized org fallback",
-			caller: &auth.Caller{
-				OrganizationIDs:    []string{primaryOrg},
-				AuthenticationType: auth.APITokenAuthentication,
-			},
-			variables:   nil,
-			inputKey:    "input",
-			expectedOrg: primaryOrg,
-		},
-		{
-			name: "Non-PAT multiple orgs require owner input",
+			name: "PAT multiple orgs require owner input",
 			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
-				AuthenticationType: auth.APITokenAuthentication,
+				AuthenticationType: auth.PATAuthentication,
 			},
 			variables:   nil,
 			inputKey:    "input",

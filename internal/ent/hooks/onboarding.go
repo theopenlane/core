@@ -64,7 +64,7 @@ func HookOnboarding() ent.Hook {
 			}
 
 			var callerEmail string
-			if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+			if caller, ok := auth.CallerFromContext(ctx); ok {
 				callerEmail = caller.SubjectEmail
 			}
 

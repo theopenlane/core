@@ -7,7 +7,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	genprivacy "github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/iam/auth"
 )
 
 func TestCreateClaimsWithOrg(t *testing.T) {
@@ -27,7 +27,7 @@ func TestSkipOrgValidation(t *testing.T) {
 	if skipOrgValidation(ctx) {
 		t.Fatalf("expected false")
 	}
-	ctx = rule.WithInternalCrossOrgContext(ctx)
+	ctx = auth.WithInternalCrossOrgContext(ctx)
 	if !skipOrgValidation(ctx) {
 		t.Fatalf("expected true for internal request")
 	}

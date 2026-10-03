@@ -14,6 +14,7 @@ import (
 	"github.com/stripe/stripe-go/v86/webhook"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -23,7 +24,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	catalogprices "github.com/theopenlane/core/v2/internal/entitlements"
 	em "github.com/theopenlane/core/v2/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
@@ -158,7 +158,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 	}
 
 	// stripe deliveries are unauthenticated and the owning org is not known until the event resolves, so this is a cross-org internal context
-	newCtx := rule.WithInternalCrossOrgContext(req.Context())
+	newCtx := auth.WithInternalCrossOrgContext(req.Context())
 
 	exists, err := h.checkForEventID(newCtx, event.ID)
 	if err != nil {
@@ -263,7 +263,7 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 
 // invalidateAPITokens invalidates all API tokens for an organization
 func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
-	allowCtx := rule.WithOrgInternalCaller(ctx, orgID)
+	allowCtx := auth.WithOrgInternalCaller(ctx, orgID)
 
 	num, err := h.DBClient.APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
@@ -285,7 +285,7 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 // invalidatePersonalAccessTokens invalidates all personal access tokens tokens for an organization
 func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID string) error {
 	// the user owned mixin filters updates to the caller's own tokens and only skips on an allow decision, so revoking every member's tokens needs it
-	allowCtx := privacy.DecisionContext(rule.WithOrgInternalCaller(ctx, orgID), privacy.Allow)
+	allowCtx := privacy.DecisionContext(auth.WithOrgInternalCaller(ctx, orgID), privacy.Allow)
 
 	num, err := h.DBClient.PersonalAccessToken.Update().
 		RemoveOrganizationIDs(orgID).
@@ -410,7 +410,7 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 
 	org, err := transaction.FromContext(ctx).Organization.Query().
 		Where(organization.StripeCustomerID(paymentMethod.Customer.ID)).
-		Only(rule.WithInternalCrossOrgContext(ctx))
+		Only(auth.WithInternalCrossOrgContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("could not fetch organization by stripe customer id")
 		return err
@@ -420,7 +420,7 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 		Where(organizationsetting.OrganizationID(org.ID)).
 		SetPaymentMethodAdded(true).
 		ClearPendingDeletionAt().
-		Exec(rule.WithOrgInternalCaller(ctx, org.ID))
+		Exec(auth.WithOrgInternalCaller(ctx, org.ID))
 }
 
 // findOrgSubscriptionByCustomer resolves an OrgSubscription through the stripe customer on the
@@ -432,7 +432,7 @@ func findOrgSubscriptionByCustomer(ctx context.Context, subscription *stripe.Sub
 		return nil
 	}
 
-	allowCtx := rule.WithInternalCrossOrgContext(ctx)
+	allowCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	org, err := transaction.FromContext(ctx).Organization.Query().
 		Where(organization.StripeCustomerID(subscription.Customer.ID)).Only(allowCtx)
@@ -466,7 +466,7 @@ func adoptStripeSubscriptionID(ctx context.Context, orgSub *ent.OrgSubscription,
 		return
 	}
 
-	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
+	allowCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 
 	if err := transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSub).
 		SetStripeSubscriptionID(subscriptionID).
@@ -485,7 +485,7 @@ func adoptStripeSubscriptionID(ctx context.Context, orgSub *ent.OrgSubscription,
 
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
 func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
-	allowCtx := rule.WithInternalCrossOrgContext(ctx)
+	allowCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
 		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(allowCtx)

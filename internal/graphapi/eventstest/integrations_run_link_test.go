@@ -53,7 +53,7 @@ func ingestFindingPayloadsWithOptions(ctx context.Context, t *testing.T, install
 // integration_run_id from IngestOptions.RunID on created rows, leaves it unwritten on a
 // volatile-only re-sync under a new run, and repoints it once a material change rides along
 func TestDirectorySnapshotIntegrationRunLink(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "runlink"
 
@@ -161,7 +161,7 @@ func TestDirectorySnapshotIntegrationRunLink(t *testing.T) {
 // IngestOptions.RunID on a created row, leaves it unwritten on a volatile-only re-ingest under a
 // new run, and repoints it once a material change rides along
 func TestFindingIntegrationRunLink(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("Finding Run Link Test").

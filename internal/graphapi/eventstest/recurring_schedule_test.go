@@ -39,8 +39,8 @@ func waitForInstallationErrored(t *testing.T, ctx context.Context, id string) {
 // runtime stops rescheduling after the error budget and marks the installation unhealthy
 func TestReconcileLoopExhaustsToUnhealthy(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
 	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeExhausting)
 
@@ -58,8 +58,8 @@ func TestReconcileLoopExhaustsToUnhealthy(t *testing.T) {
 // is never seeded and the installation is marked unhealthy at seed time
 func TestReconcileLoopUnresolvableClientMarksUnhealthy(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
 	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeUnresolvable)
 

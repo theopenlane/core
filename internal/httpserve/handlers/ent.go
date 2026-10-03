@@ -172,11 +172,14 @@ func (h *Handler) createPasswordResetToken(ctx context.Context, user *User) (*en
 // getUserByEVToken returns the ent user with the user settings and email verification token fields based on the
 // token in the request
 func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User, error) {
+	// bypass org intercepotrs to lookup the token
+	crossOrgCtx := auth.WithCrossOrgContext(ctx)
+
 	user, err := transaction.FromContext(ctx).EmailVerificationToken.Query().
 		Where(
 			emailverificationtoken.Token(token),
 		).
-		QueryOwner().WithSetting().WithEmailVerificationTokens().Only(ctx)
+		QueryOwner().WithSetting().WithEmailVerificationTokens().Only(crossOrgCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from email verification token")
 
@@ -188,9 +191,12 @@ func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User
 
 // getFilebyDownloadToken returns the ent file and download token based on the token in the request
 func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*ent.File, *ent.FileDownloadToken, error) {
+	// bypass org intercepotrs to lookup the token
+	crossOrgCtx := auth.WithCrossOrgContext(ctx)
+
 	tokenRecord, err := transaction.FromContext(ctx).FileDownloadToken.Query().
 		Where(filedownloadtoken.Token(token)).
-		Only(ctx)
+		Only(crossOrgCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining file download token")
 
@@ -203,9 +209,9 @@ func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*en
 		return nil, nil, ErrDownloadTokenMissingFile
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	crossOrgCtx = auth.WithInternalCrossOrgContext(ctx)
 
-	fileRecord, err := transaction.FromContext(ctx).File.Get(allowCtx, *tokenRecord.FileID)
+	fileRecord, err := transaction.FromContext(ctx).File.Get(crossOrgCtx, *tokenRecord.FileID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining file from download token")
 
@@ -233,10 +239,11 @@ func (h *Handler) getUserByResetToken(ctx context.Context, token string) (*ent.U
 }
 
 // getUserByEmail returns the ent user with the user settings based on the email in the request
+// callers have no caller for the user yet (login, signup, sso, etc), so the lookup runs as an internal operation pinned to the email
 func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.EmailEqualFold(email)).
-		Only(ctx)
+		Only(auth.WithInternalOperationContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("email", email).Err(err).Msg("error obtaining user from email")
 
@@ -247,10 +254,11 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, 
 }
 
 // getUserByID returns the ent user with the user settings based on the email in the request
+// callers have no caller for the user yet (webauthn), so the lookup runs as an internal operation pinned to the id
 func (h *Handler) getUserByID(ctx context.Context, id string) (*ent.User, context.Context, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.ID(id)).
-		Only(ctx)
+		Only(auth.WithInternalOperationContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from id")
 
@@ -358,10 +366,12 @@ func (h *Handler) updateRecoveryCodes(ctx context.Context, tfaID string, codes [
 
 // getUserByInviteToken returns the ent user based on the invite token in the request
 func (h *Handler) getUserByInviteToken(ctx context.Context, token string) (*ent.Invite, error) {
+	// bypass org intercepotrs to lookup the token
+	crossOrgCtx := auth.WithCrossOrgContext(ctx)
 	recipient, err := transaction.FromContext(ctx).Invite.Query().
 		Where(
 			invite.Token(token),
-		).WithOwner().Only(ctx)
+		).WithOwner().Only(crossOrgCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from token")
 
@@ -565,11 +575,14 @@ func (h *Handler) setWebauthnAllowed(ctx context.Context, user *ent.User) error 
 
 // getSubscriberByToken returns the subscriber based on the token in the request
 func (h *Handler) getSubscriberByToken(ctx context.Context, token string) (*ent.Subscriber, error) {
+	// bypass org intercepotrs to lookup the token
+	crossOrgCtx := auth.WithCrossOrgContext(ctx)
+
 	subscriber, err := transaction.FromContext(ctx).Subscriber.Query().
 		Where(
 			subscriber.Token(token),
 		).
-		Only(ctx)
+		Only(crossOrgCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining subscriber from token")
 
@@ -746,7 +759,7 @@ func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user
 			orgmembership.UserID(user.ID),
 			orgmembership.OrganizationID(orgID),
 		).
-		Exist(allowCtx)
+		Exist(auth.WithCrossOrgContext(allowCtx))
 	if err != nil {
 		return err
 	}

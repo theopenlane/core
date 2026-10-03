@@ -110,7 +110,7 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 						orgmembership.OrganizationID(th.SharedTestUser1.OrganizationID),
 						orgmembership.UserID(existingMember.ID),
 					).
-					Only(allowCtx)
+					Only(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(enums.RoleOwner, newOwnerMembership.Role))
 				// verify new owner is sso exempt
@@ -122,7 +122,7 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 						orgmembership.OrganizationID(th.SharedTestUser1.OrganizationID),
 						orgmembership.UserID(th.SharedTestUser1.ID),
 					).
-					Only(allowCtx)
+					Only(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(enums.RoleSuperAdmin, oldOwnerMembership.Role))
 				// verify old owner is no longer sso exempt

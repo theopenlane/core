@@ -177,7 +177,7 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	// If the actor is a system admin, prefer deriving the organization from the
 	// correlated object rather than using the admin's org from context
 	persistCaller, persistOk := auth.CallerFromContext(ctx)
-	if !persistOk || persistCaller == nil {
+	if !persistOk {
 		return "", auth.ErrNoAuthUser
 	}
 
@@ -186,9 +186,9 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 			return persistCaller.OrganizationID, nil
 		}
 
-		orgIDs := persistCaller.OrgIDs()
-		if len(orgIDs) == 1 {
-			return orgIDs[0], nil
+		orgID, ok := persistCaller.ActiveOrg()
+		if ok {
+			return orgID, nil
 		}
 	}
 

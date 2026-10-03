@@ -52,7 +52,7 @@ func (h *Handler) AccountRolesMeHandler(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil {
+	if !ok {
 		logx.FromContext(reqCtx).Error().Msg("error getting caller from context")
 		return h.InternalServerError(ctx, auth.ErrNoAuthUser)
 	}
@@ -106,7 +106,7 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, isDeleteOp bool) error {
 	reqCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil {
+	if !ok {
 		logx.FromContext(reqCtx).Error().Msg("error getting caller from context")
 		return h.InternalServerError(ctx, auth.ErrNoAuthUser)
 	}

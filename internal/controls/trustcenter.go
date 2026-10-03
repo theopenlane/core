@@ -85,12 +85,10 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 // CloneTrustCenterControl clones the trust center controls and assumes the the user has the trust center module already
 // this is intended to be called from an internal-hook when a trust center is created
 func CloneTrustCenterControls(ctx context.Context, m *generated.TrustCenterMutation) error {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return rout.NewMissingRequiredFieldError("owner_id")
 	}
-
-	orgID := caller.OrganizationID
 
 	controls, err := getTrustCenterControls(ctx, m.Client())
 	if err != nil {

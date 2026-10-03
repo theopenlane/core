@@ -48,7 +48,7 @@ func HookUserSetting() ent.Hook {
 // allowDefaultOrgUpdate checks if the user has access to the organization being updated as their default org
 func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation, orgID string) bool {
 	// allow if explicitly allowed or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+	if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
 		return true
 	}
 
@@ -72,18 +72,11 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 		return false
 	}
 
-	usCaller, ok := auth.CallerFromContext(ctx)
-	if !ok || usCaller == nil {
-		logx.FromContext(ctx).Error().Msg("unable to get authenticated user context")
-
-		return false
-	}
-
 	req := fgax.AccessCheck{
 		SubjectID:   owner.ID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
-		Relation:    "can_view_org",
+		Relation:    fgax.CanViewOrg,
 	}
 
 	allow, err := m.Authz.CheckOrgAccess(ctx, req)
@@ -122,9 +115,10 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			userSettingID, _ := m.ID()
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
+			// the confirming user may have no caller yet, the lookup is pinned to the setting being updated
 			user, err := m.Client().User.Query().
 				Where(user.HasSettingWith(usersetting.ID(userSettingID))).
-				Only(allowCtx)
+				Only(auth.WithInternalOperationContext(ctx))
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to get user for auto-join")
 
@@ -197,7 +191,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 				orgmembership.UserID(user.ID),
 				orgmembership.OrganizationID(org.ID),
 			).
-			Exist(ctx)
+			Exist(auth.WithCrossOrgContext(ctx))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error checking organization membership")
 

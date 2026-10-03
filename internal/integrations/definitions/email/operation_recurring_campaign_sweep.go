@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // RecurringCampaignSweep configures one recurring campaign sweep cycle
@@ -37,7 +38,7 @@ func (r RecurringCampaignSweep) Handle() types.OperationHandler {
 func (RecurringCampaignSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
 	db := req.DB
 	now := time.Now()
-	systemCtx := systemSweepContext(ctx)
+	systemCtx := auth.WithSystemSweepContext(ctx)
 
 	campaigns, err := db.Campaign.Query().
 		Where(dueCampaignPredicates(now)...).

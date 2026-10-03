@@ -135,11 +135,11 @@ func (e EmailVerificationToken) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
-			rule.AllowMutationAfterApplyingOwnerFilter(),
+			rule.AllowMutationAfterApplyingUserOwnerFilter(),
 		),
 		policy.WithOnMutationRules(
 			ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete,
-			rule.AllowMutationAfterApplyingOwnerFilter(),
+			rule.AllowMutationAfterApplyingUserOwnerFilter(),
 		),
 	)
 }

@@ -34,7 +34,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 
 	// Get the current authenticated user (the impersonator)
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil {
+	if !ok {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
 
@@ -152,7 +152,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context) error {
 
 	// Get impersonation details from the caller in context.
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil || caller.Impersonation == nil {
+	if !ok || caller.Impersonation == nil {
 		return h.BadRequest(ctx, ErrNoActiveImpersonationSession)
 	}
 

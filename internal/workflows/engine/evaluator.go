@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/iam/auth"
@@ -100,7 +99,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.
 	if obj != nil && obj.Node == nil {
-		allowCtx := rule.WithInternalOperationContext(ctx)
+		allowCtx := auth.WithInternalOperationContext(ctx)
 		if _, err := e.loadObjectNode(allowCtx, obj); err != nil {
 			return nil, err
 		}
@@ -113,7 +112,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 			return nil, err
 		}
 
-		allowCtx := rule.WithInternalOperationContext(ctx)
+		allowCtx := auth.WithInternalOperationContext(ctx)
 
 		proposal, err := e.client.WorkflowProposal.Query().
 			Where(
@@ -139,7 +138,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Merge assignment context (assignments, instance, initiator)
 	// Use privacy bypass for internal workflow operations that query assignment state
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	assignmentCtx, err := workflows.BuildAssignmentContext(allowCtx, e.client, instance.ID)
 	if err != nil {
 		return nil, err
@@ -166,7 +165,7 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 	defer scope.End(err, nil)
 
 	// the owning org is not known yet and the caller may not have one selected, so this lookup bypasses the org filter; everything after is scoped to the owner
-	orgID, err := workflows.ObjectOwnerID(rule.WithInternalCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
+	orgID, err := workflows.ObjectOwnerID(auth.WithInternalCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}

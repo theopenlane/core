@@ -207,11 +207,11 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 
 	orgID := instance.OwnerID
 	if orgID == "" {
-		integCaller, integOk := auth.CallerFromContext(ctx)
-		if !integOk || integCaller == nil || integCaller.OrganizationID == "" {
+		var err error
+		orgID, err = auth.GetOrganizationIDFromContext(ctx)
+		if err != nil {
 			return ErrIntegrationOwnerRequired
 		}
-		orgID = integCaller.OrganizationID
 	}
 
 	resolvedInstallationID := params.InstallationID

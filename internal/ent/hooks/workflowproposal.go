@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/iam/auth"
@@ -84,11 +83,9 @@ func HookWorkflowProposalInvalidateAssignments() ent.Hook {
 			}
 
 			// Get the user making this change - may be empty for system operations
-			var invalidatedByUserID string
-			if wpCaller, callerOK := auth.CallerFromContext(ctx); callerOK && wpCaller != nil {
-				invalidatedByUserID = wpCaller.SubjectID
-			} else {
-				log.Ctx(ctx).Debug().Msg("invalidate hook: no user in context, using empty user ID")
+			invalidatedByUserID, err := auth.GetSubjectIDFromContext(ctx)
+			if err != nil {
+				log.Ctx(ctx).Warn().Msg("invalidate hook: no user in context, using empty user ID")
 			}
 
 			// Get the old hash before mutation
@@ -316,7 +313,7 @@ func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, w
 	}
 	obj.Node = entity
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, obj.Type.String(), "UPDATE", changedFields, nil, nil, nil, proposal.Changes, obj)
 	if err != nil {
 		return ErrFailedToFindMatchingDefinitions

@@ -14,13 +14,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 func InterceptorUserSetting() ent.Interceptor {
 	return intercept.TraverseUserSetting(func(ctx context.Context, q *generated.UserSettingQuery) error {
 		// bypass filter if the request is allowed or if it's an internal request
-		if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+		if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
 			return nil
 		}
 
@@ -30,7 +29,7 @@ func InterceptorUserSetting() ent.Interceptor {
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			// this happens when this is before authentication, e.g. on login and we are pulling the user settings
 			return nil
 		}

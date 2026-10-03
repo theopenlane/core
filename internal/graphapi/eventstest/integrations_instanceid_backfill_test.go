@@ -106,7 +106,7 @@ func legacyUnclaimedAccount(ctx context.Context, t *testing.T, install *ent.Inte
 // ExecuteOperation so provider-supplied records flow through the real ingest pipeline, proving connect
 // resolves the instance id and ingest stamps it as provenance on every record
 func TestMockProviderIngestStampsResolvedInstanceID(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "ingest-"
 
@@ -153,7 +153,7 @@ func TestMockProviderIngestStampsResolvedInstanceID(t *testing.T) {
 // TestInstanceIDGatesIngest proves the ingest pipeline refuses an installation with no instance id and
 // resumes once the backfill re-resolves it from the provider, all through the real ExecuteOperation path
 func TestInstanceIDGatesIngest(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "gate-"
 
@@ -191,7 +191,7 @@ func TestInstanceIDGatesIngest(t *testing.T) {
 // TestHealthAssessmentRefreshesChangedInstanceID proves a health assessment re-resolves and overwrites
 // the stored instance id when the provider begins reporting a different one, with no direct write
 func TestHealthAssessmentRefreshesChangedInstanceID(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	server := testint.NewMockHTTPServer(mockProviderToken, "tenant-v1")
 	t.Cleanup(server.Close)
@@ -215,7 +215,7 @@ func TestHealthAssessmentRefreshesChangedInstanceID(t *testing.T) {
 // TestReconnectRefreshesChangedInstanceID proves reconnecting with a valid credential refreshes the
 // stored instance id to the one the provider now reports instead of rejecting it as an instance mismatch
 func TestReconnectRefreshesChangedInstanceID(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	server := testint.NewMockHTTPServer(mockProviderToken, "tenant-v1")
 	t.Cleanup(server.Close)
@@ -238,7 +238,7 @@ func TestReconnectRefreshesChangedInstanceID(t *testing.T) {
 // re-claimed, not duplicated, by a fresh installation of the same provider on the same instance after
 // the first is disconnected, driven entirely through the production connect, disconnect, and ingest flow
 func TestDisconnectReinstallReclaimsIngestedRecord(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "reinstall-"
 

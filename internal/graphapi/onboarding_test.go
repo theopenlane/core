@@ -167,7 +167,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			programs, err := suite.Client.DB.Program.Query().
 				Where(program.OwnerID(orgID)).
 				WithControls().
-				All(th.SetContext(tc.ctx, suite.Client.DB))
+				All(th.SetInternalContext(tc.ctx, suite.Client.DB))
 			assert.NilError(t, err)
 			assert.Assert(t, is.Len(programs, tc.expectedPrograms))
 

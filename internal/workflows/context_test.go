@@ -8,8 +8,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
-
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 func TestWorkflowContexts(t *testing.T) {
@@ -18,7 +16,7 @@ func TestWorkflowContexts(t *testing.T) {
 	bypass := WithContext(base)
 	assert.True(t, IsWorkflowBypass(bypass))
 
-	assert.True(t, rule.IsInternalRequest(rule.WithInternalCrossOrgContext(base)))
+	assert.True(t, auth.IsInternalRequest(auth.WithInternalCrossOrgContext(base)))
 
 	orgID := ulids.New().String()
 	orgCtx := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)
@@ -26,13 +24,13 @@ func TestWorkflowContexts(t *testing.T) {
 	allowCtx, resolvedOrg, err := AllowContextWithOrg(orgCtx)
 	assert.NoError(t, err)
 	assert.Equal(t, orgID, resolvedOrg)
-	assert.True(t, rule.IsInternalRequest(allowCtx))
+	assert.True(t, auth.IsInternalRequest(allowCtx))
 
 	bypassCtx, resolvedOrg, err := AllowBypassContextWithOrg(orgCtx)
 	assert.NoError(t, err)
 	assert.Equal(t, orgID, resolvedOrg)
 	assert.True(t, IsWorkflowBypass(bypassCtx))
-	assert.True(t, rule.IsInternalRequest(bypassCtx))
+	assert.True(t, auth.IsInternalRequest(bypassCtx))
 
 	_, _, err = AllowContextWithOrg(base)
 	assert.Error(t, err)
@@ -48,7 +46,7 @@ func TestAllowContextWithOrg_SingleAuthorizedOrgFallback(t *testing.T) {
 	allowCtx, resolvedOrg, err := AllowContextWithOrg(ctx)
 	assert.NoError(t, err)
 	assert.Equal(t, orgID, resolvedOrg)
-	assert.True(t, rule.IsInternalRequest(allowCtx))
+	assert.True(t, auth.IsInternalRequest(allowCtx))
 }
 
 func TestAllowContextWithOrg_MultipleAuthorizedOrgsWithoutSelection(t *testing.T) {

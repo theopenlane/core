@@ -102,13 +102,11 @@ func HookManagedGroups() ent.Hook {
 			}
 
 			// allow general allow context or managed group bypass to modify managed groups
-			_, allowCtx := privacy.DecisionFromContext(ctx)
-			caller, _ := auth.CallerFromContext(ctx)
-			allowManagedCtx := caller != nil && caller.Has(auth.CapBypassManagedGroup)
+			allowManagedCtx := auth.HasInContextCaller(ctx, auth.CapBypassManagedGroup)
 
 			// before returning the error, we need to allow for edges to be updated
 			// if they are permissions edges
-			if g.IsManaged && (!allowManagedCtx && !allowCtx) {
+			if g.IsManaged && !allowManagedCtx {
 				if err := checkOnlyDefaultFields(m); err != nil {
 					return nil, ErrManagedGroup
 				}
@@ -120,7 +118,6 @@ func HookManagedGroups() ent.Hook {
 
 			// if we got here, the only that that was updated was edges for permissions (Editor, Viewer, BlockedGroups)
 			// and we can continue
-
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne)

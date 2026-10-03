@@ -40,7 +40,7 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 
 		allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
-		user, err := h.getUserByEmail(allowCtx, email)
+		user, err := h.getUserByEmail(reqCtx, email)
 		if err != nil {
 			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger user lookup failed")
 

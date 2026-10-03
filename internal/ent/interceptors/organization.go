@@ -29,7 +29,7 @@ func InterceptorOrganization() ent.Interceptor {
 			return nil
 		}
 
-		if ok := rule.IsInternalRequest(ctx); ok {
+		if ok := auth.IsInternalRequest(ctx); ok {
 			return nil
 		}
 
@@ -42,7 +42,11 @@ func InterceptorOrganization() ent.Interceptor {
 		// after logging in, check this first before using the AddIDPredicate and requiring a
 		// query to fga
 		caller, ok := auth.CallerFromContext(ctx)
-		if ok && caller != nil && len(caller.OrgIDs()) > 0 {
+		if !ok {
+			return auth.ErrNoAuthUser
+		}
+
+		if len(caller.OrgIDs()) > 0 {
 			// support callers are scoped to one org and have no FGA tuples; bypass FGA and restrict directly
 			if caller.Has(auth.CapOrgSupport) {
 				q.WhereP(organization.IDIn(caller.OrgIDs()...))

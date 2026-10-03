@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -26,7 +26,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
-	ctx := rule.WithOrgInternalCaller(ec, testUser1.OrganizationID)
+	ctx := auth.WithOrgInternalCaller(ec, testUser1.OrganizationID)
 
 	// Test data
 	testPath := gofakeit.UUID()

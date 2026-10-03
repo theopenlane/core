@@ -23,7 +23,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil {
+	if !ok {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)

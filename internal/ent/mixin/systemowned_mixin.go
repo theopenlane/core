@@ -163,14 +163,14 @@ func HookSystemOwnedCreate() ent.Hook {
 			if !ok || ownerID == "" {
 				logx.FromContext(ctx).Debug().Msg("non system admin creating object without owner ID, attempting to set")
 
-				caller, callerOk := auth.CallerFromContext(ctx)
-				if !callerOk || caller == nil || caller.OrganizationID == "" {
+				orgID, err := auth.GetOrganizationIDFromContext(ctx)
+				if err != nil {
 					logx.FromContext(ctx).Error().Msg("unable to get organization ID from context for non system admin creating object")
 
 					return nil, generated.ErrPermissionDenied
 				}
 
-				orgMut.SetOwnerID(caller.OrganizationID)
+				orgMut.SetOwnerID(orgID)
 			}
 
 			return next.Mutate(ctx, m)
@@ -187,7 +187,7 @@ func SystemOwnedSchema() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
 		// skip for internal requests - IDs() triggers a SELECT that goes through
 		// FilterQueryResults, which requires a valid SubjectID for FGA checks
-		if rule.IsInternalRequest(ctx) {
+		if auth.IsInternalRequest(ctx) {
 			return privacy.Skip
 		}
 

@@ -34,11 +34,12 @@ func (r *createEntityInputResolver) Note(ctx context.Context, obj *generated.Cre
 func (r *updateEntityInputResolver) Note(ctx context.Context, obj *generated.UpdateEntityInput, data *generated.CreateNoteInput) error {
 	// get the organization id from the context and if not found, get it from the entity
 	// this should only happen when a personal access token is used to authenticate
-	callerForOrg, _ := auth.CallerFromContext(ctx)
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	ownerID := ""
-	if callerForOrg != nil {
-		ownerID = callerForOrg.OrganizationID
+	if err == nil {
+		ownerID = orgID
 	}
+
 	if ownerID == "" {
 		// get the entity id from the context
 		id := graphutils.GetStringInputVariableByName(ctx, "id")

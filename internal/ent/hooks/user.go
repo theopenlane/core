@@ -220,7 +220,7 @@ func HookDeleteUser() ent.Hook {
 					Where(orgmembership.UserID(user.ID)).
 					Where(orgmembership.RoleEQ(enums.RoleOwner)).
 					Where(orgmembership.Not(orgmembership.OrganizationIDIn(personalOrgIDs...))).
-					Exist(allowCtx)
+					Exist(auth.WithCrossOrgContext(allowCtx))
 				if err != nil {
 					return nil, err
 				}
@@ -414,7 +414,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 
 	memberships, err := m.Client().OrgMembership.Query().
 		Where(orgmembership.UserID(user.ID)).
-		All(allowCtx)
+		All(auth.WithCrossOrgContext(allowCtx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error querying user's org memberships")
 		return err

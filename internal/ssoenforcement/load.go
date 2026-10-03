@@ -4,6 +4,8 @@ package ssoenforcement
 import (
 	"context"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -43,7 +45,7 @@ func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email s
 	member, mErr := db.OrgMembership.Query().
 		Where(orgmembership.OrganizationID(orgID), orgmembership.UserID(userID)).
 		Select(orgmembership.FieldRole, orgmembership.FieldSSOExempt, orgmembership.FieldTfaEnforced).
-		Only(allowCtx)
+		Only(auth.WithCrossOrgContext(allowCtx))
 	if mErr != nil {
 		return sso.EnforcementInput{}, nil, mErr
 	}

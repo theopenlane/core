@@ -189,7 +189,7 @@ func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
 	trustCenterDocProtected := (&th.TrustCenterDocBuilder{Client: suite.Client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg.Owner.UserCtx, t)
 	trustCenterDocPublic := (&th.TrustCenterDocBuilder{Client: suite.Client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(tcOrg.Owner.UserCtx, t)
 
-	dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 	_, err := suite.Client.DB.TrustCenterDoc.UpdateOneID(trustCenterDocProtected.ID).SetStandardID(standard.ID).Save(dbCtx)
 	assert.NilError(t, err)
 	_, err = suite.Client.DB.TrustCenterDoc.UpdateOneID(trustCenterDocPublic.ID).SetStandardID(standard.ID).Save(dbCtx)
@@ -1001,7 +1001,7 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 		updatedDoc := resp.UpdateTrustCenterDoc.TrustCenterDoc
 
 		// Get the updated document from database to check FileID
-		dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+		dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 		dbDoc, err := suite.Client.DB.TrustCenterDoc.Get(dbCtx, updatedDoc.ID)
 		assert.NilError(t, err)
 
@@ -1523,7 +1523,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 
 	trustCenter := tcOrg.TrustCenter
 
-	dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 	allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
 
 	watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
@@ -1584,7 +1584,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+			dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 			dbDoc, err := suite.Client.DB.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled))
@@ -1612,7 +1612,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+		dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 		dbDoc, err := suite.Client.DB.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(false, dbDoc.WatermarkingEnabled))
@@ -1633,7 +1633,7 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 
 	trustCenter := tcOrg.TrustCenter
 
-	dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 	allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
 
 	watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
@@ -1695,7 +1695,7 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 				assert.NilError(t, err, tc.description)
 				assert.Assert(t, resp != nil)
 
-				dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+				dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 				dbDoc, err := suite.Client.DB.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled), tc.description)
@@ -1755,7 +1755,7 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 				assert.NilError(t, err, tc.description)
 				assert.Assert(t, resp != nil)
 
-				dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+				dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 				dbDoc, err := suite.Client.DB.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled), tc.description)
@@ -1794,7 +1794,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 	assert.Assert(t, createResp != nil)
 
 	docID := createResp.CreateTrustCenterDoc.TrustCenterDoc.ID
-	dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 	dbDoc, err := suite.Client.DB.TrustCenterDoc.Get(dbCtx, docID)
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(true, dbDoc.WatermarkingEnabled))

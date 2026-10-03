@@ -23,23 +23,17 @@ func TraverseUser() ent.Interceptor {
 		// bypass filter if the request is allowed, this happens when a user is
 		// being created, via invite or other method by another authenticated user
 		// or in tests
-		if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+		if _, allow := privacy.DecisionFromContext(ctx); allow {
 			return nil
 		}
 
-		// allow system admins to see all users
-		if auth.IsSystemAdminFromContext(ctx) {
+		if auth.HasAnyInContextCaller(ctx, auth.CapOrgSupport|auth.CapInternalOperation|auth.CapSystemAdmin) {
 			return nil
 		}
 
 		// allow users to be created without filtering
 		rootFieldCtx := graphql.GetRootFieldContext(ctx)
 		if rootFieldCtx != nil && rootFieldCtx.Object == "createUser" {
-			return nil
-		}
-
-		caller, callerOK := auth.CallerFromContext(ctx)
-		if callerOK && caller.Has(auth.CapOrgSupport) {
 			return nil
 		}
 
@@ -50,17 +44,23 @@ func TraverseUser() ent.Interceptor {
 			return filterUsingFGA(ctx, q)
 		case "user":
 			// if we are looking at self
-			if callerOK && caller != nil && caller.SubjectID != "" {
-				q.Where(user.ID(caller.SubjectID))
+			subjectID, err := auth.GetSubjectIDFromContext(ctx)
+			if err != nil {
+				// unauthenticated flows such as signup have no caller yet and are identified by their privacy token
+				if rule.HasPublicFlowToken(ctx) {
+					return nil
+				}
 
-				return nil
+				return auth.ErrNoAuthUser
 			}
+
+			q.Where(user.ID(subjectID))
+
+			return nil
 		default:
 			// if we want to get all users, don't apply any filters
 			return nil
 		}
-
-		return nil
 	})
 }
 
@@ -118,7 +118,7 @@ func userFilterType(ctx context.Context) string {
 // filterUsingFGA filters the user query using the FGA service to get the users with access to the org
 func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return auth.ErrNoAuthUser
 	}
 

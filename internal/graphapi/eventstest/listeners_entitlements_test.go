@@ -47,7 +47,7 @@ func fakeStripeCustomerID() string {
 
 func TestEntitlementListenerOrganizationCreated(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
 	// the suite's search mock resolves every org to the one shared cus_test_customer, which
 	// the first seeded org claims; reconcile for every later org hits the unique constraint
@@ -67,7 +67,7 @@ func TestEntitlementListenerOrganizationDeleted(t *testing.T) {
 	ensureStripeSubscriptionCancelMock()
 
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
 	waitForEvents()
 
@@ -94,7 +94,7 @@ func TestEntitlementListenerOrganizationDeleted(t *testing.T) {
 
 func TestEntitlementListenerOrganizationDeletedWithoutCustomer(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
 	waitForEvents()
 
@@ -116,7 +116,7 @@ func TestEntitlementListenerOrganizationDeletedWithoutCustomer(t *testing.T) {
 
 func TestEntitlementListenerBillingUpdate(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
 	waitForEvents()
 

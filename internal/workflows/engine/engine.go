@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
@@ -113,7 +112,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 		})
 	}
 	// the owning org is not known yet and the caller may not have one selected, so this lookup bypasses the org filter; guards and instance creation after are scoped to the owner
-	ownerID, err := workflows.ObjectOwnerID(rule.WithInternalCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
+	ownerID, err := workflows.ObjectOwnerID(auth.WithInternalCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}
@@ -160,7 +159,7 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 	userID, _ := auth.GetSubjectIDFromContext(ctx)
 	contextData := applyTriggerContext(instance.Context, def.ID, obj, input, userID)
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	if err := e.client.WorkflowInstance.UpdateOneID(instance.ID).
 		SetWorkflowDefinitionID(def.ID).
 		SetState(enums.WorkflowInstanceStateRunning).
@@ -313,7 +312,7 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 	}
 
 	// Use allow context for internal workflow operations
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	objRef, err := e.client.WorkflowObjectRef.
 		Query().
@@ -411,7 +410,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		CompletedBy:  userID,
 	}
 
-	allowCtx = rule.WithInternalOperationContext(ctx)
+	allowCtx = auth.WithInternalOperationContext(ctx)
 
 	instance, instanceErr := loadWorkflowInstance(allowCtx, e.client, assignment.WorkflowInstanceID, orgID)
 	if instanceErr != nil {

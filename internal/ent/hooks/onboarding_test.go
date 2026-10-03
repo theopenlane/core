@@ -172,8 +172,6 @@ func (suite *HookTestSuite) TestOnboardingProgramControlsLoadableByListeners() {
 		missing   []string
 	)
 
-	listenerCtx := generated.NewContext(auth.WithCaller(context.Background(), &auth.Caller{Capabilities: auth.CapInternalOperation | auth.CapBypassOrgFilter}), suite.client)
-
 	listenerIDs, err := gala.Register(suite.galaRuntime, gala.Definition[entityops.MutationPayload]{
 		Topic:      entityops.MutationTopic(entityops.MutationConcernWorkflow, generated.TypeControl),
 		Name:       "test.control.loadable",
@@ -181,8 +179,8 @@ func (suite *HookTestSuite) TestOnboardingProgramControlsLoadableByListeners() {
 		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 			return restored
 		},
-		Handle: func(_ gala.HandlerContext, payload entityops.MutationPayload) error {
-			_, ok, loadErr := entityops.LoadEntity(listenerCtx, payload.EntityID, suite.client.Control.Get)
+		Handle: func(hc gala.HandlerContext, payload entityops.MutationPayload) error {
+			_, ok, loadErr := entityops.LoadEntity(generated.NewContext(hc.Context, suite.client), payload.EntityID, suite.client.Control.Get)
 
 			mu.Lock()
 			defer mu.Unlock()

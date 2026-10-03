@@ -35,7 +35,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
@@ -532,12 +531,12 @@ type Cleanup[T DeleteExec] struct {
 // and controls that are linked to them
 func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 	// add client to context for hooks that expect the client to be in the context
-	ctx = SetContext(ctx, Suite.Client.DB)
+	ctx = SetInternalContext(ctx, Suite.Client.DB)
 
 	// Special handling for standards - update them to be private before deletion
 	// Only do this for system admins
 	stdAdminCaller, stdAdminOk := auth.CallerFromContext(ctx)
-	if _, ok := any(c.Client).(*ent.StandardClient); ok && stdAdminOk && stdAdminCaller != nil && stdAdminCaller.Has(auth.CapSystemAdmin) {
+	if _, ok := any(c.Client).(*ent.StandardClient); ok && stdAdminOk && stdAdminCaller.Has(auth.CapSystemAdmin) {
 		if c.ID != "" {
 			err := Suite.Client.DB.Standard.UpdateOneID(c.ID).SetIsPublic(false).Exec(ctx)
 			RequireNoError(t, err)
@@ -559,10 +558,10 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 	}
 }
 
-// SetContext is a helper function to set the context for the client
-// setting privacy to allow and adding the client to the context
-func SetContext(ctx context.Context, db *ent.Client) context.Context {
-	return SetUserContext(rule.WithInternalCrossOrgContext(ctx), db)
+// SetInternalContext is a helper function to set the context for the client
+// setting the cabilities required to seed system objects and adding the client to the context
+func SetInternalContext(ctx context.Context, db *ent.Client) context.Context {
+	return SetUserContext(auth.WithCallerCapabilities(ctx, auth.CapBypassOrgFilter|auth.CapInternalOperation|auth.CapBypassManagedGroup), db)
 }
 
 // SetUserContext adds the ent client and graphql response context without elevating the caller
@@ -576,7 +575,7 @@ func SetUserContext(ctx context.Context, db *ent.Client) context.Context {
 // MustNew organization builder is used to create, without authz checks, orgs in the database
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
-	ctx = SetContext(ctx, o.Client.DB)
+	ctx = SetInternalContext(ctx, o.Client.DB)
 
 	if o.SystemOrg {
 		systemOrg, err := o.Client.DB.Organization.Create().SetID(consts.SystemAdminOrgID).SetName("System Admin Organization").SetDisplayName("System Admin Organization").SetPersonalOrg(true).SetDescription("Organization for system administrators").Save(ctx)
@@ -681,7 +680,7 @@ func (o *OrganizationBuilder) deactivateModulesNotIn(ctx context.Context, t *tes
 
 // MustNew user builder is used to create, without authz checks, users in the database
 func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
-	ctx = SetContext(ctx, u.Client.DB)
+	ctx = SetInternalContext(ctx, u.Client.DB)
 
 	if u.FirstName == "" {
 		u.FirstName = gofakeit.FirstName()
@@ -761,7 +760,7 @@ func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webaut
 
 // MustNew org members builder is used to create, without authz checks, org members in the database
 func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgMembership {
-	ctx = SetContext(ctx, om.Client.DB)
+	ctx = SetInternalContext(ctx, om.Client.DB)
 
 	if om.UserID == "" {
 		user := (&UserBuilder{Client: om.Client}).MustNew(ctx, t)
@@ -784,7 +783,7 @@ func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 
 // MustNew group builder is used to create, without authz checks, groups in the database
 func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
-	ctx = SetContext(ctx, g.Client.DB)
+	ctx = SetInternalContext(ctx, g.Client.DB)
 
 	if g.Name == "" {
 		g.Name = RandomName(t)
@@ -808,7 +807,7 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 
 // MustNew invite builder is used to create, without authz checks, invites in the database
 func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
-	ctx = SetContext(ctx, i.Client.DB)
+	ctx = SetInternalContext(ctx, i.Client.DB)
 
 	// create user if not provided
 	rec := i.Recipient
@@ -832,7 +831,7 @@ func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 
 // MustNew subscriber builder is used to create, without authz checks, subscribers in the database
 func (i *SubscriberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subscriber {
-	reqCtx := SetContext(ctx, i.Client.DB)
+	reqCtx := SetInternalContext(ctx, i.Client.DB)
 
 	// create user if not provided
 	rec := i.Email
@@ -851,7 +850,7 @@ func (i *SubscriberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subs
 
 // MustNew personal access tokens builder is used to create, without authz checks, personal access tokens in the database
 func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.PersonalAccessToken {
-	ctx = SetContext(ctx, pat.Client.DB)
+	ctx = SetInternalContext(ctx, pat.Client.DB)
 
 	if pat.Name == "" {
 		pat.Name = gofakeit.AppName()
@@ -883,7 +882,7 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 
 // MustNew api tokens builder is used to create, without authz checks, api tokens in the database
 func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APIToken {
-	ctx = SetContext(ctx, at.Client.DB)
+	ctx = SetInternalContext(ctx, at.Client.DB)
 
 	if at.Name == "" {
 		at.Name = gofakeit.AppName()
@@ -913,7 +912,7 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 
 // MustNew user builder is used to create, without authz checks, group members in the database
 func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.GroupMembership {
-	ctx = SetContext(ctx, gm.Client.DB)
+	ctx = SetInternalContext(ctx, gm.Client.DB)
 
 	if gm.GroupID == "" {
 		group := (&GroupBuilder{Client: gm.Client}).MustNew(ctx, t)
@@ -947,7 +946,7 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 
 // MustNew entity type builder is used to create, without authz checks, entity types in the database
 func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EntityType {
-	ctx = SetContext(ctx, e.Client.DB)
+	ctx = SetInternalContext(ctx, e.Client.DB)
 
 	if e.Name == "" {
 		e.Name = RandomName(t)
@@ -963,7 +962,7 @@ func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Enti
 
 // MustNew entity builder is used to create, without authz checks, entities in the database
 func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
-	ctx = SetContext(ctx, e.Client.DB)
+	ctx = SetInternalContext(ctx, e.Client.DB)
 
 	if e.Name == "" {
 		e.Name = gofakeit.LoremIpsumWord() + ulids.New().String()
@@ -1001,7 +1000,7 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 
 // MustNew identity holder builder is used to create, without authz checks, identity holders in the database
 func (i *IdentityHolderBuilder) MustNew(ctx context.Context, t *testing.T) *ent.IdentityHolder {
-	ctx = SetContext(ctx, i.Client.DB)
+	ctx = SetInternalContext(ctx, i.Client.DB)
 
 	if i.FullName == "" {
 		i.FullName = gofakeit.Name()
@@ -1047,7 +1046,7 @@ func (i *IdentityHolderBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 // MustNew directory account builder is used to create, without authz checks, directory accounts in the database
 func (d *DirectoryAccountBuilder) MustNew(ctx context.Context, t *testing.T) *ent.DirectoryAccount {
-	ctx = SetContext(ctx, d.Client.DB)
+	ctx = SetInternalContext(ctx, d.Client.DB)
 
 	if d.ExternalID == "" {
 		d.ExternalID = ulids.New().String()
@@ -1083,7 +1082,7 @@ func (d *DirectoryAccountBuilder) MustNew(ctx context.Context, t *testing.T) *en
 
 // MustNew contact builder is used to create, without authz checks, contacts in the database
 func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact {
-	ctx = SetContext(ctx, c.Client.DB)
+	ctx = SetInternalContext(ctx, c.Client.DB)
 
 	if c.Name == "" {
 		c.Name = gofakeit.AppName()
@@ -1125,7 +1124,7 @@ func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact
 
 // MustNew task builder is used to create, without authz checks, tasks in the database
 func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
-	ctx = SetContext(ctx, c.Client.DB)
+	ctx = SetInternalContext(ctx, c.Client.DB)
 
 	if c.Title == "" {
 		c.Title = gofakeit.AppName()
@@ -1167,7 +1166,7 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 
 // MustNew program builder is used to create, without authz checks, programs in the database
 func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program {
-	ctx = SetContext(ctx, p.Client.DB)
+	ctx = SetInternalContext(ctx, p.Client.DB)
 
 	if p.Name == "" {
 		p.Name = gofakeit.AppName()
@@ -1207,7 +1206,7 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 
 // MustNew user builder is used to create, without authz checks, program members in the database
 func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ProgramMembership {
-	ctx = SetContext(ctx, pm.Client.DB)
+	ctx = SetInternalContext(ctx, pm.Client.DB)
 
 	if pm.ProgramID == "" {
 		program := (&ProgramBuilder{Client: pm.Client}).MustNew(ctx, t)
@@ -1242,7 +1241,7 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 // MustNew procedure builder is used to create, without authz checks, procedures in the database
 func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Procedure {
-	ctx = SetContext(ctx, p.Client.DB)
+	ctx = SetInternalContext(ctx, p.Client.DB)
 
 	if p.Name == "" {
 		p.Name = gofakeit.AppName()
@@ -1263,7 +1262,7 @@ func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Proce
 
 // MustNew policy builder is used to create, without authz checks, policies in the database
 func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.InternalPolicy {
-	ctx = SetContext(ctx, p.Client.DB)
+	ctx = SetInternalContext(ctx, p.Client.DB)
 
 	if p.Name == "" {
 		p.Name = gofakeit.AppName()
@@ -1292,7 +1291,7 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 // MustNew risk builder is used to create, without authz checks, risks in the database
 func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
-	ctx = SetContext(ctx, r.Client.DB)
+	ctx = SetInternalContext(ctx, r.Client.DB)
 
 	if r.Name == "" {
 		r.Name = gofakeit.AppName()
@@ -1313,7 +1312,7 @@ func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
 
 // MustNew control objective builder is used to create, without authz checks, control objectives in the database
 func (c *ControlObjectiveBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ControlObjective {
-	ctx = SetContext(ctx, c.Client.DB)
+	ctx = SetInternalContext(ctx, c.Client.DB)
 
 	if c.Name == "" {
 		c.Name = gofakeit.AppName()
@@ -1334,7 +1333,7 @@ func (c *ControlObjectiveBuilder) MustNew(ctx context.Context, t *testing.T) *en
 
 // MustNew narrative builder is used to create, without authz checks, narratives in the database
 func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narrative {
-	ctx = SetContext(ctx, n.Client.DB)
+	ctx = SetInternalContext(ctx, n.Client.DB)
 
 	if n.Name == "" {
 		n.Name = gofakeit.AppName()
@@ -1356,7 +1355,7 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 
 // MustNew control builder is used to create, without authz checks, controls in the database
 func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control {
-	ctx = SetContext(ctx, c.Client.DB)
+	ctx = SetInternalContext(ctx, c.Client.DB)
 
 	if c.RefCode == "" {
 		c.RefCode = gofakeit.UUID()
@@ -1453,7 +1452,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 // MustNew subcontrol builder is used to create, without authz checks, subcontrols in the database
 func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subcontrol {
-	ctx = SetContext(ctx, s.Client.DB)
+	ctx = SetInternalContext(ctx, s.Client.DB)
 
 	if s.Name == "" {
 		s.Name = gofakeit.UUID()
@@ -1487,7 +1486,7 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 
 // MustNew control builder is used to create, without authz checks, controls in the database
 func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Evidence {
-	ctx = SetContext(ctx, e.Client.DB)
+	ctx = SetInternalContext(ctx, e.Client.DB)
 
 	if e.Name == "" {
 		e.Name = gofakeit.AppName()
@@ -1540,7 +1539,7 @@ func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 
 // MustNew standard builder is used to create, without authz checks, standards in the database
 func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standard {
-	ctx = SetContext(ctx, s.Client.DB)
+	ctx = SetInternalContext(ctx, s.Client.DB)
 
 	if s.Name == "" {
 		s.Name = gofakeit.AppName()
@@ -1563,7 +1562,7 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 
 // MustNew subprocessor builder is used to create, without authz checks, subprocessors in the database
 func (s *SubprocessorBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subprocessor {
-	ctx = SetContext(ctx, s.Client.DB)
+	ctx = SetInternalContext(ctx, s.Client.DB)
 
 	if s.Name == "" {
 		for {
@@ -1594,7 +1593,7 @@ func (s *SubprocessorBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Su
 
 // MustNew note builder is used to create, without authz checks, notes in the database
 func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
-	ctx = SetContext(ctx, n.Client.DB)
+	ctx = SetInternalContext(ctx, n.Client.DB)
 
 	if n.Text == "" {
 		n.Text = gofakeit.HipsterSentence()
@@ -1623,7 +1622,7 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 
 // MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
 func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ControlImplementation {
-	ctx = SetContext(ctx, e.Client.DB)
+	ctx = SetInternalContext(ctx, e.Client.DB)
 
 	if e.Details == "" {
 		e.Details = gofakeit.Paragraph()
@@ -1664,7 +1663,7 @@ func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.M
 		}
 	}
 
-	ctx = SetContext(ctx, e.Client.DB)
+	ctx = SetInternalContext(ctx, e.Client.DB)
 
 	if len(e.FromControlIDs) == 0 && len(e.FromSubcontrolIDs) == 0 {
 		fromControl := (&ControlBuilder{Client: e.Client}).MustNew(ctx, t)
@@ -1727,7 +1726,7 @@ func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.M
 
 // MustNew mappable domain builder is used to create, without authz checks, mappable domains in the database
 func (e *MappableDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.MappableDomain {
-	ctx = SetContext(ctx, e.Client.DB)
+	ctx = SetInternalContext(ctx, e.Client.DB)
 
 	if e.Name == "" {
 		e.Name = gofakeit.DomainName()
@@ -1773,7 +1772,7 @@ type DNSVerificationBuilder struct {
 
 // MustNew custom domain builder is used to create, without authz checks, custom domains in the database
 func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.CustomDomain {
-	ctx = SetContext(ctx, c.Client.DB)
+	ctx = SetInternalContext(ctx, c.Client.DB)
 
 	if c.CnameRecord == "" {
 		c.CnameRecord = gofakeit.DomainName()
@@ -1795,7 +1794,7 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Cu
 
 // MustNew DNS verification builder is used to create, without authz checks, DNS verifications in the database
 func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.DNSVerification {
-	ctx = SetContext(ctx, d.Client.DB)
+	ctx = SetInternalContext(ctx, d.Client.DB)
 
 	if d.CloudflareHostnameID == "" {
 		d.CloudflareHostnameID = gofakeit.UUID()
@@ -1904,9 +1903,9 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 	}
 
 	// set the org owner_id, this is done via hooks when using the api
-	caller, _ := auth.CallerFromContext(ctx)
-	if caller != nil && caller.OrganizationID != "" {
-		mutation.SetOwnerID(caller.OrganizationID)
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err == nil {
+		mutation.SetOwnerID(orgID)
 	}
 
 	trustCenter, err := mutation.Save(ctx)
@@ -1915,7 +1914,7 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 	// the trust center create hook seeds a customizable message-updates email template; remove it when
 	// the test ends so it does not leak into shared-org email template assertions
 	t.Cleanup(func() {
-		cleanupCtx := privacy.DecisionContext(SetContext(ctx, tc.Client.DB), privacy.Allow)
+		cleanupCtx := privacy.DecisionContext(SetInternalContext(ctx, tc.Client.DB), privacy.Allow)
 		_, _ = tc.Client.DB.EmailTemplate.Delete().Where(emailtemplate.TrustCenterID(trustCenter.ID)).Exec(cleanupCtx)
 	})
 
@@ -1925,7 +1924,7 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 // MustNew trust center setting builder is used to create, without authz checks, trust center settings in the database
 func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterSetting {
 	userCtx := ctx
-	ctx = SetContext(ctx, tcs.Client.DB)
+	ctx = SetInternalContext(ctx, tcs.Client.DB)
 
 	if tcs.Title == "" {
 		tcs.Title = gofakeit.Company() + " Trust Center"
@@ -1962,7 +1961,7 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 
 func (tccb *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterCompliance {
 	userCtx := ctx
-	ctx = SetContext(ctx, tccb.Client.DB)
+	ctx = SetInternalContext(ctx, tccb.Client.DB)
 
 	if tccb.TrustCenterID == "" {
 		trustCenter := (&TrustCenterBuilder{Client: tccb.Client}).MustNew(userCtx, t)
@@ -2043,7 +2042,7 @@ type IntegrationBuilder struct {
 
 // MustNew integration builder is used to create, without authz checks, integrations in the database
 func (ib *IntegrationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Integration {
-	ctx = SetContext(ctx, ib.Client.DB)
+	ctx = SetInternalContext(ctx, ib.Client.DB)
 
 	if ib.Name == "" {
 		ib.Name = "GitHub Integration Test"
@@ -2101,7 +2100,7 @@ func (sb *SecretBuilder) WithSecretValue(value string) *SecretBuilder {
 
 // MustNew secret builder is used to create, without authz checks, secrets in the database
 func (sb *SecretBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Hush {
-	ctx = SetContext(ctx, sb.Client.DB)
+	ctx = SetInternalContext(ctx, sb.Client.DB)
 
 	if sb.Name == "" {
 		sb.Name = "Test Secret"
@@ -2149,7 +2148,7 @@ type IntegrationCleanup struct {
 
 // MustDelete deletes the integration
 func (ic *IntegrationCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = SetContext(ctx, ic.Client.DB)
+	ctx = SetInternalContext(ctx, ic.Client.DB)
 
 	err := ic.Client.DB.Integration.DeleteOneID(ic.ID).Exec(ctx)
 	RequireNoError(t, err)
@@ -2163,7 +2162,7 @@ type SecretCleanup struct {
 
 // MustDelete deletes the secret
 func (sc *SecretCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	ctx = SetContext(ctx, sc.Client.DB)
+	ctx = SetInternalContext(ctx, sc.Client.DB)
 
 	err := sc.Client.DB.Hush.DeleteOneID(sc.ID).Exec(ctx)
 	RequireNoError(t, err)
@@ -2171,7 +2170,7 @@ func (sc *SecretCleanup) MustDelete(ctx context.Context, t *testing.T) {
 
 // MustNew file builder is used to create, without authz checks, files in the database
 func (fb *FileBuilder) MustNew(ctx context.Context, t *testing.T) *ent.File {
-	ctx = SetContext(ctx, fb.Client.DB)
+	ctx = SetInternalContext(ctx, fb.Client.DB)
 
 	if fb.Name == "" {
 		fb.Name = gofakeit.Name()
@@ -2197,7 +2196,7 @@ func (fb *FileBuilder) MustNew(ctx context.Context, t *testing.T) *ent.File {
 
 // MustNew template builder is used to create, without authz checks, templates in the database
 func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Template {
-	ctx = SetContext(ctx, tb.Client.DB)
+	ctx = SetInternalContext(ctx, tb.Client.DB)
 
 	if tb.Name == "" {
 		tb.Name = gofakeit.Name()
@@ -2259,7 +2258,7 @@ func (ab *AssessmentBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Ass
 		},
 	}
 
-	ctx = SetContext(ctx, ab.Client.DB)
+	ctx = SetInternalContext(ctx, ab.Client.DB)
 
 	if ab.Name == "" {
 		ab.Name = gofakeit.Company() + "-" + ulids.New().String()
@@ -2297,7 +2296,7 @@ func (ab *AssessmentBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Ass
 // MustNew assessment response builder creates responses without authz checks
 // This uses a questionnaire caller to bypass auth, simulating anonymous user creation
 func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T) *ent.AssessmentResponse {
-	ctx = SetContext(ctx, arb.Client.DB)
+	ctx = SetInternalContext(ctx, arb.Client.DB)
 
 	var assessment *ent.Assessment
 
@@ -2430,7 +2429,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 
 	// Convert the GraphQL response to an ent entity
 	// We need to fetch it from the database to get the full ent.TrustCenterDoc
-	dbCtx := SetContext(ctx, tcdb.Client.DB)
+	dbCtx := SetInternalContext(ctx, tcdb.Client.DB)
 	trustCenterDoc, err := tcdb.Client.DB.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 	RequireNoError(t, err)
 
@@ -2439,7 +2438,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 
 // MustNew trust center watermark config builder is used to create, without authz checks, trust center watermark configs in the database
 func (tcwcb *TrustCenterWatermarkConfigBuilder) MustNew(ctx context.Context, t *testing.T, trustCenterID string) *ent.TrustCenterWatermarkConfig {
-	ctx = SetContext(ctx, tcwcb.Client.DB)
+	ctx = SetInternalContext(ctx, tcwcb.Client.DB)
 
 	// Set the trust center ID from the parameter
 	tcwcb.TrustCenterID = trustCenterID
@@ -2492,7 +2491,7 @@ func (tcwcb *TrustCenterWatermarkConfigBuilder) MustNew(ctx context.Context, t *
 }
 
 func (td *TagDefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TagDefinition {
-	ctx = SetContext(ctx, td.Client.DB)
+	ctx = SetInternalContext(ctx, td.Client.DB)
 
 	if td.Name == "" {
 		// ensure unique name by appending ULID
@@ -2513,7 +2512,7 @@ func (td *TagDefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 }
 
 func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent.CustomTypeEnum {
-	ctx = SetContext(ctx, td.Client.DB)
+	ctx = SetInternalContext(ctx, td.Client.DB)
 
 	if td.Name == "" {
 		td.Name = gofakeit.HipsterWord() + "-" + ulids.New().String()
@@ -2594,7 +2593,7 @@ func (s *SLADefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.S
 }
 
 func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EmailTemplate {
-	ctx = SetContext(ctx, e.Client.DB)
+	ctx = SetInternalContext(ctx, e.Client.DB)
 
 	if e.Name == "" {
 		e.Name = gofakeit.HipsterWord() + " Template"
@@ -2624,7 +2623,7 @@ func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.E
 }
 
 func (p *PlatformBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Platform {
-	ctx = SetContext(ctx, p.Client.DB)
+	ctx = SetInternalContext(ctx, p.Client.DB)
 
 	if p.Name == "" {
 		p.Name = gofakeit.AppName() + ulids.New().String()

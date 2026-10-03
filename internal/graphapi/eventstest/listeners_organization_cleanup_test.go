@@ -36,7 +36,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 	orgID := org.OrganizationID
 	ownerCtx := org.UserCtx
-	allowCtx := privacy.DecisionContext(th.SetContext(ownerCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(ownerCtx, suite.Client.DB), privacy.Allow)
 
 	waitForEvents()
 

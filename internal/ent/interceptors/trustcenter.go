@@ -108,13 +108,13 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return auth.ErrNoAuthUser
 	}
 
 	// system admins and trusted internal callers that bypass org scoping (e.g. scheduled pollers
 	// sweeping every organization) read trust center children across all organizations
-	if caller.Has(auth.CapSystemAdmin) || caller.Has(auth.CapBypassOrgFilter) {
+	if auth.HasCrossOrgCapabilities(ctx) {
 		return nil
 	}
 

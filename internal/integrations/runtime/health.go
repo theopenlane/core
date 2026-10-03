@@ -12,9 +12,9 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/notifications"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // integrationUnhealthyObjectType is the notification object type for a stopped installation
@@ -529,7 +529,7 @@ func workloadOperations(def types.Definition, installation *ent.Integration) []t
 // notifyIntegrationHealth sends one health notification to the owning organization's owners and admins
 func (r *Runtime) notifyIntegrationHealth(ctx context.Context, installation *ent.Integration, objectType, title, body string, data map[string]any) error {
 	// notifications are internal-only, and the member lookup needs the ent client on the context
-	ctx = rule.WithInternalOperationContext(ent.NewContext(ctx, r.DB()))
+	ctx = auth.WithInternalOperationContext(ent.NewContext(ctx, r.DB()))
 
 	ids, err := notifications.OrgUserIDsByRole(ctx, r.DB(), installation.OwnerID, enums.RoleOwner, enums.RoleSuperAdmin)
 	if err != nil {

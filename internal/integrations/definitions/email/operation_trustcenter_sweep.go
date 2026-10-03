@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
@@ -39,13 +38,6 @@ type TrustCenterNotificationSweep struct{}
 
 var trustCenterNotificationSweepSchema, TrustCenterNotificationOp = providerkit.OperationSchema[TrustCenterNotificationSweep]() //nolint:revive
 
-// systemSweepContext builds a cross-organization system caller context bypassing org filtering and FGA
-func systemSweepContext(ctx context.Context) context.Context {
-	return auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
-}
-
 // Handle adapts the trust center notification sweep to the generic operation registration boundary
 func (t TrustCenterNotificationSweep) Handle() types.OperationHandler {
 	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
@@ -65,9 +57,8 @@ func (TrustCenterNotificationSweep) Run(ctx context.Context, req types.Operation
 	cutoff := now.Add(-trustCenterNotificationGrace)
 	// the sweep scans trust center settings and subprocessors across every organization, and the
 	// per-trust-center sends it dispatches must load branding from the trust center setting. The
-	// cross-org bypass rides on the caller (which gala persists across the durable dispatch boundary,
-	// unlike the privacy decision), matching the other scheduled sweeps' system caller
-	systemCtx := systemSweepContext(ctx)
+	// cross-org bypass rides on the caller
+	systemCtx := auth.WithSystemSweepContext(ctx)
 
 	posts, postsErr := dispatchDuePosts(systemCtx, req, cutoff, now)
 	subprocessors, subprocessorsErr := dispatchDueSubprocessorChanges(systemCtx, req, cutoff)

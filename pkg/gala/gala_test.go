@@ -297,7 +297,7 @@ func TestRuntimeDispatchEnvelopeWithCallerContext(t *testing.T) {
 		Name:  "runtime.test.auth.listener",
 		Handle: func(handlerContext HandlerContext, _ runtimeTestPayload) error {
 			caller, ok := auth.CallerFromContext(handlerContext.Context)
-			if !ok || caller == nil {
+			if !ok {
 				return auth.ErrNoAuthUser
 			}
 
@@ -2078,7 +2078,7 @@ func TestLogFieldsCodecRoundTripViaContextManager(t *testing.T) {
 	}
 
 	caller, ok := auth.CallerFromContext(restored)
-	if !ok || caller == nil {
+	if !ok {
 		t.Fatalf("expected caller in restored context")
 	}
 

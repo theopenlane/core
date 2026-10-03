@@ -30,7 +30,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	requestCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(requestCtx)
-	if !ok || caller == nil {
+	if !ok {
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser)
 	}
 

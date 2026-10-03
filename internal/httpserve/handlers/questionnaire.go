@@ -33,7 +33,7 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 	}
 
 	caller, callerOk := auth.CallerFromContext(reqCtx)
-	if !callerOk || caller == nil {
+	if !callerOk {
 		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext)
 	}
 
@@ -143,15 +143,18 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 
 	allowCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
 
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok {
+		logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	}
+
 	if anonAssessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx); ok {
 		assessmentID = anonAssessmentID
 
-		anonCaller, callerOk := auth.CallerFromContext(reqCtx)
-		if callerOk && anonCaller != nil {
-			email = anonCaller.SubjectEmail
-			ownerID = anonCaller.OrganizationID
-			allowCtx = auth.WithCaller(allowCtx, anonCaller)
-		}
+		email = caller.SubjectEmail
+		ownerID = caller.OrganizationID
+		allowCtx = auth.WithCaller(allowCtx, caller)
 
 		if email == "" {
 			isAnonymous = true
@@ -159,11 +162,6 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 
 		allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
 	} else {
-		qCaller, qOk := auth.CallerFromContext(reqCtx)
-		if !qOk || qCaller == nil {
-			logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
-			return h.InternalServerError(ctx, ErrProcessingRequest)
-		}
 
 		// for regular/normal authenticated users, we expect the assessment id to be passed
 		// in the request by the client.
@@ -174,14 +172,14 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 		}
 
 		assessmentID = req.AssessmentID
-		email = qCaller.SubjectEmail
-		ownerID = qCaller.OrganizationID
+		email = caller.SubjectEmail
+		ownerID = caller.OrganizationID
 
 		// bypass FGA tuple creation for questionnaire submissions;
 		// DocumentData ownership is tracked via AssessmentResponse, not FGA tuples
 		allowCtx = auth.WithCaller(allowCtx, &auth.Caller{
-			OrganizationID: qCaller.OrganizationID,
-			SubjectID:      qCaller.SubjectID,
+			OrganizationID: caller.OrganizationID,
+			SubjectID:      caller.SubjectID,
 			Capabilities:   auth.CapBypassFGA,
 		})
 	}

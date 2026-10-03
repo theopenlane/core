@@ -157,6 +157,8 @@ func (suite *GraphTestSuite) SetupTestData(ctx context.Context, t *testing.T) {
 	RequireNoError(t, seedErr)
 }
 
+// SetupPatClient returns a client using a PAT authorized for two orgs but passes
+// the organization header through
 func (suite *GraphTestSuite) SetupPatClient(user TestUserDetails, t *testing.T) *testclient.TestClient {
 	return suite.setupPatClient(user, t, []string{user.OrganizationID, user.PersonalOrgID}, true)
 }

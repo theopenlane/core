@@ -8,7 +8,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/iam/auth"
@@ -127,7 +126,7 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 		return "", nil
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, m.client, obj)
 	if err != nil {
 		return "", fmt.Errorf("%w: %w", ErrFailedToQueryObjectRefs, err)
@@ -150,14 +149,12 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 func (m *ProposalManager) Apply(scope *observability.Scope, proposalID string, obj *workflows.Object) error {
 	ctx := scope.Context()
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return auth.ErrNoAuthUser
 	}
 
-	orgID := caller.OrganizationID
-
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := m.client.WorkflowProposal.Query().
 		Where(
 			workflowproposal.IDEQ(proposalID),

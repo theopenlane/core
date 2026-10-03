@@ -53,16 +53,14 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// get the authenticated user from the context
-	inviteCaller, inviteOk := auth.CallerFromContext(reqCtx)
-	if !inviteOk || inviteCaller == nil || inviteCaller.SubjectID == "" {
+	subjectID, err := auth.GetSubjectIDFromContext(reqCtx)
+	if err != nil {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
-	userID := inviteCaller.SubjectID
-
-	user, err := h.getUserDetailsByID(reqCtx, userID)
+	user, err := h.getUserDetailsByID(reqCtx, subjectID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user details")
 
@@ -85,7 +83,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	// reply with the relevant details
 	out := &models.InviteResponse{
 		Reply:       rout.Reply{Success: true},
-		ID:          userID,
+		ID:          subjectID,
 		Email:       invitedUser.Recipient,
 		JoinedOrgID: invitedUser.OwnerID,
 		Role:        string(invitedUser.Role),

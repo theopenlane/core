@@ -40,7 +40,7 @@ func TestTrustCenterAnonymousSubscribe(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, strings.ToLower(subscriberEmail), resp.CreateSubscriber.Subscriber.Email)
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	sub, err := suite.Client.DB.Subscriber.Get(dbCtx, resp.CreateSubscriber.Subscriber.ID)
 	assert.NilError(t, err)
@@ -65,7 +65,7 @@ func TestTrustCenterAnonymousSubscribe(t *testing.T) {
 func TestTrustCenterSubscriberGate(t *testing.T) {
 	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	tcLoaded, err := suite.Client.DB.TrustCenter.Query().
 		Where(trustcenter.IDEQ(tc.TrustCenter.ID)).
@@ -128,7 +128,7 @@ func TestTrustCenterSubscriberScopedPerTrustCenter(t *testing.T) {
 
 	assert.Assert(t, resp1.CreateSubscriber.Subscriber.ID != resp2.CreateSubscriber.Subscriber.ID)
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tc1.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tc1.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	sub1, err := suite.Client.DB.Subscriber.Get(dbCtx, resp1.CreateSubscriber.Subscriber.ID)
 	assert.NilError(t, err)
@@ -148,7 +148,7 @@ func TestTrustCenterSubscriberScopedPerTrustCenter(t *testing.T) {
 func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	// ensure the trust center has a branded setting linked via the setting edge
 	tcLoaded, err := suite.Client.DB.TrustCenter.Query().Where(trustcenter.IDEQ(tc.TrustCenter.ID)).WithSetting().Only(dbCtx)

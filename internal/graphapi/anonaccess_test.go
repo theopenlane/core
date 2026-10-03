@@ -272,8 +272,8 @@ func TestControlAnonymousTrustCenterAccess(t *testing.T) {
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t)
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t)
 
-	org1DBCtx := th.SetContext(tcOrg1.Owner.UserCtx, suite.Client.DB)
-	org2DBCtx := th.SetContext(tcOrg2.Owner.UserCtx, suite.Client.DB)
+	org1DBCtx := th.SetInternalContext(tcOrg1.Owner.UserCtx, suite.Client.DB)
+	org2DBCtx := th.SetInternalContext(tcOrg2.Owner.UserCtx, suite.Client.DB)
 
 	// public TC control for org1
 	tcControl1, err := suite.Client.DB.Control.Create().

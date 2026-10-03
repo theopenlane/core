@@ -521,7 +521,7 @@ func TestMutationCreateOrgMemberRoleCeiling(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.RoleEQ(enums.RoleOwner),
 		).
-		All(privacy.DecisionContext(context.Background(), privacy.Allow))
+		All(auth.WithCallerCapabilities(privacy.DecisionContext(context.Background(), privacy.Allow), auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 	assert.Assert(t, is.Len(owners, 1))
 	assert.Check(t, is.Equal(org.Owner.ID, owners[0].UserID))
@@ -622,7 +622,7 @@ func TestMutationUpdateOrgMemberRole(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.UserID(user.ID),
 		).
-		Only(allowCtx)
+		Only(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 
 	ownerMember, err := suite.Client.DB.OrgMembership.Query().
@@ -630,7 +630,7 @@ func TestMutationUpdateOrgMemberRole(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.UserID(org.Owner.ID),
 		).
-		Only(allowCtx)
+		Only(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 
 	cases := []struct {
@@ -715,7 +715,7 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.UserIDIn(user1.ID, user2.ID),
 		).
-		All(allowCtx)
+		All(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(currentMembers, 2))
 
@@ -738,7 +738,7 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 
 	updatedMembers, err := suite.Client.DB.OrgMembership.Query().
 		Where(orgmembership.IDIn(ids...)).
-		All(allowCtx)
+		All(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 
 	for _, member := range updatedMembers {
@@ -750,7 +750,7 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.UserID(org.Owner.ID),
 		).
-		Only(allowCtx)
+		Only(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 
 	memberRole := enums.RoleMember
@@ -764,7 +764,7 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 
 	ownerMember, err = suite.Client.DB.OrgMembership.Query().
 		Where(orgmembership.ID(ownerMember.ID)).
-		Only(allowCtx)
+		Only(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(enums.RoleOwner, ownerMember.Role))
 
@@ -1009,7 +1009,7 @@ func TestMutationDeleteBulkOrgMembers(t *testing.T) {
 			orgmembership.OrganizationID(bulkOrg.Owner.OrganizationID),
 			orgmembership.UserID(bulkOrg.Owner.ID),
 		).
-		OnlyID(allowCtx)
+		OnlyID(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 
 	homeGroupsBefore := suite.countOrgScopedGroupMemberships(t, crossOrgUserID, homeOrg.Owner.OrganizationID)
@@ -1095,7 +1095,7 @@ func TestMutationLeaveOrganizationReassignsDefaultOrgToMemberOrg(t *testing.T) {
 			orgmembership.UserID(userID),
 			orgmembership.OrganizationID(newDefaultOrgID),
 		).
-		Exist(allowCtx)
+		Exist(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
 	assert.NilError(t, err)
 	assert.Check(t, isMember, "default org %s was reassigned to an org the user is not a member of", newDefaultOrgID)
 

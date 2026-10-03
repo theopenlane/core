@@ -105,7 +105,7 @@ func provenanceConversionProviderState(t *testing.T) openapi.IntegrationProvider
 // untouched, persists the resolved instance id on every installation
 // it converts in the caller's organization, and is idempotent on a second call
 func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	providerState := provenanceConversionProviderState(t)

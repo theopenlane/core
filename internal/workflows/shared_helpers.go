@@ -43,12 +43,13 @@ func (e *WorkflowCreationError) Unwrap() error {
 
 // ActingUserID returns the acting caller's user id, or empty when the caller is an API token and not a user
 func ActingUserID(ctx context.Context) string {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || auth.IsAPITokenAuthentication(ctx) {
+	if auth.IsUserlessContext(ctx) {
 		return ""
 	}
 
-	return caller.SubjectID
+	subjectID, _ := auth.GetSubjectIDFromContext(ctx)
+
+	return subjectID
 }
 
 // ResolveOwnerID returns the provided owner ID or derives it from the context when empty.
@@ -57,12 +58,7 @@ func ResolveOwnerID(ctx context.Context, ownerID string) (string, error) {
 		return ownerID, nil
 	}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return "", auth.ErrNoAuthUser
-	}
-
-	return caller.OrganizationID, nil
+	return auth.GetOrganizationIDFromContext(ctx)
 }
 
 // WorkflowInstanceBuilderParams defines the inputs for creating a workflow instance + object ref.
@@ -168,8 +164,8 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 		return nil, nil
 	}
 
-	proposalCaller, proposalOk := auth.CallerFromContext(ctx)
-	if !proposalOk || proposalCaller == nil || proposalCaller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return nil, auth.ErrNoAuthUser
 	}
 
@@ -178,7 +174,7 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 			Where(
 				workflowproposal.WorkflowObjectRefIDIn(objRefIDs...),
 				workflowproposal.DomainKeyEQ(domainKey),
-				workflowproposal.OwnerIDEQ(proposalCaller.OrganizationID),
+				workflowproposal.OwnerIDEQ(orgID),
 			)
 	}
 

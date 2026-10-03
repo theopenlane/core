@@ -498,7 +498,7 @@ func TestTrustCenterEntityHookCustomerEntityType(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ctx := th.SetContext(tc.ctx, suite.Client.DB)
+			ctx := th.SetInternalContext(tc.ctx, suite.Client.DB)
 
 			resp, err := tc.client.CreateTrustCenterEntity(tc.ctx, tc.request, nil, nil)
 			if tc.expectedErr != "" {

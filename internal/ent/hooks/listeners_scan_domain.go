@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -38,7 +38,7 @@ func DomainScanListeners() []gala.Registration {
 			Schema:      entityops.SchemaOrganizationSetting,
 			Operations:  []string{entityops.OpUpdateOne},
 			Fields:      []string{organizationsetting.FieldDomains},
-			ContextKeys: []func(context.Context) context.Context{rule.WithInternalOperationContext},
+			ContextKeys: []func(context.Context) context.Context{auth.WithInternalOperationContext},
 			Handle:      entityops.RequireDep(handleOrganizationSettingDomainsUpdated),
 		},
 	}

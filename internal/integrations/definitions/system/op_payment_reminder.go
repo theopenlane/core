@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // reminderStaggerDifference spaces successive deletion notice emails apart to avoid
@@ -62,7 +63,7 @@ func (p PaymentReminderSweep) Run(ctx context.Context, req types.OperationReques
 		p.DeletionDays = DefaultDeletionDays
 	}
 
-	systemCtx := systemSweepContext(ctx)
+	systemCtx := auth.WithSystemSweepContext(ctx)
 
 	now := time.Now()
 	canceledBefore := now.Add(-time.Duration(p.PaymentMethodInterval) * 24 * time.Hour)

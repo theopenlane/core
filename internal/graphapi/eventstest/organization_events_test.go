@@ -40,7 +40,7 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 	// a task gives us an org owned record that tracks history
 	task1 := (&th.TaskBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 
-	allowCtx := th.SetContext(reqCtx, suite.Client.DB)
+	allowCtx := th.SetInternalContext(reqCtx, suite.Client.DB)
 
 	// the trust center is org owned, but the setting created alongside it is not, it only points at
 	// the trust center. The cascade has to recurse through the trust center to reach it

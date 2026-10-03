@@ -22,7 +22,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -979,7 +978,7 @@ func TestMutationDeleteOrganization(t *testing.T) {
 			assert.Check(t, orgUser.Owner.OrganizationID != settingUpdated.UserSetting.DefaultOrg.ID)
 
 			// allow ctx to ensure the org no longer exists after deletion
-			allowCtx := ent.NewContext(rule.WithInternalCrossOrgContext(reqCtx), suite.Client.DB)
+			allowCtx := ent.NewContext(auth.WithInternalCrossOrgContext(reqCtx), suite.Client.DB)
 
 			_, err = suite.Client.API.GetOrganizationByID(allowCtx, tc.orgID)
 			assert.ErrorContains(t, err, th.NotFoundErrorMsg)

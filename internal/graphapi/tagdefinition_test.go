@@ -558,7 +558,7 @@ func TestMutationDeleteTagDefinitionInUse(t *testing.T) {
 	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// create a workflow definition that uses the tag definition
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 	workflowResp, err := suite.Client.DB.WorkflowDefinition.Create().
 		SetName("Test Workflow").
 		SetWorkflowKind(enums.WorkflowKindApproval).

@@ -25,7 +25,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
@@ -46,35 +45,24 @@ func HookOrganization() ent.Hook {
 			// to propagate the new org ID back to the original caller pointer
 			var existingCaller *auth.Caller
 
-			// originalCtx is the caller context without the org creation bypass capabilities
+			// create bootstrap caller with evelated privileges on create
+			// use the same context to make it easier to read the code, but only on create to we elevate
+			// to keep the code clear, never use ctx after here
 			originalCtx := ctx
+			bootstrapCtx := ctx
+			if m.Op().Is(ent.OpCreate) {
+				bootstrapCtx = auth.WithOrganizationBootstrapCapabilities(ctx)
+			}
 
 			if m.Op().Is(ent.OpCreate) {
 				// add bypass capabilities to the caller for the duration of org creation
 				// so that downstream hooks skip owner-field and managed-group guards
-				const orgCreationCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
-				if caller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
+				if caller, hasCaller := auth.CallerFromContext(originalCtx); hasCaller {
 					existingCaller = caller
-					ctx = auth.WithCaller(ctx, caller.WithCapabilities(orgCreationCaps))
-				} else {
-					ctx = auth.WithCaller(ctx, &auth.Caller{Capabilities: orgCreationCaps})
 				}
 
-				// generate a default org setting schema if not provided
-				if err := createOrgSettings(ctx, m); err != nil {
+				if err := preOrgCreateMutation(bootstrapCtx, m); err != nil {
 					return nil, err
-				}
-
-				// check if this is a child org, error if parent org is a personal org
-				if err := personalOrgNoChildren(ctx, m); err != nil {
-					return nil, err
-				}
-
-				// trim trailing whitespace from the name and derive the SSO slug from it
-				if name, ok := m.Name(); ok {
-					trimmed := strings.TrimSpace(name)
-					m.SetName(trimmed)
-					m.SetSlugName(strcase.KebabCase(trimmed))
 				}
 			}
 
@@ -82,11 +70,11 @@ func HookOrganization() ent.Hook {
 			setDefaultsOnMutations(m)
 
 			// check for uploaded files (e.g. avatar image)
-			fileIDs := objects.GetFileIDsFromContext(ctx)
+			fileIDs := objects.GetFileIDsFromContext(bootstrapCtx)
 			if len(fileIDs) > 0 {
 				var err error
 
-				ctx, err = checkAvatarFile(ctx, m)
+				bootstrapCtx, err = checkAvatarFile(bootstrapCtx, m)
 				if err != nil {
 					return nil, err
 				}
@@ -94,57 +82,41 @@ func HookOrganization() ent.Hook {
 				m.AddFileIDs(fileIDs...)
 			}
 
-			v, err := next.Mutate(ctx, m)
+			v, err := next.Mutate(bootstrapCtx, m)
 			if err != nil {
 				return v, err
 			}
 
-			if m.Op().Is(ent.OpCreate) {
-				orgCreated, ok := v.(*generated.Organization)
-				if !ok {
-					return nil, err
-				}
+			// return early if this is not a create
+			if !m.Op().Is(ent.OpCreate) {
+				return v, err
+			}
 
-				// the bypass capabilities are only needed for the insert itself, the rest of the
-				// flow runs as the original caller scoped to only the new org
-				if !orgCreated.PersonalOrg && existingCaller != nil {
-					// propagate the new org ID back through the original caller pointer
-					// so that callers holding the same *Caller see the updated org
-					existingCaller.OrganizationID = orgCreated.ID
-					if !lo.Contains(existingCaller.OrganizationIDs, orgCreated.ID) {
-						existingCaller.OrganizationIDs = append(existingCaller.OrganizationIDs, orgCreated.ID)
-					}
+			orgCreated, ok := v.(*generated.Organization)
+			if !ok {
+				logx.FromContext(ctx).Warn().Msg("returned value was not a organization mutation, unable to proceed")
+				return false, ErrInternalServerError
+			}
 
-					// the managed group bypass is still required to create the default groups
-					newOrgCaller := existingCaller.WithCapabilities(auth.CapBypassManagedGroup)
-					newOrgCaller.OrganizationID = orgCreated.ID
-					newOrgCaller.OrganizationIDs = []string{orgCreated.ID}
+			bootstrapCtx, err = postOrgCreateMutation(bootstrapCtx, orgCreated, m, existingCaller)
+			if err != nil {
+				return nil, err
+			}
 
-					ctx = auth.WithCaller(originalCtx, newOrgCaller)
-				}
-
-				// create the admin organization member if not using an API token (which is not associated with a user)
-				// otherwise add the API token for admin access to the newly created organization
-				if err := createOrgMemberOwner(ctx, orgCreated.ID, m); err != nil {
+			// update the session to drop the user into the new organization
+			// if the org is not a personal org, as personal orgs are created during registration
+			// and sessions are already set
+			if !orgCreated.PersonalOrg {
+				am := authmanager.New(m.Client())
+				originalCtx, err = updateUserAuthSession(originalCtx, am, orgCreated.ID)
+				if err != nil {
 					return v, err
 				}
 
-				// update the session to drop the user into the new organization
-				// if the org is not a personal org, as personal orgs are created during registration
-				// and sessions are already set
-				if !orgCreated.PersonalOrg {
-					am := authmanager.New(m.Client())
-					ctx, err = updateUserAuthSession(ctx, am, orgCreated.ID)
-					if err != nil {
-						return v, err
-					}
+				if err = postOrganizationCreation(bootstrapCtx, orgCreated, m); err != nil {
+					logx.FromContext(originalCtx).Error().Err(err).Msg("error in post organization creation steps")
 
-					ctx, err = postOrganizationCreation(ctx, orgCreated, m)
-					if err != nil {
-						logx.FromContext(ctx).Error().Err(err).Msg("error in post organization creation steps")
-
-						return v, err
-					}
+					return v, err
 				}
 			}
 
@@ -153,11 +125,62 @@ func HookOrganization() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
+// preOrgCreateMutation are steps run on an organization create mutation before the mutation itself runs
+func preOrgCreateMutation(ctx context.Context, m *generated.OrganizationMutation) error {
+	// generate a default org setting schema if not provided
+	if err := createOrgSettings(ctx, m); err != nil {
+		return err
+	}
+
+	// check if this is a child org, error if parent org is a personal org
+	if err := personalOrgNoChildren(ctx, m); err != nil {
+		return err
+	}
+
+	// trim trailing whitespace from the name and derive the SSO slug from it
+	if name, ok := m.Name(); ok {
+		trimmed := strings.TrimSpace(name)
+		m.SetName(trimmed)
+		m.SetSlugName(strcase.KebabCase(trimmed))
+	}
+
+	return nil
+}
+
+// postOrgCreateMutation runs updates after the initial org creation mutation is completed and returns the updated context
+func postOrgCreateMutation(ctx context.Context, v *generated.Organization, m *generated.OrganizationMutation, caller *auth.Caller) (context.Context, error) {
+	// the bypass capabilities are only needed for the insert itself, the rest of the
+	// flow runs as the original caller scoped to only the new org
+	if !v.PersonalOrg && caller != nil {
+		// propagate the new org ID back through the original caller pointer
+		// so that callers holding the same *Caller see the updated org
+		caller.OrganizationID = v.ID
+		if !lo.Contains(caller.OrganizationIDs, v.ID) {
+			caller.OrganizationIDs = append(caller.OrganizationIDs, v.ID)
+		}
+
+		// the managed group bypass is still required to create the default groups
+		newOrgCaller := caller.WithCapabilities(auth.CapBypassManagedGroup)
+		newOrgCaller.OrganizationID = v.ID
+		newOrgCaller.OrganizationIDs = []string{v.ID}
+
+		ctx = auth.WithCaller(ctx, newOrgCaller)
+	}
+
+	// create the admin organization member if not using an API token (which is not associated with a user)
+	// otherwise add the API token for admin access to the newly created organization
+	if err := createOrgMemberOwner(ctx, v.ID, m); err != nil {
+		return ctx, err
+	}
+
+	return ctx, nil
+}
+
 // HookOrganizationDelete runs on org delete mutations to ensure the org can be deleted
 func HookOrganizationDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationFunc(func(ctx context.Context, m *generated.OrganizationMutation) (generated.Value, error) {
-			if rule.IsInternalRequest(ctx) {
+			if auth.IsInternalRequest(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
@@ -248,7 +271,7 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 // createOrgSubscription creates the default organization subscription for a new org
 func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation) (*generated.OrgSubscription, error) {
 	// ensure we can always pull the org subscription for the organization
-	allowCtx := rule.WithOrgInternalCaller(ctx, orgCreated.ID)
+	allowCtx := auth.WithOrgInternalCaller(ctx, orgCreated.ID)
 
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
@@ -319,24 +342,24 @@ func createEntityTypes(ctx context.Context, orgID string, m *generated.Organizat
 }
 
 // postOrganizationCreation runs after an organization is created to perform additional setup
-func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) (context.Context, error) {
+func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
 	// create default entity types, if configured
 	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
-		return ctx, err
+		return err
 	}
 
 	// create generated groups
 	if err := generateOrganizationGroups(ctx, m, orgCreated.ID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating generated groups")
 
-		return ctx, err
+		return err
 	}
 
 	// create subscriptions if the entitlement manager is enabled
 	if m.EntitlementManager.Config.IsEnabled() {
 		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
 		if err != nil {
-			return ctx, err
+			return err
 		}
 
 		opts := []reconciler.OrgModuleOption{reconciler.WithTrial()}
@@ -346,16 +369,16 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 		_, err = reconciler.CreateDefaultOrgModulesProductsPrices(ctx, m.Client(), orgSubs, orgCreated.ID, opts...)
 		if err != nil {
-			return ctx, err
+			return err
 		}
 	}
 
 	if err := createDefaultSLADefinitions(ctx, orgCreated.ID, m.Client()); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating default SLA definitions")
-		return ctx, err
+		return err
 	}
 
-	return ctx, nil
+	return nil
 }
 
 const (
@@ -552,7 +575,7 @@ func personalOrgNoChildren(ctx context.Context, m *generated.OrganizationMutatio
 	if ok {
 		// check if parent org is a personal org
 		parentOrg, err := m.Client().Organization.Query().
-			Select("personal_org").
+			Select(organization.FieldPersonalOrg).
 			Where(organization.ID(parentOrgID)).
 			Only(ctx)
 		if err != nil {

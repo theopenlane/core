@@ -154,7 +154,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 	}
 
 	individualID := ""
-	supportUser, err := h.getUserByEmail(allowCtx, individualEmail)
+	supportUser, err := h.getUserByEmail(reqCtx, individualEmail)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("email", individualEmail).Msg("failed to look up support user by email, session will not be logged")
 	} else {

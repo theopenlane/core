@@ -42,11 +42,9 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 		// we are intentionally swallowing this error because if we can't get the org ID
 		// we just won't populate the provider hints with it. The upload can still proceed
 		// without it - failing at this stage prevents the upload from ever progressing
-		var orgID string
-		if uploadCaller, uploadOk := auth.CallerFromContext(ctx); uploadOk && uploadCaller != nil {
-			orgID, _ = uploadCaller.ActiveOrg()
-		}
-		if orgID != "" && file.Parent.ID == "" && file.CorrelatedObjectID == "" && file.CorrelatedObjectType == "" {
+		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+
+		if err == nil && file.Parent.ID == "" && file.CorrelatedObjectID == "" && file.CorrelatedObjectType == "" {
 			file.CorrelatedObjectID = orgID
 			file.CorrelatedObjectType = "organization"
 		}
@@ -171,11 +169,7 @@ func BuildUploadOptions(ctx context.Context, f *pkgobjects.File) *pkgobjects.Upl
 		f.ProviderHints = &pkgobjects.ProviderHints{}
 	}
 
-	var orgID string
-	if hintCaller, hintOk := auth.CallerFromContext(ctx); hintOk && hintCaller != nil {
-		orgID, _ = hintCaller.ActiveOrg()
-	}
-
+	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 	objects.PopulateProviderHints(f, orgID)
 
 	contentType := f.ContentType

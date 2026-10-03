@@ -32,7 +32,7 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 
 	user := suite.UserBuilder(context.Background(), t)
 	orgID := user.OrganizationID
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
 	template := (&th.TemplateBuilder{Client: suite.Client}).MustNew(user.UserCtx, t)
 	assert.NilError(t, suite.Client.DB.Template.UpdateOneID(template.ID).SetTransformConfiguration(models.TemplateProjectionConfig{

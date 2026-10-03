@@ -39,7 +39,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
-	dbCtx := privacy.DecisionContext(th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).

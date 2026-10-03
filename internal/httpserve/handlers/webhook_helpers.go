@@ -6,6 +6,7 @@ import (
 
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -13,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
@@ -68,7 +68,7 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscript
 
 // upsertOrgProduct creates or updates an OrgProduct based on the Stripe product data
 func upsertOrgProduct(ctx context.Context, orgSub *ent.OrgSubscription, p *stripe.Product) (*ent.OrgProduct, error) {
-	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
+	allowCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	existing, err := tx.OrgProduct.Query().Where(orgproduct.StripeProductID(p.ID), orgproduct.SubscriptionID(orgSub.ID)).Only(allowCtx)
@@ -96,7 +96,7 @@ func upsertOrgProduct(ctx context.Context, orgSub *ent.OrgSubscription, p *strip
 
 // upsertOrgPrice creates or updates an OrgPrice based on the Stripe price data
 func upsertOrgPrice(ctx context.Context, orgSub *ent.OrgSubscription, prod *ent.OrgProduct, price *stripe.Price) (*ent.OrgPrice, error) {
-	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
+	allowCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	existing, err := tx.OrgPrice.Query().Where(orgprice.StripePriceID(price.ID), orgprice.SubscriptionID(orgSub.ID)).Only(allowCtx)
@@ -133,7 +133,7 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 		return nil, nil
 	}
 
-	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
+	allowCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	productMetadata := em.GetProductMetadata(ctx, item.Price.Product, client)
@@ -201,7 +201,7 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 // reconcileModules makes sure to match the modules accessible to the org
 // with what is in stripe
 func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentModules []models.OrgModule) error {
-	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
+	allowCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	_, err := tx.OrgModule.Delete().Where(
@@ -222,7 +222,7 @@ func (h *Handler) removeAllModules(ctx context.Context, subscription *stripe.Sub
 		return err
 	}
 
-	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
+	allowCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	_, err = tx.OrgModule.Delete().Where(

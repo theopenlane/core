@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 type mockQuery struct {
@@ -52,7 +51,7 @@ func TestSkipFilter(t *testing.T) {
 		},
 		{
 			name:        "internal request context skips regardless of forceFilter",
-			ctx:         rule.WithInternalCrossOrgContext(context.Background()),
+			ctx:         auth.WithInternalCrossOrgContext(context.Background()),
 			forceFilter: alwaysForce,
 			want:        true,
 		},

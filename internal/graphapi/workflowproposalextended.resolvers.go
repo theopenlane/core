@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/internal/workflows"
@@ -33,7 +32,7 @@ func (r *mutationResolver) UpdateWorkflowProposalChanges(ctx context.Context, in
 
 	// this is required to fetch the proposal but the requireworkflowObjectEditAccess check
 	// enforces permissions
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, input.ID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -88,7 +87,7 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -110,8 +109,8 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 		return nil, err
 	}
 
-	submitCaller, ok := auth.CallerFromContext(ctx)
-	if !ok || submitCaller == nil || submitCaller.SubjectID == "" {
+	_, err = auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
 		return nil, rout.ErrPermissionDenied
 	}
 
@@ -152,7 +151,7 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -229,7 +228,7 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -283,7 +282,7 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 		return nil, err
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	ownerID, err := workflows.ObjectOwnerID(allowCtx, r.db, *objType, objectID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})

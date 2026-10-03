@@ -53,7 +53,7 @@ func listenerPoll[T any](query func() (T, error), condition func(T) bool) (T, er
 
 func TestDocumentAssociationListeners(t *testing.T) {
 	docUser := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(docUser.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(docUser.UserCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.DocumentAssociationListeners())
 	assert.NilError(t, err)

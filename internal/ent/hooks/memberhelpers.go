@@ -34,7 +34,12 @@ func HookMembershipSelf(table string) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			// bypass privacy check if the context allows it
+			// todo: remove privacy allow
 			if _, allow := privacy.DecisionFromContext(ctx); allow {
+				return next.Mutate(ctx, m)
+			}
+
+			if auth.IsInternalRequest(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
@@ -45,7 +50,7 @@ func HookMembershipSelf(table string) ent.Hook {
 
 			// check if group member is the authenticated user
 			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil {
+			if !ok {
 				return nil, auth.ErrNoAuthUser
 			}
 

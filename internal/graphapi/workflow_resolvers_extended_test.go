@@ -8,6 +8,7 @@ import (
 	"time"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+	"github.com/theopenlane/iam/auth"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -17,7 +18,6 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -81,7 +81,7 @@ func createControlForWorkflow(t *testing.T, ctx context.Context, ownerID string)
 func createWorkflowInstance(t *testing.T, ctx context.Context, ownerID string, definitionID string, control *ent.Control) *ent.WorkflowInstance {
 	t.Helper()
 
-	ctx = rule.WithInternalOperationContext(ctx)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	instance, err := suite.Client.DB.WorkflowInstance.Create().
 		SetWorkflowDefinitionID(definitionID).
@@ -102,7 +102,7 @@ func createWorkflowAssignmentWithTarget(t *testing.T, ctx context.Context, owner
 
 	actionKey := "action_" + ulids.New().String()
 
-	ctx = rule.WithInternalOperationContext(ctx)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	assignment, err := suite.Client.DB.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instanceID).
@@ -129,7 +129,7 @@ func createWorkflowAssignmentWithTarget(t *testing.T, ctx context.Context, owner
 func createWorkflowProposal(t *testing.T, ctx context.Context, ownerID string, instance *ent.WorkflowInstance, control *ent.Control, domainKey string, changes map[string]any) *ent.WorkflowProposal {
 	t.Helper()
 
-	ctx = rule.WithInternalOperationContext(ctx)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	objRef, err := suite.Client.DB.WorkflowObjectRef.Create().
 		SetWorkflowInstanceID(instance.ID).
@@ -285,7 +285,7 @@ func TestAdminReassignWorkflowAssignment(t *testing.T) {
 		SetRejectionMetadata(models.WorkflowAssignmentRejection{
 			RejectionReason: "not good",
 		}).
-		Save(rule.WithInternalOperationContext(ctx))
+		Save(auth.WithInternalOperationContext(ctx))
 	assert.NilError(t, err)
 
 	targetID := newTarget.ID
@@ -364,7 +364,7 @@ func TestWorkflowProposalSubmitAndWithdraw(t *testing.T) {
 
 			_, err := suite.Client.DB.WorkflowInstance.UpdateOneID(instance.ID).
 				SetWorkflowProposalID(proposal.ID).
-				Save(rule.WithInternalOperationContext(ctx))
+				Save(auth.WithInternalOperationContext(ctx))
 			assert.NilError(t, err)
 
 			assignment := createWorkflowAssignmentWithTarget(t, ctx, user.OrganizationID, instance.ID, user.ID)
@@ -406,7 +406,7 @@ func TestWorkflowProposalPreview(t *testing.T) {
 
 	_, err := suite.Client.DB.WorkflowInstance.UpdateOneID(instance.ID).
 		SetWorkflowProposalID(proposal.ID).
-		Save(rule.WithInternalOperationContext(ctx))
+		Save(auth.WithInternalOperationContext(ctx))
 	assert.NilError(t, err)
 
 	_ = createWorkflowAssignmentWithTarget(t, ctx, user.OrganizationID, instance.ID, user.ID)

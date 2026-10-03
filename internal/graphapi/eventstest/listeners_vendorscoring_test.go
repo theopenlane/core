@@ -28,7 +28,7 @@ const (
 
 func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 	scoringUser := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(scoringUser.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(scoringUser.UserCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.VendorScoringListeners())
 	assert.NilError(t, err)

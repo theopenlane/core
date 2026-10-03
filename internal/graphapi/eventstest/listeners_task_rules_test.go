@@ -29,7 +29,7 @@ const taskRuleOrganizationReadyObjectType = "organization.ready"
 
 func TestTaskRuleListenersRealMutations(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.TaskRuleListeners())
 	assert.NilError(t, err)
@@ -41,7 +41,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	assert.NilError(t, err)
 
 	orgID := onboarding.OrganizationID
-	orgCtx := privacy.DecisionContext(th.SetContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.Client.DB), privacy.Allow)
+	orgCtx := privacy.DecisionContext(th.SetInternalContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.Client.DB), privacy.Allow)
 
 	taskCount := func(t *testing.T) int {
 		t.Helper()

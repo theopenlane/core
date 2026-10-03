@@ -189,9 +189,10 @@ func (suite *HookTestSuite) seedUser() *generated.User {
 	require.NoError(t, err)
 
 	// get user and their org memberships
+	// no caller has the new personal org, so the membership load needs the org filter bypass
 	newUser, err = suite.client.User.Query().Where(user.ID(newUser.ID)).
 		WithSetting().
-		WithOrgMemberships().Only(ctx)
+		WithOrgMemberships().Only(auth.WithCrossOrgContext(ctx))
 	require.NoError(t, err)
 
 	return newUser

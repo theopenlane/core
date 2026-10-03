@@ -54,7 +54,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
-	dbCtx := privacy.DecisionContext(th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	// the runtime is created after seeding so only the mutations under test dispatch
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.TrustCenterCacheListeners())

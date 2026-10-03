@@ -254,8 +254,8 @@ func HookTrustCenterDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil || caller.OrganizationID == "" {
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
 				log.Error().Msg("unable to get caller from context in trust center delete hook")
 
 				return nil, generated.ErrPermissionDenied
@@ -265,7 +265,7 @@ func HookTrustCenterDelete() ent.Hook {
 			tcControlIDs, err := m.Client().Control.Query().
 				Where(
 					control.IsTrustCenterControl(true),
-					control.OwnerID(caller.OrganizationID),
+					control.OwnerID(orgID),
 				).
 				IDs(ctx)
 			if err != nil {

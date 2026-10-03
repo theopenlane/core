@@ -28,7 +28,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context) error {
 	userCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(userCtx)
-	if !ok || caller == nil {
+	if !ok {
 		return h.Unauthorized(ctx, ErrUnauthorized)
 	}
 

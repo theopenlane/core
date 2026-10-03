@@ -38,7 +38,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/internal/entdb"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
@@ -331,7 +330,7 @@ func (s *WorkflowEngineTestSuite) WaitForEvents() {
 // SetupSystemAdmin creates a system admin user and returns user ID, org ID, and admin context
 // Use this for tests that rely on ent hooks which need elevated permissions for internal queries
 func (s *WorkflowEngineTestSuite) SetupSystemAdmin() (string, string, context.Context) {
-	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	user, err := s.client.User.Create().
 		SetEmail("admin-" + ulids.New().String() + "@example.com").
@@ -343,7 +342,7 @@ func (s *WorkflowEngineTestSuite) SetupSystemAdmin() (string, string, context.Co
 	s.Require().NoError(err)
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, personalOrg.ID)
-	setCtx := generated.NewContext(rule.WithInternalCrossOrgContext(userCtx), s.client)
+	setCtx := generated.NewContext(auth.WithInternalCrossOrgContext(userCtx), s.client)
 
 	testOrg, err := s.client.Organization.Create().
 		SetName("Admin Organization " + ulids.New().String()).
@@ -362,7 +361,7 @@ func (s *WorkflowEngineTestSuite) SetupSystemAdmin() (string, string, context.Co
 
 // SetupTestUser creates a test user and organization, returning user ID, org ID, and context
 func (s *WorkflowEngineTestSuite) SetupTestUser() (string, string, context.Context) {
-	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	user, err := s.client.User.Create().
 		SetEmail("test-" + ulids.New().String() + "@example.com").
@@ -374,7 +373,7 @@ func (s *WorkflowEngineTestSuite) SetupTestUser() (string, string, context.Conte
 	s.Require().NoError(err)
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, personalOrg.ID)
-	setCtx := generated.NewContext(rule.WithInternalCrossOrgContext(userCtx), s.client)
+	setCtx := generated.NewContext(auth.WithInternalCrossOrgContext(userCtx), s.client)
 
 	testOrg, err := s.client.Organization.Create().
 		SetName("Test Organization " + ulids.New().String()).
@@ -419,7 +418,7 @@ func (s *WorkflowEngineTestSuite) enableModules(userID, orgID string) {
 
 // CreateTestUserID creates an additional test user and returns the ID.
 func (s *WorkflowEngineTestSuite) CreateTestUserID() string {
-	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	user, err := s.client.User.Create().
 		SetEmail("test-" + ulids.New().String() + "@example.com").
@@ -432,7 +431,7 @@ func (s *WorkflowEngineTestSuite) CreateTestUserID() string {
 
 // CreateTestUserInOrg creates a user and attaches them to the provided organization.
 func (s *WorkflowEngineTestSuite) CreateTestUserInOrg(orgID string, role enums.Role) (string, context.Context) {
-	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	user, err := s.client.User.Create().
 		SetEmail("test-" + ulids.New().String() + "@example.com").
@@ -442,7 +441,7 @@ func (s *WorkflowEngineTestSuite) CreateTestUserInOrg(orgID string, role enums.R
 
 	// OrgMembership hooks require authenticated user context for creating managed groups
 	authCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
-	membershipCtx := generated.NewContext(rule.WithInternalCrossOrgContext(authCtx), s.client)
+	membershipCtx := generated.NewContext(auth.WithInternalCrossOrgContext(authCtx), s.client)
 
 	_, err = s.client.OrgMembership.Create().
 		SetOrganizationID(orgID).
@@ -543,7 +542,7 @@ func (s *WorkflowEngineTestSuite) ApplyTriggerPrefilter(update *generated.Workfl
 
 // UpdateWorkflowDefinition updates a workflow definition with privacy bypass for testing
 func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinition(def *generated.WorkflowDefinition, doc models.WorkflowDefinitionDocument) *generated.WorkflowDefinition {
-	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	updated, err := def.Update().
 		SetDefinitionJSON(doc).
@@ -555,7 +554,7 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinition(def *generated.Workfl
 
 // UpdateWorkflowDefinitionWithPrefilter updates a workflow definition with prefilter and privacy bypass
 func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionWithPrefilter(def *generated.WorkflowDefinition, doc models.WorkflowDefinitionDocument) *generated.WorkflowDefinition {
-	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	update := def.Update().SetDefinitionJSON(doc)
 	update = s.ApplyTriggerPrefilter(update, doc)
@@ -568,7 +567,7 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionWithPrefilter(def *gen
 
 // UpdateWorkflowDefinitionInactive updates a workflow definition to inactive with prefilter and privacy bypass
 func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionInactive(def *generated.WorkflowDefinition, doc models.WorkflowDefinitionDocument) *generated.WorkflowDefinition {
-	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	update := def.Update().SetDefinitionJSON(doc).SetActive(false)
 	update = s.ApplyTriggerPrefilter(update, doc)
@@ -582,7 +581,7 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionInactive(def *generate
 // ClearWorkflowDefinitionsForOrg removes all workflow definitions and related entities for a specific organization.
 // Use this when subtests share an org and need isolation between test cases.
 func (s *WorkflowEngineTestSuite) ClearWorkflowDefinitionsForOrg(orgID string) {
-	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	_, err := s.client.WorkflowEvent.Delete().Where(workflowevent.OwnerIDEQ(orgID)).Exec(internalCtx)
 	s.Require().NoError(err)
@@ -611,7 +610,7 @@ func (s *WorkflowEngineTestSuite) ClearWorkflowDefinitionsForOrg(orgID string) {
 
 // InternalContext returns an internal context with privacy bypass for test setup operations
 func (s *WorkflowEngineTestSuite) InternalContext() context.Context {
-	return generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
+	return generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 }
 
 // SeedContext creates a context with auth info and privacy bypass for seeding test data.

@@ -20,7 +20,7 @@ import (
 // other group and membership stays active, and a later complete snapshot revives the group on the
 // same row while its memberships come back as new rows
 func TestDirectoryGroupDisappearanceIsRemovalRevivedOnReAppearance(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "grpdisappear"
 	const tenant = "tenant-" + prefix

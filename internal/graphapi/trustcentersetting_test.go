@@ -368,7 +368,7 @@ func TestSubprocessorNotifyWatermarkInitialized(t *testing.T) {
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	setting, err := suite.Client.DB.TrustCenterSetting.Get(dbCtx, settingID)
 	assert.NilError(t, err)

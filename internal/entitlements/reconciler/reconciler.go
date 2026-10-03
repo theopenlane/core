@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	internalentitlements "github.com/theopenlane/core/v2/internal/entitlements"
 	"github.com/theopenlane/core/v2/pkg/catalog"
 	"github.com/theopenlane/core/v2/pkg/catalog/gencatalog"
@@ -120,7 +119,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 	}
 
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
@@ -160,7 +159,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 // reconcileOrg ensures the organization has a customer and subscription in Stripe, creating them if missing
 func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) error {
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	var sub *ent.OrgSubscription
 	if len(org.Edges.OrgSubscriptions) > 0 {
@@ -277,7 +276,7 @@ func (r *Reconciler) disableIntegrations(ctx context.Context, orgID string) erro
 			integration.StatusNotIn(enums.IntegrationStatusDisabled),
 		).
 		SetStatus(enums.IntegrationStatusDisabled).
-		Exec(rule.WithInternalCrossOrgContext(ctx))
+		Exec(auth.WithInternalCrossOrgContext(ctx))
 	if err != nil {
 		return fmt.Errorf("error disabling integrations: %w", err)
 	}
@@ -335,7 +334,7 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 // updateSubscription updates the organization subscription in the database with current Stripe data
 func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.OrganizationCustomer) error {
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	if c.OrganizationSubscriptionID == "" {
 		return ErrMissingSubscriptionID
@@ -391,7 +390,7 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 				integration.DeletedAtIsNil(),
 				integration.StatusNotIn(enums.IntegrationStatusDisabled),
 			).
-			Count(rule.WithInternalCrossOrgContext(ctx))
+			Count(auth.WithInternalCrossOrgContext(ctx))
 		if err != nil {
 			return "", fmt.Errorf("query integrations: %w", err)
 		}

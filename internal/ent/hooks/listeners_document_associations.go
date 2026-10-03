@@ -7,9 +7,9 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // init registers the document association listeners so gala setup picks them up automatically
@@ -69,7 +69,7 @@ func handleDocumentAssociationCreated(inv entityops.Invocation, _ entityops.Muta
 		return err
 	}
 
-	return inv.Schema.Update(rule.WithInternalOperationContext(inv.Context), inv.Client, inv.EntityID, updatePayload)
+	return inv.Schema.Update(auth.WithInternalOperationContext(inv.Context), inv.Client, inv.EntityID, updatePayload)
 }
 
 // getDocumentAssociationsForDetails returns the control and subcontrol IDs referenced in a document's details

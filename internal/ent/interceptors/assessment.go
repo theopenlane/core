@@ -59,9 +59,9 @@ func setAssessmentAccessURL(ctx context.Context, assessment *generated.Assessmen
 		return nil
 	}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return nil
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
 	}
 
 	if q.TokenManager == nil {
@@ -81,7 +81,7 @@ func setAssessmentAccessURL(ctx context.Context, assessment *generated.Assessmen
 	result, err := urlx.GenerateAnonTokenURL(ctx, q.TokenManager, q.Shortlinks, *baseURL, urlx.AnonTokenRequest{
 		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,
 		SubjectID: ulids.New().String(),
-		OrgID:     caller.OrganizationID,
+		OrgID:     orgID,
 		Purpose:   shortlinks.PurposeAssessmentAccess,
 		Duration:  q.TokenManager.Config().AssessmentAccessDuration,
 		ExtraClaims: func(c *tokens.Claims) {

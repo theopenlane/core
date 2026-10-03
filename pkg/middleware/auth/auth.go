@@ -55,7 +55,7 @@ var SessionSkipperFunc = func(c echo.Context) bool {
 
 // SessionFallbackUserID resolves the authenticated caller to mint a session for when the request carries none
 var SessionFallbackUserID = func(ctx context.Context) (string, bool) {
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.IsImpersonated() {
+	if _, ok := auth.IsImpersonatedCallerContext(ctx); ok {
 		return "", false
 	}
 
@@ -69,7 +69,7 @@ var SessionFallbackUserID = func(ctx context.Context) (string, bool) {
 var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
 	caller, ok := auth.CallerFromContext(c.Request().Context())
 
-	skip := ok && caller != nil && caller.IsImpersonated()
+	skip := ok && caller.IsImpersonated()
 
 	if skip {
 		logx.FromContext(c.Request().Context()).Debug().Str("user_id", caller.SubjectID).Msg("skipping authentication for impersonated user")
@@ -256,15 +256,6 @@ func getTokenType(bearerToken string) auth.AuthenticationType {
 	return auth.JWTAuthentication
 }
 
-func withOrgFilterBypass(ctx context.Context) context.Context {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		caller = &auth.Caller{}
-	}
-
-	return auth.WithCaller(ctx, caller.WithCapabilities(auth.CapBypassOrgFilter))
-}
-
 // updateLastUsed updates the last used time for the token depending on the authentication type
 func updateLastUsed(ctx context.Context, dbClient *ent.Client, caller *auth.Caller, tokenID string) error {
 	logger := logx.FromContext(ctx)
@@ -337,7 +328,8 @@ func createCallerFromClaims(ctx context.Context, opts *Options, claims *tokens.C
 	}
 
 	// get the user ID from the claims
-	user, err := opts.DBClient.User.Get(ctx, claims.UserID)
+	// no caller exists yet, internal operation lets the user lookup pass the user filter
+	user, err := opts.DBClient.User.Get(auth.WithInternalOperationContext(ctx), claims.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -354,7 +346,7 @@ func createCallerFromClaims(ctx context.Context, opts *Options, claims *tokens.C
 		OrganizationID:     claims.OrgID,
 		OrganizationIDs:    []string{claims.OrgID},
 		AuthenticationType: authType,
-		Capabilities:       capabilitiesFor(systemAdmin),
+		Capabilities:       auth.CapabilitiesForSystemAdmin(systemAdmin),
 	}
 
 	role := getOrgRoleFunc(ctx, opts.DBClient, user.ID, claims.OrgID)
@@ -370,7 +362,7 @@ func createCallerFromClaims(ctx context.Context, opts *Options, claims *tokens.C
 // If the token is valid, the caller is returned
 func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string) (*auth.Caller, string, error) {
 	// allow check to bypass privacy rules
-	ctx = withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
+	ctx = auth.WithInternalCrossOrgContext(ctx)
 
 	// check if the token is a personal access token
 	caller, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token, orgFromHeader)
@@ -450,7 +442,7 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		SubjectEmail:       pat.Edges.Owner.Email,
 		OrganizationIDs:    orgIDs,
 		AuthenticationType: auth.PATAuthentication,
-		Capabilities:       capabilitiesFor(systemAdmin),
+		Capabilities:       auth.CapabilitiesForSystemAdmin(systemAdmin),
 	}
 
 	var role *auth.OrganizationRoleType
@@ -510,16 +502,8 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 		OrganizationID:     t.OwnerID,
 		OrganizationIDs:    []string{t.OwnerID},
 		AuthenticationType: auth.APITokenAuthentication,
-		Capabilities:       capabilitiesFor(systemAdmin),
+		Capabilities:       auth.CapabilitiesForSystemAdmin(systemAdmin),
 	}, t.ID, nil
-}
-
-func capabilitiesFor(isAdmin bool) auth.Capability {
-	if isAdmin {
-		return auth.CapSystemAdmin | auth.CapBypassOrgFilter
-	}
-
-	return 0
 }
 
 // isSystemAdmin checks fga to see if the user is a system admin
@@ -744,7 +728,7 @@ func getRole(ctx context.Context, db *ent.Client, userID, orgID string) (enums.R
 	member, err := db.OrgMembership.Query().
 		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
 		Select(orgmembership.FieldRole).
-		Only(privacy.DecisionContext(ctx, privacy.Allow))
+		Only(auth.WithInternalCrossOrgContext(ctx))
 	if err != nil {
 		return "", err
 	}

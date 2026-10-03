@@ -25,7 +25,7 @@ func (r *mutationResolver) filterAuthorizedIDs(ctx context.Context, ids []string
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		logx.FromContext(ctx).Error().Msg("unable to get caller from context for bulk access check")
 		return nil
 	}

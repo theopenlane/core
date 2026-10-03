@@ -250,7 +250,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		// don't log here, the caller is already logging this when it is actually an issue, otherwise it is expected
 		// because it is happening during the login flow
 		return "", auth.ErrNoAuthUser
@@ -396,12 +396,12 @@ func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*g
 // skipOrgValidation checks if the org validation should be skipped based on the context
 func skipOrgValidation(ctx context.Context) bool {
 	// skip if explicitly allowed or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
 		return true
 	}
 
 	// skip on internal operations (e.g. org creation)
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapInternalOperation) {
+	if auth.HasInContextCaller(ctx, auth.CapInternalOperation) {
 		return true
 	}
 

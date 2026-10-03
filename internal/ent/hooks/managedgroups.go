@@ -130,13 +130,7 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 	}
 
 	// add managed group bypass capability to the caller for downstream hook checks
-	const managedCaps = auth.CapBypassManagedGroup
-	var managedCtx context.Context
-	if existingCaller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
-		managedCtx = auth.WithCaller(ctx, existingCaller.WithCapabilities(managedCaps))
-	} else {
-		managedCtx = auth.WithCaller(ctx, &auth.Caller{Capabilities: managedCaps})
-	}
+	managedCtx := auth.WithCallerCapabilities(ctx, auth.CapBypassManagedGroup)
 
 	orgMemberRole, ok := m.Role()
 	if !ok {

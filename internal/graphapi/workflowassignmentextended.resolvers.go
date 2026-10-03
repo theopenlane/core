@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -44,7 +43,7 @@ func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id str
 	approvalMeta.ApprovedByUserID = decisionCtx.UserID
 
 	// Use allow context for the update since we've already validated the user is an authorized target
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -97,7 +96,7 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 	}
 
 	// Use allow context for the update since we've already validated the user is an authorized target
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -166,7 +165,7 @@ func (r *mutationResolver) RequestChangesWorkflowAssignment(ctx context.Context,
 		rejectionMeta.ActionKey = resolveAssignmentActionKey(assignment)
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	update := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -235,7 +234,7 @@ func (r *mutationResolver) ReassignWorkflowAssignment(ctx context.Context, id st
 		return nil, common.NewNotFoundError("target user")
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	create := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Create().
 		SetWorkflowAssignmentID(assignment.ID).
@@ -263,6 +262,11 @@ func (r *queryResolver) MyWorkflowAssignments(ctx context.Context, after *entgql
 		return nil, ErrWorkflowsDisabled
 	}
 
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
+		return nil, rout.ErrPermissionDenied
+	}
+
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
@@ -284,18 +288,12 @@ func (r *queryResolver) MyWorkflowAssignments(ctx context.Context, after *entgql
 		where = &generated.WorkflowAssignmentWhereInput{}
 	}
 
-	myCaller, ok := auth.CallerFromContext(ctx)
-	if !ok || myCaller == nil || myCaller.SubjectID == "" {
-		return nil, rout.ErrPermissionDenied
-	}
-	userID := myCaller.SubjectID
-
 	groupIDs, err := withTransactionalMutation(ctx).GroupMembership.Query().
 		Where(groupmembership.UserIDEQ(userID)).
 		Select(groupmembership.FieldGroupID).
 		Strings(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("user_id", userID).Msg("failed to query group memberships for workflow assignments")
+		logx.FromContext(ctx).Warn().Err(err).Msg("failed to query group memberships for workflow assignments")
 	}
 
 	// Use OR to match targets where the user is directly assigned OR belongs to an assigned group

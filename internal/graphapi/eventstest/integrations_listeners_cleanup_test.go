@@ -17,7 +17,7 @@ import (
 
 func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(org.UserCtx, suite.Client.DB), privacy.Allow)
 
 	installation, fragment := seedHarnessLoop(t, allowCtx)
 
@@ -36,7 +36,7 @@ func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 
 func TestIntegrationCleanupListenerNonStatusUpdateKeepsLoops(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(org.UserCtx, suite.Client.DB), privacy.Allow)
 
 	installation, fragment := seedHarnessLoop(t, allowCtx)
 

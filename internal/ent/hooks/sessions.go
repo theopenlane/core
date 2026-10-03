@@ -23,7 +23,7 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 	}
 
 	sessionCaller, ok := auth.CallerFromContext(ctx)
-	if !ok || sessionCaller == nil {
+	if !ok {
 		return ctx, auth.ErrNoAuthUser
 	}
 

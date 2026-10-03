@@ -28,7 +28,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
 
@@ -84,12 +84,12 @@ func getInviteOwnerID(ctx context.Context, m *generated.InviteMutation) (string,
 		return oID, nil
 	}
 
-	caller, callerOk := auth.CallerFromContext(ctx)
-	if !callerOk || caller == nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return "", auth.ErrNoAuthUser
 	}
 
-	return caller.OrganizationID, nil
+	return orgID, nil
 }
 
 // getRelationToCheck returns the relation to check based on the role on the mutation

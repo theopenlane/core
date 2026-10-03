@@ -203,16 +203,14 @@ func resolveOrgIntegrationAvailability(ctx context.Context, db *ent.Client) *org
 		return nil
 	}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return nil
 	}
 
-	ownerID := caller.OrganizationID
-
 	installations, err := db.Integration.Query().
 		Where(
-			integration.OwnerIDEQ(ownerID),
+			integration.OwnerIDEQ(orgID),
 			integration.StatusIn(enums.IntegrationOperationalStatuses...),
 		).All(ctx)
 	if err != nil {
@@ -222,7 +220,7 @@ func resolveOrgIntegrationAvailability(ctx context.Context, db *ent.Client) *org
 
 	templates, err := db.NotificationTemplate.Query().
 		Where(
-			notificationtemplate.OwnerIDEQ(ownerID),
+			notificationtemplate.OwnerIDEQ(orgID),
 			notificationtemplate.ActiveEQ(true),
 			notificationtemplate.TemplateContextEQ(enums.TemplateContextWorkflowAction),
 		).All(ctx)

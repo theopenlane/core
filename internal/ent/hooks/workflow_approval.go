@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
@@ -79,7 +78,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowCtx := rule.WithInternalOperationContext(ctx)
+			allowCtx := auth.WithInternalOperationContext(ctx)
 			entity, err := workflows.LoadWorkflowObject(allowCtx, client, mut.Type(), id)
 			if err != nil {
 				return nil, err
@@ -149,8 +148,8 @@ func HookWorkflowApprovalRouting() ent.Hook {
 
 // routeMutationToProposals stores the mutation in WorkflowProposal records instead of applying it directly.
 func routeMutationToProposals(ctx context.Context, client *generated.Client, m utils.GenericMutation, proposedChanges map[string]any, defs []*generated.WorkflowDefinition) (ent.Value, error) {
-	wfaCaller, ok := auth.CallerFromContext(ctx)
-	if !ok || wfaCaller == nil {
+	_, ok := auth.CallerFromContext(ctx)
+	if !ok {
 		return nil, ErrFailedToGetUserFromContext
 	}
 
@@ -167,7 +166,7 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 		return nil, ErrMutationMissingID
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	if len(proposedChanges) == 0 {
 		return workflows.LoadWorkflowObject(allowCtx, client, m.Type(), id)
@@ -264,7 +263,7 @@ func resolveApprovalSubmissionMode(def *generated.WorkflowDefinition) enums.Work
 // stageProposalChanges creates or updates WorkflowProposal records for each domain
 func stageProposalChanges(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domainChanges []workflows.DomainChanges, userID string) error {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	submissionMode := resolveApprovalSubmissionMode(def)
 	initialState := lo.Ternary(
@@ -335,7 +334,7 @@ func stageProposalChanges(ctx context.Context, client *generated.Client, def *ge
 // ensureInstanceForExistingProposal makes sure a workflow instance exists for the definition + proposal.
 func ensureInstanceForExistingProposal(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID, ownerID string, proposal *generated.WorkflowProposal) (*generated.WorkflowInstance, error) {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	instance, err := client.WorkflowInstance.Query().
 		Where(
@@ -417,7 +416,7 @@ func stageWorkflowProposals(ctx context.Context, client *generated.Client, def *
 // updateExistingProposal updates an existing proposal with new changes
 func updateExistingProposal(ctx context.Context, def *generated.WorkflowDefinition, existing *generated.WorkflowProposal, changes map[string]any, proposedHash, userID string, now time.Time) error {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	submissionMode := resolveApprovalSubmissionMode(def)
 	updater := existing.Update().
@@ -449,7 +448,7 @@ type proposalCreationResult struct {
 // createProposalWithInstance creates a new WorkflowInstance, WorkflowObjectRef, and WorkflowProposal in a transaction
 func createProposalWithInstance(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domain workflows.DomainChanges, proposedHash, ownerID, userID string, initialState enums.WorkflowProposalState, now time.Time) (*proposalCreationResult, error) {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	var result proposalCreationResult
 
@@ -556,7 +555,7 @@ func triggerWorkflowAfterProposalCreation(ctx context.Context, client *generated
 		return nil
 	}
 
-	allowCtx := rule.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	instance, err := client.WorkflowInstance.Get(allowCtx, instanceID)
 	if err != nil {

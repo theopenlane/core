@@ -110,12 +110,10 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// keep track of the control IDs that already exist in the org to be updated to link to the program if needed
 	existingControlIDs := []string{}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
-
-	orgID := caller.OrganizationID
 
 	if r.db.EntConfig != nil && r.db.EntConfig.Modules.Enabled {
 		// check if the organization has the required modules for Control entities before the parallel execution
@@ -126,7 +124,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 
 		if !hasModules {
-			logger.Error().Str("organization_id", caller.OrganizationID).Msg("organization does not have required modules enabled for control operations")
+			logger.Error().Msg("organization does not have required modules enabled for control operations")
 
 			return nil, generated.ErrPermissionDenied
 		}
@@ -222,25 +220,8 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			return nil, err
 		}
 
-		// support users should skip this check but for other users,
-		// we still want to verify they have edit access to the program
-		if !caller.Has(auth.CapOrgSupport) {
-			allow, err := r.db.Authz.CheckAccess(ctx, fgax.AccessCheck{
-				ObjectType:  generated.TypeProgram,
-				ObjectID:    *programID,
-				Relation:    fgax.CanEdit,
-				SubjectID:   caller.SubjectID,
-				SubjectType: caller.SubjectType(),
-			})
-			if err != nil {
-				return nil, err
-			}
-
-			if !allow {
-				logger.Error().Str("organization_id", caller.OrganizationID).Str("user_id", caller.SubjectID).Msg("no access to edit specified program")
-
-				return nil, generated.ErrPermissionDenied
-			}
+		if err := checkProgramAccess(ctx, r.db, *programID); err != nil {
+			return nil, err
 		}
 	}
 
@@ -320,6 +301,39 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	return query.All(allowCtx)
+}
+
+// checkProgramAccess checks the users access to the specific program id
+func checkProgramAccess(ctx context.Context, db *generated.Client, programID string) error {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok {
+		return auth.ErrNoAuthUser
+	}
+
+	// support users should skip this check but for other users,
+	// we still want to verify they have edit access to the program
+	if caller.Has(auth.CapOrgSupport) {
+		return nil
+	}
+
+	allow, err := db.Authz.CheckAccess(ctx, fgax.AccessCheck{
+		ObjectType:  generated.TypeProgram,
+		ObjectID:    programID,
+		Relation:    fgax.CanEdit,
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
+	})
+	if err != nil {
+		return err
+	}
+
+	if !allow {
+		logx.FromContext(ctx).Error().Msg("no access to edit specified program")
+
+		return generated.ErrPermissionDenied
+	}
+
+	return nil
 }
 
 // cloneSubcontrols clones the subcontrols from the given control to the new control ID

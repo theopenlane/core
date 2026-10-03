@@ -8,9 +8,9 @@ import (
 
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers/scim"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
@@ -33,7 +33,7 @@ func (h *Handler) SCIMHandler(scimHandler http.Handler, routePrefix string) echo
 		}
 
 		// the owning org is not known until the endpoint resolves, so the lookup is a cross-org internal read
-		ctx = rule.WithInternalCrossOrgContext(ctx)
+		ctx = auth.WithInternalCrossOrgContext(ctx)
 
 		rt := h.IntegrationsRuntime
 		webhook, err := rt.ResolveWebhookByEndpoint(ctx, endpointID)
@@ -59,7 +59,7 @@ func (h *Handler) SCIMHandler(scimHandler http.Handler, routePrefix string) echo
 		}
 
 		// Narrow caller to the installation owner's org
-		ctx = rule.WithOrgInternalCaller(ctx, installation.OwnerID)
+		ctx = auth.WithOrgInternalCaller(ctx, installation.OwnerID)
 
 		ctx = scim.WithRequest(ctx, &scim.Request{
 			Installation: installation,

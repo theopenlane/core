@@ -22,7 +22,7 @@ func TestOnboardingProgramListener(t *testing.T) {
 	defer setup.Teardown()
 
 	user := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	tx, err := suite.Client.DB.Tx(ctx)

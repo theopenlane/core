@@ -18,12 +18,10 @@ import (
 // AllowSelfOrgMembershipDelete allows users to delete only their own org membership
 func AllowSelfOrgMembershipDelete() privacy.OrgMembershipMutationRuleFunc {
 	return privacy.OrgMembershipMutationRuleFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) error {
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil || caller.SubjectID == "" {
+		subjectID, err := auth.GetSubjectIDFromContext(ctx)
+		if err != nil || subjectID == "" {
 			return privacy.Skipf("unable to get user ID from context")
 		}
-
-		userID := caller.SubjectID
 
 		id, ok := m.ID()
 		if !ok {
@@ -35,7 +33,7 @@ func AllowSelfOrgMembershipDelete() privacy.OrgMembershipMutationRuleFunc {
 			return privacy.Skipf("unable to get org membership: %v", err)
 		}
 
-		if orgMembership.UserID == userID {
+		if orgMembership.UserID == subjectID {
 			return privacy.Allow
 		}
 
@@ -93,7 +91,7 @@ func AllowOrgMemberRoleUpdate() privacy.OrgMembershipMutationRuleFunc {
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
 
@@ -145,7 +143,7 @@ func DenyOrgMemberRoleAboveCeiling() privacy.OrgMembershipMutationRuleFunc {
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
 

@@ -48,7 +48,7 @@ func TestIntegrationBuilder(t *testing.T) {
 		assert.Check(t, is.DeepEqual("Custom Slack integration", integration.Description))
 
 		// Clean up, add the client to the context for fga checks instead of just allowing
-		ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
+		ctx := th.SetInternalContext(orgUser.UserCtx, suite.Client.DB)
 		err := suite.Client.DB.Integration.DeleteOneID(integration.ID).Exec(ctx)
 		assert.NilError(t, err)
 	})
@@ -57,7 +57,7 @@ func TestIntegrationBuilder(t *testing.T) {
 func TestSecretBuilder(t *testing.T) {
 	// setup user context
 	orgUser := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(orgUser.UserCtx, suite.Client.DB)
 
 	// Create integration first
 	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(ctx, t)
@@ -93,7 +93,7 @@ func TestSecretBuilder(t *testing.T) {
 func TestIntegrationWithSecretsRelationship(t *testing.T) {
 	// setup user context
 	orgUser := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(orgUser.UserCtx, suite.Client.DB)
 
 	// Create integration
 	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(orgUser.UserCtx, t)

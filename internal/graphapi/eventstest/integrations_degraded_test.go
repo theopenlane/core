@@ -20,8 +20,8 @@ import (
 func TestIntegrationDegradedLifecycle(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
 	installation, fragment := seedHarnessLoop(t, allowCtx)
 

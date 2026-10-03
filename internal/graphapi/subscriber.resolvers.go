@@ -31,12 +31,13 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 		}
 
 		caller, callerOk := auth.CallerFromContext(ctx)
-		if !callerOk || caller == nil {
+		if !callerOk {
 			return nil, rout.ErrPermissionDenied
 		}
 
 		input.TrustCenterID = &tcID
 
+		// add allowCtx for Anon Trust Center Callers
 		ctx = auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), caller)
 	} else {
 		// set the organization in the auth context if its not done for us

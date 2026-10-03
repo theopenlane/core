@@ -21,8 +21,8 @@ import (
 func TestIntegrationLifecycle(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
 	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
 	require.Equal(t, org.OrganizationID, installation.OwnerID)

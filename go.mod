@@ -10,6 +10,8 @@ tool (
 	gotest.tools/gotestsum
 )
 
+replace github.com/theopenlane/iam => ../iam
+
 require (
 	ariga.io/atlas v1.3.0
 	ariga.io/entcache v0.1.0
@@ -127,7 +129,7 @@ require (
 	github.com/theopenlane/riverboat v0.14.3
 	github.com/theopenlane/utils v0.7.2
 	github.com/tmc/langchaingo v0.1.14
-	github.com/urfave/cli/v3 v3.11.0
+	github.com/urfave/cli/v3 v3.13.0
 	github.com/vektah/gqlparser/v2 v2.5.58
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/wundergraph/astjson v1.1.0
@@ -171,13 +173,8 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/XSAM/otelsql v0.44.0 // indirect
 	github.com/Yiling-J/theine-go v0.6.2 // indirect
-	github.com/agext/levenshtein v1.2.3 // indirect
-	github.com/agnivade/levenshtein v1.2.1 // indirect
-	github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb // indirect
-	github.com/andybalholm/cascadia v1.3.4 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v17 v17.0.1 // indirect
@@ -321,7 +318,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.6 // indirect
 	github.com/openfga/api/proto v0.0.0-20260723150800-6981fff8d33b // indirect
-	github.com/openfga/openfga v1.20.0 // indirect
+	github.com/openfga/openfga v1.21.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/ory/dockertest/v3 v3.12.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect

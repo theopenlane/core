@@ -34,7 +34,7 @@ func directoryAccountByExternalIDAndIntegration(ctx context.Context, t *testing.
 // but distinct source_instance_id tenants never see each other's rows even when every external id
 // in their snapshots is identical
 func TestDirectorySameDefinitionTwoTenantsIsolated(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "sdtwotenant"
 	const tenant1 = "tenant-" + prefix + "-1"
@@ -101,7 +101,7 @@ func TestDirectorySameDefinitionTwoTenantsIsolated(t *testing.T) {
 // no source_instance_id, no managed_by) is claimed in full by the first matching installation, and
 // is then read-only for a different definition sharing the same tenant
 func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "legacytakeover"
 	const tenant = "tenant-" + prefix
@@ -245,7 +245,7 @@ func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
 // ingesting normally when the very next sync after reinstall carries a material change, converging
 // every row onto the new installation without duplicating rows or removal-inferring memberships
 func TestDirectoryRemoveAndReaddKeepsFlowing(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "removereadd"
 	const tenant = "tenant-" + prefix

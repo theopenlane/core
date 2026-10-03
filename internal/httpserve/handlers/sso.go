@@ -247,7 +247,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		}
 
 		ssoCaller, ok := auth.CallerFromContext(userCtx)
-		if !ok || ssoCaller == nil {
+		if !ok {
 			logx.FromContext(reqCtx).Error().Msg("missing caller context for SSO token authorization")
 			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
@@ -410,7 +410,7 @@ func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusResponse {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	user, err := h.getUserByEmail(allowCtx, email)
+	user, err := h.getUserByEmail(ctx, email)
 	if err != nil {
 		return nil
 	}

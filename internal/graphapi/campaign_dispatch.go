@@ -429,8 +429,10 @@ func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, state
 
 // ensureCampaignEditAccess verifies the caller can edit the campaign.
 func (r *mutationResolver) ensureCampaignEditAccess(ctx context.Context, campaignID string) error {
+	ctx = logx.WithField(ctx, "campaign_id", campaignID)
+
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return auth.ErrNoAuthUser
 	}
 
@@ -455,7 +457,7 @@ func (r *mutationResolver) ensureCampaignEditAccess(ctx context.Context, campaig
 		return err
 	}
 	if !allow {
-		logx.FromContext(ctx).Warn().Str("campaign_id", campaignID).Msg("access denied to edit campaign")
+		logx.FromContext(ctx).Warn().Msg("access denied to edit campaign")
 
 		return newPermissionDeniedError()
 	}

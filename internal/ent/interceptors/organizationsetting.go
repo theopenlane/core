@@ -31,13 +31,11 @@ func InterceptorOrganizationSetting() ent.Interceptor {
 			return nil
 		}
 
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+		if err != nil {
 			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing organization settings")
 			return auth.ErrNoAuthUser
 		}
-
-		orgIDs := caller.OrgIDs()
 
 		// sets the organization id on the query for the current organization
 		q.WhereP(organizationsetting.OrganizationIDIn(orgIDs...))

@@ -1130,7 +1130,7 @@ func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
 
 	clonedControlID := resp.CreateControlsByClone.Controls[0].ID
 
-	dbCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	control, err := suite.Client.DB.Control.Query().
 		Where(controlgen.ID(clonedControlID)).
@@ -1826,7 +1826,7 @@ func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
 		},
 	}
 
-	dbCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	err = suite.Client.DB.Control.UpdateOneID(clonedControl.ID).
 		SetDescriptionJSON(comment).
@@ -3306,7 +3306,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	// create a trust center for the anonymous context
 	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	dbCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	// create a trust center control with default (not visible) visibility
 	publicControl, err := suite.Client.DB.Control.Create().

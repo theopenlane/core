@@ -20,7 +20,7 @@ import (
 
 func TestCampaignRecurringListener(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.CampaignRecurringListeners())
 	assert.NilError(t, err)

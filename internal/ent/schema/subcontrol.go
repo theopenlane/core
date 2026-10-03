@@ -265,7 +265,7 @@ func parentBlockedGroupsInterceptor(parentType string) ent.Interceptor {
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
 

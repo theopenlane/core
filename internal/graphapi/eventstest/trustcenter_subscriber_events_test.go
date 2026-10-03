@@ -26,7 +26,7 @@ import (
 func TestTrustCenterPostNotificationEmail(t *testing.T) {
 	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	// brand the live trust center setting so the email pulls trust center branding
 	tcLoaded, err := suite.Client.DB.TrustCenter.Query().Where(trustcenter.IDEQ(tc.TrustCenter.ID)).WithSetting().Only(dbCtx)
@@ -108,7 +108,7 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetInternalContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	tcLoaded, err := suite.Client.DB.TrustCenter.Query().Where(trustcenter.IDEQ(tc.TrustCenter.ID)).WithSetting().Only(dbCtx)
 	assert.NilError(t, err)

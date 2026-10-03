@@ -90,7 +90,7 @@ func catalogAssetBySourceIdentifier(ctx context.Context, t *testing.T, sourceIde
 }
 
 func TestCatalogUpsertUnchangedGate(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	integration, err := suite.Client.DB.Integration.Create().
 		SetName("Catalog Upsert Gate Test").
@@ -139,7 +139,7 @@ func TestCatalogUpsertUnchangedGate(t *testing.T) {
 // one run converges on the same row: the first record creates it and the second record's lookup
 // sees the row the first created, updating it instead of racing a second create
 func TestCatalogUpsertDuplicateKeyInOneRunConvergesOnOneRow(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	integration, err := suite.Client.DB.Integration.Create().
 		SetName("Catalog Dup Key Test").
@@ -177,7 +177,7 @@ func TestCatalogUpsertDuplicateKeyInOneRunConvergesOnOneRow(t *testing.T) {
 // TestCatalogClaimUnclaimedRowTakenOverInOneWrite verifies an ingest payload takes over a row that
 // carries no recorded source definition, in the same write that applies its other field changes
 func TestCatalogClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	integration, err := suite.Client.DB.Integration.Create().
 		SetName("Catalog Claim Unclaimed Test").
@@ -213,7 +213,7 @@ func TestCatalogClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 // TestCatalogClaimActiveOtherInstallationReadOnly verifies a row managed by another still-active
 // installation of the same definition is skipped untouched, ownership pointers and data alike
 func TestCatalogClaimActiveOtherInstallationReadOnly(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const sharedDefinitionID = "def_catclaimactive"
 
@@ -262,7 +262,7 @@ func TestCatalogClaimActiveOtherInstallationReadOnly(t *testing.T) {
 // TestCatalogClaimGoneOtherInstallationRepoints verifies a row whose managing installation no longer
 // exists is repointed to the new installation in the same update as any other field change
 func TestCatalogClaimGoneOtherInstallationRepoints(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const sharedDefinitionID = "def_catclaimgone"
 
@@ -311,7 +311,7 @@ func TestCatalogClaimGoneOtherInstallationRepoints(t *testing.T) {
 // TestCatalogIntegrationRunsEdgeOnChangedRow verifies a material catalog ingest change adds the
 // ingesting run to the row's integration_runs edge, not just its scalar integration_run_id field
 func TestCatalogIntegrationRunsEdgeOnChangedRow(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	integration, err := suite.Client.DB.Integration.Create().
 		SetName("Catalog Run Edge Test").

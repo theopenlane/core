@@ -169,7 +169,7 @@ func TestQueryAssessmentResponses(t *testing.T) {
 // TestAssessmentResponseCampaignIsolation ensures responses are isolated per campaign.
 func TestAssessmentResponseCampaignIsolation(t *testing.T) {
 	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	campaignA, err := suite.Client.DB.Campaign.Create().
 		SetName("Campaign A").
@@ -231,7 +231,7 @@ func TestAssessmentResponseCampaignIsolation(t *testing.T) {
 // TestAssessmentResponseUpdatesCampaignTargetsAndCompletion verifies campaign rollups on completion.
 func TestAssessmentResponseUpdatesCampaignTargetsAndCompletion(t *testing.T) {
 	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("Campaign Target Sync").
@@ -333,7 +333,6 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 			request: testclient.CreateAssessmentResponseInput{
 				Email:        lo.ToPtr(gofakeit.Email()),
 				AssessmentID: assessment.ID,
-				OwnerID:      &th.SharedTestUser1.OrganizationID,
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -415,7 +414,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		response := resp.CreateAssessmentResponse.AssessmentResponse
 		responseIDsOrg1 = append(responseIDsOrg1, response.ID)
 
-		updateCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+		updateCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 		_, err = suite.Client.DB.AssessmentResponse.UpdateOneID(response.ID).
 			SetStatus(enums.AssessmentResponseStatusCompleted).
 			Save(updateCtx)

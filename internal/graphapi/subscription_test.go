@@ -9,7 +9,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/websocket"
 	"github.com/theopenlane/iam/tokens"
 	"gotest.tools/v3/assert"
@@ -52,11 +51,9 @@ func TestNotificationCreated(t *testing.T) {
 			assert.NilError(t, err)
 
 			claims := &tokens.Claims{
-				RegisteredClaims: jwt.RegisteredClaims{
-					Subject: tc.testUser.ID,
-				},
-				UserID: tc.testUser.ID,
-				OrgID:  tc.testUser.OrganizationID,
+				Subject: tc.testUser.ID,
+				UserID:  tc.testUser.ID,
+				OrgID:   tc.testUser.OrganizationID,
 			}
 
 			access, _, err := suite.Client.DB.TokenManager.CreateTokenPair(claims)

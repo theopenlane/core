@@ -65,7 +65,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 	defer setup.Teardown()
 
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetInternalContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
 	t.Run("create without domains keeps default avatar", func(t *testing.T) {
 		org := (&th.OrganizationBuilder{Client: suite.Client}).MustNew(user.UserCtx, t)

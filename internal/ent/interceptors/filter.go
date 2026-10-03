@@ -44,7 +44,7 @@ func FilterListQuery() ent.Interceptor {
 // the FilterQueryResults function should be used in most cases due to performance issues of ListObjectsRequest
 func AddIDPredicate(ctx context.Context, q Query) error {
 	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+	if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
 		return nil
 	}
 
@@ -108,7 +108,7 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 // has access to within the FGA system
 func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax.Relation) ([]string, error) {
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return []string{}, nil
 	}
 
@@ -271,7 +271,8 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 
 func skipFilter(ctx context.Context, q intercept.Query, forceFilter SkipperFunc, customSkipperFunc ...SkipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+	// TODO: remove allow
+	if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
 		return true
 	}
 
@@ -281,8 +282,7 @@ func skipFilter(ctx context.Context, q intercept.Query, forceFilter SkipperFunc,
 	}
 
 	// skip object owned filtering for the support user
-	caller, ok := auth.CallerFromContext(ctx)
-	if ok && caller != nil && caller.Has(auth.CapOrgSupport) {
+	if auth.HasInContextCaller(ctx, auth.CapOrgSupport) {
 		return true
 	}
 
@@ -455,7 +455,7 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 	)
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return []string{}, nil
 	}
 
