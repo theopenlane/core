@@ -9,10 +9,17 @@ import (
 
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
+
+// executionTestAPIKey is the credential type bound to the operation under test
+type executionTestAPIKey struct{}
+
+var executionTestAPIKeyRef = types.NewCredentialRef[executionTestAPIKey]("executionTestAPIKey")
 
 func TestExecuteOperationNilInstallation(t *testing.T) {
 	t.Parallel()
@@ -39,7 +46,7 @@ func TestExecuteOperationInvalidConfig(t *testing.T) {
 		ID:           "install-1",
 		DefinitionID: "test-def",
 	}, op, nil, json.RawMessage(`{}`))
-	if !errors.Is(err, ErrOperationConfigInvalid) {
+	if !errors.Is(err, types.ErrOperationConfigInvalid) {
 		t.Fatalf("expected ErrOperationConfigInvalid, got %v", err)
 	}
 }
@@ -157,7 +164,6 @@ func TestExecuteOperationEmptyConfigSkipsValidation(t *testing.T) {
 		},
 	}
 
-	// Empty config should skip schema validation even when schema is present
 	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
@@ -176,7 +182,7 @@ func TestExecuteOperationWithCredentials(t *testing.T) {
 
 	rt := NewForTesting(registry.New())
 
-	ref := types.NewCredentialSlotID("api-key")
+	ref := executionTestAPIKeyRef.ID()
 	credentials := types.CredentialBindings{
 		{Ref: ref, Credential: types.CredentialSet{Data: json.RawMessage(`{"key":"secret"}`)}},
 	}
@@ -284,4 +290,86 @@ func TestExecuteOperationPassesRequestFields(t *testing.T) {
 	if string(captured.Config) != `{"key":"value"}` {
 		t.Fatalf("expected config to be passed through, got %s", string(captured.Config))
 	}
+}
+
+func TestExecuteOperationResolvesConfigFromInstallation(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"filterExpr":"payload.active"}`)}},
+	}
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, nil)
+	assert.NilError(t, err)
+	assert.Equal(t, string(captured.Config), `{"filterExpr":"payload.active"}`)
+}
+
+func TestExecuteOperationRefusesDisabledOperation(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"disable":true}`)}},
+	}
+
+	cases := map[string]types.OperationRegistration{
+		"disabled for all": {
+			Name:           "other-op",
+			DisabledForAll: true,
+		},
+		"disabled for the installation": {
+			Name: "test-op",
+		},
+	}
+
+	for name, op := range cases {
+		called := false
+		op.Handle = func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+			called = true
+			return nil, nil
+		}
+
+		_, err := rt.ExecuteOperation(context.Background(), installation, op, nil, nil)
+		if !errors.Is(err, operations.ErrOperationDisabled) {
+			t.Fatalf("%s: expected ErrOperationDisabled, got %v", name, err)
+		}
+
+		if called {
+			t.Fatalf("%s: expected the handler not to run", name)
+		}
+	}
+}
+
+func TestExecuteOperationExplicitConfigWinsOverStored(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"filterExpr":"payload.active"}`)}},
+	}
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, json.RawMessage(`{"key":"value"}`))
+	assert.NilError(t, err)
+	assert.Equal(t, string(captured.Config), `{"key":"value"}`)
 }

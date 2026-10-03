@@ -9,6 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/newman/providers/mock"
+
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 func TestHealthCheck_NilSender(t *testing.T) {
@@ -17,7 +19,7 @@ func TestHealthCheck_NilSender(t *testing.T) {
 		Config: RuntimeEmailConfig{},
 	}
 
-	_, err := HealthCheck{}.Run(context.Background(), client)
+	_, err := checkHealth(context.Background(), types.OperationRequest{}, client)
 
 	require.ErrorIs(t, err, ErrSenderNotConfigured)
 }
@@ -34,7 +36,7 @@ func TestHealthCheck_ConfiguredSender(t *testing.T) {
 		},
 	}
 
-	result, err := HealthCheck{}.Run(context.Background(), client)
+	result, err := checkHealth(context.Background(), types.OperationRequest{}, client)
 	require.NoError(t, err)
 
 	var data map[string]any

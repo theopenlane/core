@@ -18,27 +18,20 @@ import (
 // cloudflareRequestTimeout bounds every Cloudflare API request issued through the SDK client
 const cloudflareRequestTimeout = time.Minute
 
-// CloudflareClient wraps the Cloudflare SDK client with the account it's scoped to:
-// the customer's own account for installation-bound operations, or the operator-owned
-// account for system-initiated operations run through the runtime path.
-// Config.DomainScan is only populated for the runtime (system) client, used by the
-// domain scan enrichment operation
+// CloudflareClient wraps the Cloudflare SDK client with the account it's scoped to
 type CloudflareClient struct { //nolint:revive
 	*cf.Client
 	// Config holds the account scope and domain scan settings this client was built with
 	Config ClientConfig
 }
 
-// ClientConfig holds the account and domain scan settings a CloudflareClient is built from, sourced from either
-// per-installation credentials or the operator-owned runtime config
+// ClientConfig holds the account and domain scan settings a CloudflareClient is built from
 type ClientConfig struct {
 	// AccountID is the Cloudflare account this client is scoped to
 	AccountID string
 	// APIToken is the raw Cloudflare API token, needed by calls made outside the SDK client
-	// (e.g. Browser Rendering requests issued directly by the domain scan enrichment operation)
 	APIToken string
-	// DomainScan configures vendor/technology classification for onboarding domain scan
-	// reports; runtime client only
+	// DomainScan configures vendor/technology classification for domain scan reports; runtime only
 	DomainScan domainscan.ReportConfig
 }
 
@@ -46,7 +39,7 @@ type ClientConfig struct {
 type Client struct{}
 
 // Build constructs the Cloudflare API client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*CloudflareClient, error) {
 	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
 		return nil, err
@@ -73,9 +66,7 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 	}, nil
 }
 
-// runtimeCloudflareClientBuilder returns a build function that constructs a Cloudflare API
-// client for the runtime (system) path, using the operator-owned account's API token, account
-// ID, and domain scan report classification config
+// runtimeCloudflareClientBuilder returns a build function for the operator-owned runtime client
 func runtimeCloudflareClientBuilder() func(context.Context, json.RawMessage) (any, error) {
 	return func(_ context.Context, config json.RawMessage) (any, error) {
 		var cfg RuntimeConfig

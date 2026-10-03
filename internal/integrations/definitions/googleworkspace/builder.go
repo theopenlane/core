@@ -1,10 +1,8 @@
 package googleworkspace
 
 import (
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -25,42 +23,32 @@ func Builder(cfg Config) registry.Builder {
 		installation := installationRef(cfg)
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Google Workspace",
-				DisplayName: "Google Workspace",
-				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
-				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace",
-				Tags:        []string{"directory"},
-				Active:      true,
-				Visible:     true,
-			},
+			ID:          definitionID.ID(),
+			Family:      "Google Workspace",
+			DisplayName: "Google Workspace",
+			Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
+			Category:    "identity",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace",
+			Tags:        []string{"directory"},
+			Active:      true,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  workspaceClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         workspaceCredential.ID(),
+				workspaceCredential.Registration(types.CredentialRegistration{
 					Name:        "Google Workspace Credential",
 					Description: "OAuth credential used to access Google Workspace directory data.",
-				},
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:  workspaceCredential.ID(),
-					Name:           "Google Workspace OAuth",
-					Description:    "Connect your Google Workspace domain using OAuth.",
-					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
-					ClientRefs:     []types.ClientID{workspaceClient.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: workspaceClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					CredentialRef: workspaceCredential.ID(),
+					Name:          "Google Workspace OAuth",
+					Description:   "Connect your Google Workspace domain using OAuth.",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -91,73 +79,23 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            workspaceClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
-					Description:    "Google Workspace Admin SDK client",
-					Build:          Client{cfg: cfg}.Build,
-				},
+				workspaceClient.Registration(Client{cfg: cfg}.Build, types.ClientRegistration{
+					Description: "Google Workspace Admin SDK client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    workspaceClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaDirectoryAccount.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryGroup.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryMembership.Name,
-						},
-					},
-					IngestHandle:        DirectorySync{}.IngestHandle(),
-					SkipDefaultLookback: true,
-					RequiredPermissions: directorySyncScopes,
-					Schedule:            gala.NewFullFetchSchedule(),
-				},
+				types.OperationRefOf[DirectorySync]().
+					Ingests(workspaceClient, runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Schedule(gala.NewFullFetchSchedule()).
+					SkipDefaultLookback().
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Permissions(directorySyncScopes...).
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
+					}),
 			},
-			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaDirectoryAccount.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryAccount,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryGroup.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryGroup,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryMembership.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryMembership,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaDirectoryAccount.Name,
-								TargetField:  directoryaccount.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
-							},
-							{
-								TargetSchema: entityops.SchemaDirectoryGroup.Name,
-								TargetField:  directorygroup.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
-							},
-						},
-					},
-				},
-			},
+			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil
 	})
 }

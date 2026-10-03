@@ -22,15 +22,8 @@ type HealthCheck struct {
 	KeycloakVersion string `json:"keycloakVersion"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(keycloakClient, func(ctx context.Context, req types.OperationRequest, gc *gocloak.GoCloak) (json.RawMessage, error) {
-		return h.Run(ctx, gc, req)
-	})
-}
-
-// Run executes the Keycloak health check
-func (HealthCheck) Run(ctx context.Context, gc *gocloak.GoCloak, req types.OperationRequest) (json.RawMessage, error) {
+// checkHealth executes the Keycloak health check
+func checkHealth(ctx context.Context, req types.OperationRequest, gc *gocloak.GoCloak) (json.RawMessage, error) {
 	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error resolving credentials")

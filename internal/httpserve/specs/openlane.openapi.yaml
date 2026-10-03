@@ -542,9 +542,7 @@ components:
                                         configSchema: {}
                                         credentialRefs:
                                             items:
-                                                description: |-
-                                                    CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
-                                                    It is used in registration structs, bindings, and persistence where the credential schema type is not needed
+                                                description: CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
                                             type: array
                                         description:
                                             type: string
@@ -559,19 +557,13 @@ components:
                                             nullable: true
                                             properties:
                                                 credentialRef:
-                                                    description: |-
-                                                        CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
-                                                        It is used in registration structs, bindings, and persistence where the credential schema type is not needed
+                                                    description: CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
                                             type: object
                                         credentialRef:
-                                            description: |-
-                                                CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
-                                                It is used in registration structs, bindings, and persistence where the credential schema type is not needed
+                                            description: CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
                                         credentialRefs:
                                             items:
-                                                description: |-
-                                                    CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
-                                                    It is used in registration structs, bindings, and persistence where the credential schema type is not needed
+                                                description: CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
                                             type: array
                                         description:
                                             type: string
@@ -580,19 +572,14 @@ components:
                                             nullable: true
                                             properties:
                                                 credentialRef:
-                                                    description: |-
-                                                        CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
-                                                        It is used in registration structs, bindings, and persistence where the credential schema type is not needed
+                                                    description: CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
                                                 description:
                                                     type: string
                                                 schema: {}
                                             type: object
-                                        installation:
-                                            description: InstallationRegistration describes how one connection mode derives installation metadata
-                                            nullable: true
                                         meta:
                                             additionalProperties:
-                                                description: MetaInfo is data to store for the UI to present to the user during credential setup of an integration
+                                                description: MetaInfo is data shown to the user during credential setup of an integration
                                                 properties:
                                                     AllowCopy:
                                                         type: boolean
@@ -615,12 +602,13 @@ components:
                                         recommended:
                                             type: boolean
                                         ref:
-                                            description: |-
-                                                CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
-                                                It is used in registration structs, bindings, and persistence where the credential schema type is not needed
+                                            description: CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
                                         schema: {}
                                     type: object
                                 type: array
+                            installation:
+                                description: InstallationRegistration describes how one connection mode derives installation metadata
+                                nullable: true
                             mappings:
                                 items:
                                     description: MappingRegistration declares one default mapping shipped with a definition
@@ -722,6 +710,14 @@ components:
                                                         type: string
                                                 type: object
                                             type: array
+                                        input:
+                                            description: InputRegistration describes one stored installation-scoped input layout and how older documents move onto it
+                                            nullable: true
+                                            properties:
+                                                name:
+                                                    type: string
+                                                schema: {}
+                                            type: object
                                         name:
                                             type: string
                                         policy:
@@ -754,11 +750,9 @@ components:
                                     schema: {}
                                 type: object
                             runtimeIntegration:
-                                description: RuntimeIntegrationRegistration is the non-generic registration stored on a Definition
+                                description: RuntimeIntegrationRegistration declares a definition provisioned from a runtime config struct
                                 nullable: true
                                 properties:
-                                    ref:
-                                        description: RuntimeRefID is the stable identifier for a runtime integration config, derived from the Go type name
                                     schema: {}
                                 type: object
                             spec:
@@ -788,9 +782,11 @@ components:
                                         type: boolean
                                 type: object
                             userInput:
-                                description: UserInputRegistration describes installation-scoped user input
+                                description: InputRegistration describes one stored installation-scoped input layout and how older documents move onto it
                                 nullable: true
                                 properties:
+                                    name:
+                                        type: string
                                     schema: {}
                                 type: object
                             webhooks:

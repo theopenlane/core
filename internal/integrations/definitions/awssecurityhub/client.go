@@ -18,7 +18,7 @@ type SecurityHubClientBuilder struct {
 }
 
 // Build constructs the AWS Security Hub client using the shared AWS credential inputs
-func (b SecurityHubClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (b SecurityHubClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (*securityhub.Client, error) {
 	return buildAWSServiceClient(ctx, b.cfg, req, func(cfg awssdk.Config) *securityhub.Client {
 		return securityhub.NewFromConfig(cfg)
 	})
@@ -31,7 +31,7 @@ type ConfigServiceClientBuilder struct {
 }
 
 // Build constructs the AWS Config client using the shared AWS credential inputs
-func (b ConfigServiceClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (b ConfigServiceClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (*configservice.Client, error) {
 	return buildAWSServiceClient(ctx, b.cfg, req, func(cfg awssdk.Config) *configservice.Client {
 		return configservice.NewFromConfig(cfg)
 	})
@@ -44,7 +44,7 @@ type IAMClientBuilder struct {
 }
 
 // Build constructs the AWS IAM client using the shared AWS credential inputs
-func (b IAMClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (b IAMClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (*iam.Client, error) {
 	return buildAWSServiceClient(ctx, b.cfg, req, func(cfg awssdk.Config) *iam.Client {
 		return iam.NewFromConfig(cfg)
 	})

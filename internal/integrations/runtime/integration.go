@@ -9,16 +9,15 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
 // PendingInstallationTTL is how long a pending installation may wait for its auth flow
-// before it expires; live auth state lasts minutes, so anything older can only restart
 const PendingInstallationTTL = 168 * time.Hour
 
 // IntegrationLookup holds the query constraints for resolving an integration
@@ -31,19 +30,57 @@ type IntegrationLookup struct {
 	DefinitionID string
 }
 
-// ResolveIntegration resolves one integration by explicit ID with optional owner
-// and definition cross-checks through the shared operations resolver
+// ResolveIntegration resolves an integration by ID with optional owner and definition checks
 func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error) {
-	return operations.ResolveIntegration(ctx, r.DB(), lookup.IntegrationID, lookup.OwnerID, lookup.DefinitionID)
+	if lookup.IntegrationID == "" {
+		return nil, ErrIntegrationIDRequired
+	}
+
+	query := r.DB().Integration.Query().Where(integration.IDEQ(lookup.IntegrationID))
+	if lookup.OwnerID != "" {
+		query = query.Where(integration.OwnerIDEQ(lookup.OwnerID))
+	}
+
+	record, err := query.Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if lookup.DefinitionID != "" && record.DefinitionID != lookup.DefinitionID {
+		return nil, ErrInstallationDefinitionMismatch
+	}
+
+	return record, nil
 }
 
-// ResolveOwnerIntegration finds a connected integration for the given definition
-// and owner through the shared operations resolver
+// ResolveOwnerIntegration returns the operational installation id for the definition and owner, or empty when none is selectable
 func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
-	return operations.ResolveOwnerIntegration(ctx, r.DB(), definitionID, ownerID, prefer...)
+	integrations, err := r.DB().Integration.Query().
+		Where(
+			integration.OwnerIDEQ(ownerID),
+			integration.DefinitionIDEQ(definitionID),
+			integration.StatusIn(enums.IntegrationOperationalStatuses...),
+		).All(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	switch {
+	case len(integrations) == 1:
+		return integrations[0].ID, nil
+	case len(prefer) == 0:
+		return "", nil
+	}
+
+	preferred, found := lo.Find(integrations, prefer[0])
+	if !found {
+		return "", nil
+	}
+
+	return preferred.ID, nil
 }
 
-// EnsureInstallation returns an existing installation when integrationID is provided, or creates a new one
+// EnsureInstallation returns an existing installation, or creates a new one
 func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID string, def types.Definition) (*ent.Integration, bool, error) {
 	if integrationID != "" {
 		record, err := r.ResolveIntegration(ctx, IntegrationLookup{
@@ -61,7 +98,12 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 	record, err := r.DB().Integration.Create().
 		SetOwnerID(ownerID).
 		SetName(def.DisplayName).
+		SetDescription(def.Description).
+		SetKind(def.Family).
+		SetIntegrationType(def.Category).
 		SetDefinitionID(def.ID).
+		SetDefinitionVersion(r.Registry().Version(def.ID)).
+		SetDefinitionSlug(def.ID).
 		SetFamily(def.Family).
 		SetStatus(enums.IntegrationStatusPending).
 		SetExpiresAt(time.Now().Add(PendingInstallationTTL)).
@@ -70,18 +112,14 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 		return nil, false, err
 	}
 
-	// record new installed integration
 	metrics.RecordIntegrationInstalled(def.ID)
 
-	// attempt to create vendor record
 	r.createVendor(ctx, ownerID, def, record.ID)
 
 	return record, true, nil
 }
 
-// createVendor will to a best-effort create of the integration family as a vendor in the organization
-// if it already exists, it will link the integration id
-// if it doesn't exist, it will create the record, add data from the system-owned subprocessors, and link the integration
+// createVendor best-effort links or creates the integration family as a vendor in the org
 func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.Definition, integrationID string) {
 	ctx = logx.WithFields(ctx, map[string]any{"vendor": def.Family, "org_id": ownerID})
 
@@ -98,7 +136,6 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 	}
 
 	if len(vendorIDs) > 0 {
-		// update the integration edges
 		ctxAllow := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := r.DB().Entity.Update().Where(entity.IDIn(vendorIDs...)).AddIntegrationIDs(
 			integrationID).Exec(ctxAllow); err != nil {
@@ -117,7 +154,6 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		IntegrationIDs: []string{integrationID},
 	}
 
-	// lookup subprocessor for existing data
 	subprocessors, err := r.DB().Subprocessor.Query().Where(
 		subprocessor.NameEqualFold(def.Family),
 	).All(ctx)

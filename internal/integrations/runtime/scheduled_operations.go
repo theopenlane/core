@@ -22,7 +22,7 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 		return 0, err
 	}
 
-	if operation.DisabledForAll || (operation.Disabled != nil && operation.Disabled(nil)) {
+	if operation.DisabledFor(nil) {
 		return 0, operations.ErrOperationDisabled
 	}
 
@@ -45,8 +45,7 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 	return result.Processed, nil
 }
 
-// SeedScheduledOperations ensures every operation with the Scheduled policy has an active
-// polling loop, called once at startup
+// SeedScheduledOperations ensures every Scheduled-policy operation has an active polling loop
 func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 	var errs []error
 
@@ -66,7 +65,7 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 				Runtime:      true,
 			})
 
-			if op.DisabledForAll || (op.Disabled != nil && op.Disabled(nil)) {
+			if op.DisabledFor(nil) {
 				logx.FromContext(intobvs.WithContext(ctx, oc)).Info().Msg("scheduled operation disabled, skipping seed")
 
 				continue
@@ -81,8 +80,7 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 	return errors.Join(errs...)
 }
 
-// seedScheduledOperation emits one scheduled operation cycle envelope unless the loop is
-// already live; successor cycles carry per-cycle unique keys the seed's key can't collide with
+// seedScheduledOperation emits one scheduled cycle envelope unless the loop is already live
 func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationContext) error {
 	ctx, headers := intobvs.EmitContext(ctx, oc)
 
@@ -99,8 +97,6 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 
 	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for active scheduled operation job")
-
 		return err
 	}
 

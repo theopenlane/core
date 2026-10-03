@@ -61,16 +61,3 @@ func (i AuthCallbackInput) First(name string) string {
 
 	return ""
 }
-
-// Values returns all query parameter values for the supplied name
-func (i AuthCallbackInput) Values(name string) []string {
-	for _, value := range i.Query {
-		if value.Name == name {
-			out := make([]string, len(value.Values))
-			copy(out, value.Values)
-			return out
-		}
-	}
-
-	return nil
-}

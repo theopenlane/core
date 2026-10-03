@@ -21,10 +21,8 @@ const (
 // Client builds Zitadel user service clients for one installation
 type Client struct{}
 
-// Build constructs the Zitadel user service client for one installation. It supports both
-// Personal Access Token and OAuth2 client-credentials auth modes, selecting whichever
-// credential the installation was configured with.
-func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+// Build constructs the Zitadel user service client for one installation
+func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (*client.Client, error) {
 	domain, auth, err := resolveAuth(req.Credentials)
 	if err != nil {
 		return nil, err
@@ -44,11 +42,7 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	return api, nil
 }
 
-// parseHost normalizes the configured instance into a bare host plus connection options.
-// TLS is the default: a bare host ("zitadel.example.com") or an https:// URL always uses
-// TLS, honoring an explicit port (e.g. self-hosted "zitadel.example.com:8443") via WithPort.
-// Only an explicit http:// scheme opts into a plaintext, non-TLS connection via WithInsecure,
-// which is intended for self-hosted or local development instances without TLS.
+// parseHost normalizes the instance into a bare host plus connection options
 func parseHost(instance string) (string, []zitadel.Option) {
 	parsed, err := urlx.Parse(instance)
 	if err != nil {
@@ -60,12 +54,10 @@ func parseHost(instance string) (string, []zitadel.Option) {
 		return instance, nil
 	}
 
-	// WithInsecure requires a port; fall back to the HTTP default when none is given
 	if parsed.Scheme == "http" {
 		return host, []zitadel.Option{zitadel.WithInsecure(cmp.Or(parsed.Port(), "80"))}
 	}
 
-	// ParseUint fails on the empty port, leaving the SDK default of 443 in place
 	if port, err := strconv.ParseUint(parsed.Port(), 10, 16); err == nil {
 		return host, []zitadel.Option{zitadel.WithPort(uint16(port))}
 	}
@@ -73,9 +65,7 @@ func parseHost(instance string) (string, []zitadel.Option) {
 	return host, nil
 }
 
-// resolveAuth selects the auth mode from the provided credential bindings, returning the
-// instance domain and the matching Zitadel SDK token source initializer. PAT credentials take
-// precedence when present, otherwise OAuth2 client-credentials are used.
+// resolveAuth selects the auth mode and returns the domain and token source
 func resolveAuth(bindings types.CredentialBindings) (string, client.TokenSourceInitializer, error) {
 	if pat, ok, err := zitadelPATCredential.Resolve(bindings); err == nil && ok {
 		if pat.Domain == "" {
@@ -106,8 +96,7 @@ func resolveAuth(bindings types.CredentialBindings) (string, client.TokenSourceI
 	return "", nil, ErrCredentialDecode
 }
 
-// resolveDomain extracts the instance domain from whichever credential mode is configured,
-// without requiring the full auth material. It is used by call sites that only need the domain.
+// resolveDomain extracts the instance domain from whichever credential is configured
 func resolveDomain(bindings types.CredentialBindings) (string, bool) {
 	if pat, ok, err := zitadelPATCredential.Resolve(bindings); err == nil && ok && pat.Domain != "" {
 		return pat.Domain, true

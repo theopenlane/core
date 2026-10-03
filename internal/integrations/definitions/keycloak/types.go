@@ -2,22 +2,20 @@ package keycloak
 
 import (
 	gocloak "github.com/Nerzal/gocloak/v13"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the Keycloak integration definition
 	definitionID = types.NewDefinitionRef("def_01K0KEYCLOAK000000000000001")
-	// integration is the typed installation metadata handle for the Keycloak definition
-	integration = types.NewInstallationRef(resolveInstallationMetadata)
-	// keycloakCredentialSchema is the JSON schema for the Keycloak credential
-	// keycloakCredential is the typed runtime ref for resolving the credential
-	keycloakCredentialSchema, keycloakCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// installation is the typed installation metadata handle for the Keycloak definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// keycloakCredential is the typed credential slot for the Keycloak client credentials
+	keycloakCredential = types.CredentialRefOf[CredentialSchema]()
 	// keycloakClient is the client ref for the Keycloak API client
-	keycloakClient = types.NewClientRef[*gocloak.GoCloak]()
-	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	keycloakClient = types.ClientRefOf[*gocloak.GoCloak]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // CredentialSchema holds the Keycloak instance credentials for one installation
@@ -36,10 +34,13 @@ type CredentialSchema struct {
 type UserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
+}
+
+// DirectorySync configures collection of Keycloak directory users, groups, and memberships
+type DirectorySync struct {
+	types.OperationSettings
 	// DisableGroupSync when true only syncs users, skipping groups and memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
-	// FilterExpr limits imported records to envelopes matching a CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting, example=Example: payload.enabled == true"`
 }
 
 // InstallationMetadata holds the stable Keycloak realm identity for one installation

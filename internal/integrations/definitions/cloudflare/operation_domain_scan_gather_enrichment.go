@@ -11,18 +11,16 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// domainScanEnrichmentTimeout bounds how long to spend gathering company profile,
-// branding, compliance, and DNS vendor data before finalizing the scan without it
+// domainScanEnrichmentTimeout bounds how long to spend gathering enrichment data
 const domainScanEnrichmentTimeout = 5 * time.Minute
 
-// DomainScanGatherEnrichment gathers company profile, branding, compliance, and DNS vendor data for a domain
+// DomainScanGatherEnrichment gathers enrichment data for a domain
 type DomainScanGatherEnrichment struct {
 	// Domain is the domain to gather enrichment for
 	Domain string `json:"domain"`
 	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
 	ForceRefresh bool `json:"forceRefresh,omitempty"`
-	// BrandDesignOnly instructs the scanning process to only extract the brand design not the entire
-	// domain scan
+	// BrandDesignOnly instructs the scanning process to only extract the brand design
 	BrandDesignOnly bool `json:"brandDesignOnly,omitempty"`
 }
 
@@ -32,16 +30,23 @@ type DomainScanGatherEnrichmentResult struct {
 	Enrichment domainscan.Enrichment `json:"enrichment"`
 }
 
-// Handle adapts domain scan enrichment gathering to the generic operation registration boundary
-func (e DomainScanGatherEnrichment) Handle() types.OperationHandler {
-	return providerkit.WithClientConfig(cloudflareClient, DomainScanEnrichmentOp, ErrOperationConfigInvalid, func(ctx context.Context, client *CloudflareClient, cfg DomainScanGatherEnrichment) (json.RawMessage, error) {
-		result, err := e.Run(ctx, client, cfg)
-		if err != nil {
-			return nil, err
-		}
+// DomainScanEnrichmentOp is the operation ref for gathering enrichment data for a domain
+//
+//nolint:revive
+var DomainScanEnrichmentOp = types.OperationPayloadOf[DomainScanGatherEnrichment]().
+	Handles(cloudflareClient, runDomainScanGatherEnrichment).
+	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+	CustomerSelectable(false).
+	Internal()
 
-		return providerkit.EncodeResult(result, ErrResultEncode)
-	})
+// runDomainScanGatherEnrichment gathers enrichment data for the configured domain and encodes it
+func runDomainScanGatherEnrichment(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanGatherEnrichment) (json.RawMessage, error) {
+	result, err := DomainScanGatherEnrichment{}.Run(ctx, client, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
 // Run gathers company profile, branding, compliance, and DNS vendor data for the domain
@@ -87,8 +92,7 @@ func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareCli
 	return DomainScanGatherEnrichmentResult{Enrichment: enrichment}, nil
 }
 
-// logDomainScanEnrichmentErrors logs any per-lookup enrichment failures through the structured
-// logger; each is best-effort (the report is built without that section) so these are warnings, not errors
+// logDomainScanEnrichmentErrors logs any per-lookup enrichment failures as warnings
 func logDomainScanEnrichmentErrors(ctx context.Context, errs domainscan.EnrichmentErrors) {
 	if errs.Company != nil {
 		logx.FromContext(ctx).Warn().Err(errs.Company).Msg("domain scan: failed to get company profile")

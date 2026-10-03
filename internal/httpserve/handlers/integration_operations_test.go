@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -36,19 +35,28 @@ type OperationTestRepoSync struct{}
 
 // OperationTestValidated is the config type for the test validated operation
 type OperationTestValidated struct {
+	types.OperationSettings
 	// Target is the required target field
 	Target string `json:"target" jsonschema:"required"`
 }
 
+// operationTestCredential is the credential type stored by the operation test definition
+type operationTestCredential struct {
+	// Token is the stored token
+	Token string `json:"token"`
+}
+
 var (
-	operationTestCredentialRef                      = types.NewCredentialSlotID("op_test")
-	opTestHealthSchema, opTestHealthCheckOperation  = providerkit.OperationSchema[OperationTestHealthCheck]()
-	opTestRepoSyncSchema, opTestRepoSyncOperation   = providerkit.OperationSchema[OperationTestRepoSync]()
-	opTestValidatedSchema, opTestValidatedOperation = providerkit.OperationSchema[OperationTestValidated]()
+	operationTestCredentialRef = types.CredentialRefOf[operationTestCredential]()
+	opTestHealthCheckOperation = types.OperationPayloadOf[OperationTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
+	opTestRepoSyncOperation    = types.OperationPayloadOf[OperationTestRepoSync]()
+	opTestValidatedOperation   = types.OperationRefOf[OperationTestValidated]().Policy(types.ExecutionPolicy{Inline: true})
 )
 
 func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		definition := types.NewDefinitionRef(definitionID)
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -57,50 +65,39 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				Visible:     true,
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:    operationTestCredentialRef,
-					Name:   "Op Test Credential",
-					Schema: json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
-				},
+				operationTestCredentialRef.Registration(types.CredentialRegistration{
+					Name: "Op Test Credential",
+				}),
 			},
+			HealthCheck: types.CredentialHealthCheck(func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+				return json.RawMessage(`{"ok":true}`), nil
+			}),
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:  operationTestCredentialRef,
+					CredentialRef:  operationTestCredentialRef.ID(),
 					Name:           "Op Test Connection",
-					CredentialRefs: []types.CredentialSlotID{operationTestCredentialRef},
+					CredentialRefs: []types.CredentialSlotID{operationTestCredentialRef.ID()},
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         opTestHealthCheckOperation.Name(),
-					Description:  "Validate the test credential",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestHealthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: opTestHealthSchema,
+				opTestHealthCheckOperation.Registration(definition, types.OperationRegistration{
+					Description: "Validate the test credential",
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
-				},
-				{
-					Name:         opTestRepoSyncOperation.Name(),
-					Description:  "Sync repositories",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestRepoSyncOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: inlineNonHealth},
-					ConfigSchema: opTestRepoSyncSchema,
+				}),
+				opTestRepoSyncOperation.Policy(types.ExecutionPolicy{Inline: inlineNonHealth}).Registration(definition, types.OperationRegistration{
+					Description: "Sync repositories",
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"synced":true}`), nil
 					},
-				},
-				{
-					Name:         opTestValidatedOperation.Name(),
-					Description:  "Operation with config schema",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestValidatedOperation.Name()),
-					ConfigSchema: opTestValidatedSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
+				}),
+				opTestValidatedOperation.Registration(definition, types.OperationRegistration{
+					Description: "Operation with config schema",
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"validated":true}`), nil
 					},
-				},
+				}),
 			},
 		}, nil
 	})
@@ -376,18 +373,17 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
 	t.Helper()
 
-	rec, err := suite.db.Integration.Create().
-		SetOwnerID(orgID).
-		SetName(definitionID).
-		SetDefinitionID(definitionID).
-		Save(ctx)
+	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
+	require.True(t, ok)
+
+	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
 	require.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, operationTestCredentialRef, &credential, nil)
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, nil, operationTestCredentialRef.ID(), &credential, nil)
 	require.NoError(t, err)
 
 	return rec.ID

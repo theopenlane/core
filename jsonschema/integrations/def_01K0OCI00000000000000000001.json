@@ -1,0 +1,129 @@
+{
+  "version": "acfc919a0202f7f8a20c555134f0f2001dc5f8b0c7aa61f072ec8ce8e16138f2",
+  "surface": {
+    "id": "def_01K0OCI00000000000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oci/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "tenancyOcid": {
+                  "type": "string",
+                  "title": "Tenancy OCID",
+                  "description": "OCID of the tenancy Openlane should read from (e.g. ocid1.tenancy.oc1..aaaa)"
+                },
+                "userOcid": {
+                  "type": "string",
+                  "title": "User OCID",
+                  "description": "OCID of the user the API signing key is registered against (e.g. ocid1.user.oc1..aaaa)"
+                },
+                "fingerprint": {
+                  "type": "string",
+                  "title": "API Key Fingerprint",
+                  "description": "Fingerprint shown in the OCI console for the uploaded public key"
+                },
+                "privateKey": {
+                  "type": "string",
+                  "title": "API Private Key",
+                  "description": "PEM encoded private key matching the uploaded public key"
+                },
+                "privateKeyPassphrase": {
+                  "type": "string",
+                  "title": "Private Key Passphrase",
+                  "description": "Only required when the private key is encrypted"
+                },
+                "region": {
+                  "type": "string",
+                  "title": "Region",
+                  "description": "OCI region identifier used for API calls (e.g. us-ashburn-1)"
+                },
+                "compartmentOcid": {
+                  "type": "string",
+                  "title": "Compartment OCID",
+                  "description": "Compartment to collect from including its subcompartments. Defaults to the tenancy root compartment"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "tenancyOcid",
+                "userOcid",
+                "fingerprint",
+                "privateKey",
+                "region"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oci/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "tenancyOcid": {
+                "type": "string",
+                "title": "Tenancy OCID"
+              },
+              "compartmentOcid": {
+                "type": "string",
+                "title": "Compartment OCID"
+              },
+              "region": {
+                "type": "string",
+                "title": "Region"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "FindingsSync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oci/findings-sync",
+          "$ref": "#/$defs/FindingsSync",
+          "$defs": {
+            "FindingsSync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "skipProblemDetails": {
+                  "type": "boolean",
+                  "title": "Skip Problem Details",
+                  "description": "Skip the per-problem detail lookup. Far fewer API calls on large tenancies"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

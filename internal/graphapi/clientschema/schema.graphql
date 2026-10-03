@@ -38232,6 +38232,7 @@ type Integration implements Node {
 	webhookURLs: Map
 	credentials: JSON
 	config: JSON
+	operationConfig: JSON
 }
 """
 A connection to a list of items.

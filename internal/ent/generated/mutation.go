@@ -117975,6 +117975,8 @@ type IntegrationMutation struct {
 	_config                       *openapi.IntegrationConfig
 	installation_metadata         *openapi.IntegrationInstallationMetadata
 	provider_state                *openapi.IntegrationProviderState
+	user_input                    *openapi.IntegrationUserInput
+	operation_config              *openapi.IntegrationOperationConfig
 	metadata                      *map[string]interface{}
 	health                        *models.IntegrationHealth
 	definition_id                 *string
@@ -119393,6 +119395,104 @@ func (m *IntegrationMutation) ProviderStateCleared() bool {
 func (m *IntegrationMutation) ResetProviderState() {
 	m.provider_state = nil
 	delete(m.clearedFields, integration.FieldProviderState)
+}
+
+// SetUserInput sets the "user_input" field.
+func (m *IntegrationMutation) SetUserInput(oui openapi.IntegrationUserInput) {
+	m.user_input = &oui
+}
+
+// UserInput returns the value of the "user_input" field in the mutation.
+func (m *IntegrationMutation) UserInput() (r openapi.IntegrationUserInput, exists bool) {
+	v := m.user_input
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserInput returns the old "user_input" field's value of the Integration entity.
+// If the Integration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationMutation) OldUserInput(ctx context.Context) (v openapi.IntegrationUserInput, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserInput is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserInput requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserInput: %w", err)
+	}
+	return oldValue.UserInput, nil
+}
+
+// ClearUserInput clears the value of the "user_input" field.
+func (m *IntegrationMutation) ClearUserInput() {
+	m.user_input = nil
+	m.clearedFields[integration.FieldUserInput] = struct{}{}
+}
+
+// UserInputCleared returns if the "user_input" field was cleared in this mutation.
+func (m *IntegrationMutation) UserInputCleared() bool {
+	_, ok := m.clearedFields[integration.FieldUserInput]
+	return ok
+}
+
+// ResetUserInput resets all changes to the "user_input" field.
+func (m *IntegrationMutation) ResetUserInput() {
+	m.user_input = nil
+	delete(m.clearedFields, integration.FieldUserInput)
+}
+
+// SetOperationConfig sets the "operation_config" field.
+func (m *IntegrationMutation) SetOperationConfig(ooc openapi.IntegrationOperationConfig) {
+	m.operation_config = &ooc
+}
+
+// OperationConfig returns the value of the "operation_config" field in the mutation.
+func (m *IntegrationMutation) OperationConfig() (r openapi.IntegrationOperationConfig, exists bool) {
+	v := m.operation_config
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperationConfig returns the old "operation_config" field's value of the Integration entity.
+// If the Integration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationMutation) OldOperationConfig(ctx context.Context) (v openapi.IntegrationOperationConfig, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperationConfig is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperationConfig requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperationConfig: %w", err)
+	}
+	return oldValue.OperationConfig, nil
+}
+
+// ClearOperationConfig clears the value of the "operation_config" field.
+func (m *IntegrationMutation) ClearOperationConfig() {
+	m.operation_config = nil
+	m.clearedFields[integration.FieldOperationConfig] = struct{}{}
+}
+
+// OperationConfigCleared returns if the "operation_config" field was cleared in this mutation.
+func (m *IntegrationMutation) OperationConfigCleared() bool {
+	_, ok := m.clearedFields[integration.FieldOperationConfig]
+	return ok
+}
+
+// ResetOperationConfig resets all changes to the "operation_config" field.
+func (m *IntegrationMutation) ResetOperationConfig() {
+	m.operation_config = nil
+	delete(m.clearedFields, integration.FieldOperationConfig)
 }
 
 // SetMetadata sets the "metadata" field.
@@ -121171,7 +121271,7 @@ func (m *IntegrationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IntegrationMutation) Fields() []string {
-	fields := make([]string, 0, 36)
+	fields := make([]string, 0, 38)
 	if m.created_at != nil {
 		fields = append(fields, integration.FieldCreatedAt)
 	}
@@ -121246,6 +121346,12 @@ func (m *IntegrationMutation) Fields() []string {
 	}
 	if m.provider_state != nil {
 		fields = append(fields, integration.FieldProviderState)
+	}
+	if m.user_input != nil {
+		fields = append(fields, integration.FieldUserInput)
+	}
+	if m.operation_config != nil {
+		fields = append(fields, integration.FieldOperationConfig)
 	}
 	if m.metadata != nil {
 		fields = append(fields, integration.FieldMetadata)
@@ -121338,6 +121444,10 @@ func (m *IntegrationMutation) Field(name string) (ent.Value, bool) {
 		return m.InstallationMetadata()
 	case integration.FieldProviderState:
 		return m.ProviderState()
+	case integration.FieldUserInput:
+		return m.UserInput()
+	case integration.FieldOperationConfig:
+		return m.OperationConfig()
 	case integration.FieldMetadata:
 		return m.Metadata()
 	case integration.FieldHealth:
@@ -121419,6 +121529,10 @@ func (m *IntegrationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldInstallationMetadata(ctx)
 	case integration.FieldProviderState:
 		return m.OldProviderState(ctx)
+	case integration.FieldUserInput:
+		return m.OldUserInput(ctx)
+	case integration.FieldOperationConfig:
+		return m.OldOperationConfig(ctx)
 	case integration.FieldMetadata:
 		return m.OldMetadata(ctx)
 	case integration.FieldHealth:
@@ -121625,6 +121739,20 @@ func (m *IntegrationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetProviderState(v)
 		return nil
+	case integration.FieldUserInput:
+		v, ok := value.(openapi.IntegrationUserInput)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserInput(v)
+		return nil
+	case integration.FieldOperationConfig:
+		v, ok := value.(openapi.IntegrationOperationConfig)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperationConfig(v)
+		return nil
 	case integration.FieldMetadata:
 		v, ok := value.(map[string]interface{})
 		if !ok {
@@ -121804,6 +121932,12 @@ func (m *IntegrationMutation) ClearedFields() []string {
 	if m.FieldCleared(integration.FieldProviderState) {
 		fields = append(fields, integration.FieldProviderState)
 	}
+	if m.FieldCleared(integration.FieldUserInput) {
+		fields = append(fields, integration.FieldUserInput)
+	}
+	if m.FieldCleared(integration.FieldOperationConfig) {
+		fields = append(fields, integration.FieldOperationConfig)
+	}
 	if m.FieldCleared(integration.FieldMetadata) {
 		fields = append(fields, integration.FieldMetadata)
 	}
@@ -121914,6 +122048,12 @@ func (m *IntegrationMutation) ClearField(name string) error {
 	case integration.FieldProviderState:
 		m.ClearProviderState()
 		return nil
+	case integration.FieldUserInput:
+		m.ClearUserInput()
+		return nil
+	case integration.FieldOperationConfig:
+		m.ClearOperationConfig()
+		return nil
 	case integration.FieldMetadata:
 		m.ClearMetadata()
 		return nil
@@ -122020,6 +122160,12 @@ func (m *IntegrationMutation) ResetField(name string) error {
 		return nil
 	case integration.FieldProviderState:
 		m.ResetProviderState()
+		return nil
+	case integration.FieldUserInput:
+		m.ResetUserInput()
+		return nil
+	case integration.FieldOperationConfig:
+		m.ResetOperationConfig()
 		return nil
 	case integration.FieldMetadata:
 		m.ResetMetadata()

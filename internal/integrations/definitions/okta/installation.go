@@ -4,12 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// resolveInstallationMetadata derives Okta tenant metadata from the persisted credential and the org settings API
+// resolveInstallationMetadata derives Okta tenant metadata from the credential and org settings
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, _, err := oktaCredential.Resolve(req.Credentials)
 	if err != nil {
@@ -25,7 +23,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, err
 	}
 
-	org, _, err := built.(*oktagosdk.APIClient).OrgSettingGeneralAPI.GetOrgSettings(ctx).Execute()
+	org, _, err := built.OrgSettingGeneralAPI.GetOrgSettings(ctx).Execute()
 	if err != nil {
 		return InstallationMetadata{}, false, fmt.Errorf("%w: %w", ErrOrgSettingsFetchFailed, err)
 	}

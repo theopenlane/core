@@ -11,8 +11,6 @@ var (
 	ErrMessageEmpty = errors.New("microsoftteams: message body is required")
 	// ErrProfileLookupFailed indicates the Graph /me request failed
 	ErrProfileLookupFailed = errors.New("microsoftteams: profile lookup failed")
-	// ErrOperationConfigInvalid indicates operation config could not be decoded
-	ErrOperationConfigInvalid = errors.New("microsoftteams: operation config invalid")
 	// ErrChannelMessageSendFailed indicates the Graph channel message request failed
 	ErrChannelMessageSendFailed = errors.New("microsoftteams: channel message send failed")
 	// ErrResultEncode indicates an operation result could not be serialized

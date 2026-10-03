@@ -6,7 +6,6 @@ import (
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
@@ -59,7 +58,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		credential = &types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}
 	}
 
-	if err := h.IntegrationsRuntime.Reconcile(systemCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
+	if err := h.IntegrationsRuntime.Reconcile(systemCtx, installationRec, payload.UserInput, payload.OperationConfig, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
 		// do not log payload, it can contain secrets
 		logx.FromContext(requestCtx).Error().Err(err).Msg("reconcile failed")
 
@@ -80,7 +79,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	}
 
 	resp := ConfigureIntegrationResponse{
-		Reply:                rout.Reply{Success: true},
+		Success:              true,
 		Provider:             def.ID,
 		IntegrationID:        installationRec.ID,
 		HealthStatus:         "ok",
@@ -114,7 +113,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	// operation that was just re-enabled needs a new job seeded - this is a no-op
 	// when all jobs are already active
 	if lo.Contains(enums.IntegrationOperationalStatuses, installationRec.Status) {
-		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(systemCtx, installationRec); err != nil {
+		if err := h.IntegrationsRuntime.ResetReconcileLoops(systemCtx, installationRec); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to seed missing reconcile jobs after config update")
 		}
 	}

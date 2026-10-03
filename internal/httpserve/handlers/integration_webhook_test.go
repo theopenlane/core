@@ -17,7 +17,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -34,14 +33,22 @@ type WebhookTestHealthCheck struct{}
 // webhookTestAlertEnvelope is the payload type for the test webhook events
 type webhookTestAlertEnvelope struct{}
 
+// webhookTestCredential is the credential type stored by the webhook test definition
+type webhookTestCredential struct {
+	// Token is the stored token
+	Token string `json:"token"`
+}
+
 var (
-	webhookTestCredentialRef                         = types.NewCredentialSlotID("webhook_test")
-	webhookHealthSchema, webhookHealthCheckOperation = providerkit.OperationSchema[WebhookTestHealthCheck]()
-	webhookAlertCreatedEvent                         = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
+	webhookTestCredentialRef    = types.CredentialRefOf[webhookTestCredential]()
+	webhookHealthCheckOperation = types.OperationPayloadOf[WebhookTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
+	webhookAlertCreatedEvent    = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
 )
 
 func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		definition := types.NewDefinitionRef(definitionID)
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -50,17 +57,18 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 				Visible:     true,
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:    webhookTestCredentialRef,
-					Name:   "Webhook Test Credential",
-					Schema: json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
-				},
+				webhookTestCredentialRef.Registration(types.CredentialRegistration{
+					Name: "Webhook Test Credential",
+				}),
 			},
+			HealthCheck: types.CredentialHealthCheck(func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+				return json.RawMessage(`{"ok":true}`), nil
+			}),
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:  webhookTestCredentialRef,
+					CredentialRef:  webhookTestCredentialRef.ID(),
 					Name:           "Webhook Test Connection",
-					CredentialRefs: []types.CredentialSlotID{webhookTestCredentialRef},
+					CredentialRefs: []types.CredentialSlotID{webhookTestCredentialRef.ID()},
 				},
 			},
 			Webhooks: []types.WebhookRegistration{
@@ -86,27 +94,21 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 						}, nil
 					},
 					Events: []types.WebhookEventRegistration{
-						{
-							Name:  webhookAlertCreatedEvent.Name(),
-							Topic: types.NewDefinitionRef(definitionID).WebhookEventTopic(webhookAlertCreatedEvent.Name()),
+						webhookAlertCreatedEvent.Registration(definition, types.WebhookEventRegistration{
 							Handle: func(context.Context, types.WebhookHandleRequest) error {
 								return nil
 							},
-						},
+						}),
 					},
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         webhookHealthCheckOperation.Name(),
-					Description:  "Health check",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(webhookHealthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: webhookHealthSchema,
+				webhookHealthCheckOperation.Registration(definition, types.OperationRegistration{
+					Description: "Health check",
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
-				},
+				}),
 			},
 		}, nil
 	})
@@ -146,7 +148,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerSuccess() {
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingEndpointID() {
 	t := suite.T()
 
-	// Register with a path that will result in empty endpointID
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/webhooks/", suite.h.IntegrationWebhookHandler)
 
 	payload := []byte(`{"event":"test"}`)
@@ -156,7 +157,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingEndpointID() 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	// Endpoint not matched or returns bad request
 	assert.True(t, rec.Code == http.StatusBadRequest || rec.Code == http.StatusNotFound)
 }
 
@@ -256,7 +256,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyEventNameReturn
 
 	wh := suite.createWebhookTestIntegration(t, user.UserCtx, user.OrganizationID, webhookTestDefinitionID)
 
-	// Payload with empty event name - the event handler returns empty name which should be a no-op success
 	payload := []byte(`{"event":"","delivery_id":"del-004"}`)
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/"+wh.endpointID, strings.NewReader(string(payload)))
 	req.Header.Set("Content-Type", "application/json")
@@ -275,22 +274,20 @@ type webhookTestIntegration struct {
 	secretToken string
 }
 
-// createWebhookTestIntegration creates an integration and webhook record for testing,
-// returning the webhook endpoint ID and auto-generated secret token
+// createWebhookTestIntegration creates an integration and webhook record for testing, returning the endpoint ID and secret token
 func (suite *HandlerTestSuite) createWebhookTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) webhookTestIntegration {
 	t.Helper()
 
-	integrationRec, err := suite.db.Integration.Create().
-		SetOwnerID(orgID).
-		SetName(definitionID).
-		SetDefinitionID(definitionID).
-		Save(ctx)
+	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
+	require.True(t, ok)
+
+	integrationRec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
 	require.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, integrationRec, nil, webhookTestCredentialRef, &credential, nil)
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, integrationRec, nil, nil, webhookTestCredentialRef.ID(), &credential, nil)
 	require.NoError(t, err)
 
 	webhookRec, err := suite.h.IntegrationsRuntime.EnsureWebhook(ctx, integrationRec, "inbound.events", "")

@@ -19,13 +19,8 @@ type HealthCheck struct {
 	Mail string `json:"mail"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClient(teamsClient, h.Run)
-}
-
-// Run executes the Microsoft Teams health check via Microsoft Graph
-func (HealthCheck) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient) (json.RawMessage, error) {
+// checkHealth executes the Microsoft Teams health check via Microsoft Graph
+func checkHealth(ctx context.Context, _ types.OperationRequest, c *msgraphsdk.GraphServiceClient) (json.RawMessage, error) {
 	me, err := c.Me().Get(ctx, nil)
 	if err != nil {
 		return nil, ErrProfileLookupFailed

@@ -48,10 +48,10 @@ func (r *internalPolicyResolver) findPrimaryDriveIntegration(ctx context.Context
 	return nil, nil
 }
 
-// isPrimaryDriveInstallation reports whether the installation's client config has Primary set to true
+// isPrimaryDriveInstallation reports whether the installation's stored user input has Primary set to true
 func isPrimaryDriveInstallation(integ *generated.Integration) bool {
 	var input operations.UserInput
-	if err := jsonx.UnmarshalIfPresent(integ.Config.ClientConfig, &input); err != nil {
+	if err := jsonx.UnmarshalIfPresent(integ.UserInput.Data, &input); err != nil {
 		return false
 	}
 

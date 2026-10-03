@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"maps"
+	"slices"
 	"strings"
 	"time"
 
@@ -36,12 +37,9 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, integration
 		return err
 	}
 
-	currentWebhooks := lo.Associate(def.Webhooks, func(w types.WebhookRegistration) (string, struct{}) {
-		return w.Name, struct{}{}
-	})
-
 	staleIDs := lo.FilterMap(existing, func(row *ent.IntegrationWebhook, _ int) (string, bool) {
-		_, current := currentWebhooks[row.Name]
+		_, _, current := def.ResolveWebhook(row.Name)
+
 		return row.ID, !current
 	})
 
@@ -124,9 +122,7 @@ func (r *Runtime) EnsureWebhook(ctx context.Context, integration *ent.Integratio
 		return nil, err
 	}
 
-	webhook, found := lo.Find(def.Webhooks, func(w types.WebhookRegistration) bool {
-		return w.Name == webhookName
-	})
+	webhook, found := def.Webhook(webhookName)
 	if !found {
 		return nil, registry.ErrWebhookNotFound
 	}
@@ -267,9 +263,10 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	rows, err := db.IntegrationWebhook.Query().
 		Where(
 			integrationwebhook.IntegrationIDIn(integrationIDs...),
-			integrationwebhook.NameEQ(registration.Name),
+			integrationwebhook.NameIn(append(slices.Clone(registration.Replaces), registration.Name)...),
 			integrationwebhook.ExternalEventIDIsNil(),
 		).
+		Order(integrationwebhook.ByCreatedAt()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -297,10 +294,15 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 		return create.Save(ctx)
 	}
 
-	row := rows[0]
+	row, renamed := lo.Find(rows, func(candidate *ent.IntegrationWebhook) bool {
+		return candidate.Name != registration.Name
+	})
+	if !renamed {
+		row = rows[0]
+	}
+
 	endpointURL := webhookEndpointURL(registration, lo.FromPtr(row.EndpointID))
 
-	// remove duplicates that should not exist
 	duplicateIDs := lo.FilterMap(rows, func(candidate *ent.IntegrationWebhook, _ int) (string, bool) {
 		return candidate.ID, candidate.ID != row.ID
 	})
@@ -314,6 +316,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	}
 
 	update := db.IntegrationWebhook.UpdateOneID(row.ID).
+		SetName(registration.Name).
 		SetAllowedEvents(allowedEvents).
 		SetEndpointURL(endpointURL)
 

@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -22,11 +21,9 @@ import (
 const (
 	// batchSize is the maximum number of recipients per bulk send API call
 	batchSize = 100
-	// sendRateInterval is the minimum interval between individual sends to stay
-	// within the provider rate limit of 20 messages per second
+	// sendRateInterval is the minimum interval between individual sends to stay within the provider rate limit of 20 messages per second
 	sendRateInterval = 50 * time.Millisecond
-	// MetadataUnsubscribeTokenKey is the campaign target metadata key under which the trust center
-	// subscriber snapshot stores the per-recipient unsubscribe token consumed at render time
+	// MetadataUnsubscribeTokenKey is the campaign target metadata key under which the trust center subscriber snapshot stores the per-recipient unsubscribe token consumed at render time
 	MetadataUnsubscribeTokenKey = "unsubscribeToken"
 )
 
@@ -50,10 +47,8 @@ type SendBrandedCampaignRequest struct {
 // SendBrandedCampaign dispatches templated branded emails to all pending campaign targets
 type SendBrandedCampaign struct{}
 
-// Handle returns the typed operation handler for builder registration
-func (s SendBrandedCampaign) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(emailClientRef, SendCampaignOp, ErrTemplateRenderFailed, s.Run)
-}
+// SendCampaignOp is the operation ref for the branded campaign dispatch operation
+var SendCampaignOp = types.OperationPayloadOf[SendBrandedCampaignRequest]().Handles(emailClientRef, SendBrandedCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
 
 // brandedCampaignEdges eager-loads the email template and its inline files
 func brandedCampaignEdges(q *generated.CampaignQuery) {
@@ -78,9 +73,7 @@ func campaignOverlay(camp *generated.Campaign) CampaignContext {
 	}
 }
 
-// Run loads the campaign and pending targets, renders all messages, then sends
-// via batch API or rate-limited individual sends depending on whether
-// attachments are present. Returns a marshaled CampaignDispatchResult with counts
+// Run loads the campaign and pending targets, renders all messages, then sends via batch API or rate-limited individual sends depending on whether attachments are present
 func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
 	if cfg.TestEmail != "" {
 		return sendBrandedCampaignTestEmail(ctx, req.DB, client, cfg)
@@ -115,7 +108,6 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 
 	sentCount, sendFailed := sendCampaignMessages(ctx, req.DB, client, messages, targetIDs, attachments)
 
-	// custom campaigns have no responses to wait on, they are done once every target has been emailed
 	if err := completeCampaignWhenAllSent(ctx, req.DB, camp); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed updating campaign completion status")
 	}
@@ -129,8 +121,7 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 	return json.Marshal(result)
 }
 
-// sendBrandedCampaignTestEmail renders and sends a single test message for the campaign without
-// snapshotting trust center subscribers or creating and updating campaign targets
+// sendBrandedCampaignTestEmail renders and sends a single test message for the campaign without snapshotting trust center subscribers or creating and updating campaign targets
 func sendBrandedCampaignTestEmail(ctx context.Context, db *generated.Client, client *Client, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
 	camp, err := loadCampaign(ctx, db, cfg.CampaignID, brandedCampaignEdges)
 	if err != nil {
@@ -156,7 +147,6 @@ func sendBrandedCampaignTestEmail(ctx context.Context, db *generated.Client, cli
 	}
 
 	msg := messages[0]
-	// replace the empty target correlation tag from the synthetic target with the test marker
 	msg.Tags = []newman.Tag{{Name: TagIsTest, Value: "true"}}
 
 	if template != nil {
@@ -172,9 +162,7 @@ func sendBrandedCampaignTestEmail(ctx context.Context, db *generated.Client, cli
 	return json.Marshal(CampaignDispatchResult{SentCount: 1})
 }
 
-// campaignDispatcher resolves the message renderer for a campaign: trust center update campaigns
-// render through the system-registered trust center update operation and need no linked email
-// template, while every other campaign type resolves through its linked template's key
+// campaignDispatcher resolves the message renderer for a campaign: trust center update campaigns render through the system-registered trust center update operation and need no linked email template, while every other campaign type resolves through its linked template's key
 func campaignDispatcher(camp *generated.Campaign) (Dispatcher, error) {
 	key := TrustCenterUpdateTemplate
 
@@ -251,9 +239,7 @@ func renderCampaignMessages(ctx context.Context, client *Client, dispatcher Disp
 	return messages, targetIDs, failed
 }
 
-// sendCampaignMessages sends rendered messages via batch API when no attachments
-// are present, falling back to rate-limited individual sends otherwise.
-// Returns (sent, failed) counts
+// sendCampaignMessages sends rendered messages via batch API when no attachments are present, falling back to rate-limited individual sends otherwise
 func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Client, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) (int, int) {
 	if len(attachments) > 0 {
 		return sendCampaignIndividual(ctx, db, client, messages, targetIDs, attachments)
@@ -280,7 +266,6 @@ func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Cli
 
 		for _, id := range batchIDs {
 			if err := markCampaignTargetSent(ctx, db, id); err != nil {
-				// Log the error but continue marking the rest of the batch as sent to avoid blocking on individual failures
 				logx.FromContext(ctx).Error().Err(err).Str("target_id", id).Msg("failed marking target sent")
 			}
 		}
@@ -322,8 +307,7 @@ func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *C
 	return sent, failed
 }
 
-// unsubscribeTokenFromMetadata extracts the per-recipient unsubscribe token stashed on a
-// campaign target's metadata by the trust center subscriber snapshot, returning empty when absent
+// unsubscribeTokenFromMetadata extracts the per-recipient unsubscribe token stashed on a campaign target's metadata by the trust center subscriber snapshot, returning empty when absent
 func unsubscribeTokenFromMetadata(metadata map[string]any) string {
 	token, _ := metadata[MetadataUnsubscribeTokenKey].(string)
 

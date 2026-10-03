@@ -3,8 +3,6 @@ package gcpscc
 import "errors"
 
 var (
-	// ErrClientType indicates the provided client is not the expected type
-	ErrClientType = errors.New("gcpscc: unexpected client type")
 	// ErrCredentialMetadataRequired indicates no credential metadata was provided
 	ErrCredentialMetadataRequired = errors.New("gcpscc: credential metadata required")
 	// ErrMetadataDecode indicates credential metadata could not be decoded
@@ -17,8 +15,6 @@ var (
 	ErrServiceAccountKeyInvalid = errors.New("gcpscc: service account key invalid")
 	// ErrSecurityCenterClientCreate indicates the SCC client could not be created
 	ErrSecurityCenterClientCreate = errors.New("gcpscc: security center client creation failed")
-	// ErrOperationConfigInvalid indicates operation config could not be decoded
-	ErrOperationConfigInvalid = errors.New("gcpscc: operation config invalid")
 	// ErrListSourcesFailed indicates the source listing request failed
 	ErrListSourcesFailed = errors.New("gcpscc: list sources failed")
 	// ErrListFindingsFailed indicates the findings listing request failed

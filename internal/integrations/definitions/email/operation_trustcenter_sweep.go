@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
@@ -29,14 +28,14 @@ import (
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
-// trustCenterNotificationGrace is the debounce window a post or subprocessor change must be stable
-// for before subscribers are notified, giving authors time to make further edits
+// trustCenterNotificationGrace is the debounce window a post or subprocessor change must be stable for before subscribers are notified, giving authors time to make further edits
 const trustCenterNotificationGrace = time.Hour
 
 // TrustCenterNotificationSweep configures one trust center notification sweep cycle
 type TrustCenterNotificationSweep struct{}
 
-var trustCenterNotificationSweepSchema, TrustCenterNotificationOp = providerkit.OperationSchema[TrustCenterNotificationSweep]() //nolint:revive
+// TrustCenterNotificationOp is the operation ref for the global trust center notification sweep, which runs without a client
+var TrustCenterNotificationOp = types.OperationPayloadOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
 
 // systemSweepContext builds a cross-organization system caller context bypassing org filtering and FGA
 func systemSweepContext(ctx context.Context) context.Context {
@@ -45,27 +44,20 @@ func systemSweepContext(ctx context.Context) context.Context {
 	})
 }
 
-// Handle adapts the trust center notification sweep to the generic operation registration boundary
-func (t TrustCenterNotificationSweep) Handle() types.OperationHandler {
-	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-		processed, err := t.Run(ctx, req)
-		if err != nil {
-			return nil, err
-		}
-
-		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
+// runTrustCenterNotificationSweep runs one trust center notification sweep cycle and encodes the processed count
+func runTrustCenterNotificationSweep(ctx context.Context, req types.OperationRequest, sweep TrustCenterNotificationSweep) (json.RawMessage, error) {
+	processed, err := sweep.Run(ctx, req)
+	if err != nil {
+		return nil, err
 	}
+
+	return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
 }
 
-// Run executes one trust center notification sweep, returning the number of notifications
-// dispatched; per-item failures log and continue while the joined error feeds the backoff
+// Run executes one trust center notification sweep, returning the number of notifications dispatched; per-item failures log and continue while the joined error feeds the backoff
 func (TrustCenterNotificationSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
 	now := time.Now()
 	cutoff := now.Add(-trustCenterNotificationGrace)
-	// the sweep scans trust center settings and subprocessors across every organization, and the
-	// per-trust-center sends it dispatches must load branding from the trust center setting. The
-	// cross-org bypass rides on the caller (which gala persists across the durable dispatch boundary,
-	// unlike the privacy decision), matching the other scheduled sweeps' system caller
 	systemCtx := systemSweepContext(ctx)
 
 	posts, postsErr := dispatchDuePosts(systemCtx, req, cutoff, now)
@@ -74,8 +66,7 @@ func (TrustCenterNotificationSweep) Run(ctx context.Context, req types.Operation
 	return posts + subprocessors, errors.Join(postsErr, subprocessorsErr)
 }
 
-// dispatchDuePosts notifies subscribers about published posts flagged for notification that have
-// been stable for the grace window
+// dispatchDuePosts notifies subscribers about published posts flagged for notification that have been stable for the grace window
 func dispatchDuePosts(ctx context.Context, req types.OperationRequest, cutoff, now time.Time) (int, error) {
 	posts, err := req.DB.Note.Query().
 		Where(
@@ -101,8 +92,6 @@ func dispatchDuePosts(ctx context.Context, req types.OperationRequest, cutoff, n
 			continue
 		}
 
-		// the campaign metadata carries only the post data; the trust center update operation composes
-		// the subject and body copy and the branding is resolved from the trust center setting at render
 		title := lo.FromPtr(post.Title)
 
 		content, err := TrustCenterUpdateContent(TrustCenterUpdateRequest{
@@ -137,8 +126,7 @@ func dispatchDuePosts(ctx context.Context, req types.OperationRequest, cutoff, n
 	return dispatched, errors.Join(errs...)
 }
 
-// dispatchDueSubprocessorChanges notifies subscribers about subprocessor changes for trust centers
-// that opted in, coalescing all changes since the last notification into one send per trust center
+// dispatchDueSubprocessorChanges notifies subscribers about subprocessor changes for trust centers that opted in, coalescing all changes since the last notification into one send per trust center
 func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequest, cutoff time.Time) (int, error) {
 	settings, err := req.DB.TrustCenterSetting.Query().
 		Where(
@@ -156,8 +144,6 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 	var errs []error
 
 	for _, setting := range settings {
-		// a zero floor would treat the trust center's entire subprocessor history as changes, so establish the
-		// baseline at the cutoff and notify from the next change instead
 		if setting.SubprocessorsNotifiedAt == nil {
 			if err := req.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(cutoff).Exec(ctx); err != nil {
 				errs = append(errs, fmt.Errorf("initializing subprocessor notified baseline for trust center %s: %w", setting.TrustCenterID, err))
@@ -168,8 +154,6 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 
 		floor := *setting.SubprocessorsNotifiedAt
 
-		// include soft-deleted rows so subprocessor removals are detected via their bumped updated_at, and
-		// eager-load each row's subprocessor for the vendor name and logo
 		changed, err := req.DB.TrustCenterSubprocessor.Query().
 			Where(
 				trustcentersubprocessor.TrustCenterID(setting.TrustCenterID),
@@ -201,8 +185,6 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 
 		entries := subprocessorEntries(changed, floor)
 
-		// churn that nets to no change (e.g. a vendor added and removed within the window) leaves nothing
-		// to report: advance the baseline past the processed rows without emailing
 		if len(entries) == 0 {
 			if err := req.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
 				errs = append(errs, fmt.Errorf("advancing subprocessor notified baseline for trust center %s: %w", setting.TrustCenterID, err))
@@ -211,8 +193,6 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 			continue
 		}
 
-		// the subprocessor notification is a direct system email: send it to each active subscriber
-		// with their unsubscribe token, like every other system email
 		subscribers, err := activeTrustCenterSubscribers(ctx, req, setting.TrustCenterID)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("loading subscribers for trust center %s subprocessor notification: %w", setting.TrustCenterID, err))
@@ -220,15 +200,12 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 			continue
 		}
 
-		// the request carries only data; the subprocessor operation composes the subject and body copy
-		// from the branding's company name with defined fallbacks
 		base := SubprocessorNotificationRequest{
 			TrustCenterBranding: TrustCenterBrandingFromSetting(setting),
 			Subprocessors:       entries,
 			TrustCenterURL:      trustcenterurl.BuildURL(customDomain, tc.Slug),
 		}
 
-		// a dead logo URL renders a broken image, so fall back to the default logo when it does not load
 		if base.LogoURL != "" && !logoURLReachable(ctx, base.LogoURL) {
 			logx.FromContext(ctx).Warn().Str("trust_center_id", setting.TrustCenterID).Str("logo_url", base.LogoURL).Msg("trust center logo URL unreachable, using default logo")
 
@@ -243,8 +220,6 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 				Email:            sub.Email,
 				UnsubscribeToken: sub.Token,
 			}
-			// the direct system dispatch does not run template interpolation, so resolve the per-recipient
-			// unsubscribe link here with the subscriber's actual token
 			sendReq.UnsubscribeURL = trustcenterurl.UnsubscribeURLWithToken(customDomain, tc.Slug, sub.Token)
 
 			if err := sendSubprocessorNotification(ctx, req, sendReq); err != nil {
@@ -254,8 +229,6 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 			}
 		}
 
-		// a total send failure keeps the baseline so the window retries next poll; partial failures
-		// advance it to avoid re-sending to recipients that succeeded
 		if len(subscribers) > 0 && failedSends == len(subscribers) {
 			continue
 		}
@@ -290,8 +263,7 @@ func loadTrustCenter(ctx context.Context, req types.OperationRequest, trustCente
 	return tc, customDomain, nil
 }
 
-// createAndDispatchTrustCenterCampaign creates a trust center update campaign carrying the supplied
-// content and dispatches it through the campaign send, which materializes subscriber targets
+// createAndDispatchTrustCenterCampaign creates a trust center update campaign carrying the supplied content and dispatches it through the campaign send, which materializes subscriber targets
 func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.OperationRequest, ownerID, trustCenterID, name string, content map[string]any) error {
 	camp, err := req.DB.Campaign.Create().
 		SetOwnerID(ownerID).
@@ -315,7 +287,7 @@ func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.Operati
 		return err
 	}
 
-	integrationID, err := operations.ResolveOwnerIntegration(ctx, req.DB, DefinitionID.ID(), ownerID, func(inst *ent.Integration) bool {
+	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), ownerID, func(inst *ent.Integration) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {
@@ -337,8 +309,7 @@ func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.Operati
 	return err
 }
 
-// subprocessorEntries coalesces the changed trust center subprocessor join rows per subprocessor and
-// maps each vendor's net change relative to the last notification floor into a structured change entry
+// subprocessorEntries coalesces the changed trust center subprocessor join rows per subprocessor and maps each vendor's net change relative to the last notification floor into a structured change entry
 func subprocessorEntries(changed []*ent.TrustCenterSubprocessor, floor time.Time) []SubprocessorEntry {
 	withVendor := lo.Filter(changed, func(sp *ent.TrustCenterSubprocessor, _ int) bool {
 		return sp.Edges.Subprocessor != nil
@@ -396,8 +367,7 @@ func activeTrustCenterSubscribers(ctx context.Context, req types.OperationReques
 		All(ctx)
 }
 
-// sendSubprocessorNotification dispatches the subprocessor notification to a single recipient as a
-// runtime system email
+// sendSubprocessorNotification dispatches the subprocessor notification to a single recipient as a runtime system email
 func sendSubprocessorNotification(ctx context.Context, req types.OperationRequest, sendReq SubprocessorNotificationRequest) error {
 	config, err := json.Marshal(sendReq)
 	if err != nil {

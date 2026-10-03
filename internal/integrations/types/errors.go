@@ -3,18 +3,17 @@ package types //nolint:revive
 import "errors"
 
 var (
-	// ErrClientCastFailed indicates a registered client instance could not be cast to the expected type
+	// ErrClientCastFailed indicates a registered client could not be cast to the expected type
 	ErrClientCastFailed = errors.New("integrations: client cast failed")
 	// ErrCredentialRefNotFound indicates the requested credential ref was not found in the definition
 	ErrCredentialRefNotFound = errors.New("integrations: credential ref not found")
-	// ErrConnectionRefNotFound indicates the requested connection credential ref was not found in the definition
+	// ErrConnectionRefNotFound indicates the connection ref was not found in the definition
 	ErrConnectionRefNotFound = errors.New("integrations: connection credential ref not found")
+	// ErrOperationConfigInvalid indicates an operation config payload could not be decoded
+	ErrOperationConfigInvalid = errors.New("operation config invalid")
 )
 
-// UnhealthyError marks an operation failure as terminal for recurring cycles: the installation
-// cannot recover without user action such as reauthorization or reconfiguration, so the runtime
-// marks the integration unhealthy, notifies the owning organization, and stops the loop instead
-// of retrying with backoff forever
+// UnhealthyError marks an operation failure as terminal, requiring user action to recover
 type UnhealthyError struct {
 	// Reason is the user-facing explanation included in the organization notification
 	Reason string
@@ -42,10 +41,7 @@ func UnhealthyFrom(err error) (*UnhealthyError, bool) {
 	return errors.AsType[*UnhealthyError](err)
 }
 
-// DegradedError marks an operation failure as terminal for that operation only: the
-// installation's credentials remain valid but a prerequisite specific to this operation is
-// absent, so the runtime records the operation unhealthy and stops its loop while the rest
-// of the installation keeps running
+// DegradedError marks a single operation's failure as terminal while the rest keeps running
 type DegradedError struct {
 	// Reason is the user-facing explanation recorded against the operation
 	Reason string

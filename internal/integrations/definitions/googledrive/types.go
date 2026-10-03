@@ -5,8 +5,6 @@ import (
 
 	"google.golang.org/api/drive/v3"
 
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -14,13 +12,11 @@ var (
 	// definitionID is the stable identifier for the Google Drive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GDRIVE00000000000000001")
 	// driveCredential is the credential slot for Google Drive OAuth credentials
-	_, driveCredential = providerkit.CredentialSchema[googleDriveCred]()
+	driveCredential = types.CredentialRefOf[googleDriveCred]()
 	// driveClient is the client ref for the Google Drive SDK
-	driveClient = types.NewClientRef[DriveClient]()
-	// documentExportSchema is the operation ref for the document export operation
-	documentExportSchema, documentExportOperation = providerkit.OperationSchema[operations.DocumentExport]()
-	// folderSyncSchema is the operation ref for the folder sync operation
-	folderSyncSchema, folderSyncOperation = providerkit.OperationSchema[FolderSync]()
+	driveClient = types.ClientRefOf[DriveClient]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // DriveClient wraps the client for Google operations
@@ -43,11 +39,6 @@ type googleDriveCred struct {
 type UserInput struct {
 	// Primary marks this installation as the authoritative Drive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderID is the Google Drive folder ID (or full URL) containing policy documents; required so
-	// an install is scoped to one folder rather than the caller's entire Drive
-	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents,required"`
-	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`
 }
 
 // InstallationMetadata holds the stable Google Drive target selected for one installation

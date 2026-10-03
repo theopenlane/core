@@ -4,14 +4,53 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"slices"
 	"testing"
+
+	"github.com/samber/lo"
+
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
+
+// oauthCredential is the credential type behind the OAuth test slot
+type oauthCredential struct{}
+
+// apiKeyCredential is the credential type behind the API key test slot
+type apiKeyCredential struct{}
+
+var (
+	oauthCredentialRef  = NewCredentialRef[oauthCredential]("oauthCredential")
+	apiKeyCredentialRef = NewCredentialRef[apiKeyCredential]("apiKeyCredential")
+)
+
+func TestCredentialRegistrationMarshalJSON(t *testing.T) {
+	t.Parallel()
+
+	encoded, err := json.Marshal(CredentialRegistration{Ref: apiKeyCredentialRef.ID(), Name: "API key"})
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+
+	var wire map[string]json.RawMessage
+	if err := json.Unmarshal(encoded, &wire); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+
+	if string(wire["ref"]) != `"apiKeyCredential"` {
+		t.Fatalf("expected ref to be the slot name, got %s", wire["ref"])
+	}
+
+	if _, ok := wire["schema"]; ok {
+		t.Fatal("expected an unfilled schema to stay off the wire")
+	}
+
+}
 
 func TestCredentialBindingsResolve(t *testing.T) {
 	t.Parallel()
 
-	refA := NewCredentialSlotID("oauth")
-	refB := NewCredentialSlotID("api_key")
+	refA := oauthCredentialRef.ID()
+	refB := apiKeyCredentialRef.ID()
 
 	bindings := CredentialBindings{
 		{Ref: refA, Credential: CredentialSet{Data: json.RawMessage(`{"token":"abc"}`)}},
@@ -21,7 +60,7 @@ func TestCredentialBindingsResolve(t *testing.T) {
 	t.Run("found", func(t *testing.T) {
 		t.Parallel()
 
-		lookup := NewCredentialSlotID("oauth")
+		lookup := oauthCredentialRef.ID()
 		cred, ok := bindings.Resolve(lookup)
 		if !ok {
 			t.Fatal("expected binding to be found")
@@ -46,21 +85,18 @@ func TestCredentialBindingsResolve(t *testing.T) {
 func TestDefinitionCredentialRegistration(t *testing.T) {
 	t.Parallel()
 
-	refA := NewCredentialSlotID("oauth")
-	refB := NewCredentialSlotID("api_key")
-
 	def := Definition{
 		DefinitionSpec: DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []CredentialRegistration{
-			{Ref: refA, Name: "OAuth"},
-			{Ref: refB, Name: "API Key"},
+			{Ref: oauthCredentialRef.ID(), Name: "OAuth"},
+			{Ref: apiKeyCredentialRef.ID(), Name: "API Key"},
 		},
 	}
 
 	t.Run("found", func(t *testing.T) {
 		t.Parallel()
 
-		lookup := NewCredentialSlotID("api_key")
+		lookup := apiKeyCredentialRef.ID()
 		reg, err := def.CredentialRegistration(lookup)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
@@ -82,24 +118,172 @@ func TestDefinitionCredentialRegistration(t *testing.T) {
 	})
 }
 
-func TestDefinitionConnectionRegistration(t *testing.T) {
+func TestOperationRegistrationDisabledFor(t *testing.T) {
 	t.Parallel()
 
-	refA := NewCredentialSlotID("oauth")
-	refB := NewCredentialSlotID("api_key")
+	tests := []struct {
+		name  string
+		op    OperationRegistration
+		input string
+		want  bool
+	}{
+		{name: "stored input without the disable key", op: OperationRegistration{}, input: `{"limit":1}`, want: false},
+		{name: "disabled for all ignores input", op: OperationRegistration{DisabledForAll: true}, input: `{}`, want: true},
+		{name: "stored input disables", op: OperationRegistration{}, input: `{"disable":true,"limit":1}`, want: true},
+		{name: "stored input explicitly enabled", op: OperationRegistration{}, input: `{"disable":false}`, want: false},
+		{name: "nil input leaves the operation on", op: OperationRegistration{}, want: false},
+		{name: "undecodable input leaves the operation on", op: OperationRegistration{}, input: `[]`, want: false},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			var input json.RawMessage
+			if tc.input != "" {
+				input = json.RawMessage(tc.input)
+			}
+
+			if got := tc.op.DisabledFor(input); got != tc.want {
+				t.Fatalf("DisabledFor() = %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestOperationSettingsFrom(t *testing.T) {
+	t.Parallel()
+
+	settings, err := OperationSettingsFrom(json.RawMessage(`{"disable":true,"filterExpr":"payload.ok","limit":1}`))
+	if err != nil {
+		t.Fatalf("OperationSettingsFrom() error = %v", err)
+	}
+
+	if !settings.Disable || settings.FilterExpr != "payload.ok" {
+		t.Fatalf("expected the uniform keys decoded beside config keys, got %+v", settings)
+	}
+
+	empty, err := OperationSettingsFrom(nil)
+	if err != nil || empty != (OperationSettings{}) {
+		t.Fatalf("expected empty input to decode to zero settings, got %+v, %v", empty, err)
+	}
+
+	if _, err := OperationSettingsFrom(json.RawMessage(`[]`)); err == nil {
+		t.Fatal("expected a non-object document to fail decoding")
+	}
+
+	keys := lo.Map(jsonx.PropertyDescriptors[OperationSettings](), func(property jsonx.PropertyDescriptor, _ int) string {
+		return property.Name
+	})
+
+	if !slices.Equal(keys, []string{"disable", "filterExpr"}) {
+		t.Fatalf("settings schema keys = %v", keys)
+	}
+
+	if got := len(OperationSettingsSchema()); got == 0 {
+		t.Fatal("expected the settings schema reflected")
+	}
+}
+
+// TestDefinitionResolveOperation verifies exact names resolve directly and retired names resolve through their replacement
+func TestDefinitionResolveOperation(t *testing.T) {
+	t.Parallel()
+
+	def := Definition{
+		DefinitionSpec: DefinitionSpec{ID: "test-def"},
+		Operations: []OperationRegistration{
+			{Name: "sync.users"},
+			{Name: "sync.groups", Replaces: []string{"sync.teams"}},
+		},
+	}
+
+	t.Run("exact", func(t *testing.T) {
+		t.Parallel()
+
+		reg, replaced, ok := def.ResolveOperation("sync.users")
+		if !ok || replaced || reg.Name != "sync.users" {
+			t.Fatalf("expected sync.users to resolve directly, got %+v replaced=%v ok=%v", reg, replaced, ok)
+		}
+	})
+
+	t.Run("retired", func(t *testing.T) {
+		t.Parallel()
+
+		reg, replaced, ok := def.ResolveOperation("sync.teams")
+		if !ok || !replaced || reg.Name != "sync.groups" {
+			t.Fatalf("expected sync.groups to replace sync.teams, got %+v replaced=%v ok=%v", reg, replaced, ok)
+		}
+	})
+
+	t.Run("unknown", func(t *testing.T) {
+		t.Parallel()
+
+		if _, _, ok := def.ResolveOperation("sync.unknown"); ok {
+			t.Fatal("expected an undeclared name not to resolve")
+		}
+	})
+}
+
+// TestDefinitionResolveCredential verifies exact slots resolve directly and retired slots resolve through their replacement
+func TestDefinitionResolveCredential(t *testing.T) {
+	t.Parallel()
+
+	retired := NewCredentialSlotID("retiredCredential")
+
+	def := Definition{
+		DefinitionSpec: DefinitionSpec{ID: "test-def"},
+		CredentialRegistrations: []CredentialRegistration{
+			{Ref: apiKeyCredentialRef.ID()},
+			{Ref: oauthCredentialRef.ID(), Replaces: []CredentialSlotID{retired}},
+		},
+	}
+
+	t.Run("exact", func(t *testing.T) {
+		t.Parallel()
+
+		reg, replaced, ok := def.ResolveCredential(apiKeyCredentialRef.ID())
+		if !ok || replaced || reg.Ref != apiKeyCredentialRef.ID() {
+			t.Fatalf("expected the declared slot to resolve directly, got %+v replaced=%v ok=%v", reg, replaced, ok)
+		}
+	})
+
+	t.Run("retired", func(t *testing.T) {
+		t.Parallel()
+
+		reg, replaced, ok := def.ResolveCredential(retired)
+		if !ok || !replaced {
+			t.Fatalf("expected a replacing registration to be found, got replaced=%v ok=%v", replaced, ok)
+		}
+
+		if reg.Ref != oauthCredentialRef.ID() {
+			t.Fatalf("got ref %q, want %q", reg.Ref.String(), oauthCredentialRef.String())
+		}
+	})
+
+	t.Run("unknown", func(t *testing.T) {
+		t.Parallel()
+
+		if _, _, ok := def.ResolveCredential(NewCredentialSlotID("nonexistent")); ok {
+			t.Fatal("expected no registration to be found")
+		}
+	})
+}
+
+func TestDefinitionConnectionRegistration(t *testing.T) {
+	t.Parallel()
 
 	def := Definition{
 		DefinitionSpec: DefinitionSpec{ID: "test-def"},
 		Connections: []ConnectionRegistration{
-			{CredentialRef: refA, Name: "OAuth Flow"},
-			{CredentialRef: refB, Name: "API Key Flow"},
+			{CredentialRef: oauthCredentialRef.ID(), Name: "OAuth Flow"},
+			{CredentialRef: apiKeyCredentialRef.ID(), Name: "API Key Flow"},
 		},
 	}
 
 	t.Run("found", func(t *testing.T) {
 		t.Parallel()
 
-		lookup := NewCredentialSlotID("oauth")
+		lookup := oauthCredentialRef.ID()
 		reg, err := def.ConnectionRegistration(lookup)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
@@ -189,7 +373,7 @@ func TestDefinitionWithProviderState(t *testing.T) {
 	}
 
 	next := DefinitionProviderState{
-		CredentialRef: NewCredentialSlotID("oauth"),
+		CredentialRef: oauthCredentialRef.ID(),
 	}
 
 	t.Run("empty state", func(t *testing.T) {
@@ -228,8 +412,8 @@ func TestDefinitionWithProviderState(t *testing.T) {
 			t.Fatalf("unmarshal error: %v", err)
 		}
 
-		if parsed.CredentialRef.String() != "oauth" {
-			t.Fatalf("got credential ref %q, want %q", parsed.CredentialRef.String(), "oauth")
+		if parsed.CredentialRef != oauthCredentialRef.ID() {
+			t.Fatalf("got credential ref %q, want %q", parsed.CredentialRef.String(), oauthCredentialRef.String())
 		}
 	})
 
@@ -339,7 +523,6 @@ func TestScopeVarsCELVars(t *testing.T) {
 			t.Fatalf("got installation_id %v, want %q", cel[ScopeVariableInstallationID], "inst_xyz")
 		}
 
-		// payload should decode to a map
 		payloadMap, ok := cel[ScopeVariablePayload].(map[string]any)
 		if !ok {
 			t.Fatalf("expected payload to be map[string]any, got %T", cel[ScopeVariablePayload])
@@ -394,15 +577,6 @@ func TestWebhookRefNameBasic(t *testing.T) {
 	ref := NewWebhookRef("push.events")
 	if ref.Name() != "push.events" {
 		t.Fatalf("got %q, want %q", ref.Name(), "push.events")
-	}
-}
-
-func TestWebhookEventRefName(t *testing.T) {
-	t.Parallel()
-
-	ref := NewWebhookEventRef[struct{}]("pull_request.opened")
-	if ref.Name() != "pull_request.opened" {
-		t.Fatalf("got %q, want %q", ref.Name(), "pull_request.opened")
 	}
 }
 

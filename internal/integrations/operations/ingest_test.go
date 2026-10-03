@@ -131,128 +131,47 @@ func TestContractIncludesSchema_EmptyContracts(t *testing.T) {
 func TestResolveInstallationFilterExpr(t *testing.T) {
 	t.Parallel()
 
-	// configResolverFor returns a ConfigResolver that extracts the named top-level key as raw JSON
-	configResolverFor := func(key string) func(json.RawMessage) json.RawMessage {
-		return func(userInput json.RawMessage) json.RawMessage {
-			var top map[string]json.RawMessage
-			if err := json.Unmarshal(userInput, &top); err != nil {
-				return nil
-			}
-			return top[key]
-		}
-	}
-
 	tests := []struct {
 		name          string
-		config        json.RawMessage
-		definition    types.Definition
+		operations    map[string]json.RawMessage
 		operationName string
 		wantExpr      string
 		wantErr       bool
 	}{
 		{
-			name:     "nil config returns empty",
-			config:   nil,
-			wantExpr: "",
+			name:          "no stored operation config returns empty",
+			operationName: "directory-sync",
+			wantExpr:      "",
 		},
 		{
-			name:     "empty config returns empty",
-			config:   json.RawMessage(`{}`),
-			wantExpr: "",
+			name:          "empty stored document returns empty",
+			operations:    map[string]json.RawMessage{"directory-sync": json.RawMessage(`{}`)},
+			operationName: "directory-sync",
+			wantExpr:      "",
 		},
 		{
-			name:     "flat top-level filterExpr",
-			config:   json.RawMessage(`{"filterExpr":"resource == \"users\""}`),
-			wantExpr: `resource == "users"`,
-		},
-		{
-			name:    "invalid JSON config",
-			config:  json.RawMessage(`{not json`),
-			wantErr: true,
-		},
-		{
-			name:   "nested filterExpr resolved via ConfigResolver",
-			config: json.RawMessage(`{"directorySync":{"filterExpr":"payload.is_external == false"}}`),
-			definition: types.Definition{
-				Operations: []types.OperationRegistration{
-					{
-						Name:           "directory-sync",
-						ConfigResolver: configResolverFor("directorySync"),
-					},
-				},
-			},
+			name:          "filterExpr read from the operation's stored document",
+			operations:    map[string]json.RawMessage{"directory-sync": json.RawMessage(`{"filterExpr":"payload.is_external == false"}`)},
 			operationName: "directory-sync",
 			wantExpr:      "payload.is_external == false",
 		},
 		{
-			// when ConfigResolver extracts a section that has no filterExpr, the flat top-level key is used as fallback
-			name:   "ConfigResolver section has no filterExpr falls back to flat",
-			config: json.RawMessage(`{"directorySync":{},"filterExpr":"resource == \"users\""}`),
-			definition: types.Definition{
-				Operations: []types.OperationRegistration{
-					{
-						Name:           "directory-sync",
-						ConfigResolver: configResolverFor("directorySync"),
-					},
-				},
-			},
+			name:          "invalid stored document",
+			operations:    map[string]json.RawMessage{"directory-sync": json.RawMessage(`{not json`)},
 			operationName: "directory-sync",
-			wantExpr:      `resource == "users"`,
+			wantErr:       true,
 		},
 		{
-			// when ConfigResolver returns nil (e.g. key not present), fall back to flat
-			name:   "ConfigResolver returns nil falls back to flat",
-			config: json.RawMessage(`{"filterExpr":"resource == \"users\""}`),
-			definition: types.Definition{
-				Operations: []types.OperationRegistration{
-					{
-						Name:           "directory-sync",
-						ConfigResolver: func(json.RawMessage) json.RawMessage { return nil },
-					},
-				},
-			},
-			operationName: "directory-sync",
-			wantExpr:      `resource == "users"`,
+			name:          "another operation's document is not consulted",
+			operations:    map[string]json.RawMessage{"directory-sync": json.RawMessage(`{"filterExpr":"payload.type == \"user\""}`)},
+			operationName: "asset-sync",
+			wantExpr:      "",
 		},
 		{
-			// when the operationName doesn't match any registered operation, fall back to flat
-			name:   "unknown operationName falls back to flat",
-			config: json.RawMessage(`{"filterExpr":"resource == \"groups\""}`),
-			definition: types.Definition{
-				Operations: []types.OperationRegistration{
-					{Name: "other-op"},
-				},
-			},
+			name:          "unknown operationName returns empty",
+			operations:    map[string]json.RawMessage{"other-op": json.RawMessage(`{"filterExpr":"resource == \"groups\""}`)},
 			operationName: "unknown-op",
-			wantExpr:      `resource == "groups"`,
-		},
-		{
-			// when the matching operation has no ConfigResolver, fall back to flat
-			name:   "operation without ConfigResolver falls back to flat",
-			config: json.RawMessage(`{"filterExpr":"resource == \"assets\""}`),
-			definition: types.Definition{
-				Operations: []types.OperationRegistration{
-					{Name: "asset-sync"},
-				},
-			},
-			operationName: "asset-sync",
-			wantExpr:      `resource == "assets"`,
-		},
-		{
-			// ConfigResolver for one operation does not affect a different operation
-			name:   "ConfigResolver not used when operationName does not match",
-			config: json.RawMessage(`{"directorySync":{"filterExpr":"payload.type == \"user\""},"filterExpr":"resource == \"assets\""}`),
-			definition: types.Definition{
-				Operations: []types.OperationRegistration{
-					{
-						Name:           "directory-sync",
-						ConfigResolver: configResolverFor("directorySync"),
-					},
-					{Name: "asset-sync"},
-				},
-			},
-			operationName: "asset-sync",
-			wantExpr:      `resource == "assets"`,
+			wantExpr:      "",
 		},
 	}
 
@@ -261,10 +180,10 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			t.Parallel()
 
 			installation := &ent.Integration{
-				Config: openapi.IntegrationConfig{ClientConfig: tc.config},
+				OperationConfig: openapi.IntegrationOperationConfig{Operations: tc.operations},
 			}
 
-			expr, err := resolveInstallationFilterExpr(installation, tc.definition, tc.operationName)
+			expr, err := resolveInstallationFilterExpr(installation, tc.operationName)
 			if tc.wantErr {
 				assert.Assert(t, err != nil, "expected error")
 				return
@@ -500,9 +419,7 @@ func testDefinition(t *testing.T, mappings []types.MappingRegistration) (*regist
 // testInstallationMetadata carries the instance id every ingest installation must have
 var testInstallationMetadata = openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-test"}}
 
-// applySingleEnvelopes runs each envelope through applyPayloadSets as its own one-record batch,
-// staying below ingestPreloadMinRecords so the DB-less IngestContext these tests build never issues
-// the batch preload queries, and returns how many records reached the handle
+// applySingleEnvelopes runs each envelope through applyPayloadSets as a one-record batch
 func applySingleEnvelopes(t *testing.T, ic IngestContext, operationName, schema string, envelopes ...types.MappingEnvelope) int {
 	t.Helper()
 
@@ -567,7 +484,6 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
-	// contracts say "contact", but payload set says "asset"
 	contracts := []types.IngestContract{{Schema: entityops.SchemaContact.Name}}
 	payloadSets := []types.IngestPayloadSet{
 		{Schema: entityops.SchemaAsset.Name, Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
@@ -605,7 +521,6 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 	t.Parallel()
 
-	// register definition with no mappings for asset
 	reg, _ := testDefinition(t, nil)
 
 	ic := IngestContext{
@@ -640,7 +555,7 @@ func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
 		Integration: &ent.Integration{
 			DefinitionID:         "test-def",
 			InstallationMetadata: testInstallationMetadata,
-			Config:               openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{invalid`)},
+			OperationConfig:      openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"": json.RawMessage(`{invalid`)}},
 		},
 	}
 
@@ -734,18 +649,9 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 	assert.Equal(t, handled, 1)
 }
 
-// TestProcessPayloadSets_NestedInstallationFilter verifies that a filterExpr stored inside a
-// per-operation config section (e.g. repoSync.filterExpr) is applied when the operation's
-// ConfigResolver is wired — this is the scenario that was previously broken for Slack and others
+// TestProcessPayloadSets_NestedInstallationFilter verifies nested filterExpr resolution
 func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	t.Parallel()
-
-	type repoSyncCfg struct {
-		FilterExpr string `json:"filterExpr,omitempty"`
-	}
-	type userInput struct {
-		RepoSync repoSyncCfg `json:"repoSync,omitempty"`
-	}
 
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
@@ -758,14 +664,6 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 					return nil, nil
 				},
-				ConfigResolver: func(raw json.RawMessage) json.RawMessage {
-					var u userInput
-					if err := json.Unmarshal(raw, &u); err != nil {
-						return nil
-					}
-					out, _ := json.Marshal(u.RepoSync)
-					return out
-				},
 			},
 		},
 		Mappings: []types.MappingRegistration{
@@ -785,8 +683,8 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 		Integration: &ent.Integration{
 			DefinitionID:         "test-def",
 			InstallationMetadata: testInstallationMetadata,
-			Config: openapi.IntegrationConfig{
-				ClientConfig: json.RawMessage(`{"repoSync":{"filterExpr":"payload.is_private == true"}}`),
+			OperationConfig: openapi.IntegrationOperationConfig{
+				Operations: map[string]json.RawMessage{"repo-sync": json.RawMessage(`{"filterExpr":"payload.is_private == true"}`)},
 			},
 		},
 	}
@@ -797,24 +695,12 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"another-private","is_private":true}`)},
 	)
 
-	assert.Equal(t, handled, 2) // private repos pass; public-repo is filtered
+	assert.Equal(t, handled, 2)
 }
 
-// TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations verifies that a nested filterExpr
-// stored under operation A's config section is not applied when processing under operation B
+// TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations verifies no cross-operation leak
 func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T) {
 	t.Parallel()
-
-	type findingSyncCfg struct {
-		FilterExpr string `json:"filterExpr,omitempty"`
-	}
-	type assetSyncCfg struct {
-		FilterExpr string `json:"filterExpr,omitempty"`
-	}
-	type userInput struct {
-		FindingSync   findingSyncCfg `json:"findingSync,omitempty"`
-		DirectorySync assetSyncCfg   `json:"directorySync,omitempty"`
-	}
 
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
@@ -823,31 +709,17 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 		},
 		Operations: []types.OperationRegistration{
 			{
-				Name: "finding-sync",
+				Name:  "finding-sync",
+				Topic: types.NewDefinitionRef("test-def").OperationTopic("finding-sync"),
 				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 					return nil, nil
-				},
-				ConfigResolver: func(raw json.RawMessage) json.RawMessage {
-					var u userInput
-					if err := json.Unmarshal(raw, &u); err != nil {
-						return nil
-					}
-					out, _ := json.Marshal(u.FindingSync)
-					return out
 				},
 			},
 			{
-				Name: "asset-sync",
+				Name:  "asset-sync",
+				Topic: types.NewDefinitionRef("test-def").OperationTopic("asset-sync"),
 				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 					return nil, nil
-				},
-				ConfigResolver: func(raw json.RawMessage) json.RawMessage {
-					var u userInput
-					if err := json.Unmarshal(raw, &u); err != nil {
-						return nil
-					}
-					out, _ := json.Marshal(u.DirectorySync)
-					return out
 				},
 			},
 		},
@@ -863,25 +735,26 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 	reg := registry.New()
 	assert.NilError(t, reg.Register(def))
 
-	// findingSync has a restrictive filter; asset-sync has none
 	ic := IngestContext{
 		Registry: reg,
 		Integration: &ent.Integration{
 			DefinitionID:         "test-def",
 			InstallationMetadata: testInstallationMetadata,
-			Config: openapi.IntegrationConfig{
-				ClientConfig: json.RawMessage(`{"findingSync":{"filterExpr":"payload.severity == \"CRITICAL\""},"directorySync":{}}`),
+			OperationConfig: openapi.IntegrationOperationConfig{
+				Operations: map[string]json.RawMessage{
+					"finding-sync": json.RawMessage(`{"filterExpr":"payload.severity == \"CRITICAL\""}`),
+					"asset-sync":   json.RawMessage(`{}`),
+				},
 			},
 		},
 	}
 
-	// running as asset-sync: the findingSync filterExpr must NOT apply
 	handled := applySingleEnvelopes(t, ic, "asset-sync", entityops.SchemaAsset.Name,
 		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"asset-001"}`)},
 		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"asset-002"}`)},
 	)
 
-	assert.Equal(t, handled, 2) // both pass — asset-sync has no filter
+	assert.Equal(t, handled, 2)
 }
 
 func TestStampProvenanceOverridesMappedValues(t *testing.T) {

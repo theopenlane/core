@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -25,20 +26,7 @@ func testMappings(t *testing.T) []types.MappingRegistration {
 }
 
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range testMappings(t) {
-		name := m.Schema
-		if m.Variant != "" {
-			name += "/" + m.Variant
-		}
-
-		t.Run(name+"/filter", func(t *testing.T) {
-			assert.NoError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
-		})
-
-		t.Run(name+"/map", func(t *testing.T) {
-			assert.NoError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
-		})
-	}
+	mappingtest.AssertExpressionsValid(t, testMappings(t))
 }
 
 // TestGCPSCCMappingsEvalMap verifies SCC finding payloads map into vulnerability fields
@@ -120,13 +108,11 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 	})
 }
 
-// TestGCPSCCMappingsFindingExample tests the finding mapping schema
-// against the real example payload in examples/finding.json
+// TestGCPSCCMappingsFindingExample tests finding mapping against examples/finding.json
 func TestGCPSCCMappingsFindingExample(t *testing.T) {
 	payload, err := os.ReadFile("examples/finding.json")
 	require.NoError(t, err)
 
-	// resource matches resource_name in the example JSON
 	const resource = "//cloudresourcemanager.googleapis.com/projects/323616316362"
 
 	envelope := types.MappingEnvelope{
@@ -134,7 +120,6 @@ func TestGCPSCCMappingsFindingExample(t *testing.T) {
 		Payload:  json.RawMessage(payload),
 	}
 
-	// mappings[2] is the finding schema
 	raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[2].Spec.MapExpr, envelope, types.MappingInstallation{})
 	require.NoError(t, err)
 
@@ -158,13 +143,11 @@ func TestGCPSCCMappingsFindingExample(t *testing.T) {
 	assert.Equal(t, "organizations/521113912301/sources/12112115738342921188/locations/global/findings/09b4bdb2ba6a4d7d910814c87e5def42", rawPayload["name"])
 }
 
-// TestGCPSCCMappingsVulnerabilityExample tests the vulnerability mapping schema
-// against the real example payload in examples/vulnerability.json
+// TestGCPSCCMappingsVulnerabilityExample tests the vulnerability example payload
 func TestGCPSCCMappingsVulnerabilityExample(t *testing.T) {
 	payload, err := os.ReadFile("examples/vulnerability.json")
 	require.NoError(t, err)
 
-	// resource matches resource_name in the example JSON
 	const resource = "//container.googleapis.com/projects/prod-project/locations/us-central1/clusters/prod-central1-main"
 
 	envelope := types.MappingEnvelope{
@@ -172,7 +155,6 @@ func TestGCPSCCMappingsVulnerabilityExample(t *testing.T) {
 		Payload:  json.RawMessage(payload),
 	}
 
-	// mappings[1] is the vulnerability schema
 	raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope, types.MappingInstallation{})
 	require.NoError(t, err)
 

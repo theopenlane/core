@@ -27,25 +27,9 @@ const (
 	findingsMaxPageSize = 1000
 )
 
-// FindingsSync holds per-invocation parameters for the findings.collect operation
-type FindingsSync struct {
-	// PageSize controls the number of findings per API page
-	PageSize int `json:"page_size,omitempty"`
-}
-
-// FindingsCollect collects GCP SCC findings for ingest
-type FindingsCollect struct{}
-
-// IngestHandle adapts findings collection to the ingest operation registration boundary
-func (f FindingsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(sccClient, findingsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
-		return f.Run(ctx, request.Credentials, client, cfg, request.LastRunAt)
-	})
-}
-
-// Run collects GCP SCC findings from configured sources
-func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client, cfg FindingsSync, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
-	scope, err := resolveScope(credentials)
+// runFindingsCollect collects GCP SCC findings from configured sources
+func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
+	scope, err := resolveScope(request.Credentials)
 	if err != nil {
 		return nil, err
 	}
@@ -70,8 +54,8 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 	riskEnvelopes := make([]types.MappingEnvelope, 0)
 
 	var timeFilter string
-	if lastRunAt != nil {
-		timeFilter = fmt.Sprintf(`event_time >= "%s"`, lastRunAt.UTC().Format(time.RFC3339))
+	if request.LastRunAt != nil {
+		timeFilter = fmt.Sprintf(`event_time >= "%s"`, request.LastRunAt.UTC().Format(time.RFC3339))
 	}
 
 	for _, sourceName := range sources {
@@ -119,7 +103,7 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 	}, nil
 }
 
-// listAllFindings paginates through all pages of findings for a single source and returns every result
+// listAllFindings pages through all findings for a single source
 func listAllFindings(ctx context.Context, c *cloudscc.Client, sourceName string, pageSize int, timeFilter string) ([]*securitycenterpb.ListFindingsResponse_ListFindingsResult, error) {
 	req := &securitycenterpb.ListFindingsRequest{
 		PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min

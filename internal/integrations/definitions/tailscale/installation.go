@@ -22,7 +22,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, err
 	}
 
-	tailnet, err := resolveTailnet(ctx, built.(*tsclient.Client))
+	tailnet, err := resolveTailnet(ctx, built)
 	if err != nil {
 		return InstallationMetadata{}, false, err
 	}
@@ -33,7 +33,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 	}, true, nil
 }
 
-// resolveTailnet derives the tailnet name the credential is scoped to from the member users it can list
+// resolveTailnet derives the tailnet name from the credential's member users
 func resolveTailnet(ctx context.Context, client *tsclient.Client) (string, error) {
 	memberType := tsclient.UserTypeMember
 

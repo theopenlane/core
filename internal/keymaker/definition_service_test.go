@@ -11,7 +11,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-var keymakerTestCredentialRef = types.NewCredentialSlotID("test_auth")
+// keymakerTestCredential is the credential type behind the auth-managed test slot
+type keymakerTestCredential struct{}
+
+var keymakerTestCredentialRef = types.NewCredentialRef[keymakerTestCredential]("keymakerTestCredential").ID()
 
 func TestService_BeginAndComplete(t *testing.T) {
 	ctx := context.Background()

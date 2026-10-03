@@ -4342,6 +4342,8 @@ var (
 		{Name: "config", Type: field.TypeJSON, Nullable: true},
 		{Name: "installation_metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "provider_state", Type: field.TypeJSON, Nullable: true},
+		{Name: "user_input", Type: field.TypeJSON, Nullable: true},
+		{Name: "operation_config", Type: field.TypeJSON, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "health", Type: field.TypeJSON, Nullable: true},
 		{Name: "definition_id", Type: field.TypeString, Nullable: true},
@@ -4368,37 +4370,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integrations_files_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[33]},
+				Columns:    []*schema.Column{IntegrationsColumns[35]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[34]},
+				Columns:    []*schema.Column{IntegrationsColumns[36]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_custom_type_enums_environment",
-				Columns:    []*schema.Column{IntegrationsColumns[35]},
+				Columns:    []*schema.Column{IntegrationsColumns[37]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_custom_type_enums_scope",
-				Columns:    []*schema.Column{IntegrationsColumns[36]},
+				Columns:    []*schema.Column{IntegrationsColumns[38]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_organizations_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[37]},
+				Columns:    []*schema.Column{IntegrationsColumns[39]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_platforms_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[38]},
+				Columns:    []*schema.Column{IntegrationsColumns[40]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4407,12 +4409,12 @@ var (
 			{
 				Name:    "integration_platform_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[38]},
+				Columns: []*schema.Column{IntegrationsColumns[40]},
 			},
 			{
 				Name:    "integration_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[37]},
+				Columns: []*schema.Column{IntegrationsColumns[39]},
 			},
 		},
 	}

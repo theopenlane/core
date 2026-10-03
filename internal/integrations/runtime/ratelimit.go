@@ -70,7 +70,7 @@ return 1
 // and always expire after window, so no separate cleanup is required. A server with no redis client
 // configured is never limited
 func (r *Runtime) AllowN(ctx context.Context, key string, n int, limit int, window time.Duration) (bool, error) {
-	redisClient := r.Redis()
+	redisClient := r.redisClient()
 	if redisClient == nil {
 		return true, nil
 	}

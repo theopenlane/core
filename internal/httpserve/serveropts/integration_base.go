@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/core/v2/pkg/version"
 )
 
 // integrationSeedTopic is the gala topic the integration loop seed is submitted on
@@ -73,7 +72,7 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 		}
 
 		if _, err := galaInstance.EmitWithHeaders(ctx, integrationSeedTopic.Name, integrationSeedRequest{}, gala.Headers{
-			UniqueKey:  gala.SystemVersioned.Key("startup.integrations.seed", version.Version),
+			UniqueKey:  gala.SystemVersioned.Key("startup.integrations.seed", rt.Registry().Fingerprint()),
 			UniqueOnce: true,
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to submit integration loop seed")
@@ -93,6 +92,10 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 
 // seedIntegrationLoops ensures every reconcilable and scheduled operation has a live loop
 func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) {
+	if err := rt.UpgradeInstallations(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade one or more installations to the current definition version")
+	}
+
 	if err := rt.SeedReconcileJobs(ctx); err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("failed to seed one or more missing reconcile jobs")
 	}

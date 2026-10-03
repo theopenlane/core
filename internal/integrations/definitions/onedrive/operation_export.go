@@ -18,10 +18,10 @@ import (
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
-// Handle adapts the document export to the generic operation registration boundary
-func Handle() types.OperationHandler {
-	return operations.Handle(oneDriveClient, documentExportOperation)
-}
+// documentExportOperation is the operation ref for the document export operation
+var documentExportOperation = types.OperationPayloadOf[operations.DocumentExport]().
+	Handles(oneDriveClient, operations.ExportDocument[*DriveClient]).
+	Policy(types.ExecutionPolicy{Inline: true})
 
 // Export fetches OneDrive item metadata and returns either an iframe embed or PDF bytes
 func (c DriveClient) Export(ctx context.Context, cfg *operations.DocumentExport) error {
@@ -63,8 +63,7 @@ func (c DriveClient) Export(ctx context.Context, cfg *operations.DocumentExport)
 	return nil
 }
 
-// fetchIframeEmbed calls the Graph preview API and returns an <iframe> pointing at the
-// embeddable Office preview URL. Works for both personal and business accounts.
+// fetchIframeEmbed returns an <iframe> for the Graph preview URL
 func fetchIframeEmbed(ctx context.Context, ts oauth2.TokenSource, itemID string) string {
 	log := logx.FromContext(ctx).With().Str("item_id", itemID).Logger()
 
@@ -128,8 +127,6 @@ func fetchPDF(ctx context.Context, ts oauth2.TokenSource, itemID string) ([]byte
 		return nil, err
 	}
 
-	// the http client strips the Authorization header on cross-domain redirects,
-	// so the CDN pre-authenticated URL receives no credentials
 	resp, err := requester.SendWithContext(ctx, httpsling.Get(u), httpsling.BearerAuth(tok.AccessToken))
 	if err != nil {
 		log.Warn().Err(err).Msg("onedrive: pdf download request failed")

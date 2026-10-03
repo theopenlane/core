@@ -9,16 +9,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Handle adapts claim inspection to the generic operation registration boundary
-func (ci ClaimsInspect) Handle() types.OperationHandler {
-	return func(_ context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		return ci.Run(request.Credentials)
-	}
-}
-
-// Run returns the stored OIDC claims for local inspection
-func (ClaimsInspect) Run(bindings types.CredentialBindings) (json.RawMessage, error) {
-	cred, ok, err := oidcCredential.Resolve(bindings)
+// inspectClaims returns the stored OIDC claims for local inspection
+func inspectClaims(_ context.Context, req types.OperationRequest, _ ClaimsInspect) (json.RawMessage, error) {
+	cred, ok, err := oidcCredential.Resolve(req.Credentials)
 	if err != nil {
 		return nil, ErrCredentialDecode
 	}

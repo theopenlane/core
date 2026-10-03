@@ -20,16 +20,9 @@ type HealthCheck struct {
 	HomeRegionKey string `json:"homeRegionKey,omitempty"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(identityClient, func(ctx context.Context, request types.OperationRequest, client *identity.IdentityClient) (json.RawMessage, error) {
-		return h.Run(ctx, request.Credentials, client)
-	})
-}
-
-// Run reads the tenancy to verify the API signing key, user, and region all resolve
-func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *identity.IdentityClient) (json.RawMessage, error) {
-	meta, err := resolveCredential(credentials)
+// checkHealth reads the tenancy to verify the API signing key, user, and region all resolve
+func checkHealth(ctx context.Context, req types.OperationRequest, c *identity.IdentityClient) (json.RawMessage, error) {
+	meta, err := resolveCredential(req.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("oci: error attempting to resolve credentials")
 		return nil, err

@@ -1637,6 +1637,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldConfig:                   {Type: field.TypeJSON, Column: integration.FieldConfig},
 			integration.FieldInstallationMetadata:     {Type: field.TypeJSON, Column: integration.FieldInstallationMetadata},
 			integration.FieldProviderState:            {Type: field.TypeJSON, Column: integration.FieldProviderState},
+			integration.FieldUserInput:                {Type: field.TypeJSON, Column: integration.FieldUserInput},
+			integration.FieldOperationConfig:          {Type: field.TypeJSON, Column: integration.FieldOperationConfig},
 			integration.FieldMetadata:                 {Type: field.TypeJSON, Column: integration.FieldMetadata},
 			integration.FieldHealth:                   {Type: field.TypeJSON, Column: integration.FieldHealth},
 			integration.FieldDefinitionID:             {Type: field.TypeString, Column: integration.FieldDefinitionID},
@@ -32374,6 +32376,16 @@ func (f *IntegrationFilter) WhereInstallationMetadata(p entql.BytesP) {
 // WhereProviderState applies the entql json.RawMessage predicate on the provider_state field.
 func (f *IntegrationFilter) WhereProviderState(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldProviderState))
+}
+
+// WhereUserInput applies the entql json.RawMessage predicate on the user_input field.
+func (f *IntegrationFilter) WhereUserInput(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldUserInput))
+}
+
+// WhereOperationConfig applies the entql json.RawMessage predicate on the operation_config field.
+func (f *IntegrationFilter) WhereOperationConfig(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldOperationConfig))
 }
 
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.

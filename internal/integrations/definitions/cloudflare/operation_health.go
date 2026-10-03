@@ -20,17 +20,9 @@ type HealthCheck struct {
 	ExpiresOn string `json:"expiresOn,omitempty"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(cloudflareClient, func(ctx context.Context, request types.OperationRequest, client *CloudflareClient) (json.RawMessage, error) {
-		return h.Run(ctx, request.Credentials, client)
-	})
-
-}
-
-// Run executes the Cloudflare token verification
-func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *CloudflareClient) (json.RawMessage, error) {
-	meta, err := resolveCredential(credentials)
+// checkHealth executes the Cloudflare token verification
+func checkHealth(ctx context.Context, request types.OperationRequest, c *CloudflareClient) (json.RawMessage, error) {
+	meta, err := resolveCredential(request.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error resolving credentials")
 		return nil, err

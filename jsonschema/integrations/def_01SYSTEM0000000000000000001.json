@@ -1,0 +1,19 @@
+{
+  "version": "75321ea654eb71119b88e7e91ccc73fa79822073ce559dc1be8ef441cb39f709",
+  "surface": {
+    "id": "def_01SYSTEM0000000000000000001",
+    "credentials": [],
+    "connections": [],
+    "operations": [
+      {
+        "name": "IntegrationLifecycleSweep"
+      },
+      {
+        "name": "OrganizationDeleteSweep"
+      },
+      {
+        "name": "PaymentReminderSweep"
+      }
+    ]
+  }
+}

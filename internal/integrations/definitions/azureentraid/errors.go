@@ -5,12 +5,8 @@ import "errors"
 var (
 	// ErrCredentialMetadataRequired indicates the credential provider data is missing
 	ErrCredentialMetadataRequired = errors.New("azureentraid: credential metadata required")
-	// ErrMetadataDecode indicates the credential metadata could not be decoded
-	ErrMetadataDecode = errors.New("azureentraid: credential metadata decode failed")
 	// ErrTokenAcquireFailed indicates the client credentials token request failed
 	ErrTokenAcquireFailed = errors.New("azureentraid: failed to acquire access token")
-	// ErrClientType indicates the provided client is not the expected type
-	ErrClientType = errors.New("azureentraid: unexpected client type")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("azureentraid: result encode failed")
 	// ErrUsersFetchFailed indicates the Microsoft Graph users listing request failed
@@ -27,7 +23,7 @@ var (
 	ErrCredentialEncode = errors.New("azureentraid: credential encode failed")
 	// ErrCredentialDecode indicates the credential could not be deserialized
 	ErrCredentialDecode = errors.New("azureentraid: credential decode failed")
-	// ErrConsentStateGeneration indicates the CSRF state could not be generated for the admin consent flow
+	// ErrConsentStateGeneration indicates the CSRF state could not be generated
 	ErrConsentStateGeneration = errors.New("azureentraid: admin consent state generation failed")
 	// ErrConsentStateInvalid indicates the stored admin consent start state could not be decoded
 	ErrConsentStateInvalid = errors.New("azureentraid: admin consent state invalid")

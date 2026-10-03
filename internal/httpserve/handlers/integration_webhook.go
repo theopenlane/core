@@ -16,6 +16,7 @@ import (
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -67,8 +68,8 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 	// Re-set the caller now that the owning organization is known
 	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(integration.OwnerID))
 
-	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(integration.DefinitionID, persistedWebhook.Name)
-	if err != nil {
+	webhookReg, found := resolveIntegrationWebhook(h.IntegrationsRuntime.Registry(), integration.DefinitionID, persistedWebhook.Name)
+	if !found {
 		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured)
 	}
 
@@ -79,6 +80,18 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 	}
 
 	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, integration, webhookReg, persistedWebhook, payload)
+}
+
+// resolveIntegrationWebhook finds the webhook registration a persisted row is named after, falling back to the registration whose ref replaces that name when the row predates a rename
+func resolveIntegrationWebhook(reg *registry.Registry, definitionID, name string) (types.WebhookRegistration, bool) {
+	def, ok := reg.Definition(definitionID)
+	if !ok {
+		return types.WebhookRegistration{}, false
+	}
+
+	webhookReg, _, ok := def.ResolveWebhook(name)
+
+	return webhookReg, ok
 }
 
 // readIntegrationWebhookPayload reads the request body up to a defined maximum size and returns an error if the body is empty or exceeds the limit

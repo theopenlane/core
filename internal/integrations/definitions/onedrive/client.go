@@ -11,6 +11,7 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -24,10 +25,8 @@ type Client struct {
 	cfg Config
 }
 
-// Build constructs a DriveClient from the installation OAuth credential.
-// It wraps an oauth2.TokenSource so that expired access tokens are automatically
-// refreshed using the stored refresh token, matching the behavior of the Google Drive client.
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+// Build constructs a DriveClient with an auto-refreshing OAuth2 token source
+func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*DriveClient, error) {
 	cred, _, err := oneDriveCredential.Resolve(req.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error decoding onedrive credentials")
@@ -36,16 +35,6 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 
 	if cred.AccessToken == "" {
 		return nil, ErrOAuthTokenMissing
-	}
-
-	tok := &oauth2.Token{
-		AccessToken:  cred.AccessToken,
-		RefreshToken: cred.RefreshToken,
-		TokenType:    "Bearer",
-	}
-
-	if cred.Expiry != nil {
-		tok.Expiry = *cred.Expiry
 	}
 
 	base := fmt.Sprintf(microsoftAuthBaseURL, "common")
@@ -64,8 +53,7 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 		},
 	}
 
-	// context background used intentionally in this slot
-	ts := oauthCfg.TokenSource(context.Background(), tok)
+	ts := oauthCfg.TokenSource(context.Background(), providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 
 	tokenCred := &oauthTokenCredential{ts: ts}
 
@@ -83,8 +71,7 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 	return &DriveClient{Graph: msgraphsdk.NewGraphServiceClient(adapter), TS: ts, Cfg: c.cfg}, nil
 }
 
-// oauthTokenCredential wraps an oauth2.TokenSource as an azcore.TokenCredential so that
-// the kiota authentication provider can obtain automatically-refreshed access tokens
+// oauthTokenCredential adapts an oauth2.TokenSource to azcore.TokenCredential
 type oauthTokenCredential struct {
 	ts oauth2.TokenSource
 }

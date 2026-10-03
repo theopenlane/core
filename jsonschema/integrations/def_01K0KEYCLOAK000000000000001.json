@@ -1,0 +1,129 @@
+{
+  "version": "497efd73d1a8129f60a2994f7d7d489583e4daee441bb772d9e58d94f5ba1fd4",
+  "surface": {
+    "id": "def_01K0KEYCLOAK000000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "baseUrl": {
+                  "type": "string",
+                  "title": "Base URL"
+                },
+                "realm": {
+                  "type": "string",
+                  "title": "Realm"
+                },
+                "clientId": {
+                  "type": "string",
+                  "title": "Client ID"
+                },
+                "clientSecret": {
+                  "type": "string",
+                  "title": "Client Secret"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "baseUrl",
+                "realm",
+                "clientId",
+                "clientSecret"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "primaryDirectory": {
+                "type": "boolean",
+                "title": "Primary Directory",
+                "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "realmId": {
+                "type": "string"
+              },
+              "realmName": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "keycloakVersion": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "disableGroupSync": {
+                  "type": "boolean",
+                  "title": "Disable Group Sync",
+                  "description": "Only sync users disable group and membership sync operations"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

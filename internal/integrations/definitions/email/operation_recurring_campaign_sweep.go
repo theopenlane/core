@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -20,18 +19,17 @@ import (
 // RecurringCampaignSweep configures one recurring campaign sweep cycle
 type RecurringCampaignSweep struct{}
 
-var recurringCampaignSweepSchema, RecurringCampaignOp = providerkit.OperationSchema[RecurringCampaignSweep]() //nolint:revive
+// RecurringCampaignOp is the operation ref for the global recurring campaign sweep, which runs without a client
+var RecurringCampaignOp = types.OperationPayloadOf[RecurringCampaignSweep]().HandlesRequest(runRecurringCampaignSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
 
-// Handle adapts the recurring campaign sweep to the generic operation registration boundary
-func (r RecurringCampaignSweep) Handle() types.OperationHandler {
-	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-		processed, err := r.Run(ctx, req)
-		if err != nil {
-			return nil, err
-		}
-
-		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
+// runRecurringCampaignSweep runs one recurring campaign sweep cycle and encodes the processed count
+func runRecurringCampaignSweep(ctx context.Context, req types.OperationRequest, sweep RecurringCampaignSweep) (json.RawMessage, error) {
+	processed, err := sweep.Run(ctx, req)
+	if err != nil {
+		return nil, err
 	}
+
+	return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
 }
 
 // Run executes one recurring campaign sweep and returns the number of campaigns dispatched
@@ -114,7 +112,7 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		return err
 	}
 
-	integrationID, err := operations.ResolveOwnerIntegration(ctx, req.DB, DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
+	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {

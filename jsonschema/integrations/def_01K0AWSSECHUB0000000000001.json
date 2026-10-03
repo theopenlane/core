@@ -1,0 +1,284 @@
+{
+  "version": "cc61418808a25d24d0aec4e39697e7489312f2cf32191057f127fc1e5340868f",
+  "surface": {
+    "id": "def_01K0AWSSECHUB0000000000001",
+    "credentials": [
+      {
+        "ref": "AssumeRoleCredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/assume-role-credential-schema",
+          "$ref": "#/$defs/AssumeRoleCredentialSchema",
+          "$defs": {
+            "AssumeRoleCredentialSchema": {
+              "properties": {
+                "roleArn": {
+                  "type": "string",
+                  "title": "IAM Role ARN",
+                  "description": "Cross-account role Openlane should assume in the tenant environment."
+                },
+                "externalId": {
+                  "type": "string",
+                  "title": "External ID",
+                  "description": "External ID required in the tenant role trust policy.",
+                  "generate": true
+                },
+                "homeRegion": {
+                  "type": "string",
+                  "title": "Home Region",
+                  "description": "AWS region used for Security Hub aggregation and other service API calls (e.g. us-east-1)."
+                },
+                "accountId": {
+                  "type": "string",
+                  "title": "Account ID",
+                  "description": "Optional AWS account ID for reference in results and reporting."
+                },
+                "accountScope": {
+                  "type": "string",
+                  "enum": [
+                    "all",
+                    "specific"
+                  ],
+                  "title": "Account Scope",
+                  "description": "Collect from all delegated accounts or restrict to specific account IDs."
+                },
+                "accountIds": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Account IDs",
+                  "description": "Required when accountScope is specific."
+                },
+                "linkedRegions": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Linked Regions",
+                  "description": "Filter findings to these source regions. Empty means all regions."
+                },
+                "sessionName": {
+                  "type": "string",
+                  "title": "Session Name",
+                  "description": "Optional STS session name override."
+                },
+                "sessionDuration": {
+                  "type": "string",
+                  "title": "Session Duration",
+                  "description": "Optional STS session duration (e.g. 1h)."
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "roleArn",
+                "externalId",
+                "homeRegion"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ref": "ServiceAccountCredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/service-account-credential-schema",
+          "$ref": "#/$defs/ServiceAccountCredentialSchema",
+          "$defs": {
+            "ServiceAccountCredentialSchema": {
+              "properties": {
+                "accessKeyId": {
+                  "type": "string",
+                  "title": "Access Key ID",
+                  "description": "Static source credential used when runtime IAM is unavailable."
+                },
+                "secretAccessKey": {
+                  "type": "string",
+                  "title": "Secret Access Key"
+                },
+                "sessionToken": {
+                  "type": "string",
+                  "title": "Session Token"
+                },
+                "region": {
+                  "type": "string",
+                  "title": "Region",
+                  "description": "AWS region used for Security Hub and other service API calls (e.g. us-east-1)."
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "accessKeyId",
+                "secretAccessKey",
+                "region"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "roleArn": {
+                "type": "string",
+                "title": "IAM Role ARN"
+              },
+              "homeRegion": {
+                "type": "string",
+                "title": "Home Region"
+              },
+              "accountId": {
+                "type": "string",
+                "title": "Account ID"
+              },
+              "accountScope": {
+                "type": "string",
+                "title": "Account Scope"
+              },
+              "accountIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Account IDs"
+              },
+              "linkedRegions": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Linked Regions"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "AssumeRoleCredentialSchema",
+      "ServiceAccountCredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "AssetSync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/asset-sync",
+          "$ref": "#/$defs/AssetSync",
+          "$defs": {
+            "AssetSync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "CheckSync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/check-sync",
+          "$ref": "#/$defs/CheckSync",
+          "$defs": {
+            "CheckSync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "disableGroupSync": {
+                  "type": "boolean",
+                  "title": "Disable Group Sync",
+                  "description": "Only sync users from AWS IAM"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "FindingSync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/finding-sync",
+          "$ref": "#/$defs/FindingSync",
+          "$defs": {
+            "FindingSync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

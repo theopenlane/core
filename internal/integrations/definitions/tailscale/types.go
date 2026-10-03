@@ -3,7 +3,6 @@ package tailscale
 import (
 	tsclient "github.com/tailscale/tailscale-client-go/v2"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -12,40 +11,22 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0TAILSCALE0000000000001")
 	// installation is the typed installation metadata handle for the Tailscale definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// tailscaleSchema is the credential schema for the Tailscale integration definition
-	tailscaleSchema, tailscaleCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// tailscaleCredential is the credential slot for the Tailscale integration definition
+	tailscaleCredential = types.CredentialRefOf[CredentialSchema]()
 	// tailscaleClient is the client ref for the Tailscale API client used by this definition
-	tailscaleClient = types.NewClientRef[*tsclient.Client]()
-	// directorySyncSchema is the operation schema for the directory sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
-	// assetSyncSchema is the operation schema for the asset sync operation
-	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
+	tailscaleClient = types.ClientRefOf[*tsclient.Client]()
 )
-
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// DirectorySync includes the configuration for syncing users, groups, and memberships from Tailscale
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
-	// AssetSync includes the configuration for syncing Tailscale devices as assets
-	AssetSync AssetSync `json:"assetSync,omitempty" jsonschema:"title=Asset Sync"`
-}
 
 // DirectorySync holds configuration for the Tailscale directory sync operation
 type DirectorySync struct {
-	// Disable stops the directory sync operation from running
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Tailscale"`
+	types.OperationSettings
 	// DisableGroupSync skips group and membership sync, importing only users
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Tailscale; disable role-based group sync"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.status == 'active'"`
 }
 
 // AssetSync holds configuration for the Tailscale asset sync operation
 type AssetSync struct {
-	// Disable stops the asset sync operation from running
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of Tailscale devices as assets"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
+	types.OperationSettings
 }
 
 // CredentialSchema holds the Tailscale OAuth credentials for one installation

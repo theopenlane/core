@@ -1,0 +1,97 @@
+{
+  "version": "b9a7a48c05d53dec89b516864b662addcf08dbbd66303832fd9fd63d5d187711",
+  "surface": {
+    "id": "def_01K0OIDCLOCAL000000000000001",
+    "credentials": [
+      {
+        "ref": "oidcLocalCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/oidc-local-cred",
+          "$ref": "#/$defs/oidcLocalCred",
+          "$defs": {
+            "oidcLocalCred": {
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "issuer": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "preferredUsername": {
+                  "type": "string"
+                },
+                "groups": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "claims": {
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ],
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "issuer": {
+                "type": "string",
+                "title": "Issuer"
+              },
+              "subject": {
+                "type": "string",
+                "title": "Subject"
+              },
+              "email": {
+                "type": "string",
+                "title": "Email"
+              },
+              "preferredUsername": {
+                "type": "string",
+                "title": "Preferred Username"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "oidcLocalCred"
+    ],
+    "operations": [
+      {
+        "name": "ClaimsInspect"
+      }
+    ]
+  }
+}

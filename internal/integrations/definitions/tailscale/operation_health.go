@@ -17,15 +17,8 @@ type HealthCheck struct {
 	UserCount int `json:"userCount,omitempty"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(tailscaleClient, func(ctx context.Context, _ types.OperationRequest, client *tsclient.Client) (json.RawMessage, error) {
-		return h.Run(ctx, client)
-	})
-}
-
-// Run validates Tailscale API access by listing users
-func (HealthCheck) Run(ctx context.Context, client *tsclient.Client) (json.RawMessage, error) {
+// checkHealth validates Tailscale API access by listing users
+func checkHealth(ctx context.Context, _ types.OperationRequest, client *tsclient.Client) (json.RawMessage, error) {
 	users, err := client.Users().List(ctx, nil, nil)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("tailscale: health check failed listing users")

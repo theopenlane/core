@@ -15,19 +15,19 @@ type InstallationRequest struct {
 	Connection ConnectionRegistration
 	// Credentials lists all resolved credential bundles participating in the connection mode
 	Credentials CredentialBindings
-	// Config is the installation-scoped configuration payload
-	Config IntegrationConfig
+	// UserInput is the stored installation-scoped user input document
+	UserInput json.RawMessage
 	// Input is provider-defined raw input used to derive installation metadata
 	Input json.RawMessage
 }
 
-// InstallationFunc derives, validates, and marshals installation metadata for one connection-backed installation
-// The bool return indicates whether metadata was produced; false with a nil error means the connection
-// does not yield metadata for this installation
+// InstallationFunc derives installation metadata for a connection; false means none was produced
 type InstallationFunc func(ctx context.Context, req InstallationRequest) (IntegrationInstallationMetadata, bool, error)
 
 // InstallationRegistration describes how one connection mode derives installation metadata
 type InstallationRegistration struct {
 	// Resolve derives installation metadata for the connection mode
 	Resolve InstallationFunc `json:"-"`
+	// Schema is the reflected JSON schema of the derived metadata type, filled from the typed ref
+	Schema json.RawMessage `json:"-"`
 }

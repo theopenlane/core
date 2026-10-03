@@ -11,7 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v7/shared"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -44,7 +43,7 @@ type cloudflareMemberPayload struct {
 	Memberships []cloudflareGroupMemberPayload `json:"memberships,omitempty"`
 }
 
-// cloudflareGroupPayload is the normalized payload for a Cloudflare groups (roles, user groups, permission groups)
+// cloudflareGroupPayload is the normalized payload for a Cloudflare group (role or user group)
 type cloudflareGroupPayload struct {
 	// ID is the Cloudflare group identifier
 	ID string `json:"id,omitempty"`
@@ -66,7 +65,7 @@ type cloudflareGroupMemberPayload struct {
 	GroupID string `json:"group_id"`
 	// UserID is the clouldflare user id
 	UserID string `json:"user_id"`
-	// Email is the contact email of the member, the account's external id when Cloudflare reports no user id
+	// Email is the contact email of the member
 	Email string `json:"email,omitempty"`
 	// Meta is metadata from the policy group
 	Meta any `json:"meta,omitempty"`
@@ -74,16 +73,9 @@ type cloudflareGroupMemberPayload struct {
 	Payload any `json:"payload"`
 }
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(cloudflareClient, func(ctx context.Context, request types.OperationRequest, client *CloudflareClient) ([]types.IngestPayloadSet, error) {
-		return d.Run(ctx, request.Credentials, client)
-	})
-}
-
-// Run collects Cloudflare account members and emits directory account ingest payloads
-func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindings, client *CloudflareClient) ([]types.IngestPayloadSet, error) {
-	meta, err := resolveCredential(credentials)
+// runDirectorySync collects Cloudflare account members and emits directory account ingest payloads
+func runDirectorySync(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+	meta, err := resolveCredential(request.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error attempting to resolve credentials")
 		return nil, err
@@ -150,26 +142,10 @@ func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindin
 		}
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-		{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	}, nil
+	return append(providerkit.DirectoryAccountPayloadSets(accountEnvelopes), providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
-// isIncludedUserMember reports whether a group member is a user that was included in the account ingest set
+// isIncludedUserMember reports whether member was included in the account ingest set
 func isIncludedUserMember(member cloudflareMemberPayload, includedUsers map[string]struct{}) bool {
 	_, ok := includedUsers[member.Email]
 	return ok
@@ -216,7 +192,7 @@ func listDirectoryUsers(ctx context.Context, client *CloudflareClient, accountID
 	return members, nil
 }
 
-// listDirectoryGroups pages through all Cloudflare user groups and permission groups for the given account
+// listDirectoryGroups pages through all Cloudflare user groups and permission groups
 func listDirectoryGroups(ctx context.Context, client *CloudflareClient, accountID string) ([]cloudflareGroupPayload, error) {
 	iterUser := client.IAM.UserGroups.ListAutoPaging(ctx, iam.UserGroupListParams{
 		AccountID: cf.F(accountID),
@@ -258,9 +234,7 @@ func listDirectoryGroups(ctx context.Context, client *CloudflareClient, accountI
 	return groups, nil
 }
 
-// permissionGroupLabel pulls the human readable label out of a permission group's meta attributes.
-// The typed SDK struct models meta as a single key/value pair, so the label is read from the raw
-// response when it comes back as the documented object of attributes instead
+// permissionGroupLabel pulls the human readable label out of a permission group's meta attributes
 func permissionGroupLabel(g iam.PermissionGroupListResponse) string {
 	if g.Meta.Key == permissionGroupMetaLabelKey {
 		return g.Meta.Value
@@ -279,8 +253,7 @@ func permissionGroupLabel(g iam.PermissionGroupListResponse) string {
 	return raw.Meta.Label
 }
 
-// rawPayload prefers the untouched API response so attributes the typed SDK struct does not model
-// (such as a permission group's meta label and scopes) survive into the stored payload
+// rawPayload prefers the untouched API response so fields the typed SDK struct omits survive
 func rawPayload(raw string, fallback any) any {
 	if raw == "" {
 		return fallback

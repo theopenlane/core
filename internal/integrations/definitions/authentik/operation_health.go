@@ -21,13 +21,8 @@ type HealthCheck struct {
 	Email string `json:"email"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClient(authentikClient, h.Run)
-}
-
-// Run executes the Authentik health check
-func (HealthCheck) Run(ctx context.Context, c *authentikSDK.APIClient) (json.RawMessage, error) {
+// checkHealth executes the Authentik health check
+func checkHealth(ctx context.Context, _ types.OperationRequest, c *authentikSDK.APIClient) (json.RawMessage, error) {
 	me, resp, err := c.CoreApi.CoreUsersMeRetrieve(ctx).Execute()
 	if resp != nil {
 		_ = resp.Body.Close()

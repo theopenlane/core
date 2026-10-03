@@ -1,0 +1,151 @@
+{
+  "version": "e9a413a808086030d42130f8234ebaf7b0c63d566387eb6458fe95f2003c35e3",
+  "surface": {
+    "id": "def_01K0SLACK000000000000000001",
+    "credentials": [
+      {
+        "ref": "slackBotTokenCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/slack-bot-token-cred",
+          "$ref": "#/$defs/slackBotTokenCred",
+          "$defs": {
+            "slackBotTokenCred": {
+              "properties": {
+                "botToken": {
+                  "type": "string",
+                  "title": "Bot Token",
+                  "description": "Bot User OAuth Token from your Slack app (starts with xoxb-)"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "botToken"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ref": "slackCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/slack-cred",
+          "$ref": "#/$defs/slackCred",
+          "$defs": {
+            "slackCred": {
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "defaultMessaging": {
+                "type": "boolean",
+                "title": "Default Messaging"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "teamId": {
+                "type": "string",
+                "title": "Team ID"
+              },
+              "teamName": {
+                "type": "string",
+                "title": "Team Name"
+              },
+              "defaultChannel": {
+                "type": "string",
+                "title": "Default Channel"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "slackBotTokenCred",
+      "slackCred"
+    ],
+    "operations": [
+      {
+        "name": "DemoRequestMessage"
+      },
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "IntegrationInstalledMessage"
+      },
+      {
+        "name": "MessageSendOperation"
+      },
+      {
+        "name": "NewUserMessage"
+      },
+      {
+        "name": "OrganizationsPendingDeletionMessage"
+      }
+    ]
+  }
+}

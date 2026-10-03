@@ -16,44 +16,44 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// SlackTestMessage represents a message captured by the mock Slack server
-type SlackTestMessage struct {
+// TestMessage represents a message captured by the mock Slack server
+type TestMessage struct {
 	// Channel is the target channel for the message
 	Channel string
 	// Text is the plain-text content
 	Text string
 }
 
-// SlackMessageRecorder captures messages sent through a mock Slack API server
-type SlackMessageRecorder struct {
+// MessageRecorder captures messages sent through a mock Slack API server
+type MessageRecorder struct {
 	mu       sync.Mutex
-	messages []SlackTestMessage
+	messages []TestMessage
 }
 
 // Messages returns a copy of all recorded messages
-func (r *SlackMessageRecorder) Messages() []SlackTestMessage {
+func (r *MessageRecorder) Messages() []TestMessage {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	out := make([]SlackTestMessage, len(r.messages))
+	out := make([]TestMessage, len(r.messages))
 	copy(out, r.messages)
 
 	return out
 }
 
 // Reset clears all recorded messages
-func (r *SlackMessageRecorder) Reset() {
+func (r *MessageRecorder) Reset() {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	r.messages = nil
 }
 
-func (r *SlackMessageRecorder) record(channel, text string) {
+func (r *MessageRecorder) record(channel, text string) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	r.messages = append(r.messages, SlackTestMessage{Channel: channel, Text: text})
+	r.messages = append(r.messages, TestMessage{Channel: channel, Text: text})
 }
 
 // MockSlackRuntime holds mock Slack infrastructure for integration test suites
@@ -61,12 +61,12 @@ type MockSlackRuntime struct {
 	// Server is the mock HTTP server backing the Slack API
 	Server *httptest.Server
 	// Recorder captures all messages sent through the mock
-	Recorder *SlackMessageRecorder
+	Recorder *MessageRecorder
 }
 
 // NewMockSlackRuntime creates a mock Slack test server and recorder
 func NewMockSlackRuntime() *MockSlackRuntime {
-	recorder := &SlackMessageRecorder{}
+	recorder := &MessageRecorder{}
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		if req.Method != http.MethodPost {
@@ -117,9 +117,7 @@ func mockSlackClient(apiURL string) *SlackClient {
 	}
 }
 
-// Builder returns a Slack definition builder backed by the mock server.
-// Every client build, including the system runtime client, returns a SlackClient
-// with the API pointed at the mock, bypassing credential resolution entirely
+// Builder returns a Slack definition builder backed by the mock server
 func (m *MockSlackRuntime) Builder() registry.Builder {
 	mockAPIURL := m.Server.URL + "/"
 

@@ -13,12 +13,8 @@ var (
 	ErrChannelMissing = errors.New("slack: channel missing")
 	// ErrMessageEmpty indicates the Slack message has no content
 	ErrMessageEmpty = errors.New("slack: message must have text, blocks, or attachments")
-	// ErrClientType indicates the provided client is not a Slack client
-	ErrClientType = errors.New("slack: unexpected client type")
 	// ErrAuthTestFailed indicates auth.test failed
 	ErrAuthTestFailed = errors.New("slack: auth test failed")
-	// ErrOperationConfigInvalid indicates operation config could not be decoded
-	ErrOperationConfigInvalid = errors.New("slack: operation config invalid")
 	// ErrMessageSendFailed indicates chat.postMessage failed
 	ErrMessageSendFailed = errors.New("slack: message send failed")
 	// ErrResultEncode indicates an operation result could not be serialized
@@ -31,7 +27,7 @@ var (
 	ErrCredentialEncode = errors.New("slack: credential encode failed")
 	// ErrCredentialDecode indicates the credential could not be deserialized
 	ErrCredentialDecode = errors.New("slack: credential decode failed")
-	// ErrInstallationMetadataDecode indicates installation metadata could not be decoded from credential data
+	// ErrInstallationMetadataDecode indicates installation metadata could not be decoded
 	ErrInstallationMetadataDecode = errors.New("slack: installation metadata decode failed")
 	// ErrTeamIDMissing indicates the Slack team ID is missing
 	ErrTeamIDMissing = errors.New("slack: installation id missing")
@@ -43,7 +39,7 @@ var (
 	ErrRuntimeConfigInvalid = errors.New("slack: runtime config invalid")
 	// ErrRuntimeConfigDecode indicates the runtime Slack configuration could not be deserialized
 	ErrRuntimeConfigDecode = errors.New("slack: runtime config decode failed")
-	// ErrDefaultChannelMissing indicates the installation has no default channel configured for system messages
+	// ErrDefaultChannelMissing indicates no default channel is configured
 	ErrDefaultChannelMissing = errors.New("slack: default channel missing")
 	// ErrTemplateRenderFailed indicates a system message template could not be rendered
 	ErrTemplateRenderFailed = errors.New("slack: template render failed")

@@ -11,43 +11,32 @@ import (
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "Microsoft",
-				DisplayName: "Microsoft Teams",
-				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
-				Category:    "collaboration",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
-				Tags:        []string{"messaging"},
-				Active:      false,
-				Visible:     true,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "Microsoft",
+			DisplayName: "Microsoft Teams",
+			Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
+			Category:    "collaboration",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
+			Tags:        []string{"messaging"},
+			Active:      false,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  teamsClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         teamsCredential.ID(),
+				teamsCredential.Registration(types.CredentialRegistration{
 					Name:        "Microsoft Teams Credential",
 					Description: "OAuth credential used to send messages to Microsoft Teams channels.",
-					Schema:      teamsCredentialSchema,
-				},
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:  teamsCredential.ID(),
-					Name:           "Microsoft Teams OAuth",
-					Description:    "Connect your Microsoft Teams workspace using OAuth.",
-					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
-					ClientRefs:     []types.ClientID{teamsClient.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: teamsClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					CredentialRef: teamsCredential.ID(),
+					Name:          "Microsoft Teams OAuth",
+					Description:   "Connect your Microsoft Teams workspace using OAuth.",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						CredentialRef: teamsCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -78,22 +67,16 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            teamsClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
-					Description:    "Microsoft Graph API client",
-					Build:          Client{}.Build,
-				},
+				teamsClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Microsoft Graph API client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         MessageSendOp.Name(),
-					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        DefinitionID.OperationTopic(MessageSendOp.Name()),
-					ClientRef:    teamsClient.ID(),
-					ConfigSchema: messageSendSchema,
-					Handle:       MessageSend{}.Handle(),
-				},
+				types.OperationPayloadOf[MessageSendOperation]().
+					Handles(teamsClient, MessageSend{}.Run).
+					Registration(DefinitionID, types.OperationRegistration{
+						Description: "Send a Teams channel message via Microsoft Graph",
+					}),
 			},
 		}, nil
 	})

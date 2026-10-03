@@ -3,138 +3,80 @@ package email
 import (
 	"fmt"
 
-	"github.com/resend/resend-go/v3"
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// Builder returns the email definition builder with the supplied runtime config applied.
-// When devMode is true or cfg.Provisioned() returns true, a RuntimeIntegration is
-// included for system-send. In dev mode the sender writes MIME files to cfg.TestDir
-// instead of calling the provider API.
-// Customer registrations (credentials, connections, clients, user input) are always present
+// Builder returns the email definition builder with the supplied runtime config applied
 func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "email",
-				DisplayName: "Email",
-				Description: "Send templated transactional and campaign emails via resend.",
-				Category:    "messaging",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/email/overview",
-				Tags:        []string{"email", "messaging", "notifications"},
-				Active:      true,
-				Visible:     true,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "email",
+			DisplayName: "Email",
+			Description: "Send templated transactional and campaign emails via resend.",
+			Category:    "messaging",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/email/overview",
+			Tags:        []string{"email", "messaging", "notifications"},
+			Active:      true,
+			Visible:     true,
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         emailCredentialRef.ID(),
+				emailCredentialRef.Registration(types.CredentialRegistration{
 					Name:        "Email Provider Credential",
 					Description: "API key and provider selection for email delivery",
-					Schema:      emailCredentialSchema,
-				},
+				}),
 			},
+			HealthCheck: emailClientRef.HealthCheck(checkHealth),
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:  emailCredentialRef.ID(),
-					Name:           "Email Provider API Key",
-					Description:    "Configure email delivery using an API key for resend, sendgrid, or postmark",
-					CredentialRefs: []types.CredentialSlotID{emailCredentialRef.ID()},
-					ClientRefs:     []types.ClientID{emailClientRef.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: emailClientRef.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
+					CredentialRef: emailCredentialRef.ID(),
+					Name:          "Email Provider API Key",
+					Description:   "Configure email delivery using an API key for resend, sendgrid, or postmark",
 				},
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            emailClientRef.ID(),
-					CredentialRefs: []types.CredentialSlotID{emailCredentialRef.ID()},
-					Description:    "Email provider client via newman",
-					Build:          buildCustomerClient,
-				},
+				emailClientRef.Registration(buildCustomerClient, types.ClientRegistration{
+					Description: "Email provider client via newman",
+				}),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput: userInput.Registration(),
 			Operations: append(AllEmailOperations(),
-				types.OperationRegistration{
-					Name:         SendEmailOp.Name(),
-					Description:  "Send a single templated email",
-					Topic:        DefinitionID.OperationTopic(SendEmailOp.Name()),
-					ClientRef:    emailClientRef.ID(),
-					ConfigSchema: sendEmailSchema,
-					Policy:       types.ExecutionPolicy{SkipRunRecord: true},
-					Handle:       SendEmail{}.Handle(),
-				},
-				types.OperationRegistration{
-					Name:         SendCampaignOp.Name(),
-					Description:  "Dispatch an email campaign",
-					Topic:        DefinitionID.OperationTopic(SendCampaignOp.Name()),
-					ClientRef:    emailClientRef.ID(),
-					ConfigSchema: sendBrandedCampaignSchema,
-					Policy:       types.ExecutionPolicy{SkipRunRecord: true},
-					Handle:       SendBrandedCampaign{}.Handle(),
-				},
-				types.OperationRegistration{
-					Name:         SendQuestionnaireCampaignOp.Name(),
-					Description:  "Dispatch a questionnaire campaign",
-					Topic:        DefinitionID.OperationTopic(SendQuestionnaireCampaignOp.Name()),
-					ClientRef:    emailClientRef.ID(),
-					ConfigSchema: sendQuestionnaireCampaignSchema,
-					Policy:       types.ExecutionPolicy{SkipRunRecord: true},
-					Handle:       SendQuestionnaireCampaign{}.Handle(),
-				},
-				// global singleton sweeps: no client ref, they route dispatches to each
-				// org's email installation or the runtime provider
-				types.OperationRegistration{
-					Name:                RecurringCampaignOp.Name(),
-					Description:         "Dispatch due recurring campaigns",
-					Topic:               DefinitionID.OperationTopic(RecurringCampaignOp.Name()),
-					ConfigSchema:        recurringCampaignSweepSchema,
-					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
-					Handle:              RecurringCampaignSweep{}.Handle(),
-					CustomerSelectable:  lo.ToPtr(false),
-					SkipDefaultLookback: true,
-				},
-				types.OperationRegistration{
-					Name:                TrustCenterNotificationOp.Name(),
-					Description:         "Notify trust center subscribers about stable posts and subprocessor changes",
-					Topic:               DefinitionID.OperationTopic(TrustCenterNotificationOp.Name()),
-					ConfigSchema:        trustCenterNotificationSweepSchema,
-					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
-					Handle:              TrustCenterNotificationSweep{}.Handle(),
-					CustomerSelectable:  lo.ToPtr(false),
-					SkipDefaultLookback: true,
-				},
+				SendEmailOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Send a single templated email",
+				}),
+				SendCampaignOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Dispatch an email campaign",
+				}),
+				SendQuestionnaireCampaignOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Dispatch a questionnaire campaign",
+				}),
+				RecurringCampaignOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Dispatch due recurring campaigns",
+				}),
+				TrustCenterNotificationOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Notify trust center subscribers about stable posts and subprocessor changes",
+				}),
 			),
 		}
 
-		if cfg.ResendSecret != "" {
-			deliveryHandler := ResendDeliveryEvent{}.Handle
+		deliveryHandler := ResendDeliveryEvent{}.Handle
 
-			def.Webhooks = []types.WebhookRegistration{
-				{
-					Name:         resendWebhookRef.Name(),
-					StaticRoute:  "/email/webhook",
-					SecretSource: func() string { return cfg.ResendSecret },
-					Verify:       ResendWebhook{Secret: cfg.ResendSecret}.Verify,
-					Event:        ResendWebhook{}.Event,
-					Events: []types.WebhookEventRegistration{
-						{Name: resend.EventEmailSent, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailSent), Handle: deliveryHandler},
-						{Name: resend.EventEmailDelivered, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailDelivered), Handle: deliveryHandler},
-						{Name: resend.EventEmailOpened, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailOpened), Handle: deliveryHandler},
-						{Name: resend.EventEmailClicked, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailClicked), Handle: deliveryHandler},
-						{Name: resend.EventEmailBounced, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailBounced), Handle: deliveryHandler},
-						{Name: resend.EventEmailFailed, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailFailed), Handle: deliveryHandler},
-					},
+		def.Webhooks = []types.WebhookRegistration{
+			resendWebhookRef.Registration(types.WebhookRegistration{
+				StaticRoute:  "/email/webhook",
+				SecretSource: func() string { return cfg.ResendSecret },
+				Verify:       ResendWebhook{Secret: cfg.ResendSecret}.Verify,
+				Event:        ResendWebhook{}.Event,
+				Events: []types.WebhookEventRegistration{
+					resendEmailSentEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailDeliveredEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailOpenedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailClickedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailBouncedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailFailedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
 				},
-			}
+			}),
 		}
 
 		if len(cfg.Social) == 0 {
@@ -142,17 +84,14 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 		}
 
 		if devMode || cfg.Provisioned() {
-			runtimeEmailRef.SetConfig(cfg)
-
-			marshaledConfig, err := runtimeEmailRef.MarshalConfig()
+			config, err := jsonx.ToRawMessage(cfg)
 			if err != nil {
 				return types.Definition{}, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 			}
 
 			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
-				Ref:    runtimeEmailRef.ID(),
-				Schema: runtimeEmailSchema,
-				Config: marshaledConfig,
+				Schema: jsonx.SchemaFrom[RuntimeEmailConfig](),
+				Config: config,
 				Build:  runtimeClientBuilder(devMode && !cfg.Provisioned()),
 			}
 		}

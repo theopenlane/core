@@ -3,10 +3,10 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // UserInput holds installation-specific configuration collected from the user
@@ -34,25 +34,15 @@ type DocumentExport struct {
 	Name string `json:"name,omitempty"`
 }
 
-// Handle adapts the document export to the generic operation registration boundary
-func Handle[C DocClient](ref types.ClientRef[C], op types.OperationRef[DocumentExport]) types.OperationHandler {
-	return providerkit.WithClientConfig(ref, op, ErrExportFailed, func(ctx context.Context, svc C, cfg DocumentExport) (json.RawMessage, error) {
-		return Run(ctx, svc, &cfg)
-	})
-}
-
-// Run executes the HTML export using the Google Drive API files.export endpoint
-func Run(ctx context.Context, svc DocClient, cfg *DocumentExport) (json.RawMessage, error) {
-	if cfg == nil || cfg.FileID == "" {
+// ExportDocument runs the document export against the typed client with the decoded export config
+func ExportDocument[C DocClient](ctx context.Context, _ types.OperationRequest, svc C, cfg DocumentExport) (json.RawMessage, error) {
+	if cfg.FileID == "" {
 		return nil, ErrExportFailed
 	}
 
-	err := svc.Export(ctx, cfg)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("Failed to create HTML export of file")
-
-		return nil, ErrExportFailed
+	if err := svc.Export(ctx, &cfg); err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrExportFailed, err)
 	}
 
-	return providerkit.EncodeResult(*cfg, ErrResultEncode)
+	return providerkit.EncodeResult(cfg, ErrResultEncode)
 }

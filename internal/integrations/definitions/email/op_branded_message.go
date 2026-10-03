@@ -6,18 +6,12 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// BrandedMessageRequest is a customer-selectable catalog entry providing a flexible,
-// brand-themed email shape. Customers supply the subject, headline, body paragraphs,
-// and optional call-to-action; the base theme handles layout, branding,
-// and footer chrome
+// BrandedMessageRequest is a customer-selectable catalog entry providing a flexible, brand-themed email shape
 type BrandedMessageRequest struct {
-	// RecipientInfo and CampaignContext are populated per-send (campaign target and
-	// dispatch context), not authored in the template, so they are excluded from the
-	// reflected catalog config schema via jsonschema:"-". Their JSON tags are untouched
-	// so the dispatch payload still carries them
+	// RecipientInfo and CampaignContext are populated per-send (campaign target and dispatch context), not authored in the template, so they are excluded from the reflected catalog config schema via jsonschema:"-"
 	RecipientInfo   `jsonschema:"-"`
 	CampaignContext `jsonschema:"-"`
 	// Subject is the email subject line
@@ -54,8 +48,7 @@ type BrandedMessageRequest struct {
 	TextColor string `json:"textColor,omitempty" jsonschema:"format=color,description=Body text color override (hex)"`
 	// FooterTextColor overrides the muted text color for this send
 	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"format=color,description=Muted text color override (hex)"`
-	// CompanyName is the company display name shown in the footer; customer-supplied
-	// because a branded message carries the customer's own identity rather than Openlane's
+	// CompanyName is the company display name shown in the footer; customer-supplied because a branded message carries the customer's own identity rather than Openlane's
 	CompanyName string `json:"companyName,omitempty" jsonschema:"description=Company display name shown in the footer"`
 	// Corporation is the legal corporation name used in the footer copyright notice
 	Corporation string `json:"corporation,omitempty" jsonschema:"description=Legal corporation name used in the footer copyright notice"`
@@ -75,22 +68,14 @@ type BrandedMessageRequest struct {
 	Social []SocialLink `json:"social,omitempty" jsonschema:"description=Social footer links rendered beneath the body"`
 }
 
-// brandedMessageSchema is the reflected JSON schema for the branded message input type
-// and BrandedMessageOp is the typed operation ref used for catalog dispatch
-var (
-	brandedMessageSchema, BrandedMessageOp = providerkit.OperationSchema[BrandedMessageRequest]() //nolint:revive
-)
+// BrandedMessageOp is the typed operation ref used for catalog dispatch
+var BrandedMessageOp = types.OperationPayloadOf[BrandedMessageRequest]() //nolint:revive
 
-// brandedMessageExample is a representative input used to render the catalog preview
-// and to seed the form preview with demo values for fields the author has not yet filled.
-// Branding fields carry literal demo values because no installation config is guaranteed;
-// content fields use {{ .firstName }} to demonstrate per-recipient interpolation
+// brandedMessageExample is a representative input used to render the catalog preview and to seed the form preview with demo values for fields the author has not yet filled
 var brandedMessageExample = BrandedMessageRequest{
-	RecipientInfo: RecipientInfo{
-		Email:     "jordan.avery@example.com",
-		FirstName: "Jordan",
-		LastName:  "Avery",
-	},
+	Email:           "jordan.avery@example.com",
+	FirstName:       "Jordan",
+	LastName:        "Avery",
 	Subject:         "A note from Acme Security",
 	Preheader:       "A quick update from the Acme Security team",
 	Title:           "Hi {{ .firstName }}, welcome aboard",
@@ -113,11 +98,7 @@ var brandedMessageExample = BrandedMessageRequest{
 	},
 }
 
-// brandedMessageUISchema carries only UI hints that JSON Schema cannot express. Field
-// types and widgets are driven by the reflected config schema instead: color fields carry
-// format=color and URL fields carry format=uri, field order follows struct order, and
-// per-send fields (recipient, campaign) are excluded from the schema via jsonschema:"-".
-// The one irreducible hint left is rendering the body-paragraph lists as multi-line textareas
+// brandedMessageUISchema carries only UI hints that JSON Schema cannot express
 var brandedMessageUISchema = json.RawMessage(`{
   "intros": {"items": {"ui:widget": "textarea"}},
   "outros": {"items": {"ui:widget": "textarea"}}
@@ -125,7 +106,6 @@ var brandedMessageUISchema = json.RawMessage(`{
 
 var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 	Op:                 BrandedMessageOp,
-	Schema:             brandedMessageSchema,
 	Theme:              baseTheme,
 	Description:        "Customer-authored branded message with headline, body paragraphs, and an optional call-to-action",
 	CustomerSelectable: lo.ToPtr(true),
@@ -152,13 +132,6 @@ var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 		return body
 	},
 	Config: func(cfg RuntimeEmailConfig, req BrandedMessageRequest) RuntimeEmailConfig {
-		// A branded message carries the customer's own identity, and the customer
-		// may have no installation config to inherit. Identity, logo, and footer
-		// fields are therefore sourced entirely from the request. Assigning directly
-		// (rather than guarding on non-empty) also strips any Openlane system defaults
-		// so they never leak into a customer's message. Functional fields (FromEmail,
-		// SupportEmail, QuestionnaireEmail, APIKey, Provider, RootURL, ProductURL,
-		// DocsURL, TroubleText) are preserved — they back delivery, not branding.
 		cfg.CompanyName = req.CompanyName
 		cfg.CompanyAddress = req.CompanyAddress
 		cfg.Corporation = req.Corporation

@@ -3,7 +3,6 @@ package oidclocal
 import (
 	"time"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -13,9 +12,7 @@ var (
 	// installation is the typed installation metadata handle for the local OIDC definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// oidcCredential is the auth-managed credential slot used by the local OIDC connection
-	_, oidcCredential = providerkit.CredentialSchema[oidcLocalCred]()
-	// claimsInspectSchema is the operation ref for the OIDC claims inspection operation
-	claimsInspectSchema, claimsInspectOperation = providerkit.OperationSchema[ClaimsInspect]()
+	oidcCredential = types.CredentialRefOf[oidcLocalCred]()
 )
 
 // oidcLocalCred holds the provider-owned credential material for a local OIDC installation

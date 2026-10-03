@@ -4,32 +4,37 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the Azure Entra ID integration definition
-	definitionID             = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
-	_, entraTenantCredential = providerkit.CredentialSchema[entraIDCred]()
-	// EntraCredential is the client ref for the Azure token credential used by the health check
-	entraCredential = types.NewClientRef[azcore.TokenCredential]()
-	// EntraClient is the client ref for the Microsoft Graph service client used by directory operations
-	entraClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
-	// DirectorySyncOperation is the operation ref for the Azure Entra ID directory sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	// installation is the typed installation metadata handle for the Azure Entra ID definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// entraTenantCredential is the credential slot holding the consented tenant
+	entraTenantCredential = types.CredentialRefOf[entraIDCred]()
+	// entraCredential is the client ref for the Azure token credential used by the health check
+	entraCredential = types.ClientRefOf[azcore.TokenCredential]()
+	// entraClient is the client ref for the Microsoft Graph service client
+	entraClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	// PrimaryDirectory marks this installation as the authoritative directory source
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
+}
+
+// DirectorySync configures collection of Azure Entra ID directory users, groups, and memberships
+type DirectorySync struct {
+	types.OperationSettings
 	// DisableGroupSync when true only syncs users, skipping groups and memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Azure Entra ID, disable groups sync operations"`
 	// IncludeGuestUsers controls whether guest-type accounts are included in the sync
 	IncludeGuestUsers bool `json:"includeGuestUsers,omitempty" jsonschema:"title=Include Guest Users"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // entraIDCred holds the per-installation credential for one Entra ID tenant

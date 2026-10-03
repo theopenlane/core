@@ -10,6 +10,7 @@ import (
 
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/iam/auth"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	"github.com/stretchr/testify/require"
@@ -54,11 +55,13 @@ func harnessReconcileOperation(t *testing.T, mode string) string {
 func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*ent.Integration, string) {
 	t.Helper()
 
-	installation, err := suite.Client.DB.Integration.Create().
-		SetName(th.RandomName(t)).
-		SetKind("testintegration").
-		SetDefinitionID(testint.DefinitionID.ID()).
-		Save(ctx)
+	def, ok := suite.IntegrationsRT.Registry().Definition(testint.DefinitionID.ID())
+	require.True(t, ok)
+
+	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
+	require.NoError(t, err)
+
+	installation, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, ownerID, "", def)
 	require.NoError(t, err)
 
 	credentialRef := testint.TokenCredential.ID()
@@ -69,7 +72,7 @@ func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*en
 		credential = testint.ServiceAccountCredentialSet("test-project", "svc@example.com")
 	}
 
-	require.NoError(t, suite.IntegrationsRT.Reconcile(ctx, installation, testint.ModeInput(mode), credentialRef, &credential, nil))
+	require.NoError(t, suite.IntegrationsRT.Reconcile(ctx, installation, nil, testint.ModeOperationConfig(mode), credentialRef, &credential, nil))
 
 	fragment := reconcileLoopFragment(t, installation.ID, harnessReconcileOperation(t, mode))
 

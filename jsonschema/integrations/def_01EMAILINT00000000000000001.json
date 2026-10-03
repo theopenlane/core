@@ -1,0 +1,157 @@
+{
+  "version": "626b6099041f7861c0165abebaa653e467d34ac0243cfaf48da2777e9bf701c5",
+  "surface": {
+    "id": "def_01EMAILINT00000000000000001",
+    "credentials": [
+      {
+        "ref": "Credential",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/email/credential",
+          "$ref": "#/$defs/Credential",
+          "$defs": {
+            "Credential": {
+              "properties": {
+                "apiKey": {
+                  "type": "string",
+                  "description": "Email provider API key"
+                },
+                "provider": {
+                  "type": "string",
+                  "enum": [
+                    "resend"
+                  ],
+                  "description": "Email service provider"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "apiKey",
+                "provider"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/email/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "fromEmail": {
+                "type": "string",
+                "description": "Email address your emails are sent from using your configured provider key"
+              },
+              "companyName": {
+                "type": "string",
+                "description": "Company display name shown in the email footer"
+              },
+              "companyAddress": {
+                "type": "string",
+                "description": "Company mailing address shown in the email footer for CAN-SPAM compliance"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "fromEmail",
+              "companyName"
+            ]
+          }
+        }
+      }
+    },
+    "connections": [
+      "Credential"
+    ],
+    "operations": [
+      {
+        "name": "BillingEmailChangedEmail"
+      },
+      {
+        "name": "BrandedMessageRequest"
+      },
+      {
+        "name": "InviteJoinedRequest"
+      },
+      {
+        "name": "InviteRequest"
+      },
+      {
+        "name": "OrgDeletionNoticeEmail"
+      },
+      {
+        "name": "PasswordResetEmailRequest"
+      },
+      {
+        "name": "PasswordResetSuccessRequest"
+      },
+      {
+        "name": "QuestionnaireAuthEmail"
+      },
+      {
+        "name": "RecurringCampaignSweep"
+      },
+      {
+        "name": "SendBrandedCampaignRequest"
+      },
+      {
+        "name": "SendEmailRequest"
+      },
+      {
+        "name": "SendQuestionnaireCampaignRequest"
+      },
+      {
+        "name": "SubprocessorNotificationRequest"
+      },
+      {
+        "name": "SubscribeRequest"
+      },
+      {
+        "name": "TrustCenterAuthEmail"
+      },
+      {
+        "name": "TrustCenterNDAApprovalRequestEmail"
+      },
+      {
+        "name": "TrustCenterNDARequestEmail"
+      },
+      {
+        "name": "TrustCenterNDASignedEmail"
+      },
+      {
+        "name": "TrustCenterNotificationSweep"
+      },
+      {
+        "name": "VerifyBillingRequest"
+      },
+      {
+        "name": "VerifyEmailRequest"
+      },
+      {
+        "name": "WelcomeRequest"
+      },
+      {
+        "name": "tmpl_trustcenter_update"
+      }
+    ],
+    "webhooks": [
+      {
+        "name": "resend.delivery",
+        "events": [
+          "email.bounced",
+          "email.clicked",
+          "email.delivered",
+          "email.failed",
+          "email.opened",
+          "email.sent"
+        ]
+      }
+    ]
+  }
+}

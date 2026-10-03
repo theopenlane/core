@@ -6,8 +6,6 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -16,14 +14,12 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0ONEDRIVE00000000000001")
 	// installation is the typed installation metadata handle for the OneDrive definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// _, oneDriveCredential is the credential slot for OneDrive OAuth credentials
-	_, oneDriveCredential = providerkit.CredentialSchema[oneDriveCred]()
+	// oneDriveCredential is the auth-managed credential slot for OneDrive OAuth credentials
+	oneDriveCredential = types.CredentialRefOf[oneDriveCred]()
 	// oneDriveClient is the client ref for the wrapped OneDrive graph client
-	oneDriveClient = types.NewClientRef[*DriveClient]()
-	// documentExportSchema is the operation schema for the document export operation
-	documentExportSchema, documentExportOperation = providerkit.OperationSchema[operations.DocumentExport]()
-	// folderSyncSchema is the operation schema for the folder sync operation
-	folderSyncSchema, folderSyncOperation = providerkit.OperationSchema[FolderSync]()
+	oneDriveClient = types.ClientRefOf[*DriveClient]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // oneDriveCred holds the provider-owned credential material for a OneDrive installation
@@ -42,7 +38,7 @@ type DriveClient struct {
 	Graph *msgraphsdk.GraphServiceClient
 	// TS is the OAuth2 token source used to obtain access tokens for plain HTTP requests
 	TS oauth2.TokenSource
-	// Cfg is the operator-level configuration, carried so export operations can access content mode settings
+	// Cfg is the operator-level configuration for export operations
 	Cfg Config
 }
 
@@ -50,10 +46,6 @@ type DriveClient struct {
 type UserInput struct {
 	// Primary marks this installation as the authoritative OneDrive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderID is the folder path relative to the drive root (e.g. "Policies"); leave empty to sync the root
-	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."`
-	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`
 }
 
 // InstallationMetadata holds the stable OneDrive target selected for one installation

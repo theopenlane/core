@@ -20,15 +20,8 @@ type HealthCheck struct {
 	SubscribedAt string `json:"subscribedAt,omitempty"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(securityHubClient, func(ctx context.Context, _ types.OperationRequest, client *securityhub.Client) (json.RawMessage, error) {
-		return h.Run(ctx, client)
-	})
-}
-
-// Run validates Security Hub access by calling DescribeHub
-func (HealthCheck) Run(ctx context.Context, c *securityhub.Client) (json.RawMessage, error) {
+// checkHealth validates Security Hub access by calling DescribeHub
+func checkHealth(ctx context.Context, _ types.OperationRequest, c *securityhub.Client) (json.RawMessage, error) {
 	resp, err := c.DescribeHub(ctx, &securityhub.DescribeHubInput{})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("awssecurityhub: error describing hub")

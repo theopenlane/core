@@ -1,6 +1,7 @@
 package types //nolint:revive
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -41,11 +42,15 @@ type Definition struct {
 	// OperatorConfig describes operator-owned configuration for the definition
 	OperatorConfig *OperatorConfigRegistration `json:"operatorConfig,omitempty"`
 	// UserInput describes installation-scoped user input for the definition
-	UserInput *UserInputRegistration `json:"userInput,omitempty"`
+	UserInput *InputRegistration `json:"userInput,omitempty"`
 	// CredentialRegistrations describes the credential slots exposed by the definition
 	CredentialRegistrations []CredentialRegistration `json:"credentialRegistrations,omitempty"`
 	// Connections describes the connection modes exposed by the definition
 	Connections []ConnectionRegistration `json:"connections,omitempty"`
+	// HealthCheck exercises the active connection's credentials before persistence
+	HealthCheck *HealthCheckRegistration `json:"-"`
+	// Installation describes installation-scoped metadata derived for the definition
+	Installation *InstallationRegistration `json:"installation,omitempty"`
 	// Clients lists the clients the definition can build
 	Clients []ClientRegistration `json:"clients,omitempty"`
 	// Operations lists the operations the definition exposes
@@ -56,11 +61,11 @@ type Definition struct {
 	Webhooks []WebhookRegistration `json:"webhooks,omitempty"`
 	// GalaListeners declares standalone gala listeners registered on the integration runtime
 	GalaListeners []GalaListenerRegistration `json:"-"`
-	// RuntimeIntegration declares that this definition can be fully provisioned from a single runtime config struct
+	// RuntimeIntegration declares this definition provisioned from a single runtime config struct
 	RuntimeIntegration *RuntimeIntegrationRegistration `json:"runtimeIntegration,omitempty"`
 }
 
-// GalaListenerRegistration declares a gala listener that should be registered on the integration runtime at startup
+// GalaListenerRegistration declares a gala listener registered at runtime startup
 type GalaListenerRegistration struct {
 	// Name is a stable listener identifier for diagnostics
 	Name string
@@ -74,10 +79,22 @@ type OperatorConfigRegistration struct {
 	Schema json.RawMessage `json:"schema,omitempty"`
 }
 
-// UserInputRegistration describes installation-scoped user input
-type UserInputRegistration struct {
-	// Schema is the JSON schema used to collect installation-scoped user input
+// UpgradeFunc reshapes a stored document from the layout, slot, or operation name it was persisted under into the current layout
+type UpgradeFunc func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error)
+
+// ValidateFunc checks a payload that already satisfies its schema for constraints the schema cannot express
+type ValidateFunc func(ctx context.Context, req InstallationRequest, payload json.RawMessage) error
+
+// InputRegistration describes one stored installation-scoped input layout and how older documents move onto it
+type InputRegistration struct {
+	// Name is the stable layout name the stored document is keyed by
+	Name string `json:"name"`
+	// Schema is the JSON schema the stored document conforms to
 	Schema json.RawMessage `json:"schema,omitempty"`
+	// Upgrade reshapes a stored document from the layout it was persisted under, nil when none is declared
+	Upgrade UpgradeFunc `json:"-"`
+	// Validate checks a schema-valid payload for semantic constraints, nil when none is declared
+	Validate ValidateFunc `json:"-"`
 }
 
 // CredentialRegistration declares how a definition accepts credentials
@@ -90,8 +107,16 @@ type CredentialRegistration struct {
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema used to collect credentials
 	Schema json.RawMessage `json:"schema,omitempty"`
+	// StoredSchema is the reflected schema of the persisted credential payload
+	StoredSchema json.RawMessage `json:"-"`
 	// Recommended indicates the method that is recommend if there are multiple options
 	Recommended bool `json:"recommended,omitempty"`
+	// Replaces lists the retired slots whose stored payloads move onto this slot
+	Replaces []CredentialSlotID `json:"-"`
+	// Upgrade reshapes a payload from the slot it was persisted under into this slot's schema
+	Upgrade UpgradeFunc `json:"-"`
+	// Validate checks a schema-valid payload for semantic constraints, nil when none is declared
+	Validate ValidateFunc `json:"-"`
 }
 
 // ConnectionRegistration describes one connection mode for a definition
@@ -106,32 +131,25 @@ type ConnectionRegistration struct {
 	Meta map[string]MetaInfo `json:"meta,omitempty"`
 	// CredentialRefs lists the credential slots used by this connection mode
 	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
-	// ClientRefs lists the clients initialized by this connection mode
-	ClientRefs []ClientID `json:"-"`
-	// HealthCheck exercises the connection's credentials before persistence and during health assessments
-	HealthCheck *HealthCheckRegistration `json:"-"`
-	// Integration describes installation-scoped metadata derived by this connection mode
-	Integration *InstallationRegistration `json:"installation,omitempty"`
 	// Auth describes how this connection mode performs auth when supported
 	Auth *AuthRegistration `json:"auth,omitempty"`
 	// Disconnect describes how this connection mode tears down an installation
 	Disconnect *DisconnectRegistration `json:"disconnect,omitempty"`
 }
 
-// HealthCheckRegistration declares the credential-exercising health check for one connection mode
+// HealthCheckRegistration declares the definition's health check on the active connection
 type HealthCheckRegistration struct {
-	// ClientRef identifies which registered client the check builds; when empty the handler
-	// receives only the credential bindings
+	// ClientRef identifies which client the check builds; empty means only credential bindings
 	ClientRef ClientID `json:"-"`
 	// Handle executes the check
 	Handle OperationHandler `json:"-"`
 }
 
-// MetaInfo is data to store for the UI to present to the user during credential setup of an integration
+// MetaInfo is data shown to the user during credential setup of an integration
 type MetaInfo struct {
 	// Value is the Value to show to the user
 	Value string
-	// allow copy will display a opy to clipboard button
+	// AllowCopy displays a copy to clipboard button
 	AllowCopy bool
 }
 
@@ -145,6 +163,59 @@ func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegi
 	}
 
 	return reg, nil
+}
+
+// Operation returns the operation registration for the given name
+func (d Definition) Operation(name string) (OperationRegistration, bool) {
+	return lo.Find(d.Operations, func(r OperationRegistration) bool {
+		return r.Name == name
+	})
+}
+
+// Webhook returns the webhook registration for the given contract name
+func (d Definition) Webhook(name string) (WebhookRegistration, bool) {
+	return lo.Find(d.Webhooks, func(r WebhookRegistration) bool {
+		return r.Name == name
+	})
+}
+
+// ResolveCredential returns the registration for the slot, or the one whose slot replaces it; replaced reports the fallback
+func (d Definition) ResolveCredential(ref CredentialSlotID) (registration CredentialRegistration, replaced bool, ok bool) {
+	if registration, err := d.CredentialRegistration(ref); err == nil {
+		return registration, false, true
+	}
+
+	registration, ok = lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
+		return lo.Contains(r.Replaces, ref)
+	})
+
+	return registration, ok, ok
+}
+
+// ResolveOperation returns the registration for the name, or the one whose operation replaces it; replaced reports the fallback
+func (d Definition) ResolveOperation(name string) (registration OperationRegistration, replaced bool, ok bool) {
+	if registration, ok := d.Operation(name); ok {
+		return registration, false, true
+	}
+
+	registration, ok = lo.Find(d.Operations, func(r OperationRegistration) bool {
+		return lo.Contains(r.Replaces, name)
+	})
+
+	return registration, ok, ok
+}
+
+// ResolveWebhook returns the registration for the name, or the one whose contract replaces it; replaced reports the fallback
+func (d Definition) ResolveWebhook(name string) (registration WebhookRegistration, replaced bool, ok bool) {
+	if registration, ok := d.Webhook(name); ok {
+		return registration, false, true
+	}
+
+	registration, ok = lo.Find(d.Webhooks, func(r WebhookRegistration) bool {
+		return lo.Contains(r.Replaces, name)
+	})
+
+	return registration, ok, ok
 }
 
 // ConnectionRegistration returns the connection registration for the given credential slot
@@ -161,30 +232,21 @@ func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegi
 
 // DefinitionProviderState stores installation-scoped state for one definition
 type DefinitionProviderState struct {
-	// CredentialRef identifies which credential-schema-selected connection mode is active for the installation
+	// CredentialRef identifies the credential-selected connection mode active for the installation
 	CredentialRef CredentialSlotID `json:"credentialRef"`
 }
 
 // ProviderState returns the persisted provider state for this definition
 func (d Definition) ProviderState(state IntegrationProviderState) (DefinitionProviderState, error) {
-	if state.Providers == nil {
-		return DefinitionProviderState{}, nil
-	}
-
-	raw, ok := state.Providers[d.ID]
-	if !ok || len(raw) == 0 {
-		return DefinitionProviderState{}, nil
-	}
-
 	var out DefinitionProviderState
-	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
+	if err := jsonx.UnmarshalIfPresent(state.Providers[d.ID], &out); err != nil {
 		return DefinitionProviderState{}, err
 	}
 
 	return out, nil
 }
 
-// WithProviderState returns a copy of the installation provider state with this definition's state updated
+// WithProviderState returns a copy of the provider state with this definition's state updated
 func (d Definition) WithProviderState(state IntegrationProviderState, next DefinitionProviderState) (IntegrationProviderState, error) {
 	raw, err := jsonx.ToRawMessage(next)
 	if err != nil {
