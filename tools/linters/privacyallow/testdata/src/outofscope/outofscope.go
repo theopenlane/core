@@ -7,5 +7,5 @@ import (
 )
 
 func bare(ctx context.Context) context.Context {
-	return privacy.DecisionContext(ctx, privacy.Allow)
+	return privacy.DecisionContext(ctx, privacy.Allow) // want "privacy.Allow decision contexts are not allowed"
 }

@@ -222,7 +222,6 @@ func (Subcontrol) Interceptors() []ent.Interceptor {
 func (s Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.AllowIfContextAllowRule(),
 			policy.CanCreateObjectsUnderParents([]string{
 				Control{}.Name(),
 			}),

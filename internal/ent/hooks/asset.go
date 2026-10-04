@@ -51,7 +51,7 @@ func HookAssetInternalOwner() ent.Hook {
 				return nil, err
 			}
 
-			internalCtx := auth.WithInternalOperationContext(ctx)
+			internalCtx := auth.WithInternalReadContext(ctx)
 
 			userID, err := m.Client().User.Query().
 				Where(

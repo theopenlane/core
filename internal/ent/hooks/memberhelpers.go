@@ -12,7 +12,6 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
@@ -35,11 +34,6 @@ func HookMembershipSelf(table string) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			// bypass privacy check if the context allows it
-			// todo: remove privacy allow
-			if _, allow := privacy.DecisionFromContext(ctx); allow {
-				return next.Mutate(ctx, m)
-			}
-
 			if auth.IsInternalRequest(ctx) {
 				return next.Mutate(ctx, m)
 			}

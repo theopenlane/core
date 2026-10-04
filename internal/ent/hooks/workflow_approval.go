@@ -78,7 +78,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowCtx := auth.WithInternalOperationContext(ctx)
+			allowCtx := auth.WithInternalReadContext(ctx)
 			entity, err := workflows.LoadWorkflowObject(allowCtx, client, mut.Type(), id)
 			if err != nil {
 				return nil, err
@@ -166,7 +166,7 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 		return nil, ErrMutationMissingID
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 
 	if len(proposedChanges) == 0 {
 		return workflows.LoadWorkflowObject(allowCtx, client, m.Type(), id)
@@ -263,7 +263,7 @@ func resolveApprovalSubmissionMode(def *generated.WorkflowDefinition) enums.Work
 // stageProposalChanges creates or updates WorkflowProposal records for each domain
 func stageProposalChanges(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domainChanges []workflows.DomainChanges, userID string) error {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 
 	submissionMode := resolveApprovalSubmissionMode(def)
 	initialState := lo.Ternary(

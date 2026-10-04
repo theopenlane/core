@@ -119,7 +119,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 	}
 
 	// Add internal context for administrative operations
-	internalCtx := auth.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
@@ -390,7 +390,7 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 				integration.DeletedAtIsNil(),
 				integration.StatusNotIn(enums.IntegrationStatusDisabled),
 			).
-			Count(auth.WithInternalCrossOrgContext(ctx))
+			Count(auth.WithInternalReadCrossOrgContext(ctx))
 		if err != nil {
 			return "", fmt.Errorf("query integrations: %w", err)
 		}
@@ -501,7 +501,7 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 			continue // skip if no monthly price
 		}
 
-		const reconcilerCaps = auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
+		const reconcilerCaps = auth.CapInternalOperation | auth.CapBypassManagedGroup
 		newCtx := auth.WithCaller(ctx, &auth.Caller{OrganizationID: orgID, Capabilities: reconcilerCaps})
 
 		// we set the price purely for reference; it will not be used for billing - we care mostly about the association of subscription to module

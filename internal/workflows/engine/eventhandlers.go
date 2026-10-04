@@ -408,7 +408,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, p
 
 	def := instance.DefinitionSnapshot
 
-	obj, err := l.loadActionObject(auth.WithInternalOperationContext(scopeCtx), instance.ID, orgID)
+	obj, err := l.loadActionObject(auth.WithInternalReadContext(scopeCtx), instance.ID, orgID)
 	if err != nil {
 		return scope.Fail(err, nil)
 	}
@@ -969,7 +969,7 @@ func requiredApprovalCount(_ models.WorkflowAction, meta models.WorkflowAssignme
 }
 
 // loadInstanceForScope loads a workflow instance and annotates scope fields
-// Uses auth.WithInternalOperationContext since all callers are internal workflow operations
+// Uses auth.WithInternalReadContext since all callers are internal workflow operations
 func (l *WorkflowListeners) loadInstanceForScope(scope *observability.Scope, instanceID string) (*generated.WorkflowInstance, string, error) {
 	ctx := scope.Context()
 
@@ -978,7 +978,7 @@ func (l *WorkflowListeners) loadInstanceForScope(scope *observability.Scope, ins
 		return nil, "", auth.ErrNoAuthUser
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 
 	instance, err := loadWorkflowInstance(allowCtx, l.client, instanceID, orgID)
 	if err != nil {

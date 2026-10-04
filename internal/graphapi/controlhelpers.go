@@ -290,7 +290,7 @@ func getMappedControlsBySubcontrolID(ctx context.Context, subcontrolID string) (
 	)
 
 	// skip filters, this is already filtered on organization
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	return withTransactionalMutation(ctx).MappedControl.Query().
 		Where(
 			mappedcontrol.Or(
@@ -312,7 +312,7 @@ func getControlMappings(ctx context.Context, refCode string, framework *string, 
 	}
 
 	// skip filters, this is already filtered on organization
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	res, err := withTransactionalMutation(ctx).MappedControl.Query().
 		Where(
 			fullWhere...,
@@ -439,8 +439,8 @@ func findOrganizationControlInfoForMappings(ctx context.Context, controls map[st
 
 	}
 
-	// runs as an internal operation because this is filtered on authorized organizations already
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	// runs as an internal read because this is filtered on authorized organizations already
+	internalCtx := auth.WithInternalReadContext(ctx)
 	if len(subcontrolRefCodes) > 0 {
 		orClauses := make([]predicate.Subcontrol, 0, len(subcontrolRefCodes))
 		for fw, refCodes := range subcontrolRefCodes {
@@ -531,7 +531,7 @@ func getStandardsInOrg(ctx context.Context) ([]string, error) {
 		return nil, err
 	}
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	return withTransactionalMutation(ctx).Control.Query().
 		Where(

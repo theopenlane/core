@@ -46,7 +46,7 @@ func HookStandardDelete() ent.Hook {
 
 			id, _ := m.ID()
 
-			checkCtx := auth.WithInternalOperationContext(ctx)
+			checkCtx := auth.WithInternalReadContext(ctx)
 
 			// always block if standard is in use by trust center compliances
 			trustCenterLinkedCount, err := m.Client().TrustCenterCompliance.Query().

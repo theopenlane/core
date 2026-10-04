@@ -65,7 +65,7 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		}
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, instance.WorkflowProposalID)
 	if err != nil {
@@ -127,7 +127,7 @@ func buildWorkflowProposalPreview(ctx context.Context, client *generated.Client,
 
 	currentValues := map[string]any{}
 	if len(fields) > 0 {
-		allowCtx := auth.WithInternalOperationContext(ctx)
+		allowCtx := auth.WithInternalReadContext(ctx)
 		entity, err := workflows.LoadWorkflowObject(allowCtx, client, objectType.String(), objectID)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
@@ -202,7 +202,7 @@ func workflowInstanceObjectContext(ctx context.Context, client *generated.Client
 		return "", "", nil
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 	query := client.WorkflowObjectRef.Query().
 		Where(workflowobjectref.WorkflowInstanceIDEQ(instance.ID))
 	if instance.OwnerID != "" {
@@ -240,7 +240,7 @@ func workflowProposalObjectContext(ctx context.Context, client *generated.Client
 		return "", "", nil
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 	ref, err := client.WorkflowObjectRef.Get(allowCtx, proposal.WorkflowObjectRefID)
 	if err != nil {
 		if generated.IsNotFound(err) {
@@ -276,7 +276,7 @@ func workflowInstanceHasApprover(ctx context.Context, client *generated.Client, 
 		return false, nil
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 
 	direct, err := client.WorkflowAssignmentTarget.Query().
 		Where(
@@ -324,7 +324,7 @@ func workflowProposalHasApprover(ctx context.Context, client *generated.Client, 
 		return false, nil
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 
 	direct, err := client.WorkflowAssignmentTarget.Query().
 		Where(

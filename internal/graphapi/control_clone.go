@@ -76,8 +76,8 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		return nil, fmt.Errorf("%w: error getting standard, too many results", common.ErrInvalidInput)
 	}
 
-	// if we get the standard back, all controls should be accessible so we can run as an internal operation to skip checks
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	// if we get the standard back, all controls should be accessible so we can run as an internal read to skip checks
+	internalCtx := auth.WithInternalReadContext(ctx)
 	where, err := controls.ControlFilterByStandard(ctx, filters, std)
 	if err != nil {
 		logger.Error().Err(err).Msg("error getting control filter")

@@ -92,7 +92,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 
 	// resolve enforcement for the accepting user; a member granted an SSO exemption via the
 	// invitation will not be flagged as needing SSO
-	internalCtx := auth.WithInternalOperationContext(reqCtx)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
 	status, err := h.fetchSSOStatus(internalCtx, invitedUser.OwnerID, user.ID)
 	if err != nil {
 		// the invitation is already accepted and the auth session issued at this point, so a failure to

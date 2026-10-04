@@ -24,7 +24,7 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	reqCtx := auth.WithInternalOperationContext(ctx.Request().Context())
+	reqCtx := auth.WithInternalReadContext(ctx.Request().Context())
 
 	switch in.TokenType {
 	case "api":

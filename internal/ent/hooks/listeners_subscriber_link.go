@@ -33,7 +33,7 @@ func SubscriberLinkListeners() []gala.Registration {
 func subscriberLinkCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 	caller := &auth.Caller{
 		OrganizationID: restored.OrganizationID,
-		Capabilities:   auth.CapBypassFGA | auth.CapInternalOperation,
+		Capabilities:   auth.CapInternalOperation,
 	}
 
 	return caller

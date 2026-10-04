@@ -13,8 +13,8 @@ func getPrePolicies(skipDenyOrgRule bool, beforeScope privacy.MutationPolicy) pr
 	// prePolicy is executed before privacy policy
 	base := privacy.Policy{
 		Query: privacy.QueryPolicy{
-			// allow internal operations (system code paths with CapInternalOperation) to proceed to query tables
-			rule.AllowIfInternalRequest(),
+			// allow internal operations and reads (CapInternalOperation or CapInternalRead) to proceed to query tables
+			rule.AllowIfInternalReadRequest(),
 			// allow history requests to proceed to query tables
 			history.AllowIfHistoryRequest(),
 		},

@@ -206,7 +206,7 @@ func getOrgIDFromSettingMutation(ctx context.Context, m *generated.OrganizationS
 	}
 
 	// allow the retrieval, which may happen before the tuples are created
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	return m.Client().Organization.Query().
 		Where(organization.HasSettingWith(organizationsetting.ID(settingID))).

@@ -34,7 +34,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// the request is unauthenticated and the owning org is not known until the response resolves, so the lookup is a cross-org internal read
-	allowCtx := auth.WithInternalCrossOrgContext(reqCtx)
+	readCtx := auth.WithInternalReadCrossOrgContext(reqCtx)
 
 	out := &models.ResendResponse{
 		Reply:   rout.Reply{Success: true},
@@ -46,7 +46,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 			assessmentresponse.EmailEqualFold(in.Email),
 			assessmentresponse.AssessmentIDEQ(in.AssessmentID),
 		).
-		Only(allowCtx)
+		Only(readCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.Success(ctx, out)

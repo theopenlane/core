@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -43,8 +42,8 @@ func FilterListQuery() ent.Interceptor {
 // e.g. memberships and history tables, and when there are a limited number of objects to filter
 // the FilterQueryResults function should be used in most cases due to performance issues of ListObjectsRequest
 func AddIDPredicate(ctx context.Context, q Query) error {
-	// bypass checks on internal requests
-	if auth.IsInternalRequest(ctx) {
+	// bypass checks on internal read requests
+	if auth.IsInternalReadRequest(ctx) {
 		return nil
 	}
 
@@ -270,9 +269,8 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 }
 
 func skipFilter(ctx context.Context, q intercept.Query, forceFilter SkipperFunc, customSkipperFunc ...SkipperFunc) bool {
-	// by pass checks on invite or pre-allowed request
-	// TODO: remove allow
-	if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
+	// bypass checks on internal read requests
+	if auth.IsInternalReadRequest(ctx) {
 		return true
 	}
 

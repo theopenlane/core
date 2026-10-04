@@ -112,7 +112,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 		})
 	}
 	// the owning org is not known yet and the caller may not have one selected, so this lookup bypasses the org filter; guards and instance creation after are scoped to the owner
-	ownerID, err := workflows.ObjectOwnerID(auth.WithInternalCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
+	ownerID, err := workflows.ObjectOwnerID(auth.WithInternalReadCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}

@@ -313,7 +313,7 @@ func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, w
 	}
 	obj.Node = entity
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 	definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, obj.Type.String(), "UPDATE", changedFields, nil, nil, nil, proposal.Changes, obj)
 	if err != nil {
 		return ErrFailedToFindMatchingDefinitions

@@ -16,7 +16,6 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
@@ -300,9 +299,9 @@ func (a *Client) getUserDefaultOrg(ctx context.Context, user *generated.User) (s
 		return user.Edges.Setting.Edges.DefaultOrg.ID, nil
 	}
 
-	// otherwise, query the default org from the user setting as an internal operation
+	// otherwise, query the default org from the user setting as an internal read
 	// incase the user is in the login process
-	orgCtx := auth.WithInternalOperationContext(ctx)
+	orgCtx := auth.WithInternalReadContext(ctx)
 
 	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
 	if err != nil {
@@ -388,16 +387,11 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 // getPersonalOrgID returns the personal org ID for the user
 func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*generated.Organization, error) {
 	// ensure the organization is not filtered by the default interceptor
-	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(auth.WithInternalOperationContext(ctx))
+	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(auth.WithInternalReadContext(ctx))
 }
 
 // skipOrgValidation checks if the org validation should be skipped based on the context
 func skipOrgValidation(ctx context.Context) bool {
-	// skip if explicitly allowed or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
-		return true
-	}
-
 	// skip on internal operations (e.g. org creation)
 	if auth.HasInContextCaller(ctx, auth.CapInternalOperation) {
 		return true

@@ -18,7 +18,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
@@ -153,11 +152,6 @@ func (userOwned UserOwnedMixin) Hooks() []ent.Hook {
 	return []ent.Hook{
 		func(next ent.Mutator) ent.Mutator {
 			return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-				// skip hook if strictly set to allow
-				if _, allow := privacy.DecisionFromContext(ctx); allow {
-					return next.Mutate(ctx, m)
-				}
-
 				// internal operations such as edge cleanup act on rows owned by other users
 				if auth.IsInternalRequest(ctx) {
 					return next.Mutate(ctx, m)

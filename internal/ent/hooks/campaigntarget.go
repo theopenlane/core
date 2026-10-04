@@ -42,7 +42,7 @@ func HookCampaignTargetLinkUser() ent.Hook {
 					user.EmailEqualFold(email),
 					user.HasOrgMembershipsWith(orgmembership.OrganizationID(ownerID)),
 				).
-				Only(auth.WithInternalOperationContext(ctx))
+				Only(auth.WithInternalReadContext(ctx))
 			if err != nil {
 				if generated.IsNotFound(err) {
 					return next.Mutate(ctx, m)

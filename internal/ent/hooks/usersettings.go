@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -48,7 +47,7 @@ func HookUserSetting() ent.Hook {
 // allowDefaultOrgUpdate checks if the user has access to the organization being updated as their default org
 func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation, orgID string) bool {
 	// allow if explicitly allowed or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
+	if auth.IsInternalRequest(ctx) {
 		return true
 	}
 
@@ -118,7 +117,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			// the confirming user may have no caller yet, the lookup is pinned to the setting being updated
 			user, err := m.Client().User.Query().
 				Where(user.HasSettingWith(usersetting.ID(userSettingID))).
-				Only(auth.WithInternalOperationContext(ctx))
+				Only(auth.WithInternalReadContext(ctx))
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to get user for auto-join")
 
@@ -177,7 +176,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 				),
 			),
 		)).
-		WithSetting().All(auth.WithInternalOperationContext(ctx))
+		WithSetting().All(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to query organizations for auto-join")
 		return err

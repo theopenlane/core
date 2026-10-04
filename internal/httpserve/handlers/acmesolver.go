@@ -19,12 +19,12 @@ func (h *Handler) ACMESolverHandler(ctx echo.Context) error {
 	}
 
 	// unauthenticated lookup by challenge path before the owning org is known, so it only needs a cross-org internal read
-	allowCtx := auth.WithInternalCrossOrgContext(ctx.Request().Context())
+	readCtx := auth.WithInternalReadCrossOrgContext(ctx.Request().Context())
 
 	res, err := h.DBClient.DNSVerification.Query().Where(
 		dnsverification.AcmeChallengePathEQ(in.Path),
 		dnsverification.DeletedAtIsNil(),
-	).First(allowCtx)
+	).First(readCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.NotFound(ctx, err)

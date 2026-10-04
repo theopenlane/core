@@ -28,7 +28,7 @@ var frameworkOrder = map[string]int{
 func Catalog(ctx context.Context, client *generated.Client) (models.Questionnaire, error) {
 	questionnaire := defaultQuestionnaire
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	opts, err := getFrameworkOptions(internalCtx, client)
 	if err != nil {
 		return models.Questionnaire{}, err

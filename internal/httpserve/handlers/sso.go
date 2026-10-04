@@ -93,7 +93,7 @@ func (h *Handler) SSOInitiateHandler(ctx echo.Context) error {
 	// public endpoint with no caller, the lookup is pinned to the requested slug
 	org, err := h.DBClient.Organization.Query().
 		Where(organization.SlugName(in.SlugName)).
-		Only(auth.WithInternalOperationContext(ctx.Request().Context()))
+		Only(auth.WithInternalReadContext(ctx.Request().Context()))
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.NotFound(ctx, ErrNotFound)
@@ -366,7 +366,7 @@ func (h *Handler) setIDPAuthTested(ctx context.Context, orgID string) error {
 func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
 	// Fetch the organization's OIDC settings from the database under an allow context; these public auth
 	// endpoints serve users who are not yet members, and the client secret is only used server-side here
-	setting, err := h.getOrganizationSettingByOrgID(auth.WithInternalOperationContext(ctx), orgID)
+	setting, err := h.getOrganizationSettingByOrgID(auth.WithInternalReadContext(ctx), orgID)
 	if err != nil {
 		return nil, err
 	}
@@ -406,7 +406,7 @@ func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 // orgEnforcementsForUser checks the user's default org SSO and TFA requirements
 // Returns the org settings status which includes both SSO and TFA enforcement
 func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusResponse {
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	user, err := h.getUserByEmail(ctx, email)
 	if err != nil {

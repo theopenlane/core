@@ -20,7 +20,7 @@ import (
 // membership query is projected to only the fields the decision needs
 func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email string) (sso.EnforcementInput, *ent.OrganizationSetting, error) {
 	// callers include unauthenticated sso checks with no caller, every lookup below is pinned to orgID or userID
-	lookupCtx := auth.WithInternalCrossOrgContext(ctx)
+	lookupCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	setting, err := db.OrganizationSetting.Query().
 		Where(organizationsetting.OrganizationID(orgID)).

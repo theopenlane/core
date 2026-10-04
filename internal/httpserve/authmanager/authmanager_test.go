@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	genprivacy "github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -30,10 +29,6 @@ func TestSkipOrgValidation(t *testing.T) {
 	ctx = auth.WithInternalCrossOrgContext(ctx)
 	if !skipOrgValidation(ctx) {
 		t.Fatalf("expected true for internal request")
-	}
-	ctx = genprivacy.DecisionContext(context.Background(), genprivacy.Allow)
-	if !skipOrgValidation(ctx) {
-		t.Fatalf("expected true when allowed in privacy decision")
 	}
 }
 

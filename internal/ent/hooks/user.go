@@ -411,7 +411,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 	// the user's memberships span orgs and must not be deduped, the query is pinned to the user id
 	memberships, err := m.Client().OrgMembership.Query().
 		Where(orgmembership.UserID(user.ID)).
-		All(auth.WithInternalCrossOrgContext(ctx))
+		All(auth.WithInternalReadCrossOrgContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error querying user's org memberships")
 		return err
@@ -432,7 +432,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 				group.IsManaged(true),
 				group.Name(groupName),
 			).
-			All(auth.WithInternalOperationContext(newCtx))
+			All(auth.WithInternalReadContext(newCtx))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error querying user's system managed groups for org")
 			return err

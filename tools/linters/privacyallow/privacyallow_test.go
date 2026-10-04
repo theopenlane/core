@@ -16,5 +16,5 @@ func TestPrivacyAllow(t *testing.T) {
 	analyzers, err := plugin.BuildAnalyzers()
 	assert.NilError(t, err)
 
-	analysistest.Run(t, analysistest.TestData(), analyzers[0], "internal/integrations/listener", "outofscope")
+	analysistest.Run(t, analysistest.TestData(), analyzers[0], "internal/integrations/listener", "outofscope", "internal/ent/generated/authz")
 }

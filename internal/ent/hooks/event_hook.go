@@ -192,7 +192,7 @@ func snapshotMutation(ctx context.Context, mutation ent.Mutation, runtimes []*ga
 		return ids, nil, nil
 	}
 
-	lookupCtx := auth.WithInternalOperationContext(ctx)
+	lookupCtx := auth.WithInternalReadContext(ctx)
 	oldValues := make(map[string]map[string]any, len(ids))
 
 	for _, id := range ids {

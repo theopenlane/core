@@ -43,7 +43,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 	// check if SSO is enforced for the target organization, then apply owner, per-user, and per-domain
 	// exemptions to decide whether this user must be redirected through the SSO login flow.
-	internalCtx := auth.WithInternalOperationContext(reqCtx)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
 	status, err := h.fetchSSOStatus(internalCtx, in.TargetOrganizationID, user.ID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resolve sso enforcement for organization switch")

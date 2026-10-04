@@ -56,7 +56,7 @@ func (h *Handler) supportFirstFactor(ctx echo.Context, req *apimodels.LoginReque
 	}
 
 	// the target organization must have consented to support access
-	internalCtx := auth.WithInternalOperationContext(reqCtx)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
 
 	setting, err := h.getOrganizationSettingByOrgID(internalCtx, req.TargetOrganizationID)
 	if err != nil {
@@ -145,7 +145,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 	}
 
 	// re-confirm the organization still consents to support access
-	internalCtx := auth.WithInternalOperationContext(reqCtx)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
 
 	setting, err := h.getOrganizationSettingByOrgID(internalCtx, orgCookie.Value)
 	if err != nil || !setting.AllowSupportAccess {

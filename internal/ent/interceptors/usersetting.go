@@ -18,7 +18,7 @@ import (
 func InterceptorUserSetting() ent.Interceptor {
 	return intercept.TraverseUserSetting(func(ctx context.Context, q *generated.UserSettingQuery) error {
 		// bypass filter if it's an internal request
-		if auth.IsInternalRequest(ctx) {
+		if auth.IsInternalReadRequest(ctx) {
 			return nil
 		}
 

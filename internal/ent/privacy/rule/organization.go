@@ -30,7 +30,7 @@ type ownerMutation interface {
 func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string) error {
 	logx.FromContext(ctx).Debug().Str("relation", relation).Msg("checking access for organization")
 	// skip if permission is already set to allow or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
+	if auth.IsInternalRequest(ctx) {
 		return privacy.Allow
 	}
 
@@ -71,13 +71,13 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 // in the organization query based on the relation provided
 func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *generated.OrganizationQuery) error {
 	// skip if it's an internal request
-	if auth.IsInternalRequest(ctx) {
+	if auth.IsInternalReadRequest(ctx) {
 		return privacy.Allow
 	}
 
 	// run the query with allow context to get the list of organizations
 	// the user is trying to access
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	requestedOrgs, err := query.Clone().Select("id").All(internalCtx)
 	if err != nil {
@@ -103,7 +103,7 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 // and logs additional context about the mutation if provided
 func checkOrgAccess(ctx context.Context, relation, organizationID string) error {
 	// skip if permission is already set to allow or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
+	if auth.IsInternalRequest(ctx) {
 		return nil
 	}
 

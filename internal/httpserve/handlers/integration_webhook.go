@@ -40,7 +40,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 	}
 
 	// deliveries are unauthenticated and the owning org is not known until the endpoint resolves, so the lookup is a cross-org internal read
-	webhookCtx := auth.WithInternalCrossOrgContext(req.Context())
+	webhookCtx := auth.WithInternalReadCrossOrgContext(req.Context())
 
 	persistedWebhook, err := h.IntegrationsRuntime.ResolveWebhookByEndpoint(webhookCtx, endpointID)
 	if err != nil {

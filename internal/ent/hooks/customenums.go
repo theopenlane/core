@@ -337,7 +337,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 
 // isEnumInUse returns a closure that checks whether a custom enum is referenced by any records
 func isEnumInUse(ctx context.Context, client *generated.Client, enumID, objectType, enumField, name string, allErrors *[]string, mu *sync.Mutex) func() {
-	ctrlCtx := auth.WithInternalOperationContext(ctx)
+	ctrlCtx := auth.WithInternalReadContext(ctx)
 
 	if enumField == "" {
 		enumField = "kind"

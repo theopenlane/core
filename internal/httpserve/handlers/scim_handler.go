@@ -33,7 +33,7 @@ func (h *Handler) SCIMHandler(scimHandler http.Handler, routePrefix string) echo
 		}
 
 		// the owning org is not known until the endpoint resolves, so the lookup is a cross-org internal read
-		ctx = auth.WithInternalCrossOrgContext(ctx)
+		ctx = auth.WithInternalReadCrossOrgContext(ctx)
 
 		rt := h.IntegrationsRuntime
 		webhook, err := rt.ResolveWebhookByEndpoint(ctx, endpointID)

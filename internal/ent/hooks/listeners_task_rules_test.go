@@ -56,7 +56,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
 }
 
 // TestTaskRuleListenersNotificationTaskOwnerAttribution guards against a suggested task
-// created off a system-context (CapInternalOperation|CapBypassFGA) mutation ending up
+// created off a system-context (CapInternalOperation) mutation ending up
 // ownerless: ObjectOwnedMixin's create hook assumes such callers set owner_id themselves,
 // so createSuggestedTask must set it explicitly rather than relying on auto-derivation
 func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttribution() {
@@ -79,7 +79,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttributio
 	// mimic domainScanSystemContext exactly: explicit caller.OrganizationID = orgA, bypassing FGA
 	scanSystemCtx := auth.WithCaller(context.Background(), &auth.Caller{
 		OrganizationID: orgA,
-		Capabilities:   auth.CapBypassFGA | auth.CapInternalOperation,
+		Capabilities:   auth.CapInternalOperation,
 	})
 
 	_, err = suite.client.Notification.Create().

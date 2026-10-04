@@ -178,7 +178,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 		internalCtx = auth.WithCaller(internalCtx, &auth.Caller{
 			OrganizationID: caller.OrganizationID,
 			SubjectID:      caller.SubjectID,
-			Capabilities:   auth.CapBypassFGA | auth.CapInternalOperation,
+			Capabilities:   auth.CapInternalOperation,
 		})
 	}
 

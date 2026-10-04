@@ -101,7 +101,7 @@ func createOrgUniqueName(ctx context.Context, m *generated.OnboardingMutation, i
 	exists, err := m.Client().Organization.Query().Where(
 		organization.Name(input.Name),
 		organization.DeletedAtIsNil(),
-	).Exist(auth.WithInternalOperationContext(ctx))
+	).Exist(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		return nil, err
 	}

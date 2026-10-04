@@ -23,7 +23,7 @@ func FindOrphanWorkflowInstanceIDs(ctx context.Context, client *generated.Client
 		return nil, ErrNilClient
 	}
 
-	allowCtx := auth.WithInternalCrossOrgContext(ctx)
+	allowCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	query := client.WorkflowInstance.Query().
 		Where(

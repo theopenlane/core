@@ -211,7 +211,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 	setting, ok := m.SettingID()
 	if ok {
 		// allow before tuples may be created
-		internalCtx := auth.WithInternalOperationContext(ctx)
+		internalCtx := auth.WithInternalReadContext(ctx)
 
 		groupSetting, err := m.Client().GroupSetting.Get(internalCtx, setting)
 		if err != nil {

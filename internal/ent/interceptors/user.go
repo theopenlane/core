@@ -19,7 +19,7 @@ import (
 // TraverseUser returns an ent interceptor for user that filters users based on the context of the query
 func TraverseUser() ent.Interceptor {
 	return intercept.TraverseUser(func(ctx context.Context, q *generated.UserQuery) error {
-		if auth.HasAnyInContextCaller(ctx, auth.CapOrgSupport|auth.CapInternalOperation|auth.CapSystemAdmin) {
+		if auth.IsInternalReadRequest(ctx) || auth.HasAnyInContextCaller(ctx, auth.CapOrgSupport|auth.CapSystemAdmin) {
 			return nil
 		}
 
@@ -114,7 +114,7 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 		return auth.ErrNoAuthUser
 	}
 
-	if caller.Has(auth.CapBypassFGA) {
+	if auth.IsInternalReadRequest(ctx) {
 		return nil
 	}
 

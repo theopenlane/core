@@ -33,7 +33,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 
 	// check user in the database, sub == claims subject and ensure only one record is returned
 	// the refresh token is verified but there is no caller yet, the lookup is pinned to the token subject
-	user, err := h.getUserDetailsByID(auth.WithInternalOperationContext(reqCtx), claims.Subject)
+	user, err := h.getUserDetailsByID(auth.WithInternalReadContext(reqCtx), claims.Subject)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			logx.FromContext(reqCtx).Info().Str("userID", claims.Subject).Msg("user not found during token refresh")

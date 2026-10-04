@@ -231,7 +231,7 @@ func validateDatabaseProvider(ctx context.Context, cfg storage.DatabaseConfig) e
 		return nil
 	}
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	if _, err := entClient.File.Query().Limit(1).Exist(internalCtx); err != nil {
 		return fmt.Errorf("database provider validation: %w", err)
 	}

@@ -90,7 +90,7 @@ type gatedActionConfig struct {
 
 // resolveTargetUsers resolves target user IDs and logs warnings if no users are found
 func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkflows.TargetConfig, obj *wfworkflows.Object, actionType string, actionKey string) ([]string, error) {
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 	userIDs, err := e.ResolveTargets(allowCtx, target, obj)
 	if err != nil {
 		return nil, err
@@ -449,7 +449,7 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 	_, basePayload := wfworkflows.BuildWorkflowActionContext(instance, obj, action.Key)
 
 	// Resolve user IDs to display names for human-readable webhook payloads
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 	// Get initiator from the object that triggered the workflow (not the service that created the instance)
 	initiatorID := wfworkflows.GetObjectUpdatedBy(obj)
 	if initiatorID == "" {

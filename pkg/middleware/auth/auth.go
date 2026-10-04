@@ -327,8 +327,8 @@ func createCallerFromClaims(ctx context.Context, opts *Options, claims *tokens.C
 	}
 
 	// get the user ID from the claims
-	// no caller exists yet, internal operation lets the user lookup pass the user filter
-	user, err := opts.DBClient.User.Get(auth.WithInternalOperationContext(ctx), claims.UserID)
+	// no caller exists yet, internal read lets the user lookup pass the user filter
+	user, err := opts.DBClient.User.Get(auth.WithInternalReadContext(ctx), claims.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -361,7 +361,7 @@ func createCallerFromClaims(ctx context.Context, opts *Options, claims *tokens.C
 // If the token is valid, the caller is returned
 func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string) (*auth.Caller, string, error) {
 	// allow check to bypass privacy rules
-	ctx = auth.WithInternalCrossOrgContext(ctx)
+	ctx = auth.WithInternalReadCrossOrgContext(ctx)
 
 	// check if the token is a personal access token
 	caller, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token, orgFromHeader)
@@ -626,7 +626,7 @@ func orgIDFromToken(c echo.Context, v tokens.Validator) string {
 // isSSOEnforced checks if SSO is enforced for the given organization ID
 func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, error) {
 	setting, err := db.OrganizationSetting.Query().Where(organizationsetting.OrganizationID(orgID)).
-		Only(auth.WithInternalOperationContext(ctx))
+		Only(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return false, nil
@@ -727,7 +727,7 @@ func getRole(ctx context.Context, db *ent.Client, userID, orgID string) (enums.R
 	member, err := db.OrgMembership.Query().
 		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
 		Select(orgmembership.FieldRole).
-		Only(auth.WithInternalCrossOrgContext(ctx))
+		Only(auth.WithInternalReadCrossOrgContext(ctx))
 	if err != nil {
 		return "", err
 	}

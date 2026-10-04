@@ -420,7 +420,7 @@ func ndaRequestsFromMutation(ctx context.Context, m *generated.TrustCenterNDAReq
 	return m.Client().TrustCenterNDARequest.Query().
 		Where(trustcenterndarequest.IDIn(ids...)).
 		Select(trustcenterndarequest.FieldID, trustcenterndarequest.FieldTrustCenterID).
-		All(auth.WithInternalOperationContext(ctx))
+		All(auth.WithInternalReadContext(ctx))
 }
 
 // recordSignedNDARequest marks an existing request signed when an already signed NDA is recorded
@@ -482,7 +482,7 @@ func createNDARequestNotification(ctx context.Context, ndaRequest *generated.Tru
 var ndaApproverRoles = []enums.Role{enums.RoleOwner, enums.RoleSuperAdmin, enums.RoleAdmin}
 
 func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client, ndaRequest *generated.TrustCenterNDARequest, tc *generated.TrustCenter) error {
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	org, err := client.Organization.Query().
 		Where(organization.IDEQ(tc.OwnerID)).
@@ -524,7 +524,7 @@ func getNDAApproverEmails(ctx context.Context, client *generated.Client, ownerID
 		return nil, nil
 	}
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	var emails []string
 
@@ -543,7 +543,7 @@ func getNDAApproverEmails(ctx context.Context, client *generated.Client, ownerID
 
 func getNDAApproverUserIDs(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
 	// approvers are read for the trust center owner org regardless of who made the request, both queries are pinned to it
-	internalCtx := auth.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	if setting != nil && setting.NdaApproverGroupID != nil && *setting.NdaApproverGroupID != "" {
 		var ids []string

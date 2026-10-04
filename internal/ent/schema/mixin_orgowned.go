@@ -205,13 +205,12 @@ var orgHookCreateServiceOnlyFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 // setOwnerIDField sets the owner id field on the mutation based on the current organization
 func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) error {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok {
+	if _, ok := auth.CallerFromContext(ctx); !ok {
 		return fmt.Errorf("failed to get organization id from context: %w", auth.ErrNoAuthUser)
 	}
 
-	// skip setting owner when the caller has both caps, e.g. org creation and subscription management
-	if caller.Has(auth.CapInternalOperation | auth.CapBypassFGA) {
+	// keep an owner set explicitly by a caller trusted to write across orgs
+	if owner, ok := m.Field(ownerFieldName); ok && owner != "" && auth.HasCrossOrgCapabilities(ctx) {
 		return nil
 	}
 
@@ -277,7 +276,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 
 		// if the auth into the api was an API token AND then
 		// current query is not an internal request, check scopes
-		if auth.IsAPITokenAuthentication(ctx) && !auth.IsInternalRequest(ctx) {
+		if auth.IsAPITokenAuthentication(ctx) && !auth.IsInternalReadRequest(ctx) {
 			if err := rule.CheckSubjectScope(ctx, q.Type(), fgax.CanView, nil); errors.Is(err, rule.ErrRequiredScopeNotSet) {
 				return err
 			}

@@ -106,7 +106,7 @@ func HookInvite() ent.Hook {
 			// the recipient is not yet visible to the inviter, the lookup is pinned to the invite email
 			recipientExists, err := m.Client().User.Query().
 				Where(user.EmailEqualFold(emailAddress)).
-				Exist(auth.WithInternalOperationContext(ctx))
+				Exist(auth.WithInternalReadContext(ctx))
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error checking recipient account existence")
 
@@ -387,7 +387,7 @@ func checkUserAlreadyMember(ctx context.Context, m *generated.InviteMutation, em
 		return nil
 	}
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	user, err := m.Client().User.Query().
 		Where(user.Email(email)).

@@ -38,7 +38,7 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 	case strings.HasPrefix(in.Resource, "acct:"):
 		email := strings.TrimPrefix(in.Resource, "acct:")
 
-		internalCtx := auth.WithInternalOperationContext(reqCtx)
+		internalCtx := auth.WithInternalReadContext(reqCtx)
 
 		user, err := h.getUserByEmail(reqCtx, email)
 		if err != nil {

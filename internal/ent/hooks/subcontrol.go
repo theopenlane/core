@@ -36,7 +36,7 @@ func HookSubcontrolUpdate() ent.Hook {
 			}
 
 			// ensure that the subcontrol has at least one control assigned
-			internalCtx := auth.WithInternalOperationContext(ctx)
+			internalCtx := auth.WithInternalReadContext(ctx)
 
 			control, err := sc.Control(internalCtx)
 			if err != nil {

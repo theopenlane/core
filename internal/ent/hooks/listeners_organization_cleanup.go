@@ -27,7 +27,7 @@ func OrganizationCleanupListeners() []gala.Registration {
 			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {
 				return &auth.Caller{
 					OrganizationID: payload.EntityID,
-					Capabilities:   auth.CapBypassFGA | auth.CapInternalOperation,
+					Capabilities:   auth.CapInternalOperation,
 				}
 			},
 			ContextKeys: []func(context.Context) context.Context{

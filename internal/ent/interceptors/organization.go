@@ -23,7 +23,7 @@ func InterceptorOrganization() ent.Interceptor {
 			return nil
 		}
 
-		if ok := auth.IsInternalRequest(ctx); ok {
+		if ok := auth.IsInternalReadRequest(ctx); ok {
 			return nil
 		}
 
@@ -130,7 +130,7 @@ func getParentOrgIDs(ctx context.Context, childOrgID string) ([]string, error) {
 			organization.HasChildrenWith(organization.ID(childOrgID)),
 		).
 		Select(organization.FieldID).
-		Strings(auth.WithInternalOperationContext(ctx))
+		Strings(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		return nil, err
 	}

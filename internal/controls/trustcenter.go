@@ -60,8 +60,8 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 	// get the first standard, this will be the most recent revision if multiple revisions exist
 	std := stds[0]
 
-	// if we get the standard back, all controls should be accessible so we can run as an internal operation to skip checks
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	// if we get the standard back, all controls should be accessible so we can run as an internal read to skip checks
+	internalCtx := auth.WithInternalReadContext(ctx)
 	where, err := ControlFilterByStandard(internalCtx, trustCenterStandardFilter, std)
 	if err != nil {
 

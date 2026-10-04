@@ -228,7 +228,7 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -282,7 +282,7 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 		return nil, err
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 	ownerID, err := workflows.ObjectOwnerID(allowCtx, r.db, *objType, objectID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})

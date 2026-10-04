@@ -126,7 +126,7 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 		return "", nil
 	}
 
-	allowCtx := auth.WithInternalOperationContext(ctx)
+	allowCtx := auth.WithInternalReadContext(ctx)
 	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, m.client, obj)
 	if err != nil {
 		return "", fmt.Errorf("%w: %w", ErrFailedToQueryObjectRefs, err)

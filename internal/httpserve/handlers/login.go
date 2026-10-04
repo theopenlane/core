@@ -56,7 +56,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
-	internalCtx := auth.WithInternalOperationContext(reqCtx)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
 
 	orgStatus := h.orgEnforcementsForUser(internalCtx, req.Username)
 	if orgStatus != nil && orgStatus.Enforced {

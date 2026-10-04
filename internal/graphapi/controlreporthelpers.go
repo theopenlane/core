@@ -334,7 +334,7 @@ func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 	}
 
 	// the report only exposes aggregate counts and statuses, so it covers all evidence linked to the controls
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	evidenceList, err := withTransactionalMutation(ctx).Evidence.Query().Where(
 		evidence.OwnerIDIn(orgIDs...),
@@ -381,7 +381,7 @@ func buildPoliciesMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 		edgePredicates = append(edgePredicates, internalpolicy.HasSubcontrolsWith(subcontrol.IDIn(subcontrolIDs...)))
 	}
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	policies, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(
 		internalpolicy.OwnerIDIn(orgIDs...),
@@ -952,7 +952,7 @@ func buildMappingsMap(ctx context.Context, controls []*model.ControlReport, scID
 		return map[string][]*model.ControlInfo{}, nil
 	}
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	mcs, err := withTransactionalMutation(ctx).MappedControl.Query().Where(
 		mappedcontrol.Or(where...),
 	).WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().All(internalCtx)
@@ -1063,7 +1063,7 @@ func relatedControlsFromSubcontrols(ctx context.Context, controlID string, frame
 		return nil, err
 	}
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	scIDs, err := withTransactionalMutation(ctx).Subcontrol.Query().
 		Where(
 			subcontrol.ControlID(controlID),

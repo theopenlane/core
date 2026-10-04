@@ -409,7 +409,7 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 
 	org, err := transaction.FromContext(ctx).Organization.Query().
 		Where(organization.StripeCustomerID(paymentMethod.Customer.ID)).
-		Only(auth.WithInternalCrossOrgContext(ctx))
+		Only(auth.WithInternalReadCrossOrgContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("could not fetch organization by stripe customer id")
 		return err
@@ -431,7 +431,7 @@ func findOrgSubscriptionByCustomer(ctx context.Context, subscription *stripe.Sub
 		return nil
 	}
 
-	internalCtx := auth.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	org, err := transaction.FromContext(ctx).Organization.Query().
 		Where(organization.StripeCustomerID(subscription.Customer.ID)).Only(internalCtx)
@@ -484,7 +484,7 @@ func adoptStripeSubscriptionID(ctx context.Context, orgSub *ent.OrgSubscription,
 
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
 func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
-	internalCtx := auth.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
 		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(internalCtx)

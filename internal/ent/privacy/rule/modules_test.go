@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	"github.com/theopenlane/core/v2/internal/testutils"
@@ -247,13 +246,6 @@ func TestDenyIfMissingAllModules_BypassScenarios(t *testing.T) {
 	featureRule := rule.DenyIfMissingAllModules()
 
 	testMutation := createExportMutation(t)
-
-	t.Run("bypass with privacy decision context", func(t *testing.T) {
-		ctx := privacy.DecisionContext(baseCtx, privacy.Allow)
-		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
-	})
 
 	t.Run("bypass with InternalOperationCaller", func(t *testing.T) {
 		ctx := auth.WithCaller(baseCtx, &auth.Caller{Capabilities: auth.CapInternalOperation})

@@ -1,5 +1,5 @@
-// Package privacyallow is a golangci-lint module plugin that reports bare privacy.Allow decision
-// contexts; an allow decision is only permitted when it is wrapped directly in a scoped caller
+// Package privacyallow is a golangci-lint module plugin that reports privacy.Allow decision contexts;
+// internal operations use auth capabilities such as auth.WithInternalOperationContext instead
 package privacyallow
 
 import (
@@ -12,23 +12,12 @@ import (
 	"golang.org/x/tools/go/types/typeutil"
 )
 
-const (
-	linterName = "privacyallow"
-	authPkg    = "github.com/theopenlane/iam/auth"
-)
+const linterName = "privacyallow"
 
-// defaultInclude is the set of path fragments checked when no include setting is provided
-var defaultInclude = []string{
-	"internal/integrations/",
-	"internal/ent/hooks/listeners_",
-	"internal/ent/notifications/",
-	"internal/workflows/",
-}
-
-// allowedWrappers are the auth functions that scope a caller around an allow decision
-var allowedWrappers = map[string]bool{
-	"WithCaller":              true,
-	"EnsureIntegrationCaller": true,
+// defaultExclude is the set of path fragments skipped when no exclude setting is provided
+var defaultExclude = []string{
+	"internal/ent/generated/",
+	"internal/ent/historygenerated/",
 }
 
 func init() {
@@ -37,8 +26,10 @@ func init() {
 
 // Settings configures which files the linter checks
 type Settings struct {
-	// Include lists path fragments; a file is checked when its path contains any of them
+	// Include lists path fragments; when set, only files whose path contains one of them are checked
 	Include []string `json:"include"`
+	// Exclude lists path fragments; files whose path contains one of them are skipped
+	Exclude []string `json:"exclude"`
 }
 
 // Plugin is the privacyallow linter plugin
@@ -53,8 +44,8 @@ func New(settings any) (register.LinterPlugin, error) {
 		return nil, err
 	}
 
-	if len(s.Include) == 0 {
-		s.Include = defaultInclude
+	if len(s.Exclude) == 0 {
+		s.Exclude = defaultExclude
 	}
 
 	return &Plugin{settings: s}, nil
@@ -70,11 +61,11 @@ func (p *Plugin) GetLoadMode() string {
 	return register.LoadModeTypesInfo
 }
 
-// Analyzer returns the analyzer that reports bare allow decisions
+// Analyzer returns the analyzer that reports allow decisions
 func (p *Plugin) Analyzer() *analysis.Analyzer {
 	return &analysis.Analyzer{
 		Name: linterName,
-		Doc:  "reports privacy.DecisionContext(ctx, privacy.Allow) that is not wrapped directly in auth.WithCaller or auth.EnsureIntegrationCaller",
+		Doc:  "reports privacy.DecisionContext(ctx, privacy.Allow) and privacy.Allowf decisions; use auth capabilities instead",
 		Run:  p.run,
 	}
 }
@@ -86,15 +77,13 @@ func (p *Plugin) run(pass *analysis.Pass) (any, error) {
 			continue
 		}
 
-		wrapped := wrappedAllowCalls(pass, file)
-
 		ast.Inspect(file, func(n ast.Node) bool {
 			call, ok := n.(*ast.CallExpr)
-			if !ok || !isAllowDecision(pass, call) || wrapped[call] {
+			if !ok || !isAllowDecision(pass, call) {
 				return true
 			}
 
-			pass.Reportf(call.Pos(), "privacy.Allow must be wrapped in a scoped caller (auth.WithCaller or auth.EnsureIntegrationCaller); use capabilities instead of a bare allow decision")
+			pass.Reportf(call.Pos(), "privacy.Allow decision contexts are not allowed; use auth.WithInternalOperationContext or a scoped caller instead")
 
 			return true
 		})
@@ -103,10 +92,20 @@ func (p *Plugin) run(pass *analysis.Pass) (any, error) {
 	return nil, nil
 }
 
-// included reports whether the file path matches one of the configured include fragments
+// included reports whether the file is checked based on the include and exclude settings
 func (p *Plugin) included(filename string) bool {
 	if strings.HasSuffix(filename, "_test.go") {
 		return false
+	}
+
+	for _, fragment := range p.settings.Exclude {
+		if strings.Contains(filename, fragment) {
+			return false
+		}
+	}
+
+	if len(p.settings.Include) == 0 {
+		return true
 	}
 
 	for _, fragment := range p.settings.Include {
@@ -118,51 +117,25 @@ func (p *Plugin) included(filename string) bool {
 	return false
 }
 
-// wrappedAllowCalls returns the allow decision calls passed directly as the context to an allowed wrapper
-func wrappedAllowCalls(pass *analysis.Pass, file *ast.File) map[*ast.CallExpr]bool {
-	wrapped := map[*ast.CallExpr]bool{}
-
-	ast.Inspect(file, func(n ast.Node) bool {
-		call, ok := n.(*ast.CallExpr)
-		if !ok || len(call.Args) == 0 || !isAllowedWrapper(pass, call) {
-			return true
-		}
-
-		if inner, ok := call.Args[0].(*ast.CallExpr); ok && isAllowDecision(pass, inner) {
-			wrapped[inner] = true
-		}
-
-		return true
-	})
-
-	return wrapped
-}
-
-// isAllowedWrapper reports whether the call is one of the auth functions that scope a caller
-func isAllowedWrapper(pass *analysis.Pass, call *ast.CallExpr) bool {
-	fn, ok := typeutil.Callee(pass.TypesInfo, call).(*types.Func)
-	if !ok || fn.Pkg() == nil {
-		return false
-	}
-
-	return fn.Pkg().Path() == authPkg && allowedWrappers[fn.Name()]
-}
-
-// isAllowDecision reports whether the call is privacy.DecisionContext(ctx, privacy.Allow)
+// isAllowDecision reports whether the call is privacy.DecisionContext(ctx, privacy.Allow) or privacy.DecisionContext(ctx, privacy.Allowf(...))
 func isAllowDecision(pass *analysis.Pass, call *ast.CallExpr) bool {
 	fn, ok := typeutil.Callee(pass.TypesInfo, call).(*types.Func)
 	if !ok || fn.Name() != "DecisionContext" || !isPrivacyPkg(fn.Pkg()) || len(call.Args) != 2 {
 		return false
 	}
 
-	sel, ok := call.Args[1].(*ast.SelectorExpr)
-	if !ok {
+	switch decision := call.Args[1].(type) {
+	case *ast.SelectorExpr:
+		obj, ok := pass.TypesInfo.Uses[decision.Sel].(*types.Var)
+
+		return ok && obj.Name() == "Allow" && isPrivacyPkg(obj.Pkg())
+	case *ast.CallExpr:
+		allowf, ok := typeutil.Callee(pass.TypesInfo, decision).(*types.Func)
+
+		return ok && allowf.Name() == "Allowf" && isPrivacyPkg(allowf.Pkg())
+	default:
 		return false
 	}
-
-	obj, ok := pass.TypesInfo.Uses[sel.Sel].(*types.Var)
-
-	return ok && obj.Name() == "Allow" && isPrivacyPkg(obj.Pkg())
 }
 
 // isPrivacyPkg reports whether the package is ent's privacy package or a generated re-export of it

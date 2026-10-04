@@ -64,7 +64,7 @@ func (r *Resolver) controlDiff(ctx context.Context, input model.ControlDiffInput
 		Msg("control diffing timestamps")
 
 	// history reads span every control on the standard, not only the ones the caller can see
-	internalCtx := auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	oldSnapshots, err := getControlHistories(internalCtx, historyClient, input.StandardID, oldRevisionTime)
 	if err != nil {

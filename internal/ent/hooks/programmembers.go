@@ -29,7 +29,7 @@ func HookProgramMembers() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			internalCtx := auth.WithInternalOperationContext(ctx)
+			internalCtx := auth.WithInternalReadContext(ctx)
 
 			program, err := m.Client().Program.Get(internalCtx, programID)
 			if err != nil {

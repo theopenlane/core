@@ -15,11 +15,6 @@ import (
 func HookGroupMembers() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.GroupMembershipFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) (generated.Value, error) {
-			// skip when the caller has both caps, e.g. org creation adding the creator to managed groups before they are an org member
-			if auth.HasInContextCaller(ctx, auth.CapInternalOperation|auth.CapBypassFGA) {
-				return next.Mutate(ctx, m)
-			}
-
 			// check role, if its not set the default is member
 			userID, ok := m.UserID()
 			if !ok {
@@ -33,7 +28,7 @@ func HookGroupMembers() ent.Hook {
 
 			// allow query, the permissions are not yet added to the group
 			// and members get added during the create process
-			group, err := m.Client().Group.Get(auth.WithInternalOperationContext(ctx), groupID)
+			group, err := m.Client().Group.Get(auth.WithInternalReadContext(ctx), groupID)
 			if err != nil {
 				return nil, err
 			}

@@ -256,16 +256,7 @@ func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRu
 // ShouldSkipFeatureCheck determines if module access checks should be bypassed based
 // on the available context
 func ShouldSkipFeatureCheck(ctx context.Context) bool {
-	if auth.HasAnyInContextCaller(ctx, auth.CapSystemAdmin|auth.CapInternalOperation|auth.CapBypassFeatureCheck) {
-		return true
-	}
-
-	// bypass module checks on anonymous trust center and questionnaire users
-	if auth.IsAnonymousFromContext(ctx) {
-		return true
-	}
-
-	if _, allowCtx := privacy.DecisionFromContext(ctx); allowCtx {
+	if auth.HasAnyInContextCaller(ctx, auth.CapInternalOperation|auth.CapInternalRead|auth.CapBypassFeatureCheck) {
 		return true
 	}
 

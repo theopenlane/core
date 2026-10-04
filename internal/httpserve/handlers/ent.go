@@ -208,7 +208,7 @@ func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*en
 		return nil, nil, ErrDownloadTokenMissingFile
 	}
 
-	crossOrgCtx = auth.WithInternalCrossOrgContext(ctx)
+	crossOrgCtx = auth.WithInternalReadCrossOrgContext(ctx)
 
 	fileRecord, err := transaction.FromContext(ctx).File.Get(crossOrgCtx, *tokenRecord.FileID)
 	if err != nil {
@@ -238,11 +238,11 @@ func (h *Handler) getUserByResetToken(ctx context.Context, token string) (*ent.U
 }
 
 // getUserByEmail returns the ent user with the user settings based on the email in the request
-// callers have no caller for the user yet (login, signup, sso, etc), so the lookup runs as an internal operation pinned to the email
+// callers have no caller for the user yet (login, signup, sso, etc), so the lookup runs as an internal read pinned to the email
 func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.EmailEqualFold(email)).
-		Only(auth.WithInternalOperationContext(ctx))
+		Only(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("email", email).Err(err).Msg("error obtaining user from email")
 
@@ -253,11 +253,11 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, 
 }
 
 // getUserByID returns the ent user with the user settings based on the email in the request
-// callers have no caller for the user yet (webauthn), so the lookup runs as an internal operation pinned to the id
+// callers have no caller for the user yet (webauthn), so the lookup runs as an internal read pinned to the id
 func (h *Handler) getUserByID(ctx context.Context, id string) (*ent.User, context.Context, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.ID(id)).
-		Only(auth.WithInternalOperationContext(ctx))
+		Only(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from id")
 
@@ -732,7 +732,7 @@ func (h *Handler) getOrganizationSettingByOrgID(ctx context.Context, orgID strin
 // is enabled for the organization; existing members are left unchanged
 func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user *ent.User) error {
 	// the user is not a member of the org yet, the setting lookup is pinned to orgID
-	setting, err := h.getOrganizationSettingByOrgID(auth.WithInternalOperationContext(ctx), orgID)
+	setting, err := h.getOrganizationSettingByOrgID(auth.WithInternalReadContext(ctx), orgID)
 	if err != nil {
 		return err
 	}
@@ -791,7 +791,7 @@ func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user
 // getUserDefaultOrgID returns the default organization ID for a user
 func (h *Handler) getUserDefaultOrgID(ctx context.Context, userID string) (string, error) {
 	// callers include unauthenticated sso checks, the lookup is pinned to the user id
-	us, err := transaction.FromContext(ctx).UserSetting.Query().Where(usersetting.UserID(userID)).WithDefaultOrg().Only(auth.WithInternalOperationContext(ctx))
+	us, err := transaction.FromContext(ctx).UserSetting.Query().Where(usersetting.UserID(userID)).WithDefaultOrg().Only(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error fetching user settings")
 
