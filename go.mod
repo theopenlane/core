@@ -72,7 +72,7 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.1
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.2
-	github.com/knadh/koanf/v2 v2.3.6
+	github.com/knadh/koanf/v2 v2.3.7
 	github.com/labstack/echo-contrib v0.50.1
 	github.com/labstack/echo/v4 v4.15.4
 	github.com/labstack/gommon v0.5.0
@@ -121,7 +121,7 @@ require (
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
 	github.com/theopenlane/entx v0.34.5
-	github.com/theopenlane/go-client v0.14.0
+	github.com/theopenlane/go-client v0.14.1
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.39.3
@@ -130,7 +130,7 @@ require (
 	github.com/theopenlane/utils v0.7.2
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.13.0
-	github.com/vektah/gqlparser/v2 v2.5.37
+	github.com/vektah/gqlparser/v2 v2.5.58
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/wundergraph/astjson v1.1.0
 	github.com/xeipuuv/gojsonschema v1.2.0
