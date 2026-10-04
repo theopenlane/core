@@ -119,7 +119,7 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
-		return applyAnonTrustCenterFilter(ctx, q, tcID, allowAnonAccess)
+		return applyAnonTrustCenterFilter(q, tcID, allowAnonAccess)
 	}
 
 	// deny all trust center requests that did not have a trust center key
@@ -150,7 +150,7 @@ func isMutationRequest(ctx context.Context) bool {
 
 // applyAnonTrustCenterFilter scopes the query to the active trust center key, denying resources
 // that do not permit anonymous access
-func applyAnonTrustCenterFilter(ctx context.Context, q intercept.Query, tcID string, allowAnonAccess bool) error {
+func applyAnonTrustCenterFilter(q intercept.Query, tcID string, allowAnonAccess bool) error {
 	if !allowAnonAccess {
 		return privacy.Denyf("anonymous trust center access not allowed for this resource: %s", q.Type())
 	}

@@ -28,7 +28,7 @@ func AllowIfTrustCenterEditor() privacy.MutationRule {
 			return privacy.Skipf("trust center ID not found in mutation")
 		}
 
-		return checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID, m.Op())
+		return checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID)
 	})
 }
 
@@ -98,7 +98,7 @@ func getTrustCenterIDFromMutation(ctx context.Context, m ent.Mutation) string {
 }
 
 // checkTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.
-func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID string, op ent.Op) error {
+func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID string) error {
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller.IsAnonymous() {
 		return auth.ErrNoAuthUser
