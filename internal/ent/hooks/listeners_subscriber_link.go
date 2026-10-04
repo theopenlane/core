@@ -31,12 +31,7 @@ func SubscriberLinkListeners() []gala.Registration {
 
 // subscriberLinkCaller scopes the listener to the organization of the caller that created the subscriber
 func subscriberLinkCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-	caller := &auth.Caller{
-		OrganizationID: restored.OrganizationID,
-		Capabilities:   auth.CapInternalOperation,
-	}
-
-	return caller
+	return auth.NewOrgInternalCaller(restored.OrganizationID)
 }
 
 // handleSubscriberCreatedLink links a subscriber to the owning organization's contact

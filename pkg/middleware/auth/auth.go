@@ -568,7 +568,8 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 			userID := userIDFromToken(c, v)
 			if userID != "" {
 				mustSSO, dbErr := userMustSSOFunc(reqCtx, conf.DBClient, orgID, userID)
-				if dbErr != nil {
+				// the client may disconnect before the lookup finishes, which is not an error worth reporting
+				if dbErr != nil && !errors.Is(dbErr, context.Canceled) {
 					logger.Error().Err(dbErr).Msg("unable to evaluate sso enforcement for unauthorized request")
 				}
 

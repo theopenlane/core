@@ -405,10 +405,7 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 // domainScanSystemContext builds a context authorized to create/update Scan and Notification records
 // for organizationID on behalf of the system
 func domainScanSystemContext(ctx context.Context, organizationID string) context.Context {
-	return auth.WithCaller(ctx, &auth.Caller{
-		OrganizationID: organizationID,
-		Capabilities:   auth.CapInternalOperation,
-	})
+	return auth.WithOrgInternalCaller(ctx, organizationID)
 }
 
 // hostFromURL returns rawURL's host, falling back to rawURL unchanged if it doesn't parse
