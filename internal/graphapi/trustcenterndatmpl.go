@@ -190,7 +190,7 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 // submitTrustCenterNDAResponse submits a trust center NDA response
 func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error) {
-	caller, tcID, ok := auth.IsTrustCenterUserCaller(ctx)
+	caller, tcID, ok := auth.GetTrustCenterUserCaller(ctx)
 	if !ok {
 		return nil, newPermissionDeniedError()
 	}

@@ -126,13 +126,13 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 		return "", nil
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
-	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, m.client, obj)
+	readCtx := auth.WithInternalReadContext(ctx)
+	objRefIDs, err := workflows.ObjectRefIDs(readCtx, m.client, obj)
 	if err != nil {
 		return "", fmt.Errorf("%w: %w", ErrFailedToQueryObjectRefs, err)
 	}
 
-	proposal, err := workflows.FindProposalForObjectRefs(allowCtx, m.client, objRefIDs, domainKey, []enums.WorkflowProposalState{enums.WorkflowProposalStateSubmitted},
+	proposal, err := workflows.FindProposalForObjectRefs(readCtx, m.client, objRefIDs, domainKey, []enums.WorkflowProposalState{enums.WorkflowProposalStateSubmitted},
 		[]enums.WorkflowProposalState{enums.WorkflowProposalStateSubmitted, enums.WorkflowProposalStateDraft})
 	if err != nil {
 		return "", err

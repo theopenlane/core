@@ -364,7 +364,7 @@ func (h *Handler) setIDPAuthTested(ctx context.Context, orgID string) error {
 // to create the relying party instance, passing in the issuer URL, client credentials, the callback URL for the OIDC flow,
 // and a set of standard OIDC scopes (openid, profile, email).
 func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
-	// Fetch the organization's OIDC settings from the database under an allow context; these public auth
+	// Fetch the organization's OIDC settings from the database as an internal read; these public auth
 	// endpoints serve users who are not yet members, and the client secret is only used server-side here
 	setting, err := h.getOrganizationSettingByOrgID(auth.WithInternalReadContext(ctx), orgID)
 	if err != nil {

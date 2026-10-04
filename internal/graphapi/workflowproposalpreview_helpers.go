@@ -65,9 +65,9 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		}
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 
-	proposal, err := r.db.WorkflowProposal.Get(allowCtx, instance.WorkflowProposalID)
+	proposal, err := r.db.WorkflowProposal.Get(readCtx, instance.WorkflowProposalID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}
@@ -127,8 +127,8 @@ func buildWorkflowProposalPreview(ctx context.Context, client *generated.Client,
 
 	currentValues := map[string]any{}
 	if len(fields) > 0 {
-		allowCtx := auth.WithInternalReadContext(ctx)
-		entity, err := workflows.LoadWorkflowObject(allowCtx, client, objectType.String(), objectID)
+		readCtx := auth.WithInternalReadContext(ctx)
+		entity, err := workflows.LoadWorkflowObject(readCtx, client, objectType.String(), objectID)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
 		}
@@ -202,14 +202,14 @@ func workflowInstanceObjectContext(ctx context.Context, client *generated.Client
 		return "", "", nil
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 	query := client.WorkflowObjectRef.Query().
 		Where(workflowobjectref.WorkflowInstanceIDEQ(instance.ID))
 	if instance.OwnerID != "" {
 		query = query.Where(workflowobjectref.OwnerIDEQ(instance.OwnerID))
 	}
 
-	ref, err := query.First(allowCtx)
+	ref, err := query.First(readCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return "", "", nil
@@ -240,8 +240,8 @@ func workflowProposalObjectContext(ctx context.Context, client *generated.Client
 		return "", "", nil
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
-	ref, err := client.WorkflowObjectRef.Get(allowCtx, proposal.WorkflowObjectRefID)
+	readCtx := auth.WithInternalReadContext(ctx)
+	ref, err := client.WorkflowObjectRef.Get(readCtx, proposal.WorkflowObjectRefID)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return "", "", nil
@@ -276,7 +276,7 @@ func workflowInstanceHasApprover(ctx context.Context, client *generated.Client, 
 		return false, nil
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 
 	direct, err := client.WorkflowAssignmentTarget.Query().
 		Where(
@@ -285,7 +285,7 @@ func workflowInstanceHasApprover(ctx context.Context, client *generated.Client, 
 				workflowassignment.WorkflowInstanceIDEQ(instanceID),
 			),
 		).
-		Exist(allowCtx)
+		Exist(readCtx)
 	if err != nil {
 		return false, err
 	}
@@ -296,7 +296,7 @@ func workflowInstanceHasApprover(ctx context.Context, client *generated.Client, 
 	groupIDs, err := client.GroupMembership.Query().
 		Where(groupmembership.UserIDEQ(userID)).
 		Select(groupmembership.FieldGroupID).
-		Strings(allowCtx)
+		Strings(readCtx)
 	if err != nil {
 		return false, err
 	}
@@ -311,7 +311,7 @@ func workflowInstanceHasApprover(ctx context.Context, client *generated.Client, 
 				workflowassignment.WorkflowInstanceIDEQ(instanceID),
 			),
 		).
-		Exist(allowCtx)
+		Exist(readCtx)
 	if err != nil {
 		return false, err
 	}
@@ -324,7 +324,7 @@ func workflowProposalHasApprover(ctx context.Context, client *generated.Client, 
 		return false, nil
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 
 	direct, err := client.WorkflowAssignmentTarget.Query().
 		Where(
@@ -335,7 +335,7 @@ func workflowProposalHasApprover(ctx context.Context, client *generated.Client, 
 				),
 			),
 		).
-		Exist(allowCtx)
+		Exist(readCtx)
 	if err != nil {
 		return false, err
 	}
@@ -346,7 +346,7 @@ func workflowProposalHasApprover(ctx context.Context, client *generated.Client, 
 	groupIDs, err := client.GroupMembership.Query().
 		Where(groupmembership.UserIDEQ(userID)).
 		Select(groupmembership.FieldGroupID).
-		Strings(allowCtx)
+		Strings(readCtx)
 	if err != nil {
 		return false, err
 	}
@@ -363,7 +363,7 @@ func workflowProposalHasApprover(ctx context.Context, client *generated.Client, 
 				),
 			),
 		).
-		Exist(allowCtx)
+		Exist(readCtx)
 	if err != nil {
 		return false, err
 	}

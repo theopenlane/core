@@ -125,13 +125,13 @@ func (WorkflowProposal) Indexes() []ent.Index {
 	}
 }
 
-// Mixin of the Integration
+// Mixin of the WorkflowProposal
 func (w WorkflowProposal) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeAnnotations: true,
 		excludeSoftDelete:  true,
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
+			newObjectOwnedMixin[generated.WorkflowProposal](w,
 				withParents(WorkflowObjectRef{}),
 				withOrganizationOwnerServiceOnly(),
 				withSkipForSystemAdmin(),

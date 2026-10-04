@@ -228,8 +228,8 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
-	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
+	readCtx := auth.WithInternalReadContext(ctx)
+	proposal, err := r.db.WorkflowProposal.Get(readCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}
@@ -282,19 +282,19 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 		return nil, err
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
-	ownerID, err := workflows.ObjectOwnerID(allowCtx, r.db, *objType, objectID)
+	readCtx := auth.WithInternalReadContext(ctx)
+	ownerID, err := workflows.ObjectOwnerID(readCtx, r.db, *objType, objectID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
 	}
 	if ownerID != "" {
-		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &ownerID)
+		readCtx, err = common.SetOrganizationInAuthContext(readCtx, &ownerID)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, r.db, &workflows.Object{
+	objRefIDs, err := workflows.ObjectRefIDs(readCtx, r.db, &workflows.Object{
 		ID:   objectID,
 		Type: *objType,
 	})
@@ -318,7 +318,7 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 			workflowproposal.WorkflowObjectRefIDIn(objRefIDs...),
 			workflowproposal.StateIn(states...),
 		).
-		All(allowCtx)
+		All(readCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}

@@ -99,8 +99,8 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.
 	if obj != nil && obj.Node == nil {
-		allowCtx := auth.WithInternalReadContext(ctx)
-		if _, err := e.loadObjectNode(allowCtx, obj); err != nil {
+		readCtx := auth.WithInternalReadContext(ctx)
+		if _, err := e.loadObjectNode(readCtx, obj); err != nil {
 			return nil, err
 		}
 	}
@@ -112,14 +112,14 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 			return nil, err
 		}
 
-		allowCtx := auth.WithInternalReadContext(ctx)
+		readCtx := auth.WithInternalReadContext(ctx)
 
 		proposal, err := e.client.WorkflowProposal.Query().
 			Where(
 				workflowproposal.IDEQ(instance.WorkflowProposalID),
 				workflowproposal.OwnerIDEQ(orgID),
 			).
-			Only(allowCtx)
+			Only(readCtx)
 		if err == nil && proposal != nil {
 			proposedChanges = proposal.Changes
 		}
@@ -137,9 +137,9 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 	)
 
 	// Merge assignment context (assignments, instance, initiator)
-	// Use privacy bypass for internal workflow operations that query assignment state
-	allowCtx := auth.WithInternalReadContext(ctx)
-	assignmentCtx, err := workflows.BuildAssignmentContext(allowCtx, e.client, instance.ID)
+	// Use an internal read to query assignment state
+	readCtx := auth.WithInternalReadContext(ctx)
+	assignmentCtx, err := workflows.BuildAssignmentContext(readCtx, e.client, instance.ID)
 	if err != nil {
 		return nil, err
 	}

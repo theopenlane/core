@@ -90,8 +90,8 @@ type gatedActionConfig struct {
 
 // resolveTargetUsers resolves target user IDs and logs warnings if no users are found
 func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkflows.TargetConfig, obj *wfworkflows.Object, actionType string, actionKey string) ([]string, error) {
-	allowCtx := auth.WithInternalReadContext(ctx)
-	userIDs, err := e.ResolveTargets(allowCtx, target, obj)
+	readCtx := auth.WithInternalReadContext(ctx)
+	userIDs, err := e.ResolveTargets(readCtx, target, obj)
 	if err != nil {
 		return nil, err
 	}
@@ -449,14 +449,14 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 	_, basePayload := wfworkflows.BuildWorkflowActionContext(instance, obj, action.Key)
 
 	// Resolve user IDs to display names for human-readable webhook payloads
-	allowCtx := auth.WithInternalReadContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 	// Get initiator from the object that triggered the workflow (not the service that created the instance)
 	initiatorID := wfworkflows.GetObjectUpdatedBy(obj)
 	if initiatorID == "" {
 		initiatorID = instance.CreatedBy
 	}
-	initiatorName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, initiatorID)
-	approverName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, instance.UpdatedBy)
+	initiatorName := wfworkflows.ResolveUserDisplayName(readCtx, e.client, initiatorID)
+	approverName := wfworkflows.ResolveUserDisplayName(readCtx, e.client, instance.UpdatedBy)
 
 	basePayload["approved_by"] = approverName
 	basePayload["initiator"] = initiatorName
@@ -464,7 +464,7 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 
 	// Enrich with object-specific details from canonical schema annotations.
 	// This adds fields like ref_code, title, name, status based on schema annotations.
-	if err := wfworkflows.EnrichWorkflowPayload(allowCtx, e.client, obj.Type, obj.ID, basePayload); err != nil {
+	if err := wfworkflows.EnrichWorkflowPayload(readCtx, e.client, obj.Type, obj.ID, basePayload); err != nil {
 		return fmt.Errorf("%w: %w", ErrFailedToEnrichWebhookPayload, err)
 	}
 

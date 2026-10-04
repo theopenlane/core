@@ -78,8 +78,8 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowCtx := auth.WithInternalReadContext(ctx)
-			entity, err := workflows.LoadWorkflowObject(allowCtx, client, mut.Type(), id)
+			readCtx := auth.WithInternalReadContext(ctx)
+			entity, err := workflows.LoadWorkflowObject(readCtx, client, mut.Type(), id)
 			if err != nil {
 				return nil, err
 			}
@@ -94,7 +94,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, mut.Type(), "UPDATE", changedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, proposedChanges, obj)
+			definitions, err := wfEngine.FindMatchingDefinitions(readCtx, mut.Type(), "UPDATE", changedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, proposedChanges, obj)
 			if err != nil {
 				return nil, err
 			}
@@ -109,7 +109,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 					continue
 				}
 
-				shouldRun, err := wfEngine.EvaluateConditions(allowCtx, def, obj, "UPDATE", changedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, proposedChanges)
+				shouldRun, err := wfEngine.EvaluateConditions(readCtx, def, obj, "UPDATE", changedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, proposedChanges)
 				if err != nil {
 					return nil, err
 				}
@@ -166,16 +166,16 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 		return nil, ErrMutationMissingID
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 
 	if len(proposedChanges) == 0 {
-		return workflows.LoadWorkflowObject(allowCtx, client, m.Type(), id)
+		return workflows.LoadWorkflowObject(readCtx, client, m.Type(), id)
 	}
 
 	// Load the existing entity BEFORE staging proposals and triggering workflows.
 	// This ensures we return the original (unchanged) entity even if workflows
 	// auto-apply proposals synchronously.
-	originalEntity, err := workflows.LoadWorkflowObject(allowCtx, client, m.Type(), id)
+	originalEntity, err := workflows.LoadWorkflowObject(readCtx, client, m.Type(), id)
 	if err != nil {
 		return nil, err
 	}
@@ -262,8 +262,8 @@ func resolveApprovalSubmissionMode(def *generated.WorkflowDefinition) enums.Work
 
 // stageProposalChanges creates or updates WorkflowProposal records for each domain
 func stageProposalChanges(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domainChanges []workflows.DomainChanges, userID string) error {
-	// Use privacy bypass for internal workflow operations
-	allowCtx := auth.WithInternalReadContext(ctx)
+	// Use an internal read for workflow lookups
+	readCtx := auth.WithInternalReadContext(ctx)
 
 	submissionMode := resolveApprovalSubmissionMode(def)
 	initialState := lo.Ternary(
@@ -272,13 +272,13 @@ func stageProposalChanges(ctx context.Context, client *generated.Client, def *ge
 		enums.WorkflowProposalStateDraft,
 	)
 
-	ownerID, err := workflows.ObjectOwnerID(allowCtx, client, objectType, objectID)
+	ownerID, err := workflows.ObjectOwnerID(readCtx, client, objectType, objectID)
 	if err != nil {
 		return ErrFailedToGetObjectOwnerID
 	}
 
 	obj := &workflows.Object{ID: objectID, Type: objectType}
-	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, client, obj)
+	objRefIDs, err := workflows.ObjectRefIDs(readCtx, client, obj)
 	if err != nil {
 		return ErrFailedToQueryObjectRefs
 	}
@@ -291,7 +291,7 @@ func stageProposalChanges(ctx context.Context, client *generated.Client, def *ge
 			return ErrFailedToComputeProposalHash
 		}
 
-		existing, err := workflows.FindProposalForObjectRefs(allowCtx, client, objRefIDs, domain.DomainKey, nil, []enums.WorkflowProposalState{
+		existing, err := workflows.FindProposalForObjectRefs(readCtx, client, objRefIDs, domain.DomainKey, nil, []enums.WorkflowProposalState{
 			enums.WorkflowProposalStateDraft,
 			enums.WorkflowProposalStateSubmitted,
 		})

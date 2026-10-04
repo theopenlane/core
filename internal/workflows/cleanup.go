@@ -23,7 +23,7 @@ func FindOrphanWorkflowInstanceIDs(ctx context.Context, client *generated.Client
 		return nil, ErrNilClient
 	}
 
-	allowCtx := auth.WithInternalReadCrossOrgContext(ctx)
+	readCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	query := client.WorkflowInstance.Query().
 		Where(
@@ -35,7 +35,7 @@ func FindOrphanWorkflowInstanceIDs(ctx context.Context, client *generated.Client
 		query = query.Where(workflowinstance.OwnerIDEQ(ownerID))
 	}
 
-	return query.Select(workflowinstance.FieldID).Strings(allowCtx)
+	return query.Select(workflowinstance.FieldID).Strings(readCtx)
 }
 
 // DeleteWorkflowInstanceChildren removes workflow instance children such as assignments, targets, proposals, object refs, and events.

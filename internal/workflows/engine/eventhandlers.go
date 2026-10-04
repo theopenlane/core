@@ -978,9 +978,9 @@ func (l *WorkflowListeners) loadInstanceForScope(scope *observability.Scope, ins
 		return nil, "", auth.ErrNoAuthUser
 	}
 
-	allowCtx := auth.WithInternalReadContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 
-	instance, err := loadWorkflowInstance(allowCtx, l.client, instanceID, orgID)
+	instance, err := loadWorkflowInstance(readCtx, l.client, instanceID, orgID)
 	if err != nil {
 		return nil, "", err
 	}

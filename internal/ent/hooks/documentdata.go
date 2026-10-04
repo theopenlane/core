@@ -44,7 +44,7 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			caller, ok := auth.GetTrustCenterUserCaller(ctx, docTemplate.TrustCenterID)
+			caller, ok := auth.GetVerifiedTrustCenterUserCaller(ctx, docTemplate.TrustCenterID)
 			if !ok {
 				return nil, errMustBeAnonymousUser
 			}

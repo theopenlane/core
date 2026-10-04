@@ -75,7 +75,7 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 		return privacy.Allow
 	}
 
-	// run the query with allow context to get the list of organizations
+	// run the query as an internal read to get the list of organizations
 	// the user is trying to access
 	internalCtx := auth.WithInternalReadContext(ctx)
 

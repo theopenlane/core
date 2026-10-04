@@ -232,7 +232,8 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	case ent.OpQueryCount:
 		// nothing to filter if we're just counting
 		return v, nil
-	case ent.OpQueryIDs, ent.OpQueryFirstID:
+	case ent.OpQueryIDs, ent.OpQueryFirstID, ent.OpQueryOnlyID:
+		// note: OpQueryOnlyID uses IDs() internally, and returns a slice, not a single id
 		ids, ok := v.([]string)
 		if !ok {
 			logx.FromContext(ctx).Error().Str("query_type", q.Type()).Str("operation", string(ctxQuery.Op)).Msgf("failed to cast query results to expected slice %T", v)
@@ -241,18 +242,6 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 		}
 
 		return filterIDList(ctx, ids, rule.GetFGAObjectType(q))
-	case ent.OpQueryOnlyID:
-		allow, err := singleIDCheck(ctx, v, rule.GetFGAObjectType(q))
-		if err != nil {
-			return nil, err
-		}
-
-		if !allow {
-			return nil, nil
-		}
-
-		return v, nil
-
 	default:
 		switch t := v.(type) {
 		case []*V:
@@ -312,27 +301,6 @@ func filterIDList(ctx context.Context, ids []string, objectType string) ([]strin
 	}
 
 	return allowedIDs, nil
-}
-
-// singleIDCheck checks if a single object id is allowed and returns a boolean
-func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, error) {
-	id, ok := v.(string)
-	if !ok {
-		logx.FromContext(ctx).Error().Msgf("failed to cast query results to expected single ID %T", v)
-
-		return false, ErrRetrievingObjects
-	}
-
-	allowedIDs, err := filterIDList(ctx, []string{id}, objectType)
-	if err != nil {
-		return false, err
-	}
-
-	if len(allowedIDs) == 0 {
-		return false, nil
-	}
-
-	return true, nil
 }
 
 // filterListObjects filters a list of objects to only include the objects that the user has access to
