@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
@@ -26,14 +25,14 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	// Owner user to setup SSO organization.
 	owner := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0p3nl@n3rocks!",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(owner.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
@@ -55,7 +54,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	})
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(ent.CreateOrgMembershipInput{
@@ -84,14 +83,14 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	// Owner user to setup TFA organization.
 	owner := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0p3nl@n3rocks!",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(owner.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting := suite.db.OrganizationSetting.Create().SetInput(ent.CreateOrganizationSettingInput{
@@ -114,7 +113,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 	})
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(ent.CreateOrgMembershipInput{
@@ -148,14 +147,14 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	// Owner user to setup TFA organization.
 	owner := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0p3nl@n3rocks!",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(owner.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting := suite.db.OrganizationSetting.Create().SetInput(ent.CreateOrganizationSettingInput{
@@ -178,7 +177,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 	})
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(ent.CreateOrgMembershipInput{

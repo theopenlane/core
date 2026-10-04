@@ -151,8 +151,7 @@ func isMutationRequest(ctx context.Context) bool {
 // applyAnonTrustCenterFilter scopes the query to the active trust center key, denying resources
 // that do not permit anonymous access
 func applyAnonTrustCenterFilter(ctx context.Context, q intercept.Query, tcID string, allowAnonAccess bool) error {
-	_, allowRequest := privacy.DecisionFromContext(ctx)
-	if !allowAnonAccess && !allowRequest {
+	if !allowAnonAccess {
 		return privacy.Denyf("anonymous trust center access not allowed for this resource: %s", q.Type())
 	}
 

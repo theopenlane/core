@@ -29,7 +29,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -40,7 +39,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
@@ -88,7 +87,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerTFAOnly() {
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	// Create organization setting with only TFA enforced, not SSO
@@ -299,7 +298,7 @@ func (suite *HandlerTestSuite) TestSSOInitiateHandler() {
 	oidc := newMockOIDCServer(t)
 	defer oidc.Close()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"
@@ -362,7 +361,7 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	)
 	defer oidc.Close()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	ssoUser := suite.db.User.Create().
@@ -392,7 +391,7 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 		ExecX(ctx)
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(ssoUser.ID, org.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
@@ -454,7 +453,7 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, email string, enforc
 	)
 	defer oidc.Close()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	ssoUser, err := suite.db.User.Create().
@@ -571,7 +570,7 @@ func (suite *HandlerTestSuite) TestSSOCallbackJITProvisioning() {
 	)
 	defer oidc.Close()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	ssoUser, err := suite.db.User.Create().

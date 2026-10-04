@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -122,7 +122,7 @@ func HookUpdateManagedGroups() ent.Hook {
 func HookBlockOwnerRoleChange() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
-			if _, allow := privacy.DecisionFromContext(ctx); allow {
+			if contextx.IsOwnershipTransfer(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
@@ -237,17 +237,18 @@ func HookOrgMembersDelete() ent.Hook {
 			}
 
 			// check to see if the default org needs to be updated for the user
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			if _, err = checkAndUpdateDefaultOrg(allowCtx, orgMembership.UserID, orgMembership.OrganizationID, m.Client()); err != nil {
+			// cleanup runs as an internal operation so rows the deleting caller cannot see are still removed
+			internalCtx := auth.WithInternalOperationContext(ctx)
+			if _, err = checkAndUpdateDefaultOrg(internalCtx, orgMembership.UserID, orgMembership.OrganizationID, m.Client()); err != nil {
 				return nil, err
 			}
 
-			if err := deleteSystemManagedUserGroup(allowCtx, m, orgMembership.UserID, orgMembership.OrganizationID); err != nil {
+			if err := deleteSystemManagedUserGroup(internalCtx, m, orgMembership.UserID, orgMembership.OrganizationID); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error deleting user's system managed group from organization")
 				return nil, err
 			}
 
-			if err := removeUserOrgScopedMemberships(allowCtx, m, orgMembership.UserID, orgMembership.OrganizationID); err != nil {
+			if err := removeUserOrgScopedMemberships(internalCtx, m, orgMembership.UserID, orgMembership.OrganizationID); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error removing user's group and program memberships from organization")
 				return nil, err
 			}
@@ -286,9 +287,9 @@ func updateOrgMemberDefaultOrgOnCreate(ctx context.Context, m *generated.OrgMemb
 
 	// allow the request, which is for a user other than the authenticated user
 	// to update the default org
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
-	return updateDefaultOrgIfPersonal(allowCtx, userID, orgID, m.Client())
+	return updateDefaultOrgIfPersonal(internalCtx, userID, orgID, m.Client())
 }
 
 func deleteSystemManagedUserGroup(ctx context.Context,

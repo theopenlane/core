@@ -17,8 +17,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestBeginWebauthnRegistration() {
@@ -54,9 +54,9 @@ func (suite *HandlerTestSuite) TestBeginWebauthnRegistration() {
 	require.NotEmpty(t, out.Session)
 
 	// add privacy allow to run the query to check that the user is created
-	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(context.Background())
 
-	exists, err := suite.db.User.Query().Where(user.Email(email)).Exist(allowCtx)
+	exists, err := suite.db.User.Query().Where(user.Email(email)).Exist(internalCtx)
 	require.NoError(t, err)
 	require.True(t, exists)
 }

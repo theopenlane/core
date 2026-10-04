@@ -27,10 +27,6 @@ func HookWorkflowAssignmentDecisionAuth() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if _, allow := privacy.DecisionFromContext(ctx); allow {
-				return next.Mutate(ctx, m)
-			}
-
 			status, ok := m.Status()
 			if !ok {
 				return next.Mutate(ctx, m)

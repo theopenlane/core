@@ -14,7 +14,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
@@ -196,15 +195,15 @@ func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCe
 		return nil, newPermissionDeniedError()
 	}
 
-	allowCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), caller)
+	internalCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, caller))
 
-	txnCtx := withTransactionalMutation(allowCtx)
+	txnCtx := withTransactionalMutation(internalCtx)
 
 	ndaRequest, err := txnCtx.TrustCenterNDARequest.Query().
 		Where(
 			trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
 			trustcenterndarequest.TrustCenterID(tcID),
-		).First(allowCtx)
+		).First(internalCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
@@ -221,7 +220,7 @@ func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCe
 			TemplateID: lo.ToPtr(input.TemplateID),
 			Data:       input.Response,
 		},
-	).Save(allowCtx)
+	).Save(internalCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}

@@ -12,10 +12,10 @@ import (
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
+	"github.com/theopenlane/iam/auth"
 )
 
 // provenanceConversionDefinitionID is the shared test integration definition every conversion
@@ -106,7 +106,7 @@ func provenanceConversionProviderState(t *testing.T) openapi.IntegrationProvider
 // it converts in the caller's organization, and is idempotent on a second call
 func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	providerState := provenanceConversionProviderState(t)
 
@@ -204,7 +204,7 @@ func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 		SetDisplayName("Single Linked Finding").
 		SetOwnerID(installation.OwnerID).
 		AddIntegrationIDs(installation.ID).
-		Save(allowCtx)
+		Save(internalCtx)
 	th.RequireNoError(t, err)
 
 	sharedFinding, err := suite.Client.DB.Finding.Create().
@@ -212,7 +212,7 @@ func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 		SetDisplayName("Shared Linked Finding").
 		SetOwnerID(installation.OwnerID).
 		AddIntegrationIDs(installation.ID, other.ID).
-		Save(allowCtx)
+		Save(internalCtx)
 	th.RequireNoError(t, err)
 
 	t.Cleanup(func() {

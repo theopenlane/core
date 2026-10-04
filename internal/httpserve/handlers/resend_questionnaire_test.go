@@ -16,7 +16,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
@@ -25,9 +24,9 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 	suite.registerTestHandler("POST", "/questionnaire/resend", suite.h.ResendQuestionnaireEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(ec)
 
-	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", ""))
+	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", "")))
 
 	template, err := suite.db.Template.Create().
 		SetName("Resend Test Template").

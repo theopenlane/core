@@ -16,7 +16,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -1445,7 +1444,7 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 
 		for _, tc := range testCases {
 			t.Run(tc.name, func(t *testing.T) {
-				allowCtx := privacy.DecisionContext(tcOrg.Owner.UserCtx, privacy.Allow)
+				internalCtx := auth.WithInternalOperationContext(tcOrg.Owner.UserCtx)
 
 				create := suite.Client.DB.TrustCenterDoc.Create().
 					SetTitle("My Test Document").
@@ -1457,7 +1456,7 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 					create = create.SetVisibility(*tc.visibility)
 				}
 
-				trustCenterDoc, err := create.Save(allowCtx)
+				trustCenterDoc, err := create.Save(internalCtx)
 
 				if tc.expectError {
 					assert.ErrorContains(t, err, tc.expectedErrorMsg)
@@ -1495,12 +1494,12 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 		assert.Check(t, trustCenterDoc.OriginalFileID != nil, "Original file ID should be set")
 		assert.Check(t, is.Equal(enums.TrustCenterDocumentVisibilityPubliclyVisible, *trustCenterDoc.Visibility))
 
-		allowCtx := privacy.DecisionContext(tcOrg.Owner.UserCtx, privacy.Allow)
+		internalCtx := auth.WithInternalOperationContext(tcOrg.Owner.UserCtx)
 
 		updatedDoc, err := suite.Client.DB.TrustCenterDoc.UpdateOneID(trustCenterDoc.ID).
 			ClearOriginalFileID().
 			ClearFileID().
-			Save(allowCtx)
+			Save(internalCtx)
 		assert.NilError(t, err)
 		assert.Assert(t, updatedDoc != nil)
 
@@ -1524,16 +1523,16 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 	trustCenter := tcOrg.TrustCenter
 
 	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
-	allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(dbCtx)
 
 	watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
-		Only(allowCtx)
+		Only(internalCtx)
 	assert.NilError(t, err)
 
 	watermarkConfig, err = suite.Client.DB.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
 		SetIsEnabled(true).
-		Save(allowCtx)
+		Save(internalCtx)
 	assert.NilError(t, err)
 	assert.Assert(t, watermarkConfig.IsEnabled)
 
@@ -1594,7 +1593,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 
 	_, err = suite.Client.DB.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
 		SetIsEnabled(false).
-		Save(allowCtx)
+		Save(internalCtx)
 	assert.NilError(t, err)
 
 	t.Run("watermarkingEnabled false with config disabled should remain false with DISABLED status", func(t *testing.T) {
@@ -1634,11 +1633,11 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 	trustCenter := tcOrg.TrustCenter
 
 	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
-	allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(dbCtx)
 
 	watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
-		Only(allowCtx)
+		Only(internalCtx)
 	assert.NilError(t, err)
 
 	createPDFUpload := th.UploadFileFunc(t, th.PdfFilePath)
@@ -1647,7 +1646,7 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 		// set config to enabled
 		_, err := suite.Client.DB.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
 			SetIsEnabled(true).
-			Save(allowCtx)
+			Save(internalCtx)
 		assert.NilError(t, err)
 
 		testCases := []struct {
@@ -1707,7 +1706,7 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 		// set global config to disabled
 		_, err := suite.Client.DB.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
 			SetIsEnabled(false).
-			Save(allowCtx)
+			Save(internalCtx)
 		assert.NilError(t, err)
 
 		testCases := []struct {
@@ -1829,15 +1828,15 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 	})
 
 	t.Run("document with watermarkingEnabled false can be updated to true and status changes to PENDING", func(t *testing.T) {
-		allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
+		internalCtx := auth.WithInternalOperationContext(dbCtx)
 		watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
 			Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
-			Only(allowCtx)
+			Only(internalCtx)
 		assert.NilError(t, err)
 
 		_, err = suite.Client.DB.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
 			SetIsEnabled(false).
-			Save(allowCtx)
+			Save(internalCtx)
 		assert.NilError(t, err)
 
 		file2 := createPDFUpload()

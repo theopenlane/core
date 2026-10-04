@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestOrganizationRolesHandler() {
@@ -57,9 +56,9 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 	suite.registerRouteOnce("POST", "account/organization-roles", suite.h.AssignOrganizationRolesHandler)
 	suite.registerRouteOnce("DELETE", "account/organization-roles", suite.h.DeleteOrganizationRolesHandler)
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ownerCtx := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole))
-	ownerCtx = privacy.DecisionContext(ownerCtx, privacy.Allow)
+	ownerCtx = auth.WithInternalOperationContext(ownerCtx)
 	ownerCtx = generated.NewContext(ownerCtx, suite.db)
 
 	group, err := suite.db.Group.Create().
@@ -79,7 +78,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 	require.NoError(t, err)
 
 	memberCtx := auth.NewTestContextWithOrgID(member.ID, testUser1.OrganizationID, auth.WithOrganizationRole(auth.MemberRole))
-	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = auth.WithInternalOperationContext(memberCtx)
 	memberCtx = generated.NewContext(memberCtx, suite.db)
 
 	cases := []struct {
@@ -242,7 +241,7 @@ func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 
 	suite.registerRouteOnce("GET", "account/roles/me", suite.h.AccountRolesMeHandler)
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	group, err := suite.db.Group.Create().
 		SetName("Role Me Test Group " + testUser1.ID).
 		SetDescription("Group for account roles me tests").

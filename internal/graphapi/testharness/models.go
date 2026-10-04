@@ -31,7 +31,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
@@ -1914,7 +1913,7 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 	// the trust center create hook seeds a customizable message-updates email template; remove it when
 	// the test ends so it does not leak into shared-org email template assertions
 	t.Cleanup(func() {
-		cleanupCtx := privacy.DecisionContext(SetInternalContext(ctx, tc.Client.DB), privacy.Allow)
+		cleanupCtx := SetInternalContext(ctx, tc.Client.DB)
 		_, _ = tc.Client.DB.EmailTemplate.Delete().Where(emailtemplate.TrustCenterID(trustCenter.ID)).Exec(cleanupCtx)
 	})
 
@@ -2319,8 +2318,7 @@ func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T)
 	}
 
 	// Use questionnaire caller to bypass auth checks (simulates anonymous JWT)
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = auth.WithCaller(allowCtx, auth.NewQuestionnaireCaller(arb.OwnerID, "", "", ""))
+	internalCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(arb.OwnerID, "", "", "")))
 
 	mutation := arb.Client.DB.AssessmentResponse.Create().
 		SetAssessmentID(arb.AssessmentID).
@@ -2335,7 +2333,7 @@ func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T)
 		mutation.SetDocumentDataID(arb.DocumentDataID)
 	}
 
-	response, err := mutation.Save(allowCtx)
+	response, err := mutation.Save(internalCtx)
 	RequireNoError(t, err)
 
 	return response
@@ -2547,7 +2545,7 @@ func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 
 // MustNew asset builder is used to create, without authz checks, assets in the database
 func (a *AssetBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Asset {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	if a.Name == "" {
 		a.Name = gofakeit.AppName()
@@ -2562,7 +2560,7 @@ func (a *AssetBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Asset {
 
 // MustNew SLADefinition builder is used to create, without authz checks, SLA definitions in the database.
 func (s *SLADefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.SLADefinition {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	if s.SLADays == 0 {
 		s.SLADays = 30

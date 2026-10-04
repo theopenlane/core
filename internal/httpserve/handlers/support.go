@@ -20,7 +20,6 @@ import (
 	apimodels "github.com/theopenlane/core/common/openapi"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
@@ -57,9 +56,9 @@ func (h *Handler) supportFirstFactor(ctx echo.Context, req *apimodels.LoginReque
 	}
 
 	// the target organization must have consented to support access
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(reqCtx)
 
-	setting, err := h.getOrganizationSettingByOrgID(allowCtx, req.TargetOrganizationID)
+	setting, err := h.getOrganizationSettingByOrgID(internalCtx, req.TargetOrganizationID)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return h.NotFound(ctx, ErrNotFound)
@@ -146,9 +145,9 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 	}
 
 	// re-confirm the organization still consents to support access
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(reqCtx)
 
-	setting, err := h.getOrganizationSettingByOrgID(allowCtx, orgCookie.Value)
+	setting, err := h.getOrganizationSettingByOrgID(internalCtx, orgCookie.Value)
 	if err != nil || !setting.AllowSupportAccess {
 		return h.Forbidden(ctx, ErrSupportAccessNotConsented)
 	}

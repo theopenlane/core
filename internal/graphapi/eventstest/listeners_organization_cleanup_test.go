@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
@@ -36,18 +35,18 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 	orgID := org.OrganizationID
 	ownerCtx := org.UserCtx
-	allowCtx := privacy.DecisionContext(th.SetInternalContext(ownerCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(ownerCtx, suite.Client.DB)
 
 	waitForEvents()
 
 	// the suite mocks no stripe subscription cancel call, so keep the entitlements_deleted
 	// listener on its skip path to avoid parking a retrying job on the shared runtime
-	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(orgID).ClearStripeCustomerID().Exec(allowCtx))
+	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(orgID).ClearStripeCustomerID().Exec(internalCtx))
 
 	task1 := (&th.TaskBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
 	contact1 := (&th.ContactBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
 
-	installation, fragment := seedHarnessLoop(t, allowCtx)
+	installation, fragment := seedHarnessLoop(t, internalCtx)
 	assert.Equal(t, orgID, installation.OwnerID)
 
 	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)
@@ -60,7 +59,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	workflowDef := createWorkflowDefinition(allowCtx, t, orgID, "Control", enums.WorkflowKindApproval, models.WorkflowDefinitionDocument{
+	workflowDef := createWorkflowDefinition(internalCtx, t, orgID, "Control", enums.WorkflowKindApproval, models.WorkflowDefinitionDocument{
 		Triggers:   []models.WorkflowTrigger{{Operation: "UPDATE", Fields: []string{"status"}}},
 		Conditions: []models.WorkflowCondition{{Expression: "true"}},
 		Actions: []models.WorkflowAction{{
@@ -75,10 +74,10 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 		SetTitle("Cleanup Control").
 		SetStatus(enums.ControlStatusNotImplemented).
 		SetOwnerID(orgID).
-		Save(allowCtx)
+		Save(internalCtx)
 	assert.NilError(t, err)
 
-	instance, err := workflowEngine.TriggerWorkflow(allowCtx, workflowDef, &workflows.Object{
+	instance, err := workflowEngine.TriggerWorkflow(internalCtx, workflowDef, &workflows.Object{
 		ID:   control.ID,
 		Type: enums.WorkflowObjectTypeControl,
 	}, engine.TriggerInput{EventType: "UPDATE", ChangedFields: []string{"status"}})
@@ -86,7 +85,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 
 	waitForGala(t, workflowRuntime)
 
-	assignments, err := graphapi.WaitForAssignments(allowCtx, suite.Client.DB, instance.ID, 1)
+	assignments, err := graphapi.WaitForAssignments(internalCtx, suite.Client.DB, instance.ID, 1)
 	assert.NilError(t, err)
 
 	resp, err := suite.Client.API.DeleteOrganization(ownerCtx, orgID)
@@ -95,7 +94,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 
 	waitForEvents()
 
-	purgedCtx := entx.SkipSoftDelete(allowCtx)
+	purgedCtx := entx.SkipSoftDelete(internalCtx)
 
 	waitForCondition(t, func() bool {
 		exists, err := suite.Client.DB.Organization.Query().Where(organization.ID(orgID)).Exist(purgedCtx)

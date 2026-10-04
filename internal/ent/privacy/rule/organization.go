@@ -77,9 +77,9 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 
 	// run the query with allow context to get the list of organizations
 	// the user is trying to access
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
-	requestedOrgs, err := query.Clone().Select("id").All(allowCtx)
+	requestedOrgs, err := query.Clone().Select("id").All(internalCtx)
 	if err != nil {
 		return err
 	}

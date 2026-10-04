@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	entorg "github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -103,12 +103,12 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		return nil, newPermissionDeniedError()
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	// Step 4: Look up user by email to get their ID (if they exist)
 	newOwnerUser, err := c.User.Query().
 		Where(user.Email(newOwnerEmail)).
-		Only(allowCtx)
+		Only(internalCtx)
 
 	// Step 5: Check if new owner is already a member
 	var newOwnerMembership *generated.OrgMembership
@@ -149,13 +149,15 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		logx.FromContext(ctx).Info().Str("new_owner_id", newOwnerUser.ID).Msg("new owner already a member, directly transferring ownership")
 
 		// Update new owner to OWNER role
-		// Use allowCtx to bypass privacy restrictions since this is an authorized ownership transfer
+		// runs as an internal operation since this is an authorized ownership transfer
+		// the ownership transfer marker lets the owner role change past the hook that blocks direct owner changes
+		transferCtx := contextx.WithOwnershipTransfer(internalCtx)
 		newRole := enums.RoleOwner
 		if err := c.OrgMembership.UpdateOneID(newOwnerMembership.ID).
 			SetRole(newRole).
 			SetSSOExempt(true).
 			SetSSOExemptReason("organization owner").
-			Exec(allowCtx); err != nil {
+			Exec(transferCtx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to update new owner role")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})
 		}
@@ -166,7 +168,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 			SetRole(superAdminRole).
 			SetSSOExempt(false).
 			ClearSSOExemptReason().
-			Exec(allowCtx); err != nil {
+			Exec(transferCtx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to set current owner to super admin")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})
 		}

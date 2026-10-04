@@ -23,8 +23,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/testutils"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestRefreshHandler() {
@@ -48,7 +48,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	ec = privacy.DecisionContext(ec, privacy.Allow)
+	ec = auth.WithInternalOperationContext(ec)
 
 	// create user in the database
 	validUser := gofakeit.Email()

@@ -14,8 +14,8 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
@@ -115,11 +115,11 @@ func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed()
 
 	suite.ClearTestData()
 
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
 
 	// opted out before confirming: token unused, but the unsubscribed guard still refuses to activate them
-	require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetUnsubscribed(true).SetActive(false).Exec(allowCtx))
+	require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetUnsubscribed(true).SetActive(false).Exec(internalCtx))
 
 	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
 	req := httptest.NewRequest(http.MethodPost, target, nil)
@@ -129,7 +129,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed()
 	assert.Equal(t, http.StatusBadRequest, recorder.Code)
 
 	// no resurrection: still unsubscribed, inactive, and unverified
-	updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
 	require.NoError(t, err)
 	assert.True(t, updated.Unsubscribed)
 	assert.False(t, updated.Active)
@@ -146,7 +146,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 
 	suite.ClearTestData()
 
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
 
 	// creating the trust center provisions its live setting (allow_subscribers defaults true), so a
 	// subscriber scoped to it is permitted
@@ -155,7 +155,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
-	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(allowCtx) })
+	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(internalCtx) })
 
 	sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), "")
 
@@ -166,7 +166,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
 
-	updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
 	require.NoError(t, err)
 	assert.True(t, updated.VerifiedEmail)
 	assert.True(t, updated.Active)
@@ -198,7 +198,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 
 	suite.ClearTestData()
 
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
 
 	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
@@ -209,7 +209,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 	suite.e.ServeHTTP(firstRec, firstReq)
 	assert.Equal(t, http.StatusOK, firstRec.Code)
 
-	confirmed, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	confirmed, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
 	require.NoError(t, err)
 	require.True(t, confirmed.VerifiedEmail)
 	require.True(t, confirmed.Active)
@@ -221,7 +221,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 	assert.Equal(t, http.StatusBadRequest, secondRec.Code)
 
 	// the replay changed nothing
-	after, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	after, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
 	require.NoError(t, err)
 	assert.True(t, after.VerifiedEmail)
 	assert.True(t, after.Active)
@@ -238,14 +238,14 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterExpiredResend() {
 
 	suite.ClearTestData()
 
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
 
 	tc, err := suite.db.TrustCenter.Create().
 		SetSlug("expired-resend").
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
-	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(allowCtx) })
+	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(internalCtx) })
 
 	expiredTTL := time.Now().AddDate(0, 0, -1).Format(time.RFC3339Nano)
 	sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), expiredTTL)
@@ -256,7 +256,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterExpiredResend() {
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
 
-	updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
 	require.NoError(t, err)
 	require.NotEqual(t, sub.Token, updated.Token)
 
@@ -290,7 +290,7 @@ func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, trustCenterID,
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	reqCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	reqCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
 
 	// store token in db
 	builder := suite.db.Subscriber.Create().

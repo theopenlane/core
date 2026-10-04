@@ -11,15 +11,14 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 )
 
 func InterceptorUserSetting() ent.Interceptor {
 	return intercept.TraverseUserSetting(func(ctx context.Context, q *generated.UserSettingQuery) error {
-		// bypass filter if the request is allowed or if it's an internal request
-		if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
+		// bypass filter if it's an internal request
+		if auth.IsInternalRequest(ctx) {
 			return nil
 		}
 

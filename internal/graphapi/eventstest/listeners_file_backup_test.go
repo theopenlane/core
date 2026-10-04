@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -210,9 +209,9 @@ func TestFileBackupListener(t *testing.T) {
 	t.Run("file created by an anonymous questionnaire respondent replicates", func(t *testing.T) {
 		setupReplicatingBackup(t, "backups/respondent.txt")
 
-		// covers the listener under the anonymous respondent caller which is why the privacy.Allow is here
+		// covers the listener under the anonymous respondent caller which is why the internal operation is here
 		respondent := auth.NewQuestionnaireCaller(user.OrganizationID, ulids.New().String(), "Anonymous Respondent", "")
-		respondentCtx := privacy.DecisionContext(generated.NewContext(auth.WithCaller(context.Background(), respondent), suite.Client.DB), privacy.Allow)
+		respondentCtx := auth.WithInternalOperationContext(generated.NewContext(auth.WithCaller(context.Background(), respondent), suite.Client.DB))
 		f := newBackupFile(t, respondentCtx, user.OrganizationID, "listener-backup-respondent.txt", nil)
 
 		waitForCondition(t, func() bool {

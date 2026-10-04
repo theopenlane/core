@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 	"slices"
 	"strings"
 
@@ -128,10 +129,19 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		return nil
 	}
 
-	query := "SELECT user_id FROM " + table + " WHERE id in ($1)"
+	// one placeholder per id so every membership in a bulk mutation is checked
+	placeholders := make([]string, len(memberIDs))
+	args := make([]any, len(memberIDs))
+
+	for i, id := range memberIDs {
+		placeholders[i] = fmt.Sprintf("$%d", i+1)
+		args[i] = id
+	}
+
+	query := "SELECT user_id FROM " + table + " WHERE id IN (" + strings.Join(placeholders, ",") + ")"
 
 	var rows sql.Rows
-	if err := generated.FromContext(ctx).Driver().Query(ctx, query, []any{strings.Join(memberIDs, ",")}, &rows); err != nil {
+	if err := m.Client().Driver().Query(ctx, query, args, &rows); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to get user ID from membership")
 
 		return err
@@ -139,7 +149,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 
 	defer rows.Close()
 
-	if rows.Next() {
+	for rows.Next() {
 		var userID string
 
 		if err := rows.Scan(&userID); err != nil {
@@ -155,7 +165,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		}
 	}
 
-	return nil
+	return rows.Err()
 }
 
 func checkMutation(ctx context.Context) bool {

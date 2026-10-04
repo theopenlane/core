@@ -11,11 +11,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // LiveExternalContents is the resolver for the liveExternalContents field
@@ -32,7 +32,7 @@ func (r *internalPolicyResolver) LiveExternalContents(ctx context.Context, obj *
 		return nil, nil
 	}
 
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	found, err := r.findPrimaryDriveIntegration(ctx, obj.OwnerID)
 	if err != nil || found == nil {

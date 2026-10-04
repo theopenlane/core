@@ -10,10 +10,10 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // prefix is 0L-
@@ -59,7 +59,7 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 	// track subcontrols to create
 	subcontrolsToCreate := []SubcontrolToCreate{}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	// create a function for each control to clone
 	// this will allow us to run the cloning in parallel
@@ -73,7 +73,7 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 
 			res, err := client.Control.Create().
 				SetInput(controlInput).
-				SetIsTrustCenterControl(isTCControl).Save(allowCtx)
+				SetIsTrustCenterControl(isTCControl).Save(internalCtx)
 			if err != nil {
 				mu.Lock()
 
@@ -120,7 +120,7 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 			// this should also cascade delete any subcontrols that were created
 			if _, err := client.Control.Delete().
 				Where(control.IDIn(createdControlIDs...)).
-				Exec(allowCtx); err != nil {
+				Exec(internalCtx); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error deleting controls that were created before the error occurred")
 			}
 		}

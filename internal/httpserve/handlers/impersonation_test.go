@@ -19,7 +19,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestStartImpersonation() {
@@ -29,7 +28,7 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 	suite.registerTestHandler("POST", "impersonation/start", suite.h.StartImpersonation)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(ec)
 
 	// Create test users - admin and target user
 	adminID := ulids.New().String()
@@ -179,10 +178,8 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			req := httptest.NewRequest(http.MethodPost, "/impersonation/start", bytes.NewReader(reqBody))
 			req.Header.Set("Content-Type", "application/json")
 
-			// Set up request context with both auth and privacy context
-			requestCtx := tt.setupContext()
-			requestCtx = privacy.DecisionContext(requestCtx, privacy.Allow)
-			req = req.WithContext(requestCtx)
+			// Set up request context with the caller under test
+			req = req.WithContext(tt.setupContext())
 
 			rec := httptest.NewRecorder()
 
@@ -292,10 +289,8 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			req := httptest.NewRequest(http.MethodPost, "/impersonation/end", bytes.NewReader(reqBody))
 			req.Header.Set("Content-Type", "application/json")
 
-			// Set up request context with both auth and privacy context
-			requestCtx := tt.setupContext()
-			requestCtx = privacy.DecisionContext(requestCtx, privacy.Allow)
-			req = req.WithContext(requestCtx)
+			// Set up request context with the caller under test
+			req = req.WithContext(tt.setupContext())
 
 			rec := httptest.NewRecorder()
 
@@ -340,7 +335,7 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 
 	// Create test context and request that should succeed
 	ec := echocontext.NewTestEchoContext().Request().Context()
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(ec)
 
 	// Create admin and target users
 	adminID := ulids.New().String()
@@ -404,7 +399,7 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	req.Header.Set("Content-Type", "application/json")
 
 	// Set up request context with both auth and privacy context
-	testCtx = privacy.DecisionContext(testCtx, privacy.Allow)
+	testCtx = auth.WithInternalOperationContext(testCtx)
 	req = req.WithContext(testCtx)
 
 	rec := httptest.NewRecorder()

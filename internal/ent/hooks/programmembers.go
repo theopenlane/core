@@ -8,8 +8,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // HookProgramMembers is a hook that ensures that the user is a member of the organization
@@ -29,9 +29,9 @@ func HookProgramMembers() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalOperationContext(ctx)
 
-			program, err := m.Client().Program.Get(allowCtx, programID)
+			program, err := m.Client().Program.Get(internalCtx, programID)
 			if err != nil {
 				return nil, err
 			}

@@ -9,7 +9,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/iam/auth"
+
 	historygenerated "github.com/theopenlane/core/v2/internal/ent/historygenerated"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/standardhistory"
@@ -62,14 +63,15 @@ func (r *Resolver) controlDiff(ctx context.Context, input model.ControlDiffInput
 		Time("revision_diff_cutoff", revisionDiffCutoff).
 		Msg("control diffing timestamps")
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	// history reads span every control on the standard, not only the ones the caller can see
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
-	oldSnapshots, err := getControlHistories(allowCtx, historyClient, input.StandardID, oldRevisionTime)
+	oldSnapshots, err := getControlHistories(internalCtx, historyClient, input.StandardID, oldRevisionTime)
 	if err != nil {
 		return nil, err
 	}
 
-	newSnapshots, err := getControlHistories(allowCtx, historyClient, input.StandardID, revisionDiffCutoff)
+	newSnapshots, err := getControlHistories(internalCtx, historyClient, input.StandardID, revisionDiffCutoff)
 	if err != nil {
 		return nil, err
 	}

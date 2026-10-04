@@ -25,9 +25,9 @@ import (
 	entEvent "github.com/theopenlane/core/v2/internal/ent/generated/event"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/iam/auth"
 )
 
 type webhookBinder struct {
@@ -482,14 +482,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			suite.stripeMockBackend.ExpectedCalls = suite.stripeMockBackend.ExpectedCalls[:0]
 			suite.orgSubscriptionMocks()
 
-			// allowCtx to skip checks on updating subs
-			allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+			// internalCtx to skip checks on updating subs
+			internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
 
 			suite.db.OrgSubscription.Update().
 				Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
 				SetActive(true).
 				SetStripeSubscriptionStatus("active").
-				ExecX(allowCtx)
+				ExecX(internalCtx)
 
 			var (
 				apiTokenID string
@@ -500,19 +500,19 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				apiToken := suite.db.APIToken.Create().
 					SetOwnerID(testUser1.OrganizationID).
 					SetName("test_token").
-					SaveX(allowCtx)
+					SaveX(internalCtx)
 				apiTokenID = apiToken.ID
 
 				pat := suite.db.PersonalAccessToken.Create().
 					SetOwnerID(testUser1.ID).
 					AddOrganizationIDs(testUser1.OrganizationID).
 					SetName("test_token").
-					SaveX(allowCtx)
+					SaveX(internalCtx)
 				patID = pat.ID
 
 				t.Cleanup(func() {
-					_ = suite.db.APIToken.DeleteOneID(apiTokenID).Exec(allowCtx)
-					_ = suite.db.PersonalAccessToken.DeleteOneID(patID).Exec(allowCtx)
+					_ = suite.db.APIToken.DeleteOneID(apiTokenID).Exec(internalCtx)
+					_ = suite.db.PersonalAccessToken.DeleteOneID(patID).Exec(internalCtx)
 				})
 			}
 

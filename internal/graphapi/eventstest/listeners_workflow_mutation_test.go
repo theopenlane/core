@@ -18,7 +18,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -266,9 +265,9 @@ func TestWorkflowMutationListenerTriggeredByAnonymousRespondent(t *testing.T) {
 		}},
 	})
 
-	// covers the listener under the anonymous respondent caller which is why the privacy.Allow is here, the handler path is covered by TestSubmitQuestionnaire
+	// covers the listener under the anonymous respondent caller which is why the internal operation is here, the handler path is covered by TestSubmitQuestionnaire
 	respondent := auth.NewQuestionnaireCaller(owner.OrganizationID, ulids.New().String(), "Anonymous Respondent", "")
-	respondentCtx := privacy.DecisionContext(auth.WithCaller(context.Background(), respondent), privacy.Allow)
+	respondentCtx := auth.WithInternalOperationContext(auth.WithCaller(context.Background(), respondent))
 
 	assert.NilError(t, suite.Client.DB.AssessmentResponse.UpdateOneID(response.ID).
 		SetStatus(enums.AssessmentResponseStatusCompleted).

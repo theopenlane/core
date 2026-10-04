@@ -10,8 +10,8 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/iam/auth"
 )
 
 func TestIntegrationBuilder(t *testing.T) {
@@ -28,7 +28,7 @@ func TestIntegrationBuilder(t *testing.T) {
 		assert.Check(t, is.DeepEqual(orgUser.OrganizationID, integration.OwnerID))
 
 		// Clean up
-		ctx := privacy.DecisionContext(orgUser.UserCtx, privacy.Allow)
+		ctx := auth.WithInternalOperationContext(orgUser.UserCtx)
 		err := suite.Client.DB.Integration.DeleteOneID(integration.ID).Exec(ctx)
 		assert.NilError(t, err)
 	})

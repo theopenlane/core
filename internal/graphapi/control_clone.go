@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -77,8 +76,8 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		return nil, fmt.Errorf("%w: error getting standard, too many results", common.ErrInvalidInput)
 	}
 
-	// if we get the standard back, all controls should be accessible so we can allow context to skip checks
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	// if we get the standard back, all controls should be accessible so we can run as an internal operation to skip checks
+	internalCtx := auth.WithInternalOperationContext(ctx)
 	where, err := controls.ControlFilterByStandard(ctx, filters, std)
 	if err != nil {
 		logger.Error().Err(err).Msg("error getting control filter")
@@ -92,7 +91,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		).
 		WithStandard().
 		WithSubcontrols().
-		All(allowCtx)
+		All(internalCtx)
 	if err != nil {
 		logger.Error().Err(err).Msg("error getting controls to clone")
 		return nil, err
@@ -146,7 +145,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// get existing controls that match the refCode and standardID
 	// skip the access checks for the controls, we are already filtering on organization id
 	// and controls are visible to users in the organization
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 	existingWhere := []predicate.Control{
 		control.DeletedAtIsNil(),
 		control.OwnerID(orgID),
@@ -160,7 +159,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			control.And(existingWhere...),
 		).
 		Select(control.FieldID, control.FieldRefCode, control.FieldStandardID, control.FieldReferenceFrameworkRevision).
-		All(allowCtx)
+		All(internalCtx)
 	if err != nil {
 		logger.Error().Err(err).Msg("error checking for existing controls")
 		return nil, err
@@ -207,10 +206,9 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	var programToImportInto *generated.Program
 
 	if programID != nil {
-
 		programToImportInto, err = withTransactionalMutation(ctx).Program.Query().
 			Where(program.ID(*programID)).
-			Only(allowCtx)
+			Only(internalCtx)
 
 		if generated.IsNotFound(err) {
 			return nil, generated.ErrPermissionDenied
@@ -243,12 +241,12 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// allow the subcontrols to be cloned without a parent check, this is because the same user already created the control
 	// and the subcontrols are part of the control
-	if err := r.cloneSubcontrols(allowCtx, subcontrolsToCreate); err != nil {
+	if err := r.cloneSubcontrols(internalCtx, subcontrolsToCreate); err != nil {
 		logger.Error().Err(err).Msg("error cloning subcontrols, rolling back controls that were created before the error occurred")
 
 		if _, err := withTransactionalMutation(ctx).Control.Delete().
 			Where(control.IDIn(createdControlIDs...)).
-			Exec(allowCtx); err != nil {
+			Exec(internalCtx); err != nil {
 			logger.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
 
 			return nil, err
@@ -258,7 +256,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	if len(controlsToUpdate) > 0 {
-		if err := r.updateControlsOnRevisionChange(allowCtx, controlsToUpdate); err != nil {
+		if err := r.updateControlsOnRevisionChange(internalCtx, controlsToUpdate); err != nil {
 			logger.Error().Err(err).Msg("error updating controls on revision change")
 			return nil, err
 		}
@@ -271,7 +269,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			Where(
 				control.IDIn(existingControlIDs...)).
 			AddProgramIDs(*programID).
-			Exec(allowCtx); err != nil {
+			Exec(internalCtx); err != nil {
 			return nil, err
 		}
 	}
@@ -293,14 +291,14 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// get the cloned controls to return in the response
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.IDIn(createdControlIDs...)).
 		WithSubcontrols().
-		CollectFields(allowCtx)
+		CollectFields(internalCtx)
 	if err != nil {
 		logger.Error().Err(err).Msg("error collecting fields for cloned controls")
 
 		return nil, err
 	}
 
-	return query.All(allowCtx)
+	return query.All(internalCtx)
 }
 
 // checkProgramAccess checks the users access to the specific program id

@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/enttest"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/entdb"
@@ -71,7 +70,7 @@ func (suite *HookTestSuite) SetupSuite() {
 		PreviewZoneID: previewMappableZoneIDTest,
 	})
 
-	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	ctx := auth.WithInternalOperationContext(context.Background())
 	_, err := suite.client.MappableDomain.Create().
 		SetName(cnameTargetTest).
 		SetZoneID(previewMappableZoneIDTest).
@@ -184,15 +183,15 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 func (suite *HookTestSuite) seedUser() *generated.User {
 	t := suite.T()
 
-	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	// no caller exists for the new user or their personal org yet
+	ctx := auth.WithInternalCrossOrgContext(context.Background())
 	newUser, err := suite.client.User.Create().SetEmail(gofakeit.Email()).Save(ctx)
 	require.NoError(t, err)
 
 	// get user and their org memberships
-	// no caller has the new personal org, so the membership load needs the org filter bypass
 	newUser, err = suite.client.User.Query().Where(user.ID(newUser.ID)).
 		WithSetting().
-		WithOrgMemberships().Only(auth.WithCrossOrgContext(ctx))
+		WithOrgMemberships().Only(ctx)
 	require.NoError(t, err)
 
 	return newUser

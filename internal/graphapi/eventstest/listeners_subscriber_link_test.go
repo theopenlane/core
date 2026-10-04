@@ -26,7 +26,7 @@ func uniqueSubscriberEmail(prefix string) string {
 func TestSubscriberLinkListener(t *testing.T) {
 	org := th.CreateFreshOrgWithTrustCenter(t)
 	ownerCtx := org.Owner.UserCtx
-	allowCtx := th.SetInternalContext(ownerCtx, suite.Client.DB)
+	internalCtx := th.SetInternalContext(ownerCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.SubscriberLinkListeners())
 	assert.NilError(t, err)
@@ -35,7 +35,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 	reload := func(t *testing.T, id string) *ent.Subscriber {
 		t.Helper()
 
-		sub, err := suite.Client.DB.Subscriber.Get(allowCtx, id)
+		sub, err := suite.Client.DB.Subscriber.Get(internalCtx, id)
 		assert.NilError(t, err)
 
 		return sub

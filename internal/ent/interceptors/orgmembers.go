@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -177,13 +176,7 @@ func dedupeOrgMembers(ctx context.Context, members []*generated.OrgMembership) (
 
 // orgMembersSkipInterceptor includes conditions to skip the org members interceptor
 func orgMembersSkipInterceptor(ctx context.Context) bool {
-	// bypass filter if the request is internal and already set to allowed
-	// this only happens from internal requests
-	// and we don't need to dedupe the org members
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
-		return true
-	}
-
+	// internal requests don't need to dedupe the org members
 	if auth.IsInternalRequest(ctx) {
 		return true
 	}

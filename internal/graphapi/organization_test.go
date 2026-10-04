@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -985,7 +984,7 @@ func TestMutationDeleteOrganization(t *testing.T) {
 
 			// tuples and entity are deleted, so we need to skip soft delete and privacy checks
 			ctx := entx.SkipSoftDelete(reqCtx)
-			ctx = privacy.DecisionContext(ctx, privacy.Allow)
+			ctx = auth.WithInternalOperationContext(ctx)
 
 			o, err := suite.Client.API.GetOrganizationByID(ctx, tc.orgID)
 			assert.NilError(t, err)

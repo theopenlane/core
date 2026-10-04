@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 )
@@ -265,22 +264,22 @@ func (suite *HookTestSuite) TestHookStandardDelete_InUseByTrustcenter() {
 
 	ctx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	ctx = generated.NewContext(ctx, suite.client)
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	std, err := suite.client.Standard.Create().
 		SetName(gofakeit.Name()).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
 	trustCenter, err := suite.client.TrustCenter.Create().
 		SetOwnerID(orgID).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
 	_, err = suite.client.TrustCenterCompliance.Create().
 		SetStandardID(std.ID).
 		SetTrustCenterID(trustCenter.ID).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
 	softDeleteCtx := entx.IsSoftDelete(ctx, generated.TypeStandard)
@@ -302,11 +301,11 @@ func (suite *HookTestSuite) TestHookStandardDelete_InUseByControls() {
 
 	regularUserCtx := auth.NewTestContextWithOrgID(regularUser.ID, orgID)
 	regularUserCtx = generated.NewContext(regularUserCtx, suite.client)
-	allowCtx := privacy.DecisionContext(regularUserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(regularUserCtx)
 
 	std, err := suite.client.Standard.Create().
 		SetName(gofakeit.Name()).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
 	_, err = suite.client.Control.Create().
@@ -315,7 +314,7 @@ func (suite *HookTestSuite) TestHookStandardDelete_InUseByControls() {
 		SetStandardID(std.ID).
 		SetSource(enums.ControlSourceFramework).
 		SetOwnerID(orgID).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
 	systemAdmin := suite.seedSystemAdmin()
@@ -340,21 +339,21 @@ func (suite *HookTestSuite) TestHookStandardDelete_AllowsWhenNotInUse() {
 
 	ctx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	ctx = generated.NewContext(ctx, suite.client)
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	std, err := suite.client.Standard.Create().
 		SetName(gofakeit.Name()).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
-	softDeleteCtx := entx.IsSoftDelete(allowCtx, generated.TypeStandard)
+	softDeleteCtx := entx.IsSoftDelete(internalCtx, generated.TypeStandard)
 
 	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
 	require.NoError(t, err)
 
 	deletedStd, err := suite.client.Standard.Query().
 		Where(standard.ID(std.ID)).
-		Only(allowCtx)
+		Only(internalCtx)
 	require.NoError(t, err)
 	assert.NotNil(t, deletedStd.DeletedAt)
 }
@@ -371,22 +370,22 @@ func (suite *HookTestSuite) TestHookStandardDelete_RegularUserCanDeleteNonSystem
 
 	regularUserCtx := auth.NewTestContextWithOrgID(regularUser.ID, orgID)
 	regularUserCtx = generated.NewContext(regularUserCtx, suite.client)
-	allowCtx := privacy.DecisionContext(regularUserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(regularUserCtx)
 
 	std, err := suite.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		SetSystemOwned(false).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
-	softDeleteCtx := entx.IsSoftDelete(allowCtx, generated.TypeStandard)
+	softDeleteCtx := entx.IsSoftDelete(internalCtx, generated.TypeStandard)
 
 	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
 	require.NoError(t, err)
 
 	deletedStd, err := suite.client.Standard.Query().
 		Where(standard.ID(std.ID)).
-		Only(allowCtx)
+		Only(internalCtx)
 	require.NoError(t, err)
 	assert.NotNil(t, deletedStd.DeletedAt)
 }
@@ -403,16 +402,16 @@ func (suite *HookTestSuite) TestHookStandardDelete_BlocksPublicSystemOwned() {
 
 	adminCtx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)
 	adminCtx = generated.NewContext(adminCtx, suite.client)
-	allowCtx := privacy.DecisionContext(adminCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(adminCtx)
 
 	std, err := suite.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		SetSystemOwned(true).
 		SetIsPublic(true).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
-	retrievedStd, err := suite.client.Standard.Get(allowCtx, std.ID)
+	retrievedStd, err := suite.client.Standard.Get(internalCtx, std.ID)
 	require.NoError(t, err)
 	require.True(t, retrievedStd.SystemOwned, "standard should be system-owned")
 	require.True(t, retrievedStd.IsPublic, "standard should be public")
@@ -436,13 +435,13 @@ func (suite *HookTestSuite) TestHookStandardDelete_SystemAdminCascadesSystemOwne
 
 	adminCtx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)
 	adminCtx = generated.NewContext(adminCtx, suite.client)
-	allowCtx := privacy.DecisionContext(adminCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(adminCtx)
 
 	std, err := suite.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		SetSystemOwned(true).
 		SetIsPublic(false).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
 	systemControl, err := suite.client.Control.Create().
@@ -450,7 +449,7 @@ func (suite *HookTestSuite) TestHookStandardDelete_SystemAdminCascadesSystemOwne
 		SetTitle(gofakeit.HipsterSentence()).
 		SetStandardID(std.ID).
 		SetSource(enums.ControlSourceFramework).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
 	orgControl, err := suite.client.Control.Create().
@@ -459,25 +458,25 @@ func (suite *HookTestSuite) TestHookStandardDelete_SystemAdminCascadesSystemOwne
 		SetStandardID(std.ID).
 		SetSource(enums.ControlSourceFramework).
 		SetOwnerID(orgID).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
-	softDeleteCtx := entx.IsSoftDelete(allowCtx, generated.TypeStandard)
+	softDeleteCtx := entx.IsSoftDelete(internalCtx, generated.TypeStandard)
 
 	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
 	require.NoError(t, err)
 
 	deletedStd, err := suite.client.Standard.Query().
 		Where(standard.ID(std.ID)).
-		Only(allowCtx)
+		Only(internalCtx)
 	require.NoError(t, err)
 	assert.NotNil(t, deletedStd.DeletedAt)
 
-	_, err = suite.client.Control.Get(allowCtx, systemControl.ID)
+	_, err = suite.client.Control.Get(internalCtx, systemControl.ID)
 	require.Error(t, err)
 	assert.True(t, generated.IsNotFound(err))
 
-	updatedOrgControl, err := suite.client.Control.Get(allowCtx, orgControl.ID)
+	updatedOrgControl, err := suite.client.Control.Get(internalCtx, orgControl.ID)
 	require.NoError(t, err)
 	assert.Empty(t, updatedOrgControl.StandardID)
 }

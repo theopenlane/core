@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -244,7 +243,7 @@ func (h *Handler) getTargetUser(ctx context.Context, userID string, orgID string
 func (h *Handler) logImpersonationEvent(ctx context.Context, action enums.ImpersonationAction, auditLog *auth.ImpersonationAuditLog) error {
 	logx.FromContext(ctx).Info().Str("action", action.String()).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 	create := h.DBClient.ImpersonationEvent.Create().
 		SetAction(action).
 		SetImpersonationType(*enums.ToImpersonationType(string(auditLog.Type))).
@@ -260,7 +259,7 @@ func (h *Handler) logImpersonationEvent(ctx context.Context, action enums.Impers
 		create.SetTargetUserID(auditLog.TargetUserID)
 	}
 
-	_, err := create.Save(allowCtx)
+	_, err := create.Save(internalCtx)
 	return err
 }
 

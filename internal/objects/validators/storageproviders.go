@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -19,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/objects/storage/providers/gcs"
 	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
 	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
+	"github.com/theopenlane/iam/auth"
 )
 
 const (
@@ -231,8 +231,8 @@ func validateDatabaseProvider(ctx context.Context, cfg storage.DatabaseConfig) e
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	if _, err := entClient.File.Query().Limit(1).Exist(allowCtx); err != nil {
+	internalCtx := auth.WithInternalOperationContext(ctx)
+	if _, err := entClient.File.Query().Limit(1).Exist(internalCtx); err != nil {
 		return fmt.Errorf("database provider validation: %w", err)
 	}
 

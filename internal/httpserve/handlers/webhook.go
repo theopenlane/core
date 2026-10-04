@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	catalogprices "github.com/theopenlane/core/v2/internal/entitlements"
 	em "github.com/theopenlane/core/v2/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
@@ -263,7 +262,7 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 
 // invalidateAPITokens invalidates all API tokens for an organization
 func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
-	allowCtx := auth.WithOrgInternalCaller(ctx, orgID)
+	internalCtx := auth.WithOrgInternalCaller(ctx, orgID)
 
 	num, err := h.DBClient.APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
@@ -272,7 +271,7 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 		SetRevokedAt(time.Now()).
 		SetRevokedReason("subscription paused or deleted").
 		SetRevokedBy("entitlements_engine").
-		Save(allowCtx)
+		Save(internalCtx)
 	if err != nil {
 		return err
 	}
@@ -285,12 +284,12 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 // invalidatePersonalAccessTokens invalidates all personal access tokens tokens for an organization
 func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID string) error {
 	// the user owned mixin filters updates to the caller's own tokens and only skips on an allow decision, so revoking every member's tokens needs it
-	allowCtx := privacy.DecisionContext(auth.WithOrgInternalCaller(ctx, orgID), privacy.Allow)
+	internalCtx := auth.WithOrgInternalCaller(ctx, orgID)
 
 	num, err := h.DBClient.PersonalAccessToken.Update().
 		RemoveOrganizationIDs(orgID).
 		Where(personalaccesstoken.HasOrganizationsWith(organization.ID(orgID))).
-		Save(allowCtx)
+		Save(internalCtx)
 	if err != nil {
 		return err
 	}
@@ -432,10 +431,10 @@ func findOrgSubscriptionByCustomer(ctx context.Context, subscription *stripe.Sub
 		return nil
 	}
 
-	allowCtx := auth.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	org, err := transaction.FromContext(ctx).Organization.Query().
-		Where(organization.StripeCustomerID(subscription.Customer.ID)).Only(allowCtx)
+		Where(organization.StripeCustomerID(subscription.Customer.ID)).Only(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Str("stripe_customer_id", subscription.Customer.ID).
 			Msg("no organization found for stripe customer")
@@ -448,7 +447,7 @@ func findOrgSubscriptionByCustomer(ctx context.Context, subscription *stripe.Sub
 	orgSub, err := transaction.FromContext(ctx).OrgSubscription.Query().
 		Where(orgsubscription.OwnerID(org.ID), orgsubscription.DeletedAtIsNil()).
 		Order(ent.Desc(orgsubscription.FieldCreatedAt)).
-		First(allowCtx)
+		First(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Str("organization_id", org.ID).
 			Msg("no org subscription found for organization")
@@ -466,11 +465,11 @@ func adoptStripeSubscriptionID(ctx context.Context, orgSub *ent.OrgSubscription,
 		return
 	}
 
-	allowCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
+	internalCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 
 	if err := transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSub).
 		SetStripeSubscriptionID(subscriptionID).
-		Exec(allowCtx); err != nil {
+		Exec(internalCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("subscription_id", subscriptionID).
 			Msg("failed to update org subscription with stripe subscription id")
 
@@ -485,10 +484,10 @@ func adoptStripeSubscriptionID(ctx context.Context, orgSub *ent.OrgSubscription,
 
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
 func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
-	allowCtx := auth.WithInternalCrossOrgContext(ctx)
+	internalCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
-		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(allowCtx)
+		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(internalCtx)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			// try by the metadata field as a fallback if customer is provided
@@ -498,12 +497,12 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 				// first try org_subscription_id
 				if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
 					orgSubscription, _ = transaction.FromContext(ctx).OrgSubscription.Query().
-						Where(orgsubscription.ID(orgSubID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
+						Where(orgsubscription.ID(orgSubID), orgsubscription.DeletedAtIsNil()).Only(internalCtx)
 					if orgSubscription == nil {
 						// fallback to organization_id
 						if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
 							orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
-								Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
+								Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(internalCtx)
 						}
 					}
 				}
@@ -528,15 +527,15 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 
 			// if we got here we could not find the org subscription
 			// first check to see if the org was deleted already
-			allowCtx = entx.SkipSoftDelete(allowCtx)
+			internalCtx = entx.SkipSoftDelete(internalCtx)
 			if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
 				orgSubscription, _ = transaction.FromContext(ctx).OrgSubscription.Query().
-					Where(orgsubscription.ID(orgSubID)).Only(allowCtx)
+					Where(orgsubscription.ID(orgSubID)).Only(internalCtx)
 				if orgSubscription == nil {
 					// fallback to organization_id
 					if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
 						orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
-							Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
+							Where(orgsubscription.OwnerID(orgID)).Only(internalCtx)
 					}
 				}
 			}

@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
-	"entgo.io/ent/privacy"
 
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
@@ -77,7 +76,7 @@ func HookTrustCenter() ent.Hook {
 
 					if err := m.Client().TrustCenterSetting.UpdateOneID(settingID).
 						SetTrustCenterID(id).
-						Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
+						Exec(auth.WithInternalOperationContext(ctx)); err != nil {
 						return nil, err
 					}
 				}
@@ -121,7 +120,7 @@ func HookTrustCenter() ent.Hook {
 					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
 					SetOverview(defaultOverview).
 					SetEnvironment(enums.TrustCenterEnvironmentLive).
-					Save(privacy.DecisionContext(ctx, privacy.Allow))
+					Save(auth.WithInternalOperationContext(ctx))
 				if err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create live trust center setting")
 
@@ -156,7 +155,7 @@ func HookTrustCenter() ent.Hook {
 					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
 					SetOverview(defaultOverview).
 					SetEnvironment(enums.TrustCenterEnvironmentPreview).
-					Save(privacy.DecisionContext(ctx, privacy.Allow))
+					Save(auth.WithInternalOperationContext(ctx))
 				if err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create preview trust center setting")
 
@@ -199,7 +198,7 @@ func HookTrustCenter() ent.Hook {
 
 			if err := m.Client().TrustCenterWatermarkConfig.Create().
 				SetInput(input).
-				Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
+				Exec(auth.WithInternalOperationContext(ctx)); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to create trust center watermark config")
 
 				return nil, err
@@ -380,7 +379,7 @@ func HookTrustCenterUpdate() ent.Hook {
 						trustcentersetting.TrustCenterID(tcID),
 					).
 					SetNoindexDefaultDomain(true).
-					Exec(privacy.DecisionContext(ctx, privacy.Allow))
+					Exec(auth.WithInternalOperationContext(ctx))
 				if err != nil {
 					return nil, err
 				}

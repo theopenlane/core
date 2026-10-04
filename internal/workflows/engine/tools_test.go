@@ -29,7 +29,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
@@ -395,8 +394,8 @@ func (s *WorkflowEngineTestSuite) enableModules(userID, orgID string) {
 
 	// Create authenticated context with user and org IDs
 	userCtx := auth.NewTestContextWithOrgID(userID, orgID)
-	// Set privacy allow for seeding operations
-	userCtx = privacy.DecisionContext(userCtx, privacy.Allow)
+	// Run seeding operations as an internal operation
+	userCtx = auth.WithInternalOperationContext(userCtx)
 	// Add client to context
 	userCtx = generated.NewContext(userCtx, s.client)
 
@@ -621,7 +620,7 @@ func (s *WorkflowEngineTestSuite) InternalContext() context.Context {
 // - Ent client
 func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Context {
 	ctx := auth.NewTestContextWithOrgID(userID, orgID)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 	ctx = generated.NewContext(ctx, s.client)
 	ctxClient := generated.FromContext(ctx)
 	s.Require().NotNil(ctxClient, "seed context missing ent client")

@@ -22,7 +22,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
@@ -271,9 +270,9 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 // createOrgSubscription creates the default organization subscription for a new org
 func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation) (*generated.OrgSubscription, error) {
 	// ensure we can always pull the org subscription for the organization
-	allowCtx := auth.WithOrgInternalCaller(ctx, orgCreated.ID)
+	internalCtx := auth.WithOrgInternalCaller(ctx, orgCreated.ID)
 
-	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
+	orgSubscriptions, err := orgCreated.OrgSubscriptions(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error getting org subscriptions")
 		return nil, err
@@ -478,7 +477,9 @@ func updateOrgSubscriptionOnDelete(ctx context.Context, m *generated.Organizatio
 
 // checkAndUpdateDefaultOrg checks if the old organization is the user's default org and updates it if needed
 // this is used when an organization is deleted, as well as when a user is removed from an organization
-func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID string, client *generated.Client) (string, error) {
+func checkAndUpdateDefaultOrg(internalCtx context.Context, userID string, oldOrgID string, client *generated.Client) (string, error) {
+	internalCtx = auth.WithInternalOperationContext(internalCtx)
+
 	// check if this is the user's default org
 	userSetting, err := client.
 		UserSetting.
@@ -487,7 +488,7 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 			usersetting.UserIDEQ(userID),
 		).
 		WithDefaultOrg().
-		Only(ctx)
+		Only(internalCtx)
 	if err != nil {
 		return "", err
 	}
@@ -509,7 +510,7 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 				// order by personal orgs last so that if there is another org available it will be set as the default instead of the personal org
 				organization.ByPersonalOrg(sql.OrderAsc()),
 			).
-			FirstID(ctx)
+			FirstID(internalCtx)
 		if err != nil {
 			return "", err
 		}
@@ -517,7 +518,7 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 		if _, err = client.UserSetting.
 			UpdateOneID(userSetting.ID).
 			SetDefaultOrgID(newDefaultOrgID).
-			Save(ctx); err != nil {
+			Save(internalCtx); err != nil {
 			return "", err
 		}
 
@@ -650,7 +651,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	}
 
 	// the creator has no tuples on the new org yet, allow bypass of role ceiling check
-	if err := m.Client().OrgMembership.Create().SetInput(input).Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
+	if err := m.Client().OrgMembership.Create().SetInput(input).Exec(auth.WithInternalOperationContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating org membership for owner")
 
 		return err
@@ -665,6 +666,9 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 // the client must be passed in, rather than using the client in the context  because
 // this function is sometimes called from a REST handler where the client is not available in the context
 func updateDefaultOrgIfPersonal(ctx context.Context, userID, orgID string, client *generated.Client) error {
+	// the caller is often an admin adding another user whose tuples are not written yet, the queries are pinned to userID
+	ctx = auth.WithInternalOperationContext(ctx)
+
 	// check if the user has a default org
 	userSetting, err := client.
 		UserSetting.

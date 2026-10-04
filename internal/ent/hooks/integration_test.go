@@ -9,7 +9,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
@@ -27,7 +26,7 @@ func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	ctx := auth.NewTestContextWithOrgID(user.ID, orgID)
 	ctx = generated.NewContext(ctx, suite.client)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	first, err := suite.client.Integration.Create().
 		SetOwnerID(orgID).

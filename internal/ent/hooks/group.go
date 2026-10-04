@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
@@ -212,9 +211,9 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 	setting, ok := m.SettingID()
 	if ok {
 		// allow before tuples may be created
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+		internalCtx := auth.WithInternalOperationContext(ctx)
 
-		groupSetting, err := m.Client().GroupSetting.Get(allowCtx, setting)
+		groupSetting, err := m.Client().GroupSetting.Get(internalCtx, setting)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to get group setting")
 

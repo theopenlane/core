@@ -15,7 +15,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
@@ -57,9 +56,9 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(reqCtx)
 
-	orgStatus := h.orgEnforcementsForUser(allowCtx, req.Username)
+	orgStatus := h.orgEnforcementsForUser(internalCtx, req.Username)
 	if orgStatus != nil && orgStatus.Enforced {
 		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgStatus.OrganizationID))
 	}

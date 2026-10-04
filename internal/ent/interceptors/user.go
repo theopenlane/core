@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
@@ -20,13 +19,6 @@ import (
 // TraverseUser returns an ent interceptor for user that filters users based on the context of the query
 func TraverseUser() ent.Interceptor {
 	return intercept.TraverseUser(func(ctx context.Context, q *generated.UserQuery) error {
-		// bypass filter if the request is allowed, this happens when a user is
-		// being created, via invite or other method by another authenticated user
-		// or in tests
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
-			return nil
-		}
-
 		if auth.HasAnyInContextCaller(ctx, auth.CapOrgSupport|auth.CapInternalOperation|auth.CapSystemAdmin) {
 			return nil
 		}

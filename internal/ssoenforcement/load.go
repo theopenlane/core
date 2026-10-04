@@ -10,7 +10,6 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
@@ -20,11 +19,12 @@ import (
 // db-aware source used by both the SSO handlers and the auth middleware to feed Evaluate, so the
 // membership query is projected to only the fields the decision needs
 func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email string) (sso.EnforcementInput, *ent.OrganizationSetting, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	// callers include unauthenticated sso checks with no caller, every lookup below is pinned to orgID or userID
+	lookupCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	setting, err := db.OrganizationSetting.Query().
 		Where(organizationsetting.OrganizationID(orgID)).
-		Only(allowCtx)
+		Only(lookupCtx)
 	if err != nil {
 		return sso.EnforcementInput{}, nil, err
 	}
@@ -45,7 +45,7 @@ func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email s
 	member, mErr := db.OrgMembership.Query().
 		Where(orgmembership.OrganizationID(orgID), orgmembership.UserID(userID)).
 		Select(orgmembership.FieldRole, orgmembership.FieldSSOExempt, orgmembership.FieldTfaEnforced).
-		Only(auth.WithCrossOrgContext(allowCtx))
+		Only(lookupCtx)
 	if mErr != nil {
 		return sso.EnforcementInput{}, nil, mErr
 	}
@@ -56,7 +56,7 @@ func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email s
 	in.MemberTFAEnforced = member.TfaEnforced
 
 	if in.Email == "" {
-		u, uErr := db.User.Query().Where(user.ID(userID)).Select(user.FieldEmail).Only(allowCtx)
+		u, uErr := db.User.Query().Where(user.ID(userID)).Select(user.FieldEmail).Only(lookupCtx)
 		if uErr != nil {
 			return sso.EnforcementInput{}, nil, uErr
 		}

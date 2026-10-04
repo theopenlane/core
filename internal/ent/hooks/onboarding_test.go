@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
@@ -88,7 +87,7 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 	for i, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			// setup the allow context
-			ctx := privacy.DecisionContext(userCtx, privacy.Allow)
+			ctx := auth.WithInternalOperationContext(userCtx)
 
 			// add the client to the context
 			ctx = generated.NewContext(ctx, suite.client)
@@ -126,7 +125,7 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 			assert.ElementsMatch(t, tc.input.Domains, org.Edges.Setting.Domains)
 
 			newOrgCtx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, onboarding.OrganizationID), suite.client)
-			newOrgCtx = privacy.DecisionContext(newOrgCtx, privacy.Allow)
+			newOrgCtx = auth.WithInternalOperationContext(newOrgCtx)
 
 			managedTagExists, err := suite.client.TagDefinition.Query().
 				Where(
@@ -202,7 +201,7 @@ func (suite *HookTestSuite) TestOnboardingProgramControlsLoadableByListeners() {
 
 	user := suite.seedUser()
 	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	_, err = suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Onboarding Co " + gofakeit.LetterN(8),
@@ -260,7 +259,7 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 		t.Run(tc.name, func(t *testing.T) {
 			user := suite.seedUser()
 			ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
-			ctx = privacy.DecisionContext(ctx, privacy.Allow)
+			ctx = auth.WithInternalOperationContext(ctx)
 
 			onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 				CompanyName: "Onboarding Co " + gofakeit.LetterN(8),

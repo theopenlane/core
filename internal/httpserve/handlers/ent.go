@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/passwordresettoken"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
@@ -732,9 +731,8 @@ func (h *Handler) getOrganizationSettingByOrgID(ctx context.Context, orgID strin
 // the organization's configured identity provider, when SSO login is enforced and just-in-time provisioning
 // is enabled for the organization; existing members are left unchanged
 func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user *ent.User) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	setting, err := h.getOrganizationSettingByOrgID(allowCtx, orgID)
+	// the user is not a member of the org yet, the setting lookup is pinned to orgID
+	setting, err := h.getOrganizationSettingByOrgID(auth.WithInternalOperationContext(ctx), orgID)
 	if err != nil {
 		return err
 	}
@@ -759,7 +757,7 @@ func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user
 			orgmembership.UserID(user.ID),
 			orgmembership.OrganizationID(orgID),
 		).
-		Exist(auth.WithCrossOrgContext(allowCtx))
+		Exist(auth.WithCrossOrgContext(ctx))
 	if err != nil {
 		return err
 	}
@@ -770,11 +768,13 @@ func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user
 
 	// the membership create hooks resolve the organization from the caller, so scope the context to the
 	// target org before creating the membership
-	memberCtx := auth.WithCaller(allowCtx, &auth.Caller{
+	// internal operation is needed because the user has no access to the org until this membership exists
+	memberCtx := auth.WithCaller(ctx, &auth.Caller{
 		SubjectID:       user.ID,
 		SubjectEmail:    user.Email,
 		OrganizationID:  orgID,
 		OrganizationIDs: []string{orgID},
+		Capabilities:    auth.CapInternalOperation,
 	})
 
 	role := enums.RoleMember
@@ -790,7 +790,8 @@ func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user
 
 // getUserDefaultOrgID returns the default organization ID for a user
 func (h *Handler) getUserDefaultOrgID(ctx context.Context, userID string) (string, error) {
-	us, err := transaction.FromContext(ctx).UserSetting.Query().Where(usersetting.UserID(userID)).WithDefaultOrg().Only(ctx)
+	// callers include unauthenticated sso checks, the lookup is pinned to the user id
+	us, err := transaction.FromContext(ctx).UserSetting.Query().Where(usersetting.UserID(userID)).WithDefaultOrg().Only(auth.WithInternalOperationContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error fetching user settings")
 

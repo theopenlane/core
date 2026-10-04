@@ -5,9 +5,11 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -29,10 +31,18 @@ func HookCampaignTargetLinkUser() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			ownerID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				return next.Mutate(ctx, m)
+			}
+
+			// only link users that are members of the campaign's organization
 			existingUser, err := m.Client().User.Query().
-				Where(user.EmailEqualFold(email)).
-				Only(allowCtx)
+				Where(
+					user.EmailEqualFold(email),
+					user.HasOrgMembershipsWith(orgmembership.OrganizationID(ownerID)),
+				).
+				Only(auth.WithInternalOperationContext(ctx))
 			if err != nil {
 				if generated.IsNotFound(err) {
 					return next.Mutate(ctx, m)

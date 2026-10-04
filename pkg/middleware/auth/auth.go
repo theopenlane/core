@@ -29,7 +29,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ssoenforcement"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
@@ -262,16 +261,16 @@ func updateLastUsed(ctx context.Context, dbClient *ent.Client, caller *auth.Call
 	switch caller.AuthenticationType {
 	case auth.PATAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-		if err := dbClient.PersonalAccessToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
+		internalCtx := auth.WithInternalOperationContext(ctx)
+		if err := dbClient.PersonalAccessToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(internalCtx); err != nil {
 			logger.Error().Err(err).Msg("unable to update last used time for personal access token")
 
 			return err
 		}
 	case auth.APITokenAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-		if err := dbClient.APIToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
+		internalCtx := auth.WithInternalOperationContext(ctx)
+		if err := dbClient.APIToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(internalCtx); err != nil {
 			logger.Error().Err(err).Msg("unable to update last used time for API token")
 
 			return err
@@ -627,7 +626,7 @@ func orgIDFromToken(c echo.Context, v tokens.Validator) string {
 // isSSOEnforced checks if SSO is enforced for the given organization ID
 func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, error) {
 	setting, err := db.OrganizationSetting.Query().Where(organizationsetting.OrganizationID(orgID)).
-		Only(privacy.DecisionContext(ctx, privacy.Allow))
+		Only(auth.WithInternalOperationContext(ctx))
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return false, nil

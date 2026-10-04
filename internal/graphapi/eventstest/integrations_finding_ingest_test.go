@@ -20,12 +20,12 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 const findingIngestTestOperation = "finding.ingest"
@@ -245,7 +245,7 @@ func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 	unclaimed, err := suite.Client.DB.Finding.Create().
 		SetExternalID("find-claim-unclaimed-1").
 		SetDisplayName("Pre-existing Finding").
-		Save(privacy.DecisionContext(ctx, privacy.Allow))
+		Save(auth.WithInternalOperationContext(ctx))
 	th.RequireNoError(t, err)
 
 	t.Cleanup(func() {

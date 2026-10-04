@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/pkg/middleware/impersonation"
@@ -102,7 +101,7 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 			suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(testUser1.UserInfo.Email, "@", 2)[1]
 			defer func() { suite.h.SupportAccessConfig = original }()
 
-			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+			ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 			ctx = ent.NewContext(ctx, suite.db)
 
 			org := suite.createConsentingOrg(ctx)
@@ -183,7 +182,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsWrongPassword() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -214,7 +213,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsNonConsentingOrg() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	// org that has NOT consented to support access
@@ -264,7 +263,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsDomainMismatch() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -339,7 +338,7 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(testUser1.UserInfo.Email, "@", 2)[1]
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 

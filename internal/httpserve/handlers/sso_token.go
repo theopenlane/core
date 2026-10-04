@@ -6,9 +6,9 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
@@ -24,7 +24,7 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	reqCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
+	reqCtx := auth.WithInternalOperationContext(ctx.Request().Context())
 
 	switch in.TokenType {
 	case "api":
@@ -113,12 +113,12 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(reqCtx)
 	now := time.Now()
 
 	switch tokenTypeCookie.Value {
 	case "api":
-		tkn, err := h.DBClient.APIToken.Get(allowCtx, tokenIDCookie.Value)
+		tkn, err := h.DBClient.APIToken.Get(internalCtx, tokenIDCookie.Value)
 		if err != nil {
 			return h.BadRequest(ctx, err)
 		}
@@ -129,14 +129,14 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 
 		tkn.SSOAuthorizations[orgCookie.Value] = now
 
-		_, err = h.DBClient.APIToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(allowCtx)
+		_, err = h.DBClient.APIToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(internalCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating api token")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	case "personal":
-		tkn, err := h.DBClient.PersonalAccessToken.Get(allowCtx, tokenIDCookie.Value)
+		tkn, err := h.DBClient.PersonalAccessToken.Get(internalCtx, tokenIDCookie.Value)
 		if err != nil {
 			return h.BadRequest(ctx, err)
 		}
@@ -147,7 +147,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 
 		tkn.SSOAuthorizations[orgCookie.Value] = now
 
-		_, err = h.DBClient.PersonalAccessToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(allowCtx)
+		_, err = h.DBClient.PersonalAccessToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(internalCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating personal access token")
 

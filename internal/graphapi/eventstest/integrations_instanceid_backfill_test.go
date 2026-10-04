@@ -19,10 +19,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
+	"github.com/theopenlane/iam/auth"
 )
 
 // mockProviderToken is the bearer token the mock provider server validates
@@ -81,7 +81,7 @@ func clearInstallInstanceID(ctx context.Context, t *testing.T, id string) {
 
 	th.RequireNoError(t, suite.Client.DB.Integration.UpdateOneID(id).
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{}).
-		Exec(privacy.DecisionContext(ctx, privacy.Allow)))
+		Exec(auth.WithInternalOperationContext(ctx)))
 }
 
 // legacyUnclaimedAccount creates a directory account FK-linked to the installation with no provenance

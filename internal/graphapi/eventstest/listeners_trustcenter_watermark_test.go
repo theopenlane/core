@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
@@ -39,7 +38,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
-	dbCtx := privacy.DecisionContext(th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 
 	watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).

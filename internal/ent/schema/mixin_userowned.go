@@ -158,6 +158,11 @@ func (userOwned UserOwnedMixin) Hooks() []ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
+				// internal operations such as edge cleanup act on rows owned by other users
+				if auth.IsInternalRequest(ctx) {
+					return next.Mutate(ctx, m)
+				}
+
 				// skip the hook if the context has the token type
 				// this is useful for tokens, where the user is not yet (e.g. email verification tokens)
 				if skip := rule.SkipTokenInContext(ctx, userOwned.SkipTokenType); skip {

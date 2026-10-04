@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
@@ -21,11 +20,6 @@ import (
 func InterceptorOrganization() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		if auth.IsSystemAdminFromContext(ctx) {
-			return nil
-		}
-
-		// by pass checks on invite or pre-allowed request
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
 			return nil
 		}
 
@@ -127,9 +121,7 @@ func getAllParentOrgIDs(ctx context.Context, childOrgIDs []string) ([]string, er
 // this should only be used to get the org members for the current org
 // and does not imply the current user is a member or has access to the parent orgs
 func getParentOrgIDs(ctx context.Context, childOrgID string) ([]string, error) {
-	// allow the request, otherwise we would be in an infinite loop, as this function is called by the interceptor
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
+	// run as an internal operation, otherwise we would be in an infinite loop, as this function is called by the interceptor
 	client := utils.EntClientFromContext(ctx)
 
 	parentOrgs, err := client.Organization.
@@ -138,7 +130,7 @@ func getParentOrgIDs(ctx context.Context, childOrgID string) ([]string, error) {
 			organization.HasChildrenWith(organization.ID(childOrgID)),
 		).
 		Select(organization.FieldID).
-		Strings(allowCtx)
+		Strings(auth.WithInternalOperationContext(ctx))
 	if err != nil {
 		return nil, err
 	}

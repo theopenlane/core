@@ -18,7 +18,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -54,7 +53,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
-	dbCtx := privacy.DecisionContext(th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 
 	// the runtime is created after seeding so only the mutations under test dispatch
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.TrustCenterCacheListeners())

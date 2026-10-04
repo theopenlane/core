@@ -300,9 +300,9 @@ func (a *Client) getUserDefaultOrg(ctx context.Context, user *generated.User) (s
 		return user.Edges.Setting.Edges.DefaultOrg.ID, nil
 	}
 
-	// otherwise, query the default org from the user setting and allow the request
+	// otherwise, query the default org from the user setting as an internal operation
 	// incase the user is in the login process
-	orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	orgCtx := auth.WithInternalOperationContext(ctx)
 
 	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
 	if err != nil {
@@ -357,12 +357,12 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 		return "", err
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	err = a.db.UserSetting.Update().
 		SetDefaultOrgID(personalOrg.ID).
 		Where(usersetting.UserID(user.ID)).
-		Exec(allowCtx)
+		Exec(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error updating default org")
 
@@ -388,9 +388,7 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 // getPersonalOrgID returns the personal org ID for the user
 func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*generated.Organization, error) {
 	// ensure the organization is not filtered by the default interceptor
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(allowCtx)
+	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(auth.WithInternalOperationContext(ctx))
 }
 
 // skipOrgValidation checks if the org validation should be skipped based on the context

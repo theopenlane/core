@@ -12,16 +12,15 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetInternalContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
-	installation, fragment := seedHarnessLoop(t, allowCtx)
+	installation, fragment := seedHarnessLoop(t, internalCtx)
 
-	hardDeleteCtx := entx.SkipSoftDelete(allowCtx)
+	hardDeleteCtx := entx.SkipSoftDelete(internalCtx)
 
 	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(hardDeleteCtx))
 
@@ -36,17 +35,17 @@ func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 
 func TestIntegrationCleanupListenerNonStatusUpdateKeepsLoops(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetInternalContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
-	installation, fragment := seedHarnessLoop(t, allowCtx)
+	installation, fragment := seedHarnessLoop(t, internalCtx)
 
-	assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).SetName(th.RandomName(t)).Exec(allowCtx))
+	assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).SetName(th.RandomName(t)).Exec(internalCtx))
 
 	waitForEvents()
 
 	assert.Equal(t, 1, activeReconcileJobs(t, fragment))
 
-	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(allowCtx))
+	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(internalCtx))
 
 	waitForEvents()
 

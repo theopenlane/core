@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
@@ -102,15 +101,13 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 
 			// If checkTransfer is true, verify the ownership was actually transferred
 			if tc.checkTransfer {
-				allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
-
 				// Verify new owner has OWNER role
 				newOwnerMembership, err := suite.Client.DB.OrgMembership.Query().
 					Where(
 						orgmembership.OrganizationID(th.SharedTestUser1.OrganizationID),
 						orgmembership.UserID(existingMember.ID),
 					).
-					Only(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
+					Only(auth.WithInternalCrossOrgContext(context.Background()))
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(enums.RoleOwner, newOwnerMembership.Role))
 				// verify new owner is sso exempt
@@ -122,7 +119,7 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 						orgmembership.OrganizationID(th.SharedTestUser1.OrganizationID),
 						orgmembership.UserID(th.SharedTestUser1.ID),
 					).
-					Only(auth.WithCallerCapabilities(allowCtx, auth.CapBypassOrgFilter))
+					Only(auth.WithInternalCrossOrgContext(context.Background()))
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(enums.RoleSuperAdmin, oldOwnerMembership.Role))
 				// verify old owner is no longer sso exempt

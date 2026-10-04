@@ -11,7 +11,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
@@ -37,8 +36,8 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 
 		input.TrustCenterID = &tcID
 
-		// add allowCtx for Anon Trust Center Callers
-		ctx = auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), caller)
+		// run as an internal operation for anon trust center callers
+		ctx = auth.WithInternalOperationContext(auth.WithCaller(ctx, caller))
 	} else {
 		// set the organization in the auth context if its not done for us
 		var err error

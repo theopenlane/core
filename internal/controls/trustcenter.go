@@ -8,7 +8,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -61,9 +60,9 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 	// get the first standard, this will be the most recent revision if multiple revisions exist
 	std := stds[0]
 
-	// if we get the standard back, all controls should be accessible so we can allow context to skip checks
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	where, err := ControlFilterByStandard(allowCtx, trustCenterStandardFilter, std)
+	// if we get the standard back, all controls should be accessible so we can run as an internal operation to skip checks
+	internalCtx := auth.WithInternalOperationContext(ctx)
+	where, err := ControlFilterByStandard(internalCtx, trustCenterStandardFilter, std)
 	if err != nil {
 
 		return nil, err
@@ -74,7 +73,7 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 			where...,
 		).
 		WithStandard().
-		All(allowCtx)
+		All(internalCtx)
 	if err != nil {
 		return nil, err
 	}

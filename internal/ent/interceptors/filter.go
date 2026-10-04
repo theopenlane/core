@@ -43,8 +43,8 @@ func FilterListQuery() ent.Interceptor {
 // e.g. memberships and history tables, and when there are a limited number of objects to filter
 // the FilterQueryResults function should be used in most cases due to performance issues of ListObjectsRequest
 func AddIDPredicate(ctx context.Context, q Query) error {
-	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || auth.IsInternalRequest(ctx) {
+	// bypass checks on internal requests
+	if auth.IsInternalRequest(ctx) {
 		return nil
 	}
 

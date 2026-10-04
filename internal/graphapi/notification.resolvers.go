@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -123,12 +122,12 @@ func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []st
 	for _, notif := range notifications {
 		// Only update if not already read
 		if notif.ReadAt == nil {
-			// we need to set allowCtx because updates are not generally allowed on notifications, but we want to allow the readAt to be set and
+			// we need an internal operation because updates are not generally allowed on notifications, but we want to allow the readAt to be set and
 			// we already verified that the user has access to this based on the user and organization ID checks above
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalOperationContext(ctx)
 			if err := notif.Update().
 				SetReadAt(models.DateTime(time.Now())).
-				Exec(allowCtx); err != nil {
+				Exec(internalCtx); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("notification_id", notif.ID).Msg("failed to mark notification as read")
 
 				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notification"})

@@ -14,7 +14,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/consts"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
@@ -28,7 +27,7 @@ func CreateFileRecord(ctx context.Context, f pkgobjects.File) (*ent.File, error)
 
 // UpdateFileWithStorageMetadata updates a file entity with metadata returned from the storage provider.
 func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileData pkgobjects.File) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	update := txFileClientFromContext(ctx).
 		UpdateOne(entFile).
@@ -48,7 +47,7 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 		update = update.SetMetadata(metadata)
 	}
 
-	if _, err := update.Save(allowCtx); err != nil {
+	if _, err := update.Save(internalCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to update file with storage metadata")
 
 		return err
@@ -95,10 +94,10 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 		set.OrganizationIDs = []string{orgID}
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 	entFile, err := txFileClientFromContext(ctx).Create().
 		SetInput(set).
-		Save(allowCtx)
+		Save(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create file")
 

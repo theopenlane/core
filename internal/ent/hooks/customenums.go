@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/migrate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -338,7 +337,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 
 // isEnumInUse returns a closure that checks whether a custom enum is referenced by any records
 func isEnumInUse(ctx context.Context, client *generated.Client, enumID, objectType, enumField, name string, allErrors *[]string, mu *sync.Mutex) func() {
-	ctrlCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	ctrlCtx := auth.WithInternalOperationContext(ctx)
 
 	if enumField == "" {
 		enumField = "kind"

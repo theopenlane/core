@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
@@ -25,13 +24,13 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	suite.e.GET("google/login", echo.WrapHandler(login))
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0wn3rP@ssw0rd",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(ownerUser.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
@@ -56,7 +55,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	})
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
@@ -82,13 +81,13 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
 	suite.e.GET("google/login", echo.WrapHandler(login))
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0wn3rP@ssw0rd",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(ownerUser.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
@@ -125,13 +124,13 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerTFAEnforced() {
 	suite.e.GET("google/login", echo.WrapHandler(login))
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0wn3rP@ssw0rd",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(ownerUser.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	// Create org with TFA enforced
@@ -159,7 +158,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerTFAEnforced() {
 	})
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
@@ -189,13 +188,13 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 	suite.e.GET("github/login", echo.WrapHandler(login))
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0wn3rP@ssw0rd",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(ownerUser.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	// Create org with TFA enforced
@@ -223,7 +222,7 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 	})
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
