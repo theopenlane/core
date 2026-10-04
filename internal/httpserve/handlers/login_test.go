@@ -8,7 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -104,7 +103,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	}
 
 	ssoMember := suite.userBuilderWithInput(ctx, &userInput{
-		email:         gofakeit.Username() + "@examples.com", // ensure the email is allowed by the org setting
+		email:         "ssomember+" + strings.ToLower(ulids.New().String()) + "@examples.com", // ensure the email is allowed by the org setting
 		password:      validPassword,
 		confirmedUser: true,
 		tfaEnabled:    tfaTrue,
