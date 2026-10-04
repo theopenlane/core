@@ -1164,7 +1164,6 @@ func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
 }
 
 func TestMutationCreateControlsByClone_Mappings(t *testing.T) {
-
 	systemCtx := th.SharedSystemAdminUser.UserCtx
 
 	standards := []*generated.Standard{}
