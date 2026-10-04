@@ -159,11 +159,7 @@ func postOrgCreateMutation(ctx context.Context, v *generated.Organization, m *ge
 		}
 
 		// the managed group bypass is still required to create the default groups
-		newOrgCaller := caller.WithCapabilities(auth.CapBypassManagedGroup)
-		newOrgCaller.OrganizationID = v.ID
-		newOrgCaller.OrganizationIDs = []string{v.ID}
-
-		ctx = auth.WithCaller(ctx, newOrgCaller)
+		ctx = auth.WithCallerScopedToOrg(auth.WithCaller(ctx, caller.WithCapabilities(auth.CapBypassManagedGroup)), v.ID)
 	}
 
 	// create the admin organization member if not using an API token (which is not associated with a user)
