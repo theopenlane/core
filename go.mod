@@ -10,8 +10,6 @@ tool (
 	gotest.tools/gotestsum
 )
 
-replace github.com/theopenlane/iam => ../iam
-
 require (
 	ariga.io/atlas v1.3.0
 	ariga.io/entcache v0.1.0
