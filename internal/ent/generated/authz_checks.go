@@ -2802,7 +2802,7 @@ func (q *GroupMembershipQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -2866,7 +2866,7 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().GroupMembership.Query().Where(groupmembership.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -2990,7 +2990,7 @@ func (q *GroupSettingQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -3054,7 +3054,7 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().GroupSetting.Query().Where(groupsetting.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -3918,7 +3918,7 @@ func (q *OrgMembershipQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -3982,7 +3982,7 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().OrgMembership.Query().Where(orgmembership.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -4254,7 +4254,7 @@ func (q *OrganizationSettingQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -4318,7 +4318,7 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().OrganizationSetting.Query().Where(organizationsetting.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -4886,7 +4886,7 @@ func (q *ProgramMembershipQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -4950,7 +4950,7 @@ func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) erro
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().ProgramMembership.Query().Where(programmembership.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -6554,7 +6554,7 @@ func (q *TrustCenterComplianceQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -6618,7 +6618,7 @@ func (m *TrustCenterComplianceMutation) CheckAccessForEdit(ctx context.Context) 
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().TrustCenterCompliance.Query().Where(trustcentercompliance.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -6742,7 +6742,7 @@ func (q *TrustCenterDocQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -6806,7 +6806,7 @@ func (m *TrustCenterDocMutation) CheckAccessForEdit(ctx context.Context) error {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().TrustCenterDoc.Query().Where(trustcenterdoc.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -6930,7 +6930,7 @@ func (q *TrustCenterEntityQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -6994,7 +6994,7 @@ func (m *TrustCenterEntityMutation) CheckAccessForEdit(ctx context.Context) erro
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().TrustCenterEntity.Query().Where(trustcenterentity.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -7118,7 +7118,7 @@ func (q *TrustCenterFAQQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -7182,7 +7182,7 @@ func (m *TrustCenterFAQMutation) CheckAccessForEdit(ctx context.Context) error {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().TrustCenterFAQ.Query().Where(trustcenterfaq.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -7454,7 +7454,7 @@ func (q *TrustCenterSettingQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -7518,7 +7518,7 @@ func (m *TrustCenterSettingMutation) CheckAccessForEdit(ctx context.Context) err
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().TrustCenterSetting.Query().Where(trustcentersetting.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -7642,7 +7642,7 @@ func (q *TrustCenterSubprocessorQuery) CheckAccess(ctx context.Context) error {
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -7706,7 +7706,7 @@ func (m *TrustCenterSubprocessorMutation) CheckAccessForEdit(ctx context.Context
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().TrustCenterSubprocessor.Query().Where(trustcentersubprocessor.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
@@ -7830,7 +7830,7 @@ func (q *TrustCenterWatermarkConfigQuery) CheckAccess(ctx context.Context) error
 	// and not the actual object id
 	if objectID == "" {
 		// allow this query to run
-		reqCtx := auth.WithInternalOperationContext(ctx)
+		reqCtx := auth.WithInternalReadContext(ctx)
 
 		ob, err := q.Clone().Only(reqCtx)
 		if err != nil {
@@ -7894,7 +7894,7 @@ func (m *TrustCenterWatermarkConfigMutation) CheckAccessForEdit(ctx context.Cont
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
-			reqCtx := auth.WithInternalOperationContext(ctx)
+			reqCtx := auth.WithInternalReadContext(ctx)
 			ob, err := m.Client().TrustCenterWatermarkConfig.Query().Where(trustcenterwatermarkconfig.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
