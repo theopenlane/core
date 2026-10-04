@@ -187,8 +187,8 @@ github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/n
 github.com/theopenlane/go-client v0.14.1 h1:GgwLjm71/j327rEjQEQbtVZCORkZguUmZqdcDEqxzMc=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.39.3 h1:gEJq78L/PZyi4AUg+bxR+SbO/Xqq8kabS7CqZgxVOQo=
-github.com/theopenlane/iam v0.39.3/go.mod h1:Q2blcVMOgWVps3bc3D0RxS7Gk2vPGslYjcIv8qzG6Fk=
+github.com/theopenlane/iam v0.40.0 h1:gC3DrC2kpNPJZbAyhJsVEORQU7G0YLcCRtAF9Zt3EgM=
+github.com/theopenlane/iam v0.40.0/go.mod h1:1TBP8vYpDwXGdRsCfpefKmzWBjelU/ymjCJ1e3qA24s=
 github.com/theopenlane/logx v0.1.0 h1:DjjGAElteKebYOW68Ee5CVGqQmkaZDvCPmhtf6BweOM=
 github.com/theopenlane/logx v0.1.0/go.mod h1:HgQNNZ2iUGdampF15KRfKabbWIaGBLGIrsg1vkijvP8=
 github.com/theopenlane/utils v0.7.2 h1:DD4C1U/ebGFis24MX9bSN+IyESr6gD2Rob2osd3szaA=

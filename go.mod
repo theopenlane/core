@@ -120,11 +120,11 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.34.5
+	github.com/theopenlane/entx v0.36.0
 	github.com/theopenlane/go-client v0.14.1
-	github.com/theopenlane/gqlgen-plugins v0.18.0
+	github.com/theopenlane/gqlgen-plugins v0.18.2
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.39.3
+	github.com/theopenlane/iam v0.40.0
 	github.com/theopenlane/newman v0.4.3
 	github.com/theopenlane/riverboat v0.14.0
 	github.com/theopenlane/utils v0.7.2
@@ -236,7 +236,7 @@ require (
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
-	github.com/go-openapi/inflect v1.0.0 // indirect
+	github.com/go-openapi/inflect v1.0.1 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
