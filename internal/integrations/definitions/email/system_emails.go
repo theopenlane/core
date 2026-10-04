@@ -42,7 +42,7 @@ const (
 const ndaApprovalRequestPath = "/trust-center/NDAs"
 
 // billingPath is the console route where an organization adds a payment method
-const billingPath = "/billing"
+const billingPath = "/organization-settings/billing"
 
 // Brand palette colors sourced from the Openlane web design system (global.css)
 const (
