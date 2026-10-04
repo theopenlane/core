@@ -422,7 +422,3 @@ require (
 	google.golang.org/grpc v1.84.0 // indirect
 	gotest.tools/gotestsum v1.13.0 // indirect
 )
-
-replace github.com/theopenlane/entx => /Users/manderson/entx
-
-replace github.com/theopenlane/gqlgen-plugins => /Users/manderson/gqlgen-plugins

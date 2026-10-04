@@ -1310,10 +1310,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "adopted_entities": {
-	ObjectType:          "adopted_entity",
+	ObjectType:          "entity",
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "entity_relationship_state": {
 	ObjectType:          "custom_type_enum",
 	SkipEditCheck:       true,
@@ -1468,7 +1468,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "file",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "internal_policies": {
 	ObjectType:          "internal_policy",
 	SkipEditCheck:       false,

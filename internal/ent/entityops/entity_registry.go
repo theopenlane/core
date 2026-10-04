@@ -20,6 +20,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -1468,6 +1469,47 @@ func (s *Schema) relinkCreated(ctx context.Context, client *generated.Client, id
 	_, err = s.Catalog.relink(ctx, client, id)
 
 	return err
+}
+
+// catalogListenerCaller lets a catalog refresh update adopted rows in every organization
+func catalogListenerCaller(restored *auth.Caller, _ MutationPayload) *auth.Caller {
+	return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter | auth.CapBypassFGA)
+}
+
+// catalogRefreshHandler refreshes the adopted rows of a mutated row when it is a visible catalog row
+func catalogRefreshHandler(s *Schema) func(Invocation, MutationPayload) error {
+	return func(inv Invocation, _ MutationPayload) error {
+		visible, err := s.Catalog.visible(inv.Context, inv.Client, inv.EntityID)
+		if err != nil {
+			return logError(inv.Context, SchemaRef{Schema: s.Snake, Operation: refOpQuery, EntityID: inv.EntityID}, ErrQueryFailed, err)
+		}
+
+		if !visible {
+			return nil
+		}
+
+		updated, err := s.RefreshAdopted(inv.Context, inv.Client, inv.EntityID)
+		if err != nil {
+			return err
+		}
+
+		logx.FromContext(inv.Context).Info().Str(FieldSchema, s.Snake).Str(fieldEntityID, inv.EntityID).Int("updated", updated).Msg("entityops: refreshed adopted rows from catalog")
+
+		return nil
+	}
+}
+
+// CatalogListeners refreshes adopted rows when a visible catalog row's source-managed fields change
+func CatalogListeners() []gala.Registration {
+	return []gala.Registration{
+		MutationListener{
+			Schema:     SchemaEntity,
+			Operations: []string{OpUpdate, OpUpdateOne},
+			Fields:     SchemaEntity.Catalog.Fields,
+			Caller:     catalogListenerCaller,
+			Handle:     catalogRefreshHandler(SchemaEntity),
+		},
+	}
 }
 
 // catalogPayload keeps only the keys copied onto adopted rows from a marshaled catalog row
@@ -22857,19 +22899,9 @@ func init() {
 			return 0, logError(ctx, ref, ErrDecodeFailed, err)
 		}
 
-		ids, err := client.Entity.Query().Where(entity.CatalogEntityID(catalogID)).IDs(ctx)
+		updated, err := client.Entity.Update().Where(entity.CatalogEntityID(catalogID)).SetInput(input).Save(ctx)
 		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		updated := 0
-
-		for _, id := range ids {
-			if err := client.Entity.UpdateOneID(id).SetInput(input).Exec(ctx); err != nil {
-				return updated, logPersistError(ctx, SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: id}, ErrUpdateFailed, err)
-			}
-
-			updated++
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
 		}
 
 		return updated, nil
@@ -23274,7 +23306,7 @@ func ownerScopeVulnerability(ownerID string) predicate.Vulnerability {
 	return vulnerability.OwnerID(ownerID)
 }
 
-// catalogRowEntity loads a visible system-owned catalogue entity as JSON with its lookup key, distinguishing hidden rows from missing ones
+// catalogRowEntity loads a visible system-owned catalog entity as JSON with its lookup key, distinguishing hidden rows from missing ones
 func catalogRowEntity(ctx context.Context, client *generated.Client, ref SchemaRef, catalogID string) (json.RawMessage, string, error) {
 	row, err := client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true)).Only(ctx)
 
