@@ -522,14 +522,18 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 		t.Run("anonymous caller cannot set status "+status.String(), func(t *testing.T) {
 			anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
 
-			_, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+			resp, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
 				Email:         gofakeit.Email(),
 				TrustCenterID: &trustCenter.ID,
 				Status:        lo.ToPtr(status),
 			})
-			assert.ErrorContains(t, err, "status not allowed to be set")
+			assert.NilError(t, err)
+
+			request := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
+			assert.Assert(t, request.Status != nil)
+			assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, *request.Status))
 		})
 	}
 

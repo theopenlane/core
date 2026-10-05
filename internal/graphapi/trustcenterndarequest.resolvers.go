@@ -26,6 +26,17 @@ func (r *mutationResolver) CreateTrustCenterNDARequest(ctx context.Context, inpu
 		if input.TrustCenterID == nil || *input.TrustCenterID != tcID {
 			return nil, rout.ErrPermissionDenied
 		}
+
+		// anonymous visitors may only provide the request details, everything else is server controlled
+		input = generated.CreateTrustCenterNDARequestInput{
+			FirstName:     input.FirstName,
+			LastName:      input.LastName,
+			Email:         input.Email,
+			CompanyName:   input.CompanyName,
+			Reason:        input.Reason,
+			AccessLevel:   input.AccessLevel,
+			TrustCenterID: &tcID,
+		}
 	}
 
 	if input.TrustCenterID == nil {

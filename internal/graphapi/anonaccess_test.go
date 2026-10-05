@@ -3,12 +3,14 @@ package graphapi_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -186,6 +188,69 @@ func TestSubscriberAnonymousTrustCenterAccess(t *testing.T) {
 	})
 
 	// org cleanup handles all subscriber deletion
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+}
+
+func TestSubscriberAnonymousTrustCenterOnlyAcceptsEmail(t *testing.T) {
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.TrustCenter
+
+	subscriberEmail := gofakeit.Email()
+	anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, subscriberEmail)
+
+	resp, err := suite.Client.API.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
+		Email:         subscriberEmail,
+		TrustCenterID: &trustCenter.ID,
+		VerifiedEmail: lo.ToPtr(true),
+		VerifiedPhone: lo.ToPtr(true),
+		PhoneNumber:   lo.ToPtr("+12025550123"),
+		Tags:          []string{"injected"},
+		UserID:        &th.SharedTestUser1.ID,
+	})
+	assert.NilError(t, err)
+
+	sub := resp.CreateSubscriber.Subscriber
+	assert.Check(t, sub.Email == subscriberEmail)
+	assert.Check(t, !sub.VerifiedEmail)
+	assert.Check(t, !sub.VerifiedPhone)
+	assert.Check(t, !sub.Active)
+	assert.Check(t, lo.FromPtr(sub.PhoneNumber) == "")
+	assert.Check(t, len(sub.Tags) == 0)
+	assert.Check(t, lo.FromPtr(sub.UserID) == "")
+	assert.Check(t, sub.TrustCenterID != nil && *sub.TrustCenterID == trustCenter.ID)
+
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+}
+
+func TestTrustCenterNDARequestAnonymousIgnoresServerFields(t *testing.T) {
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
+
+	anonEmail := gofakeit.Email()
+	anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, anonEmail)
+
+	now := models.DateTime(time.Now())
+
+	resp, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:        gofakeit.FirstName(),
+		LastName:         gofakeit.LastName(),
+		Email:            anonEmail,
+		TrustCenterID:    &trustCenter.ID,
+		AccessLevel:      lo.ToPtr(enums.TrustCenterNDARequestAccessLevelLimited),
+		ApprovedAt:       &now,
+		SignedAt:         &now,
+		ApprovedByUserID: &tcOrg.Owner.ID,
+		Tags:             []string{"injected"},
+	})
+	assert.NilError(t, err)
+
+	req := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
+	assert.Check(t, req.AccessLevel != nil && *req.AccessLevel == enums.TrustCenterNDARequestAccessLevelLimited)
+	assert.Check(t, req.ApprovedAt == nil)
+	assert.Check(t, req.SignedAt == nil)
+	assert.Check(t, lo.FromPtr(req.ApprovedByUserID) == "")
+	assert.Check(t, len(req.Tags) == 0)
+
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 

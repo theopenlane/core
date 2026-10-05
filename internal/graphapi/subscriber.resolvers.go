@@ -34,7 +34,11 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 			return nil, rout.ErrPermissionDenied
 		}
 
-		input.TrustCenterID = &tcID
+		// anonymous visitors may only provide their email, everything else is server controlled
+		input = generated.CreateSubscriberInput{
+			Email:         input.Email,
+			TrustCenterID: &tcID,
+		}
 
 		// run as an internal operation for anon trust center callers
 		ctx = auth.WithInternalOperationContext(auth.WithCaller(ctx, caller))
