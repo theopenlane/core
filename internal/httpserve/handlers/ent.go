@@ -171,7 +171,7 @@ func (h *Handler) createPasswordResetToken(ctx context.Context, user *User) (*en
 // getUserByEVToken returns the ent user with the user settings and email verification token fields based on the
 // token in the request
 func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User, error) {
-	// bypass org intercepotrs to lookup the token
+	// bypass org interceptors to lookup the token
 	crossOrgCtx := auth.WithCrossOrgContext(ctx)
 
 	user, err := transaction.FromContext(ctx).EmailVerificationToken.Query().
@@ -190,7 +190,7 @@ func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User
 
 // getFilebyDownloadToken returns the ent file and download token based on the token in the request
 func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*ent.File, *ent.FileDownloadToken, error) {
-	// bypass org intercepotrs to lookup the token
+	// bypass org interceptors to lookup the token
 	crossOrgCtx := auth.WithCrossOrgContext(ctx)
 
 	tokenRecord, err := transaction.FromContext(ctx).FileDownloadToken.Query().
@@ -365,7 +365,7 @@ func (h *Handler) updateRecoveryCodes(ctx context.Context, tfaID string, codes [
 
 // getUserByInviteToken returns the ent user based on the invite token in the request
 func (h *Handler) getUserByInviteToken(ctx context.Context, token string) (*ent.Invite, error) {
-	// bypass org intercepotrs to lookup the token
+	// bypass org interceptors to lookup the token
 	crossOrgCtx := auth.WithCrossOrgContext(ctx)
 	recipient, err := transaction.FromContext(ctx).Invite.Query().
 		Where(
@@ -574,7 +574,7 @@ func (h *Handler) setWebauthnAllowed(ctx context.Context, user *ent.User) error 
 
 // getSubscriberByToken returns the subscriber based on the token in the request
 func (h *Handler) getSubscriberByToken(ctx context.Context, token string) (*ent.Subscriber, error) {
-	// bypass org intercepotrs to lookup the token
+	// bypass org interceptors to lookup the token
 	crossOrgCtx := auth.WithCrossOrgContext(ctx)
 
 	subscriber, err := transaction.FromContext(ctx).Subscriber.Query().
