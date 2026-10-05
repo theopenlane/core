@@ -32,9 +32,9 @@ func (r *internalPolicyResolver) LiveExternalContents(ctx context.Context, obj *
 		return nil, nil
 	}
 
-	ctx = auth.WithInternalOperationContext(ctx)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
-	found, err := r.findPrimaryDriveIntegration(ctx, obj.OwnerID)
+	found, err := r.findPrimaryDriveIntegration(internalCtx, obj.OwnerID)
 	if err != nil || found == nil {
 		return nil, nil
 	}
