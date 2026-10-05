@@ -31,6 +31,10 @@ const (
 
 	// DomainScanGroupMetadataKey is the Scan.Metadata key carrying the shared group id for scans
 	DomainScanGroupMetadataKey = "scan_group_id"
+
+	// mainFindingSyncKey is the key main's client config stored the findings sync section under
+	// TODO: remove with providerkit.UpgradeFromSection once every installation has been upgraded off main's client config
+	mainFindingSyncKey = "findingSync"
 )
 
 // RuntimeConfig is the runtime-provisioned configuration for the operator-owned Cloudflare account

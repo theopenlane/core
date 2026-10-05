@@ -38,7 +38,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 
-	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.IntegrationID, def)
+	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(systemCtx, caller.OrganizationID, payload.IntegrationID, def, payload.UserInput, payload.OperationConfig)
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("failed to resolve installation")
 
@@ -53,22 +53,17 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 
 	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
 		// do not log payload, it can contain secrets
-		logx.FromContext(requestCtx).Error().Err(err).Msg("reconcile failed")
+		logx.FromContext(requestCtx).Error().Err(err).Msg("failed to ensure installation")
 
 		return h.BadRequest(ctx, err)
 	}
 
-	if len(def.CredentialRegistrations) == 0 && installationRec.Status == enums.IntegrationStatusPending {
-		if err := h.IntegrationsRuntime.DB().Integration.UpdateOneID(installationRec.ID).
-			SetStatus(enums.IntegrationStatusConnected).
-			ClearExpiresAt().
-			Exec(requestCtx); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to mark credential-less installation connected")
+	if payload.HasCredentialBody() {
+		if err := h.IntegrationsRuntime.ReconcileCredential(systemCtx, installationRec, types.NewCredentialSlotID(payload.CredentialRef), types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}, nil); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Msg("credential reconcile failed")
 
-			return h.BadRequest(ctx, ErrProcessingRequest)
+			return h.BadRequest(ctx, err)
 		}
-
-		installationRec.Status = enums.IntegrationStatusConnected
 	}
 
 	resp := ConfigureIntegrationResponse{

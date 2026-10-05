@@ -294,14 +294,14 @@ func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx 
 	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
 	require.True(t, ok)
 
-	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
+	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def, nil, nil)
 	require.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, nil, operationTestCredentialRef.ID(), &credential, nil)
+	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, operationTestCredentialRef.ID(), credential, nil)
 	require.NoError(t, err)
 
 	return rec.ID

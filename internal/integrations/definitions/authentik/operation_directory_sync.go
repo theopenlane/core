@@ -14,7 +14,7 @@ import (
 const directoryDefaultPageSize = int32(100)
 
 // runDirectorySync collects Authentik directory users, groups, and memberships
-func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *authentikSDK.APIClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *authentikSDK.APIClient, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c)
 	if err != nil {
 		return nil, err

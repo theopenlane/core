@@ -32,12 +32,6 @@ type UserInput struct {
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
 }
 
-// DirectorySync configures collection of Authentik directory users, groups, and memberships
-type DirectorySync struct {
-	types.OperationSettings
-	// DisableGroupSync when true only syncs users, skipping groups and memberships
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
-}
 
 // InstallationMetadata holds the stable Authentik instance identity for one installation
 type InstallationMetadata struct {

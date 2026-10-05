@@ -17,12 +17,6 @@ var (
 	tailscaleClient = types.ClientRefOf[*tsclient.Client]()
 )
 
-// DirectorySync holds configuration for the Tailscale directory sync operation
-type DirectorySync struct {
-	types.OperationSettings
-	// DisableGroupSync skips group and membership sync, importing only users
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Tailscale; disable role-based group sync"`
-}
 
 // AssetSync holds configuration for the Tailscale asset sync operation
 type AssetSync struct {

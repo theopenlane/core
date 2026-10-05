@@ -101,12 +101,14 @@ func Builder(cfg Config) registry.Builder {
 					}),
 				types.OperationRefOf[VulnerabilitySync]().
 					Ingests(gitHubClient, runVulnerabilityCollect).
+					// TODO: remove with providerkit.UpgradeFromSection once every installation has been upgraded off main's client config
+					Upgraded(providerkit.UpgradeFromSection[VulnerabilitySync](mainFindingSyncKey)).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
 					Registration(DefinitionID, types.OperationRegistration{
 						Description: "Collect vulnerability alerts from the installation",
 					}),
-				types.OperationRefOf[DirectorySync]().
+				types.OperationRefOf[providerkit.DirectorySync]().
 					Ingests(gitHubClient, runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(providerkit.DirectoryIngestContracts()...).

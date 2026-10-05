@@ -52,11 +52,11 @@ func connectMockInstall(ctx context.Context, t *testing.T, server *testint.MockH
 	def, ok := suite.IntegrationsRT.Registry().Definition(testint.MockHTTPDefinitionID.ID())
 	assert.Assert(t, ok, "mock provider definition must be registered on the runtime")
 
-	install, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, th.SharedTestUser1.OrganizationID, "", def)
+	install, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, th.SharedTestUser1.OrganizationID, "", def, nil, nil)
 	th.RequireNoError(t, err)
 
 	credential := testint.MockHTTPCredentialSet(mockProviderToken, server.URL())
-	th.RequireNoError(t, suite.IntegrationsRT.Reconcile(ctx, install, nil, nil, testint.MockHTTPCredential.ID(), &credential, nil))
+	th.RequireNoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, install, testint.MockHTTPCredential.ID(), credential, nil))
 
 	return reloadIntegration(t, ctx, install.ID)
 }
@@ -178,7 +178,7 @@ func TestInstanceIDGatesIngest(t *testing.T) {
 	_, err = suite.IntegrationsRT.ExecuteOperation(ctx, reloadIntegration(t, ctx, install.ID), operation, nil, nil)
 	assert.Check(t, errors.Is(err, operations.ErrIngestInstanceIDRequired), "ingest is gated for an installation with no instance id")
 
-	th.RequireNoError(t, suite.IntegrationsRT.BackfillInstallationInstanceID(ctx, reloadIntegration(t, ctx, install.ID)))
+	th.RequireNoError(t, suite.IntegrationsRT.RefreshInstallationMetadata(ctx, reloadIntegration(t, ctx, install.ID)))
 
 	executeMockSync(ctx, t, reloadIntegration(t, ctx, install.ID))
 
@@ -229,7 +229,7 @@ func TestReconnectRefreshesChangedInstanceID(t *testing.T) {
 	server.SetInstanceID("tenant-v2")
 
 	credential := testint.MockHTTPCredentialSet(mockProviderToken, server.URL())
-	th.RequireNoError(t, suite.IntegrationsRT.Reconcile(ctx, reloadIntegration(t, ctx, install.ID), nil, nil, testint.MockHTTPCredential.ID(), &credential, nil))
+	th.RequireNoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, reloadIntegration(t, ctx, install.ID), testint.MockHTTPCredential.ID(), credential, nil))
 
 	assert.Check(t, is.Equal("tenant-v2", reloadIntegration(t, ctx, install.ID).InstallationMetadata.Display.ExternalID), "reconnect refreshes the changed instance id instead of rejecting it as a mismatch")
 }

@@ -45,7 +45,7 @@ func Builder() registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				types.OperationRefOf[DirectorySync]().
+				types.OperationRefOf[providerkit.DirectorySync]().
 					Ingests(authentikClient, runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(providerkit.DirectoryIngestContracts()...).

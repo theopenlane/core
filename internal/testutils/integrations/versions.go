@@ -5,11 +5,43 @@ package integrations
 import (
 	"context"
 	"encoding/json"
+	"path"
+	"testing/fstest"
+
+	"github.com/oklog/ulid/v2"
 
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
+
+// VersionedRegistry registers builders on a registry whose definitions carry a version minted now, so a registry created later is newer than one created earlier
+func VersionedRegistry(builders ...registry.Builder) (*registry.Registry, error) {
+	plain := registry.New()
+	if err := plain.RegisterAll(builders...); err != nil {
+		return nil, err
+	}
+
+	snapshots := fstest.MapFS{}
+
+	for _, def := range plain.Definitions() {
+		hash, err := registry.SurfaceHash(def)
+		if err != nil {
+			return nil, err
+		}
+
+		data, err := json.Marshal(registry.Snapshot{Hash: hash, Version: ulid.Make().String()})
+		if err != nil {
+			return nil, err
+		}
+
+		snapshots[path.Join("surfaces", def.ID+".json")] = &fstest.MapFile{Data: data}
+	}
+
+	reg := registry.New(registry.WithSnapshots(snapshots))
+
+	return reg, reg.RegisterAll(builders...)
+}
 
 // backfilledFilter is the default filter for version 3 user input
 const backfilledFilter = "*"

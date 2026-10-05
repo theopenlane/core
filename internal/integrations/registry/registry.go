@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"maps"
 	"slices"
 	"strings"
@@ -30,6 +31,8 @@ type Registry struct {
 	webhookEventsByTopic map[gala.TopicName]types.WebhookEventRegistration
 	// galaListeners collects standalone gala listener registrations across definitions
 	galaListeners []types.GalaListenerRegistration
+	// snapshots holds the committed surface snapshots every registered definition must match, nil when unchecked
+	snapshots fs.FS
 }
 
 // Surface is a definition's installation-facing surface: every kind bound to stored data
@@ -50,9 +53,11 @@ type Surface struct {
 	Webhooks []SurfaceWebhook `json:"webhooks,omitempty"`
 }
 
-// Snapshot is a definition's committed surface alongside the version computed from it
+// Snapshot is a definition's committed surface, its hash, and the version minted when the hash last changed
 type Snapshot struct {
-	// Version is the hash of Surface recorded on installations as their definition version
+	// Hash is the SurfaceHash of the definition the snapshot was written from
+	Hash string `json:"hash"`
+	// Version is the ULID recorded on installations as their definition version
 	Version string `json:"version"`
 	// Surface is the definition's installation-facing surface
 	Surface Surface `json:"surface"`
@@ -169,17 +174,33 @@ type definitionEntry struct {
 	webhookEvents map[string]map[string]types.WebhookEventRegistration
 	// runtimeClient holds the pre-built client for runtime integrations
 	runtimeClient any
-	// version is the hash of the definition's declarative composition
+	// version is the ULID of the committed snapshot the definition matched, empty without snapshots
 	version string
 }
 
+// Option configures a Registry
+type Option func(*Registry)
+
+// WithSnapshots requires every registered definition to match its committed snapshot in fsys and records the snapshot's version
+func WithSnapshots(fsys fs.FS) Option {
+	return func(r *Registry) {
+		r.snapshots = fsys
+	}
+}
+
 // New constructs an empty registry
-func New() *Registry {
-	return &Registry{
+func New(opts ...Option) *Registry {
+	r := &Registry{
 		definitions:          map[string]definitionEntry{},
 		operationsByTopic:    map[gala.TopicName]types.OperationRegistration{},
 		webhookEventsByTopic: map[gala.TopicName]types.WebhookEventRegistration{},
 	}
+
+	for _, opt := range opts {
+		opt(r)
+	}
+
+	return r
 }
 
 // Register adds one definition to the registry
@@ -198,6 +219,13 @@ func (r *Registry) Register(def types.Definition) error {
 	entry, err := compileDefinition(def)
 	if err != nil {
 		return err
+	}
+
+	if r.snapshots != nil {
+		entry.version, err = committedVersion(r.snapshots, def)
+		if err != nil {
+			return err
+		}
 	}
 
 	if def.RuntimeIntegration != nil && def.RuntimeIntegration.Config != nil {
@@ -278,7 +306,7 @@ func (r *Registry) Definition(id string) (types.Definition, bool) {
 	return entry.definition, ok
 }
 
-// Version returns the computed version of one definition, or empty when unregistered
+// Version returns the committed snapshot version of one definition, or empty when unregistered or registered without snapshots
 func (r *Registry) Version(id string) string {
 	return r.definitions[id].version
 }
@@ -565,18 +593,12 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 		return definitionEntry{}, err
 	}
 
-	version, err := computeVersion(def)
-	if err != nil {
-		return definitionEntry{}, err
-	}
-
 	return definitionEntry{
 		definition:    def,
 		clients:       clients,
 		operations:    operations,
 		webhooks:      webhooks,
 		webhookEvents: webhookEvents,
-		version:       version,
 	}, nil
 }
 

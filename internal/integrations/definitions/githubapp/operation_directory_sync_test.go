@@ -12,6 +12,7 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/httpsling"
 )
@@ -73,7 +74,7 @@ func TestDirectorySyncSnapshotComplete(t *testing.T) {
 	tests := []struct {
 		name          string
 		teamsResponse string
-		cfg           DirectorySync
+		cfg           providerkit.DirectorySync
 		want          map[string]bool
 	}{
 		{
@@ -97,7 +98,7 @@ func TestDirectorySyncSnapshotComplete(t *testing.T) {
 		{
 			name:          "group sync disabled emits only a complete account set",
 			teamsResponse: organizationTeamsErrorResponse,
-			cfg:           DirectorySync{DisableGroupSync: true},
+			cfg:           providerkit.DirectorySync{DisableGroupSync: true},
 			want: map[string]bool{
 				entityops.SchemaDirectoryAccount.Name: true,
 			},

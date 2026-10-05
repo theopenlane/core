@@ -28,7 +28,7 @@ type tailscaleMembershipPayload struct {
 }
 
 // runDirectorySync collects Tailscale users and optionally role-based groups and memberships
-func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listTailscaleUsers(ctx, client)
 	if err != nil {
 		return nil, err

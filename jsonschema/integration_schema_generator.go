@@ -9,13 +9,15 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/oklog/ulid/v2"
+
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 )
 
 const (
 	// integrationSchemaDir is the directory holding one committed surface snapshot per definition
-	integrationSchemaDir = "./jsonschema/integrations"
+	integrationSchemaDir = "./internal/integrations/registry/surfaces"
 	// snapshotExtension is the file extension of every surface snapshot
 	snapshotExtension = ".json"
 	// snapshotFilePermission is the mode used for written snapshot files
@@ -32,7 +34,8 @@ func main() {
 	}
 }
 
-// generateIntegrationSchemas writes one surface snapshot per registered definition, refusing a removed slot, operation, webhook, or webhook event that no registration declares it replaces
+// generateIntegrationSchemas writes one surface snapshot per registered definition, keeping the committed version while the surface hash is unchanged and minting a new one otherwise,
+// and refusing a removed slot, operation, webhook, or webhook event that no registration declares it replaces
 func generateIntegrationSchemas(dir string) error {
 	reg := registry.New()
 	if err := reg.RegisterAll(catalog.Builders(catalog.Config{}, "", false)...); err != nil {
@@ -44,7 +47,12 @@ func generateIntegrationSchemas(dir string) error {
 	}
 
 	for _, def := range reg.Definitions() {
-		next := registry.Snapshot{Version: reg.Version(def.ID), Surface: registry.DefinitionSurface(def)}
+		hash, err := registry.SurfaceHash(def)
+		if err != nil {
+			return fmt.Errorf("hash %s surface: %w", def.ID, err)
+		}
+
+		next := registry.Snapshot{Hash: hash, Surface: registry.DefinitionSurface(def)}
 		target := filepath.Join(dir, def.ID+snapshotExtension)
 
 		existing, err := os.ReadFile(target)
@@ -52,10 +60,22 @@ func generateIntegrationSchemas(dir string) error {
 			return fmt.Errorf("read %s: %w", target, err)
 		}
 
+		var committed registry.Snapshot
+
 		if err == nil {
+			if err := json.Unmarshal(existing, &committed); err != nil {
+				return fmt.Errorf("decode %s: %w", target, err)
+			}
+
 			if err := registry.GateSurfaceChange(target, existing, next.Surface); err != nil {
 				return err
 			}
+		}
+
+		next.Version = committed.Version
+
+		if committed.Hash != hash {
+			next.Version = ulid.Make().String()
 		}
 
 		data, err := json.MarshalIndent(next, "", "  ")

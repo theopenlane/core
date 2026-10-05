@@ -67,6 +67,8 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					}),
 				types.OperationRefOf[FindingsSync]().
 					Ingests(cloudflareClient, runFindingsCollect).
+					// TODO: remove with providerkit.UpgradeFromSection once every installation has been upgraded off main's client config
+					Upgraded(providerkit.UpgradeFromSection[FindingsSync](mainFindingSyncKey)).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaFinding.Name}).
 					Permissions("Account Security Center Insights Read").

@@ -9,6 +9,8 @@ import (
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/common/openapi"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -213,16 +215,21 @@ func TestConformDocuments(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := conformDocuments(t.Context(), types.InstallationRequest{}, tc.kind, tc.stored)
+			got, failed := conformDocuments(t.Context(), types.InstallationRequest{}, tc.kind, tc.stored)
+			documents := func(docs map[string]json.RawMessage) map[string]string {
+				return lo.MapValues(docs, func(doc json.RawMessage, _ string) string { return string(doc) })
+			}
 
 			if tc.wantErr != nil {
+				err := joinFailures(failed)
 				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)
+				assert.DeepEqual(t, documents(got), documents(tc.stored))
 
 				return
 			}
 
-			assert.NilError(t, err)
-			assert.DeepEqual(t, lo.MapValues(got, func(doc json.RawMessage, _ string) string { return string(doc) }), tc.want)
+			assert.Equal(t, len(failed), 0, "failed: %v", failed)
+			assert.DeepEqual(t, documents(got), tc.want)
 		})
 	}
 }
@@ -376,4 +383,62 @@ func TestConformStored(t *testing.T) {
 			assert.Equal(t, string(got), tc.want)
 		})
 	}
+}
+
+func TestLegacyDocuments(t *testing.T) {
+	t.Parallel()
+
+	definition := types.NewDefinitionRef("legacy-def")
+	userInput := types.UserInputRefOf[upgradeUserInput]()
+	sectioned := types.NewOperationRef[upgradeOperationConfigCfg]("DirectorySync")
+	flat := types.NewOperationRef[retiredOperationConfigCfg]("AssetSync")
+	payload := types.NewOperationPayload[upgradeUserInput]("Notify")
+
+	def := types.Definition{
+		UserInput: userInput.Registration(),
+		Operations: []types.OperationRegistration{
+			sectioned.Registration(definition, types.OperationRegistration{}),
+			flat.Registration(definition, types.OperationRegistration{}),
+			payload.Registration(definition, types.OperationRegistration{}),
+		},
+	}
+
+	legacy := json.RawMessage(`{"region":"eu","directorySync":{"region":"us","disable":true}}`)
+
+	t.Run("main's client config seeds user input and each stored operation by its camelCase section, else the whole document", func(t *testing.T) {
+		t.Parallel()
+
+		gotInput, gotConfig := legacyDocuments(&ent.Integration{Config: openapi.IntegrationConfig{ClientConfig: legacy}}, def)
+
+		assert.Equal(t, gotInput.Layout, userInput.Name())
+		assert.Equal(t, string(gotInput.Data), string(legacy))
+		assert.DeepEqual(t, lo.MapValues(gotConfig.Operations, func(doc json.RawMessage, _ string) string { return string(doc) }), map[string]string{
+			sectioned.Name(): `{"disable":true,"region":"us"}`,
+			flat.Name():      string(legacy),
+		})
+	})
+
+	t.Run("an installation with stored user input keeps its documents", func(t *testing.T) {
+		t.Parallel()
+
+		stored := types.IntegrationUserInput{Layout: userInput.Name(), Data: json.RawMessage(`{"region":"ca"}`)}
+
+		gotInput, gotConfig := legacyDocuments(&ent.Integration{UserInput: stored, Config: openapi.IntegrationConfig{ClientConfig: legacy}}, def)
+
+		assert.DeepEqual(t, gotInput, stored)
+		assert.Equal(t, len(gotConfig.Operations), 0)
+	})
+}
+
+func TestRetiredHealth(t *testing.T) {
+	t.Parallel()
+
+	definition := types.NewDefinitionRef("health-def")
+	retired := types.NewOperationRef[retiredOperationConfigCfg]("old")
+	current := types.NewOperationRef[upgradeOperationConfigCfg]("current").Replacing(retired)
+
+	def := types.Definition{Operations: []types.OperationRegistration{current.Registration(definition, types.OperationRegistration{})}}
+
+	assert.DeepEqual(t, retiredHealth(map[string]string{"old": "failing", "gone": "undeclared"}, def), map[string]string{"current": "failing"})
+	assert.Assert(t, retiredHealth(map[string]string{"gone": "undeclared"}, def) == nil)
 }

@@ -18,7 +18,6 @@ import (
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keymaker"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -57,45 +56,31 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 	}
 
 	// if integrationID is empty, we assume this is a new installation and proceed to create a record that the auth flow can reference; if it is provided we will attempt to resolve and reuse the existing installation record for the auth flow
-	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, in.IntegrationID, def)
+	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, in.IntegrationID, def, in.UserInput, in.OperationConfig)
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve integration")
+		switch {
+		case errors.Is(err, integrationsruntime.ErrOperationNotFound),
+			errors.Is(err, integrationsruntime.ErrUserInputInvalid),
+			errors.Is(err, types.ErrOperationConfigInvalid):
+			logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Msg("integration input rejected, refusing to start auth flow")
 
-		return h.BadRequest(ctx, ErrIntegrationNotFound)
+			return h.BadRequest(ctx, err)
+		default:
+			logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to ensure integration")
+
+			return h.BadRequest(ctx, ErrIntegrationNotFound)
+		}
 	}
 
 	// required user input has to be satisfied before we hand out provider scopes, otherwise the
 	// install authorizes successfully and then fails every sync it runs
-	effectiveInput := in.UserInput
-	if jsonx.IsEmptyRawMessage(effectiveInput) {
-		effectiveInput = installationRec.UserInput.Data
-	}
-
 	if def.UserInput != nil {
 		req := types.InstallationRequest{Integration: installationRec, UserInput: installationRec.UserInput.Data}
 
-		if err := operations.ValidateInput(requestCtx, req, def.UserInput.Schema, def.UserInput.Validate, effectiveInput, integrationsruntime.ErrUserInputInvalid); err != nil {
+		if err := operations.ValidateInput(requestCtx, req, def.UserInput.Schema, def.UserInput.Validate, installationRec.UserInput.Data, integrationsruntime.ErrUserInputInvalid); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Msg("integration user input incomplete, refusing to start auth flow")
 
 			return h.BadRequest(ctx, ErrIntegrationUserInputRequired)
-		}
-	}
-
-	// if we got optional config with the input, persist it
-	if !jsonx.IsEmptyRawMessage(in.UserInput) || len(in.OperationConfig) > 0 {
-		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, in.OperationConfig, types.CredentialSlotID{}, nil, nil); err != nil {
-			switch {
-			case errors.Is(err, integrationsruntime.ErrOperationNotFound),
-				errors.Is(err, integrationsruntime.ErrUserInputInvalid),
-				errors.Is(err, types.ErrOperationConfigInvalid):
-				logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Msg("integration input rejected, refusing to start auth flow")
-
-				return h.BadRequest(ctx, err)
-			default:
-				logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("failed to reconcile user input")
-
-				return h.InternalServerError(ctx, ErrProcessingRequest)
-			}
 		}
 	}
 

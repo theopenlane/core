@@ -40,6 +40,9 @@ const (
 	githubAlertTypeCodeScanning = "code_scanning"
 	// githubAlertTypeSecretScan is the variant name for secret scanning alert payloads
 	githubAlertTypeSecretScan = "secret_scanning"
+	// mainFindingSyncKey is the key main's client config stored the vulnerability sync section under
+	// TODO: remove with providerkit.UpgradeFromSection once every installation has been upgraded off main's client config
+	mainFindingSyncKey = "findingSync"
 )
 
 // githubAppCredential is the credential payload stored in CredentialSet.Data
@@ -54,13 +57,6 @@ type githubAppCredential struct {
 	Expiry *time.Time `json:"expiry,omitempty"`
 	// OrganizationName is the organization this was installed in
 	OrganizationName string `json:"organizationName,omitempty"`
-}
-
-// DirectorySync controls the directory sync operation
-type DirectorySync struct {
-	types.OperationSettings
-	// DisableGroupSync will just sync users and no groups or group memberships
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from GitHub, disable groups sync operations"`
 }
 
 // VulnerabilitySync controls the vulnerability collect operation

@@ -67,7 +67,7 @@ func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*en
 	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
 	require.NoError(t, err)
 
-	installation, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, ownerID, "", def)
+	installation, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, ownerID, "", def, nil, testint.ModeOperationConfig(mode))
 	require.NoError(t, err)
 
 	credentialRef := testint.TokenCredential.ID()
@@ -78,7 +78,7 @@ func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*en
 		credential = testint.ServiceAccountCredentialSet("test-project", "svc@example.com")
 	}
 
-	require.NoError(t, suite.IntegrationsRT.Reconcile(ctx, installation, nil, testint.ModeOperationConfig(mode), credentialRef, &credential, nil))
+	require.NoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, installation, credentialRef, credential, nil))
 
 	fragment := reconcileLoopFragment(t, installation.ID, harnessReconcileOperation(t, mode))
 

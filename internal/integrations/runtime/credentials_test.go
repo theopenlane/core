@@ -280,23 +280,23 @@ func TestDisconnectMissingDefinition(t *testing.T) {
 	}
 }
 
-func TestReconcileNilInstallation(t *testing.T) {
+func TestReconcileCredentialNilInstallation(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
-	err := rt.Reconcile(context.Background(), nil, nil, nil, types.CredentialSlotID{}, nil, nil)
+	err := rt.ReconcileCredential(context.Background(), nil, types.CredentialSlotID{}, types.CredentialSet{}, nil)
 	if !errors.Is(err, ErrInstallationRequired) {
 		t.Fatalf("expected ErrInstallationRequired, got %v", err)
 	}
 }
 
-func TestReconcileMissingDefinition(t *testing.T) {
+func TestReconcileCredentialMissingDefinition(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
-	err := rt.Reconcile(context.Background(), &ent.Integration{
+	err := rt.ReconcileCredential(context.Background(), &ent.Integration{
 		DefinitionID: "nonexistent",
-	}, nil, nil, types.CredentialSlotID{}, nil, nil)
+	}, types.CredentialSlotID{}, types.CredentialSet{}, nil)
 	if !errors.Is(err, registry.ErrDefinitionNotFound) {
 		t.Fatalf("expected ErrDefinitionNotFound, got %v", err)
 	}

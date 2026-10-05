@@ -125,7 +125,7 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 
 	secretName := credentialRef.String()
 	if !ok {
-		if err := s.db.Hush.Create().
+		if err := s.client(ctx).Hush.Create().
 			SetOwnerID(installation.OwnerID).
 			SetName(secretName).
 			SetSecretName(secretName).
@@ -199,7 +199,7 @@ func (s *Store) ReplaceCredentials(ctx context.Context, installation *ent.Integr
 	})
 
 	if len(removed) > 0 {
-		if _, err := s.db.Hush.Delete().
+		if _, err := s.client(ctx).Hush.Delete().
 			Where(
 				enthush.HasIntegrationsWith(entintegration.IDEQ(installation.ID)),
 				enthush.SecretNameIn(removed...),
@@ -304,6 +304,15 @@ func cloneCredentialBindings(credentials types.CredentialBindings) types.Credent
 	return cloned
 }
 
+// client returns the transaction's client when ctx carries one, else the store's client
+func (s *Store) client(ctx context.Context) *ent.Client {
+	if tx := ent.TxFromContext(ctx); tx != nil {
+		return tx.Client()
+	}
+
+	return s.db
+}
+
 // activeCredentialRecord returns the active credential record for a slot
 func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID) (*ent.Hush, bool, error) {
 	records, err := s.activeCredentialRecords(ctx, integrationID, []types.CredentialSlotID{credentialRef})
@@ -321,7 +330,7 @@ func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string
 
 // activeCredentialRecords returns active credential records keyed by Hush.SecretName
 func (s *Store) activeCredentialRecords(ctx context.Context, integrationID string, credentialRefs []types.CredentialSlotID) (map[string]*ent.Hush, error) {
-	query := s.db.Hush.Query().Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID)))
+	query := s.client(ctx).Hush.Query().Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID)))
 
 	if len(credentialRefs) > 0 {
 		secretNames := make([]string, 0, len(credentialRefs))

@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// UpgradeInstallations upgrades every connected, degraded, or errored installation whose stored definition version is not the registry version
+// UpgradeInstallations upgrades every connected, degraded, or errored installation whose stored definition version predates the registry version
 func (r *Runtime) UpgradeInstallations(ctx context.Context) error {
 	definitionIDs := lo.Map(r.Registry().Definitions(), func(def types.Definition, _ int) string {
 		return def.ID
@@ -48,9 +48,9 @@ func (r *Runtime) UpgradeInstallations(ctx context.Context) error {
 	return errors.Join(failures...)
 }
 
-// staleInstallations keeps the installations whose stored definition version is not the registry version
+// staleInstallations keeps the installations whose stored definition version predates the registry version
 func staleInstallations(reg *registry.Registry, installations []*ent.Integration) []*ent.Integration {
 	return lo.Filter(installations, func(inst *ent.Integration, _ int) bool {
-		return inst.DefinitionVersion != reg.Version(inst.DefinitionID)
+		return outdated(inst.DefinitionVersion, reg.Version(inst.DefinitionID))
 	})
 }

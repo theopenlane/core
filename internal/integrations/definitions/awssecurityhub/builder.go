@@ -83,7 +83,7 @@ func Builder(cfg Config) registry.Builder {
 					Registration(definitionID, types.OperationRegistration{
 						Description: "Collect AWS Security Hub for findings and vulnerability ingestion",
 					}),
-				types.OperationRefOf[DirectorySync]().
+				types.OperationRefOf[providerkit.DirectorySync]().
 					Ingests(iamClient, runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(providerkit.DirectoryIngestContracts()...).

@@ -154,12 +154,14 @@ func New(config Config) (*Runtime, error) {
 
 	do.Provide(injector, func(do.Injector) (*registry.Registry, error) {
 		registryInstance := config.Registry
-		if registryInstance == nil {
-			registryInstance = registry.New()
-		}
-
 		builders := config.DefinitionBuilders
-		if len(builders) == 0 && config.Registry == nil {
+
+		switch {
+		case registryInstance != nil:
+		case len(builders) > 0:
+			registryInstance = registry.New()
+		default:
+			registryInstance = registry.New(registry.WithSnapshots(registry.Surfaces))
 			builders = catalog.Builders(config.CatalogConfig, config.FederationIssuer, config.DevMode)
 		}
 
@@ -185,7 +187,7 @@ func New(config Config) (*Runtime, error) {
 				return err
 			}
 
-			if err := rt.Reconcile(ctx, installation, nil, nil, connection.Auth.CredentialRef, &result.Credential, result.InstallationInput); err != nil {
+			if err := rt.ReconcileCredential(ctx, installation, connection.Auth.CredentialRef, result.Credential, result.InstallationInput); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("installation_id", installation.ID).Msg("failed to reconcile completed auth credential")
 
 				return err

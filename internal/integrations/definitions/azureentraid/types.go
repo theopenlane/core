@@ -4,6 +4,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -30,9 +31,7 @@ type UserInput struct {
 
 // DirectorySync configures collection of Azure Entra ID directory users, groups, and memberships
 type DirectorySync struct {
-	types.OperationSettings
-	// DisableGroupSync when true only syncs users, skipping groups and memberships
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Azure Entra ID, disable groups sync operations"`
+	providerkit.DirectorySync
 	// IncludeGuestUsers controls whether guest-type accounts are included in the sync
 	IncludeGuestUsers bool `json:"includeGuestUsers,omitempty" jsonschema:"title=Include Guest Users"`
 }

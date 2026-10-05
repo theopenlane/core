@@ -132,14 +132,14 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
 	assert.True(t, ok)
 
-	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
+	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def, nil, nil)
 	assert.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"secret"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, nil, githubTestCredentialRef.ID(), &credential, nil)
+	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, githubTestCredentialRef.ID(), credential, nil)
 	assert.NoError(t, err)
 
 	return rec.ID

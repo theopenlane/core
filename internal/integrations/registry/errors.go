@@ -75,4 +75,6 @@ var (
 	ErrOperationFilterExprInvalid = errors.New("integrations/registry: operation filter expression invalid")
 	// ErrDestructiveSurfaceChange indicates a removed slot, operation, or webhook has no replacement
 	ErrDestructiveSurfaceChange = errors.New("integrations/registry: removed credential slot, operation, or webhook has no replacing registration")
+	// ErrSnapshotStale indicates a definition's surface does not match its committed snapshot; run task config:generate
+	ErrSnapshotStale = errors.New("integrations/registry: definition surface does not match its committed snapshot")
 )

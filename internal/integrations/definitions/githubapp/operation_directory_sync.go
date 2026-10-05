@@ -117,7 +117,7 @@ type orgNode struct {
 }
 
 // runDirectorySync collects GitHub org members, teams, and team memberships for directory ingest
-func runDirectorySync(ctx context.Context, _ types.OperationRequest, client GraphQLClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client GraphQLClient, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
 	orgs, err := queryViewerOrganizations(ctx, client)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("githubapp_directorysync: failed to discover organizations")

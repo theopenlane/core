@@ -2,7 +2,6 @@ package registry
 
 import (
 	"encoding/json"
-	"slices"
 
 	"github.com/samber/lo"
 
@@ -10,8 +9,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// computeVersion hashes the marshalled DefinitionSurface
-func computeVersion(def types.Definition) (string, error) {
+// SurfaceHash hashes the marshalled DefinitionSurface
+func SurfaceHash(def types.Definition) (string, error) {
 	encoded, err := json.Marshal(DefinitionSurface(def))
 	if err != nil {
 		return "", err
@@ -20,11 +19,9 @@ func computeVersion(def types.Definition) (string, error) {
 	return helpers.NewHashBuilder().WriteStrings(string(encoded)).Hex(), nil
 }
 
-// Fingerprint is the hash of the sorted versions of every registered definition
+// Fingerprint is the hash of every registered definition's id and version, in definition id order
 func (r *Registry) Fingerprint() string {
-	versions := lo.Map(r.Definitions(), func(def types.Definition, _ int) string { return r.Version(def.ID) })
-
-	slices.Sort(versions)
+	versions := lo.FlatMap(r.Definitions(), func(def types.Definition, _ int) []string { return []string{def.ID, r.Version(def.ID)} })
 
 	return helpers.NewHashBuilder().WriteStrings(versions...).Hex()
 }

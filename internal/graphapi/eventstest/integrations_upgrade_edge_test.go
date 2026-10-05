@@ -92,8 +92,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		installation, previous := installUnder(t, subCtx, previousOAuthDefinition(t, def, jsonx.SchemaFrom[oauthTokenCredV1]()), testint.OAuthCredential.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
 			testint.OAuthCredential.ID(): {Data: json.RawMessage(`{"access_token":"legacy-oauth-token","legacy":"drop-me"}`)},
 		})
-		require.NotEmpty(t, previous)
-		require.NotEqual(t, current, previous)
+		require.Less(t, previous, current)
 		require.Equal(t, previous, installation.DefinitionVersion)
 
 		assessment, err := suite.IntegrationsRT.RunHealthAssessment(subCtx, installation)
@@ -170,7 +169,11 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		require.Equal(t, enums.IntegrationStatusErrored, stranded.Status)
 		require.NotEqual(t, strictVersion, stranded.DefinitionVersion)
 
-		require.NoError(t, strict.Reconcile(subCtx, stranded, json.RawMessage(`{"region":"eu"}`), nil, integrationtypes.CredentialSlotID{}, nil, nil))
+		strictDef, ok := strict.Registry().Definition(testint.DefinitionID.ID())
+		require.True(t, ok)
+
+		_, _, err = strict.EnsureInstallation(subCtx, stranded.OwnerID, stranded.ID, strictDef, json.RawMessage(`{"region":"eu"}`), nil)
+		require.NoError(t, err)
 
 		repaired := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, strictRegionInputRef.Name(), repaired.UserInput.Layout)
@@ -201,7 +204,11 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		renamedVersion := renamed.Registry().Version(testint.DefinitionID.ID())
 		require.NotEqual(t, renamedVersion, installation.DefinitionVersion)
 
-		require.NoError(t, renamed.Reconcile(subCtx, installation, nil, map[string]json.RawMessage{renamedSyncOp.Name(): json.RawMessage(`{"disable":false}`)}, integrationtypes.CredentialSlotID{}, nil, nil))
+		renamedDef, ok := renamed.Registry().Definition(testint.DefinitionID.ID())
+		require.True(t, ok)
+
+		_, _, err := renamed.EnsureInstallation(subCtx, installation.OwnerID, installation.ID, renamedDef, nil, map[string]json.RawMessage{renamedSyncOp.Name(): json.RawMessage(`{"disable":false}`)})
+		require.NoError(t, err)
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, renamedVersion, reloaded.DefinitionVersion)

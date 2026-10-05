@@ -3,8 +3,10 @@ package registry
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"slices"
 	"testing"
+	"testing/fstest"
 
 	"github.com/samber/lo"
 
@@ -255,12 +257,52 @@ func versionOf(t *testing.T, def integrationtypes.Definition) string {
 		t.Fatalf("register: %v", err)
 	}
 
-	version := reg.Version(def.ID)
-	if version == "" {
-		t.Fatal("expected a version")
+	registered, _ := reg.Definition(def.ID)
+
+	hash, err := SurfaceHash(registered)
+	if err != nil {
+		t.Fatalf("surface hash: %v", err)
 	}
 
-	return version
+	return hash
+}
+
+func TestCommittedVersion(t *testing.T) {
+	t.Parallel()
+
+	def, _ := minimalDefinition("snapshot-def")
+
+	hash := versionOf(t, def)
+
+	snapshotOf := func(hash string) fstest.MapFS {
+		data, err := json.Marshal(Snapshot{Hash: hash, Version: "01K0SNAPSHOTVERSION00000001"})
+		if err != nil {
+			t.Fatalf("marshal snapshot: %v", err)
+		}
+
+		return fstest.MapFS{"surfaces/snapshot-def.json": &fstest.MapFile{Data: data}}
+	}
+
+	matching := New(WithSnapshots(snapshotOf(hash)))
+	if err := matching.Register(def); err != nil {
+		t.Fatalf("register against a matching snapshot: %v", err)
+	}
+
+	if got := matching.Version(def.ID); got != "01K0SNAPSHOTVERSION00000001" {
+		t.Fatalf("Version = %q, want the committed snapshot version", got)
+	}
+
+	if err := New(WithSnapshots(snapshotOf("stale"))).Register(def); !errors.Is(err, ErrSnapshotStale) {
+		t.Fatalf("expected ErrSnapshotStale for a stale snapshot, got %v", err)
+	}
+
+	if err := New(WithSnapshots(fstest.MapFS{})).Register(def); !errors.Is(err, ErrSnapshotStale) {
+		t.Fatalf("expected ErrSnapshotStale for a missing snapshot, got %v", err)
+	}
+
+	if New().Version("missing") != "" {
+		t.Fatal("expected an unregistered definition to have no version")
+	}
 }
 
 func TestVersionIsStableAndChangesWithTheDefinition(t *testing.T) {

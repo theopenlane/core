@@ -328,6 +328,15 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	suite.SlackMock = slackdef.NewMockSlackRuntime()
 	suite.CloudflareMock = cloudflaredef.NewMockCloudflareRuntime()
 
+	reg, err := testint.VersionedRegistry(
+		emaildef.Builder(emaildef.MockRuntimeConfig(), false),
+		suite.SlackMock.Builder(),
+		systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
+		testint.Builder(),
+		testint.MockHTTPBuilder(),
+	)
+	RequireNoError(t, err)
+
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,
 		Gala:        galaInstance,

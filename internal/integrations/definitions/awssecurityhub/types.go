@@ -25,12 +25,6 @@ var (
 	iamClient = types.ClientRefOf[*iam.Client]()
 )
 
-// DirectorySync are the configuration settings for the directory sync from AWS IAM
-type DirectorySync struct {
-	types.OperationSettings
-	// DisableGroupSync will just sync users and no groups or group memberships
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from AWS IAM, disable groups sync operations"`
-}
 
 // FindingSync are configuration settings for the findings sync
 type FindingSync struct {

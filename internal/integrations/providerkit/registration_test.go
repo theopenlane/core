@@ -1,6 +1,8 @@
 package providerkit
 
 import (
+	"context"
+	"encoding/json"
 	"slices"
 	"testing"
 	"time"
@@ -91,5 +93,35 @@ func TestOAuthToken(t *testing.T) {
 
 	if withoutExpiry := OAuthToken("access", "", nil); !withoutExpiry.Expiry.IsZero() {
 		t.Fatalf("expected zero expiry, got %v", withoutExpiry.Expiry)
+	}
+}
+
+func TestUpgradeFromSection(t *testing.T) {
+	t.Parallel()
+
+	upgrade := UpgradeFromSection[DirectorySync]("findingSync")
+
+	tests := []struct {
+		name   string
+		stored string
+		want   DirectorySync
+	}{
+		{name: "main's section under the key is decoded", stored: `{"region":"eu","findingSync":{"disable":true}}`, want: DirectorySync{OperationSettings: types.OperationSettings{Disable: true}}},
+		{name: "a stored document without the key is decoded as is", stored: `{"disableGroupSync":true}`, want: DirectorySync{DisableGroupSync: true}},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := upgrade(context.Background(), types.InstallationRequest{}, "", json.RawMessage(tc.stored))
+			if err != nil {
+				t.Fatalf("upgrade: %v", err)
+			}
+
+			if got != tc.want {
+				t.Fatalf("got %+v, want %+v", got, tc.want)
+			}
+		})
 	}
 }

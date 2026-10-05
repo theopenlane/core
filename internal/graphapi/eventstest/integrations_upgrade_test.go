@@ -201,18 +201,14 @@ func definitionOver(shape func(def *integrationtypes.Definition)) registry.Build
 	}
 }
 
-// runtimeFor returns a runtime on an in-memory gala running one definition version
+// runtimeFor returns a runtime on an in-memory gala running one definition version minted when called
 func runtimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtime {
 	t.Helper()
 
-	instance, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 1})
-	require.NoError(t, err)
-	t.Cleanup(func() { _ = instance.Close() })
-
-	return runtimeOn(t, instance, builder)
+	return runtimeOn(t, inMemoryGala(t), versionedRegistry(t, builder))
 }
 
-// queuedRuntimeFor returns a runtime on the suite's durable gala queue with no workers
+// queuedRuntimeFor returns a runtime on the suite's durable gala queue with no workers, running one definition version minted when called
 func queuedRuntimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtime {
 	t.Helper()
 
@@ -220,17 +216,38 @@ func queuedRuntimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtim
 	require.NoError(t, err)
 	t.Cleanup(func() { _ = instance.Close() })
 
-	return runtimeOn(t, instance, builder)
+	return runtimeOn(t, instance, versionedRegistry(t, builder))
 }
 
-// runtimeOn returns a runtime on instance running one definition version
-func runtimeOn(t *testing.T, instance *gala.Gala, builder registry.Builder) *intruntime.Runtime {
+// inMemoryGala returns an in-memory gala closed when the test ends
+func inMemoryGala(t *testing.T) *gala.Gala {
+	t.Helper()
+
+	instance, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 1})
+	require.NoError(t, err)
+	t.Cleanup(func() { _ = instance.Close() })
+
+	return instance
+}
+
+// versionedRegistry returns a registry running builder under a version minted when called
+func versionedRegistry(t *testing.T, builder registry.Builder) *registry.Registry {
+	t.Helper()
+
+	reg, err := testint.VersionedRegistry(builder)
+	require.NoError(t, err)
+
+	return reg
+}
+
+// runtimeOn returns a runtime on instance running the definitions of reg
+func runtimeOn(t *testing.T, instance *gala.Gala, reg *registry.Registry) *intruntime.Runtime {
 	t.Helper()
 
 	store, err := keystore.NewStore(suite.Client.DB)
 	require.NoError(t, err)
 
-	rt, err := intruntime.New(intruntime.Config{DB: suite.Client.DB, Gala: instance, Keystore: store, DefinitionBuilders: []registry.Builder{builder}})
+	rt, err := intruntime.New(intruntime.Config{DB: suite.Client.DB, Gala: instance, Keystore: store, Registry: reg})
 	require.NoError(t, err)
 
 	return rt
@@ -266,19 +283,22 @@ func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userIn
 	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
 	require.NoError(t, err)
 
-	installation, _, err := rt.EnsureInstallation(ctx, ownerID, "", def)
+	installation, _, err := rt.EnsureInstallation(ctx, ownerID, "", def, userInput, operationConfig)
 	require.NoError(t, err)
 
-	require.NoError(t, rt.Reconcile(ctx, installation, userInput, operationConfig, primary, &credential, nil))
+	require.NoError(t, rt.ReconcileCredential(ctx, installation, primary, credential, nil))
 
 	return reloadIntegration(t, ctx, installation.ID)
 }
 
-// installUnder returns the installation and version from an earlier definition runtime
+// installUnder returns the installation and version from an earlier, unversioned definition runtime, older than every versioned runtime
 func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, primary integrationtypes.CredentialSlotID, credentials map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet) (*ent.Integration, string) {
 	t.Helper()
 
-	rt := runtimeFor(t, builder)
+	reg := registry.New()
+	require.NoError(t, reg.RegisterAll(builder))
+
+	rt := runtimeOn(t, inMemoryGala(t), reg)
 
 	installation := installOn(t, ctx, rt, nil, nil, primary, credentials[primary])
 
@@ -287,7 +307,7 @@ func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, p
 			continue
 		}
 
-		require.NoError(t, rt.Reconcile(ctx, reloadIntegration(t, ctx, installation.ID), nil, nil, slot, &credential, nil))
+		require.NoError(t, rt.ReconcileCredential(ctx, reloadIntegration(t, ctx, installation.ID), slot, credential, nil))
 	}
 
 	return reloadIntegration(t, ctx, installation.ID), rt.Registry().Version(testint.DefinitionID.ID())
@@ -322,8 +342,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		installation, previous := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyTokenCredential)), testint.LegacyTokenCredential.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
 			testint.LegacyTokenCredential.ID(): {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
 		})
-		require.NotEmpty(t, previous)
-		require.NotEqual(t, current, previous)
+		require.Less(t, previous, current)
 		require.Equal(t, previous, installation.DefinitionVersion)
 
 		assessment, err := suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
@@ -408,7 +427,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 
 		cred := testint.TokenCredentialSet("fresh")
-		require.NoError(t, suite.IntegrationsRT.Reconcile(subCtx, reloaded, nil, nil, testint.TokenCredential.ID(), &cred, nil))
+		require.NoError(t, suite.IntegrationsRT.ReconcileCredential(subCtx, reloaded, testint.TokenCredential.ID(), cred, nil))
 
 		recovered := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusConnected, recovered.Status)
@@ -709,7 +728,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Equal(t, renamedEventsWebhook.Name(), dedupes[0].Name)
 
 		fresh := testint.TokenCredentialSet("fresh")
-		require.NoError(t, renamed.Reconcile(subCtx, reloadIntegration(t, subCtx, installation.ID), nil, nil, testint.TokenCredential.ID(), &fresh, nil))
+		require.NoError(t, renamed.ReconcileCredential(subCtx, reloadIntegration(t, subCtx, installation.ID), testint.TokenCredential.ID(), fresh, nil))
 
 		rows = endpointRows(t, subCtx, installation.ID)
 		require.Len(t, rows, 1)
@@ -723,7 +742,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		_, err = renamed.EnsureWebhook(subCtx, untouched, renamedEventsWebhook.Name(), "")
 		require.NoError(t, err)
 
-		require.NoError(t, renamed.Reconcile(subCtx, untouched, nil, nil, testint.TokenCredential.ID(), &fresh, nil))
+		require.NoError(t, renamed.ReconcileCredential(subCtx, untouched, testint.TokenCredential.ID(), fresh, nil))
 
 		untouchedRows = endpointRows(t, subCtx, untouched.ID)
 		require.Len(t, untouchedRows, 1)
