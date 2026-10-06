@@ -53,8 +53,8 @@ func EntitlementListeners() []gala.Registration {
 				organizationsetting.FieldBillingPhone,
 				organizationsetting.FieldBillingAddress,
 			},
-			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return auth.NewOrgInternalCaller("")
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation)
 			},
 			Handle: entityops.RequireDep(handleOrganizationSettingsUpdateOneGala),
 		},
