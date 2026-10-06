@@ -162,8 +162,8 @@ func (r *Resolver) Handler() *Handler {
 		common.AddAllExtensions(srv)
 	}
 
-	// prevent synthetic support-user list edges from falling through to QueryXxx()
-	WithSupportUserEdges(srv)
+	// restrict what support and anonymous callers can do
+	WithCallerExtensions(srv)
 
 	// Set the error presenter to use the custom error presenter
 	srv.SetErrorPresenter(gqlerrors.ErrorPresenter)

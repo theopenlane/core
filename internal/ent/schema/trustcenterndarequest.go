@@ -211,5 +211,6 @@ func (TrustCenterNDARequest) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaTrustCenterNDARequest),
 		entfga.SelfAccessChecks(),
 		entx.ConsoleRoute(entx.WithConsoleBase("trust-center/NDAs")),
+		entx.AnonymousFields("trust_center_id", "first_name", "last_name", "email", "company_name", "reason", "access_level"),
 	}
 }

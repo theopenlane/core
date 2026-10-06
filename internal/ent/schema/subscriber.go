@@ -196,6 +196,7 @@ func (Subscriber) Annotations() []schema.Annotation {
 			Exclude: true,
 		},
 		entx.NewExportable(),
+		entx.AnonymousFields("email", "trust_center_id"),
 	}
 }
 
