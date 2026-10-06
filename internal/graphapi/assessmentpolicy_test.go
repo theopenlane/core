@@ -271,7 +271,7 @@ func TestMutationCreateAssessmentWithPolicies(t *testing.T) {
 			},
 		},
 		{
-			name: "policy from another organization, assessment is not created",
+			name: "not authorized, policy from another organization",
 			policies: []*testclient.AssessmentPoliciesInput{
 				{InternalPolicyID: policy1.ID},
 				{InternalPolicyID: otherOrgPolicy.ID},
