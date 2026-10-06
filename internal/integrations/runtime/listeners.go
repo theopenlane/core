@@ -101,7 +101,7 @@ func (r *Runtime) resolveIngestIntegration(ctx context.Context, _ *ent.Client, o
 		return nil, operations.ErrIngestIntegrationUnresolved
 	}
 
-	integration, err := r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: oc.EntityID})
+	integration, err := r.resolveCurrentIntegration(ctx, IntegrationLookup{IntegrationID: oc.EntityID})
 	if ent.IsNotFound(err) {
 		return nil, river.JobCancel(fmt.Errorf("%w: %w", operations.ErrIngestIntegrationRemoved, err))
 	}

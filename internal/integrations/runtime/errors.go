@@ -31,6 +31,8 @@ var (
 	ErrInstallationInstanceIDRequired = errors.New("integrations/runtime: installation instance id required")
 	// ErrInstallationInstanceMismatch indicates the credential resolves to a different instance
 	ErrInstallationInstanceMismatch = errors.New("integrations/runtime: installation instance mismatch")
+	// ErrInstallationVersionAhead indicates a newer binary stamped the installation with a definition version this binary does not have
+	ErrInstallationVersionAhead = errors.New("integrations/runtime: installation definition version is ahead of this binary")
 	// ErrInstallationUpgradeFailed indicates the installation couldn't reach the current version
 	ErrInstallationUpgradeFailed = errors.New("integrations/runtime: installation upgrade failed")
 	// ErrUpgradeHookCalled indicates an upgrade hook ran on an absent stored document

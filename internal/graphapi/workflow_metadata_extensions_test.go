@@ -52,9 +52,9 @@ func TestBuildOperationEntries(t *testing.T) {
 			name: "single operation with schema",
 			ops: []types.OperationRegistration{
 				{
-					Name:         "message.send",
-					Description:  "Send a message",
-					ConfigSchema: json.RawMessage(`{"type":"object"}`),
+					Name:        "message.send",
+					Description: "Send a message",
+					Input:       types.InputRegistration{Schema: json.RawMessage(`{"type":"object"}`)},
 				},
 			},
 			wantLen:  1,
@@ -70,7 +70,7 @@ func TestBuildOperationEntries(t *testing.T) {
 			if tt.wantName != "" && len(entries) > 0 {
 				assert.Equal(t, tt.wantName, entries[0].Name)
 				assert.Equal(t, tt.ops[0].Description, entries[0].Description)
-				assert.JSONEq(t, string(tt.ops[0].ConfigSchema), string(entries[0].ConfigSchema))
+				assert.JSONEq(t, string(tt.ops[0].Input.Schema), string(entries[0].ConfigSchema))
 			}
 		})
 	}

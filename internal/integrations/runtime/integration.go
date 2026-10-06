@@ -8,7 +8,10 @@ import (
 	"slices"
 	"time"
 
+	"github.com/riverqueue/river"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
@@ -30,6 +33,8 @@ const (
 	userInputNameKey = "name"
 	// userInputPrimaryDirectoryKey is the user input key mirrored onto the installation's primary directory flag
 	userInputPrimaryDirectoryKey = "primaryDirectory"
+	// installationVersionAheadSnooze is how long a job snoozes when a newer binary stamped its installation, leaving it to that binary's workers
+	installationVersionAheadSnooze = time.Minute
 )
 
 // IntegrationLookup holds the query constraints for resolving an integration
@@ -63,6 +68,25 @@ func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLook
 	}
 
 	return record, nil
+}
+
+// resolveCurrentIntegration resolves the integration an in-flight job processes, snoozing the job for a binary that has the version when a
+// newer binary already stamped the installation, else upgrading it to the current definition version before anything reads it
+func (r *Runtime) resolveCurrentIntegration(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error) {
+	installation, err := r.ResolveIntegration(ctx, lookup)
+	if err != nil {
+		return nil, err
+	}
+
+	if current := r.Registry().Version(installation.DefinitionID); current != "" && outdated(current, installation.DefinitionVersion) {
+		return nil, fmt.Errorf("%w: %w", ErrInstallationVersionAhead, river.JobSnooze(installationVersionAheadSnooze))
+	}
+
+	if err := r.ensureCurrentVersion(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), installation); err != nil {
+		return nil, err
+	}
+
+	return installation, nil
 }
 
 // ResolveOwnerIntegration returns the operational installation id for the definition and owner, or empty when none is selectable
@@ -161,14 +185,22 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 	return record, true, nil
 }
 
-// updateInstallationInput writes the submitted documents onto an existing installation in one statement, then upgrades it to the current definition version,
-// and recovers an errored installation whose connection passes its health check once the submitted documents are stored
+// updateInstallationInput upgrades an existing installation to the current definition version with the submitted documents replacing what they replace,
+// writes the submitted documents in one statement, and recovers an errored installation whose connection passes its health check once they are stored
 func (r *Runtime) updateInstallationInput(ctx context.Context, installation *ent.Integration, def types.Definition, nextInput types.IntegrationUserInput, nextConfig types.IntegrationOperationConfig, userInput json.RawMessage, operationConfig map[string]json.RawMessage) (*ent.Integration, bool, error) {
+	wasErrored := installation.Status == enums.IntegrationStatusErrored
+
+	installation.UserInput, installation.OperationConfig = nextInput, nextConfig
+
+	if err := r.ensureCurrentVersion(ctx, installation); err != nil {
+		return nil, false, err
+	}
+
 	if jsonx.IsEmptyRawMessage(userInput) && len(operationConfig) == 0 {
 		return installation, false, nil
 	}
 
-	wasErrored := installation.Status == enums.IntegrationStatusErrored
+	nextInput, nextConfig = mergeInput(def, installation, userInput, operationConfig)
 
 	update := r.DB().Integration.UpdateOneID(installation.ID).SetUserInput(nextInput).SetOperationConfig(nextConfig)
 	mirrorUserInput(update.Mutation(), userInput)
@@ -179,10 +211,6 @@ func (r *Runtime) updateInstallationInput(ctx context.Context, installation *ent
 	}
 
 	r.keystore().InvalidateClients(updated.ID)
-
-	if err := r.ensureCurrentVersion(ctx, updated); err != nil {
-		return nil, false, err
-	}
 
 	if !wasErrored {
 		return updated, false, nil
@@ -208,6 +236,38 @@ func (r *Runtime) updateInstallationInput(ctx context.Context, installation *ent
 
 // installationInput validates the submitted user input and operation config and returns them merged over what current stores, nil current for a new installation
 func installationInput(ctx context.Context, def types.Definition, current *ent.Integration, userInput json.RawMessage, operationConfig map[string]json.RawMessage) (types.IntegrationUserInput, types.IntegrationOperationConfig, error) {
+	nextInput, nextConfig := mergeInput(def, current, userInput, operationConfig)
+
+	req := types.InstallationRequest{Integration: current}
+
+	if current != nil {
+		req.UserInput = current.UserInput.Data
+	}
+
+	if !jsonx.IsEmptyRawMessage(userInput) && def.UserInput != nil {
+		if err := operations.ValidateInput(ctx, req, def.UserInput.Schema, def.UserInput.Validate, userInput, ErrUserInputInvalid); err != nil {
+			return nextInput, nextConfig, err
+		}
+	}
+
+	req.UserInput = nextInput.Data
+
+	for _, name := range slices.Sorted(maps.Keys(operationConfig)) {
+		operation, found := def.Operation(name)
+		if !found || !operation.Stored {
+			return nextInput, nextConfig, fmt.Errorf("%w: %s", ErrOperationNotFound, name)
+		}
+
+		if err := operations.ValidateInput(ctx, req, operation.Input.Schema, operation.Input.Validate, operationConfig[name], types.ErrOperationConfigInvalid); err != nil {
+			return nextInput, nextConfig, fmt.Errorf("%w: operation %s", err, name)
+		}
+	}
+
+	return nextInput, nextConfig, nil
+}
+
+// mergeInput returns the submitted user input and operation config merged over what current stores, nil current for a new installation
+func mergeInput(def types.Definition, current *ent.Integration, userInput json.RawMessage, operationConfig map[string]json.RawMessage) (types.IntegrationUserInput, types.IntegrationOperationConfig) {
 	var (
 		nextInput  types.IntegrationUserInput
 		nextConfig types.IntegrationOperationConfig
@@ -217,36 +277,19 @@ func installationInput(ctx context.Context, def types.Definition, current *ent.I
 		nextInput, nextConfig = current.UserInput, current.OperationConfig
 	}
 
-	req := types.InstallationRequest{Integration: current, UserInput: nextInput.Data}
-
 	if !jsonx.IsEmptyRawMessage(userInput) {
 		nextInput = types.IntegrationUserInput{Data: jsonx.CloneRawMessage(userInput)}
 
 		if def.UserInput != nil {
-			if err := operations.ValidateInput(ctx, req, def.UserInput.Schema, def.UserInput.Validate, userInput, ErrUserInputInvalid); err != nil {
-				return nextInput, nextConfig, err
-			}
-
 			nextInput.Layout = def.UserInput.Name
 		}
-
-		req.UserInput = nextInput.Data
 	}
 
-	for _, name := range slices.Sorted(maps.Keys(operationConfig)) {
-		operation, found := def.Operation(name)
-		if !found || operation.Input == nil {
-			return nextInput, nextConfig, fmt.Errorf("%w: %s", ErrOperationNotFound, name)
-		}
-
-		if err := operations.ValidateInput(ctx, req, operation.Input.Schema, operation.Input.Validate, operationConfig[name], types.ErrOperationConfigInvalid); err != nil {
-			return nextInput, nextConfig, fmt.Errorf("%w: operation %s", err, name)
-		}
-
-		nextConfig = nextConfig.With(name, jsonx.CloneRawMessage(operationConfig[name]))
+	for name, document := range operationConfig {
+		nextConfig = nextConfig.With(name, jsonx.CloneRawMessage(document))
 	}
 
-	return nextInput, nextConfig, nil
+	return nextInput, nextConfig
 }
 
 // mirrorUserInput sets the record fields the submitted user input carries: the installation name and its primary directory flag

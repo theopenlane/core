@@ -141,9 +141,9 @@ func slotOf[T any](ref integrationtypes.CredentialRef[T]) retiredSlot {
 
 // syncOperation returns a no-op operation registration for the ref, carrying whatever the ref replaces
 func syncOperation[Config any](op integrationtypes.OperationRef[Config], policy integrationtypes.ExecutionPolicy) integrationtypes.OperationRegistration {
-	return op.Policy(policy).Registration(testint.DefinitionID, integrationtypes.OperationRegistration{
-		Handle: func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) { return nil, nil },
-	})
+	return op.Policy(policy).HandlesRequest(func(context.Context, integrationtypes.OperationRequest, Config) (json.RawMessage, error) {
+		return nil, nil
+	}).Registration(testint.DefinitionID)
 }
 
 // eventsWebhook returns a webhook registration accepting events, carrying whatever the ref replaces

@@ -117,7 +117,8 @@ func systemMessageRegistration[T any](op types.OperationRef[T], description stri
 	}).
 		CustomerSelectable(false).
 		Policy(types.ExecutionPolicy{SkipRunRecord: true}).
-		Registration(DefinitionID, types.OperationRegistration{Description: description})
+		Description(description).
+		Registration(DefinitionID)
 }
 
 // renderAndSendSystemMessage executes tmpl against input and posts the result through c's transport

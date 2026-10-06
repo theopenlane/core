@@ -95,9 +95,8 @@ func Builder(cfg Config) registry.Builder {
 				types.OperationPayloadOf[ClaimsInspect]().
 					HandlesRequest(inspectClaims).
 					Policy(types.ExecutionPolicy{Inline: true}).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Return the raw OIDC ID token claims stored with the auth-managed credential.",
-					}),
+					Description("Return the raw OIDC ID token claims stored with the auth-managed credential.").
+					Registration(definitionID),
 			},
 		}, nil
 	})

@@ -108,7 +108,7 @@ func DefinitionSurface(def types.Definition) Surface {
 	credentials := sortedProjection(def.CredentialRegistrations, func(registration types.CredentialRegistration) SurfaceCredential {
 		replaces := lo.Map(registration.Replaces, func(slot types.CredentialSlotID, _ int) string { return slot.String() })
 
-		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: registration.StoredSchema, Upgrade: registration.Upgrade != nil}, Replaces: replaces}
+		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: registration.Stored.Schema, Upgrade: registration.Stored.Upgrade != nil}, Replaces: replaces}
 	}, func(credential SurfaceCredential) string { return credential.Ref })
 
 	connections := lo.Map(def.Connections, func(connection types.ConnectionRegistration, _ int) string {
@@ -120,7 +120,7 @@ func DefinitionSurface(def types.Definition) Surface {
 	operations := sortedProjection(def.Operations, func(operation types.OperationRegistration) SurfaceOperation {
 		surface := SurfaceOperation{Name: operation.Name, Replaces: operation.Replaces}
 
-		if operation.Input != nil {
+		if operation.Stored {
 			surface.Schema = operation.Input.Schema
 			surface.Upgrade = operation.Input.Upgrade != nil
 		}
@@ -351,7 +351,7 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrDefinitionAlreadyRegistered
 	case def.OperatorConfig != nil && len(def.OperatorConfig.Schema) == 0:
 		return ErrOperatorConfigSchemaRequired
-	case lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool { return len(credential.StoredSchema) == 0 }):
+	case lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool { return len(credential.Stored.Schema) == 0 }):
 		return ErrCredentialSchemaRequired
 	case def.UserInput != nil && len(def.UserInput.Schema) == 0:
 		return ErrUserInputSchemaRequired

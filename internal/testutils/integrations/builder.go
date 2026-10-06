@@ -88,21 +88,11 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				RepoSyncOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Async operation running with the built client",
-				}),
-				ValidatedOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Inline operation with a required config field",
-				}),
-				RecurringOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Healthy idle reconcile loop",
-				}),
-				ExhaustingOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Always-failing reconcile loop for exhaustion",
-				}),
-				UnresolvableOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Reconcile loop whose client cannot resolve without a stored credential",
-				}),
+				RepoSyncOp.Description("Async operation running with the built client").Registration(DefinitionID),
+				ValidatedOp.Description("Inline operation with a required config field").Registration(DefinitionID),
+				RecurringOp.Description("Healthy idle reconcile loop").Registration(DefinitionID),
+				ExhaustingOp.Description("Always-failing reconcile loop for exhaustion").Registration(DefinitionID),
+				UnresolvableOp.Description("Reconcile loop whose client cannot resolve without a stored credential").Registration(DefinitionID),
 			},
 		}, nil
 	})

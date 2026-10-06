@@ -42,21 +42,11 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 			},
 			UserInput: userInput.Registration(),
 			Operations: append(AllEmailOperations(),
-				SendEmailOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Send a single templated email",
-				}),
-				SendCampaignOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Dispatch an email campaign",
-				}),
-				SendQuestionnaireCampaignOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Dispatch a questionnaire campaign",
-				}),
-				RecurringCampaignOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Dispatch due recurring campaigns",
-				}),
-				TrustCenterNotificationOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Notify trust center subscribers about stable posts and subprocessor changes",
-				}),
+				SendEmailOp.Description("Send a single templated email").Registration(DefinitionID),
+				SendCampaignOp.Description("Dispatch an email campaign").Registration(DefinitionID),
+				SendQuestionnaireCampaignOp.Description("Dispatch a questionnaire campaign").Registration(DefinitionID),
+				RecurringCampaignOp.Description("Dispatch due recurring campaigns").Registration(DefinitionID),
+				TrustCenterNotificationOp.Description("Notify trust center subscribers about stable posts and subprocessor changes").Registration(DefinitionID),
 			),
 		}
 

@@ -41,6 +41,10 @@ func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (type
 			return types.DispatchResult{}, err
 		}
 
+		if err := r.ensureCurrentVersion(auth.EnsureIntegrationCaller(ctx, record.OwnerID), record); err != nil {
+			return types.DispatchResult{}, err
+		}
+
 		installation = record
 		definitionID = record.DefinitionID
 		ownerID = record.OwnerID
@@ -63,7 +67,7 @@ func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (type
 		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
 	}
 
-	if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: installation}, operation.ConfigSchema, nil, req.Config, types.ErrOperationConfigInvalid); err != nil {
+	if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: installation}, operation.Input.Schema, nil, req.Config, types.ErrOperationConfigInvalid); err != nil {
 		if errors.Is(err, types.ErrOperationConfigInvalid) {
 			return types.DispatchResult{}, operations.ErrDispatchInputInvalid
 		}

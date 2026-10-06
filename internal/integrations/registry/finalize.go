@@ -35,10 +35,12 @@ func finalizeDefinition(def types.Definition) (types.Definition, error) {
 	return def, nil
 }
 
-// finalizeCredential fills stored/form schema from each other when unset
+// finalizeCredential keys the stored layout by the slot name and fills stored/form schema from each other when unset
 func finalizeCredential(connections []types.ConnectionRegistration, registration types.CredentialRegistration) types.CredentialRegistration {
-	if len(registration.StoredSchema) == 0 {
-		registration.StoredSchema = registration.Schema
+	registration.Stored.Name = registration.Ref.String()
+
+	if len(registration.Stored.Schema) == 0 {
+		registration.Stored.Schema = registration.Schema
 	}
 
 	authManaged := lo.ContainsBy(connections, func(connection types.ConnectionRegistration) bool {
@@ -46,7 +48,7 @@ func finalizeCredential(connections []types.ConnectionRegistration, registration
 	})
 
 	if !authManaged && len(registration.Schema) == 0 {
-		registration.Schema = registration.StoredSchema
+		registration.Schema = registration.Stored.Schema
 	}
 
 	return registration
@@ -77,13 +79,11 @@ func finalizeOperations(def types.Definition) []types.OperationRegistration {
 	for i := range operations {
 		operation := &operations[i]
 
-		if operation.Input == nil {
+		if !operation.Stored {
 			continue
 		}
 
-		input := *operation.Input
-		input.Validate = validateOperationInput(input.Validate)
-		operation.Input = &input
+		operation.Input.Validate = validateOperationInput(operation.Input.Validate)
 	}
 
 	return operations

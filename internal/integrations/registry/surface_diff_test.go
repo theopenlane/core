@@ -1,7 +1,6 @@
 package registry
 
 import (
-	"encoding/json"
 	"errors"
 	"testing"
 )
@@ -99,12 +98,7 @@ func TestGateSurfaceChange(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			existing, err := json.Marshal(Snapshot{Surface: tc.old})
-			if err != nil {
-				t.Fatalf("json.Marshal() error = %v", err)
-			}
-
-			err = GateSurfaceChange("acme.json", existing, tc.next)
+			err := GateSurfaceChange(tc.old, tc.next)
 
 			switch {
 			case tc.wantErr == "" && err != nil:
@@ -124,17 +118,7 @@ func TestGateSurfaceChange(t *testing.T) {
 func TestGateSurfaceChangeEmptySnapshot(t *testing.T) {
 	t.Parallel()
 
-	if err := GateSurfaceChange("acme.json", json.RawMessage(`{}`), Surface{ID: "acme", Operations: []SurfaceOperation{{Name: "sync"}}}); err != nil {
+	if err := GateSurfaceChange(Surface{}, Surface{ID: "acme", Operations: []SurfaceOperation{{Name: "sync"}}}); err != nil {
 		t.Fatalf("GateSurfaceChange() error = %v, want nil", err)
-	}
-}
-
-// TestGateSurfaceChangeUndecodableSnapshot verifies an unreadable snapshot yields a decode error
-func TestGateSurfaceChangeUndecodableSnapshot(t *testing.T) {
-	t.Parallel()
-
-	err := GateSurfaceChange("acme.json", []byte(`{`), Surface{ID: "acme"})
-	if err == nil || errors.Is(err, ErrDestructiveSurfaceChange) {
-		t.Fatalf("GateSurfaceChange() error = %v, want a decode error", err)
 	}
 }

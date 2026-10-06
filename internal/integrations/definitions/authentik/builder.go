@@ -49,9 +49,8 @@ func Builder() registry.Builder {
 					Ingests(authentikClient, runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(providerkit.DirectoryIngestContracts()...).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect Authentik directory users, groups, and memberships as directory accounts",
-					}),
+					Description("Collect Authentik directory users, groups, and memberships as directory accounts").
+					Registration(definitionID),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

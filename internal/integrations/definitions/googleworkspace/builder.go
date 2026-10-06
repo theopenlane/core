@@ -91,9 +91,8 @@ func Builder(cfg Config) registry.Builder {
 					SkipDefaultLookback().
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Permissions(directorySyncScopes...).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					}),
+					Description("Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes").
+					Registration(definitionID),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

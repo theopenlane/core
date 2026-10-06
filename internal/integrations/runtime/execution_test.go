@@ -38,8 +38,8 @@ func TestExecuteOperationInvalidConfig(t *testing.T) {
 	rt := NewForTesting(reg)
 
 	op := types.OperationRegistration{
-		Name:         "test-op",
-		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+		Name:  "test-op",
+		Input: types.InputRegistration{Schema: json.RawMessage(`{"type":"object","required":["url"]}`)},
 	}
 
 	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
@@ -124,8 +124,8 @@ func TestExecuteOperationValidConfigWithSchema(t *testing.T) {
 
 	called := false
 	op := types.OperationRegistration{
-		Name:         "test-op",
-		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+		Name:  "test-op",
+		Input: types.InputRegistration{Schema: json.RawMessage(`{"type":"object","required":["url"]}`)},
 		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 			called = true
 			return json.RawMessage(`{"ok":true}`), nil
@@ -156,8 +156,8 @@ func TestExecuteOperationEmptyConfigSkipsValidation(t *testing.T) {
 
 	called := false
 	op := types.OperationRegistration{
-		Name:         "test-op",
-		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+		Name:  "test-op",
+		Input: types.InputRegistration{Schema: json.RawMessage(`{"type":"object","required":["url"]}`)},
 		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 			called = true
 			return nil, nil

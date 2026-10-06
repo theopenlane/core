@@ -48,16 +48,14 @@ func Builder() registry.Builder {
 					Ingests(securityCenterClient, runAssessmentsCollect).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect unhealthy security posture assessment findings for vulnerability ingestion",
-					}),
+					Description("Collect unhealthy security posture assessment findings for vulnerability ingestion").
+					Registration(definitionID),
 				types.OperationRefOf[SubAssessmentsCollect]().
 					Ingests(securityCenterClient, runSubAssessmentsCollect).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
-					}),
+					Description("Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)").
+					Registration(definitionID),
 			},
 			Mappings: []types.MappingRegistration{
 				{

@@ -17,7 +17,6 @@ var (
 	tailscaleClient = types.ClientRefOf[*tsclient.Client]()
 )
 
-
 // AssetSync holds configuration for the Tailscale asset sync operation
 type AssetSync struct {
 	types.OperationSettings

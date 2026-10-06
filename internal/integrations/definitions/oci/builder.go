@@ -52,9 +52,8 @@ func Builder() registry.Builder {
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaFinding.Name}).
 					Permissions("read cloud-guard-problems in tenancy").
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect OCI Cloud Guard problems as findings",
-					}),
+					Description("Collect OCI Cloud Guard problems as findings").
+					Registration(definitionID),
 			},
 			Mappings: []types.MappingRegistration{
 				{

@@ -80,9 +80,8 @@ func Builder(cfg Config) registry.Builder {
 						types.IngestContract{Schema: entityops.SchemaVulnerability.Name},
 					).
 					Permissions("AWSSecurityHubReadOnlyAccess").
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect AWS Security Hub for findings and vulnerability ingestion",
-					}),
+					Description("Collect AWS Security Hub for findings and vulnerability ingestion").
+					Registration(definitionID),
 				types.OperationRefOf[providerkit.DirectorySync]().
 					Ingests(iamClient, runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
@@ -90,9 +89,8 @@ func Builder(cfg Config) registry.Builder {
 					Permissions("iam:ListUsers", "iam:ListGroups", "iam:ListGroupsForUser", "iam:ListUserTags").
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Sync AWS IAM users, groups, and memberships as directory accounts",
-					}),
+					Description("Sync AWS IAM users, groups, and memberships as directory accounts").
+					Registration(definitionID),
 				types.OperationRefOf[CheckSync]().
 					Ingests(configServiceClient, runCheckSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
@@ -105,18 +103,16 @@ func Builder(cfg Config) registry.Builder {
 						"controlcatalog:ListCommonControls",
 					).
 					DisabledForAll(true).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Sync AWS Config rules and check results",
-					}),
+					Description("Sync AWS Config rules and check results").
+					Registration(definitionID),
 				types.OperationRefOf[AssetSync]().
 					Ingests(configServiceClient, runAssetSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaAsset.Name}).
 					Permissions("AWSSecurityHubReadOnlyAccess").
 					DisabledForAll(true).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Sync assets from AWS",
-					}),
+					Description("Sync assets from AWS").
+					Registration(definitionID),
 			},
 			Mappings: append([]types.MappingRegistration{
 				providerkit.FindingMapping(mapExprFinding),

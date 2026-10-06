@@ -78,6 +78,10 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 			}
 		}
 
+		if _, snoozed := errors.AsType[*river.JobSnoozeError](execErr); snoozed {
+			return execErr
+		}
+
 		if execErr != nil {
 			if definition.Cancel != nil && definition.Cancel(ctx.Context, payload, execErr) {
 				logx.FromContext(ctx.Context).Error().Err(execErr).Msg("scheduled listener cycle failed, canceling loop")

@@ -213,9 +213,7 @@ func MockHTTPBuilder() registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				mockHTTPSyncOp.Registration(MockHTTPDefinitionID, types.OperationRegistration{
-					Description: "Directory sync ingest for the mock provider",
-				}),
+				mockHTTPSyncOp.Description("Directory sync ingest for the mock provider").Registration(MockHTTPDefinitionID),
 			},
 			Mappings: []types.MappingRegistration{
 				{Schema: entityops.SchemaDirectoryAccount.Name, Spec: types.MappingOverride{MapExpr: "payload"}},

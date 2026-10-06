@@ -39,11 +39,6 @@ func newTestHealthCheck() *integrationtypes.HealthCheckRegistration {
 	return &integrationtypes.HealthCheckRegistration{Handle: newTestHandler()}
 }
 
-// testOperationConfig is the operation config type behind the typed operation ref tests
-type testOperationConfig struct {
-	Limit int `json:"limit"`
-}
-
 // testUserInput is the user input type behind the typed user input ref tests
 type testUserInput struct {
 	Region string `json:"region"`

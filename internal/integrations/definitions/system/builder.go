@@ -40,15 +40,9 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 			Active:      true,
 			Visible:     false,
 			Operations: []types.OperationRegistration{
-				paymentReminderOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Mark canceled organizations for deletion and dispatch deletion notice emails",
-				}),
-				organizationDeleteOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Delete overdue organizations that still have no active or trialing subscription",
-				}),
-				integrationLifecycleOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Reap expired integration installations that never connected",
-				}),
+				paymentReminderOp.Description("Mark canceled organizations for deletion and dispatch deletion notice emails").Registration(DefinitionID),
+				organizationDeleteOp.Description("Delete overdue organizations that still have no active or trialing subscription").Registration(DefinitionID),
+				integrationLifecycleOp.Description("Reap expired integration installations that never connected").Registration(DefinitionID),
 			},
 		}, nil
 	})

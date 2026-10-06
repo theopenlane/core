@@ -57,7 +57,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return r.handleScheduledCycle(ctx, envelope)
 	}
 
-	installation, err := r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
+	installation, err := r.resolveCurrentIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("reconcile bootstrap failed")
 
@@ -291,6 +291,10 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 
 	ctx = auth.EnsureIntegrationCaller(ctx, integration.OwnerID)
 
+	if err := r.ensureCurrentVersion(ctx, integration); err != nil {
+		return nil, err
+	}
+
 	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, credentials, config)
 }
 
@@ -321,7 +325,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 	ctx = intobvs.WithOperation(ctx, operation.Name)
 
 	if len(config) > 0 {
-		if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: integration}, operation.ConfigSchema, nil, config, types.ErrOperationConfigInvalid); err != nil {
+		if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: integration}, operation.Input.Schema, nil, config, types.ErrOperationConfigInvalid); err != nil {
 			return nil, err
 		}
 	}
@@ -347,7 +351,11 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	)
 
 	if !src.Runtime {
-		integration, bootstrapErr = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
+		integration, bootstrapErr = r.resolveCurrentIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
+	}
+
+	if errors.Is(bootstrapErr, ErrInstallationVersionAhead) {
+		return bootstrapErr
 	}
 
 	finish := func(execErr error, ingest bool, response json.RawMessage, ingestResult operations.IngestResult) error {

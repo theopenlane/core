@@ -245,7 +245,7 @@ func buildOperationEntries(ops []types.OperationRegistration) []integrationOpera
 		return integrationOperationEntry{
 			Name:         op.Name,
 			Description:  op.Description,
-			ConfigSchema: jsonx.CloneRawMessage(op.ConfigSchema),
+			ConfigSchema: jsonx.CloneRawMessage(op.Input.Schema),
 		}
 	})
 }

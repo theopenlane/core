@@ -96,27 +96,24 @@ func Builder(cfg Config) registry.Builder {
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaAsset.Name}).
 					SkipDefaultLookback().
-					Registration(DefinitionID, types.OperationRegistration{
-						Description: "Collect repository inventory from the installation as assets",
-					}),
+					Description("Collect repository inventory from the installation as assets").
+					Registration(DefinitionID),
 				types.OperationRefOf[VulnerabilitySync]().
 					Ingests(gitHubClient, runVulnerabilityCollect).
 					// TODO: remove with providerkit.UpgradeFromSection once every installation has been upgraded off main's client config
 					Upgraded(providerkit.UpgradeFromSection[VulnerabilitySync](mainFindingSyncKey)).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
-					Registration(DefinitionID, types.OperationRegistration{
-						Description: "Collect vulnerability alerts from the installation",
-					}),
+					Description("Collect vulnerability alerts from the installation").
+					Registration(DefinitionID),
 				types.OperationRefOf[providerkit.DirectorySync]().
 					Ingests(gitHubClient, runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().
-					Registration(DefinitionID, types.OperationRegistration{
-						Description: "Collect organization members, teams, and team memberships",
-					}),
+					Description("Collect organization members, teams, and team memberships").
+					Registration(DefinitionID),
 			},
 			Mappings: append([]types.MappingRegistration{
 				{

@@ -53,9 +53,8 @@ func Builder() registry.Builder {
 					Permissions("users:read", "policy_file:read").
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Sync Tailscale users and role-based groups as directory accounts",
-					}),
+					Description("Sync Tailscale users and role-based groups as directory accounts").
+					Registration(definitionID),
 				types.OperationRefOf[AssetSync]().
 					Ingests(tailscaleClient, runAssetSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
@@ -63,9 +62,8 @@ func Builder() registry.Builder {
 					Permissions("devices:core:read", "devices:posture_attributes:read", "devices:routes:read").
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Sync Tailscale devices as assets",
-					}),
+					Description("Sync Tailscale devices as assets").
+					Registration(definitionID),
 			},
 			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 				types.MappingRegistration{

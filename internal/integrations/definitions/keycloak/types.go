@@ -36,7 +36,6 @@ type UserInput struct {
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
 }
 
-
 // InstallationMetadata holds the stable Keycloak realm identity for one installation
 type InstallationMetadata struct {
 	// RealmID is the stable UUID of the Keycloak realm

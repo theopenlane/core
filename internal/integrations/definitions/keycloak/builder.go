@@ -51,9 +51,8 @@ func Builder() registry.Builder {
 					SkipDefaultLookback().
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Permissions("view-realm", "view-users", "query-groups", "view-events").
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect Keycloak realm users, groups, and memberships as directory accounts",
-					}),
+					Description("Collect Keycloak realm users, groups, and memberships as directory accounts").
+					Registration(definitionID),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

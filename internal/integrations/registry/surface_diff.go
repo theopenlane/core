@@ -1,7 +1,6 @@
 package registry
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -17,15 +16,8 @@ func unreplaced[T any](old []string, next []T, name func(T) string, replaces fun
 	return lo.Without(old, carried...)
 }
 
-// GateSurfaceChange refuses dropping a slot, operation, or webhook without a replacement
-func GateSurfaceChange(target string, existing []byte, next Surface) error {
-	var committed Snapshot
-	if err := json.Unmarshal(existing, &committed); err != nil {
-		return fmt.Errorf("decode %s: %w", target, err)
-	}
-
-	old := committed.Surface
-
+// GateSurfaceChange refuses dropping a slot, operation, or webhook of the committed surface without a replacement
+func GateSurfaceChange(old, next Surface) error {
 	var refused []string
 
 	refuse := func(kind string, names []string) {

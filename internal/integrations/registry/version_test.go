@@ -68,20 +68,20 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 
 	def.Operations = []integrationtypes.OperationRegistration{
 		{
-			Name:         "sync.users",
-			Replaces:     []string{"sync.people"},
-			Topic:        defRef.OperationTopic("sync.users"),
-			ClientRef:    clientRef.ID(),
-			ConfigSchema: jsonx.SchemaFrom[testOperationConfig](),
-			Input:        &integrationtypes.InputRegistration{Name: "sync.users", Schema: jsonx.SchemaFrom[finalizeConfig]()},
-			Handle:       newTestHandler(),
+			Name:      "sync.users",
+			Replaces:  []string{"sync.people"},
+			Topic:     defRef.OperationTopic("sync.users"),
+			ClientRef: clientRef.ID(),
+			Input:     integrationtypes.InputRegistration{Name: "sync.users", Schema: jsonx.SchemaFrom[finalizeConfig]()},
+			Stored:    true,
+			Handle:    newTestHandler(),
 		},
 		{
-			Name:         "sync.groups",
-			Topic:        defRef.OperationTopic("sync.groups"),
-			ClientRef:    clientRef.ID(),
-			ConfigSchema: jsonx.SchemaFrom[testOperationConfig](),
-			Input: &integrationtypes.InputRegistration{
+			Name:      "sync.groups",
+			Topic:     defRef.OperationTopic("sync.groups"),
+			ClientRef: clientRef.ID(),
+			Stored:    true,
+			Input: integrationtypes.InputRegistration{
 				Name:   "sync.groups",
 				Schema: jsonx.SchemaFrom[finalizeConfig](),
 				Upgrade: func(_ context.Context, _ integrationtypes.InstallationRequest, _ string, stored json.RawMessage) (json.RawMessage, error) {
@@ -320,7 +320,7 @@ func TestVersionIsStableAndChangesWithTheDefinition(t *testing.T) {
 	}
 
 	requiredField, _ := minimalDefinition("version-def")
-	requiredField.CredentialRegistrations[0].StoredSchema = jsonx.SchemaFrom[testCredential]()
+	requiredField.CredentialRegistrations[0].Stored.Schema = jsonx.SchemaFrom[testCredential]()
 
 	addedSlot, _ := minimalDefinition("version-def")
 	addedSlot.CredentialRegistrations = append(addedSlot.CredentialRegistrations, versionSecondCredentialRef.Registration(integrationtypes.CredentialRegistration{}))
@@ -455,57 +455,13 @@ func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
 	}
 }
 
-// TestFingerprintIsStableAcrossOrderAndChangesWithDefinitions verifies the registry-wide fingerprint
-func TestFingerprintIsStableAcrossOrderAndChangesWithDefinitions(t *testing.T) {
-	t.Parallel()
-
-	first, _ := minimalDefinition("fingerprint-a")
-	second := surfaceDefinition("fingerprint-b")
-	third, _ := minimalDefinition("fingerprint-c")
-
-	fingerprintOf := func(defs ...integrationtypes.Definition) string {
-		t.Helper()
-
-		reg := New()
-		for _, def := range defs {
-			if err := reg.Register(def); err != nil {
-				t.Fatalf("register %s: %v", def.ID, err)
-			}
-		}
-
-		return reg.Fingerprint()
-	}
-
-	base := fingerprintOf(first, second)
-
-	if base == "" {
-		t.Fatal("expected a fingerprint")
-	}
-
-	if fingerprintOf(first, second) != base {
-		t.Fatal("expected registries with the same definitions to share a fingerprint")
-	}
-
-	if fingerprintOf(second, first) != base {
-		t.Fatal("expected registration order not to change the fingerprint")
-	}
-
-	if fingerprintOf(first, second, third) == base {
-		t.Fatal("expected an extra definition to change the fingerprint")
-	}
-
-	if fingerprintOf(first) == base {
-		t.Fatal("expected a missing definition to change the fingerprint")
-	}
-}
-
 // TestVersionChangesWhenAuthManagedCredentialSchemaChanges verifies its schema moves the version
 func TestVersionChangesWhenAuthManagedCredentialSchemaChanges(t *testing.T) {
 	t.Parallel()
 
 	build := func(storedSchema json.RawMessage) integrationtypes.Definition {
 		def, _ := minimalDefinition("version-def")
-		def.CredentialRegistrations = append(def.CredentialRegistrations, integrationtypes.CredentialRegistration{Ref: testAuthCredentialRef.ID(), StoredSchema: storedSchema})
+		def.CredentialRegistrations = append(def.CredentialRegistrations, integrationtypes.CredentialRegistration{Ref: testAuthCredentialRef.ID(), Stored: integrationtypes.InputRegistration{Schema: storedSchema}})
 		def.Connections = []integrationtypes.ConnectionRegistration{
 			{
 				CredentialRef:  testAuthCredentialRef.ID(),

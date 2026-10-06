@@ -74,9 +74,8 @@ func Builder(federationIssuer string) registry.Builder {
 						types.IngestContract{Schema: entityops.SchemaRisk.Name},
 					).
 					Permissions("https://www.googleapis.com/auth/cloud-platform").
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect GCP Security Command Center findings for vulnerabilities, findings, and risk ingestion",
-					}),
+					Description("Collect GCP Security Command Center findings for vulnerabilities, findings, and risk ingestion").
+					Registration(definitionID),
 			},
 			Mappings: []types.MappingRegistration{
 				{

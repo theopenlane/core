@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"reflect"
 	"slices"
+	"strings"
 
 	"github.com/samber/lo"
 
@@ -53,19 +54,11 @@ func (r DefinitionRef) WebhookEventTopic(name string) gala.TopicName {
 	return r.WebhookEventTopics().Name(name)
 }
 
-// storedLayout is a stored document's reflected schema, the upgrade that moves older documents onto it, and its semantic validation
-type storedLayout[T any] struct {
-	// schema is the reflected JSON schema of T
-	schema json.RawMessage
-	// upgrade reshapes a stored document from the layout it was persisted under into T, nil when none is declared
-	upgrade UpgradeFunc
-	// validate checks a schema-valid document for constraints the schema cannot express, nil when none is declared
-	validate ValidateFunc
-}
+// reflectedInput creates an input registration with the schema reflected from T, named name or after the reflected schema when name is empty
+func reflectedInput[T any](name string) InputRegistration {
+	schema := jsonx.SchemaFrom[T]()
 
-// newStoredLayout creates a stored layout with the schema reflected from T
-func newStoredLayout[T any]() storedLayout[T] {
-	return storedLayout[T]{schema: jsonx.SchemaFrom[T]()}
+	return InputRegistration{Name: lo.CoalesceOrEmpty(name, jsonx.SchemaID(schema)), Schema: schema}
 }
 
 // validated binds a typed validation closure as a ValidateFunc, decoding the payload into T first
@@ -94,83 +87,102 @@ func upgraded[T any](fn func(context.Context, InstallationRequest, string, json.
 }
 
 // =========
-// Credentials
+// Identities
 // =========
 
-// CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
-type CredentialSlotID struct {
-	// name is the stable credential slot name used for persistence and equality comparisons
+// ID is the durable string identity of one registered entity of kind K, compared and persisted by name
+type ID[K any] struct {
+	// name is the stable name used for persistence, indexing, and equality comparisons
 	name string
 }
 
-// NewCredentialSlotID creates a credential slot identity handle with a stable name for persistence
+// String returns the stable name
+func (id ID[K]) String() string {
+	return id.name
+}
+
+// Valid reports whether the identity was initialized
+func (id ID[K]) Valid() bool {
+	return id.name != ""
+}
+
+// Compare orders identities by name
+func (id ID[K]) Compare(other ID[K]) int {
+	return strings.Compare(id.name, other.name)
+}
+
+// MarshalJSON encodes the identity as its stable name string
+func (id ID[K]) MarshalJSON() ([]byte, error) {
+	return json.Marshal(id.name)
+}
+
+// UnmarshalJSON decodes an identity from its stable name string
+func (id *ID[K]) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &id.name)
+}
+
+// credentialSlotKind is the identity kind of a credential slot
+type credentialSlotKind struct{}
+
+// clientKind is the identity kind of a registered client
+type clientKind struct{}
+
+// CredentialSlotID is the durable identity of one credential slot used by a definition
+type CredentialSlotID = ID[credentialSlotKind]
+
+// ClientID is the in-process identity of one registered client, unique within a definition
+type ClientID = ID[clientKind]
+
+// NewCredentialSlotID creates a credential slot identity with a stable name for persistence
 func NewCredentialSlotID(name string) CredentialSlotID {
 	return CredentialSlotID{name: name}
 }
 
-// String returns the stable credential name used for persistence and equality comparisons
-func (r CredentialSlotID) String() string {
-	return r.name
+// NewClientID creates a client identity from its name
+func NewClientID(name string) ClientID {
+	return ClientID{name: name}
 }
 
-// MarshalJSON encodes the credential slot ID as its stable name string
-func (r CredentialSlotID) MarshalJSON() ([]byte, error) {
-	return json.Marshal(r.name)
-}
-
-// UnmarshalJSON decodes a credential slot ID from its stable name string
-func (r *CredentialSlotID) UnmarshalJSON(data []byte) error {
-	var name string
-
-	if err := json.Unmarshal(data, &name); err != nil {
-		return err
-	}
-
-	*r = NewCredentialSlotID(name)
-
-	return nil
-}
+// =========
+// Credentials
+// =========
 
 // CredentialRef is a typed handle for one credential slot, parameterized by its schema type
 type CredentialRef[T any] struct {
-	// id is the durable credential slot identity
-	id CredentialSlotID
-	// storedLayout is the credential type's reflected schema and declared upgrade
-	storedLayout[T]
+	// input is the slot name, the credential type's reflected schema, and its declared upgrade and validation
+	input InputRegistration
 	// replaces lists the retired slots whose stored payloads move onto this slot
 	replaces []CredentialSlotID
 }
 
 // NewCredentialRef creates a typed credential slot identity handle with the schema reflected from T
 func NewCredentialRef[T any](name string) CredentialRef[T] {
-	return CredentialRef[T]{id: NewCredentialSlotID(name), storedLayout: newStoredLayout[T]()}
+	return CredentialRef[T]{input: reflectedInput[T](name)}
 }
 
 // CredentialRefOf creates a typed credential slot handle named after T's reflected schema
 func CredentialRefOf[T any]() CredentialRef[T] {
-	layout := newStoredLayout[T]()
-
-	return CredentialRef[T]{id: NewCredentialSlotID(jsonx.SchemaID(layout.schema)), storedLayout: layout}
+	return CredentialRef[T]{input: reflectedInput[T]("")}
 }
 
 // ID returns the non-generic credential slot identity
 func (r CredentialRef[T]) ID() CredentialSlotID {
-	return r.id
+	return NewCredentialSlotID(r.input.Name)
 }
 
 // String returns the stable credential name used for persistence and equality comparisons
 func (r CredentialRef[T]) String() string {
-	return r.id.String()
+	return r.input.Name
 }
 
 // Schema returns a copy of the reflected JSON schema of the credential type
 func (r CredentialRef[T]) Schema() json.RawMessage {
-	return jsonx.CloneRawMessage(r.schema)
+	return jsonx.CloneRawMessage(r.input.Schema)
 }
 
 // Resolve decodes the credential bound to this slot from the supplied bindings
 func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) {
-	cred, ok := bindings.Resolve(r.id)
+	cred, ok := bindings.Resolve(r.ID())
 	if !ok {
 		var zero T
 		return zero, false, nil
@@ -190,31 +202,27 @@ func (r CredentialRef[T]) Replacing[Old any](old CredentialRef[Old]) CredentialR
 
 // Upgraded declares how a stored payload is reshaped from the slot it was persisted under into T
 func (r CredentialRef[T]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (T, error)) CredentialRef[T] {
-	r.upgrade = upgraded(fn)
+	r.input.Upgrade = upgraded(fn)
 
 	return r
 }
 
 // Validated declares a semantic check run on a schema-valid credential payload decoded as T
 func (r CredentialRef[T]) Validated(fn func(context.Context, InstallationRequest, *T) error) CredentialRef[T] {
-	r.validate = validated(fn)
+	r.input.Validate = validated(fn)
 
 	return r
 }
 
 // Replaces lists the retired slots whose stored payloads this slot takes over, sorted
 func (r CredentialRef[T]) Replaces() []CredentialSlotID {
-	return lo.Map(sortedUnique(lo.Map(r.replaces, func(slot CredentialSlotID, _ int) string { return slot.String() })), func(name string, _ int) CredentialSlotID {
-		return NewCredentialSlotID(name)
-	})
+	return sortedUnique(r.replaces, CredentialSlotID.Compare)
 }
 
 // Registration projects the slot identity and lifecycle onto base
 func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRegistration {
 	base.Ref = r.ID()
-	base.StoredSchema = r.Schema()
-	base.Upgrade = r.upgrade
-	base.Validate = r.validate
+	base.Stored = r.input.Clone()
 	base.Replaces = nil
 
 	if len(r.replaces) > 0 {
@@ -230,67 +238,44 @@ func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRe
 
 // UserInputRef is a typed handle for one definition's installation-scoped user input layout
 type UserInputRef[T any] struct {
-	// name is the stable layout name the stored document is keyed by, reflected from T
-	name string
-	// storedLayout is the user input type's reflected schema and declared upgrade
-	storedLayout[T]
+	// input is the layout name reflected from T, its schema, and its declared upgrade and validation
+	input InputRegistration
 }
 
 // UserInputRefOf creates a typed user input layout handle named after T's reflected schema
 func UserInputRefOf[T any]() UserInputRef[T] {
-	layout := newStoredLayout[T]()
-
-	return UserInputRef[T]{name: jsonx.SchemaID(layout.schema), storedLayout: layout}
+	return UserInputRef[T]{input: reflectedInput[T]("")}
 }
 
 // Name returns the stable layout name the stored document is keyed by
 func (r UserInputRef[T]) Name() string {
-	return r.name
+	return r.input.Name
 }
 
 // Upgraded declares how stored user input is reshaped from the layout it was persisted under into T
 func (r UserInputRef[T]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (T, error)) UserInputRef[T] {
-	r.upgrade = upgraded(fn)
+	r.input.Upgrade = upgraded(fn)
 
 	return r
 }
 
 // Validated declares a semantic check run on schema-valid user input decoded as T
 func (r UserInputRef[T]) Validated(fn func(context.Context, InstallationRequest, *T) error) UserInputRef[T] {
-	r.validate = validated(fn)
+	r.input.Validate = validated(fn)
 
 	return r
 }
 
-// Registration projects the layout name, reflected schema, declared upgrade, and validation into an input registration
+// Registration returns the layout name, reflected schema, declared upgrade, and validation as an input registration
 func (r UserInputRef[T]) Registration() *InputRegistration {
-	return &InputRegistration{Name: r.name, Schema: jsonx.CloneRawMessage(r.schema), Upgrade: r.upgrade, Validate: r.validate}
+	input := r.input.Clone()
+
+	return &input
 }
 
 // =========
 // Clients
 // =========
-
-// ClientID is the in-process identity of one registered client, unique within a definition
-type ClientID struct {
-	// name is the client name used for registry indexing and client caching
-	name string
-}
-
-// NewClientID creates a client identity from its name
-func NewClientID(name string) ClientID {
-	return ClientID{name: name}
-}
-
-// Valid reports whether the client identity was initialized
-func (id ClientID) Valid() bool {
-	return id.name != ""
-}
-
-// String returns the client name used for cache indexing
-func (id ClientID) String() string {
-	return id.name
-}
 
 // ClientRef is a typed handle for one registered client identity
 type ClientRef[C any] struct {
@@ -375,12 +360,14 @@ func CredentialHealthCheck(fn func(context.Context, OperationRequest) (json.RawM
 
 // OperationRef is a typed handle for one operation identity, parameterized by its config type
 type OperationRef[Config any] struct {
-	// name is the stable operation name used for persistence and topic derivation
-	name string
-	// storedLayout is the config type's reflected schema and declared upgrade
-	storedLayout[Config]
+	// input is the stable operation name used for persistence and topic derivation, the config type's reflected schema, and its declared upgrade and validation
+	input InputRegistration
+	// description describes what the operation does
+	description string
 	// client is the registered client the operation runs against, invalid when the operation has none
 	client ClientID
+	// healthCheck probes the operation's prerequisites under its client
+	healthCheck OperationHandler
 	// handle executes the operation when it does not produce ingest payloads
 	handle OperationHandler
 	// ingest executes the operation and returns typed payload sets for the ingest pipeline
@@ -414,29 +401,25 @@ type OperationRef[Config any] struct {
 // NewOperationRef creates a stored-input operation handle with the given name; Config embeds OperationSettings and
 // its reflected schema is the per-installation input document stored under the operation name
 func NewOperationRef[Config OperationInput](name string) OperationRef[Config] {
-	return OperationRef[Config]{name: name, storedLayout: newStoredLayout[Config](), stored: true}
+	return OperationRef[Config]{input: reflectedInput[Config](name), stored: true}
 }
 
 // OperationRefOf creates a stored-input operation handle named after the reflected schema of Config; Config embeds
 // OperationSettings and its reflected schema is the per-installation input document stored under the operation name
 func OperationRefOf[Config OperationInput]() OperationRef[Config] {
-	layout := newStoredLayout[Config]()
-
-	return OperationRef[Config]{name: jsonx.SchemaID(layout.schema), storedLayout: layout, stored: true}
+	return OperationRef[Config]{input: reflectedInput[Config](""), stored: true}
 }
 
 // NewOperationPayload creates a payload operation handle with the given name; Config is the payload a caller
 // supplies on each dispatch, nothing is stored per installation, and Upgraded and Validated are ignored
 func NewOperationPayload[Config any](name string) OperationRef[Config] {
-	return OperationRef[Config]{name: name, storedLayout: newStoredLayout[Config]()}
+	return OperationRef[Config]{input: reflectedInput[Config](name)}
 }
 
 // OperationPayloadOf creates a payload operation handle named after the reflected schema of Config; Config is the
 // payload a caller supplies on each dispatch, nothing is stored per installation, and Upgraded and Validated are ignored
 func OperationPayloadOf[Config any]() OperationRef[Config] {
-	layout := newStoredLayout[Config]()
-
-	return OperationRef[Config]{name: jsonx.SchemaID(layout.schema), storedLayout: layout}
+	return OperationRef[Config]{input: reflectedInput[Config]("")}
 }
 
 // decodeConfig decodes an operation config payload into Config, treating absent as the zero value
@@ -464,19 +447,33 @@ func bindRequest[C, Config any](client ClientRef[C], request OperationRequest) (
 	return typed, cfg, err
 }
 
-// sortedUnique returns the names sorted with duplicates removed
-func sortedUnique(names []string) []string {
-	return slices.Compact(slices.Sorted(slices.Values(names)))
+// sortedUnique returns the items sorted by compare with duplicates removed
+func sortedUnique[T comparable](items []T, compare func(a, b T) int) []T {
+	return slices.Compact(slices.SortedFunc(slices.Values(items), compare))
 }
 
 // Name returns the stable operation name
 func (r OperationRef[Config]) Name() string {
-	return r.name
+	return r.input.Name
 }
 
 // Schema returns a copy of the reflected JSON schema of the config type
 func (r OperationRef[Config]) Schema() json.RawMessage {
-	return jsonx.CloneRawMessage(r.schema)
+	return jsonx.CloneRawMessage(r.input.Schema)
+}
+
+// Description declares what the operation does
+func (r OperationRef[Config]) Description(description string) OperationRef[Config] {
+	r.description = description
+
+	return r
+}
+
+// HealthCheck binds check as the probe of the operation's prerequisites, run under the operation's client
+func (r OperationRef[Config]) HealthCheck(check *HealthCheckRegistration) OperationRef[Config] {
+	r.healthCheck = check.Handle
+
+	return r
 }
 
 // Ingests binds fn as the ingest handler, run against client with the decoded config
@@ -534,7 +531,7 @@ func (r OperationRef[Config]) Replacing[Old any](old OperationRef[Old]) Operatio
 func (r OperationRef[Config]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (Config, error)) OperationRef[Config] {
 	typed := upgraded(fn)
 
-	r.upgrade = func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error) {
+	r.input.Upgrade = func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error) {
 		document, err := typed(ctx, req, from, stored)
 		if err != nil {
 			return nil, err
@@ -560,7 +557,7 @@ func (r OperationRef[Config]) Upgraded(fn func(context.Context, InstallationRequ
 
 // Validated declares a semantic check run on a schema-valid stored input document decoded as Config; ignored on a payload operation
 func (r OperationRef[Config]) Validated(fn func(context.Context, InstallationRequest, *Config) error) OperationRef[Config] {
-	r.validate = validated(fn)
+	r.input.Validate = validated(fn)
 
 	return r
 }
@@ -635,45 +632,35 @@ func (r OperationRef[Config]) DisabledForAll(disabled bool) OperationRef[Config]
 	return r
 }
 
-// Registration projects the operation's identity, handler, stored input, and declared behavior onto base
-func (r OperationRef[Config]) Registration(definition DefinitionRef, base OperationRegistration) OperationRegistration {
-	base.Name = r.name
-	base.Topic = definition.OperationTopic(r.name)
-	base.ConfigSchema = r.Schema()
-	base.Policy = r.policy
-	base.Ingest = slices.Clone(r.contracts)
-	base.RequiredPermissions = slices.Clone(r.permissions)
-	base.Schedule = r.schedule
-	base.SkipDefaultLookback = r.skipDefaultLookback
-	base.RateLimit = r.rateLimit
-	base.Internal = r.internal
-	base.CustomerSelectable = r.customerSelectable
-	base.RequiresPaymentMethod = r.requiresPaymentMethod
-	base.DisabledForAll = r.disabledForAll
-
-	if r.stored {
-		base.Input = &InputRegistration{Name: r.name, Schema: r.Schema(), Upgrade: r.upgrade, Validate: r.validate}
+// Registration builds the operation registration from the operation's identity, handler, stored input, and declared behavior
+func (r OperationRef[Config]) Registration(definition DefinitionRef) OperationRegistration {
+	registration := OperationRegistration{
+		Name:                  r.input.Name,
+		Description:           r.description,
+		RequiredPermissions:   slices.Clone(r.permissions),
+		Topic:                 definition.OperationTopic(r.input.Name),
+		ClientRef:             r.client,
+		CustomerSelectable:    r.customerSelectable,
+		Internal:              r.internal,
+		RequiresPaymentMethod: r.requiresPaymentMethod,
+		Policy:                r.policy,
+		RateLimit:             r.rateLimit,
+		Ingest:                slices.Clone(r.contracts),
+		HealthCheck:           r.healthCheck,
+		Handle:                r.handle,
+		IngestHandle:          r.ingest,
+		DisabledForAll:        r.disabledForAll,
+		Input:                 r.input.Clone(),
+		Stored:                r.stored,
+		Schedule:              r.schedule,
+		SkipDefaultLookback:   r.skipDefaultLookback,
 	}
-
-	if r.client.Valid() {
-		base.ClientRef = r.client
-	}
-
-	if r.handle != nil {
-		base.Handle = r.handle
-	}
-
-	if r.ingest != nil {
-		base.IngestHandle = r.ingest
-	}
-
-	base.Replaces = nil
 
 	if len(r.replaces) > 0 {
-		base.Replaces = sortedUnique(r.replaces)
+		registration.Replaces = sortedUnique(r.replaces, strings.Compare)
 	}
 
-	return base
+	return registration
 }
 
 // =========
@@ -752,7 +739,7 @@ func (r WebhookRef) Registration(base WebhookRegistration) WebhookRegistration {
 	base.Replaces = nil
 
 	if len(r.replaces) > 0 {
-		base.Replaces = sortedUnique(r.replaces)
+		base.Replaces = sortedUnique(r.replaces, strings.Compare)
 	}
 
 	return base

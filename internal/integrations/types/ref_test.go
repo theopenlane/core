@@ -132,7 +132,7 @@ func TestCredentialRefUpgraded(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := reg.Upgrade(context.Background(), InstallationRequest{}, tc.from.String(), json.RawMessage(tc.payload))
+			got, err := reg.Stored.Upgrade(context.Background(), InstallationRequest{}, tc.from.String(), json.RawMessage(tc.payload))
 			if err != nil {
 				t.Fatalf("Upgrade() error = %v", err)
 			}
@@ -164,7 +164,7 @@ func TestCredentialRefWithoutUpgradeProjectsNone(t *testing.T) {
 
 	reg := NewCredentialRef[refTestCredential]("refTestCredential").Registration(CredentialRegistration{})
 
-	if reg.Upgrade != nil {
+	if reg.Stored.Upgrade != nil {
 		t.Fatal("expected no upgrade projected on a plain slot")
 	}
 }
@@ -180,7 +180,7 @@ func TestCredentialRefUpgradedReceivesTheInstallationRequest(t *testing.T) {
 		return refTestCredential{Token: "derived"}, nil
 	}).Registration(CredentialRegistration{})
 
-	got, err := reg.Upgrade(context.Background(), InstallationRequest{Input: json.RawMessage(`{"marker":true}`)}, "refTestCredential", json.RawMessage(`{"token":""}`))
+	got, err := reg.Stored.Upgrade(context.Background(), InstallationRequest{Input: json.RawMessage(`{"marker":true}`)}, "refTestCredential", json.RawMessage(`{"token":""}`))
 	if err != nil {
 		t.Fatalf("Upgrade() error = %v", err)
 	}
@@ -359,20 +359,20 @@ func TestOperationPayloadRegistrationHasNoInput(t *testing.T) {
 		Upgraded(func(_ context.Context, _ InstallationRequest, _ string, stored json.RawMessage) (refTestCredential, error) {
 			return jsonx.Decode[refTestCredential](stored)
 		}).
-		Registration(definition, OperationRegistration{})
+		Registration(definition)
 
-	if reg.Name != "refTestCredential" || reg.Input != nil {
+	if reg.Name != "refTestCredential" || reg.Stored {
 		t.Fatalf("expected a payload operation named from its schema with no stored input, got %+v", reg)
 	}
 
-	if jsonx.SchemaID(reg.ConfigSchema) != "refTestCredential" {
-		t.Fatalf("expected the payload schema as the config schema, got %s", reg.ConfigSchema)
+	if jsonx.SchemaID(reg.Input.Schema) != "refTestCredential" {
+		t.Fatalf("expected the payload schema as the input schema, got %s", reg.Input.Schema)
 	}
 
-	stored := OperationRefOf[refTestConfig]().Registration(definition, OperationRegistration{})
+	stored := OperationRefOf[refTestConfig]().Registration(definition)
 
-	if stored.Input == nil || string(stored.Input.Schema) != string(stored.ConfigSchema) {
-		t.Fatalf("expected a stored-input operation to carry one schema for config and input, got %+v", stored)
+	if !stored.Stored || jsonx.SchemaID(stored.Input.Schema) != "refTestConfig" {
+		t.Fatalf("expected a stored-input operation carrying its reflected schema, got %+v", stored)
 	}
 }
 
@@ -433,7 +433,7 @@ func TestOperationRefHandles(t *testing.T) {
 		}{Client: c, Limit: cfg.Limit})
 	})
 
-	reg := ref.Registration(definition, OperationRegistration{})
+	reg := ref.Registration(definition)
 
 	if reg.Handle == nil || reg.IngestHandle != nil {
 		t.Fatalf("expected only Handle projected, got %+v", reg)
@@ -490,7 +490,7 @@ func TestOperationRefIngests(t *testing.T) {
 		return []IngestPayloadSet{{Schema: c, Envelopes: make([]MappingEnvelope, cfg.Limit)}}, nil
 	})
 
-	reg := ref.Registration(definition, OperationRegistration{})
+	reg := ref.Registration(definition)
 
 	if reg.IngestHandle == nil || reg.Handle != nil {
 		t.Fatalf("expected only IngestHandle projected, got %+v", reg)
@@ -539,7 +539,7 @@ func TestOperationRefHandlesRequest(t *testing.T) {
 		return json.Marshal(cfg.Limit)
 	})
 
-	reg := ref.Registration(definition, OperationRegistration{})
+	reg := ref.Registration(definition)
 
 	if reg.Handle == nil || reg.ClientRef.Valid() {
 		t.Fatalf("expected a client-less Handle projected, got %+v", reg)
@@ -564,7 +564,7 @@ func TestOperationRefReplacing(t *testing.T) {
 	alpha := OperationRefOf[refTestAlphaConfig]()
 	replaced := base.Replacing(zeta).Replacing(alpha).Replacing(zeta)
 
-	reg := replaced.Registration(definition, OperationRegistration{})
+	reg := replaced.Registration(definition)
 
 	if got := reg.Replaces; !slices.Equal(got, []string{"refTestAlphaConfig", "refTestZetaConfig"}) {
 		t.Fatalf("Replaces = %v, want sorted unique names", got)
@@ -574,7 +574,7 @@ func TestOperationRefReplacing(t *testing.T) {
 		t.Fatal("expected no upgrade projected from identity replacements alone")
 	}
 
-	source := base.Registration(definition, OperationRegistration{})
+	source := base.Registration(definition)
 
 	if source.Replaces != nil {
 		t.Fatalf("expected the source ref to stay without replacements, got %+v", source.Replaces)
@@ -586,7 +586,7 @@ func TestOperationRefUpgraded(t *testing.T) {
 
 	definition := NewDefinitionRef("def_001")
 	retired := OperationRefOf[refTestRetiredConfig]()
-	reg := OperationRefOf[refTestConfig]().Replacing(retired).Upgraded(refTestUpgradeConfig).Registration(definition, OperationRegistration{})
+	reg := OperationRefOf[refTestConfig]().Replacing(retired).Upgraded(refTestUpgradeConfig).Registration(definition)
 
 	tests := []struct {
 		name    string
@@ -614,7 +614,7 @@ func TestOperationRefUpgraded(t *testing.T) {
 		})
 	}
 
-	plain := OperationRefOf[refTestConfig]().Registration(definition, OperationRegistration{})
+	plain := OperationRefOf[refTestConfig]().Registration(definition)
 
 	if plain.Input.Upgrade != nil {
 		t.Fatal("expected no upgrade projected on a plain operation")
@@ -628,6 +628,7 @@ func TestOperationRefChainProjectsBehavior(t *testing.T) {
 	schedule := &gala.Schedule{}
 
 	ref := OperationRefOf[refTestConfig]().
+		Description("sync").
 		Policy(ExecutionPolicy{Reconcile: true, Snapshot: true}).
 		Ingest(IngestContract{Schema: "User"}, IngestContract{Schema: "Group"}).
 		Permissions("read:users", "read:groups").
@@ -639,14 +640,14 @@ func TestOperationRefChainProjectsBehavior(t *testing.T) {
 		RequiresPaymentMethod().
 		DisabledForAll(true)
 
-	reg := ref.Registration(definition, OperationRegistration{Description: "sync", Policy: ExecutionPolicy{Inline: true}, Replaces: []string{"stale"}})
+	reg := ref.Registration(definition)
 
 	if reg.Description != "sync" {
-		t.Fatalf("expected the base description preserved, got %+v", reg)
+		t.Fatalf("expected the chain description projected, got %+v", reg)
 	}
 
 	if !reg.Policy.Reconcile || !reg.Policy.Snapshot || reg.Policy.Inline {
-		t.Fatalf("expected the chain policy to replace the base policy, got %+v", reg.Policy)
+		t.Fatalf("expected the chain policy projected, got %+v", reg.Policy)
 	}
 
 	if len(reg.Ingest) != 2 || reg.Ingest[0].Schema != "User" || reg.Ingest[1].Schema != "Group" {
@@ -666,12 +667,12 @@ func TestOperationRefChainProjectsBehavior(t *testing.T) {
 	}
 
 	if reg.Replaces != nil {
-		t.Fatalf("expected the base replacements discarded, got %v", reg.Replaces)
+		t.Fatalf("expected no replacements without Replacing, got %v", reg.Replaces)
 	}
 
-	plain := OperationRefOf[refTestConfig]().Registration(definition, OperationRegistration{})
+	plain := OperationRefOf[refTestConfig]().Registration(definition)
 
-	if plain.Policy != (ExecutionPolicy{}) || plain.Ingest != nil || plain.CustomerSelectable != nil || plain.Schedule != nil || plain.RateLimit != nil {
+	if plain.Description != "" || plain.Policy != (ExecutionPolicy{}) || plain.Ingest != nil || plain.CustomerSelectable != nil || plain.Schedule != nil || plain.RateLimit != nil {
 		t.Fatalf("expected an unconfigured ref to project zero behavior, got %+v", plain)
 	}
 }
@@ -753,11 +754,11 @@ func TestCredentialRefRegistration(t *testing.T) {
 			t.Fatalf("expected the authored schema preserved, got %s", reg.Schema)
 		}
 
-		if string(reg.StoredSchema) != string(plain.Schema()) {
-			t.Fatalf("expected StoredSchema from the ref, got %s", reg.StoredSchema)
+		if string(reg.Stored.Schema) != string(plain.Schema()) {
+			t.Fatalf("expected Stored.Schema from the ref, got %s", reg.Stored.Schema)
 		}
 
-		if len(reg.Replaces) != 0 || reg.Upgrade != nil {
+		if len(reg.Replaces) != 0 || reg.Stored.Upgrade != nil {
 			t.Fatalf("expected no lifecycle on a plain slot, got %+v", reg)
 		}
 	})
@@ -773,11 +774,11 @@ func TestCredentialRefRegistration(t *testing.T) {
 			t.Fatalf("Replaces = %v", reg.Replaces)
 		}
 
-		if reg.Upgrade == nil {
+		if reg.Stored.Upgrade == nil {
 			t.Fatal("expected Upgrade projected")
 		}
 
-		upgraded, err := reg.Upgrade(context.Background(), InstallationRequest{}, retired.ID().String(), json.RawMessage(`{"accessToken":"t"}`))
+		upgraded, err := reg.Stored.Upgrade(context.Background(), InstallationRequest{}, retired.ID().String(), json.RawMessage(`{"accessToken":"t"}`))
 		if err != nil || string(upgraded) != `{"token":"t"}` {
 			t.Fatalf("Upgrade() = %s, %v", upgraded, err)
 		}
@@ -792,8 +793,8 @@ func TestCredentialRefRegistration(t *testing.T) {
 			t.Fatalf("expected Registration not to fill Schema, got %s", reg.Schema)
 		}
 
-		if string(reg.StoredSchema) != string(plain.Schema()) {
-			t.Fatalf("expected StoredSchema from the ref, got %s", reg.StoredSchema)
+		if string(reg.Stored.Schema) != string(plain.Schema()) {
+			t.Fatalf("expected Stored.Schema from the ref, got %s", reg.Stored.Schema)
 		}
 	})
 }
@@ -901,13 +902,12 @@ func TestOperationRefRegistration(t *testing.T) {
 
 	definition := NewDefinitionRef("def_001")
 	client := NewClientRef[string]("client")
-	base := OperationRegistration{Description: "sync", UISchema: json.RawMessage(`{"order":[]}`)}
 
 	t.Run("without a client", func(t *testing.T) {
 		t.Parallel()
 
-		ref := NewOperationRef[refTestInput]("refTestInput")
-		reg := ref.Registration(definition, base)
+		ref := NewOperationRef[refTestInput]("refTestInput").Description("sync")
+		reg := ref.Registration(definition)
 
 		if reg.Name != "refTestInput" {
 			t.Fatalf("Name = %q", reg.Name)
@@ -917,11 +917,7 @@ func TestOperationRefRegistration(t *testing.T) {
 			t.Fatalf("Topic = %q", reg.Topic)
 		}
 
-		if string(reg.ConfigSchema) != string(ref.Schema()) {
-			t.Fatalf("ConfigSchema = %s", reg.ConfigSchema)
-		}
-
-		if reg.Input == nil || reg.Input.Name != "refTestInput" || string(reg.Input.Schema) != string(ref.Schema()) {
+		if !reg.Stored || reg.Input.Name != "refTestInput" || string(reg.Input.Schema) != string(ref.Schema()) {
 			t.Fatalf("Input = %+v, want the reflected layout", reg.Input)
 		}
 
@@ -933,8 +929,8 @@ func TestOperationRefRegistration(t *testing.T) {
 			t.Fatal("expected no client ref")
 		}
 
-		if reg.Description != "sync" || string(reg.UISchema) != `{"order":[]}` {
-			t.Fatalf("expected base prose preserved, got %+v", reg)
+		if reg.Description != "sync" {
+			t.Fatalf("expected the ref description projected, got %+v", reg)
 		}
 	})
 
@@ -943,20 +939,27 @@ func TestOperationRefRegistration(t *testing.T) {
 
 		reg := NewOperationRef[refTestInput]("refTestInput").Handles(client, func(context.Context, OperationRequest, string, refTestInput) (json.RawMessage, error) {
 			return nil, nil
-		}).Registration(definition, base)
+		}).Registration(definition)
 
 		if reg.ClientRef != client.ID() {
 			t.Fatalf("ClientRef = %v, want %v", reg.ClientRef, client.ID())
 		}
 	})
 
-	t.Run("base client is kept when the ref declares none", func(t *testing.T) {
+	t.Run("health check declared on the ref is projected", func(t *testing.T) {
 		t.Parallel()
 
-		reg := NewOperationRef[refTestInput]("refTestInput").Registration(definition, OperationRegistration{ClientRef: client.ID()})
+		reg := NewOperationRef[refTestInput]("refTestInput").HealthCheck(CredentialHealthCheck(func(context.Context, OperationRequest) (json.RawMessage, error) {
+			return json.RawMessage(`"ok"`), nil
+		})).Registration(definition)
 
-		if reg.ClientRef != client.ID() {
-			t.Fatalf("ClientRef = %v, want %v", reg.ClientRef, client.ID())
+		if reg.HealthCheck == nil {
+			t.Fatal("expected HealthCheck projected")
+		}
+
+		got, err := reg.HealthCheck(context.Background(), OperationRequest{})
+		if err != nil || string(got) != `"ok"` {
+			t.Fatalf("HealthCheck() = %s, %v", got, err)
 		}
 	})
 }
@@ -970,11 +973,11 @@ func TestOperationRefHandlesDoesNotAliasTheReceiver(t *testing.T) {
 		return nil, nil
 	})
 
-	if reg := base.Registration(definition, OperationRegistration{}); reg.ClientRef.Valid() || reg.Handle != nil {
+	if reg := base.Registration(definition); reg.ClientRef.Valid() || reg.Handle != nil {
 		t.Fatal("expected the source ref to stay unbound")
 	}
 
-	if reg := bound.Registration(definition, OperationRegistration{}); !reg.ClientRef.Valid() || reg.Handle == nil {
+	if reg := bound.Registration(definition); !reg.ClientRef.Valid() || reg.Handle == nil {
 		t.Fatal("expected the bound ref to carry the client and handler")
 	}
 }
@@ -1146,15 +1149,15 @@ func TestCredentialRefValidated(t *testing.T) {
 		return nil
 	}).Registration(CredentialRegistration{})
 
-	if err := reg.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":"t"}`)); err != nil {
+	if err := reg.Stored.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":"t"}`)); err != nil {
 		t.Fatalf("Validate() error = %v", err)
 	}
 
-	if err := reg.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":""}`)); !errors.Is(err, errRefTestRegion) {
+	if err := reg.Stored.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":""}`)); !errors.Is(err, errRefTestRegion) {
 		t.Fatalf("Validate() error = %v, want %v", err, errRefTestRegion)
 	}
 
-	if CredentialRefOf[refTestCredential]().Registration(CredentialRegistration{}).Validate != nil {
+	if CredentialRefOf[refTestCredential]().Registration(CredentialRegistration{}).Stored.Validate != nil {
 		t.Fatal("expected no validation projected on a plain credential")
 	}
 }
@@ -1170,7 +1173,7 @@ func TestOperationRefValidatedIgnoresSettingsKeys(t *testing.T) {
 		}
 
 		return nil
-	}).Registration(definition, OperationRegistration{})
+	}).Registration(definition)
 
 	if err := reg.Input.Validate(context.Background(), InstallationRequest{}, json.RawMessage(`{"disable":true,"filterExpr":"x","limit":3}`)); err != nil {
 		t.Fatalf("Validate() error = %v", err)
@@ -1180,7 +1183,7 @@ func TestOperationRefValidatedIgnoresSettingsKeys(t *testing.T) {
 		t.Fatalf("Validate() error = %v, want %v", err, errRefTestRegion)
 	}
 
-	if OperationRefOf[refTestConfig]().Registration(definition, OperationRegistration{}).Input.Validate != nil {
+	if OperationRefOf[refTestConfig]().Registration(definition).Input.Validate != nil {
 		t.Fatal("expected no validation projected on a plain operation")
 	}
 }

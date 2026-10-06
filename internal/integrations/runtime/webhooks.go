@@ -23,14 +23,13 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one integration
-func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, integration *ent.Integration, previousIntegrationID string) error {
+// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one integration through db
+func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, db *ent.Client, integration *ent.Integration, previousIntegrationID string) error {
 	def, err := r.resolveDefinitionForInstallation(integration)
 	if err != nil {
 		return err
 	}
 
-	db := r.DB()
 	existing, err := db.IntegrationWebhook.Query().Where(integrationwebhook.IntegrationIDEQ(integration.ID), integrationwebhook.ExternalEventIDIsNil()).All(ctx)
 	if err != nil {
 		return err
@@ -49,7 +48,7 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, integration
 	}
 
 	for _, webhook := range def.Webhooks {
-		if _, err := r.ensureWebhook(ctx, integration, webhook, previousIntegrationID); err != nil {
+		if _, err := r.ensureWebhook(ctx, db, integration, webhook, previousIntegrationID); err != nil {
 			return err
 		}
 	}
@@ -126,7 +125,7 @@ func (r *Runtime) EnsureWebhook(ctx context.Context, integration *ent.Integratio
 		return nil, registry.ErrWebhookNotFound
 	}
 
-	return r.ensureWebhook(ctx, integration, webhook, previousIntegrationID)
+	return r.ensureWebhook(ctx, r.DB(), integration, webhook, previousIntegrationID)
 }
 
 // DispatchWebhookEvent emits one normalized integration webhook event through Gala.
@@ -187,7 +186,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	if !src.Runtime {
 		var err error
 
-		integration, err = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
+		integration, err = r.resolveCurrentIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
 		if err != nil {
 			return err
 		}
@@ -246,13 +245,11 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	})
 }
 
-// ensureWebhook creates or updates the persisted webhook row for one integration and webhook registration
-func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
+// ensureWebhook creates or updates the persisted webhook row for one integration and webhook registration through db
+func (r *Runtime) ensureWebhook(ctx context.Context, db *ent.Client, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {
 		return event.Name
 	})
-
-	db := r.DB()
 
 	integrationIDs := []string{intg.ID}
 	if previousIntegrationID != "" {

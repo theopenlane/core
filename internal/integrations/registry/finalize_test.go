@@ -42,7 +42,7 @@ func finalizeOperation[Cfg integrationtypes.OperationInput]() integrationtypes.O
 		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, Cfg) (json.RawMessage, error) {
 			return nil, nil
 		}).
-		Registration(finalizeDefinitionRef, integrationtypes.OperationRegistration{})
+		Registration(finalizeDefinitionRef)
 }
 
 // operationDefinition returns a definition with the given operations
@@ -122,12 +122,12 @@ func TestFinalizeCredentialFormSchema(t *testing.T) {
 		t.Fatalf("auth-managed slot Schema = %s, want empty", authManaged.Schema)
 	}
 
-	if !sameJSON(authManaged.StoredSchema, testAuthCredentialRef.Schema()) {
-		t.Fatalf("auth-managed slot StoredSchema = %s, want the reflected schema", authManaged.StoredSchema)
+	if !sameJSON(authManaged.Stored.Schema, testAuthCredentialRef.Schema()) {
+		t.Fatalf("auth-managed slot Stored.Schema = %s, want the reflected schema", authManaged.Stored.Schema)
 	}
 
 	literal, _ := finalized.CredentialRegistration(literalSlot)
-	if !sameJSON(literal.StoredSchema, literalSchema) || !sameJSON(literal.Schema, literalSchema) {
+	if !sameJSON(literal.Stored.Schema, literalSchema) || !sameJSON(literal.Schema, literalSchema) {
 		t.Fatalf("literal slot = %+v, want stored and form schema from the literal", literal)
 	}
 
@@ -153,8 +153,8 @@ func TestFinalizeKeepsEmbeddedOperationInputSchema(t *testing.T) {
 		t.Fatalf("input properties = %v, want the embedded settings followed by the config keys", got)
 	}
 
-	if !sameJSON(configured.ConfigSchema, configured.Input.Schema) {
-		t.Fatalf("expected one schema for caller config and stored input, got %s and %s", configured.ConfigSchema, configured.Input.Schema)
+	if !configured.Stored {
+		t.Fatal("expected the operation input stored per installation")
 	}
 
 	if configured.Input.Name != "finalizeConfig" {
@@ -205,7 +205,7 @@ func TestFinalizeValidatesOperationFilterExpr(t *testing.T) {
 
 			return nil
 		}).
-		Registration(finalizeDefinitionRef, integrationtypes.OperationRegistration{})
+		Registration(finalizeDefinitionRef)
 
 	finalized, err := finalizeDefinition(operationDefinition(limited, finalizeOperation[finalizeEmptyConfig]()))
 	if err != nil {
@@ -249,7 +249,7 @@ func TestFinalizeLeavesOperationsWithoutInput(t *testing.T) {
 		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, finalizePayload) (json.RawMessage, error) {
 			return nil, nil
 		}).
-		Registration(finalizeDefinitionRef, integrationtypes.OperationRegistration{})
+		Registration(finalizeDefinitionRef)
 
 	def := operationDefinition(integrationtypes.OperationRegistration{Name: "literal", Handle: newTestHandler()}, payload)
 
@@ -259,12 +259,12 @@ func TestFinalizeLeavesOperationsWithoutInput(t *testing.T) {
 	}
 
 	for _, operation := range finalized.Operations {
-		if operation.Input != nil {
+		if operation.Stored || operation.Input.Validate != nil {
 			t.Fatalf("expected no stored input for operation %s, got %+v", operation.Name, operation.Input)
 		}
 	}
 
-	if got := propertyKeys(t, finalized.Operations[1].ConfigSchema); !slices.Equal(got, []string{"target"}) {
+	if got := propertyKeys(t, finalized.Operations[1].Input.Schema); !slices.Equal(got, []string{"target"}) {
 		t.Fatalf("payload config properties = %v, want only the payload keys", got)
 	}
 }

@@ -32,7 +32,6 @@ type UserInput struct {
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
 }
 
-
 // InstallationMetadata holds the stable Authentik instance identity for one installation
 type InstallationMetadata struct {
 	// Brand is the Authentik instance brand name

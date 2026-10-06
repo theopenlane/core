@@ -335,7 +335,7 @@ func sharedVersionBuilder[In, Cred any](input types.UserInputRef[In], token type
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				SyncOp.Registration(DefinitionID, types.OperationRegistration{}),
+				SyncOp.Registration(DefinitionID),
 			},
 			Webhooks: []types.WebhookRegistration{
 				WebhookV1V2.Registration(types.WebhookRegistration{}),
@@ -384,7 +384,7 @@ func latestVersionBuilder(input types.UserInputRef[userInputV3], token types.Cre
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				operation.Registration(DefinitionID, types.OperationRegistration{}),
+				operation.Registration(DefinitionID),
 			},
 			Webhooks: []types.WebhookRegistration{
 				webhook.Registration(types.WebhookRegistration{}),

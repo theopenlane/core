@@ -22,28 +22,14 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// documentLayout is the current layout a stored document name resolves to
-type documentLayout struct {
-	// name is the current name the document is stored under
-	name string
-	// schema is the reflected JSON schema of the current layout
-	schema json.RawMessage
-	// upgrade reshapes a document stored under an earlier layout, nil when none is declared
-	upgrade types.UpgradeFunc
-	// validate checks a schema-valid document for constraints the schema cannot express, nil when none is declared
-	validate types.ValidateFunc
-	// replaced reports that the stored name is retired and name is its replacement
-	replaced bool
-}
-
 // documentKind projects one stored document kind onto name-keyed documents
 type documentKind struct {
 	// label is the noun used in logs and errors for one document of this kind
 	label string
 	// sentinel is the error a failed conformance is wrapped with
 	sentinel error
-	// resolve maps a stored name onto its current layout, false when the definition does not declare it
-	resolve func(name string) (documentLayout, bool)
+	// resolve maps a stored name onto its current layout, replaced when the stored name is retired, ok false when the definition does not declare it
+	resolve func(name string) (layout types.InputRegistration, replaced bool, ok bool)
 }
 
 // outdated reports whether a stored definition version predates the current one; versions are ULIDs, so string order is mint order
@@ -70,9 +56,10 @@ func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.In
 	return nil
 }
 
-// upgradeInstallation conforms every stored document onto its current name and persists them with the definition version in one transaction;
-// the transaction first claims the version so a concurrent upgrade that already stamped it leaves the installation to that upgrade and reloads it,
-// and an operation input that fails to conform keeps its stored value and marks only that operation unhealthy
+// upgradeInstallation conforms every stored document onto its current name, failing the whole upgrade when any document does not conform,
+// cancels loops queued under retired operation names, persists the documents, renamed runs, and webhook rows with the definition version in
+// one transaction, and resets the reconcile loops when an operation was renamed; the transaction first claims the version so a concurrent
+// upgrade that already stamped it leaves the installation to that upgrade and reloads it
 func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -105,7 +92,11 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 	req.UserInput = userInput.Data
 
-	operationDocuments, failed := conformDocuments(ctx, req, operationInputKind(def), operationConfig.Operations)
+	operationDocuments, err := conformDocuments(ctx, req, operationInputKind(def), operationConfig.Operations)
+	if err != nil {
+		return fmt.Errorf("upgrade operation input: %w", err)
+	}
+
 	operationConfig = types.IntegrationOperationConfig{Operations: operationDocuments}
 
 	providerStateNext := installation.ProviderState
@@ -122,6 +113,19 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	version := r.Registry().Version(def.ID)
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	for _, operation := range def.Operations {
+		for _, old := range operation.Replaces {
+			purged, err := r.purgeReconcileLoop(systemCtx, installation.ID, old)
+			if err != nil {
+				return fmt.Errorf("purge retired loops: %w", err)
+			}
+
+			if purged > 0 {
+				logx.FromContext(ctx).Info().Str("retired_operation", old).Str("operation", operation.Name).Int("purged", purged).Msg("cancelled reconcile loops queued under a retired operation name")
+			}
+		}
+	}
 
 	claimed, err := workflows.WithTx(systemCtx, r.DB(), nil, func(ctx context.Context, tx *ent.Tx) (bool, error) {
 		stamped, err := tx.Integration.Update().
@@ -175,6 +179,10 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 			}
 		}
 
+		if err := r.reconcileInstallationWebhooks(ctx, tx.Client(), installation, ""); err != nil {
+			return false, fmt.Errorf("upgrade webhooks: %w", err)
+		}
+
 		return true, nil
 	})
 	if err != nil {
@@ -200,39 +208,6 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 	r.keystore().InvalidateClients(installation.ID)
 
-	return r.finishUpgrade(ctx, installation, def, failed)
-}
-
-// finishUpgrade runs the post-commit steps of an upgrade: purging loops queued under retired operation names, reconciling webhooks,
-// marking operations whose input failed to conform, and resetting loops when an operation was renamed
-func (r *Runtime) finishUpgrade(ctx context.Context, installation *ent.Integration, def types.Definition, failed map[string]error) error {
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	for _, operation := range def.Operations {
-		for _, old := range operation.Replaces {
-			purged, err := r.purgeReconcileLoop(systemCtx, installation.ID, old)
-			if err != nil {
-				return err
-			}
-
-			if purged > 0 {
-				logx.FromContext(ctx).Info().Str("retired_operation", old).Str("operation", operation.Name).Int("purged", purged).Msg("cancelled reconcile loops queued under a retired operation name")
-			}
-		}
-	}
-
-	if err := r.reconcileInstallationWebhooks(systemCtx, installation, ""); err != nil {
-		return fmt.Errorf("upgrade webhooks: %w", err)
-	}
-
-	for _, name := range slices.Sorted(maps.Keys(failed)) {
-		operation, _, _ := def.ResolveOperation(name)
-
-		if err := r.MarkOperationUnhealthy(ctx, installation, operation.Name, failed[name].Error()); err != nil {
-			return err
-		}
-	}
-
 	if lo.SomeBy(def.Operations, func(operation types.OperationRegistration) bool { return len(operation.Replaces) > 0 }) {
 		if err := r.ResetReconcileLoops(ctx, installation); err != nil {
 			return fmt.Errorf("reset reconcile loops: %w", err)
@@ -242,21 +217,21 @@ func (r *Runtime) finishUpgrade(ctx context.Context, installation *ent.Integrati
 	return nil
 }
 
-// legacyDocuments returns the installation's stored user input and operation input, seeded from main's client config when neither has been written:
-// user input from the whole document, each stored-input operation from the section under its camelCase name, else the whole document
+// legacyDocuments returns the installation's user input and operation input, seeding each document not yet stored from main's client config
+// on an installation main created, which carries no definition version: user input from the whole document, each stored-input operation from
+// the section under its camelCase name, else the whole document
 //
 // TODO: remove with the integration config column once every installation has been upgraded off main's client config
 func legacyDocuments(installation *ent.Integration, def types.Definition) (types.IntegrationUserInput, types.IntegrationOperationConfig) {
 	legacy := installation.Config.ClientConfig
+	userInput, operationConfig := installation.UserInput, installation.OperationConfig
 
-	if installation.UserInput.Layout != "" || len(installation.OperationConfig.Operations) > 0 || jsonx.IsEmptyRawMessage(legacy) {
-		return installation.UserInput, installation.OperationConfig
+	if installation.DefinitionVersion != "" || jsonx.IsEmptyRawMessage(legacy) {
+		return userInput, operationConfig
 	}
 
-	operationConfig := installation.OperationConfig
-
 	for _, operation := range def.Operations {
-		if operation.Input == nil {
+		if !operation.Stored || lo.HasKey(operationConfig.Operations, operation.Name) {
 			continue
 		}
 
@@ -277,9 +252,7 @@ func legacyDocuments(installation *ent.Integration, def types.Definition) (types
 		operationConfig = operationConfig.With(operation.Name, raw)
 	}
 
-	userInput := installation.UserInput
-
-	if def.UserInput != nil {
+	if def.UserInput != nil && userInput.Layout == "" {
 		userInput = types.IntegrationUserInput{Layout: def.UserInput.Name, Data: legacy}
 	}
 
@@ -326,8 +299,8 @@ func conformCredentials(ctx context.Context, req types.InstallationRequest, def 
 		stored[slot.String()] = credential.Data
 	}
 
-	conformed, failed := conformDocuments(ctx, req, credentialKind(def), stored)
-	if err := joinFailures(failed); err != nil {
+	conformed, err := conformDocuments(ctx, req, credentialKind(def), stored)
+	if err != nil {
 		return nil, err
 	}
 
@@ -352,8 +325,8 @@ func conformUserInput(ctx context.Context, req types.InstallationRequest, def ty
 		stored[userInput.Layout] = userInput.Data
 	}
 
-	conformed, failed := conformDocuments(ctx, req, userInputKind(def), stored)
-	if err := joinFailures(failed); err != nil {
+	conformed, err := conformDocuments(ctx, req, userInputKind(def), stored)
+	if err != nil {
 		return userInput, err
 	}
 
@@ -364,23 +337,15 @@ func conformUserInput(ctx context.Context, req types.InstallationRequest, def ty
 	return types.IntegrationUserInput{Layout: def.UserInput.Name, Data: conformed[def.UserInput.Name]}, nil
 }
 
-// joinFailures joins the failed documents' errors in name order, nil when none failed
-func joinFailures(failed map[string]error) error {
-	return errors.Join(lo.Map(slices.Sorted(maps.Keys(failed)), func(name string, _ int) error { return failed[name] })...)
-}
-
 // credentialKind projects stored credential slots onto the definition's credential registrations
 func credentialKind(def types.Definition) documentKind {
 	return documentKind{
 		label:    "slot",
 		sentinel: ErrCredentialInvalid,
-		resolve: func(name string) (documentLayout, bool) {
+		resolve: func(name string) (types.InputRegistration, bool, bool) {
 			registration, replaced, ok := def.ResolveCredential(types.NewCredentialSlotID(name))
-			if !ok {
-				return documentLayout{}, false
-			}
 
-			return documentLayout{name: registration.Ref.String(), schema: registration.StoredSchema, upgrade: registration.Upgrade, validate: registration.Validate, replaced: replaced}, true
+			return registration.Stored, replaced, ok
 		},
 	}
 }
@@ -390,12 +355,12 @@ func userInputKind(def types.Definition) documentKind {
 	return documentKind{
 		label:    "layout",
 		sentinel: ErrUserInputInvalid,
-		resolve: func(name string) (documentLayout, bool) {
+		resolve: func(name string) (types.InputRegistration, bool, bool) {
 			if def.UserInput == nil {
-				return documentLayout{}, false
+				return types.InputRegistration{}, false, false
 			}
 
-			return documentLayout{name: def.UserInput.Name, schema: def.UserInput.Schema, upgrade: def.UserInput.Upgrade, validate: def.UserInput.Validate, replaced: name != def.UserInput.Name}, true
+			return *def.UserInput, name != def.UserInput.Name, true
 		},
 	}
 }
@@ -405,65 +370,65 @@ func operationInputKind(def types.Definition) documentKind {
 	return documentKind{
 		label:    "operation",
 		sentinel: types.ErrOperationConfigInvalid,
-		resolve: func(name string) (documentLayout, bool) {
+		resolve: func(name string) (types.InputRegistration, bool, bool) {
 			operation, replaced, ok := def.ResolveOperation(name)
-			if !ok || operation.Input == nil {
-				return documentLayout{}, false
+			if !ok || !operation.Stored {
+				return types.InputRegistration{}, false, false
 			}
 
-			return documentLayout{name: operation.Name, schema: operation.Input.Schema, upgrade: operation.Input.Upgrade, validate: operation.Input.Validate, replaced: replaced}, true
+			return operation.Input, replaced, true
 		},
 	}
 }
 
-// conformDocuments conforms every stored document onto its current name, dropping a retired document whose replacement is already stored;
-// a document that fails to conform keeps its stored value and is reported in failed under its stored name
-func conformDocuments(ctx context.Context, req types.InstallationRequest, kind documentKind, stored map[string]json.RawMessage) (map[string]json.RawMessage, map[string]error) {
+// conformDocuments conforms every stored document onto its current name, dropping a retired document whose replacement is already stored,
+// and returns every document's conformance failure joined in name order
+func conformDocuments(ctx context.Context, req types.InstallationRequest, kind documentKind, stored map[string]json.RawMessage) (map[string]json.RawMessage, error) {
 	next := maps.Clone(stored)
 
 	if next == nil {
 		next = map[string]json.RawMessage{}
 	}
 
-	failed := map[string]error{}
+	var failed []error
 
 	for _, name := range slices.Sorted(maps.Keys(stored)) {
-		layout, ok := kind.resolve(name)
+		layout, replaced, ok := kind.resolve(name)
 		if !ok {
 			logx.FromContext(ctx).Warn().Str(kind.label, name).Msg("stored document is not declared by the definition and was left untouched")
 
 			continue
 		}
 
-		if layout.replaced && lo.HasKey(next, layout.name) {
+		if replaced && lo.HasKey(next, layout.Name) {
 			delete(next, name)
 
 			continue
 		}
 
-		document, err := conformStored(ctx, req, layout.schema, layout.upgrade, layout.validate, name, stored[name], kind.sentinel)
+		document, err := conformStored(ctx, req, layout, name, stored[name], kind.sentinel)
 		if err != nil {
-			failed[name] = fmt.Errorf("%w: %s %s", err, kind.label, name)
+			failed = append(failed, fmt.Errorf("%w: %s %s", err, kind.label, name))
 
 			continue
 		}
 
-		next[layout.name] = document
+		next[layout.Name] = document
 
-		if layout.replaced {
+		if replaced {
 			delete(next, name)
 		}
 	}
 
-	return next, failed
+	return next, errors.Join(failed...)
 }
 
-// conformStored upgrades a stored document from the name it was persisted under, strips and defaults it against schema, then validates it
-func conformStored(ctx context.Context, req types.InstallationRequest, schema json.RawMessage, upgrade types.UpgradeFunc, validate types.ValidateFunc, from string, stored json.RawMessage, sentinel error) (json.RawMessage, error) {
+// conformStored upgrades a stored document from the name it was persisted under, strips and defaults it against the layout schema, then validates it
+func conformStored(ctx context.Context, req types.InstallationRequest, layout types.InputRegistration, from string, stored json.RawMessage, sentinel error) (json.RawMessage, error) {
 	document := stored
 
-	if upgrade != nil {
-		upgraded, err := upgrade(ctx, req, from, stored)
+	if layout.Upgrade != nil {
+		upgraded, err := layout.Upgrade(ctx, req, from, stored)
 		if err != nil {
 			return nil, fmt.Errorf("%w: upgrade: %w", sentinel, err)
 		}
@@ -471,12 +436,12 @@ func conformStored(ctx context.Context, req types.InstallationRequest, schema js
 		document = upgraded
 	}
 
-	conformed, err := jsonx.ConformToSchema(schema, document)
+	conformed, err := jsonx.ConformToSchema(layout.Schema, document)
 	if err != nil {
 		return nil, fmt.Errorf("%w: conform to schema: %w", sentinel, err)
 	}
 
-	if err := operations.ValidateInput(ctx, req, schema, validate, conformed, sentinel); err != nil {
+	if err := operations.ValidateInput(ctx, req, layout.Schema, layout.Validate, conformed, sentinel); err != nil {
 		return nil, err
 	}
 

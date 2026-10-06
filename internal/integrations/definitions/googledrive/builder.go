@@ -76,17 +76,14 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				documentExportOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Export a Google Doc as HTML via the Drive files.export endpoint",
-				}),
+				documentExportOperation.Description("Export a Google Doc as HTML via the Drive files.export endpoint").Registration(definitionID),
 				types.OperationRefOf[FolderSync]().
 					Ingests(driveClient, runFolderSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaInternalPolicy.Name}).
 					Schedule(gala.NewFullFetchSchedule()).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "List Google Docs in the configured folder and emit policy ingest envelopes",
-					}),
+					Description("List Google Docs in the configured folder and emit policy ingest envelopes").
+					Registration(definitionID),
 			},
 			Mappings: []types.MappingRegistration{
 				{

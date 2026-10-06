@@ -95,7 +95,7 @@ func TestConformDocuments(t *testing.T) {
 			}
 		})
 
-	operationDef := types.Definition{Operations: []types.OperationRegistration{currentOp.Registration(definition, types.OperationRegistration{})}}
+	operationDef := types.Definition{Operations: []types.OperationRegistration{currentOp.Registration(definition)}}
 
 	retiredSlot := types.NewCredentialRef[retiredCredential]("retiredCredential")
 	currentSlot := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retiredSlot).Upgraded(upgradeRetiredCredential(retiredSlot))
@@ -215,20 +215,18 @@ func TestConformDocuments(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, failed := conformDocuments(t.Context(), types.InstallationRequest{}, tc.kind, tc.stored)
+			got, err := conformDocuments(t.Context(), types.InstallationRequest{}, tc.kind, tc.stored)
 			documents := func(docs map[string]json.RawMessage) map[string]string {
 				return lo.MapValues(docs, func(doc json.RawMessage, _ string) string { return string(doc) })
 			}
 
 			if tc.wantErr != nil {
-				err := joinFailures(failed)
 				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)
-				assert.DeepEqual(t, documents(got), documents(tc.stored))
 
 				return
 			}
 
-			assert.Equal(t, len(failed), 0, "failed: %v", failed)
+			assert.NilError(t, err)
 			assert.DeepEqual(t, documents(got), tc.want)
 		})
 	}
@@ -311,7 +309,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "missing required without default is filled by the declared upgrade",
 			schema:   credentialSchema,
-			upgrade:  filling.Upgrade,
+			upgrade:  filling.Stored.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"region":"eu"}`,
 			want:     `{"token":"filled","region":"eu"}`,
@@ -319,7 +317,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "upgrade that leaves the payload invalid is rejected",
 			schema:   credentialSchema,
-			upgrade:  idle.Upgrade,
+			upgrade:  idle.Stored.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"region":"eu"}`,
 			wantErr:  ErrCredentialInvalid,
@@ -334,7 +332,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "declared upgrade runs even when the stored payload already validates",
 			schema:   credentialSchema,
-			upgrade:  retagging.Upgrade,
+			upgrade:  retagging.Stored.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"token":"t","region":"eu"}`,
 			want:     `{"token":"t","region":"override"}`,
@@ -342,7 +340,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "payload stored under a retired slot is mapped by the declared upgrade",
 			schema:   credentialSchema,
-			upgrade:  renaming.Upgrade,
+			upgrade:  renaming.Stored.Upgrade,
 			from:     retired.ID().String(),
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"accessToken":"t"}`,
@@ -351,7 +349,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "a required field present but empty is filled by the declared upgrade",
 			schema:   regionSchema,
-			upgrade:  regionFilling.Upgrade,
+			upgrade:  regionFilling.Stored.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"token":"t","region":""}`,
 			want:     `{"token":"t","region":"resolved"}`,
@@ -371,7 +369,7 @@ func TestConformStored(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := conformStored(t.Context(), types.InstallationRequest{}, tc.schema, tc.upgrade, nil, tc.from, json.RawMessage(tc.payload), tc.sentinel)
+			got, err := conformStored(t.Context(), types.InstallationRequest{}, types.InputRegistration{Schema: tc.schema, Upgrade: tc.upgrade}, tc.from, json.RawMessage(tc.payload), tc.sentinel)
 
 			if tc.wantErr != nil {
 				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)
@@ -397,9 +395,9 @@ func TestLegacyDocuments(t *testing.T) {
 	def := types.Definition{
 		UserInput: userInput.Registration(),
 		Operations: []types.OperationRegistration{
-			sectioned.Registration(definition, types.OperationRegistration{}),
-			flat.Registration(definition, types.OperationRegistration{}),
-			payload.Registration(definition, types.OperationRegistration{}),
+			sectioned.Registration(definition),
+			flat.Registration(definition),
+			payload.Registration(definition),
 		},
 	}
 
@@ -418,14 +416,27 @@ func TestLegacyDocuments(t *testing.T) {
 		})
 	})
 
-	t.Run("an installation with stored user input keeps its documents", func(t *testing.T) {
+	t.Run("stored documents are kept and only the documents not yet stored are seeded", func(t *testing.T) {
 		t.Parallel()
 
 		stored := types.IntegrationUserInput{Layout: userInput.Name(), Data: json.RawMessage(`{"region":"ca"}`)}
+		storedConfig := types.IntegrationOperationConfig{}.With(sectioned.Name(), json.RawMessage(`{"region":"mx"}`))
 
-		gotInput, gotConfig := legacyDocuments(&ent.Integration{UserInput: stored, Config: openapi.IntegrationConfig{ClientConfig: legacy}}, def)
+		gotInput, gotConfig := legacyDocuments(&ent.Integration{UserInput: stored, OperationConfig: storedConfig, Config: openapi.IntegrationConfig{ClientConfig: legacy}}, def)
 
 		assert.DeepEqual(t, gotInput, stored)
+		assert.DeepEqual(t, lo.MapValues(gotConfig.Operations, func(doc json.RawMessage, _ string) string { return string(doc) }), map[string]string{
+			sectioned.Name(): `{"region":"mx"}`,
+			flat.Name():      string(legacy),
+		})
+	})
+
+	t.Run("an installation carrying a definition version is never seeded", func(t *testing.T) {
+		t.Parallel()
+
+		gotInput, gotConfig := legacyDocuments(&ent.Integration{DefinitionVersion: "01J0000000000000000000000", Config: openapi.IntegrationConfig{ClientConfig: legacy}}, def)
+
+		assert.DeepEqual(t, gotInput, types.IntegrationUserInput{})
 		assert.Equal(t, len(gotConfig.Operations), 0)
 	})
 }
@@ -437,7 +448,7 @@ func TestRetiredHealth(t *testing.T) {
 	retired := types.NewOperationRef[retiredOperationConfigCfg]("old")
 	current := types.NewOperationRef[upgradeOperationConfigCfg]("current").Replacing(retired)
 
-	def := types.Definition{Operations: []types.OperationRegistration{current.Registration(definition, types.OperationRegistration{})}}
+	def := types.Definition{Operations: []types.OperationRegistration{current.Registration(definition)}}
 
 	assert.DeepEqual(t, retiredHealth(map[string]string{"old": "failing", "gone": "undeclared"}, def), map[string]string{"current": "failing"})
 	assert.Assert(t, retiredHealth(map[string]string{"gone": "undeclared"}, def) == nil)

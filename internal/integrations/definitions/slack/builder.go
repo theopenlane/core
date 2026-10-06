@@ -106,17 +106,14 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 				}),
 			},
 			Operations: append(AllSlackSystemMessages(),
-				MessageSendOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Send a Slack message via chat.postMessage",
-				}),
+				MessageSendOp.Description("Send a Slack message via chat.postMessage").Registration(DefinitionID),
 				types.OperationRefOf[DirectorySync]().
 					Ingests(slackClient, runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaDirectoryAccount.Name}).
 					Permissions(scopes...).
-					Registration(DefinitionID, types.OperationRegistration{
-						Description: "Collect workspace users as directory accounts",
-					}),
+					Description("Collect workspace users as directory accounts").
+					Registration(DefinitionID),
 			),
 			Mappings: []types.MappingRegistration{
 				{

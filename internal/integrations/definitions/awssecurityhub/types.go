@@ -25,7 +25,6 @@ var (
 	iamClient = types.ClientRefOf[*iam.Client]()
 )
 
-
 // FindingSync are configuration settings for the findings sync
 type FindingSync struct {
 	types.OperationSettings

@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/version"
 )
 
 // integrationSeedTopic is the gala topic the integration loop seed is submitted on
@@ -63,16 +64,14 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 		if _, err := gala.Register(galaInstance, gala.Definition[integrationSeedRequest]{
 			Topic: integrationSeedTopic,
 			Handle: func(handlerCtx gala.HandlerContext, _ integrationSeedRequest) error {
-				seedIntegrationLoops(handlerCtx.Context, rt)
-
-				return nil
+				return seedIntegrationLoops(handlerCtx.Context, rt)
 			},
 		}); err != nil {
 			log.Panic().Err(err).Msg("failed to register integration loop seeding listener")
 		}
 
 		if _, err := galaInstance.EmitWithHeaders(ctx, integrationSeedTopic.Name, integrationSeedRequest{}, gala.Headers{
-			UniqueKey:  gala.SystemVersioned.Key("startup.integrations.seed", rt.Registry().Fingerprint()),
+			UniqueKey:  gala.SystemVersioned.Key("startup.integrations.seed", version.Version),
 			UniqueOnce: true,
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to submit integration loop seed")
@@ -90,8 +89,15 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 	})
 }
 
-// seedIntegrationLoops ensures every reconcilable and scheduled operation has a live loop
-func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) {
+// integrationQueues are the integration job kinds paused during the startup sweep
+var integrationQueues = []gala.Namespace{gala.IntegrationReconcile, gala.IntegrationRun, gala.IntegrationWebhook, gala.IntegrationIngest}
+
+// seedIntegrationLoops upgrades installations and seeds loops with the integration queues paused
+func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) error {
+	if err := rt.Gala().PauseQueues(ctx, integrationQueues...); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to pause integration queues, upgrading installations with them running")
+	}
+
 	if err := rt.UpgradeInstallations(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade one or more installations to the current definition version")
 	}
@@ -103,4 +109,6 @@ func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) {
 	if err := rt.SeedScheduledOperations(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to seed one or more scheduled operation listeners")
 	}
+
+	return rt.Gala().ResumeQueues(ctx, integrationQueues...)
 }

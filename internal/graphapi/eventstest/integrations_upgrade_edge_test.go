@@ -57,7 +57,7 @@ func previousOAuthDefinition(t *testing.T, current integrationtypes.Definition, 
 				Active:      true,
 			},
 			CredentialRegistrations: []integrationtypes.CredentialRegistration{
-				{Ref: testint.OAuthCredential.ID(), StoredSchema: schema},
+				{Ref: testint.OAuthCredential.ID(), Stored: integrationtypes.InputRegistration{Schema: schema}},
 			},
 			HealthCheck: current.HealthCheck,
 			Connections: []integrationtypes.ConnectionRegistration{
@@ -113,7 +113,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 
 		registration, err := def.CredentialRegistration(testint.OAuthCredential.ID())
 		require.NoError(t, err)
-		require.NotEmpty(t, registration.StoredSchema)
+		require.NotEmpty(t, registration.Stored.Schema)
 		require.Empty(t, registration.Schema)
 	})
 

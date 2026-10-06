@@ -103,7 +103,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
 	if inlineExecution {
-		if err := operations.ValidateInput(requestCtx, types.InstallationRequest{Integration: integrationRef}, operation.ConfigSchema, nil, configDoc, types.ErrOperationConfigInvalid); err != nil {
+		if err := operations.ValidateInput(requestCtx, types.InstallationRequest{Integration: integrationRef}, operation.Input.Schema, nil, configDoc, types.ErrOperationConfigInvalid); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Msg("invalid operation config")
 
 			return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)

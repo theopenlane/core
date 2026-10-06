@@ -64,9 +64,8 @@ func Builder() registry.Builder {
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					SkipDefaultLookback().
 					Ingest(types.IngestContract{Schema: entityops.SchemaDirectoryAccount.Name}).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect Zitadel directory users as directory accounts",
-					}),
+					Description("Collect Zitadel directory users as directory accounts").
+					Registration(definitionID),
 			},
 			Mappings: zitadelMappings(),
 		}, nil

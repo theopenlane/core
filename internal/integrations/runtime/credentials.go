@@ -113,7 +113,7 @@ func (r *Runtime) ReconcileCredential(ctx context.Context, installation *ent.Int
 
 	wasErrored := installation.Status == enums.IntegrationStatusErrored
 
-	req, _, err := r.installationRequest(ctx, installation, def)
+	req, records, err := r.installationRequest(ctx, installation, def)
 	if err != nil {
 		return err
 	}
@@ -128,16 +128,15 @@ func (r *Runtime) ReconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	if err := operations.ValidateInput(ctx, req, registration.Schema, registration.Validate, credential.Data, ErrCredentialInvalid); err != nil {
+	if err := operations.ValidateInput(ctx, req, registration.Schema, registration.Stored.Validate, credential.Data, ErrCredentialInvalid); err != nil {
 		return err
 	}
 
-	bindings, err := r.keystore().LoadCredentials(ctx, installation, connection.CredentialRefs)
-	if err != nil {
-		return err
-	}
+	bindings := types.CredentialBindings(lo.FilterMap(connection.CredentialRefs, func(ref types.CredentialSlotID, _ int) (types.CredentialBinding, bool) {
+		stored, ok := records[ref]
 
-	bindings = bindings.With(credentialRef, credential)
+		return types.CredentialBinding{Ref: ref, Credential: stored}, ok
+	})).With(credentialRef, credential)
 
 	if def.HealthCheck != nil {
 		if err := r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings); err != nil {
@@ -406,7 +405,7 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 		installation.Status = enums.IntegrationStatusConnected
 	}
 
-	if err := r.reconcileInstallationWebhooks(ctx, installation, ""); err != nil {
+	if err := r.reconcileInstallationWebhooks(ctx, r.DB(), installation, ""); err != nil {
 		return err
 	}
 

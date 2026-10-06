@@ -230,7 +230,8 @@ func (e Operation[T]) Registration() types.OperationRegistration {
 		return nil, e.dispatch(ctx, req, client, input)
 	}).
 		CustomerSelectable(e.CustomerSelectable != nil && *e.CustomerSelectable).
-		Registration(DefinitionID, types.OperationRegistration{Description: e.Description})
+		Description(e.Description).
+		Registration(DefinitionID)
 }
 
 // RenderCatalogPreview renders a customer-selectable catalog entry to HTML for UI preview

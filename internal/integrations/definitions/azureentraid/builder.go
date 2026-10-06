@@ -61,10 +61,9 @@ func Builder(cfg Config) registry.Builder {
 					SkipDefaultLookback().
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Permissions("User.Read.All", "Group.Read.All", "GroupMember.Read.All", "Directory.Read.All").
-					Registration(definitionID, types.OperationRegistration{
-						Description: "Collect Azure Entra ID users, groups, and memberships as directory accounts",
-						HealthCheck: probeDirectory,
-					}),
+					HealthCheck(entraClient.HealthCheck(probeDirectory)).
+					Description("Collect Azure Entra ID users, groups, and memberships as directory accounts").
+					Registration(definitionID),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

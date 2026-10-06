@@ -27,9 +27,7 @@ func Builder() registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Synchronize directory state through SCIM",
-				}),
+				directorySyncOperation.Description("Synchronize directory state through SCIM").Registration(DefinitionID),
 			},
 			Mappings: []types.MappingRegistration{
 				{

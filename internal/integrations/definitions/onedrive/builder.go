@@ -78,17 +78,14 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				documentExportOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Download a OneDrive file and return its content",
-				}),
+				documentExportOperation.Description("Download a OneDrive file and return its content").Registration(definitionID),
 				types.OperationRefOf[FolderSync]().
 					Ingests(oneDriveClient, runFolderSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaInternalPolicy.Name}).
 					Schedule(gala.NewFullFetchSchedule()).
-					Registration(definitionID, types.OperationRegistration{
-						Description: "List document files in the configured OneDrive folder and emit policy ingest envelopes",
-					}),
+					Description("List document files in the configured OneDrive folder and emit policy ingest envelopes").
+					Registration(definitionID),
 			},
 			Mappings: []types.MappingRegistration{
 				{

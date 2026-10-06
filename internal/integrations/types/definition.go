@@ -97,6 +97,13 @@ type InputRegistration struct {
 	Validate ValidateFunc `json:"-"`
 }
 
+// Clone returns a copy of the input registration with its own schema bytes
+func (r InputRegistration) Clone() InputRegistration {
+	r.Schema = jsonx.CloneRawMessage(r.Schema)
+
+	return r
+}
+
 // CredentialRegistration declares how a definition accepts credentials
 type CredentialRegistration struct {
 	// Ref is the durable credential slot identifier
@@ -107,16 +114,12 @@ type CredentialRegistration struct {
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema used to collect credentials
 	Schema json.RawMessage `json:"schema,omitempty"`
-	// StoredSchema is the reflected schema of the persisted credential payload
-	StoredSchema json.RawMessage `json:"-"`
+	// Stored is the persisted credential payload's layout, keyed by the slot name, with its declared upgrade and validation
+	Stored InputRegistration `json:"-"`
 	// Recommended indicates the method that is recommend if there are multiple options
 	Recommended bool `json:"recommended,omitempty"`
 	// Replaces lists the retired slots whose stored payloads move onto this slot
 	Replaces []CredentialSlotID `json:"-"`
-	// Upgrade reshapes a payload from the slot it was persisted under into this slot's schema
-	Upgrade UpgradeFunc `json:"-"`
-	// Validate checks a schema-valid payload for semantic constraints, nil when none is declared
-	Validate ValidateFunc `json:"-"`
 }
 
 // ConnectionRegistration describes one connection mode for a definition
@@ -179,43 +182,36 @@ func (d Definition) Webhook(name string) (WebhookRegistration, bool) {
 	})
 }
 
-// ResolveCredential returns the registration for the slot, or the one whose slot replaces it; replaced reports the fallback
-func (d Definition) ResolveCredential(ref CredentialSlotID) (registration CredentialRegistration, replaced bool, ok bool) {
-	if registration, err := d.CredentialRegistration(ref); err == nil {
+// resolveReplaced returns the registration identified by key, or the one whose replaces lists key; replaced reports the fallback
+func resolveReplaced[T any, K comparable](registrations []T, key K, id func(T) K, replaces func(T) []K) (registration T, replaced bool, ok bool) {
+	if registration, ok := lo.Find(registrations, func(r T) bool { return id(r) == key }); ok {
 		return registration, false, true
 	}
 
-	registration, ok = lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
-		return lo.Contains(r.Replaces, ref)
-	})
+	registration, ok = lo.Find(registrations, func(r T) bool { return lo.Contains(replaces(r), key) })
 
 	return registration, ok, ok
+}
+
+// ResolveCredential returns the registration for the slot, or the one whose slot replaces it; replaced reports the fallback
+func (d Definition) ResolveCredential(ref CredentialSlotID) (registration CredentialRegistration, replaced bool, ok bool) {
+	return resolveReplaced(d.CredentialRegistrations, ref,
+		func(r CredentialRegistration) CredentialSlotID { return r.Ref },
+		func(r CredentialRegistration) []CredentialSlotID { return r.Replaces })
 }
 
 // ResolveOperation returns the registration for the name, or the one whose operation replaces it; replaced reports the fallback
 func (d Definition) ResolveOperation(name string) (registration OperationRegistration, replaced bool, ok bool) {
-	if registration, ok := d.Operation(name); ok {
-		return registration, false, true
-	}
-
-	registration, ok = lo.Find(d.Operations, func(r OperationRegistration) bool {
-		return lo.Contains(r.Replaces, name)
-	})
-
-	return registration, ok, ok
+	return resolveReplaced(d.Operations, name,
+		func(r OperationRegistration) string { return r.Name },
+		func(r OperationRegistration) []string { return r.Replaces })
 }
 
 // ResolveWebhook returns the registration for the name, or the one whose contract replaces it; replaced reports the fallback
 func (d Definition) ResolveWebhook(name string) (registration WebhookRegistration, replaced bool, ok bool) {
-	if registration, ok := d.Webhook(name); ok {
-		return registration, false, true
-	}
-
-	registration, ok = lo.Find(d.Webhooks, func(r WebhookRegistration) bool {
-		return lo.Contains(r.Replaces, name)
-	})
-
-	return registration, ok, ok
+	return resolveReplaced(d.Webhooks, name,
+		func(r WebhookRegistration) string { return r.Name },
+		func(r WebhookRegistration) []string { return r.Replaces })
 }
 
 // ConnectionRegistration returns the connection registration for the given credential slot

@@ -133,10 +133,6 @@ type OperationRegistration struct {
 	Topic gala.TopicName `json:"topic"`
 	// ClientRef identifies which registered client the operation uses
 	ClientRef ClientID `json:"-"`
-	// ConfigSchema is the JSON schema for operation configuration
-	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
-	// UISchema is optional UI layout hints for the input form; nil when absent
-	UISchema json.RawMessage `json:"uiSchema,omitempty"`
 	// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces
 	CustomerSelectable *bool `json:"customerSelectable,omitempty"`
 	// Internal marks the operation as reachable only through its own listener or saga machinery
@@ -157,8 +153,10 @@ type OperationRegistration struct {
 	IngestHandle IngestHandler `json:"-"`
 	// DisabledForAll marks the sync unavailable, hiding config params from the user
 	DisabledForAll bool `json:"disabledForAll"`
-	// Input describes the stored per-installation input document for the operation
-	Input *InputRegistration `json:"input,omitempty"`
+	// Input describes the operation's input document: the payload a caller supplies on each dispatch, and for a stored operation the per-installation document kept under its name
+	Input InputRegistration `json:"input"`
+	// Stored reports whether the operation keeps a per-installation input document under its name
+	Stored bool `json:"stored"`
 	// Schedule overrides the default adaptive schedule for reconcile or scheduled cycles
 	Schedule *gala.Schedule `json:"-"`
 	// SkipDefaultLookback disables the runtime's default lookback window on initial runs

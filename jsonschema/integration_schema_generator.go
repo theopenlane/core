@@ -67,7 +67,7 @@ func generateIntegrationSchemas(dir string) error {
 				return fmt.Errorf("decode %s: %w", target, err)
 			}
 
-			if err := registry.GateSurfaceChange(target, existing, next.Surface); err != nil {
+			if err := registry.GateSurfaceChange(committed.Surface, next.Surface); err != nil {
 				return err
 			}
 		}

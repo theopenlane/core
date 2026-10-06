@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"github.com/microsoftgraph/msgraph-sdk-go/users"
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
@@ -21,13 +22,8 @@ type DirectoryProbe struct {
 }
 
 // probeDirectory verifies Graph permissions can read the directory
-func probeDirectory(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-	c, err := entraClient.Cast(req.Client)
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = c.Users().Get(ctx, &users.UsersRequestBuilderGetRequestConfiguration{
+func probeDirectory(ctx context.Context, _ types.OperationRequest, c *msgraphsdk.GraphServiceClient) (json.RawMessage, error) {
+	_, err := c.Users().Get(ctx, &users.UsersRequestBuilderGetRequestConfiguration{
 		QueryParameters: &users.UsersRequestBuilderGetQueryParameters{Top: new(int32(1))},
 	})
 	if err != nil {
