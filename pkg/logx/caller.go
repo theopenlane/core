@@ -37,7 +37,7 @@ var PerHopFields = []string{
 // without a caller pass through unchanged
 func WithCallerIdentity(ctx context.Context) context.Context {
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return ctx
 	}
 

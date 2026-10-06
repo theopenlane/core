@@ -126,13 +126,13 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 		return "", nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
-	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, m.client, obj)
+	readCtx := auth.WithInternalReadContext(ctx)
+	objRefIDs, err := workflows.ObjectRefIDs(readCtx, m.client, obj)
 	if err != nil {
 		return "", fmt.Errorf("%w: %w", ErrFailedToQueryObjectRefs, err)
 	}
 
-	proposal, err := workflows.FindProposalForObjectRefs(allowCtx, m.client, objRefIDs, domainKey, []enums.WorkflowProposalState{enums.WorkflowProposalStateSubmitted},
+	proposal, err := workflows.FindProposalForObjectRefs(readCtx, m.client, objRefIDs, domainKey, []enums.WorkflowProposalState{enums.WorkflowProposalStateSubmitted},
 		[]enums.WorkflowProposalState{enums.WorkflowProposalStateSubmitted, enums.WorkflowProposalStateDraft})
 	if err != nil {
 		return "", err
@@ -149,14 +149,12 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 func (m *ProposalManager) Apply(scope *observability.Scope, proposalID string, obj *workflows.Object) error {
 	ctx := scope.Context()
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return auth.ErrNoAuthUser
 	}
 
-	orgID := caller.OrganizationID
-
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := m.client.WorkflowProposal.Query().
 		Where(
 			workflowproposal.IDEQ(proposalID),

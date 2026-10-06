@@ -34,7 +34,7 @@ func TestDirectorySyncResolvesAccountsAcrossReinstall(t *testing.T) {
 	assert.NilError(t, reg.Register(def))
 
 	orgUser := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(orgUser.UserCtx, suite.Client.DB)
 
 	oldIntegration, err := suite.Client.DB.Integration.Create().
 		SetName("GitHub Old Install").

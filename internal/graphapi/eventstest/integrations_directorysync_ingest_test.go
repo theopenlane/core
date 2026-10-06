@@ -129,7 +129,7 @@ func directoryGroupByExternalID(ctx context.Context, t *testing.T, externalID st
 // TestDirectorySyncIngestProfileHashing now that change detection is a direct field comparison
 // (pruneIngestFields) rather than a stored profile_hash column, which no longer exists
 func TestDirectorySyncIngestUnchangedFieldGate(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	// the counting listener creates mutation-topic interest, so the persist paths emit events for
 	// it exactly as they would for identity resolution in production; the counters prove which
@@ -272,7 +272,7 @@ func TestDirectorySyncIngestUnchangedFieldGate(t *testing.T) {
 // applyIngestClaim returns not-owned while the manager exists, so no per-row update or mutation
 // event fires and integration_id and managed_by stay on the original installation
 func TestDirectoryAccountReinstallRelinkNoUpdate(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	var accountUpdates atomic.Int64
 
@@ -343,7 +343,7 @@ func TestDirectoryAccountReinstallRelinkNoUpdate(t *testing.T) {
 
 // TestDirectoryAccountProfileChurnRidesAlongMaterialChange verifies a change confined to the profile bag is not written, counted, or emitted on its own, and lands once a material column changes in the same run
 func TestDirectoryAccountProfileChurnRidesAlongMaterialChange(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	var accountUpdates atomic.Int64
 
@@ -418,7 +418,7 @@ func TestDirectoryAccountProfileChurnRidesAlongMaterialChange(t *testing.T) {
 // staleness check vetoes snapshot removal for that run even though the payload appears to omit a
 // membership
 func TestDirectoryMembershipStaleRunUnchangedNoop(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "stalerun"
 

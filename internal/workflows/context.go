@@ -3,11 +3,9 @@ package workflows
 import (
 	"context"
 
-	"entgo.io/ent/privacy"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
@@ -52,21 +50,15 @@ func AllowWorkflowEventEmission(ctx context.Context) bool {
 	return gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{}).AllowEventEmission
 }
 
-// AllowContext sets the ent privacy decision to allow for internal workflow operations.
-// It also sets the internal request marker so FGA checks are bypassed.
-func AllowContext(ctx context.Context) context.Context {
-	return privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
-}
-
 // AllowContextForOrg returns an allow context scoped to the supplied organization.
 func AllowContextForOrg(ctx context.Context, orgID string) context.Context {
-	allowCtx := AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	if orgID == "" {
 		return allowCtx
 	}
 
 	caller, ok := auth.CallerFromContext(allowCtx)
-	if !ok || caller == nil {
+	if !ok {
 		return allowCtx
 	}
 
@@ -79,7 +71,7 @@ func AllowContextForOrg(ctx context.Context, orgID string) context.Context {
 
 // AllowBypassContext sets workflow bypass and allow decision for internal workflow operations.
 func AllowBypassContext(ctx context.Context) context.Context {
-	return WithContext(AllowContext(ctx))
+	return WithContext(auth.WithInternalOperationContext(ctx))
 }
 
 // AllowBypassContextWithEvents sets workflow bypass, allow decision, and preserves workflow event emission.
@@ -99,13 +91,13 @@ func AllowBypassContextWithOrg(ctx context.Context) (context.Context, string, er
 
 // allowContextWithOrg returns an allow context plus the organization ID with optional workflow bypass
 func allowContextWithOrg(ctx context.Context, bypass bool) (context.Context, string, error) {
-	allowCtx := AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	if bypass {
 		allowCtx = WithContext(allowCtx)
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return allowCtx, "", auth.ErrNoAuthUser
 	}
 

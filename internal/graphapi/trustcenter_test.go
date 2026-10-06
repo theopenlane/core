@@ -327,7 +327,7 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 
 			// Verify slug is the lowercased, alphanumeric version of the org name
 			// Get the organization to check its name using a context that allows database access
-			dbCtx := th.SetContext(tc.ctx, suite.Client.DB)
+			dbCtx := th.SetInternalContext(tc.ctx, suite.Client.DB)
 			org, err := suite.Client.DB.Organization.Get(dbCtx, *resp.CreateTrustCenter.TrustCenter.OwnerID)
 			assert.NilError(t, err)
 
@@ -876,7 +876,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	}
 
 	// create a trust center control and verify frontend query still works with controls present
-	dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 
 	tcControl, err := suite.Client.DB.Control.Create().
 		SetRefCode("OTS-TC-" + ulids.New().String()).
@@ -893,7 +893,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	assert.NilError(t, err)
 
 	// create another trust center control for another trust center to ensure only controls for the queried trust center are returned in the frontend query
-	dbCtx2 := th.SetContext(tcOrg2.Owner.UserCtx, suite.Client.DB)
+	dbCtx2 := th.SetInternalContext(tcOrg2.Owner.UserCtx, suite.Client.DB)
 	tcControlForAnotherOrg, err := suite.Client.DB.Control.Create().
 		SetRefCode("OTS-TC-" + ulids.New().String()).
 		SetTitle("Trust Center Control").
@@ -1378,7 +1378,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(tcOrgWithDomain.Owner.UserCtx, t)
 
 	// Manually set pirsch_domain_id to simulate what would happen after the CreatePirschDomain job completes
-	ctx := th.SetContext(tcOrgWithDomain.Owner.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(tcOrgWithDomain.Owner.UserCtx, suite.Client.DB)
 	fakePirschDomainID := "fake-pirsch-domain-id-for-update-test"
 	_, err := suite.Client.DB.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
 	assert.NilError(t, err)
@@ -1456,7 +1456,7 @@ func TestTrustCenterUpdateHookWithCustomDomainRemoval(t *testing.T) {
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithCustomDomain())
 	trustCenter := tcOrg.TrustCenter
 
-	ctx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 	fakePirschDomainID := "fake-pirsch-domain-id-clear-test"
 	_, err := suite.Client.DB.TrustCenter.UpdateOneID(trustCenter.ID).
 		SetPirschDomainID(fakePirschDomainID).
@@ -1495,7 +1495,7 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 
 	// Manually set pirsch_domain_id to simulate what would happen after the CreatePirschDomain job completes
 	// This is necessary because the job runs asynchronously and we need the field set for the delete hook to trigger
-	ctx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 	fakePirschDomainID := "fake-pirsch-domain-id-123"
 	_, err := suite.Client.DB.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
 	assert.NilError(t, err)
@@ -1691,7 +1691,7 @@ func TestMutationDeleteTrustCenterWithPreviewDomain(t *testing.T) {
 	// Create a preview domain (custom domain)
 	previewDomain := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(tcOrg.Owner.UserCtx, t)
 
-	dbCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 	trustCenter, err := suite.Client.DB.TrustCenter.UpdateOneID(trustCenter.ID).
 		SetPreviewDomainID(previewDomain.ID).
 		Save(dbCtx)

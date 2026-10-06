@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -43,8 +42,8 @@ func FilterListQuery() ent.Interceptor {
 // e.g. memberships and history tables, and when there are a limited number of objects to filter
 // the FilterQueryResults function should be used in most cases due to performance issues of ListObjectsRequest
 func AddIDPredicate(ctx context.Context, q Query) error {
-	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+	// bypass checks on internal read requests
+	if auth.IsInternalReadRequest(ctx) {
 		return nil
 	}
 
@@ -108,7 +107,7 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 // has access to within the FGA system
 func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax.Relation) ([]string, error) {
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return []string{}, nil
 	}
 
@@ -233,7 +232,8 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	case ent.OpQueryCount:
 		// nothing to filter if we're just counting
 		return v, nil
-	case ent.OpQueryIDs, ent.OpQueryFirstID:
+	case ent.OpQueryIDs, ent.OpQueryFirstID, ent.OpQueryOnlyID:
+		// note: OpQueryOnlyID uses IDs() internally, and returns a slice, not a single id
 		ids, ok := v.([]string)
 		if !ok {
 			logx.FromContext(ctx).Error().Str("query_type", q.Type()).Str("operation", string(ctxQuery.Op)).Msgf("failed to cast query results to expected slice %T", v)
@@ -242,18 +242,6 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 		}
 
 		return filterIDList(ctx, ids, rule.GetFGAObjectType(q))
-	case ent.OpQueryOnlyID:
-		allow, err := singleIDCheck(ctx, v, rule.GetFGAObjectType(q))
-		if err != nil {
-			return nil, err
-		}
-
-		if !allow {
-			return nil, nil
-		}
-
-		return v, nil
-
 	default:
 		switch t := v.(type) {
 		case []*V:
@@ -270,8 +258,8 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 }
 
 func skipFilter(ctx context.Context, q intercept.Query, forceFilter SkipperFunc, customSkipperFunc ...SkipperFunc) bool {
-	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+	// bypass checks on internal read requests
+	if auth.IsInternalReadRequest(ctx) {
 		return true
 	}
 
@@ -281,8 +269,7 @@ func skipFilter(ctx context.Context, q intercept.Query, forceFilter SkipperFunc,
 	}
 
 	// skip object owned filtering for the support user
-	caller, ok := auth.CallerFromContext(ctx)
-	if ok && caller != nil && caller.Has(auth.CapOrgSupport) {
+	if auth.HasInContextCaller(ctx, auth.CapOrgSupport) {
 		return true
 	}
 
@@ -314,27 +301,6 @@ func filterIDList(ctx context.Context, ids []string, objectType string) ([]strin
 	}
 
 	return allowedIDs, nil
-}
-
-// singleIDCheck checks if a single object id is allowed and returns a boolean
-func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, error) {
-	id, ok := v.(string)
-	if !ok {
-		logx.FromContext(ctx).Error().Msgf("failed to cast query results to expected single ID %T", v)
-
-		return false, ErrRetrievingObjects
-	}
-
-	allowedIDs, err := filterIDList(ctx, []string{id}, objectType)
-	if err != nil {
-		return false, err
-	}
-
-	if len(allowedIDs) == 0 {
-		return false, nil
-	}
-
-	return true, nil
 }
 
 // filterListObjects filters a list of objects to only include the objects that the user has access to
@@ -455,7 +421,7 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 	)
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return []string{}, nil
 	}
 

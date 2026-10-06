@@ -37,17 +37,17 @@ func TestSubcontrolsForControls(t *testing.T) {
 
 	grouped := map[string][]standardSubcontrol{
 		"control-1": []standardSubcontrol{
-			{standardControl: standardControl{ID: "subcontrol-1"}, ControlID: "control-1"},
+			{ID: "subcontrol-1", ControlID: "control-1"},
 		},
 		"control-2": []standardSubcontrol{
-			{standardControl: standardControl{ID: "subcontrol-2"}, ControlID: "control-2"},
-			{standardControl: standardControl{ID: "subcontrol-3"}, ControlID: "control-2"},
+			{ID: "subcontrol-2", ControlID: "control-2"},
+			{ID: "subcontrol-3", ControlID: "control-2"},
 		},
 	}
 
 	assert.Equal(t, []standardSubcontrol{
-		{standardControl: standardControl{ID: "subcontrol-1"}, ControlID: "control-1"},
-		{standardControl: standardControl{ID: "subcontrol-2"}, ControlID: "control-2"},
-		{standardControl: standardControl{ID: "subcontrol-3"}, ControlID: "control-2"},
+		{ID: "subcontrol-1", ControlID: "control-1"},
+		{ID: "subcontrol-2", ControlID: "control-2"},
+		{ID: "subcontrol-3", ControlID: "control-2"},
 	}, fetchSubcontrolsOwnedByControl(controls, grouped))
 }

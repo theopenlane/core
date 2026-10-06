@@ -210,8 +210,6 @@ var (
 	errMissingTemplate = errors.New("missing template")
 	// errDocInfoDoesNotMatchCaller is returned when the document data submitted for an NDA does not match the authenticated user's information, such as email
 	errDocInfoDoesNotMatchCaller = errors.New("NDA submission does not match authenticated user")
-	// errNDATemplateDoesNotMatchTrustCenter is returned when an NDA response references a template for a different trust center
-	errNDATemplateDoesNotMatchTrustCenter = errors.New("NDA template does not match the authenticated trust center")
 	// errNDAPDFFileDoesNotMatchTemplate is returned when an NDA response links a PDF file other than the template file
 	errNDAPDFFileDoesNotMatchTemplate = errors.New("NDA PDF file does not match the template")
 	// errNDAPDFHashDoesNotMatchTemplate is returned when an NDA response hash does not match the template file hash

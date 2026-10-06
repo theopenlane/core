@@ -6,7 +6,6 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 )
@@ -19,13 +18,13 @@ func (h *Handler) ACMESolverHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow) // bypass privacy policy
-	allowCtx = auth.WithCaller(allowCtx, auth.NewAcmeSolverCaller(""))
+	// unauthenticated lookup by challenge path before the owning org is known, so it only needs a cross-org internal read
+	readCtx := auth.WithInternalReadCrossOrgContext(ctx.Request().Context())
 
 	res, err := h.DBClient.DNSVerification.Query().Where(
 		dnsverification.AcmeChallengePathEQ(in.Path),
 		dnsverification.DeletedAtIsNil(),
-	).First(allowCtx)
+	).First(readCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.NotFound(ctx, err)

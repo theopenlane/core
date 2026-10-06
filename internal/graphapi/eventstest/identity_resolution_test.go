@@ -18,7 +18,7 @@ import (
 )
 
 func TestIdentityResolution(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	irSetup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.IdentityResolutionListeners())
 	assert.NilError(t, err)

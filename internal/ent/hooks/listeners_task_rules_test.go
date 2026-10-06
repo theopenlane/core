@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
@@ -29,7 +28,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
 	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
 	userCtx = generated.NewContext(userCtx, suite.client)
 
-	ctx := privacy.DecisionContext(userCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(userCtx)
 	ctx = generated.NewContext(ctx, suite.client)
 
 	onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
@@ -57,7 +56,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
 }
 
 // TestTaskRuleListenersNotificationTaskOwnerAttribution guards against a suggested task
-// created off a system-context (CapInternalOperation|CapBypassFGA) mutation ending up
+// created off a system-context (CapInternalOperation) mutation ending up
 // ownerless: ObjectOwnedMixin's create hook assumes such callers set owner_id themselves,
 // so createSuggestedTask must set it explicitly rather than relying on auto-derivation
 func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttribution() {
@@ -68,7 +67,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttributio
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	userCtx = privacy.DecisionContext(userCtx, privacy.Allow)
+	userCtx = auth.WithInternalOperationContext(userCtx)
 
 	orgBEntity, err := suite.client.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name: "Org B " + gofakeit.LetterN(8),
@@ -78,9 +77,9 @@ func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttributio
 	orgB := orgBEntity.ID
 
 	// mimic domainScanSystemContext exactly: explicit caller.OrganizationID = orgA, bypassing FGA
-	scanSystemCtx := auth.WithCaller(privacy.DecisionContext(context.Background(), privacy.Allow), &auth.Caller{
+	scanSystemCtx := auth.WithCaller(context.Background(), &auth.Caller{
 		OrganizationID: orgA,
-		Capabilities:   auth.CapBypassFGA | auth.CapInternalOperation,
+		Capabilities:   auth.CapInternalOperation,
 	})
 
 	_, err = suite.client.Notification.Create().
@@ -112,7 +111,7 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 	t := suite.T()
 	user := suite.seedUser()
 	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	admin := suite.seedSystemAdmin()
 	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), suite.client)

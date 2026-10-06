@@ -20,7 +20,7 @@ import (
 // distinct source_instance_id tenants never overwrite each other's Finding rows, even though the
 // catalog upsert's lookup key (owner + external id) alone would otherwise match the same row
 func TestFindingSameDefinitionTwoTenantsIsolated(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const tenant1 = "tenant-findtwotenant-1"
 	const tenant2 = "tenant-findtwotenant-2"

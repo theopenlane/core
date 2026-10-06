@@ -12,7 +12,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
@@ -39,14 +38,14 @@ func waitForInstallationErrored(t *testing.T, ctx context.Context, id string) {
 // runtime stops rescheduling after the error budget and marks the installation unhealthy
 func TestReconcileLoopExhaustsToUnhealthy(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
-	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeExhausting)
+	installation, fragment := newHarnessInstallation(t, internalCtx, testint.ModeExhausting)
 
-	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, installation))
+	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, installation))
 
-	waitForInstallationErrored(t, allowCtx, installation.ID)
+	waitForInstallationErrored(t, internalCtx, installation.ID)
 
 	waitForEvents()
 
@@ -58,18 +57,18 @@ func TestReconcileLoopExhaustsToUnhealthy(t *testing.T) {
 // is never seeded and the installation is marked unhealthy at seed time
 func TestReconcileLoopUnresolvableClientMarksUnhealthy(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
-	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeUnresolvable)
+	installation, fragment := newHarnessInstallation(t, internalCtx, testint.ModeUnresolvable)
 
-	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, installation))
+	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, installation))
 
 	waitForEvents()
 
 	require.Equal(t, 0, activeReconcileJobs(t, fragment))
 
-	reloaded := reloadIntegration(t, allowCtx, installation.ID)
+	reloaded := reloadIntegration(t, internalCtx, installation.ID)
 	require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
 	require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 }

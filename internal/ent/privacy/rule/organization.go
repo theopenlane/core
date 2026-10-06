@@ -30,7 +30,7 @@ type ownerMutation interface {
 func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string) error {
 	logx.FromContext(ctx).Debug().Str("relation", relation).Msg("checking access for organization")
 	// skip if permission is already set to allow or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || IsInternalRequest(ctx) {
+	if auth.IsInternalRequest(ctx) {
 		return privacy.Allow
 	}
 
@@ -43,14 +43,14 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 		}
 	}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if ok && caller != nil && caller.OrganizationID != "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err == nil {
 		if relation == fgax.CanView && !auth.IsAPITokenAuthentication(ctx) {
 			// if the relation is view, we can skip the check
 			return privacy.Allow
 		}
 
-		return checkOrgAccess(ctx, relation, caller.OrganizationID)
+		return checkOrgAccess(ctx, relation, orgID)
 	}
 
 	// else we need to get the object id from the mutation and get the owner id, this should only happen on deletes when using personal access tokens
@@ -71,15 +71,15 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 // in the organization query based on the relation provided
 func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *generated.OrganizationQuery) error {
 	// skip if it's an internal request
-	if IsInternalRequest(ctx) {
+	if auth.IsInternalReadRequest(ctx) {
 		return privacy.Allow
 	}
 
-	// run the query with allow context to get the list of organizations
+	// run the query as an internal read to get the list of organizations
 	// the user is trying to access
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
-	requestedOrgs, err := query.Clone().Select("id").All(allowCtx)
+	requestedOrgs, err := query.Clone().Select("id").All(internalCtx)
 	if err != nil {
 		return err
 	}
@@ -103,12 +103,12 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 // and logs additional context about the mutation if provided
 func checkOrgAccess(ctx context.Context, relation, organizationID string) error {
 	// skip if permission is already set to allow or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || IsInternalRequest(ctx) {
+	if auth.IsInternalRequest(ctx) {
 		return nil
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return auth.ErrNoAuthUser
 	}
 
@@ -116,8 +116,10 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 		return privacy.Allow
 	}
 
+	logx.WithFields(ctx, map[string]any{"relation": relation, "subject_id": caller.SubjectID, "email": caller.SubjectEmail, "auth_type": caller.AuthenticationType.String()})
+
 	if slices.Contains(caller.OrgIDs(), organizationID) && relation == fgax.CanView {
-		logx.FromContext(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on user's orgs")
+		logx.FromContext(ctx).Debug().Msg("access allowed for organization based on user's orgs")
 
 		return privacy.Allow
 	}
@@ -125,7 +127,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	// check the cache first
 	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 		if hasRole, err := cache.HasRole(ctx, caller.SubjectID, organizationID, relation); err == nil && hasRole {
-			logx.FromContext(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
+			logx.FromContext(ctx).Debug().Msg("access allowed for organization based on cache")
 
 			return privacy.Allow
 		}
@@ -144,7 +146,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	if access {
-		logx.FromContext(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on fga")
+		logx.FromContext(ctx).Debug().Msg("access allowed for organization based on fga")
 
 		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 			if err := cache.SetRole(ctx, caller.SubjectID, organizationID, relation); err != nil {
@@ -159,9 +161,9 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	// we check owner relation to skip group level checks, but this ends up being a deny for non-owners
 	// and creates noise in the logs; we want to to log at debug level when the check is owners only and info otherwise
 	if relation == fgax.OwnerRelation || relation == fgax.FullAccessRelation {
-		logx.FromContext(ctx).Debug().Str("relation", relation).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", organizationID).Str("auth_type", string(caller.AuthenticationType)).Msg("request denied by access for user in organization")
+		logx.FromContext(ctx).Debug().Msg("request denied by access for user in organization")
 	} else {
-		logx.FromContext(ctx).Info().Str("relation", relation).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", organizationID).Str("auth_type", string(caller.AuthenticationType)).Msg("request denied by ownership access for user in organization")
+		logx.FromContext(ctx).Info().Msg("request denied by ownership access for user in organization")
 	}
 
 	return generated.ErrPermissionDenied
@@ -196,14 +198,16 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
+
+		logx.WithFields(ctx, map[string]any{"relation": relation, "entity_type": m.Type(), "operation": m.Op().String(), "auth_type": caller.AuthenticationType.String()})
 
 		// check the cache first
 		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 			if hasRole, err := cache.HasRole(ctx, caller.SubjectID, caller.OrganizationID, relation); err == nil && hasRole {
-				logx.FromContext(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
+				logx.FromContext(ctx).Debug().Msg("access allowed for organization based on cache")
 
 				return privacy.Allow
 			}
@@ -229,7 +233,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 				}
 
 				if !access {
-					logx.FromContext(ctx).Error().Str("relation", relation).Str("entity_type", m.Type()).Str("operation", m.Op().String()).Str("organization_id", parentOrgID).Str("auth_type", string(caller.AuthenticationType))
+					logx.FromContext(ctx).Error().Msg("access not allowed")
 
 					return generated.ErrPermissionDenied
 				}
@@ -248,7 +252,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 			return privacy.Denyf("missing organization ID information in context")
 		}
 
-		logx.FromContext(ctx).Debug().Str("relation", relation).Str("organization_id", oID).Msg("checking relationship tuples")
+		logx.FromContext(ctx).Debug().Msg("checking relationship tuples")
 
 		// check access to the organization
 		ac.ObjectID = oID
@@ -259,7 +263,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		if access {
-			logx.FromContext(ctx).Debug().Str("relation", relation).Str("organization_id", oID).Msg("access allowed")
+			logx.FromContext(ctx).Debug().Msg("access allowed")
 
 			if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 				if err := cache.SetRole(ctx, caller.SubjectID, oID, relation); err != nil {
@@ -271,7 +275,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		// deny if it was a mutation is not allowed
-		logx.FromContext(ctx).Info().Str("relation", relation).Str("entity_type", m.Type()).Str("operation", m.Op().String()).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", oID).Str("auth_type", string(caller.AuthenticationType))
+		logx.FromContext(ctx).Info().Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Msg("access now allowed")
 
 		return generated.ErrPermissionDenied
 	})

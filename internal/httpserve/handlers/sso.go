@@ -21,7 +21,6 @@ import (
 	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -91,11 +90,10 @@ func (h *Handler) SSOInitiateHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
-
+	// public endpoint with no caller, the lookup is pinned to the requested slug
 	org, err := h.DBClient.Organization.Query().
 		Where(organization.SlugName(in.SlugName)).
-		Only(allowCtx)
+		Only(auth.WithInternalReadContext(ctx.Request().Context()))
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.NotFound(ctx, ErrNotFound)
@@ -247,7 +245,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		}
 
 		ssoCaller, ok := auth.CallerFromContext(userCtx)
-		if !ok || ssoCaller == nil {
+		if !ok {
 			logx.FromContext(reqCtx).Error().Msg("missing caller context for SSO token authorization")
 			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
@@ -257,7 +255,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 
 		userCtx = auth.WithCaller(userCtx, ssoCaller)
 
-		aErr := h.authorizeTokenSSO(privacy.DecisionContext(userCtx, privacy.Allow), tokenType.Value, tokenID.Value, orgCookie.Value)
+		aErr := h.authorizeTokenSSO(auth.WithInternalOperationContext(userCtx), tokenType.Value, tokenID.Value, orgCookie.Value)
 		if aErr != nil {
 			logx.FromContext(reqCtx).Error().Err(aErr).Msg("unable to authorize token for SSO")
 
@@ -366,9 +364,9 @@ func (h *Handler) setIDPAuthTested(ctx context.Context, orgID string) error {
 // to create the relying party instance, passing in the issuer URL, client credentials, the callback URL for the OIDC flow,
 // and a set of standard OIDC scopes (openid, profile, email).
 func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
-	// Fetch the organization's OIDC settings from the database under an allow context; these public auth
+	// Fetch the organization's OIDC settings from the database as an internal read; these public auth
 	// endpoints serve users who are not yet members, and the client secret is only used server-side here
-	setting, err := h.getOrganizationSettingByOrgID(privacy.DecisionContext(ctx, privacy.Allow), orgID)
+	setting, err := h.getOrganizationSettingByOrgID(auth.WithInternalReadContext(ctx), orgID)
 	if err != nil {
 		return nil, err
 	}
@@ -408,21 +406,21 @@ func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 // orgEnforcementsForUser checks the user's default org SSO and TFA requirements
 // Returns the org settings status which includes both SSO and TFA enforcement
 func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusResponse {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
-	user, err := h.getUserByEmail(allowCtx, email)
+	user, err := h.getUserByEmail(ctx, email)
 	if err != nil {
 		return nil
 	}
 
-	orgID, err := h.getUserDefaultOrgID(allowCtx, user.ID)
+	orgID, err := h.getUserDefaultOrgID(internalCtx, user.ID)
 	if err != nil {
 		return nil
 	}
 
 	// fetchSSOStatus applies the user's owner/per-user/per-domain exemption when a userID is provided,
 	// so status.Enforced already reflects whether this user must be redirected through SSO
-	status, err := h.fetchSSOStatus(allowCtx, orgID, user.ID)
+	status, err := h.fetchSSOStatus(internalCtx, orgID, user.ID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to resolve sso enforcement for user")
 		return nil

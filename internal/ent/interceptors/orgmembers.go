@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -21,12 +20,7 @@ import (
 // TraverseOrgMembers is middleware to change the Org Members query
 func TraverseOrgMembers() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		if auth.IsSystemAdminFromContext(ctx) {
-			return nil
-		}
-
-		// bypass filter if the request is internal and already set to allowed
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
+		if auth.HasCrossOrgCapabilities(ctx) {
 			return nil
 		}
 
@@ -37,13 +31,11 @@ func TraverseOrgMembers() ent.Interceptor {
 			return nil
 		}
 
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+		if err != nil {
 			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing org members")
 			return auth.ErrNoAuthUser
 		}
-
-		orgIDs := caller.OrgIDs()
 
 		// get all parent orgs to ensure we get all OrgMembers in the org tree
 		allOrgsIDs, err := getAllParentOrgIDs(ctx, orgIDs)
@@ -101,20 +93,20 @@ func InterceptorOrgMember() ent.Interceptor {
 }
 
 func getFunctionalRoles(ctx context.Context, userID string) ([]string, error) {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return []string{}, nil
 	}
 
-	return GetFunctionalRolesForSubject(ctx, auth.UserSubjectType, userID, caller.OrganizationID)
+	return GetFunctionalRolesForSubject(ctx, auth.UserSubjectType, userID, orgID)
 }
 
 // GetFunctionalRolesForSubject returns the display names of the functional/organization roles
 // assigned to the given subject on the organization. The subject is a user or a group tupleset
 // (e.g. subjectType "group" with subjectID "<groupID>#member"), matching how the roles were assigned.
 func GetFunctionalRolesForSubject(ctx context.Context, subjectType, subjectID, orgID string) ([]string, error) {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	_, ok := auth.CallerFromContext(ctx)
+	if !ok {
 		return []string{}, nil
 	}
 
@@ -184,10 +176,8 @@ func dedupeOrgMembers(ctx context.Context, members []*generated.OrgMembership) (
 
 // orgMembersSkipInterceptor includes conditions to skip the org members interceptor
 func orgMembersSkipInterceptor(ctx context.Context) bool {
-	// bypass filter if the request is internal and already set to allowed
-	// this only happens from internal requests
-	// and we don't need to dedupe the org members
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	// internal requests don't need to dedupe the org members
+	if auth.IsInternalRequest(ctx) {
 		return true
 	}
 

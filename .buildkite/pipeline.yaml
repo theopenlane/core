@@ -222,6 +222,7 @@ steps:
         if_changed:
           - "internal/graphapi/**.go"
           - .golangci.yaml
+          - .custom-gcl.yml
           - go.{mod,sum}
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -246,6 +247,7 @@ steps:
         if_changed:
           - "internal/httpserve/handlers/**.go"
           - .golangci.yaml
+          - .custom-gcl.yml
           - go.{mod,sum}
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -271,6 +273,7 @@ steps:
           include:
             - "**.go"
             - .golangci.yaml
+            - .custom-gcl.yml
             - go.{mod,sum}
           exclude:
             - internal/graphapi/**

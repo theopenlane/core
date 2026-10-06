@@ -28,14 +28,14 @@ func (mixin UserOwnedMutationPolicyMixin) Policy() ent.Policy {
 		Mutation: privacy.MutationPolicy{
 			privacy.OnMutationOperation(
 				utils.NewMutationPolicyWithoutNil(privacy.MutationPolicy{
-					rule.AllowMutationAfterApplyingOwnerFilter(),
+					rule.AllowMutationAfterApplyingUserOwnerFilter(),
 					privacy.AlwaysDenyRule(),
 				}),
 				ent.OpCreate,
 			),
 			privacy.OnMutationOperation(
 				utils.NewMutationPolicyWithoutNil(privacy.MutationPolicy{
-					rule.AllowMutationAfterApplyingOwnerFilter(),
+					rule.AllowMutationAfterApplyingUserOwnerFilter(),
 					privacy.AlwaysDenyRule(),
 				}),
 				ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete,

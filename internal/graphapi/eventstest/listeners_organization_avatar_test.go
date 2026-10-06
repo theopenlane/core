@@ -22,7 +22,6 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -65,7 +64,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 	defer setup.Teardown()
 
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	t.Run("create without domains keeps default avatar", func(t *testing.T) {
 		org := (&th.OrganizationBuilder{Client: suite.Client}).MustNew(user.UserCtx, t)
@@ -76,7 +75,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 		reloaded, err := suite.Client.DB.Organization.Query().
 			Where(organization.IDEQ(org.ID)).
 			WithSetting().
-			Only(allowCtx)
+			Only(internalCtx)
 		assert.NilError(t, err)
 		assert.Assert(t, reloaded.Edges.Setting != nil)
 		assert.Check(t, is.Len(reloaded.Edges.Setting.Domains, 0))
@@ -103,7 +102,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 		reloaded, err := suite.Client.DB.Organization.Query().
 			Where(organization.IDEQ(created.ID)).
 			WithSetting().
-			Only(allowCtx)
+			Only(internalCtx)
 		assert.NilError(t, err)
 		assert.Assert(t, reloaded.Edges.Setting != nil)
 		assert.Check(t, is.DeepEqual([]string{domain}, reloaded.Edges.Setting.Domains))
@@ -130,7 +129,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 		reloaded, err := suite.Client.DB.Organization.Query().
 			Where(organization.IDEQ(created.ID)).
 			WithSetting().
-			Only(allowCtx)
+			Only(internalCtx)
 		assert.NilError(t, err)
 		assert.Assert(t, reloaded.AvatarRemoteURL != nil)
 		assert.Check(t, is.Equal(*created.AvatarRemoteURL, *reloaded.AvatarRemoteURL))

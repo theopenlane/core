@@ -1,0 +1,6 @@
+version: v2.13.2
+name: custom-gcl
+destination: ./bin
+plugins:
+  - module: github.com/theopenlane/core/tools/linters/privacyallow
+    path: ./tools/linters/privacyallow

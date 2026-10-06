@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 // emitActionStarted emits action started event.
@@ -186,7 +187,7 @@ func (l *WorkflowListeners) recordEmitFailure(scope *observability.Scope, instan
 
 // persistWorkflowEvent stores a workflow event payload for an instance.
 func persistWorkflowEvent(ctx context.Context, client *generated.Client, instance *generated.WorkflowInstance, eventType enums.WorkflowEventType, actionKey string, details any) error {
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	payload := models.WorkflowEventPayload{
 		EventType: eventType,

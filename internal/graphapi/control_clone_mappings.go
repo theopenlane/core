@@ -7,12 +7,12 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 )
@@ -56,7 +56,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 
 	client := withTransactionalMutation(ctx)
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	readCtx := auth.WithInternalReadContext(ctx)
 
 	controlIDsOnlyPredicate := func(q *generated.ControlQuery) {
 		q.Select(control.FieldID)
@@ -80,7 +80,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 		WithToControls(controlIDsOnlyPredicate).
 		WithFromSubcontrols(subcontrolReferencesPredicate).
 		WithToSubcontrols(subcontrolReferencesPredicate).
-		All(allowCtx)
+		All(readCtx)
 	if err != nil {
 		return err
 	}
@@ -134,7 +134,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 		Select(control.FieldID, control.FieldRefCode, control.FieldStandardID).
 		WithStandard(func(q *generated.StandardQuery) {
 			q.Select(standard.FieldID, standard.FieldSystemOwned)
-		}).All(allowCtx)
+		}).All(readCtx)
 	if err != nil {
 		return err
 	}
@@ -171,7 +171,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 			).
 				Select(subcontrol.FieldID, subcontrol.FieldControlID, subcontrol.FieldRefCode)
 		}).
-		All(allowCtx)
+		All(readCtx)
 	if err != nil {
 		return err
 	}
@@ -216,7 +216,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 		WithToSubcontrols(func(q *generated.SubcontrolQuery) {
 			q.Select(subcontrol.FieldID)
 		}).
-		All(allowCtx)
+		All(readCtx)
 	if err != nil {
 		return err
 	}
@@ -278,7 +278,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 		return nil
 	}
 
-	_, err = r.bulkCreateMappedControl(allowCtx, mapped)
+	_, err = r.bulkCreateMappedControl(auth.WithInternalOperationContext(ctx), mapped)
 	return err
 }
 

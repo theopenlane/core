@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -34,8 +33,8 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
+	// the request is unauthenticated and the owning org is not known until the response resolves, so the lookup is a cross-org internal read
+	readCtx := auth.WithInternalReadCrossOrgContext(reqCtx)
 
 	out := &models.ResendResponse{
 		Reply:   rout.Reply{Success: true},
@@ -47,7 +46,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 			assessmentresponse.EmailEqualFold(in.Email),
 			assessmentresponse.AssessmentIDEQ(in.AssessmentID),
 		).
-		Only(allowCtx)
+		Only(readCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.Success(ctx, out)
@@ -70,9 +69,11 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 		return h.Success(ctx, out)
 	}
 
+	orgCtx := auth.WithOrgInternalCaller(reqCtx, assessmentResp.OwnerID)
+
 	assessmentResp, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResp.ID).
 		SetSendAttempts(assessmentResp.SendAttempts + 1).
-		Save(allowCtx)
+		Save(orgCtx)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error incrementing send attempts")
 
@@ -82,7 +83,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 	assessmentData, err := h.DBClient.Assessment.Query().
 		Where(assessment.ID(in.AssessmentID)).
 		Select(assessment.FieldName).
-		Only(allowCtx)
+		Only(orgCtx)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error querying assessment")
 

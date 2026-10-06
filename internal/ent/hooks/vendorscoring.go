@@ -13,9 +13,9 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/iam/auth"
 )
 
 // defaultThresholds is the fallback when no config is available
@@ -75,14 +75,14 @@ func HookVendorRiskScoreAggregate() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalOperationContext(ctx)
 
 			// Capture entity_id before deletion since the record will be gone after mutate
 			var preDeleteEntityID string
 			if m.Op().Is(ent.OpDeleteOne) {
 				id, ok := m.ID()
 				if ok {
-					existing, err := m.Client().VendorRiskScore.Get(allowCtx, id)
+					existing, err := m.Client().VendorRiskScore.Get(internalCtx, id)
 					if err != nil && !generated.IsNotFound(err) {
 						return nil, err
 					}
@@ -106,7 +106,7 @@ func HookVendorRiskScoreAggregate() ent.Hook {
 				return v, nil
 			}
 
-			if err := RecomputeEntityRiskAggregate(allowCtx, m.Client(), entityID); err != nil {
+			if err := RecomputeEntityRiskAggregate(internalCtx, m.Client(), entityID); err != nil {
 				return v, err
 			}
 

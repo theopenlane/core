@@ -19,7 +19,11 @@ import (
 func TraverseStandard() ent.Interceptor {
 	return intercept.TraverseStandard(func(ctx context.Context, q *generated.StandardQuery) error {
 		caller, ok := auth.CallerFromContext(ctx)
-		if ok && caller != nil && caller.IsAnonymous() {
+		if !ok {
+			return auth.ErrNoAuthUser
+		}
+
+		if caller.IsAnonymous() {
 			q.Where(
 				standard.HasTrustCenterCompliancesWith(
 					trustcentercompliance.HasTrustCenterWith(
@@ -29,10 +33,6 @@ func TraverseStandard() ent.Interceptor {
 			)
 
 			return nil
-		}
-
-		if !ok || caller == nil {
-			return auth.ErrNoAuthUser
 		}
 
 		orgIDs := caller.OrgIDs()

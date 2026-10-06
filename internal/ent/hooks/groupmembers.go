@@ -9,26 +9,12 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 // HookGroupMembers checks the users role, ensures they are a member of the org, and prevents direct modifications to managed groups unless the caller has the bypass capability
 func HookGroupMembers() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.GroupMembershipFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) (generated.Value, error) {
-			// skip for real internal system operations (e.g. org creation) where the user may not
-			// yet be a member of the org. CapBypassFGA distinguishes real service callers from
-			// test contexts created by rule.WithInternalContext, which adds CapInternalOperation
-			// but not CapBypassFGA.
-			if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapInternalOperation|auth.CapBypassFGA) {
-				return next.Mutate(ctx, m)
-			}
-
-			// skip if this is an explicit managed group bypass
-			if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassManagedGroup) {
-				return next.Mutate(ctx, m)
-			}
-
 			// check role, if its not set the default is member
 			userID, ok := m.UserID()
 			if !ok {
@@ -40,19 +26,16 @@ func HookGroupMembers() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowQueryCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-			group, err := m.Client().Group.Get(allowQueryCtx, groupID)
+			// allow query, the permissions are not yet added to the group
+			// and members get added during the create process
+			group, err := m.Client().Group.Get(auth.WithInternalReadContext(ctx), groupID)
 			if err != nil {
 				return nil, err
 			}
 
-			// allow general allow context or managed group bypass to modify managed groups
-			_, allowCtx := privacy.DecisionFromContext(ctx)
-			caller, _ := auth.CallerFromContext(ctx)
-			allowManagedCtx := caller != nil && caller.Has(auth.CapBypassManagedGroup)
-
-			if group.IsManaged && (!allowManagedCtx && !allowCtx) {
+			// if the group is managed, but isn't a managed group context
+			// return error
+			if group.IsManaged && !auth.HasInContextCaller(ctx, auth.CapBypassManagedGroup) {
 				return nil, ErrManagedGroup
 			}
 

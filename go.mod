@@ -87,7 +87,7 @@ require (
 	github.com/okta/okta-sdk-golang/v6 v6.1.7
 	github.com/olekukonko/tablewriter v1.1.5
 	github.com/openfga/go-sdk v0.8.3
-	github.com/openfga/language/pkg/go v0.3.2-0.20260730144454-83fedf8a4e70
+	github.com/openfga/language/pkg/go v0.3.2-0.20260818192608-0d2ad7fb7c40
 	github.com/oracle/oci-go-sdk/v65 v65.124.1
 	github.com/pdfcpu/pdfcpu v0.15.0
 	github.com/pkg/errors v0.9.1
@@ -122,12 +122,12 @@ require (
 	github.com/theopenlane/go-client v0.14.1
 	github.com/theopenlane/gqlgen-plugins v0.18.2
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.39.3
+	github.com/theopenlane/iam v0.40.0
 	github.com/theopenlane/newman v0.4.4
 	github.com/theopenlane/riverboat v0.14.3
 	github.com/theopenlane/utils v0.7.2
 	github.com/tmc/langchaingo v0.1.14
-	github.com/urfave/cli/v3 v3.11.0
+	github.com/urfave/cli/v3 v3.13.0
 	github.com/vektah/gqlparser/v2 v2.5.58
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/wundergraph/astjson v1.1.0
@@ -321,7 +321,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.6 // indirect
 	github.com/openfga/api/proto v0.0.0-20260723150800-6981fff8d33b // indirect
-	github.com/openfga/openfga v1.20.0 // indirect
+	github.com/openfga/openfga v1.21.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/ory/dockertest/v3 v3.12.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect

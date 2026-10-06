@@ -20,8 +20,8 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestVerifyHandler() {
@@ -87,7 +87,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 			// set privacy allow in order to allow the creation of the users without
 			// authentication in the tests
-			ctx := privacy.DecisionContext(ec, privacy.Allow)
+			ctx := auth.WithInternalOperationContext(ec)
 
 			// create user in the database
 			userSetting := suite.db.UserSetting.Create().
@@ -126,14 +126,14 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			}
 
 			// store token in db
-			allowCtx := privacy.DecisionContext(ec, privacy.Allow)
+			internalCtx := auth.WithInternalOperationContext(ec)
 			et := suite.db.EmailVerificationToken.Create().
 				SetOwner(u).
 				SetToken(user.EmailVerificationToken.String).
 				SetEmail(user.Email).
 				SetSecret(user.EmailVerificationSecret).
 				SetTTL(ttl).
-				SaveX(allowCtx)
+				SaveX(internalCtx)
 
 			target := "/verify"
 			if tc.tokenSet {
@@ -182,13 +182,13 @@ func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAc
 	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(ec)
 
 	orgOwner := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(orgOwner.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(orgOwner.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	allowedDomain := "autojoin-in-test.com"

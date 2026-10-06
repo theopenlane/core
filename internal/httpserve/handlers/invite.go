@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
@@ -53,16 +52,14 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	// get the authenticated user from the context
-	inviteCaller, inviteOk := auth.CallerFromContext(reqCtx)
-	if !inviteOk || inviteCaller == nil || inviteCaller.SubjectID == "" {
+	subjectID, err := auth.GetSubjectIDFromContext(reqCtx)
+	if err != nil {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
-	userID := inviteCaller.SubjectID
-
-	user, err := h.getUserDetailsByID(reqCtx, userID)
+	user, err := h.getUserDetailsByID(reqCtx, subjectID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user details")
 
@@ -75,7 +72,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID)
+	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
@@ -85,18 +82,18 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	// reply with the relevant details
 	out := &models.InviteResponse{
 		Reply:       rout.Reply{Success: true},
-		ID:          userID,
+		ID:          subjectID,
 		Email:       invitedUser.Recipient,
 		JoinedOrgID: invitedUser.OwnerID,
 		Role:        string(invitedUser.Role),
 		Message:     "Welcome to your new organization!",
-		AuthData:    *auth,
+		AuthData:    *authData,
 	}
 
 	// resolve enforcement for the accepting user; a member granted an SSO exemption via the
 	// invitation will not be flagged as needing SSO
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID, user.ID)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
+	status, err := h.fetchSSOStatus(internalCtx, invitedUser.OwnerID, user.ID)
 	if err != nil {
 		// the invitation is already accepted and the auth session issued at this point, so a failure to
 		// resolve enforcement must not fail the request; log it and leave NeedsSSO at its default

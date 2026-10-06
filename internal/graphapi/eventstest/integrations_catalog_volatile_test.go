@@ -27,7 +27,7 @@ import (
 
 // TestFindingRawPayloadOnlyReingestNoop verifies a Volatile-only raw_payload difference never writes on its own but rides along on a material change
 func TestFindingRawPayloadOnlyReingestNoop(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	counts := catalogEventCounters(t, entityops.SchemaFinding)
 	defer counts.Teardown()
@@ -103,7 +103,7 @@ func TestFindingRawPayloadOnlyReingestNoop(t *testing.T) {
 
 // TestVulnerabilityVolatileOnlyReingestNoop verifies a Volatile-only raw_payload difference never writes on its own but rides along on a material change
 func TestVulnerabilityVolatileOnlyReingestNoop(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	counts := catalogEventCounters(t, entityops.SchemaVulnerability)
 	defer counts.Teardown()
@@ -179,7 +179,7 @@ func TestVulnerabilityVolatileOnlyReingestNoop(t *testing.T) {
 
 // TestAssetObservedAtOnlyReingestNoop verifies an observed_at-only difference never writes on its own but rides along on a material change
 func TestAssetObservedAtOnlyReingestNoop(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	counts := catalogEventCounters(t, entityops.SchemaAsset)
 	defer counts.Teardown()
@@ -254,7 +254,7 @@ func TestAssetObservedAtOnlyReingestNoop(t *testing.T) {
 
 // TestRiskObservedAtOnlyReingestNoop verifies an observed_at-only difference never writes on its own but rides along on a material change
 func TestRiskObservedAtOnlyReingestNoop(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	counts := catalogEventCounters(t, entityops.SchemaRisk)
 	defer counts.Teardown()
@@ -329,7 +329,7 @@ func TestRiskObservedAtOnlyReingestNoop(t *testing.T) {
 
 // TestFindingFractionalTimestampReingestUnchanged pins the second-precision round-trip of a non-volatile models.DateTime field
 func TestFindingFractionalTimestampReingestUnchanged(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	counts := catalogEventCounters(t, entityops.SchemaFinding)
 	defer counts.Teardown()
@@ -381,7 +381,7 @@ func TestFindingFractionalTimestampReingestUnchanged(t *testing.T) {
 
 // TestFindingControlLinkResyncDedupes verifies a Finding.controls through-edge link supplied on every ingest is applied once
 func TestFindingControlLinkResyncDedupes(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("Finding Control Link Test").

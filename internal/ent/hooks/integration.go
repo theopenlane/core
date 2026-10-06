@@ -8,9 +8,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 // HookIntegrationPrimaryDirectory enforces the one-primary-directory-per-org invariant
@@ -42,7 +42,7 @@ func HookIntegrationPrimaryDirectory() ent.Hook {
 					integration.PrimaryDirectory(true),
 				).
 				SetPrimaryDirectory(false).
-				Exec(privacy.DecisionContext(withSkipIntegrationPrimaryDirectorySync(ctx), privacy.Allow))
+				Exec(auth.WithInternalOperationContext(withSkipIntegrationPrimaryDirectorySync(ctx)))
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
@@ -93,7 +93,7 @@ func HookIntegrationCampaignEmail() ent.Hook {
 					integration.CampaignEmail(true),
 				).
 				SetCampaignEmail(false).
-				Exec(privacy.DecisionContext(withSkipIntegrationCampaignEmailSync(ctx), privacy.Allow))
+				Exec(auth.WithInternalOperationContext(withSkipIntegrationCampaignEmailSync(ctx)))
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
 }

@@ -10,7 +10,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -70,13 +69,11 @@ type trustCenterResolveResult struct {
 
 // resolveTrustCenterAnonURL loads a trust center and generates an anonymous access token URL
 func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, requestID, trustCenterID, email string, purpose shortlinks.Purpose, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	tc, err := req.DB.TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
 		WithSetting().
-		Only(allowCtx)
+		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed loading trust center for email")
 		return trustCenterResolveResult{}, fmt.Errorf("%w: %w", ErrSendFailed, err)
@@ -189,12 +186,10 @@ func resolveQuestionnaireOrgName(ctx context.Context, req types.OperationRequest
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	org, err := req.DB.Organization.Query().
 		Where(organization.IDEQ(orgID)).
 		Select(organization.FieldDisplayName, organization.FieldName).
-		Only(allowCtx)
+		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("org_id", orgID).Msg("failed resolving org name for questionnaire email")
 		return nil

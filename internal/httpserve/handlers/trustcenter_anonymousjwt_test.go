@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -24,8 +23,10 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 	suite.registerTestHandler("POST", "trustcenter/auth/anonymous", suite.h.CreateTrustCenterAnonymousJWT)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
-	ctx = auth.WithCaller(ctx, auth.NewTrustCenterBootstrapCaller(""))
+
+	// used to create objects, not for the requests
+	ctx := auth.WithCaller(ec, auth.NewSystemAdminCaller("", "", ""))
+
 	mappableDomain, err := suite.db.MappableDomain.Create().
 		SetName("trust.openlane.io").
 		SetZoneID("1234").
@@ -37,8 +38,8 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		SetMappableDomainID(mappableDomain.ID).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
-
 	require.NoError(t, err)
+
 	previewDomain, err := suite.db.CustomDomain.Create().
 		SetCnameRecord("preview.meow.org").
 		SetMappableDomainID(mappableDomain.ID).
@@ -53,9 +54,10 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		SetCustomDomainID(customDomain.ID).
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
-	_, err = suite.db.TrustCenter.UpdateOneID(trustCenterWithCD.ID).
+
+	err = suite.db.TrustCenter.UpdateOneID(trustCenterWithCD.ID).
 		SetPreviewDomainID(previewDomain.ID).
-		Save(testUser1.UserCtx)
+		Exec(testUser1.UserCtx)
 	require.NoError(t, err)
 
 	trustCenterNoCD, err := suite.db.TrustCenter.Create().

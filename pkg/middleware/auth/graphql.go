@@ -16,7 +16,7 @@ func BlockNonTrustCenterAnonymous() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			caller, ok := auth.CallerFromContext(c.Request().Context())
-			if ok && caller != nil && caller.OrganizationRole == auth.AnonymousRole {
+			if ok && caller.IsAnonymous() {
 				if !caller.Has(auth.CapTrustCenterAnonymous) {
 					return echo.NewHTTPError(http.StatusUnauthorized, ErrAnonymousAccessNotAllowed.Error())
 				}

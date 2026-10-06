@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	dbprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/database"
@@ -33,7 +33,7 @@ func InterceptorFile() ent.Interceptor {
 		logx.FromContext(ctx).Debug().Msg("InterceptorFile")
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
 
@@ -252,14 +252,14 @@ func isFileNotFound(err error) bool {
 // org avatars across the current authentication organization
 // it returns the list of org ids and well if that list should be used
 func getAllOrgsForFileInterceptor(ctx context.Context) ([]string, bool) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	if !graphutils.CheckForRequestedField(ctx, "avatarFile") {
 		return nil, false
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return nil, false
 	}
 
@@ -267,14 +267,14 @@ func getAllOrgsForFileInterceptor(ctx context.Context) ([]string, bool) {
 		return nil, false
 	}
 
-	client := generated.FromContext(ctx)
+	client := utils.EntClientFromContext(ctx)
 	if client == nil {
 		return nil, false
 	}
 
 	orgIDs, err := client.OrgMembership.Query().Where(
 		orgmembership.UserID(caller.SubjectID),
-	).Select(orgmembership.FieldOrganizationID).Strings(allowCtx)
+	).Select(orgmembership.FieldOrganizationID).Strings(internalCtx)
 	if err != nil {
 		return nil, false
 	}

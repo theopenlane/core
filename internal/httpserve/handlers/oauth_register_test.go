@@ -16,9 +16,9 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestOauthRegister() {
@@ -30,7 +30,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 	ensureUserAbsent := func(t *testing.T, email string) {
 		t.Helper()
 
-		ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+		ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 		_, _ = suite.db.User.Delete().Where(user.Email(email)).Exec(ctx)
 	}
 

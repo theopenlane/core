@@ -7,7 +7,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -20,7 +19,7 @@ func (r *Runtime) BackfillInstallationProvenance(ctx context.Context, installati
 		return 0, nil
 	}
 
-	orgCtx := entityops.WithEmissionVetoed(auth.EnsureIntegrationCaller(privacy.DecisionContext(ctx, privacy.Allow), installation.OwnerID))
+	orgCtx := entityops.WithEmissionVetoed(auth.WithInternalOperationContext(auth.EnsureIntegrationCaller(ctx, installation.OwnerID)))
 	instCtx := intobvs.WithInstallation(orgCtx, installation)
 
 	return stampInstallationProvenance(instCtx, r.DB(), installation)
@@ -30,7 +29,7 @@ func (r *Runtime) BackfillInstallationProvenance(ctx context.Context, installati
 // persisted credential during the startup backfill, so provenance stamps the current external
 // instance and a later reinstall correlates records on it
 func (r *Runtime) BackfillInstallationInstanceID(ctx context.Context, installation *ent.Integration) error {
-	orgCtx := entityops.WithEmissionVetoed(auth.EnsureIntegrationCaller(privacy.DecisionContext(ctx, privacy.Allow), installation.OwnerID))
+	orgCtx := entityops.WithEmissionVetoed(auth.WithInternalOperationContext(auth.EnsureIntegrationCaller(ctx, installation.OwnerID)))
 	instCtx := intobvs.WithInstallation(orgCtx, installation)
 
 	return r.RefreshInstallationMetadata(instCtx, installation)

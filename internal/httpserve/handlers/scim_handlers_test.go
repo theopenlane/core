@@ -11,10 +11,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/route"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -98,17 +98,17 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerCreate() {
 	})
 
 	// Enable SSO enforcement for SCIM (required for SCIM operations)
-	allowCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
-	org, err := suite.db.Organization.Get(allowCtx, scimTestUser.OrganizationID)
+	internalCtx := auth.WithInternalOperationContext(scimTestUser.UserCtx)
+	org, err := suite.db.Organization.Get(internalCtx, scimTestUser.OrganizationID)
 	suite.Require().NoError(err)
-	setting, err := org.Setting(allowCtx)
+	setting, err := org.Setting(internalCtx)
 	suite.Require().NoError(err)
-	suite.enforceSSOOnSetting(allowCtx, setting.ID)
+	suite.enforceSSOOnSetting(internalCtx, setting.ID)
 
 	restore := suite.registerSCIMRoutesWithAuth()
 	defer restore()
 
-	_, endpointID, secret := suite.createSCIMIntegration(allowCtx, scimTestUser.OrganizationID, "SCIM Directory")
+	_, endpointID, secret := suite.createSCIMIntegration(internalCtx, scimTestUser.OrganizationID, "SCIM Directory")
 
 	testCases := []struct {
 		name        string
@@ -189,7 +189,7 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerCreate() {
 			suite.Equal(expectedDisplay, resp["displayName"], "displayName should match")
 
 			// Verify DirectoryAccount was created with correct attributes
-			da, err := suite.db.DirectoryAccount.Get(allowCtx, userID)
+			da, err := suite.db.DirectoryAccount.Get(internalCtx, userID)
 			suite.Require().NoError(err)
 
 			expectedEmail := strings.ToLower(email)
@@ -228,17 +228,17 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerPatchActiveToggle() {
 	})
 
 	// Enable SSO enforcement for SCIM (required for SCIM operations)
-	allowCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
-	org, err := suite.db.Organization.Get(allowCtx, scimTestUser.OrganizationID)
+	internalCtx := auth.WithInternalOperationContext(scimTestUser.UserCtx)
+	org, err := suite.db.Organization.Get(internalCtx, scimTestUser.OrganizationID)
 	suite.Require().NoError(err)
-	setting, err := org.Setting(allowCtx)
+	setting, err := org.Setting(internalCtx)
 	suite.Require().NoError(err)
-	suite.enforceSSOOnSetting(allowCtx, setting.ID)
+	suite.enforceSSOOnSetting(internalCtx, setting.ID)
 
 	restore := suite.registerSCIMRoutesWithAuth()
 	defer restore()
 
-	_, endpointID, secret := suite.createSCIMIntegration(allowCtx, scimTestUser.OrganizationID, "SCIM Directory")
+	_, endpointID, secret := suite.createSCIMIntegration(internalCtx, scimTestUser.OrganizationID, "SCIM Directory")
 
 	email := fmt.Sprintf("scim-user-%s@example.com", strings.ToLower(ulids.New().String()))
 	createBody := map[string]any{
@@ -315,17 +315,17 @@ func (suite *HandlerTestSuite) TestSCIMGroupHandlerCreateDeduplicatesMembers() {
 	})
 
 	// Enable SSO enforcement for SCIM (required for SCIM operations)
-	allowCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
-	org, err := suite.db.Organization.Get(allowCtx, scimTestUser.OrganizationID)
+	internalCtx := auth.WithInternalOperationContext(scimTestUser.UserCtx)
+	org, err := suite.db.Organization.Get(internalCtx, scimTestUser.OrganizationID)
 	suite.Require().NoError(err)
-	setting, err := org.Setting(allowCtx)
+	setting, err := org.Setting(internalCtx)
 	suite.Require().NoError(err)
-	suite.enforceSSOOnSetting(allowCtx, setting.ID)
+	suite.enforceSSOOnSetting(internalCtx, setting.ID)
 
 	restore := suite.registerSCIMRoutesWithAuth()
 	defer restore()
 
-	_, endpointID, secret := suite.createSCIMIntegration(allowCtx, scimTestUser.OrganizationID, "SCIM Directory")
+	_, endpointID, secret := suite.createSCIMIntegration(internalCtx, scimTestUser.OrganizationID, "SCIM Directory")
 
 	memberEmail := fmt.Sprintf("scim-member-%s@example.com", strings.ToLower(ulids.New().String()))
 	memberPayload, err := json.Marshal(map[string]any{
@@ -394,8 +394,8 @@ func (suite *HandlerTestSuite) TestSCIMRouteRejectsPendingAndDisabledInstallatio
 		email: ulids.New().String() + "@example.com",
 	})
 
-	allowCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	integrationID, endpointID, secret := suite.createSCIMIntegration(allowCtx, testUser.OrganizationID, "SCIM Directory")
+	internalCtx := auth.WithInternalOperationContext(testUser.UserCtx)
+	integrationID, endpointID, secret := suite.createSCIMIntegration(internalCtx, testUser.OrganizationID, "SCIM Directory")
 
 	testCases := []struct {
 		name   string
@@ -409,7 +409,7 @@ func (suite *HandlerTestSuite) TestSCIMRouteRejectsPendingAndDisabledInstallatio
 		suite.Run(tc.name, func() {
 			err := suite.db.Integration.UpdateOneID(integrationID).
 				SetStatus(tc.status).
-				Exec(allowCtx)
+				Exec(internalCtx)
 			suite.Require().NoError(err)
 
 			req := suite.newSCIMRequest(http.MethodGet, fmt.Sprintf("/v1/integrations/scim/%s/v2/Users", endpointID), secret, nil)
@@ -420,7 +420,7 @@ func (suite *HandlerTestSuite) TestSCIMRouteRejectsPendingAndDisabledInstallatio
 
 			err = suite.db.Integration.UpdateOneID(integrationID).
 				SetStatus(enums.IntegrationStatusConnected).
-				Exec(allowCtx)
+				Exec(internalCtx)
 			suite.Require().NoError(err)
 		})
 	}

@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -33,15 +32,14 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 	}
 
 	caller, callerOk := auth.CallerFromContext(reqCtx)
-	if !callerOk || caller == nil {
+	if !callerOk {
 		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext)
 	}
 
 	email := caller.SubjectEmail
 
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = auth.WithCaller(allowCtx, caller)
-	allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
+	internalCtx := auth.WithInternalOperationContext(auth.WithCaller(reqCtx, caller))
+	internalCtx = auth.ActiveAssessmentIDKey.Set(internalCtx, assessmentID)
 
 	var (
 		assessmentResponse *generated.AssessmentResponse
@@ -69,7 +67,7 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 
 		assessmentResponse, err = query.Where(campaignPredicate).
 			WithDocument().
-			Only(allowCtx)
+			Only(internalCtx)
 		if err != nil && !generated.IsNotFound(err) {
 			logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment response")
 			return h.InternalServerError(ctx, ErrProcessingRequest)
@@ -84,7 +82,7 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 		if !assessmentResponse.DueDate.IsZero() && time.Now().After(assessmentResponse.DueDate) {
 			_, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
 				SetStatus(enums.AssessmentResponseStatusOverdue).
-				Save(allowCtx)
+				Save(internalCtx)
 			if err != nil {
 				logx.FromContext(reqCtx).Err(err).Msg("could not update assessment response due date")
 				return h.InternalServerError(ctx, ErrProcessingRequest)
@@ -97,7 +95,7 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 	assessment, err := h.DBClient.Assessment.Query().
 		Where(assessment.IDEQ(assessmentID)).
 		WithTemplate().
-		Only(allowCtx)
+		Only(internalCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.NotFound(ctx, ErrAssessmentNotFound)
@@ -136,34 +134,32 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 	var (
 		assessmentID string
 		email        string
-		allowCtx     context.Context
+		internalCtx  context.Context
 		ownerID      string
 		isAnonymous  bool
 	)
 
-	allowCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
+	internalCtx = reqCtx
+
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok {
+		logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	}
 
 	if anonAssessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx); ok {
 		assessmentID = anonAssessmentID
 
-		anonCaller, callerOk := auth.CallerFromContext(reqCtx)
-		if callerOk && anonCaller != nil {
-			email = anonCaller.SubjectEmail
-			ownerID = anonCaller.OrganizationID
-			allowCtx = auth.WithCaller(allowCtx, anonCaller)
-		}
+		email = caller.SubjectEmail
+		ownerID = caller.OrganizationID
+		internalCtx = auth.WithInternalOperationContext(auth.WithCaller(internalCtx, caller))
 
 		if email == "" {
 			isAnonymous = true
 		}
 
-		allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
+		internalCtx = auth.ActiveAssessmentIDKey.Set(internalCtx, assessmentID)
 	} else {
-		qCaller, qOk := auth.CallerFromContext(reqCtx)
-		if !qOk || qCaller == nil {
-			logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
-			return h.InternalServerError(ctx, ErrProcessingRequest)
-		}
 
 		// for regular/normal authenticated users, we expect the assessment id to be passed
 		// in the request by the client.
@@ -174,15 +170,15 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 		}
 
 		assessmentID = req.AssessmentID
-		email = qCaller.SubjectEmail
-		ownerID = qCaller.OrganizationID
+		email = caller.SubjectEmail
+		ownerID = caller.OrganizationID
 
 		// bypass FGA tuple creation for questionnaire submissions;
 		// DocumentData ownership is tracked via AssessmentResponse, not FGA tuples
-		allowCtx = auth.WithCaller(allowCtx, &auth.Caller{
-			OrganizationID: qCaller.OrganizationID,
-			SubjectID:      qCaller.SubjectID,
-			Capabilities:   auth.CapBypassFGA,
+		internalCtx = auth.WithCaller(internalCtx, &auth.Caller{
+			OrganizationID: caller.OrganizationID,
+			SubjectID:      caller.SubjectID,
+			Capabilities:   auth.CapInternalOperation,
 		})
 	}
 
@@ -201,7 +197,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 	assessment, err := h.DBClient.Assessment.Query().
 		Where(assessment.IDEQ(assessmentID)).
 		WithAssessmentResponses().
-		Only(allowCtx)
+		Only(internalCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.NotFound(ctx, ErrAssessmentNotFound)
@@ -233,7 +229,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 			campaignPredicate = assessmentresponse.CampaignIDEQ(id)
 		}
 
-		assessmentResponse, err = query.Where(campaignPredicate).Only(allowCtx)
+		assessmentResponse, err = query.Where(campaignPredicate).Only(internalCtx)
 		if generated.IsNotFound(err) {
 			return h.NotFound(ctx, ErrAssessmentResponseNotFound)
 		}
@@ -252,7 +248,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 	if assessmentResponse != nil && assessmentResponse.DocumentDataID != "" {
 		err = h.DBClient.DocumentData.UpdateOneID(assessmentResponse.DocumentDataID).
 			SetData(req.Data).
-			Exec(allowCtx)
+			Exec(internalCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Err(err).Msg("could not update document data")
 			return h.InternalServerError(ctx, ErrProcessingRequest)
@@ -267,7 +263,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 			documentDataQuery = documentDataQuery.SetTemplateID(assessment.TemplateID)
 		}
 
-		documentData, err := documentDataQuery.SetData(req.Data).Save(allowCtx)
+		documentData, err := documentDataQuery.SetData(req.Data).Save(internalCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Err(err).Msg("could not create document data")
 			return h.InternalServerError(ctx, ErrProcessingRequest)
@@ -280,7 +276,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 		assessmentResponse, err = h.DBClient.AssessmentResponse.Create().
 			SetAssessmentID(assessmentID).
 			SetOwnerID(ownerID).
-			Save(allowCtx)
+			Save(internalCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Err(err).Msg("could not create assessment response")
 			return h.InternalServerError(ctx, ErrProcessingRequest)
@@ -301,7 +297,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 			SetIsDraft(false)
 	}
 
-	freshResponse, err := responseUpdate.Save(allowCtx)
+	freshResponse, err := responseUpdate.Save(internalCtx)
 	if err != nil {
 		if errors.Is(err, hooks.ErrAssessmentInCompleted) {
 			return h.BadRequest(ctx, err)

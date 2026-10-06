@@ -19,10 +19,6 @@ func init() { registerListeners(WorkflowListeners) }
 // dependency-resolution skip logs
 const workflowMutationListenerLabel = "workflow.mutation"
 
-func internalOperationBypassCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-	return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter)
-}
-
 // WorkflowListeners wires workflow mutations and command events to the workflow engine
 func WorkflowListeners() []gala.Registration {
 	return append(WorkflowMutationListeners(),
@@ -63,8 +59,10 @@ func WorkflowMutationListeners() []gala.Registration {
 	return append(entityops.ForSchemas(schemas, entityops.MutationListener{
 		Concern:    entityops.MutationConcernWorkflow,
 		Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
-		Caller:     internalOperationBypassCaller,
-		Handle:     forwardToWorkflowMutation((*engine.WorkflowListeners).HandleWorkflowMutationGala),
+		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+			return restored.WithCapabilities(auth.CapInternalOperation)
+		},
+		Handle: forwardToWorkflowMutation((*engine.WorkflowListeners).HandleWorkflowMutationGala),
 	}), entityops.MutationListener{
 		Concern:    entityops.MutationConcernWorkflow,
 		Schema:     entityops.SchemaWorkflowAssignment,

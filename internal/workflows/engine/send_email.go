@@ -52,12 +52,11 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 
 	ownerID := instance.OwnerID
 	if ownerID == "" {
-		caller, callerOk := auth.CallerFromContext(ctx)
-		if !callerOk || caller == nil || caller.OrganizationID == "" {
-			return ErrIntegrationOwnerRequired
+		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+		if err != nil {
+			return auth.ErrNoAuthUser
 		}
-
-		ownerID = caller.OrganizationID
+		ownerID = orgID
 	}
 
 	emailTpl, err := e.loadSendEmailTemplate(ctx, ownerID, params.EmailTemplateID, params.EmailTemplateKey)

@@ -21,7 +21,6 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
@@ -32,6 +31,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
+	"github.com/theopenlane/iam/auth"
 )
 
 // signedNDADocumentData captures the expected structure of the document data for a trust center NDA submission
@@ -72,9 +72,9 @@ type ndaAttestationResult struct {
 // attestNDADocument performs the full NDA attestation flow: downloads the original PDF,
 // appends an attestation certificate, uploads the result, and resolves trust center metadata
 func attestNDADocument(ctx context.Context, client *generated.Client, docData *generated.DocumentData, templateID, trustCenterID string) (*ndaAttestationResult, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
-	templateFile, err := fetchNDATemplateFile(allowCtx, client, templateID)
+	templateFile, err := fetchNDATemplateFile(internalCtx, client, templateID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template file")
 
@@ -118,7 +118,7 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 		return nil, ErrFailedToCreateAttestedPDF
 	}
 
-	if err := uploadAttestedPDF(allowCtx, client, attestedPDF, docData, attestedPDFHash, templateFile.ID); err != nil {
+	if err := uploadAttestedPDF(internalCtx, client, attestedPDF, docData, attestedPDFHash, templateFile.ID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to upload attested PDF")
 
 		return nil, err
@@ -128,7 +128,7 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithSetting().
 		WithCustomDomain().
-		Only(allowCtx)
+		Only(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to fetch trust center")
 

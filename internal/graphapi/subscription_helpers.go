@@ -25,7 +25,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
 	}
 
@@ -39,12 +39,12 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
 	}
 
-	orgID, _ := caller.ActiveOrg()
-	if orgID == "" {
+	orgID, ok := caller.ActiveOrg()
+	if !ok {
 		logx.FromContext(ctx).Warn().Str("user_id", userID).Msg("notification subscription: no active organization, org-wide notifications will not be delivered")
 	}
 
-	logx.FromContext(ctx).Debug().Str("user_id", userID).Str("org_id", orgID).Bool("redis_enabled", r.subscriptionManager.HasRedis()).Msg("notification subscription: subscribing")
+	logx.FromContext(ctx).Debug().Bool("redis_enabled", r.subscriptionManager.HasRedis()).Msg("notification subscription: subscribing")
 
 	// Create a channel with the interface type for the subscription manager
 	internalChan := make(chan graphsubscriptions.Notification, graphsubscriptions.NotificationChannelBufferSize)

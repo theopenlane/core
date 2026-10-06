@@ -217,7 +217,7 @@ func createIdentityHolder(ctx context.Context, client *entgen.Client, account *e
 		return nil, nil
 	}
 
-	exists := resolveIsOpenlaneUser(ctx, client, canonicalEmail)
+	exists := resolveIsOpenlaneUser(ctx, client, account.OwnerID, canonicalEmail)
 
 	create := client.IdentityHolder.Create().
 		SetOwnerID(account.OwnerID).
@@ -247,12 +247,13 @@ func createIdentityHolder(ctx context.Context, client *entgen.Client, account *e
 }
 
 // resolveIsOpenlaneUser checks if the user with the email is a member of the organization and sets to true if found
-func resolveIsOpenlaneUser(ctx context.Context, client *entgen.Client, email string) bool {
+func resolveIsOpenlaneUser(ctx context.Context, client *entgen.Client, orgID, email string) bool {
 	if email == "" {
 		return false
 	}
 
 	exists, err := client.OrgMembership.Query().Where(
+		orgmembership.OrganizationID(orgID),
 		orgmembership.HasUserWith(user.Email(email)),
 	).Exist(ctx)
 	if err != nil {
@@ -284,7 +285,7 @@ func applyPrimarySourceDefaults(create *entgen.IdentityHolderCreate, account *en
 func enrichFromPrimarySource(ctx context.Context, client *entgen.Client, holder *entgen.IdentityHolder, account *entgen.DirectoryAccount) error {
 	update := client.IdentityHolder.UpdateOneID(holder.ID)
 
-	exists := resolveIsOpenlaneUser(ctx, client, holder.Email)
+	exists := resolveIsOpenlaneUser(ctx, client, account.OwnerID, holder.Email)
 
 	update.SetIsOpenlaneUser(exists)
 	update.SetStatus(mapDirectoryAccountStatus(account.Status))

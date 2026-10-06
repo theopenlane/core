@@ -46,7 +46,7 @@ func TestAddFilePermissionsAvatarMissingOrg(t *testing.T) {
 
 	_, err := AddFilePermissions(ctx)
 	assert.Error(t, err)
-	assert.ErrorIs(t, err, auth.ErrNoAuthUser)
+	assert.ErrorContains(t, err, "organization ID is required for file upload")
 }
 
 func TestGetOrgOwnerIDWithUserType(t *testing.T) {

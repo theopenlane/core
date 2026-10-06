@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects"
@@ -256,10 +255,9 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 			}
 
 			if (mutationSetsOriginalFileID || len(docFiles) > 0) && !trustCenterDoc.WatermarkingEnabled {
-				// Use privacy allow context for internal update operation to bypass authorization checks
+				// Run as an internal operation to bypass authorization checks
 				// and mark as internal operation to avoid triggering the update hook logic
-				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-				internalCtx := internalTrustCenterDocUpdateContextKey.Set(allowCtx, struct{}{})
+				internalCtx := internalTrustCenterDocUpdateContextKey.Set(auth.WithInternalOperationContext(ctx), struct{}{})
 				trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
 				if err != nil {
 					return nil, err

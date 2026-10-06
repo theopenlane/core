@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -64,7 +63,7 @@ func HookOnboarding() ent.Hook {
 			}
 
 			var callerEmail string
-			if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+			if caller, ok := auth.CallerFromContext(ctx); ok {
 				callerEmail = caller.SubjectEmail
 			}
 
@@ -98,13 +97,11 @@ func createOrgUniqueName(ctx context.Context, m *generated.OnboardingMutation, i
 		return nil, ErrMaxAttemptsOrganization
 	}
 
-	// check for the existence of the organization with the given name
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
+	// check for the existence of the organization with the given name across all orgs
 	exists, err := m.Client().Organization.Query().Where(
 		organization.Name(input.Name),
 		organization.DeletedAtIsNil(),
-	).Exist(allowCtx)
+	).Exist(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		return nil, err
 	}

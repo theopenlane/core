@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -130,13 +129,8 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 	}
 
 	// add managed group bypass capability to the caller for downstream hook checks
-	const managedCaps = auth.CapBypassOrgFilter | auth.CapBypassManagedGroup
-	var managedCtx context.Context
-	if existingCaller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
-		managedCtx = auth.WithCaller(ctx, existingCaller.WithCapabilities(managedCaps))
-	} else {
-		managedCtx = auth.WithCaller(ctx, &auth.Caller{Capabilities: managedCaps})
-	}
+	// internal operation is needed because the member's tuples are not written yet when this runs
+	managedCtx := auth.WithCallerCapabilities(ctx, auth.CapBypassManagedGroup|auth.CapInternalOperation)
 
 	orgMemberRole, ok := m.Role()
 	if !ok {
@@ -263,12 +257,12 @@ func addMemberToManagedGroup(ctx context.Context, m *generated.OrgMembershipMuta
 	}
 
 	// allow the request to bypass the privacy check
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	// get the group to update
 	group, err := m.Client().Group.Query().Where(
 		pred...,
-	).Only(allowCtx)
+	).Only(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msgf("error getting managed group: %s", groupName)
 		return err
@@ -280,7 +274,7 @@ func addMemberToManagedGroup(ctx context.Context, m *generated.OrgMembershipMuta
 			groupmembership.UserID(om.UserID),
 			groupmembership.GroupID(group.ID),
 		).
-		Exist(allowCtx)
+		Exist(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error checking existing group membership")
 		return err
@@ -298,7 +292,7 @@ func addMemberToManagedGroup(ctx context.Context, m *generated.OrgMembershipMuta
 		GroupID: group.ID,
 	}
 
-	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
+	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(internalCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error adding user to managed group")
 		return err
 	}
@@ -319,11 +313,11 @@ func removeMemberFromManagedGroup(ctx context.Context, m *generated.OrgMembershi
 	}
 
 	// allow the request to bypass the privacy check
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	groupID, err := m.Client().Group.Query().Where(
 		pred...,
-	).OnlyID(allowCtx)
+	).OnlyID(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msgf("error getting managed group: %s", groupName)
 
@@ -333,7 +327,7 @@ func removeMemberFromManagedGroup(ctx context.Context, m *generated.OrgMembershi
 	groupMembershipID, err := m.Client().GroupMembership.Query().
 		Where(groupmembership.GroupID(groupID),
 			groupmembership.UserID(om.UserID),
-			groupmembership.RoleEQ(enums.RoleMember)).OnlyID(allowCtx)
+			groupmembership.RoleEQ(enums.RoleMember)).OnlyID(internalCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			logx.FromContext(ctx).Warn().Str("user_id", om.UserID).Str("group", groupName).Msg("user not found in managed group, nothing to delete")
@@ -346,7 +340,7 @@ func removeMemberFromManagedGroup(ctx context.Context, m *generated.OrgMembershi
 		return err
 	}
 
-	if err = m.Client().GroupMembership.DeleteOneID(groupMembershipID).Exec(allowCtx); err != nil {
+	if err = m.Client().GroupMembership.DeleteOneID(groupMembershipID).Exec(internalCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error removing user from managed group")
 
 		return err

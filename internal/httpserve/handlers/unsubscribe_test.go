@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/iam/auth"
 )
 
 // TestUnsubscribeHandler verifies the unsubscribe endpoint marks the subscriber unsubscribed (which the
@@ -22,13 +22,13 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 
 	suite.registerTestHandler("POST", "unsubscribe", suite.h.UnsubscribeHandler)
 
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
 
 	t.Run("happy path unsubscribes an active subscriber", func(t *testing.T) {
 		suite.ClearTestData()
 
 		sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
-		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(allowCtx))
+		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 		req := httptest.NewRequest(http.MethodPost, target, nil)
@@ -44,7 +44,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		assert.Equal(t, http.StatusOK, recorder.Code)
 		assert.NotEmpty(t, out.Message)
 
-		updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+		updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
 		require.NoError(t, err)
 		assert.True(t, updated.Unsubscribed)
 		assert.False(t, updated.Active)
@@ -59,10 +59,10 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 			SetOwnerID(testUser1.OrganizationID).
 			Save(testUser1.UserCtx)
 		require.NoError(t, err)
-		t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(allowCtx) })
+		t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(internalCtx) })
 
 		sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), "")
-		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(allowCtx))
+		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 		req := httptest.NewRequest(http.MethodPost, target, nil)
@@ -71,7 +71,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 
 		assert.Equal(t, http.StatusOK, recorder.Code)
 
-		updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+		updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
 		require.NoError(t, err)
 		assert.True(t, updated.Unsubscribed)
 		assert.False(t, updated.Active)
@@ -103,7 +103,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		suite.ClearTestData()
 
 		sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
-		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(allowCtx))
+		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 
@@ -127,7 +127,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		require.NoError(t, json.NewDecoder(res2.Body).Decode(&out2))
 		assert.Contains(t, out2.Message, "already unsubscribed")
 
-		updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+		updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
 		require.NoError(t, err)
 		assert.True(t, updated.Unsubscribed)
 		assert.False(t, updated.Active)

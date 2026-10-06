@@ -32,7 +32,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 
 	// Use initiator's context for creating workflow definitions (has user + org)
 	// Then use th.SetContext for bypassing privacy on engine operations
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)
 
@@ -218,7 +218,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 
 	// Use initiator's context for creating workflow definitions (has user + org)
 	// Then use th.SetContext for bypassing privacy on engine operations
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)
 

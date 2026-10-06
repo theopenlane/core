@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects"
 )
@@ -208,10 +207,10 @@ func HookDeleteUser() ent.Hook {
 				}
 
 				// the user might not be currently in the authorized context to see the personal org
-				// so we need to allow the context to see the personal org
-				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+				// so this runs as an internal operation to see the personal org
+				internalCtx := auth.WithInternalOperationContext(ctx)
 
-				personalOrgIDs, err := m.Client().User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).IDs(allowCtx)
+				personalOrgIDs, err := m.Client().User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).IDs(internalCtx)
 				if err != nil {
 					return nil, err
 				}
@@ -220,7 +219,7 @@ func HookDeleteUser() ent.Hook {
 					Where(orgmembership.UserID(user.ID)).
 					Where(orgmembership.RoleEQ(enums.RoleOwner)).
 					Where(orgmembership.Not(orgmembership.OrganizationIDIn(personalOrgIDs...))).
-					Exist(allowCtx)
+					Exist(auth.WithCrossOrgContext(internalCtx))
 				if err != nil {
 					return nil, err
 				}
@@ -235,12 +234,11 @@ func HookDeleteUser() ent.Hook {
 					return nil, err
 				}
 
-				// cleanup personal org(s) using the allow context set above
 				if _, err := m.Client().
 					Organization.
 					Delete().
 					Where(organization.IDIn(personalOrgIDs...)).
-					Exec(allowCtx); err != nil {
+					Exec(internalCtx); err != nil {
 					return nil, err
 				}
 
@@ -290,7 +288,7 @@ func personalOrgDescription(user *generated.User) *string {
 // createPersonalOrg creates an org for a user with a unique random name
 func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *generated.User) (*generated.UserSetting, *generated.Organization, error) {
 	// this prevents a privacy check that would be required for regular orgs, but not a personal org
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	orgInput := getPersonalOrgInput(user)
 
@@ -330,7 +328,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 }
 
 func updatePersonalOrgSetting(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) error {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	setting, err := org.Setting(ctx)
 	if err != nil {
@@ -410,11 +408,10 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
+	// the user's memberships span orgs and must not be deduped, the query is pinned to the user id
 	memberships, err := m.Client().OrgMembership.Query().
 		Where(orgmembership.UserID(user.ID)).
-		All(allowCtx)
+		All(auth.WithInternalReadCrossOrgContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error querying user's org memberships")
 		return err
@@ -435,7 +432,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 				group.IsManaged(true),
 				group.Name(groupName),
 			).
-			All(privacy.DecisionContext(newCtx, privacy.Allow))
+			All(auth.WithInternalReadContext(newCtx))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error querying user's system managed groups for org")
 			return err
@@ -467,7 +464,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 			update.SetAvatarLocalFileID(avatarLocalFileID)
 		}
 
-		err = update.Exec(privacy.DecisionContext(newCtx, privacy.Allow))
+		err = update.Exec(auth.WithInternalOperationContext(newCtx))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error updating system managed group for user")
 

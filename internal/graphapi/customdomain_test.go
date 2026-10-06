@@ -541,7 +541,7 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 func TestGetAllCustomDomains(t *testing.T) {
 	// Create test mappable domain
 	mappableDomain := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
-	deletectx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+	deletectx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
 	d, err := suite.Client.DB.CustomDomain.Query().All(deletectx)
 	assert.Assert(t, err == nil)
 
@@ -728,7 +728,7 @@ func TestDeleteCustomDomainClearsPreviewDomain(t *testing.T) {
 	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	previewDomain := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	dbCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 	_, err := suite.Client.DB.TrustCenter.UpdateOneID(trustCenter.ID).
 		SetPreviewDomainID(previewDomain.ID).
 		Save(dbCtx)

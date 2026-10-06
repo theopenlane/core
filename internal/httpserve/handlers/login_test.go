@@ -8,7 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -27,7 +26,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
@@ -42,7 +40,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	// create users in the database
 	validPassword := "sup3rs3cu7e!"
@@ -105,7 +103,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	}
 
 	ssoMember := suite.userBuilderWithInput(ctx, &userInput{
-		email:         gofakeit.Username() + "@examples.com", // ensure the email is allowed by the org setting
+		email:         "ssomember+" + strings.ToLower(ulids.New().String()) + "@examples.com", // ensure the email is allowed by the org setting
 		password:      validPassword,
 		confirmedUser: true,
 		tfaEnabled:    tfaTrue,
@@ -119,18 +117,18 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	})
 
 	// setup allow context with the client in the context which is required for hooks that run
-	allowCtx := privacy.DecisionContext(validConfirmedUserRestrictedOrg.UserCtx, privacy.Allow)
-	allowCtx = ent.NewContext(allowCtx, suite.db)
+	internalCtx := auth.WithInternalOperationContext(validConfirmedUserRestrictedOrg.UserCtx)
+	internalCtx = ent.NewContext(internalCtx, suite.db)
 
-	org := suite.db.Organization.Create().SetInput(input).SaveX(allowCtx)
-	createdssoOrg := suite.db.Organization.Create().SetInput(ssoOrg).SaveX(allowCtx)
+	org := suite.db.Organization.Create().SetInput(input).SaveX(internalCtx)
+	createdssoOrg := suite.db.Organization.Create().SetInput(ssoOrg).SaveX(internalCtx)
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(validConfirmedUserRestrictedOrg.ID, createdssoOrg.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	auditorOrgCtx := auth.NewTestContextWithOrgID(validConfirmedUserRestrictedOrg.ID, org.ID)
-	auditorOrgCtx = privacy.DecisionContext(auditorOrgCtx, privacy.Allow)
+	auditorOrgCtx = auth.WithInternalOperationContext(auditorOrgCtx)
 	auditorOrgCtx = ent.NewContext(auditorOrgCtx, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
@@ -139,7 +137,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		Role:           &enums.RoleMember,
 	}).ExecX(testUserCtx)
 
-	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(allowCtx)
+	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(internalCtx)
 
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
@@ -147,21 +145,21 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		Role:           &enums.RoleAuditor,
 	}).ExecX(auditorOrgCtx)
 
-	suite.db.UserSetting.UpdateOneID(auditorUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(allowCtx)
+	suite.db.UserSetting.UpdateOneID(auditorUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(internalCtx)
 
 	// update the user settings to have the default org set that is the domain restricted org
 	suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
-		SetDefaultOrgID(org.ID).ExecX(allowCtx)
+		SetDefaultOrgID(org.ID).ExecX(internalCtx)
 
 	suite.db.UserSetting.UpdateOneID(invalidConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
-		SetDefaultOrgID(org.ID).ExecX(allowCtx)
+		SetDefaultOrgID(org.ID).ExecX(internalCtx)
 
 	// update the user settings to have the default org set to an inactive subscription
 	suite.db.OrgSubscription.Update().Where(orgsubscription.OwnerID(userWithInactiveDefaultOrg.OrganizationID)).
-		SetActive(false).ExecX(allowCtx)
+		SetActive(false).ExecX(internalCtx)
 
 	suite.db.UserSetting.UpdateOneID(userWithInactiveDefaultOrg.UserInfo.Edges.Setting.ID).
-		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).ExecX(allowCtx)
+		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).ExecX(internalCtx)
 
 	allModulesWithSignup := []any{
 		models.CatalogBaseModule.String(),
@@ -314,14 +312,14 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	// Create an owner user and org (owner not used for login, but for org setup)
 	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0wn3rP@ssw0rd",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(ownerUser.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
@@ -345,7 +343,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	})
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(testUser.ID, org.ID)
-	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
@@ -373,13 +371,13 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "0wn3rP@ssw0rd",
 		confirmedUser: true,
 	})
-	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(ownerUser.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
@@ -418,7 +416,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	// Create user without TFA enabled
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
@@ -426,7 +424,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 		confirmedUser: true,
 		tfaEnabled:    false, // User does not have TFA enabled
 	})
-	testCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+	testCtx := auth.WithInternalOperationContext(testUser.UserCtx)
 	testCtx = ent.NewContext(testCtx, suite.db)
 
 	// Create organization setting with TFA enforced
@@ -469,7 +467,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	// Create user with TFA enabled
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
@@ -477,7 +475,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
 		confirmedUser: true,
 		tfaEnabled:    true, // User has TFA enabled
 	})
-	testCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+	testCtx := auth.WithInternalOperationContext(testUser.UserCtx)
 	testCtx = ent.NewContext(testCtx, suite.db)
 
 	// Create organization setting with TFA enforced

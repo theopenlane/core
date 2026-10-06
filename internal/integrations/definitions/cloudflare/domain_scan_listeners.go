@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/vendorenrich"
@@ -406,10 +405,7 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 // domainScanSystemContext builds a context authorized to create/update Scan and Notification records
 // for organizationID on behalf of the system
 func domainScanSystemContext(ctx context.Context, organizationID string) context.Context {
-	return auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
-		OrganizationID: organizationID,
-		Capabilities:   auth.CapBypassFGA | auth.CapInternalOperation,
-	})
+	return auth.WithOrgInternalCaller(ctx, organizationID)
 }
 
 // hostFromURL returns rawURL's host, falling back to rawURL unchanged if it doesn't parse

@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -24,8 +23,6 @@ func snapshotTrustCenterSubscribers(ctx context.Context, db *generated.Client, c
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	subscribers, err := db.Subscriber.Query().
 		Where(
 			subscriber.TrustCenterID(*camp.TrustCenterID),
@@ -33,7 +30,7 @@ func snapshotTrustCenterSubscribers(ctx context.Context, db *generated.Client, c
 			subscriber.VerifiedEmail(true),
 			subscriber.Unsubscribed(false),
 		).
-		All(allowCtx)
+		All(ctx)
 	if err != nil {
 		return err
 	}
@@ -44,7 +41,7 @@ func snapshotTrustCenterSubscribers(ctx context.Context, db *generated.Client, c
 
 	existing, err := db.CampaignTarget.Query().
 		Where(campaigntarget.CampaignIDEQ(camp.ID)).
-		All(allowCtx)
+		All(ctx)
 	if err != nil {
 		return err
 	}
@@ -74,7 +71,7 @@ func snapshotTrustCenterSubscribers(ctx context.Context, db *generated.Client, c
 		return nil
 	}
 
-	return db.CampaignTarget.CreateBulk(builders...).Exec(allowCtx)
+	return db.CampaignTarget.CreateBulk(builders...).Exec(ctx)
 }
 
 // renderMessagesForCampaign routes campaign rendering: trust center update campaigns render the

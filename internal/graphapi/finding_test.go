@@ -216,7 +216,7 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 		}
 
 		// confirm the finding is now linked to both controls, not just the last one created
-		ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+		ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 		entFinding, err := suite.Client.DB.Finding.Get(ctx, findingID)
 		assert.NilError(t, err)

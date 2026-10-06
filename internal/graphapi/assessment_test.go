@@ -193,7 +193,6 @@ func TestMutationCreateAssessment(t *testing.T) {
 			request: testclient.CreateAssessmentInput{
 				Name:                gofakeit.Company(),
 				TemplateID:          lo.ToPtr(template.ID),
-				OwnerID:             &th.SharedTestUser1.OrganizationID,
 				AssessmentType:      lo.ToPtr(enums.AssessmentTypeInternal),
 				Tags:                []string{"tag1", "tag2"},
 				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day

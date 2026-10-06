@@ -257,7 +257,7 @@ extend type organization
     define risk_creator: [group#member]
     define can_create_risk: can_edit or can_edit_risk or risk_creator or can_manage_risk or can_manage_compliance
 
-    define can_view_sla_definition: [service, user, group#member] or can_edit_sla_definition or full_access
+    define can_view_sla_definition: [service, user, group#member] or can_edit_sla_definition or full_access or sla_definition_viewer
     define can_edit_sla_definition: [service, user, group#member] or can_delete_sla_definition or full_access
     define can_delete_sla_definition: [service, user, group#member] or full_access
     define sla_definition_creator: [group#member]

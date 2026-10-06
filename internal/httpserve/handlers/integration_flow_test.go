@@ -17,8 +17,6 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
-
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 const (
@@ -33,7 +31,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	startRec, resp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
@@ -57,7 +55,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: "def_invalid_000000000000000000", CredentialRef: testAuthCredentialRef.String()})
@@ -95,7 +93,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
@@ -138,7 +136,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
@@ -173,7 +171,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
 
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath+"?code=test-code&state=state", nil)
@@ -188,7 +186,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCoo
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	startRec, _ := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
@@ -204,7 +202,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCoo
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	startRec, _ := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
@@ -218,7 +216,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: ""})
@@ -238,7 +236,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingState() {
 
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath+"?code=test-code", nil)
@@ -254,7 +252,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
@@ -288,7 +286,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	startRec, _ := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
@@ -318,7 +316,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})

@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -167,7 +167,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 
 // createUserWithResetToken creates a user with a valid reset token and returns the token, user id, and error if one occurred
 func (suite *HandlerTestSuite) createUserWithResetToken(t *testing.T, ec context.Context, email string, ttl string) (*ent.PasswordResetToken, string, error) {
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(ec)
 
 	userSetting := suite.db.UserSetting.Create().
 		SetEmailConfirmed(true).

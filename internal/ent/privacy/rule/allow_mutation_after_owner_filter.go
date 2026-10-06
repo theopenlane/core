@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
-// AllowMutationAfterApplyingOwnerFilter defines a privacy rule for mutations in the context of an owner filter
-func AllowMutationAfterApplyingOwnerFilter() privacy.MutationRule {
+// AllowMutationAfterApplyingUserOwnerFilter defines a privacy rule for mutations in the context of an owner filter
+func AllowMutationAfterApplyingUserOwnerFilter() privacy.MutationRule {
 	type OwnerFilter interface {
 		WhereHasOwnerWith(predicates ...predicate.User)
 	}
@@ -23,14 +23,12 @@ func AllowMutationAfterApplyingOwnerFilter() privacy.MutationRule {
 				return privacy.Denyf("unable to cast to owner filter")
 			}
 
-			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil || caller.SubjectID == "" {
+			subjectID, err := auth.GetSubjectIDFromContext(ctx)
+			if err != nil || subjectID == "" {
 				return privacy.Skip
 			}
 
-			viewerID := caller.SubjectID
-
-			ownerFilter.WhereHasOwnerWith(user.ID(viewerID))
+			ownerFilter.WhereHasOwnerWith(user.ID(subjectID))
 
 			return privacy.Allowf("applied owner filter")
 		},

@@ -22,7 +22,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -234,11 +233,6 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 }
 
 func groupPermissionInterceptorSkipper(ctx context.Context, caller *auth.Caller) bool {
-	// bypass if request is set to allowed
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
-		return true
-	}
-
 	// if its a service account, we don't need to filter by groups
 	if caller.AuthenticationType == auth.APITokenAuthentication {
 		return true

@@ -460,7 +460,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 
 func TestGetAllSubprocessors(t *testing.T) {
 	// Clean up any existing subprocessors to ensure clean test state
-	deletectx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+	deletectx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
 	existingSubprocessors, err := suite.Client.DB.Subprocessor.Query().All(deletectx)
 	assert.NilError(t, err)
 	for _, sp := range existingSubprocessors {

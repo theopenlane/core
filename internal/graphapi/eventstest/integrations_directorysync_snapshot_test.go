@@ -36,7 +36,7 @@ func directoryMembershipByExternalIDs(ctx context.Context, t *testing.T, account
 
 // TestDirectoryFullSnapshotIdleResyncWritesNothing verifies an unchanged resync emits zero update events, and one material change produces exactly one
 func TestDirectoryFullSnapshotIdleResyncWritesNothing(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "fullidle"
 
@@ -95,7 +95,7 @@ func TestDirectoryFullSnapshotIdleResyncWritesNothing(t *testing.T) {
 
 // TestDirectoryGroupProfileChurnRidesAlongMaterialChange verifies a change confined to the group profile bag is not written, counted, or emitted on its own, and lands once a display-name change follows
 func TestDirectoryGroupProfileChurnRidesAlongMaterialChange(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "grpchurn"
 
@@ -151,7 +151,7 @@ func TestDirectoryGroupProfileChurnRidesAlongMaterialChange(t *testing.T) {
 // TestDirectoryMembershipMetadataChangePersisted verifies metadata persistence follows its volatility
 // descriptor and that a material role change persists the latest metadata in either configuration.
 func TestDirectoryMembershipMetadataChangePersisted(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	field, ok := entityops.SchemaDirectoryMembership.FieldByName(directorymembership.FieldMetadata)
 	assert.Assert(t, ok, "membership metadata must have a field descriptor")

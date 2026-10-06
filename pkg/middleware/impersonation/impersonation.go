@@ -144,7 +144,7 @@ func BlockImpersonation() echo.MiddlewareFunc {
 			ctx := c.Request().Context()
 
 			caller, ok := auth.CallerFromContext(ctx)
-			if ok && caller != nil && caller.IsImpersonated() {
+			if ok && caller.IsImpersonated() {
 				logx.FromContext(ctx).Info().Str("user_id", caller.SubjectID).Msg("impersonated user attempted to access blocked endpoint")
 				return echo.NewHTTPError(http.StatusForbidden, "action not allowed during impersonation session")
 			}
@@ -161,7 +161,7 @@ func AllowOnlyImpersonationType(allowedTypes ...auth.ImpersonationType) echo.Mid
 			ctx := c.Request().Context()
 
 			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil || !caller.IsImpersonated() {
+			if !ok || !caller.IsImpersonated() {
 				// Not impersonated, proceed normally
 				return next(c)
 			}
@@ -185,8 +185,8 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 			ctx := c.Request().Context()
 
 			// Check if there's already an authenticated caller (from previous middleware)
-			caller, hasUser := auth.CallerFromContext(ctx)
-			if !hasUser || caller == nil {
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok {
 				// No authenticated caller, continue normally
 				return next(c)
 			}

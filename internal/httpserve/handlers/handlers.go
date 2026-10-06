@@ -200,7 +200,7 @@ func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, 
 	reqCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil {
+	if !ok {
 		logx.FromContext(reqCtx).Error().Msg("error getting caller from context")
 		return h.InternalServerError(ctx, auth.ErrNoAuthUser)
 	}

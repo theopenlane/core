@@ -33,18 +33,16 @@ func TraverseSubprocessor() ent.Interceptor {
 			return nil
 		}
 
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
-			return auth.ErrNoAuthUser
-		}
-
 		// trusted internal callers that bypass org scoping (e.g. scheduled pollers) read every
 		// organization's subprocessors
-		if caller.Has(auth.CapBypassOrgFilter) {
+		if auth.HasCrossOrgCapabilities(ctx) {
 			return nil
 		}
 
-		orgIDs := caller.OrgIDs()
+		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+		if err != nil {
+			return auth.ErrNoAuthUser
+		}
 
 		// filter to return system owned subprocessors and subprocessors owned by the organization
 		q.Where(

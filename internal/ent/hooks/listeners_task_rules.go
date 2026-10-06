@@ -39,7 +39,7 @@ func TaskRuleListeners() []gala.Registration {
 			Schema:     schema,
 			Operations: taskRuleOperations(schema),
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return restored.WithCapabilities(auth.CapInternalOperation | auth.CapOrgSupport)
+				return restored.WithCapabilities(auth.CapInternalOperation)
 			},
 			Handle: handleTaskRuleMutation,
 		}
@@ -395,8 +395,8 @@ func slugifyTaskKey(value string) string {
 
 func createSuggestedTask(ctx context.Context, client *generated.Client, schema *entityops.Schema, entityID string, rendered renderedTask) error {
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return generated.ErrPermissionDenied
 	}
 
@@ -418,7 +418,7 @@ func createSuggestedTask(ctx context.Context, client *generated.Client, schema *
 	}
 
 	mutation := client.Task.Create().
-		SetOwnerID(caller.OrganizationID).
+		SetOwnerID(orgID).
 		SetTitle(rendered.Title).
 		SetDetails(rendered.Details).
 		SetSystemGenerated(true).

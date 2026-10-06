@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -48,7 +47,7 @@ func HookUserSetting() ent.Hook {
 // allowDefaultOrgUpdate checks if the user has access to the organization being updated as their default org
 func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation, orgID string) bool {
 	// allow if explicitly allowed or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+	if auth.IsInternalRequest(ctx) {
 		return true
 	}
 
@@ -72,18 +71,11 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 		return false
 	}
 
-	usCaller, ok := auth.CallerFromContext(ctx)
-	if !ok || usCaller == nil {
-		logx.FromContext(ctx).Error().Msg("unable to get authenticated user context")
-
-		return false
-	}
-
 	req := fgax.AccessCheck{
 		SubjectID:   owner.ID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
-		Relation:    "can_view_org",
+		Relation:    fgax.CanViewOrg,
 	}
 
 	allow, err := m.Authz.CheckOrgAccess(ctx, req)
@@ -120,11 +112,12 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 
 			// get the user associated with this user setting
 			userSettingID, _ := m.ID()
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalOperationContext(ctx)
 
+			// the confirming user may have no caller yet, the lookup is pinned to the setting being updated
 			user, err := m.Client().User.Query().
 				Where(user.HasSettingWith(usersetting.ID(userSettingID))).
-				Only(allowCtx)
+				Only(auth.WithInternalReadContext(ctx))
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to get user for auto-join")
 
@@ -132,7 +125,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}
 
 			// perform auto-join logic
-			if err := autoJoinOrganizationsForUser(allowCtx, m.Client(), user); err != nil {
+			if err := autoJoinOrganizationsForUser(internalCtx, m.Client(), user); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("auto-join failed")
 
 				return nil, err
@@ -183,7 +176,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 				),
 			),
 		)).
-		WithSetting().All(ctx)
+		WithSetting().All(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to query organizations for auto-join")
 		return err
@@ -197,7 +190,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 				orgmembership.UserID(user.ID),
 				orgmembership.OrganizationID(org.ID),
 			).
-			Exist(ctx)
+			Exist(auth.WithCrossOrgContext(ctx))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error checking organization membership")
 
@@ -209,11 +202,13 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 		}
 
 		// add organization to the context for accepted invite hook
+		// the user is not a member yet, internal operation lets the invite acceptance and membership create through
 		ctx = auth.WithCaller(ctx, &auth.Caller{
 			SubjectID:       user.ID,
 			SubjectEmail:    user.Email,
 			OrganizationID:  org.ID,
 			OrganizationIDs: []string{org.ID},
+			Capabilities:    auth.CapInternalOperation,
 		})
 
 		// this triggers the invitation hook which will add the user to the organization

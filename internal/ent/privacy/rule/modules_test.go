@@ -13,9 +13,9 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	"github.com/theopenlane/core/v2/internal/testutils"
@@ -48,8 +48,9 @@ func createControlMutation(t *testing.T) ent.Mutation {
 	).Control.Create().Mutation()
 }
 
-func setupContext(t *testing.T, org string, feats []models.OrgModule) context.Context {
+func setupContext(t *testing.T, feats []models.OrgModule) context.Context {
 	t.Helper()
+	org := ulids.New().String()
 	ctx := context.Background()
 	r := testutils.NewRedisClient()
 	cache := permissioncache.NewCache(r, permissioncache.WithCacheTTL(time.Minute))
@@ -61,7 +62,7 @@ func setupContext(t *testing.T, org string, feats []models.OrgModule) context.Co
 }
 
 func TestHasFeature(t *testing.T) {
-	ctx := setupContext(t, "org1", []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
+	ctx := setupContext(t, []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
 
 	ok, err := rule.HasFeature(ctx, "base_module")
 	require.NoError(t, err)
@@ -73,7 +74,7 @@ func TestHasFeature(t *testing.T) {
 }
 
 func TestHasAnyFeature(t *testing.T) {
-	ctx := setupContext(t, "org2", []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
+	ctx := setupContext(t, []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
 
 	ok, _, err := rule.HasAnyFeature(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
@@ -85,28 +86,54 @@ func TestHasAnyFeature(t *testing.T) {
 }
 
 func TestHasAllFeatures(t *testing.T) {
-	ctx := setupContext(t, "org3", []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule})
+	ctx := setupContext(t, []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule})
 
-	ok, _, err := rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule)
-	require.NoError(t, err)
-	assert.True(t, ok)
+	tests := []struct {
+		name            string
+		modules         []models.OrgModule
+		expected        bool
+		expectedMissing models.OrgModule
+	}{
+		{
+			name:     "base and compliance",
+			modules:  []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule},
+			expected: true,
+		},
+		{
+			name:     "base and entity management",
+			modules:  []models.OrgModule{models.CatalogBaseModule, models.CatalogEntityManagementModule},
+			expected: true,
+		},
+		{
+			name:     "compliance only",
+			modules:  []models.OrgModule{models.CatalogComplianceModule},
+			expected: true,
+		},
+		{
+			name:     "all enabled modules",
+			modules:  []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule},
+			expected: true,
+		},
+		{
+			name:            "trust center not enabled",
+			modules:         []models.OrgModule{models.CatalogTrustCenterModule},
+			expected:        false,
+			expectedMissing: models.CatalogTrustCenterModule,
+		},
+	}
 
-	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
-	require.NoError(t, err)
-	assert.True(t, ok)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ok, missingModule, err := rule.HasAllFeatures(ctx, tt.modules...)
+			require.NoError(t, err)
+			assert.Equal(t, tt.expected, ok)
 
-	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogComplianceModule)
-	require.NoError(t, err)
-	assert.True(t, ok)
-
-	ok, missingModule, err := rule.HasAllFeatures(ctx, models.CatalogTrustCenterModule)
-	require.NoError(t, err)
-	assert.False(t, ok)
-	assert.Equal(t, models.CatalogTrustCenterModule, *missingModule)
-
-	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule)
-	require.NoError(t, err)
-	assert.True(t, ok)
+			if !tt.expected {
+				require.NotNil(t, missingModule)
+				assert.Equal(t, tt.expectedMissing, *missingModule)
+			}
+		})
+	}
 }
 
 func TestDenyIfMissingAllModulesBase(t *testing.T) {
@@ -139,7 +166,7 @@ func TestDenyIfMissingAllModulesBase(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.title, func(t *testing.T) {
 
-			ctx := setupContext(t, "test-org", tt.modules)
+			ctx := setupContext(t, tt.modules)
 
 			err := rule.DenyIfMissingAllModules().EvalMutation(ctx, tt.createMutationFn())
 
@@ -191,7 +218,7 @@ func TestDenyIfMissingAllModules(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.title, func(t *testing.T) {
 
-			ctx := setupContext(t, "test-org", tt.modules)
+			ctx := setupContext(t, tt.modules)
 
 			err := rule.DenyIfMissingAllModules().EvalMutation(ctx, tt.createMutationFn())
 
@@ -214,25 +241,11 @@ func TestDenyIfMissingAllModules(t *testing.T) {
 }
 
 func TestDenyIfMissingAllModules_BypassScenarios(t *testing.T) {
-	baseCtx := setupContext(t, "test-org", []models.OrgModule{})
+	baseCtx := setupContext(t, []models.OrgModule{})
 
 	featureRule := rule.DenyIfMissingAllModules()
 
 	testMutation := createExportMutation(t)
-
-	t.Run("bypass with privacy decision context", func(t *testing.T) {
-		ctx := privacy.DecisionContext(baseCtx, privacy.Allow)
-		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
-	})
-
-	t.Run("bypass with WebhookCaller", func(t *testing.T) {
-		ctx := auth.WithCaller(baseCtx, auth.NewWebhookCaller(""))
-		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
-	})
 
 	t.Run("bypass with InternalOperationCaller", func(t *testing.T) {
 		ctx := auth.WithCaller(baseCtx, &auth.Caller{Capabilities: auth.CapInternalOperation})
@@ -295,7 +308,7 @@ func TestModulesEnabledBase(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.title, func(t *testing.T) {
-			ctx := setupContext(t, "test-org", tt.modules)
+			ctx := setupContext(t, tt.modules)
 			mutation := createExportMutation(t)
 
 			rule := rule.DenyIfMissingAllModules()
@@ -346,7 +359,7 @@ func TestModulesEnabled(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.title, func(t *testing.T) {
-			ctx := setupContext(t, "test-org", tt.modules)
+			ctx := setupContext(t, tt.modules)
 			mutation := createControlMutation(t)
 
 			rule := rule.DenyIfMissingAllModules()
@@ -377,7 +390,7 @@ func TestModulesDisabled(t *testing.T) {
 		mutationType: "Export",
 	}
 
-	ctx := setupContext(t, "test-org", []models.OrgModule{})
+	ctx := setupContext(t, []models.OrgModule{})
 	rule := rule.DenyIfMissingAllModules()
 
 	err := rule.EvalMutation(ctx, mutation)

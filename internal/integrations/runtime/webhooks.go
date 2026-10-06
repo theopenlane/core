@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -185,7 +184,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	oc := envelope.OperationContext
 	src := types.IntegrationSourceFrom(oc)
 	ctx = intobvs.WithContext(ctx, oc)
-	ctx = ent.NewContext(privacy.DecisionContext(ctx, privacy.Allow), r.DB())
+	ctx = ent.NewContext(ctx, r.DB())
 
 	var integration *ent.Integration
 
@@ -246,7 +245,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 			return dispatchErr
 		},
 		CleanupInstallation: func(cleanupCtx context.Context) error {
-			return r.cleanupInstallation(privacy.DecisionContext(cleanupCtx, privacy.Allow), integration.ID)
+			return r.cleanupInstallation(cleanupCtx, integration.ID)
 		},
 	})
 }

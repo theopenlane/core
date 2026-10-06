@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -47,7 +46,7 @@ func HookStandardDelete() ent.Hook {
 
 			id, _ := m.ID()
 
-			checkCtx := privacy.DecisionContext(ctx, privacy.Allowf("check standard usage before deletion"))
+			checkCtx := auth.WithInternalReadContext(ctx)
 
 			// always block if standard is in use by trust center compliances
 			trustCenterLinkedCount, err := m.Client().TrustCenterCompliance.Query().
@@ -94,7 +93,7 @@ func HookStandardDelete() ent.Hook {
 				return nil, ErrPublicStandardCannotBeDeleted
 			}
 
-			ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")))
+			ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalOperationContext(ctx))
 
 			// remove standard_id mapping from org owned controls
 			err = m.Client().Control.Update().ClearStandardID().

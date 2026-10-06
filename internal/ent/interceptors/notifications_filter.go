@@ -21,7 +21,7 @@ func NotificationQueryFilter() generated.Interceptor {
 
 		// Get user info from context
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing notifications")
 
 			return auth.ErrNoAuthUser

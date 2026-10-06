@@ -100,7 +100,7 @@ func CanEditObjectUnderParents(parents []string, fetch func(ctx context.Context,
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
 
@@ -211,8 +211,8 @@ func CheckOrgAccess() privacy.MutationRule {
 // DenyQueryIfNotAuthenticated denies a query if the user is not authenticated
 func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		_, ok := auth.CallerFromContext(ctx)
+		if !ok {
 			logx.FromContext(ctx).Info().Msg("unable to get authenticated user context")
 
 			return auth.ErrNoAuthUser
@@ -225,8 +225,8 @@ func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 // DenyMutationIfNotAuthenticated denies a mutation if the user is not authenticated
 func DenyMutationIfNotAuthenticated() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		_, ok := auth.CallerFromContext(ctx)
+		if !ok {
 			logx.FromContext(ctx).Info().Msg("unable to get authenticated user context")
 
 			return auth.ErrNoAuthUser
@@ -260,7 +260,7 @@ func CheckEdgesForRemovedAccess(ctx context.Context, m ent.Mutation, edges []str
 // checkEdgesEditAccess takes a list of edges and looks for the permissions edges to confirm the user has edit access
 func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, added bool) error {
 	actor, ok := auth.CallerFromContext(ctx)
-	if !ok || actor == nil {
+	if !ok {
 		logx.FromContext(ctx).Error().Msg("unable to get caller from context for edge checks")
 
 		return auth.ErrNoAuthUser

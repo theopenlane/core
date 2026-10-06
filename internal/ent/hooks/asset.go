@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/iam/auth"
 )
 
 // HookAssetCreate sets the display name for assets everytime one is created
@@ -51,14 +51,14 @@ func HookAssetInternalOwner() ent.Hook {
 				return nil, err
 			}
 
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalReadContext(ctx)
 
 			userID, err := m.Client().User.Query().
 				Where(
 					user.EmailEqualFold(address.Address),
 					user.HasOrgMembershipsWith(orgmembership.OrganizationID(ownerID)),
 				).
-				OnlyID(allowCtx)
+				OnlyID(internalCtx)
 
 			switch {
 			case err == nil:
@@ -75,7 +75,7 @@ func HookAssetInternalOwner() ent.Hook {
 					identityholder.OwnerID(ownerID),
 					emailOrAliasMatch(identityholder.FieldEmail, identityholder.FieldEmailAliases, []string{address.Address}),
 				).
-				FirstID(allowCtx)
+				FirstID(internalCtx)
 			if err != nil {
 				if generated.IsNotFound(err) {
 					return next.Mutate(ctx, m)

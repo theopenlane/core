@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -57,7 +56,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 
 	testUser := testUserDetails{}
 
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	// create a test user
 	var err error
@@ -113,7 +112,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests seeds
-	userCtx = privacy.DecisionContext(userCtx, privacy.Allow)
+	userCtx = auth.WithInternalOperationContext(userCtx)
 
 	// add client to context, required for hooks that expect the client to be in the context
 	userCtx = ent.NewContext(userCtx, suite.db)
@@ -138,7 +137,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests seeds
-	testUser.UserCtx = privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+	testUser.UserCtx = auth.WithInternalOperationContext(testUser.UserCtx)
 
 	// add client to context, required for hooks that expect the client to be in the context
 	testUser.UserCtx = ent.NewContext(testUser.UserCtx, suite.db)

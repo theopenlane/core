@@ -15,13 +15,19 @@ import (
 	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
+	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
@@ -247,4 +253,49 @@ func releaseWorkflowRuntime(t *testing.T) {
 	err := suite.GalaRuntime.RemoveListeners(ctx, workflowListenerIDs...)
 	th.RequireNoError(t, err)
 	workflowListenerIDs = nil
+}
+
+func createWorkflowDefinition(ctx context.Context, t *testing.T, orgID, schemaType string, kind enums.WorkflowKind, doc models.WorkflowDefinitionDocument) *ent.WorkflowDefinition {
+	t.Helper()
+
+	operations, fields := workflows.DeriveTriggerPrefilter(doc)
+
+	workflowDef, err := suite.Client.DB.WorkflowDefinition.Create().
+		SetName(schemaType + " Workflow " + ulids.New().String()).
+		SetSchemaType(schemaType).
+		SetWorkflowKind(kind).
+		SetActive(true).
+		SetDraft(false).
+		SetOwnerID(orgID).
+		SetTriggerOperations(operations).
+		SetTriggerFields(fields).
+		SetDefinitionJSON(doc).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	return workflowDef
+}
+
+func waitForWorkflowInstance(ctx context.Context, t *testing.T, definitionID string, object predicate.WorkflowInstance, msg string) *ent.WorkflowInstance {
+	t.Helper()
+
+	var instance *ent.WorkflowInstance
+
+	waitForCondition(t, func() bool {
+		found, err := suite.Client.DB.WorkflowInstance.Query().
+			Where(
+				workflowinstance.WorkflowDefinitionIDEQ(definitionID),
+				object,
+			).
+			First(ctx)
+		if err != nil {
+			return false
+		}
+
+		instance = found
+
+		return true
+	}, msg)
+
+	return instance
 }

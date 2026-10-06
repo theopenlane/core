@@ -9,10 +9,10 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/pkg/catalog"
 	"github.com/theopenlane/core/v2/pkg/catalog/gencatalog"
+	"github.com/theopenlane/iam/auth"
 )
 
 // frameworkOrder pins the display order of these frameworks ahead of the rest
@@ -28,8 +28,8 @@ var frameworkOrder = map[string]int{
 func Catalog(ctx context.Context, client *generated.Client) (models.Questionnaire, error) {
 	questionnaire := defaultQuestionnaire
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	opts, err := getFrameworkOptions(allowCtx, client)
+	internalCtx := auth.WithInternalReadContext(ctx)
+	opts, err := getFrameworkOptions(internalCtx, client)
 	if err != nil {
 		return models.Questionnaire{}, err
 	}

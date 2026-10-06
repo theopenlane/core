@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -31,7 +32,7 @@ func (r *mutationResolver) UpdateWorkflowProposalChanges(ctx context.Context, in
 
 	// this is required to fetch the proposal but the requireworkflowObjectEditAccess check
 	// enforces permissions
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, input.ID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -86,7 +87,7 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -108,11 +109,10 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 		return nil, err
 	}
 
-	submitCaller, ok := auth.CallerFromContext(ctx)
-	if !ok || submitCaller == nil || submitCaller.SubjectID == "" {
+	_, err = auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
 		return nil, rout.ErrPermissionDenied
 	}
-	userID := submitCaller.SubjectID
 
 	if proposal.OwnerID != "" {
 		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
@@ -133,7 +133,7 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 	updated, err := r.db.WorkflowProposal.UpdateOneID(proposal.ID).
 		SetState(enums.WorkflowProposalStateSubmitted).
 		SetSubmittedAt(now).
-		SetSubmittedByUserID(userID).
+		SetNillableSubmittedByUserID(lo.EmptyableToPtr(workflows.ActingUserID(ctx))).
 		SetProposedHash(proposedHash).
 		Save(allowCtx)
 	if err != nil {
@@ -151,7 +151,7 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -175,7 +175,7 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 	if !ok || withdrawCaller == nil || withdrawCaller.SubjectID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
-	userID := withdrawCaller.SubjectID
+	userID := workflows.ActingUserID(ctx)
 
 	if proposal.OwnerID != "" {
 		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
@@ -228,8 +228,8 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
-	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
+	readCtx := auth.WithInternalReadContext(ctx)
+	proposal, err := r.db.WorkflowProposal.Get(readCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}
@@ -253,7 +253,7 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 				return nil, err
 			}
 			if !isApprover {
-				return nil, err
+				return nil, rout.ErrPermissionDenied
 			}
 		} else {
 			return nil, err
@@ -282,19 +282,19 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 		return nil, err
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
-	ownerID, err := workflows.ObjectOwnerID(allowCtx, r.db, *objType, objectID)
+	readCtx := auth.WithInternalReadContext(ctx)
+	ownerID, err := workflows.ObjectOwnerID(readCtx, r.db, *objType, objectID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
 	}
 	if ownerID != "" {
-		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &ownerID)
+		readCtx, err = common.SetOrganizationInAuthContext(readCtx, &ownerID)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, r.db, &workflows.Object{
+	objRefIDs, err := workflows.ObjectRefIDs(readCtx, r.db, &workflows.Object{
 		ID:   objectID,
 		Type: *objType,
 	})
@@ -318,7 +318,7 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 			workflowproposal.WorkflowObjectRefIDIn(objRefIDs...),
 			workflowproposal.StateIn(states...),
 		).
-		All(allowCtx)
+		All(readCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 	}

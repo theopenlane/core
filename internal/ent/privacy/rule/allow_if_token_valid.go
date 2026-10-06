@@ -89,6 +89,20 @@ func SkipTokenInContext(ctx context.Context, skipTypes []token.PrivacyToken) boo
 	return false
 }
 
+// publicFlowTokenTypes are the privacy tokens set by unauthenticated flows such as signup, invites, oauth, verification and password reset
+var publicFlowTokenTypes = []token.PrivacyToken{
+	&token.OauthTooToken{},
+	&token.VerifyToken{},
+	&token.SignUpToken{},
+	&token.OrgInviteToken{},
+	&token.ResetToken{},
+}
+
+// HasPublicFlowToken reports whether the context carries a privacy token from an unauthenticated flow
+func HasPublicFlowToken(ctx context.Context) bool {
+	return SkipTokenInContext(ctx, publicFlowTokenTypes)
+}
+
 func privacyTokenFromContext[T any](ctx context.Context) (T, bool) {
 	var zero T
 

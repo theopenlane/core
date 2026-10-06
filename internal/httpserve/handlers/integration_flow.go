@@ -33,7 +33,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 	requestCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(requestCtx)
-	if !ok || caller == nil {
+	if !ok {
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser)
 	}
 
@@ -141,7 +141,7 @@ func (h *Handler) HandleIntegrationAuthCallback(ctx echo.Context) error {
 
 	callbackInput := normalizeIntegrationAuthCallbackInput(ctx.Request())
 
-	reqCtx = auth.WithCaller(reqCtx, auth.NewWebhookCaller(orgCookie.Value))
+	reqCtx = auth.WithOrgInternalCaller(reqCtx, orgCookie.Value)
 
 	_, err = h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
 		State:    stateCookie.Value,

@@ -302,7 +302,8 @@ func TestMutationCreateRisk(t *testing.T) {
 		{
 			name: "using api token with only risk read/write scope, missing sla_definition scope",
 			request: testclient.CreateRiskInput{
-				Name: "Risk",
+				Name:   "Risk",
+				Impact: &enums.RiskImpactLow,
 			},
 			// the group and program are specific to the risk query in CreateRisk
 			client:         th.SetupAPIToken(th.SharedTestUser1.UserCtx, t, []string{"risk:write", "group:read", "program:read"}),
@@ -322,7 +323,8 @@ func TestMutationCreateRisk(t *testing.T) {
 		{
 			name: "user now authorized, added group to org",
 			request: testclient.CreateRiskInput{
-				Name: "Risk",
+				Name:   "Risk",
+				Impact: &enums.RiskImpactLow,
 			},
 			addGroupToOrg:  true,
 			client:         suite.Client.API,
@@ -485,7 +487,7 @@ func TestMutationCreateRisk(t *testing.T) {
 
 			// check due date based on the sla config, which should be 60 days from now for a risk with low impact
 			if tc.request.Impact != nil && *tc.request.Impact == enums.RiskImpactLow {
-				assert.Check(t, resp.CreateRisk.Risk.DueDate != nil)
+				assert.Assert(t, resp.CreateRisk.Risk.DueDate != nil)
 				due := time.Time(*resp.CreateRisk.Risk.DueDate)
 				assert.Check(t, due.After(time.Now().Add(59*24*time.Hour)), "due date is not after 59 days from now %s", due.String())
 				assert.Check(t, due.Before(time.Now().Add(61*24*time.Hour)), "due date is not before 61 days from now %s", due.String())

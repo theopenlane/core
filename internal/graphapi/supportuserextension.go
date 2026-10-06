@@ -27,8 +27,7 @@ func (supportUserEdgeExtension) InterceptField(ctx context.Context, next graphql
 		return next(ctx)
 	}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || !caller.Has(auth.CapOrgSupport) {
+	if !auth.HasInContextCaller(ctx, auth.CapOrgSupport) {
 		return next(ctx)
 	}
 
@@ -55,8 +54,8 @@ func WithSupportUserEdges(srv *handler.Server) {
 	srv.Use(supportUserEdgeExtension{})
 }
 
-// supportUserFromCaller defines the support user for calls from the UI such as GetUserProfile
-func supportUserFromCaller(caller *auth.Caller) *generated.User {
+// defineSupportUser defines the support user for calls from the UI such as GetUserProfile
+func defineSupportUser(caller *auth.Caller) *generated.User {
 	orgID := caller.OrganizationID
 
 	setting := &generated.UserSetting{

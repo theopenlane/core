@@ -24,11 +24,9 @@ func (token *OauthTooToken) SetEmail(email string) {
 // parent context and a oauth2 token as parameters and returns a new context with
 // the oauth2 token added
 func NewContextWithOauthTooToken(parent context.Context, email string) context.Context {
-	ctx := oauthTooTokenContextKey.Set(parent, &OauthTooToken{
+	return oauthTooTokenContextKey.Set(parent, &OauthTooToken{
 		email: email,
 	})
-
-	return withTokenContextBypassCaller(ctx)
 }
 
 // OauthTooTokenFromContext retrieves the value associated with the

@@ -7,7 +7,9 @@ package generated
 import (
 	"context"
 
-	"entgo.io/ent/privacy"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
@@ -104,65 +106,74 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/iam/entfga"
 )
 
 func APITokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup apitoken edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ActionPlanEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplan edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func AssessmentEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessment edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func AssessmentResponseEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmentresponse edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func AssetEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup asset edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func CampaignEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup campaign edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func CampaignTargetEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup campaigntarget edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func CheckResultEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup checkresult edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ContactEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ControlEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup control edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	{
 		ids, err := FromContext(ctx).Subcontrol.Query().Where(subcontrol.HasControlWith(control.ID(id))).IDs(ctx)
@@ -202,37 +213,43 @@ func ControlEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func ControlImplementationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlimplementation edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ControlObjectiveEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjective edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func CustomDomainEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomain edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func CustomTypeEnumEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customtypeenum edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func DNSVerificationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverification edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func DirectoryAccountEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directoryaccount edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasDirectoryAccountWith(directoryaccount.ID(id)))).Exist(ctx); err == nil && exists {
 
@@ -246,7 +263,8 @@ func DirectoryAccountEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func DirectoryGroupEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorygroup edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasDirectoryGroupWith(directorygroup.ID(id)))).Exist(ctx); err == nil && exists {
 
@@ -260,13 +278,15 @@ func DirectoryGroupEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func DirectoryMembershipEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorymembership edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func DiscussionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup discussion edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	{
 		ids, err := FromContext(ctx).Note.Query().Where(note.HasDiscussionWith(discussion.ID(id))).IDs(ctx)
@@ -295,79 +315,92 @@ func DiscussionEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func DocumentDataEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdata edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func EmailTemplateEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailtemplate edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func EmailVerificationTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailverificationtoken edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func EntityEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entity edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func EntityTypeEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytype edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func EventEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup event edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func EvidenceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidence edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ExportEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup export edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func FileEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup file edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func FileDownloadTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup filedownloadtoken edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func FindingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup finding edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func FindingControlEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findingcontrol edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func GroupEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup group edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	{
 		ids, err := FromContext(ctx).GroupSetting.Query().Where(groupsetting.HasGroupWith(group.ID(id))).IDs(ctx)
@@ -407,85 +440,99 @@ func GroupEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func GroupMembershipEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembership edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func GroupSettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupsetting edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func HushEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hush edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func IdentityHolderEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup identityholder edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ImpersonationEventEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup impersonationevent edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func IntegrationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integration edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func IntegrationRunEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationrun edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func IntegrationWebhookEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationwebhook edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func InternalPolicyEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicy edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func InviteEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func MappableDomainEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappabledomain edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func MappedControlEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappedcontrol edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func NarrativeEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrative edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func NoteEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup note edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	{
 		ids, err := FromContext(ctx).TrustCenterFAQ.Query().Where(trustcenterfaq.HasNoteWith(note.ID(id))).IDs(ctx)
@@ -514,61 +561,71 @@ func NoteEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func NotificationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notification edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func NotificationPreferenceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notificationpreference edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func NotificationTemplateEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notificationtemplate edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func OnboardingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup onboarding edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func OrgMembershipEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembership edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func OrgModuleEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmodule edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func OrgPriceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgprice edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func OrgProductEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgproduct edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func OrgSubscriptionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscription edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func OrganizationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organization edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 	ctx = contextx.WithSkipEnumInUseCheck(ctx)
 	if exists, err := FromContext(ctx).CustomTypeEnum.Query().Where((customtypeenum.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if customtypeenumCount, err := FromContext(ctx).CustomTypeEnum.Delete().Where(customtypeenum.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
@@ -2236,37 +2293,43 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func OrganizationSettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsetting edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func PasswordResetTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup passwordresettoken edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func PersonalAccessTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup personalaccesstoken edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func PlatformEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup platform edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ProcedureEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedure edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ProgramEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup program edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	if exists, err := FromContext(ctx).ProgramMembership.Query().Where((programmembership.HasProgramWith(program.ID(id)))).Exist(ctx); err == nil && exists {
 		if err := PurgeProgramMembershipHistory(ctx, programmembership.HasProgramWith(program.ID(id))); err != nil {
@@ -2283,55 +2346,64 @@ func ProgramEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func ProgramMembershipEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembership edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func RemediationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup remediation edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ReviewEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup review edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func RiskEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup risk edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func SLADefinitionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup sladefinition edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func ScanEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scan edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func StandardEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func SubcontrolEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrol edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessor edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	{
 		ids, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where(trustcentersubprocessor.HasSubprocessorWith(subprocessor.ID(id))).IDs(ctx)
@@ -2360,37 +2432,43 @@ func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func SubscriberEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subscriber edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func SystemDetailEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup systemdetail edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TFASettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tfasetting edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TagDefinitionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tagdefinition edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TaskEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup task edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TemplateEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup template edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	{
 		ids, err := FromContext(ctx).DocumentData.Query().Where(documentdata.HasTemplateWith(template.ID(id))).IDs(ctx)
@@ -2419,7 +2497,8 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenter edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	if exists, err := FromContext(ctx).CustomDomain.Query().Where((customdomain.TrustCenterID(id))).Exist(ctx); err == nil && exists {
 		if err := PurgeCustomDomainHistory(ctx, customdomain.TrustCenterID(id)); err != nil {
@@ -2738,13 +2817,15 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func TrustCenterComplianceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentercompliance edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdoc edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	{
 		ids, err := FromContext(ctx).File.Query().Where(file.HasTrustCenterDocWith(trustcenterdoc.ID(id))).IDs(ctx)
@@ -2796,43 +2877,50 @@ func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func TrustCenterEntityEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterentity edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TrustCenterFAQEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterfaq edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TrustCenterNDARequestEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterndarequest edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TrustCenterSettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersetting edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TrustCenterSubprocessorEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessor edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func TrustCenterWatermarkConfigEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterwatermarkconfig edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func UserEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup user edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	{
 		ids, err := FromContext(ctx).PersonalAccessToken.Query().Where(personalaccesstoken.HasOwnerWith(user.ID(id))).IDs(ctx)
@@ -3003,37 +3091,43 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func UserSettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersetting edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func VendorRiskScoreEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorriskscore edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func VendorScoringConfigEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorscoringconfig edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func VulnerabilityEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vulnerability edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func WebauthnEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup webauthn edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func WorkflowAssignmentEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignment edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	if exists, err := FromContext(ctx).WorkflowAssignmentTarget.Query().Where((workflowassignmenttarget.WorkflowAssignmentID(id))).Exist(ctx); err == nil && exists {
 		if err := PurgeWorkflowAssignmentTargetHistory(ctx, workflowassignmenttarget.WorkflowAssignmentID(id)); err != nil {
@@ -3049,13 +3143,15 @@ func WorkflowAssignmentEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func WorkflowAssignmentTargetEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenttarget edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func WorkflowDefinitionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowdefinition edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	if exists, err := FromContext(ctx).WorkflowInstance.Query().Where((workflowinstance.WorkflowDefinitionID(id))).Exist(ctx); err == nil && exists {
 		if workflowinstanceCount, err := FromContext(ctx).WorkflowInstance.Delete().Where(workflowinstance.WorkflowDefinitionID(id)).Exec(ctx); err != nil {
@@ -3068,13 +3164,15 @@ func WorkflowDefinitionEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func WorkflowEventEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowevent edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }
 
 func WorkflowInstanceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowinstance edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	if exists, err := FromContext(ctx).WorkflowAssignment.Query().Where((workflowassignment.WorkflowInstanceID(id))).Exist(ctx); err == nil && exists {
 		if err := PurgeWorkflowAssignmentHistory(ctx, workflowassignment.WorkflowInstanceID(id)); err != nil {
@@ -3104,7 +3202,8 @@ func WorkflowInstanceEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func WorkflowObjectRefEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectref edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	if exists, err := FromContext(ctx).WorkflowProposal.Query().Where((workflowproposal.WorkflowObjectRefID(id))).Exist(ctx); err == nil && exists {
 		if workflowproposalCount, err := FromContext(ctx).WorkflowProposal.Delete().Where(workflowproposal.WorkflowObjectRefID(id)).Exec(ctx); err != nil {
@@ -3117,7 +3216,8 @@ func WorkflowObjectRefEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func WorkflowProposalEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowproposal edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }

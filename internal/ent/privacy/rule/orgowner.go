@@ -33,14 +33,12 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 			return privacy.Skip
 		}
 
-		actor, ok := auth.CallerFromContext(ctx)
-		if !ok || actor == nil {
+		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+		if err != nil {
 			logx.FromContext(ctx).Error().Msg("unable to get caller from context on deny if not in organization")
 
 			return auth.ErrNoAuthUser
 		}
-
-		orgID := actor.OrganizationID
 
 		// special cases
 		switch m := m.(type) {
