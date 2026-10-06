@@ -1,3 +1,31 @@
 extend type Assessment {
     accessURL: String
 }
+
+"""
+AssessmentPoliciesInput is used to attach internal policies to an assessment
+along with the assessment creation
+"""
+input AssessmentPoliciesInput {
+  internalPolicyID: ID!
+  """
+  the revision of the internal policy, defaults to the current revision of the policy
+  """
+  policyRevision: String
+}
+
+extend type Mutation{
+    """
+    Create a new assessment with internal policies attached
+    """
+    createAssessmentWithPolicies(
+        """
+        values of the assessment to be created
+        """
+        assessmentInput: CreateAssessmentInput!
+        """
+        internal policies to attach to the assessment
+        """
+        policies: [AssessmentPoliciesInput!]
+    ): AssessmentCreatePayload!
+}

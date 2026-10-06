@@ -1203,6 +1203,60 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 	return c
 }
 
+// CreateAssessmentPolicyInput represents a mutation input for creating assessmentpolicies.
+type CreateAssessmentPolicyInput struct {
+	PolicyRevision   *string `json:"policy_revision,omitempty"`
+	OwnerID          *string `json:"owner_id,omitempty"`
+	AssessmentID     string  `json:"assessment_id,omitempty"`
+	InternalPolicyID string  `json:"internal_policy_id,omitempty"`
+}
+
+// Mutate applies the CreateAssessmentPolicyInput on the AssessmentPolicyMutation builder.
+func (i *CreateAssessmentPolicyInput) Mutate(m *AssessmentPolicyMutation) {
+	if v := i.PolicyRevision; v != nil {
+		m.SetPolicyRevision(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetAssessmentID(i.AssessmentID)
+	m.SetInternalPolicyID(i.InternalPolicyID)
+}
+
+// SetInput applies the change-set in the CreateAssessmentPolicyInput on the AssessmentPolicyCreate builder.
+func (c *AssessmentPolicyCreate) SetInput(i CreateAssessmentPolicyInput) *AssessmentPolicyCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateAssessmentPolicyInput represents a mutation input for updating assessmentpolicies.
+type UpdateAssessmentPolicyInput struct {
+	ClearOwner bool
+	OwnerID    *string `json:"owner_id,omitempty"`
+}
+
+// Mutate applies the UpdateAssessmentPolicyInput on the AssessmentPolicyMutation builder.
+func (i *UpdateAssessmentPolicyInput) Mutate(m *AssessmentPolicyMutation) {
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateAssessmentPolicyInput on the AssessmentPolicyUpdate builder.
+func (c *AssessmentPolicyUpdate) SetInput(i UpdateAssessmentPolicyInput) *AssessmentPolicyUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateAssessmentPolicyInput on the AssessmentPolicyUpdateOne builder.
+func (c *AssessmentPolicyUpdateOne) SetInput(i UpdateAssessmentPolicyInput) *AssessmentPolicyUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
 type CreateAssessmentResponseInput struct {
 	WorkflowEligibleMarker *bool                  `json:"workflow_eligible_marker,omitempty"`
@@ -15797,6 +15851,7 @@ type CreateOrganizationInput struct {
 	ActionPlanCreatorIDs                 []string   `json:"action_plan_creator_ids,omitempty"`
 	APITokenCreatorIDs                   []string   `json:"api_token_creator_ids,omitempty"`
 	AssessmentCreatorIDs                 []string   `json:"assessment_creator_ids,omitempty"`
+	AssessmentPolicyCreatorIDs           []string   `json:"assessment_policy_creator_ids,omitempty"`
 	AssetCreatorIDs                      []string   `json:"asset_creator_ids,omitempty"`
 	CampaignCreatorIDs                   []string   `json:"campaign_creator_ids,omitempty"`
 	CampaignTargetCreatorIDs             []string   `json:"campaign_target_creator_ids,omitempty"`
@@ -15871,73 +15926,12 @@ type CreateOrganizationInput struct {
 	ParentID                             *string    `json:"parent_id,omitempty"`
 	SettingID                            *string    `json:"setting_id,omitempty"`
 	PersonalAccessTokenIDs               []string   `json:"personal_access_token_ids,omitempty"`
-	APITokenIDs                          []string   `json:"api_token_ids,omitempty"`
-	EmailTemplateIDs                     []string   `json:"email_template_ids,omitempty"`
-	NotificationPreferenceIDs            []string   `json:"notification_preference_ids,omitempty"`
-	NotificationTemplateIDs              []string   `json:"notification_template_ids,omitempty"`
 	FileIDs                              []string   `json:"file_ids,omitempty"`
 	EventIDs                             []string   `json:"event_ids,omitempty"`
-	SecretIDs                            []string   `json:"secret_ids,omitempty"`
 	AvatarFileID                         *string    `json:"avatar_file_id,omitempty"`
-	GroupIDs                             []string   `json:"group_ids,omitempty"`
-	TemplateIDs                          []string   `json:"template_ids,omitempty"`
-	IntegrationIDs                       []string   `json:"integration_ids,omitempty"`
-	DocumentIDs                          []string   `json:"document_ids,omitempty"`
 	OrgSubscriptionIDs                   []string   `json:"org_subscription_ids,omitempty"`
 	InviteIDs                            []string   `json:"invite_ids,omitempty"`
-	SubscriberIDs                        []string   `json:"subscriber_ids,omitempty"`
-	EntityIDs                            []string   `json:"entity_ids,omitempty"`
-	PlatformIDs                          []string   `json:"platform_ids,omitempty"`
-	IdentityHolderIDs                    []string   `json:"identity_holder_ids,omitempty"`
-	CampaignIDs                          []string   `json:"campaign_ids,omitempty"`
-	CampaignTargetIDs                    []string   `json:"campaign_target_ids,omitempty"`
-	EntityTypeIDs                        []string   `json:"entity_type_ids,omitempty"`
-	ContactIDs                           []string   `json:"contact_ids,omitempty"`
-	NoteIDs                              []string   `json:"note_ids,omitempty"`
-	TaskIDs                              []string   `json:"task_ids,omitempty"`
-	ProgramIDs                           []string   `json:"program_ids,omitempty"`
-	SystemDetailIDs                      []string   `json:"system_detail_ids,omitempty"`
-	ProcedureIDs                         []string   `json:"procedure_ids,omitempty"`
-	InternalPolicyIDs                    []string   `json:"internal_policy_ids,omitempty"`
-	RiskIDs                              []string   `json:"risk_ids,omitempty"`
-	ControlObjectiveIDs                  []string   `json:"control_objective_ids,omitempty"`
-	NarrativeIDs                         []string   `json:"narrative_ids,omitempty"`
-	ControlIDs                           []string   `json:"control_ids,omitempty"`
-	SubcontrolIDs                        []string   `json:"subcontrol_ids,omitempty"`
-	ControlImplementationIDs             []string   `json:"control_implementation_ids,omitempty"`
-	MappedControlIDs                     []string   `json:"mapped_control_ids,omitempty"`
-	EvidenceIDs                          []string   `json:"evidence_ids,omitempty"`
-	StandardIDs                          []string   `json:"standard_ids,omitempty"`
-	ActionPlanIDs                        []string   `json:"action_plan_ids,omitempty"`
-	CustomDomainIDs                      []string   `json:"custom_domain_ids,omitempty"`
-	DNSVerificationIDs                   []string   `json:"dns_verification_ids,omitempty"`
-	TrustCenterIDs                       []string   `json:"trust_center_ids,omitempty"`
-	AssetIDs                             []string   `json:"asset_ids,omitempty"`
-	ScanIDs                              []string   `json:"scan_ids,omitempty"`
-	SLADefinitionIDs                     []string   `json:"sla_definition_ids,omitempty"`
-	SubprocessorIDs                      []string   `json:"subprocessor_ids,omitempty"`
-	ExportIDs                            []string   `json:"export_ids,omitempty"`
-	TrustCenterWatermarkConfigIDs        []string   `json:"trust_center_watermark_config_ids,omitempty"`
 	ImpersonationEventIDs                []string   `json:"impersonation_event_ids,omitempty"`
-	AssessmentIDs                        []string   `json:"assessment_ids,omitempty"`
-	AssessmentResponseIDs                []string   `json:"assessment_response_ids,omitempty"`
-	CustomTypeEnumIDs                    []string   `json:"custom_type_enum_ids,omitempty"`
-	TagDefinitionIDs                     []string   `json:"tag_definition_ids,omitempty"`
-	RemediationIDs                       []string   `json:"remediation_ids,omitempty"`
-	FindingIDs                           []string   `json:"finding_ids,omitempty"`
-	ReviewIDs                            []string   `json:"review_ids,omitempty"`
-	VulnerabilityIDs                     []string   `json:"vulnerability_ids,omitempty"`
-	WorkflowDefinitionIDs                []string   `json:"workflow_definition_ids,omitempty"`
-	WorkflowInstanceIDs                  []string   `json:"workflow_instance_ids,omitempty"`
-	WorkflowEventIDs                     []string   `json:"workflow_event_ids,omitempty"`
-	WorkflowAssignmentIDs                []string   `json:"workflow_assignment_ids,omitempty"`
-	WorkflowAssignmentTargetIDs          []string   `json:"workflow_assignment_target_ids,omitempty"`
-	WorkflowObjectRefIDs                 []string   `json:"workflow_object_ref_ids,omitempty"`
-	DirectoryAccountIDs                  []string   `json:"directory_account_ids,omitempty"`
-	DirectoryGroupIDs                    []string   `json:"directory_group_ids,omitempty"`
-	DiscussionIDs                        []string   `json:"discussion_ids,omitempty"`
-	VendorScoringConfigIDs               []string   `json:"vendor_scoring_config_ids,omitempty"`
-	VendorRiskScoreIDs                   []string   `json:"vendor_risk_score_ids,omitempty"`
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -15969,6 +15963,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AssessmentCreatorIDs; len(v) > 0 {
 		m.AddAssessmentCreatorIDs(v...)
+	}
+	if v := i.AssessmentPolicyCreatorIDs; len(v) > 0 {
+		m.AddAssessmentPolicyCreatorIDs(v...)
 	}
 	if v := i.AssetCreatorIDs; len(v) > 0 {
 		m.AddAssetCreatorIDs(v...)
@@ -16192,41 +16189,14 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.PersonalAccessTokenIDs; len(v) > 0 {
 		m.AddPersonalAccessTokenIDs(v...)
 	}
-	if v := i.APITokenIDs; len(v) > 0 {
-		m.AddAPITokenIDs(v...)
-	}
-	if v := i.EmailTemplateIDs; len(v) > 0 {
-		m.AddEmailTemplateIDs(v...)
-	}
-	if v := i.NotificationPreferenceIDs; len(v) > 0 {
-		m.AddNotificationPreferenceIDs(v...)
-	}
-	if v := i.NotificationTemplateIDs; len(v) > 0 {
-		m.AddNotificationTemplateIDs(v...)
-	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
-	if v := i.SecretIDs; len(v) > 0 {
-		m.AddSecretIDs(v...)
-	}
 	if v := i.AvatarFileID; v != nil {
 		m.SetAvatarFileID(*v)
-	}
-	if v := i.GroupIDs; len(v) > 0 {
-		m.AddGroupIDs(v...)
-	}
-	if v := i.TemplateIDs; len(v) > 0 {
-		m.AddTemplateIDs(v...)
-	}
-	if v := i.IntegrationIDs; len(v) > 0 {
-		m.AddIntegrationIDs(v...)
-	}
-	if v := i.DocumentIDs; len(v) > 0 {
-		m.AddDocumentIDs(v...)
 	}
 	if v := i.OrgSubscriptionIDs; len(v) > 0 {
 		m.AddOrgSubscriptionIDs(v...)
@@ -16234,164 +16204,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.InviteIDs; len(v) > 0 {
 		m.AddInviteIDs(v...)
 	}
-	if v := i.SubscriberIDs; len(v) > 0 {
-		m.AddSubscriberIDs(v...)
-	}
-	if v := i.EntityIDs; len(v) > 0 {
-		m.AddEntityIDs(v...)
-	}
-	if v := i.PlatformIDs; len(v) > 0 {
-		m.AddPlatformIDs(v...)
-	}
-	if v := i.IdentityHolderIDs; len(v) > 0 {
-		m.AddIdentityHolderIDs(v...)
-	}
-	if v := i.CampaignIDs; len(v) > 0 {
-		m.AddCampaignIDs(v...)
-	}
-	if v := i.CampaignTargetIDs; len(v) > 0 {
-		m.AddCampaignTargetIDs(v...)
-	}
-	if v := i.EntityTypeIDs; len(v) > 0 {
-		m.AddEntityTypeIDs(v...)
-	}
-	if v := i.ContactIDs; len(v) > 0 {
-		m.AddContactIDs(v...)
-	}
-	if v := i.NoteIDs; len(v) > 0 {
-		m.AddNoteIDs(v...)
-	}
-	if v := i.TaskIDs; len(v) > 0 {
-		m.AddTaskIDs(v...)
-	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.SystemDetailIDs; len(v) > 0 {
-		m.AddSystemDetailIDs(v...)
-	}
-	if v := i.ProcedureIDs; len(v) > 0 {
-		m.AddProcedureIDs(v...)
-	}
-	if v := i.InternalPolicyIDs; len(v) > 0 {
-		m.AddInternalPolicyIDs(v...)
-	}
-	if v := i.RiskIDs; len(v) > 0 {
-		m.AddRiskIDs(v...)
-	}
-	if v := i.ControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
-	}
-	if v := i.NarrativeIDs; len(v) > 0 {
-		m.AddNarrativeIDs(v...)
-	}
-	if v := i.ControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
-	if v := i.SubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
-	}
-	if v := i.ControlImplementationIDs; len(v) > 0 {
-		m.AddControlImplementationIDs(v...)
-	}
-	if v := i.MappedControlIDs; len(v) > 0 {
-		m.AddMappedControlIDs(v...)
-	}
-	if v := i.EvidenceIDs; len(v) > 0 {
-		m.AddEvidenceIDs(v...)
-	}
-	if v := i.StandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
-	}
-	if v := i.ActionPlanIDs; len(v) > 0 {
-		m.AddActionPlanIDs(v...)
-	}
-	if v := i.CustomDomainIDs; len(v) > 0 {
-		m.AddCustomDomainIDs(v...)
-	}
-	if v := i.DNSVerificationIDs; len(v) > 0 {
-		m.AddDNSVerificationIDs(v...)
-	}
-	if v := i.TrustCenterIDs; len(v) > 0 {
-		m.AddTrustCenterIDs(v...)
-	}
-	if v := i.AssetIDs; len(v) > 0 {
-		m.AddAssetIDs(v...)
-	}
-	if v := i.ScanIDs; len(v) > 0 {
-		m.AddScanIDs(v...)
-	}
-	if v := i.SLADefinitionIDs; len(v) > 0 {
-		m.AddSLADefinitionIDs(v...)
-	}
-	if v := i.SubprocessorIDs; len(v) > 0 {
-		m.AddSubprocessorIDs(v...)
-	}
-	if v := i.ExportIDs; len(v) > 0 {
-		m.AddExportIDs(v...)
-	}
-	if v := i.TrustCenterWatermarkConfigIDs; len(v) > 0 {
-		m.AddTrustCenterWatermarkConfigIDs(v...)
-	}
 	if v := i.ImpersonationEventIDs; len(v) > 0 {
 		m.AddImpersonationEventIDs(v...)
-	}
-	if v := i.AssessmentIDs; len(v) > 0 {
-		m.AddAssessmentIDs(v...)
-	}
-	if v := i.AssessmentResponseIDs; len(v) > 0 {
-		m.AddAssessmentResponseIDs(v...)
-	}
-	if v := i.CustomTypeEnumIDs; len(v) > 0 {
-		m.AddCustomTypeEnumIDs(v...)
-	}
-	if v := i.TagDefinitionIDs; len(v) > 0 {
-		m.AddTagDefinitionIDs(v...)
-	}
-	if v := i.RemediationIDs; len(v) > 0 {
-		m.AddRemediationIDs(v...)
-	}
-	if v := i.FindingIDs; len(v) > 0 {
-		m.AddFindingIDs(v...)
-	}
-	if v := i.ReviewIDs; len(v) > 0 {
-		m.AddReviewIDs(v...)
-	}
-	if v := i.VulnerabilityIDs; len(v) > 0 {
-		m.AddVulnerabilityIDs(v...)
-	}
-	if v := i.WorkflowDefinitionIDs; len(v) > 0 {
-		m.AddWorkflowDefinitionIDs(v...)
-	}
-	if v := i.WorkflowInstanceIDs; len(v) > 0 {
-		m.AddWorkflowInstanceIDs(v...)
-	}
-	if v := i.WorkflowEventIDs; len(v) > 0 {
-		m.AddWorkflowEventIDs(v...)
-	}
-	if v := i.WorkflowAssignmentIDs; len(v) > 0 {
-		m.AddWorkflowAssignmentIDs(v...)
-	}
-	if v := i.WorkflowAssignmentTargetIDs; len(v) > 0 {
-		m.AddWorkflowAssignmentTargetIDs(v...)
-	}
-	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
-		m.AddWorkflowObjectRefIDs(v...)
-	}
-	if v := i.DirectoryAccountIDs; len(v) > 0 {
-		m.AddDirectoryAccountIDs(v...)
-	}
-	if v := i.DirectoryGroupIDs; len(v) > 0 {
-		m.AddDirectoryGroupIDs(v...)
-	}
-	if v := i.DiscussionIDs; len(v) > 0 {
-		m.AddDiscussionIDs(v...)
-	}
-	if v := i.VendorScoringConfigIDs; len(v) > 0 {
-		m.AddVendorScoringConfigIDs(v...)
-	}
-	if v := i.VendorRiskScoreIDs; len(v) > 0 {
-		m.AddVendorRiskScoreIDs(v...)
 	}
 }
 
@@ -16422,6 +16236,9 @@ type UpdateOrganizationInput struct {
 	ClearAssessmentCreators                    bool
 	AddAssessmentCreatorIDs                    []string `json:"add_assessment_creator_ids,omitempty"`
 	RemoveAssessmentCreatorIDs                 []string `json:"remove_assessment_creator_ids,omitempty"`
+	ClearAssessmentPolicyCreators              bool
+	AddAssessmentPolicyCreatorIDs              []string `json:"add_assessment_policy_creator_ids,omitempty"`
+	RemoveAssessmentPolicyCreatorIDs           []string `json:"remove_assessment_policy_creator_ids,omitempty"`
 	ClearAssetCreators                         bool
 	AddAssetCreatorIDs                         []string `json:"add_asset_creator_ids,omitempty"`
 	RemoveAssetCreatorIDs                      []string `json:"remove_asset_creator_ids,omitempty"`
@@ -16640,206 +16457,23 @@ type UpdateOrganizationInput struct {
 	ClearPersonalAccessTokens                  bool
 	AddPersonalAccessTokenIDs                  []string `json:"add_personal_access_token_ids,omitempty"`
 	RemovePersonalAccessTokenIDs               []string `json:"remove_personal_access_token_ids,omitempty"`
-	ClearAPITokens                             bool
-	AddAPITokenIDs                             []string `json:"add_api_token_ids,omitempty"`
-	RemoveAPITokenIDs                          []string `json:"remove_api_token_ids,omitempty"`
-	ClearEmailTemplates                        bool
-	AddEmailTemplateIDs                        []string `json:"add_email_template_ids,omitempty"`
-	RemoveEmailTemplateIDs                     []string `json:"remove_email_template_ids,omitempty"`
-	ClearNotificationPreferences               bool
-	AddNotificationPreferenceIDs               []string `json:"add_notification_preference_ids,omitempty"`
-	RemoveNotificationPreferenceIDs            []string `json:"remove_notification_preference_ids,omitempty"`
-	ClearNotificationTemplates                 bool
-	AddNotificationTemplateIDs                 []string `json:"add_notification_template_ids,omitempty"`
-	RemoveNotificationTemplateIDs              []string `json:"remove_notification_template_ids,omitempty"`
 	ClearFiles                                 bool
 	AddFileIDs                                 []string `json:"add_file_ids,omitempty"`
 	RemoveFileIDs                              []string `json:"remove_file_ids,omitempty"`
 	ClearEvents                                bool
 	AddEventIDs                                []string `json:"add_event_ids,omitempty"`
 	RemoveEventIDs                             []string `json:"remove_event_ids,omitempty"`
-	ClearSecrets                               bool
-	AddSecretIDs                               []string `json:"add_secret_ids,omitempty"`
-	RemoveSecretIDs                            []string `json:"remove_secret_ids,omitempty"`
 	ClearAvatarFile                            bool
 	AvatarFileID                               *string `json:"avatar_file_id,omitempty"`
-	ClearGroups                                bool
-	AddGroupIDs                                []string `json:"add_group_ids,omitempty"`
-	RemoveGroupIDs                             []string `json:"remove_group_ids,omitempty"`
-	ClearTemplates                             bool
-	AddTemplateIDs                             []string `json:"add_template_ids,omitempty"`
-	RemoveTemplateIDs                          []string `json:"remove_template_ids,omitempty"`
-	ClearIntegrations                          bool
-	AddIntegrationIDs                          []string `json:"add_integration_ids,omitempty"`
-	RemoveIntegrationIDs                       []string `json:"remove_integration_ids,omitempty"`
-	ClearDocuments                             bool
-	AddDocumentIDs                             []string `json:"add_document_ids,omitempty"`
-	RemoveDocumentIDs                          []string `json:"remove_document_ids,omitempty"`
 	ClearOrgSubscriptions                      bool
 	AddOrgSubscriptionIDs                      []string `json:"add_org_subscription_ids,omitempty"`
 	RemoveOrgSubscriptionIDs                   []string `json:"remove_org_subscription_ids,omitempty"`
 	ClearInvites                               bool
 	AddInviteIDs                               []string `json:"add_invite_ids,omitempty"`
 	RemoveInviteIDs                            []string `json:"remove_invite_ids,omitempty"`
-	ClearSubscribers                           bool
-	AddSubscriberIDs                           []string `json:"add_subscriber_ids,omitempty"`
-	RemoveSubscriberIDs                        []string `json:"remove_subscriber_ids,omitempty"`
-	ClearEntities                              bool
-	AddEntityIDs                               []string `json:"add_entity_ids,omitempty"`
-	RemoveEntityIDs                            []string `json:"remove_entity_ids,omitempty"`
-	ClearPlatforms                             bool
-	AddPlatformIDs                             []string `json:"add_platform_ids,omitempty"`
-	RemovePlatformIDs                          []string `json:"remove_platform_ids,omitempty"`
-	ClearIdentityHolders                       bool
-	AddIdentityHolderIDs                       []string `json:"add_identity_holder_ids,omitempty"`
-	RemoveIdentityHolderIDs                    []string `json:"remove_identity_holder_ids,omitempty"`
-	ClearCampaigns                             bool
-	AddCampaignIDs                             []string `json:"add_campaign_ids,omitempty"`
-	RemoveCampaignIDs                          []string `json:"remove_campaign_ids,omitempty"`
-	ClearCampaignTargets                       bool
-	AddCampaignTargetIDs                       []string `json:"add_campaign_target_ids,omitempty"`
-	RemoveCampaignTargetIDs                    []string `json:"remove_campaign_target_ids,omitempty"`
-	ClearEntityTypes                           bool
-	AddEntityTypeIDs                           []string `json:"add_entity_type_ids,omitempty"`
-	RemoveEntityTypeIDs                        []string `json:"remove_entity_type_ids,omitempty"`
-	ClearContacts                              bool
-	AddContactIDs                              []string `json:"add_contact_ids,omitempty"`
-	RemoveContactIDs                           []string `json:"remove_contact_ids,omitempty"`
-	ClearNotes                                 bool
-	AddNoteIDs                                 []string `json:"add_note_ids,omitempty"`
-	RemoveNoteIDs                              []string `json:"remove_note_ids,omitempty"`
-	ClearTasks                                 bool
-	AddTaskIDs                                 []string `json:"add_task_ids,omitempty"`
-	RemoveTaskIDs                              []string `json:"remove_task_ids,omitempty"`
-	ClearPrograms                              bool
-	AddProgramIDs                              []string `json:"add_program_ids,omitempty"`
-	RemoveProgramIDs                           []string `json:"remove_program_ids,omitempty"`
-	ClearSystemDetails                         bool
-	AddSystemDetailIDs                         []string `json:"add_system_detail_ids,omitempty"`
-	RemoveSystemDetailIDs                      []string `json:"remove_system_detail_ids,omitempty"`
-	ClearProcedures                            bool
-	AddProcedureIDs                            []string `json:"add_procedure_ids,omitempty"`
-	RemoveProcedureIDs                         []string `json:"remove_procedure_ids,omitempty"`
-	ClearInternalPolicies                      bool
-	AddInternalPolicyIDs                       []string `json:"add_internal_policy_ids,omitempty"`
-	RemoveInternalPolicyIDs                    []string `json:"remove_internal_policy_ids,omitempty"`
-	ClearRisks                                 bool
-	AddRiskIDs                                 []string `json:"add_risk_ids,omitempty"`
-	RemoveRiskIDs                              []string `json:"remove_risk_ids,omitempty"`
-	ClearControlObjectives                     bool
-	AddControlObjectiveIDs                     []string `json:"add_control_objective_ids,omitempty"`
-	RemoveControlObjectiveIDs                  []string `json:"remove_control_objective_ids,omitempty"`
-	ClearNarratives                            bool
-	AddNarrativeIDs                            []string `json:"add_narrative_ids,omitempty"`
-	RemoveNarrativeIDs                         []string `json:"remove_narrative_ids,omitempty"`
-	ClearControls                              bool
-	AddControlIDs                              []string `json:"add_control_ids,omitempty"`
-	RemoveControlIDs                           []string `json:"remove_control_ids,omitempty"`
-	ClearSubcontrols                           bool
-	AddSubcontrolIDs                           []string `json:"add_subcontrol_ids,omitempty"`
-	RemoveSubcontrolIDs                        []string `json:"remove_subcontrol_ids,omitempty"`
-	ClearControlImplementations                bool
-	AddControlImplementationIDs                []string `json:"add_control_implementation_ids,omitempty"`
-	RemoveControlImplementationIDs             []string `json:"remove_control_implementation_ids,omitempty"`
-	ClearMappedControls                        bool
-	AddMappedControlIDs                        []string `json:"add_mapped_control_ids,omitempty"`
-	RemoveMappedControlIDs                     []string `json:"remove_mapped_control_ids,omitempty"`
-	ClearEvidence                              bool
-	AddEvidenceIDs                             []string `json:"add_evidence_ids,omitempty"`
-	RemoveEvidenceIDs                          []string `json:"remove_evidence_ids,omitempty"`
-	ClearStandards                             bool
-	AddStandardIDs                             []string `json:"add_standard_ids,omitempty"`
-	RemoveStandardIDs                          []string `json:"remove_standard_ids,omitempty"`
-	ClearActionPlans                           bool
-	AddActionPlanIDs                           []string `json:"add_action_plan_ids,omitempty"`
-	RemoveActionPlanIDs                        []string `json:"remove_action_plan_ids,omitempty"`
-	ClearCustomDomains                         bool
-	AddCustomDomainIDs                         []string `json:"add_custom_domain_ids,omitempty"`
-	RemoveCustomDomainIDs                      []string `json:"remove_custom_domain_ids,omitempty"`
-	ClearDNSVerifications                      bool
-	AddDNSVerificationIDs                      []string `json:"add_dns_verification_ids,omitempty"`
-	RemoveDNSVerificationIDs                   []string `json:"remove_dns_verification_ids,omitempty"`
-	ClearTrustCenters                          bool
-	AddTrustCenterIDs                          []string `json:"add_trust_center_ids,omitempty"`
-	RemoveTrustCenterIDs                       []string `json:"remove_trust_center_ids,omitempty"`
-	ClearAssets                                bool
-	AddAssetIDs                                []string `json:"add_asset_ids,omitempty"`
-	RemoveAssetIDs                             []string `json:"remove_asset_ids,omitempty"`
-	ClearScans                                 bool
-	AddScanIDs                                 []string `json:"add_scan_ids,omitempty"`
-	RemoveScanIDs                              []string `json:"remove_scan_ids,omitempty"`
-	ClearSLADefinitions                        bool
-	AddSLADefinitionIDs                        []string `json:"add_sla_definition_ids,omitempty"`
-	RemoveSLADefinitionIDs                     []string `json:"remove_sla_definition_ids,omitempty"`
-	ClearSubprocessors                         bool
-	AddSubprocessorIDs                         []string `json:"add_subprocessor_ids,omitempty"`
-	RemoveSubprocessorIDs                      []string `json:"remove_subprocessor_ids,omitempty"`
-	ClearExports                               bool
-	AddExportIDs                               []string `json:"add_export_ids,omitempty"`
-	RemoveExportIDs                            []string `json:"remove_export_ids,omitempty"`
-	ClearTrustCenterWatermarkConfigs           bool
-	AddTrustCenterWatermarkConfigIDs           []string `json:"add_trust_center_watermark_config_ids,omitempty"`
-	RemoveTrustCenterWatermarkConfigIDs        []string `json:"remove_trust_center_watermark_config_ids,omitempty"`
 	ClearImpersonationEvents                   bool
 	AddImpersonationEventIDs                   []string `json:"add_impersonation_event_ids,omitempty"`
 	RemoveImpersonationEventIDs                []string `json:"remove_impersonation_event_ids,omitempty"`
-	ClearAssessments                           bool
-	AddAssessmentIDs                           []string `json:"add_assessment_ids,omitempty"`
-	RemoveAssessmentIDs                        []string `json:"remove_assessment_ids,omitempty"`
-	ClearAssessmentResponses                   bool
-	AddAssessmentResponseIDs                   []string `json:"add_assessment_response_ids,omitempty"`
-	RemoveAssessmentResponseIDs                []string `json:"remove_assessment_response_ids,omitempty"`
-	ClearCustomTypeEnums                       bool
-	AddCustomTypeEnumIDs                       []string `json:"add_custom_type_enum_ids,omitempty"`
-	RemoveCustomTypeEnumIDs                    []string `json:"remove_custom_type_enum_ids,omitempty"`
-	ClearTagDefinitions                        bool
-	AddTagDefinitionIDs                        []string `json:"add_tag_definition_ids,omitempty"`
-	RemoveTagDefinitionIDs                     []string `json:"remove_tag_definition_ids,omitempty"`
-	ClearRemediations                          bool
-	AddRemediationIDs                          []string `json:"add_remediation_ids,omitempty"`
-	RemoveRemediationIDs                       []string `json:"remove_remediation_ids,omitempty"`
-	ClearFindings                              bool
-	AddFindingIDs                              []string `json:"add_finding_ids,omitempty"`
-	RemoveFindingIDs                           []string `json:"remove_finding_ids,omitempty"`
-	ClearReviews                               bool
-	AddReviewIDs                               []string `json:"add_review_ids,omitempty"`
-	RemoveReviewIDs                            []string `json:"remove_review_ids,omitempty"`
-	ClearVulnerabilities                       bool
-	AddVulnerabilityIDs                        []string `json:"add_vulnerability_ids,omitempty"`
-	RemoveVulnerabilityIDs                     []string `json:"remove_vulnerability_ids,omitempty"`
-	ClearWorkflowDefinitions                   bool
-	AddWorkflowDefinitionIDs                   []string `json:"add_workflow_definition_ids,omitempty"`
-	RemoveWorkflowDefinitionIDs                []string `json:"remove_workflow_definition_ids,omitempty"`
-	ClearWorkflowInstances                     bool
-	AddWorkflowInstanceIDs                     []string `json:"add_workflow_instance_ids,omitempty"`
-	RemoveWorkflowInstanceIDs                  []string `json:"remove_workflow_instance_ids,omitempty"`
-	ClearWorkflowEvents                        bool
-	AddWorkflowEventIDs                        []string `json:"add_workflow_event_ids,omitempty"`
-	RemoveWorkflowEventIDs                     []string `json:"remove_workflow_event_ids,omitempty"`
-	ClearWorkflowAssignments                   bool
-	AddWorkflowAssignmentIDs                   []string `json:"add_workflow_assignment_ids,omitempty"`
-	RemoveWorkflowAssignmentIDs                []string `json:"remove_workflow_assignment_ids,omitempty"`
-	ClearWorkflowAssignmentTargets             bool
-	AddWorkflowAssignmentTargetIDs             []string `json:"add_workflow_assignment_target_ids,omitempty"`
-	RemoveWorkflowAssignmentTargetIDs          []string `json:"remove_workflow_assignment_target_ids,omitempty"`
-	ClearWorkflowObjectRefs                    bool
-	AddWorkflowObjectRefIDs                    []string `json:"add_workflow_object_ref_ids,omitempty"`
-	RemoveWorkflowObjectRefIDs                 []string `json:"remove_workflow_object_ref_ids,omitempty"`
-	ClearDirectoryAccounts                     bool
-	AddDirectoryAccountIDs                     []string `json:"add_directory_account_ids,omitempty"`
-	RemoveDirectoryAccountIDs                  []string `json:"remove_directory_account_ids,omitempty"`
-	ClearDirectoryGroups                       bool
-	AddDirectoryGroupIDs                       []string `json:"add_directory_group_ids,omitempty"`
-	RemoveDirectoryGroupIDs                    []string `json:"remove_directory_group_ids,omitempty"`
-	ClearDiscussions                           bool
-	AddDiscussionIDs                           []string `json:"add_discussion_ids,omitempty"`
-	RemoveDiscussionIDs                        []string `json:"remove_discussion_ids,omitempty"`
-	ClearVendorScoringConfigs                  bool
-	AddVendorScoringConfigIDs                  []string `json:"add_vendor_scoring_config_ids,omitempty"`
-	RemoveVendorScoringConfigIDs               []string `json:"remove_vendor_scoring_config_ids,omitempty"`
-	ClearVendorRiskScores                      bool
-	AddVendorRiskScoreIDs                      []string `json:"add_vendor_risk_score_ids,omitempty"`
-	RemoveVendorRiskScoreIDs                   []string `json:"remove_vendor_risk_score_ids,omitempty"`
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -16900,6 +16534,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveAssessmentCreatorIDs; len(v) > 0 {
 		m.RemoveAssessmentCreatorIDs(v...)
+	}
+	if i.ClearAssessmentPolicyCreators {
+		m.ClearAssessmentPolicyCreators()
+	}
+	if v := i.AddAssessmentPolicyCreatorIDs; len(v) > 0 {
+		m.AddAssessmentPolicyCreatorIDs(v...)
+	}
+	if v := i.RemoveAssessmentPolicyCreatorIDs; len(v) > 0 {
+		m.RemoveAssessmentPolicyCreatorIDs(v...)
 	}
 	if i.ClearAssetCreators {
 		m.ClearAssetCreators()
@@ -17555,42 +17198,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemovePersonalAccessTokenIDs; len(v) > 0 {
 		m.RemovePersonalAccessTokenIDs(v...)
 	}
-	if i.ClearAPITokens {
-		m.ClearAPITokens()
-	}
-	if v := i.AddAPITokenIDs; len(v) > 0 {
-		m.AddAPITokenIDs(v...)
-	}
-	if v := i.RemoveAPITokenIDs; len(v) > 0 {
-		m.RemoveAPITokenIDs(v...)
-	}
-	if i.ClearEmailTemplates {
-		m.ClearEmailTemplates()
-	}
-	if v := i.AddEmailTemplateIDs; len(v) > 0 {
-		m.AddEmailTemplateIDs(v...)
-	}
-	if v := i.RemoveEmailTemplateIDs; len(v) > 0 {
-		m.RemoveEmailTemplateIDs(v...)
-	}
-	if i.ClearNotificationPreferences {
-		m.ClearNotificationPreferences()
-	}
-	if v := i.AddNotificationPreferenceIDs; len(v) > 0 {
-		m.AddNotificationPreferenceIDs(v...)
-	}
-	if v := i.RemoveNotificationPreferenceIDs; len(v) > 0 {
-		m.RemoveNotificationPreferenceIDs(v...)
-	}
-	if i.ClearNotificationTemplates {
-		m.ClearNotificationTemplates()
-	}
-	if v := i.AddNotificationTemplateIDs; len(v) > 0 {
-		m.AddNotificationTemplateIDs(v...)
-	}
-	if v := i.RemoveNotificationTemplateIDs; len(v) > 0 {
-		m.RemoveNotificationTemplateIDs(v...)
-	}
 	if i.ClearFiles {
 		m.ClearFiles()
 	}
@@ -17609,56 +17216,11 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
 	}
-	if i.ClearSecrets {
-		m.ClearSecrets()
-	}
-	if v := i.AddSecretIDs; len(v) > 0 {
-		m.AddSecretIDs(v...)
-	}
-	if v := i.RemoveSecretIDs; len(v) > 0 {
-		m.RemoveSecretIDs(v...)
-	}
 	if i.ClearAvatarFile {
 		m.ClearAvatarFile()
 	}
 	if v := i.AvatarFileID; v != nil {
 		m.SetAvatarFileID(*v)
-	}
-	if i.ClearGroups {
-		m.ClearGroups()
-	}
-	if v := i.AddGroupIDs; len(v) > 0 {
-		m.AddGroupIDs(v...)
-	}
-	if v := i.RemoveGroupIDs; len(v) > 0 {
-		m.RemoveGroupIDs(v...)
-	}
-	if i.ClearTemplates {
-		m.ClearTemplates()
-	}
-	if v := i.AddTemplateIDs; len(v) > 0 {
-		m.AddTemplateIDs(v...)
-	}
-	if v := i.RemoveTemplateIDs; len(v) > 0 {
-		m.RemoveTemplateIDs(v...)
-	}
-	if i.ClearIntegrations {
-		m.ClearIntegrations()
-	}
-	if v := i.AddIntegrationIDs; len(v) > 0 {
-		m.AddIntegrationIDs(v...)
-	}
-	if v := i.RemoveIntegrationIDs; len(v) > 0 {
-		m.RemoveIntegrationIDs(v...)
-	}
-	if i.ClearDocuments {
-		m.ClearDocuments()
-	}
-	if v := i.AddDocumentIDs; len(v) > 0 {
-		m.AddDocumentIDs(v...)
-	}
-	if v := i.RemoveDocumentIDs; len(v) > 0 {
-		m.RemoveDocumentIDs(v...)
 	}
 	if i.ClearOrgSubscriptions {
 		m.ClearOrgSubscriptions()
@@ -17678,303 +17240,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveInviteIDs; len(v) > 0 {
 		m.RemoveInviteIDs(v...)
 	}
-	if i.ClearSubscribers {
-		m.ClearSubscribers()
-	}
-	if v := i.AddSubscriberIDs; len(v) > 0 {
-		m.AddSubscriberIDs(v...)
-	}
-	if v := i.RemoveSubscriberIDs; len(v) > 0 {
-		m.RemoveSubscriberIDs(v...)
-	}
-	if i.ClearEntities {
-		m.ClearEntities()
-	}
-	if v := i.AddEntityIDs; len(v) > 0 {
-		m.AddEntityIDs(v...)
-	}
-	if v := i.RemoveEntityIDs; len(v) > 0 {
-		m.RemoveEntityIDs(v...)
-	}
-	if i.ClearPlatforms {
-		m.ClearPlatforms()
-	}
-	if v := i.AddPlatformIDs; len(v) > 0 {
-		m.AddPlatformIDs(v...)
-	}
-	if v := i.RemovePlatformIDs; len(v) > 0 {
-		m.RemovePlatformIDs(v...)
-	}
-	if i.ClearIdentityHolders {
-		m.ClearIdentityHolders()
-	}
-	if v := i.AddIdentityHolderIDs; len(v) > 0 {
-		m.AddIdentityHolderIDs(v...)
-	}
-	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
-		m.RemoveIdentityHolderIDs(v...)
-	}
-	if i.ClearCampaigns {
-		m.ClearCampaigns()
-	}
-	if v := i.AddCampaignIDs; len(v) > 0 {
-		m.AddCampaignIDs(v...)
-	}
-	if v := i.RemoveCampaignIDs; len(v) > 0 {
-		m.RemoveCampaignIDs(v...)
-	}
-	if i.ClearCampaignTargets {
-		m.ClearCampaignTargets()
-	}
-	if v := i.AddCampaignTargetIDs; len(v) > 0 {
-		m.AddCampaignTargetIDs(v...)
-	}
-	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
-		m.RemoveCampaignTargetIDs(v...)
-	}
-	if i.ClearEntityTypes {
-		m.ClearEntityTypes()
-	}
-	if v := i.AddEntityTypeIDs; len(v) > 0 {
-		m.AddEntityTypeIDs(v...)
-	}
-	if v := i.RemoveEntityTypeIDs; len(v) > 0 {
-		m.RemoveEntityTypeIDs(v...)
-	}
-	if i.ClearContacts {
-		m.ClearContacts()
-	}
-	if v := i.AddContactIDs; len(v) > 0 {
-		m.AddContactIDs(v...)
-	}
-	if v := i.RemoveContactIDs; len(v) > 0 {
-		m.RemoveContactIDs(v...)
-	}
-	if i.ClearNotes {
-		m.ClearNotes()
-	}
-	if v := i.AddNoteIDs; len(v) > 0 {
-		m.AddNoteIDs(v...)
-	}
-	if v := i.RemoveNoteIDs; len(v) > 0 {
-		m.RemoveNoteIDs(v...)
-	}
-	if i.ClearTasks {
-		m.ClearTasks()
-	}
-	if v := i.AddTaskIDs; len(v) > 0 {
-		m.AddTaskIDs(v...)
-	}
-	if v := i.RemoveTaskIDs; len(v) > 0 {
-		m.RemoveTaskIDs(v...)
-	}
-	if i.ClearPrograms {
-		m.ClearPrograms()
-	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
-	}
-	if i.ClearSystemDetails {
-		m.ClearSystemDetails()
-	}
-	if v := i.AddSystemDetailIDs; len(v) > 0 {
-		m.AddSystemDetailIDs(v...)
-	}
-	if v := i.RemoveSystemDetailIDs; len(v) > 0 {
-		m.RemoveSystemDetailIDs(v...)
-	}
-	if i.ClearProcedures {
-		m.ClearProcedures()
-	}
-	if v := i.AddProcedureIDs; len(v) > 0 {
-		m.AddProcedureIDs(v...)
-	}
-	if v := i.RemoveProcedureIDs; len(v) > 0 {
-		m.RemoveProcedureIDs(v...)
-	}
-	if i.ClearInternalPolicies {
-		m.ClearInternalPolicies()
-	}
-	if v := i.AddInternalPolicyIDs; len(v) > 0 {
-		m.AddInternalPolicyIDs(v...)
-	}
-	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
-		m.RemoveInternalPolicyIDs(v...)
-	}
-	if i.ClearRisks {
-		m.ClearRisks()
-	}
-	if v := i.AddRiskIDs; len(v) > 0 {
-		m.AddRiskIDs(v...)
-	}
-	if v := i.RemoveRiskIDs; len(v) > 0 {
-		m.RemoveRiskIDs(v...)
-	}
-	if i.ClearControlObjectives {
-		m.ClearControlObjectives()
-	}
-	if v := i.AddControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
-	}
-	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
-		m.RemoveControlObjectiveIDs(v...)
-	}
-	if i.ClearNarratives {
-		m.ClearNarratives()
-	}
-	if v := i.AddNarrativeIDs; len(v) > 0 {
-		m.AddNarrativeIDs(v...)
-	}
-	if v := i.RemoveNarrativeIDs; len(v) > 0 {
-		m.RemoveNarrativeIDs(v...)
-	}
-	if i.ClearControls {
-		m.ClearControls()
-	}
-	if v := i.AddControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
-	if v := i.RemoveControlIDs; len(v) > 0 {
-		m.RemoveControlIDs(v...)
-	}
-	if i.ClearSubcontrols {
-		m.ClearSubcontrols()
-	}
-	if v := i.AddSubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
-	}
-	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
-		m.RemoveSubcontrolIDs(v...)
-	}
-	if i.ClearControlImplementations {
-		m.ClearControlImplementations()
-	}
-	if v := i.AddControlImplementationIDs; len(v) > 0 {
-		m.AddControlImplementationIDs(v...)
-	}
-	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
-		m.RemoveControlImplementationIDs(v...)
-	}
-	if i.ClearMappedControls {
-		m.ClearMappedControls()
-	}
-	if v := i.AddMappedControlIDs; len(v) > 0 {
-		m.AddMappedControlIDs(v...)
-	}
-	if v := i.RemoveMappedControlIDs; len(v) > 0 {
-		m.RemoveMappedControlIDs(v...)
-	}
-	if i.ClearEvidence {
-		m.ClearEvidence()
-	}
-	if v := i.AddEvidenceIDs; len(v) > 0 {
-		m.AddEvidenceIDs(v...)
-	}
-	if v := i.RemoveEvidenceIDs; len(v) > 0 {
-		m.RemoveEvidenceIDs(v...)
-	}
-	if i.ClearStandards {
-		m.ClearStandards()
-	}
-	if v := i.AddStandardIDs; len(v) > 0 {
-		m.AddStandardIDs(v...)
-	}
-	if v := i.RemoveStandardIDs; len(v) > 0 {
-		m.RemoveStandardIDs(v...)
-	}
-	if i.ClearActionPlans {
-		m.ClearActionPlans()
-	}
-	if v := i.AddActionPlanIDs; len(v) > 0 {
-		m.AddActionPlanIDs(v...)
-	}
-	if v := i.RemoveActionPlanIDs; len(v) > 0 {
-		m.RemoveActionPlanIDs(v...)
-	}
-	if i.ClearCustomDomains {
-		m.ClearCustomDomains()
-	}
-	if v := i.AddCustomDomainIDs; len(v) > 0 {
-		m.AddCustomDomainIDs(v...)
-	}
-	if v := i.RemoveCustomDomainIDs; len(v) > 0 {
-		m.RemoveCustomDomainIDs(v...)
-	}
-	if i.ClearDNSVerifications {
-		m.ClearDNSVerifications()
-	}
-	if v := i.AddDNSVerificationIDs; len(v) > 0 {
-		m.AddDNSVerificationIDs(v...)
-	}
-	if v := i.RemoveDNSVerificationIDs; len(v) > 0 {
-		m.RemoveDNSVerificationIDs(v...)
-	}
-	if i.ClearTrustCenters {
-		m.ClearTrustCenters()
-	}
-	if v := i.AddTrustCenterIDs; len(v) > 0 {
-		m.AddTrustCenterIDs(v...)
-	}
-	if v := i.RemoveTrustCenterIDs; len(v) > 0 {
-		m.RemoveTrustCenterIDs(v...)
-	}
-	if i.ClearAssets {
-		m.ClearAssets()
-	}
-	if v := i.AddAssetIDs; len(v) > 0 {
-		m.AddAssetIDs(v...)
-	}
-	if v := i.RemoveAssetIDs; len(v) > 0 {
-		m.RemoveAssetIDs(v...)
-	}
-	if i.ClearScans {
-		m.ClearScans()
-	}
-	if v := i.AddScanIDs; len(v) > 0 {
-		m.AddScanIDs(v...)
-	}
-	if v := i.RemoveScanIDs; len(v) > 0 {
-		m.RemoveScanIDs(v...)
-	}
-	if i.ClearSLADefinitions {
-		m.ClearSLADefinitions()
-	}
-	if v := i.AddSLADefinitionIDs; len(v) > 0 {
-		m.AddSLADefinitionIDs(v...)
-	}
-	if v := i.RemoveSLADefinitionIDs; len(v) > 0 {
-		m.RemoveSLADefinitionIDs(v...)
-	}
-	if i.ClearSubprocessors {
-		m.ClearSubprocessors()
-	}
-	if v := i.AddSubprocessorIDs; len(v) > 0 {
-		m.AddSubprocessorIDs(v...)
-	}
-	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
-		m.RemoveSubprocessorIDs(v...)
-	}
-	if i.ClearExports {
-		m.ClearExports()
-	}
-	if v := i.AddExportIDs; len(v) > 0 {
-		m.AddExportIDs(v...)
-	}
-	if v := i.RemoveExportIDs; len(v) > 0 {
-		m.RemoveExportIDs(v...)
-	}
-	if i.ClearTrustCenterWatermarkConfigs {
-		m.ClearTrustCenterWatermarkConfigs()
-	}
-	if v := i.AddTrustCenterWatermarkConfigIDs; len(v) > 0 {
-		m.AddTrustCenterWatermarkConfigIDs(v...)
-	}
-	if v := i.RemoveTrustCenterWatermarkConfigIDs; len(v) > 0 {
-		m.RemoveTrustCenterWatermarkConfigIDs(v...)
-	}
 	if i.ClearImpersonationEvents {
 		m.ClearImpersonationEvents()
 	}
@@ -17983,177 +17248,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveImpersonationEventIDs; len(v) > 0 {
 		m.RemoveImpersonationEventIDs(v...)
-	}
-	if i.ClearAssessments {
-		m.ClearAssessments()
-	}
-	if v := i.AddAssessmentIDs; len(v) > 0 {
-		m.AddAssessmentIDs(v...)
-	}
-	if v := i.RemoveAssessmentIDs; len(v) > 0 {
-		m.RemoveAssessmentIDs(v...)
-	}
-	if i.ClearAssessmentResponses {
-		m.ClearAssessmentResponses()
-	}
-	if v := i.AddAssessmentResponseIDs; len(v) > 0 {
-		m.AddAssessmentResponseIDs(v...)
-	}
-	if v := i.RemoveAssessmentResponseIDs; len(v) > 0 {
-		m.RemoveAssessmentResponseIDs(v...)
-	}
-	if i.ClearCustomTypeEnums {
-		m.ClearCustomTypeEnums()
-	}
-	if v := i.AddCustomTypeEnumIDs; len(v) > 0 {
-		m.AddCustomTypeEnumIDs(v...)
-	}
-	if v := i.RemoveCustomTypeEnumIDs; len(v) > 0 {
-		m.RemoveCustomTypeEnumIDs(v...)
-	}
-	if i.ClearTagDefinitions {
-		m.ClearTagDefinitions()
-	}
-	if v := i.AddTagDefinitionIDs; len(v) > 0 {
-		m.AddTagDefinitionIDs(v...)
-	}
-	if v := i.RemoveTagDefinitionIDs; len(v) > 0 {
-		m.RemoveTagDefinitionIDs(v...)
-	}
-	if i.ClearRemediations {
-		m.ClearRemediations()
-	}
-	if v := i.AddRemediationIDs; len(v) > 0 {
-		m.AddRemediationIDs(v...)
-	}
-	if v := i.RemoveRemediationIDs; len(v) > 0 {
-		m.RemoveRemediationIDs(v...)
-	}
-	if i.ClearFindings {
-		m.ClearFindings()
-	}
-	if v := i.AddFindingIDs; len(v) > 0 {
-		m.AddFindingIDs(v...)
-	}
-	if v := i.RemoveFindingIDs; len(v) > 0 {
-		m.RemoveFindingIDs(v...)
-	}
-	if i.ClearReviews {
-		m.ClearReviews()
-	}
-	if v := i.AddReviewIDs; len(v) > 0 {
-		m.AddReviewIDs(v...)
-	}
-	if v := i.RemoveReviewIDs; len(v) > 0 {
-		m.RemoveReviewIDs(v...)
-	}
-	if i.ClearVulnerabilities {
-		m.ClearVulnerabilities()
-	}
-	if v := i.AddVulnerabilityIDs; len(v) > 0 {
-		m.AddVulnerabilityIDs(v...)
-	}
-	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
-		m.RemoveVulnerabilityIDs(v...)
-	}
-	if i.ClearWorkflowDefinitions {
-		m.ClearWorkflowDefinitions()
-	}
-	if v := i.AddWorkflowDefinitionIDs; len(v) > 0 {
-		m.AddWorkflowDefinitionIDs(v...)
-	}
-	if v := i.RemoveWorkflowDefinitionIDs; len(v) > 0 {
-		m.RemoveWorkflowDefinitionIDs(v...)
-	}
-	if i.ClearWorkflowInstances {
-		m.ClearWorkflowInstances()
-	}
-	if v := i.AddWorkflowInstanceIDs; len(v) > 0 {
-		m.AddWorkflowInstanceIDs(v...)
-	}
-	if v := i.RemoveWorkflowInstanceIDs; len(v) > 0 {
-		m.RemoveWorkflowInstanceIDs(v...)
-	}
-	if i.ClearWorkflowEvents {
-		m.ClearWorkflowEvents()
-	}
-	if v := i.AddWorkflowEventIDs; len(v) > 0 {
-		m.AddWorkflowEventIDs(v...)
-	}
-	if v := i.RemoveWorkflowEventIDs; len(v) > 0 {
-		m.RemoveWorkflowEventIDs(v...)
-	}
-	if i.ClearWorkflowAssignments {
-		m.ClearWorkflowAssignments()
-	}
-	if v := i.AddWorkflowAssignmentIDs; len(v) > 0 {
-		m.AddWorkflowAssignmentIDs(v...)
-	}
-	if v := i.RemoveWorkflowAssignmentIDs; len(v) > 0 {
-		m.RemoveWorkflowAssignmentIDs(v...)
-	}
-	if i.ClearWorkflowAssignmentTargets {
-		m.ClearWorkflowAssignmentTargets()
-	}
-	if v := i.AddWorkflowAssignmentTargetIDs; len(v) > 0 {
-		m.AddWorkflowAssignmentTargetIDs(v...)
-	}
-	if v := i.RemoveWorkflowAssignmentTargetIDs; len(v) > 0 {
-		m.RemoveWorkflowAssignmentTargetIDs(v...)
-	}
-	if i.ClearWorkflowObjectRefs {
-		m.ClearWorkflowObjectRefs()
-	}
-	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
-		m.AddWorkflowObjectRefIDs(v...)
-	}
-	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
-		m.RemoveWorkflowObjectRefIDs(v...)
-	}
-	if i.ClearDirectoryAccounts {
-		m.ClearDirectoryAccounts()
-	}
-	if v := i.AddDirectoryAccountIDs; len(v) > 0 {
-		m.AddDirectoryAccountIDs(v...)
-	}
-	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
-		m.RemoveDirectoryAccountIDs(v...)
-	}
-	if i.ClearDirectoryGroups {
-		m.ClearDirectoryGroups()
-	}
-	if v := i.AddDirectoryGroupIDs; len(v) > 0 {
-		m.AddDirectoryGroupIDs(v...)
-	}
-	if v := i.RemoveDirectoryGroupIDs; len(v) > 0 {
-		m.RemoveDirectoryGroupIDs(v...)
-	}
-	if i.ClearDiscussions {
-		m.ClearDiscussions()
-	}
-	if v := i.AddDiscussionIDs; len(v) > 0 {
-		m.AddDiscussionIDs(v...)
-	}
-	if v := i.RemoveDiscussionIDs; len(v) > 0 {
-		m.RemoveDiscussionIDs(v...)
-	}
-	if i.ClearVendorScoringConfigs {
-		m.ClearVendorScoringConfigs()
-	}
-	if v := i.AddVendorScoringConfigIDs; len(v) > 0 {
-		m.AddVendorScoringConfigIDs(v...)
-	}
-	if v := i.RemoveVendorScoringConfigIDs; len(v) > 0 {
-		m.RemoveVendorScoringConfigIDs(v...)
-	}
-	if i.ClearVendorRiskScores {
-		m.ClearVendorRiskScores()
-	}
-	if v := i.AddVendorRiskScoreIDs; len(v) > 0 {
-		m.AddVendorRiskScoreIDs(v...)
-	}
-	if v := i.RemoveVendorRiskScoreIDs; len(v) > 0 {
-		m.RemoveVendorRiskScoreIDs(v...)
 	}
 }
 

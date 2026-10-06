@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
@@ -187,6 +188,33 @@ func (f TraverseAssessmentHistory) Traverse(ctx context.Context, q historygenera
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.AssessmentHistoryQuery", q)
+}
+
+// The AssessmentPolicyHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AssessmentPolicyHistoryFunc func(context.Context, *historygenerated.AssessmentPolicyHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f AssessmentPolicyHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.AssessmentPolicyHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.AssessmentPolicyHistoryQuery", q)
+}
+
+// The TraverseAssessmentPolicyHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAssessmentPolicyHistory func(context.Context, *historygenerated.AssessmentPolicyHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAssessmentPolicyHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAssessmentPolicyHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.AssessmentPolicyHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.AssessmentPolicyHistoryQuery", q)
 }
 
 // The AssessmentResponseHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1924,6 +1952,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.ActionPlanHistoryQuery, predicate.ActionPlanHistory, actionplanhistory.OrderOption]{typ: historygenerated.TypeActionPlanHistory, tq: q}, nil
 	case *historygenerated.AssessmentHistoryQuery:
 		return &query[*historygenerated.AssessmentHistoryQuery, predicate.AssessmentHistory, assessmenthistory.OrderOption]{typ: historygenerated.TypeAssessmentHistory, tq: q}, nil
+	case *historygenerated.AssessmentPolicyHistoryQuery:
+		return &query[*historygenerated.AssessmentPolicyHistoryQuery, predicate.AssessmentPolicyHistory, assessmentpolicyhistory.OrderOption]{typ: historygenerated.TypeAssessmentPolicyHistory, tq: q}, nil
 	case *historygenerated.AssessmentResponseHistoryQuery:
 		return &query[*historygenerated.AssessmentResponseHistoryQuery, predicate.AssessmentResponseHistory, assessmentresponsehistory.OrderOption]{typ: historygenerated.TypeAssessmentResponseHistory, tq: q}, nil
 	case *historygenerated.AssetHistoryQuery:

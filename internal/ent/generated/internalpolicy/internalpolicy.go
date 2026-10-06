@@ -166,8 +166,12 @@ const (
 	EdgeIdentityHolders = "identity_holders"
 	// EdgeReviews holds the string denoting the reviews edge name in mutations.
 	EdgeReviews = "reviews"
+	// EdgeAssessments holds the string denoting the assessments edge name in mutations.
+	EdgeAssessments = "assessments"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
+	// EdgePolicyAttestations holds the string denoting the policy_attestations edge name in mutations.
+	EdgePolicyAttestations = "policy_attestations"
 	// Table holds the table name of the internalpolicy in the database.
 	Table = "internal_policies"
 	// IntegrationRunsTable is the table that holds the integration_runs relation/edge. The primary key declared below.
@@ -322,11 +326,23 @@ const (
 	// ReviewsInverseTable is the table name for the Review entity.
 	// It exists in this package in order to avoid circular dependency with the "review" package.
 	ReviewsInverseTable = "reviews"
+	// AssessmentsTable is the table that holds the assessments relation/edge. The primary key declared below.
+	AssessmentsTable = "assessment_policies"
+	// AssessmentsInverseTable is the table name for the Assessment entity.
+	// It exists in this package in order to avoid circular dependency with the "assessment" package.
+	AssessmentsInverseTable = "assessments"
 	// IntegrationsTable is the table that holds the integrations relation/edge. The primary key declared below.
 	IntegrationsTable = "integration_internal_policies"
 	// IntegrationsInverseTable is the table name for the Integration entity.
 	// It exists in this package in order to avoid circular dependency with the "integration" package.
 	IntegrationsInverseTable = "integrations"
+	// PolicyAttestationsTable is the table that holds the policy_attestations relation/edge.
+	PolicyAttestationsTable = "assessment_policies"
+	// PolicyAttestationsInverseTable is the table name for the AssessmentPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "assessmentpolicy" package.
+	PolicyAttestationsInverseTable = "assessment_policies"
+	// PolicyAttestationsColumn is the table column denoting the policy_attestations relation/edge.
+	PolicyAttestationsColumn = "internal_policy_id"
 )
 
 // Columns holds all SQL columns for internalpolicy fields.
@@ -435,6 +451,9 @@ var (
 	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
 	// primary key for the reviews relation (M2M).
 	ReviewsPrimaryKey = []string{"review_id", "internal_policy_id"}
+	// AssessmentsPrimaryKey and AssessmentsColumn2 are the table columns denoting the
+	// primary key for the assessments relation (M2M).
+	AssessmentsPrimaryKey = []string{"assessment_id", "internal_policy_id"}
 	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
 	// primary key for the integrations relation (M2M).
 	IntegrationsPrimaryKey = []string{"integration_id", "internal_policy_id"}
@@ -1065,6 +1084,20 @@ func ByReviews(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAssessmentsCount orders the results by assessments count.
+func ByAssessmentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentsStep(), opts...)
+	}
+}
+
+// ByAssessments orders the results by assessments terms.
+func ByAssessments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByIntegrationsCount orders the results by integrations count.
 func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1076,6 +1109,20 @@ func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPolicyAttestationsCount orders the results by policy_attestations count.
+func ByPolicyAttestationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPolicyAttestationsStep(), opts...)
+	}
+}
+
+// ByPolicyAttestations orders the results by policy_attestations terms.
+func ByPolicyAttestations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPolicyAttestationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newIntegrationRunsStep() *sqlgraph.Step {
@@ -1260,11 +1307,25 @@ func newReviewsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
 	)
 }
+func newAssessmentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, AssessmentsTable, AssessmentsPrimaryKey...),
+	)
+}
 func newIntegrationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, IntegrationsTable, IntegrationsPrimaryKey...),
+	)
+}
+func newPolicyAttestationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PolicyAttestationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, PolicyAttestationsTable, PolicyAttestationsColumn),
 	)
 }
 

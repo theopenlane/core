@@ -289,11 +289,13 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		IdentityHolders         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		InternalNotes           func(childComplexity int) int
+		InternalPolicies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Jsonconfig              func(childComplexity int) int
 		Name                    func(childComplexity int) int
 		Owner                   func(childComplexity int) int
 		OwnerID                 func(childComplexity int) int
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		PolicyAttestations      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) int
 		ResponseDueDuration     func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
@@ -333,6 +335,62 @@ type ComplexityRoot struct {
 	AssessmentEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	AssessmentPolicy struct {
+		Assessment            func(childComplexity int) int
+		AssessmentID          func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalPolicy        func(childComplexity int) int
+		InternalPolicyID      func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PolicyRevision        func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+	}
+
+	AssessmentPolicyBulkCreatePayload struct {
+		AssessmentPolicies func(childComplexity int) int
+	}
+
+	AssessmentPolicyBulkDeletePayload struct {
+		DeletedIDs    func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotDeletedIDs func(childComplexity int) int
+	}
+
+	AssessmentPolicyBulkUpdatePayload struct {
+		AssessmentPolicies func(childComplexity int) int
+		Error              func(childComplexity int) int
+		NotUpdatedIDs      func(childComplexity int) int
+		UpdatedIDs         func(childComplexity int) int
+	}
+
+	AssessmentPolicyConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AssessmentPolicyCreatePayload struct {
+		AssessmentPolicy func(childComplexity int) int
+	}
+
+	AssessmentPolicyDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	AssessmentPolicyEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	AssessmentPolicyUpdatePayload struct {
+		AssessmentPolicy func(childComplexity int) int
 	}
 
 	AssessmentResponse struct {
@@ -3146,6 +3204,7 @@ type ComplexityRoot struct {
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
+		Assessments                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		Assets                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		BlockedGroups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Comments                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
@@ -3193,6 +3252,7 @@ type ComplexityRoot struct {
 		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                           func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
+		PolicyAttestations              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) int
 		Procedures                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ReviewDue                       func(childComplexity int) int
@@ -3453,14 +3513,18 @@ type ComplexityRoot struct {
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
 		CreateAssessment                     func(childComplexity int, input generated.CreateAssessmentInput) int
+		CreateAssessmentPolicy               func(childComplexity int, input generated.CreateAssessmentPolicyInput) int
 		CreateAssessmentResponse             func(childComplexity int, input generated.CreateAssessmentResponseInput) int
 		CreateAssessmentTemplate             func(childComplexity int, input model.CreateAssessmentTemplateInput) int
+		CreateAssessmentWithPolicies         func(childComplexity int, assessmentInput generated.CreateAssessmentInput, policies []*model.AssessmentPoliciesInput) int
 		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
 		CreateBulkAPIToken                   func(childComplexity int, input []*generated.CreateAPITokenInput) int
 		CreateBulkActionPlan                 func(childComplexity int, input []*generated.CreateActionPlanInput) int
+		CreateBulkAssessmentPolicy           func(childComplexity int, input []*generated.CreateAssessmentPolicyInput) int
 		CreateBulkAsset                      func(childComplexity int, input []*generated.CreateAssetInput) int
 		CreateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVAssessmentPolicy        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCampaign                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCampaignTarget          func(childComplexity int, input graphql.Upload) int
@@ -3679,11 +3743,13 @@ type ComplexityRoot struct {
 		DeleteAPIToken                       func(childComplexity int, id string) int
 		DeleteActionPlan                     func(childComplexity int, id string) int
 		DeleteAssessment                     func(childComplexity int, id string) int
+		DeleteAssessmentPolicy               func(childComplexity int, id string) int
 		DeleteAssessmentResponse             func(childComplexity int, id string) int
 		DeleteAsset                          func(childComplexity int, id string) int
 		DeleteBulkAPIToken                   func(childComplexity int, ids []string) int
 		DeleteBulkActionPlan                 func(childComplexity int, ids []string) int
 		DeleteBulkAssessment                 func(childComplexity int, ids []string) int
+		DeleteBulkAssessmentPolicy           func(childComplexity int, ids []string) int
 		DeleteBulkAsset                      func(childComplexity int, ids []string) int
 		DeleteBulkCheckResult                func(childComplexity int, ids []string) int
 		DeleteBulkContact                    func(childComplexity int, ids []string) int
@@ -3831,12 +3897,15 @@ type ComplexityRoot struct {
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAssessment                     func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
+		UpdateAssessmentPolicy               func(childComplexity int, id string, input generated.UpdateAssessmentPolicyInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
 		UpdateBulkAPIToken                   func(childComplexity int, ids []string, input generated.UpdateAPITokenInput) int
 		UpdateBulkActionPlan                 func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
+		UpdateBulkAssessmentPolicy           func(childComplexity int, ids []string, input generated.UpdateAssessmentPolicyInput) int
 		UpdateBulkAsset                      func(childComplexity int, ids []string, input generated.UpdateAssetInput) int
 		UpdateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVAssessmentPolicy        func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVCheckResult             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
@@ -4450,140 +4519,89 @@ type ComplexityRoot struct {
 
 	Organization struct {
 		APITokenCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		APITokens                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
 		ActionPlanCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ActionPlans                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AssessmentCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		AssessmentResponses                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
-		Assessments                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
+		AssessmentPolicyCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		AssetCreators                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Assets                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		AvatarFile                         func(childComplexity int) int
 		AvatarLocalFileID                  func(childComplexity int) int
 		AvatarRemoteURL                    func(childComplexity int) int
 		AvatarUpdatedAt                    func(childComplexity int) int
 		CampaignCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CampaignTargetCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CampaignTargets                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
-		Campaigns                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CampaignsManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CheckResultCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Children                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		ComplianceManager                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ContactCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Contacts                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		ControlCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ControlImplementationCreators      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ControlImplementations             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectiveCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ControlObjectives                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		Controls                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                          func(childComplexity int) int
 		CreatedBy                          func(childComplexity int) int
 		CustomDomainCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CustomDomains                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
 		CustomTypeEnumCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CustomTypeEnums                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) int
-		DNSVerifications                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
 		Description                        func(childComplexity int) int
 		DirectoryAccountCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		DirectoryAccounts                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
 		DirectoryGroupCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		DirectoryGroups                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		DirectoryMembershipCreators        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		DirectoryMemberships               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
 		DiscussionCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Discussions                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayName                        func(childComplexity int) int
 		DocumentDataCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Documents                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
 		EmailTemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		EmailTemplates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
-		Entities                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		EntityCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EntityTypeCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		EntityTypes                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
 		Events                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Evidence                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Exports                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
 		FileCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Files                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		FindingControlCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		FindingControls                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
 		FindingCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Findings                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		GroupCreators                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		GroupManager                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		GroupMembershipCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		GroupSettingCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Groups                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		HushCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                                 func(childComplexity int) int
 		IdentityHolderCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		IdentityHolders                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
-		Integrations                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicies                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		InternalPolicyCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		InviteCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Invites                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
 		MappedControlCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		MappedControls                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Members                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		Name                               func(childComplexity int) int
 		NarrativeCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Narratives                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		NoteCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Notes                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		NotificationPreferences            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationPreferenceOrder, where *generated.NotificationPreferenceWhereInput) int
 		NotificationTemplateCreators       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		NotificationTemplates              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
 		OrgMembershipCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		OrgSubscriptions                   func(childComplexity int) int
 		Parent                             func(childComplexity int) int
 		PersonalAccessTokens               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		PersonalOrg                        func(childComplexity int) int
 		PlatformCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Platforms                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		PoliciesManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ProcedureCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Procedures                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		ProgramCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ProgramMembershipCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Programs                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RegistryManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		RemediationCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Remediations                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		ReviewCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Reviews                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		RiskCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		RiskManager                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Risks                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		SLADefinitionCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		SLADefinitions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) int
 		ScanCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Scans                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Secrets                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Setting                            func(childComplexity int) int
 		SlugName                           func(childComplexity int) int
 		StandardCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Standards                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
 		StripeCustomerID                   func(childComplexity int) int
 		SubcontrolCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Subcontrols                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SubprocessorCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Subprocessors                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		SubscriberCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Subscribers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		SystemDetailCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		SystemDetails                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) int
 		TagDefinitionCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		TagDefinitions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
 		Tags                               func(childComplexity int) int
 		TaskCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Tasks                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Templates                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TrustCenterComplianceCreators      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		TrustCenterCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		TrustCenterDocCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4593,25 +4611,14 @@ type ComplexityRoot struct {
 		TrustCenterNdaRequestCreators      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		TrustCenterSubprocessorCreators    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		TrustCenterWatermarkConfigCreators func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		TrustCenterWatermarkConfigs        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
-		TrustCenters                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
 		UpdatedAt                          func(childComplexity int) int
 		UpdatedBy                          func(childComplexity int) int
 		UpdatedByImpersonator              func(childComplexity int) int
 		Users                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 		VendorRiskScoreCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		VendorRiskScores                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VendorRiskScoreOrder, where *generated.VendorRiskScoreWhereInput) int
 		VendorScoringConfigCreators        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		VendorScoringConfigs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VendorScoringConfigOrder, where *generated.VendorScoringConfigWhereInput) int
-		Vulnerabilities                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 		VulnerabilityCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		WorkflowAssignmentTargets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) int
-		WorkflowAssignments                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) int
 		WorkflowDefinitionCreators         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		WorkflowDefinitions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
-		WorkflowEvents                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
-		WorkflowInstances                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
-		WorkflowObjectRefs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 		WorkflowsManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
@@ -5210,6 +5217,8 @@ type ComplexityRoot struct {
 		ActionPlanSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ActionPlans                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		Assessment                      func(childComplexity int, id string) int
+		AssessmentPolicies              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) int
+		AssessmentPolicy                func(childComplexity int, id string) int
 		AssessmentResponse              func(childComplexity int, id string) int
 		AssessmentResponseSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AssessmentResponses             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
@@ -9080,6 +9089,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Assessment.InternalNotes(childComplexity), true
+	case "Assessment.internalPolicies":
+		if e.ComplexityRoot.Assessment.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Assessment_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Assessment.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
 	case "Assessment.jsonconfig":
 		if e.ComplexityRoot.Assessment.Jsonconfig == nil {
 			break
@@ -9115,6 +9135,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Assessment.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+	case "Assessment.policyAttestations":
+		if e.ComplexityRoot.Assessment.PolicyAttestations == nil {
+			break
+		}
+
+		args, err := ec.field_Assessment_policyAttestations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Assessment.PolicyAttestations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentPolicyOrder), args["where"].(*generated.AssessmentPolicyWhereInput)), true
 	case "Assessment.responseDueDuration":
 		if e.ComplexityRoot.Assessment.ResponseDueDuration == nil {
 			break
@@ -9279,6 +9310,189 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentEdge.Node(childComplexity), true
+
+	case "AssessmentPolicy.assessment":
+		if e.ComplexityRoot.AssessmentPolicy.Assessment == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.Assessment(childComplexity), true
+	case "AssessmentPolicy.assessmentID":
+		if e.ComplexityRoot.AssessmentPolicy.AssessmentID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.AssessmentID(childComplexity), true
+	case "AssessmentPolicy.createdAt":
+		if e.ComplexityRoot.AssessmentPolicy.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.CreatedAt(childComplexity), true
+	case "AssessmentPolicy.createdBy":
+		if e.ComplexityRoot.AssessmentPolicy.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.CreatedBy(childComplexity), true
+	case "AssessmentPolicy.id":
+		if e.ComplexityRoot.AssessmentPolicy.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.ID(childComplexity), true
+	case "AssessmentPolicy.internalPolicy":
+		if e.ComplexityRoot.AssessmentPolicy.InternalPolicy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.InternalPolicy(childComplexity), true
+	case "AssessmentPolicy.internalPolicyID":
+		if e.ComplexityRoot.AssessmentPolicy.InternalPolicyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.InternalPolicyID(childComplexity), true
+	case "AssessmentPolicy.owner":
+		if e.ComplexityRoot.AssessmentPolicy.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.Owner(childComplexity), true
+	case "AssessmentPolicy.ownerID":
+		if e.ComplexityRoot.AssessmentPolicy.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.OwnerID(childComplexity), true
+	case "AssessmentPolicy.policyRevision":
+		if e.ComplexityRoot.AssessmentPolicy.PolicyRevision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.PolicyRevision(childComplexity), true
+	case "AssessmentPolicy.updatedAt":
+		if e.ComplexityRoot.AssessmentPolicy.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.UpdatedAt(childComplexity), true
+	case "AssessmentPolicy.updatedBy":
+		if e.ComplexityRoot.AssessmentPolicy.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.UpdatedBy(childComplexity), true
+	case "AssessmentPolicy.updatedByImpersonator":
+		if e.ComplexityRoot.AssessmentPolicy.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.UpdatedByImpersonator(childComplexity), true
+
+	case "AssessmentPolicyBulkCreatePayload.assessmentPolicies":
+		if e.ComplexityRoot.AssessmentPolicyBulkCreatePayload.AssessmentPolicies == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyBulkCreatePayload.AssessmentPolicies(childComplexity), true
+
+	case "AssessmentPolicyBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.AssessmentPolicyBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyBulkDeletePayload.DeletedIDs(childComplexity), true
+	case "AssessmentPolicyBulkDeletePayload.error":
+		if e.ComplexityRoot.AssessmentPolicyBulkDeletePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyBulkDeletePayload.Error(childComplexity), true
+	case "AssessmentPolicyBulkDeletePayload.notDeletedIDs":
+		if e.ComplexityRoot.AssessmentPolicyBulkDeletePayload.NotDeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyBulkDeletePayload.NotDeletedIDs(childComplexity), true
+
+	case "AssessmentPolicyBulkUpdatePayload.assessmentPolicies":
+		if e.ComplexityRoot.AssessmentPolicyBulkUpdatePayload.AssessmentPolicies == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyBulkUpdatePayload.AssessmentPolicies(childComplexity), true
+	case "AssessmentPolicyBulkUpdatePayload.error":
+		if e.ComplexityRoot.AssessmentPolicyBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyBulkUpdatePayload.Error(childComplexity), true
+	case "AssessmentPolicyBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.AssessmentPolicyBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
+	case "AssessmentPolicyBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.AssessmentPolicyBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "AssessmentPolicyConnection.edges":
+		if e.ComplexityRoot.AssessmentPolicyConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyConnection.Edges(childComplexity), true
+	case "AssessmentPolicyConnection.pageInfo":
+		if e.ComplexityRoot.AssessmentPolicyConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyConnection.PageInfo(childComplexity), true
+	case "AssessmentPolicyConnection.totalCount":
+		if e.ComplexityRoot.AssessmentPolicyConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyConnection.TotalCount(childComplexity), true
+
+	case "AssessmentPolicyCreatePayload.assessmentPolicy":
+		if e.ComplexityRoot.AssessmentPolicyCreatePayload.AssessmentPolicy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyCreatePayload.AssessmentPolicy(childComplexity), true
+
+	case "AssessmentPolicyDeletePayload.deletedID":
+		if e.ComplexityRoot.AssessmentPolicyDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyDeletePayload.DeletedID(childComplexity), true
+
+	case "AssessmentPolicyEdge.cursor":
+		if e.ComplexityRoot.AssessmentPolicyEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyEdge.Cursor(childComplexity), true
+	case "AssessmentPolicyEdge.node":
+		if e.ComplexityRoot.AssessmentPolicyEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyEdge.Node(childComplexity), true
+
+	case "AssessmentPolicyUpdatePayload.assessmentPolicy":
+		if e.ComplexityRoot.AssessmentPolicyUpdatePayload.AssessmentPolicy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyUpdatePayload.AssessmentPolicy(childComplexity), true
 
 	case "AssessmentResponse.activeWorkflowInstances":
 		if e.ComplexityRoot.AssessmentResponse.ActiveWorkflowInstances == nil {
@@ -22798,6 +23012,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicy.ApproverID(childComplexity), true
+	case "InternalPolicy.assessments":
+		if e.ComplexityRoot.InternalPolicy.Assessments == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_assessments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.InternalPolicy.Assessments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentOrder), args["where"].(*generated.AssessmentWhereInput)), true
 	case "InternalPolicy.assets":
 		if e.ComplexityRoot.InternalPolicy.Assets == nil {
 			break
@@ -23145,6 +23370,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicy.OwnerID(childComplexity), true
+	case "InternalPolicy.policyAttestations":
+		if e.ComplexityRoot.InternalPolicy.PolicyAttestations == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_policyAttestations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.InternalPolicy.PolicyAttestations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentPolicyOrder), args["where"].(*generated.AssessmentPolicyWhereInput)), true
 	case "InternalPolicy.procedures":
 		if e.ComplexityRoot.InternalPolicy.Procedures == nil {
 			break
@@ -24228,6 +24464,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateAssessment(childComplexity, args["input"].(generated.CreateAssessmentInput)), true
+	case "Mutation.createAssessmentPolicy":
+		if e.ComplexityRoot.Mutation.CreateAssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAssessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateAssessmentPolicy(childComplexity, args["input"].(generated.CreateAssessmentPolicyInput)), true
 	case "Mutation.createAssessmentResponse":
 		if e.ComplexityRoot.Mutation.CreateAssessmentResponse == nil {
 			break
@@ -24250,6 +24497,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateAssessmentTemplate(childComplexity, args["input"].(model.CreateAssessmentTemplateInput)), true
+	case "Mutation.createAssessmentWithPolicies":
+		if e.ComplexityRoot.Mutation.CreateAssessmentWithPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAssessmentWithPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateAssessmentWithPolicies(childComplexity, args["assessmentInput"].(generated.CreateAssessmentInput), args["policies"].([]*model.AssessmentPoliciesInput)), true
 	case "Mutation.createAsset":
 		if e.ComplexityRoot.Mutation.CreateAsset == nil {
 			break
@@ -24283,6 +24541,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkActionPlan(childComplexity, args["input"].([]*generated.CreateActionPlanInput)), true
+	case "Mutation.createBulkAssessmentPolicy":
+		if e.ComplexityRoot.Mutation.CreateBulkAssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkAssessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkAssessmentPolicy(childComplexity, args["input"].([]*generated.CreateAssessmentPolicyInput)), true
 	case "Mutation.createBulkAsset":
 		if e.ComplexityRoot.Mutation.CreateBulkAsset == nil {
 			break
@@ -24316,6 +24585,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVActionPlan(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.createBulkCSVAssessmentPolicy":
+		if e.ComplexityRoot.Mutation.CreateBulkCSVAssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVAssessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkCSVAssessmentPolicy(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVAsset":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVAsset == nil {
 			break
@@ -26714,6 +26994,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteAssessment(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteAssessmentPolicy":
+		if e.ComplexityRoot.Mutation.DeleteAssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteAssessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteAssessmentPolicy(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteAssessmentResponse":
 		if e.ComplexityRoot.Mutation.DeleteAssessmentResponse == nil {
 			break
@@ -26769,6 +27060,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkAssessment(childComplexity, args["ids"].([]string)), true
+	case "Mutation.deleteBulkAssessmentPolicy":
+		if e.ComplexityRoot.Mutation.DeleteBulkAssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkAssessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkAssessmentPolicy(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkAsset":
 		if e.ComplexityRoot.Mutation.DeleteBulkAsset == nil {
 			break
@@ -28381,6 +28683,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateAssessment(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssessmentInput)), true
+	case "Mutation.updateAssessmentPolicy":
+		if e.ComplexityRoot.Mutation.UpdateAssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateAssessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateAssessmentPolicy(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssessmentPolicyInput)), true
 	case "Mutation.updateAsset":
 		if e.ComplexityRoot.Mutation.UpdateAsset == nil {
 			break
@@ -28414,6 +28727,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkActionPlan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateActionPlanInput)), true
+	case "Mutation.updateBulkAssessmentPolicy":
+		if e.ComplexityRoot.Mutation.UpdateBulkAssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkAssessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkAssessmentPolicy(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateAssessmentPolicyInput)), true
 	case "Mutation.updateBulkAsset":
 		if e.ComplexityRoot.Mutation.UpdateBulkAsset == nil {
 			break
@@ -28447,6 +28771,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVActionPlan(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.updateBulkCSVAssessmentPolicy":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVAssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVAssessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVAssessmentPolicy(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVAsset":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVAsset == nil {
 			break
@@ -32258,17 +32593,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.APITokenCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.apiTokens":
-		if e.ComplexityRoot.Organization.APITokens == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_apiTokens_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.APITokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.APITokenOrder), args["where"].(*generated.APITokenWhereInput)), true
 	case "Organization.actionPlanCreators":
 		if e.ComplexityRoot.Organization.ActionPlanCreators == nil {
 			break
@@ -32280,17 +32604,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ActionPlanCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.actionPlans":
-		if e.ComplexityRoot.Organization.ActionPlans == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_actionPlans_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 	case "Organization.assessmentCreators":
 		if e.ComplexityRoot.Organization.AssessmentCreators == nil {
 			break
@@ -32302,28 +32615,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.AssessmentCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.assessmentResponses":
-		if e.ComplexityRoot.Organization.AssessmentResponses == nil {
+	case "Organization.assessmentPolicyCreators":
+		if e.ComplexityRoot.Organization.AssessmentPolicyCreators == nil {
 			break
 		}
 
-		args, err := ec.field_Organization_assessmentResponses_args(ctx, rawArgs)
+		args, err := ec.field_Organization_assessmentPolicyCreators_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Organization.AssessmentResponses(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentResponseOrder), args["where"].(*generated.AssessmentResponseWhereInput)), true
-	case "Organization.assessments":
-		if e.ComplexityRoot.Organization.Assessments == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_assessments_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Assessments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentOrder), args["where"].(*generated.AssessmentWhereInput)), true
+		return e.ComplexityRoot.Organization.AssessmentPolicyCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.assetCreators":
 		if e.ComplexityRoot.Organization.AssetCreators == nil {
 			break
@@ -32335,17 +32637,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.AssetCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.assets":
-		if e.ComplexityRoot.Organization.Assets == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_assets_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 	case "Organization.avatarFile":
 		if e.ComplexityRoot.Organization.AvatarFile == nil {
 			break
@@ -32392,28 +32683,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.CampaignTargetCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.campaignTargets":
-		if e.ComplexityRoot.Organization.CampaignTargets == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_campaignTargets_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.CampaignTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignTargetOrder), args["where"].(*generated.CampaignTargetWhereInput)), true
-	case "Organization.campaigns":
-		if e.ComplexityRoot.Organization.Campaigns == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_campaigns_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
 	case "Organization.campaignsManager":
 		if e.ComplexityRoot.Organization.CampaignsManager == nil {
 			break
@@ -32469,17 +32738,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ContactCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.contacts":
-		if e.ComplexityRoot.Organization.Contacts == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_contacts_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
 	case "Organization.controlCreators":
 		if e.ComplexityRoot.Organization.ControlCreators == nil {
 			break
@@ -32502,17 +32760,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ControlImplementationCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.controlImplementations":
-		if e.ComplexityRoot.Organization.ControlImplementations == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_controlImplementations_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
 	case "Organization.controlObjectiveCreators":
 		if e.ComplexityRoot.Organization.ControlObjectiveCreators == nil {
 			break
@@ -32524,28 +32771,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ControlObjectiveCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.controlObjectives":
-		if e.ComplexityRoot.Organization.ControlObjectives == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_controlObjectives_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
-	case "Organization.controls":
-		if e.ComplexityRoot.Organization.Controls == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_controls_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 	case "Organization.createdAt":
 		if e.ComplexityRoot.Organization.CreatedAt == nil {
 			break
@@ -32569,17 +32794,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.CustomDomainCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.customDomains":
-		if e.ComplexityRoot.Organization.CustomDomains == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_customDomains_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
 	case "Organization.customTypeEnumCreators":
 		if e.ComplexityRoot.Organization.CustomTypeEnumCreators == nil {
 			break
@@ -32591,28 +32805,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.CustomTypeEnumCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.customTypeEnums":
-		if e.ComplexityRoot.Organization.CustomTypeEnums == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_customTypeEnums_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.CustomTypeEnums(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomTypeEnumOrder), args["where"].(*generated.CustomTypeEnumWhereInput)), true
-	case "Organization.dnsVerifications":
-		if e.ComplexityRoot.Organization.DNSVerifications == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_dnsVerifications_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.DNSVerifications(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DNSVerificationOrder), args["where"].(*generated.DNSVerificationWhereInput)), true
 	case "Organization.description":
 		if e.ComplexityRoot.Organization.Description == nil {
 			break
@@ -32630,17 +32822,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.DirectoryAccountCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.directoryAccounts":
-		if e.ComplexityRoot.Organization.DirectoryAccounts == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_directoryAccounts_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
 	case "Organization.directoryGroupCreators":
 		if e.ComplexityRoot.Organization.DirectoryGroupCreators == nil {
 			break
@@ -32652,17 +32833,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.DirectoryGroupCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.directoryGroups":
-		if e.ComplexityRoot.Organization.DirectoryGroups == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_directoryGroups_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.DirectoryGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
 	case "Organization.directoryMembershipCreators":
 		if e.ComplexityRoot.Organization.DirectoryMembershipCreators == nil {
 			break
@@ -32674,17 +32844,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.DirectoryMembershipCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.directoryMemberships":
-		if e.ComplexityRoot.Organization.DirectoryMemberships == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_directoryMemberships_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
 	case "Organization.discussionCreators":
 		if e.ComplexityRoot.Organization.DiscussionCreators == nil {
 			break
@@ -32696,17 +32855,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.DiscussionCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.discussions":
-		if e.ComplexityRoot.Organization.Discussions == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_discussions_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Discussions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DiscussionOrder), args["where"].(*generated.DiscussionWhereInput)), true
 	case "Organization.displayName":
 		if e.ComplexityRoot.Organization.DisplayName == nil {
 			break
@@ -32724,17 +32872,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.DocumentDataCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.documents":
-		if e.ComplexityRoot.Organization.Documents == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_documents_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Documents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DocumentDataOrder), args["where"].(*generated.DocumentDataWhereInput)), true
 	case "Organization.emailTemplateCreators":
 		if e.ComplexityRoot.Organization.EmailTemplateCreators == nil {
 			break
@@ -32746,28 +32883,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.EmailTemplateCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.emailTemplates":
-		if e.ComplexityRoot.Organization.EmailTemplates == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_emailTemplates_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.EmailTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailTemplateOrder), args["where"].(*generated.EmailTemplateWhereInput)), true
-	case "Organization.entities":
-		if e.ComplexityRoot.Organization.Entities == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_entities_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Organization.entityCreators":
 		if e.ComplexityRoot.Organization.EntityCreators == nil {
 			break
@@ -32790,17 +32905,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.EntityTypeCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.entityTypes":
-		if e.ComplexityRoot.Organization.EntityTypes == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_entityTypes_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.EntityTypes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityTypeOrder), args["where"].(*generated.EntityTypeWhereInput)), true
 	case "Organization.events":
 		if e.ComplexityRoot.Organization.Events == nil {
 			break
@@ -32812,17 +32916,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
-	case "Organization.evidence":
-		if e.ComplexityRoot.Organization.Evidence == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_evidence_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 	case "Organization.evidenceCreators":
 		if e.ComplexityRoot.Organization.EvidenceCreators == nil {
 			break
@@ -32834,17 +32927,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.EvidenceCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.exports":
-		if e.ComplexityRoot.Organization.Exports == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_exports_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Exports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ExportOrder), args["where"].(*generated.ExportWhereInput)), true
 	case "Organization.fileCreators":
 		if e.ComplexityRoot.Organization.FileCreators == nil {
 			break
@@ -32878,17 +32960,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.FindingControlCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.findingControls":
-		if e.ComplexityRoot.Organization.FindingControls == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_findingControls_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.FindingControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingControlOrder), args["where"].(*generated.FindingControlWhereInput)), true
 	case "Organization.findingCreators":
 		if e.ComplexityRoot.Organization.FindingCreators == nil {
 			break
@@ -32900,17 +32971,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.FindingCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.findings":
-		if e.ComplexityRoot.Organization.Findings == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_findings_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
 	case "Organization.groupCreators":
 		if e.ComplexityRoot.Organization.GroupCreators == nil {
 			break
@@ -32955,17 +33015,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.GroupSettingCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.groups":
-		if e.ComplexityRoot.Organization.Groups == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_groups_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Groups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.hushCreators":
 		if e.ComplexityRoot.Organization.HushCreators == nil {
 			break
@@ -32994,39 +33043,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.IdentityHolderCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.identityHolders":
-		if e.ComplexityRoot.Organization.IdentityHolders == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_identityHolders_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
-	case "Organization.integrations":
-		if e.ComplexityRoot.Organization.Integrations == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_integrations_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
-	case "Organization.internalPolicies":
-		if e.ComplexityRoot.Organization.InternalPolicies == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_internalPolicies_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
 	case "Organization.internalPolicyCreators":
 		if e.ComplexityRoot.Organization.InternalPolicyCreators == nil {
 			break
@@ -33071,17 +33087,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.MappedControlCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.mappedControls":
-		if e.ComplexityRoot.Organization.MappedControls == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_mappedControls_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.MappedControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
 	case "Organization.members":
 		if e.ComplexityRoot.Organization.Members == nil {
 			break
@@ -33110,17 +33115,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.NarrativeCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.narratives":
-		if e.ComplexityRoot.Organization.Narratives == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_narratives_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Narratives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 	case "Organization.noteCreators":
 		if e.ComplexityRoot.Organization.NoteCreators == nil {
 			break
@@ -33132,28 +33126,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.NoteCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.notes":
-		if e.ComplexityRoot.Organization.Notes == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_notes_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
-	case "Organization.notificationPreferences":
-		if e.ComplexityRoot.Organization.NotificationPreferences == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_notificationPreferences_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.NotificationPreferences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationPreferenceOrder), args["where"].(*generated.NotificationPreferenceWhereInput)), true
 	case "Organization.notificationTemplateCreators":
 		if e.ComplexityRoot.Organization.NotificationTemplateCreators == nil {
 			break
@@ -33165,17 +33137,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.NotificationTemplateCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.notificationTemplates":
-		if e.ComplexityRoot.Organization.NotificationTemplates == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_notificationTemplates_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
 	case "Organization.orgMembershipCreators":
 		if e.ComplexityRoot.Organization.OrgMembershipCreators == nil {
 			break
@@ -33227,17 +33188,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.PlatformCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.platforms":
-		if e.ComplexityRoot.Organization.Platforms == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_platforms_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 	case "Organization.policiesManager":
 		if e.ComplexityRoot.Organization.PoliciesManager == nil {
 			break
@@ -33260,17 +33210,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ProcedureCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.procedures":
-		if e.ComplexityRoot.Organization.Procedures == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_procedures_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 	case "Organization.programCreators":
 		if e.ComplexityRoot.Organization.ProgramCreators == nil {
 			break
@@ -33293,17 +33232,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ProgramMembershipCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.programs":
-		if e.ComplexityRoot.Organization.Programs == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_programs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 	case "Organization.registryManager":
 		if e.ComplexityRoot.Organization.RegistryManager == nil {
 			break
@@ -33326,17 +33254,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.RemediationCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.remediations":
-		if e.ComplexityRoot.Organization.Remediations == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_remediations_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
 	case "Organization.reviewCreators":
 		if e.ComplexityRoot.Organization.ReviewCreators == nil {
 			break
@@ -33348,17 +33265,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ReviewCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.reviews":
-		if e.ComplexityRoot.Organization.Reviews == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_reviews_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
 	case "Organization.riskCreators":
 		if e.ComplexityRoot.Organization.RiskCreators == nil {
 			break
@@ -33381,17 +33287,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.RiskManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.risks":
-		if e.ComplexityRoot.Organization.Risks == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_risks_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 	case "Organization.slaDefinitionCreators":
 		if e.ComplexityRoot.Organization.SLADefinitionCreators == nil {
 			break
@@ -33403,17 +33298,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.SLADefinitionCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.slaDefinitions":
-		if e.ComplexityRoot.Organization.SLADefinitions == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_slaDefinitions_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.SLADefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SLADefinitionOrder), args["where"].(*generated.SLADefinitionWhereInput)), true
 	case "Organization.scanCreators":
 		if e.ComplexityRoot.Organization.ScanCreators == nil {
 			break
@@ -33425,28 +33309,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ScanCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.scans":
-		if e.ComplexityRoot.Organization.Scans == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_scans_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
-	case "Organization.secrets":
-		if e.ComplexityRoot.Organization.Secrets == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_secrets_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Secrets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
 	case "Organization.setting":
 		if e.ComplexityRoot.Organization.Setting == nil {
 			break
@@ -33470,17 +33332,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.StandardCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.standards":
-		if e.ComplexityRoot.Organization.Standards == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_standards_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
 	case "Organization.stripeCustomerID":
 		if e.ComplexityRoot.Organization.StripeCustomerID == nil {
 			break
@@ -33498,17 +33349,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.SubcontrolCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.subcontrols":
-		if e.ComplexityRoot.Organization.Subcontrols == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_subcontrols_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 	case "Organization.subprocessorCreators":
 		if e.ComplexityRoot.Organization.SubprocessorCreators == nil {
 			break
@@ -33520,17 +33360,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.SubprocessorCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.subprocessors":
-		if e.ComplexityRoot.Organization.Subprocessors == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_subprocessors_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Subprocessors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubprocessorOrder), args["where"].(*generated.SubprocessorWhereInput)), true
 	case "Organization.subscriberCreators":
 		if e.ComplexityRoot.Organization.SubscriberCreators == nil {
 			break
@@ -33542,17 +33371,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.SubscriberCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.subscribers":
-		if e.ComplexityRoot.Organization.Subscribers == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_subscribers_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubscriberOrder), args["where"].(*generated.SubscriberWhereInput)), true
 	case "Organization.systemDetailCreators":
 		if e.ComplexityRoot.Organization.SystemDetailCreators == nil {
 			break
@@ -33564,17 +33382,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.SystemDetailCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.systemDetails":
-		if e.ComplexityRoot.Organization.SystemDetails == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_systemDetails_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.SystemDetails(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SystemDetailOrder), args["where"].(*generated.SystemDetailWhereInput)), true
 	case "Organization.tagDefinitionCreators":
 		if e.ComplexityRoot.Organization.TagDefinitionCreators == nil {
 			break
@@ -33586,17 +33393,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.TagDefinitionCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.tagDefinitions":
-		if e.ComplexityRoot.Organization.TagDefinitions == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_tagDefinitions_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.TagDefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TagDefinitionOrder), args["where"].(*generated.TagDefinitionWhereInput)), true
 	case "Organization.tags":
 		if e.ComplexityRoot.Organization.Tags == nil {
 			break
@@ -33614,17 +33410,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.TaskCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.tasks":
-		if e.ComplexityRoot.Organization.Tasks == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_tasks_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 	case "Organization.templateCreators":
 		if e.ComplexityRoot.Organization.TemplateCreators == nil {
 			break
@@ -33636,17 +33421,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.TemplateCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.templates":
-		if e.ComplexityRoot.Organization.Templates == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_templates_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 	case "Organization.trustCenterComplianceCreators":
 		if e.ComplexityRoot.Organization.TrustCenterComplianceCreators == nil {
 			break
@@ -33746,28 +33520,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.TrustCenterWatermarkConfigCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.trustCenterWatermarkConfigs":
-		if e.ComplexityRoot.Organization.TrustCenterWatermarkConfigs == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_trustCenterWatermarkConfigs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.TrustCenterWatermarkConfigs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterWatermarkConfigOrder), args["where"].(*generated.TrustCenterWatermarkConfigWhereInput)), true
-	case "Organization.trustCenters":
-		if e.ComplexityRoot.Organization.TrustCenters == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_trustCenters_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.TrustCenters(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterOrder), args["where"].(*generated.TrustCenterWhereInput)), true
 	case "Organization.updatedAt":
 		if e.ComplexityRoot.Organization.UpdatedAt == nil {
 			break
@@ -33808,17 +33560,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.VendorRiskScoreCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.vendorRiskScores":
-		if e.ComplexityRoot.Organization.VendorRiskScores == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_vendorRiskScores_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.VendorRiskScores(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VendorRiskScoreOrder), args["where"].(*generated.VendorRiskScoreWhereInput)), true
 	case "Organization.vendorScoringConfigCreators":
 		if e.ComplexityRoot.Organization.VendorScoringConfigCreators == nil {
 			break
@@ -33830,28 +33571,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.VendorScoringConfigCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.vendorScoringConfigs":
-		if e.ComplexityRoot.Organization.VendorScoringConfigs == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_vendorScoringConfigs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.VendorScoringConfigs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VendorScoringConfigOrder), args["where"].(*generated.VendorScoringConfigWhereInput)), true
-	case "Organization.vulnerabilities":
-		if e.ComplexityRoot.Organization.Vulnerabilities == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_vulnerabilities_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 	case "Organization.vulnerabilityCreators":
 		if e.ComplexityRoot.Organization.VulnerabilityCreators == nil {
 			break
@@ -33863,28 +33582,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.VulnerabilityCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.workflowAssignmentTargets":
-		if e.ComplexityRoot.Organization.WorkflowAssignmentTargets == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_workflowAssignmentTargets_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.WorkflowAssignmentTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowAssignmentTargetOrder), args["where"].(*generated.WorkflowAssignmentTargetWhereInput)), true
-	case "Organization.workflowAssignments":
-		if e.ComplexityRoot.Organization.WorkflowAssignments == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_workflowAssignments_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.WorkflowAssignments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowAssignmentOrder), args["where"].(*generated.WorkflowAssignmentWhereInput)), true
 	case "Organization.workflowDefinitionCreators":
 		if e.ComplexityRoot.Organization.WorkflowDefinitionCreators == nil {
 			break
@@ -33896,50 +33593,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.WorkflowDefinitionCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.workflowDefinitions":
-		if e.ComplexityRoot.Organization.WorkflowDefinitions == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_workflowDefinitions_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.WorkflowDefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowDefinitionOrder), args["where"].(*generated.WorkflowDefinitionWhereInput)), true
-	case "Organization.workflowEvents":
-		if e.ComplexityRoot.Organization.WorkflowEvents == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_workflowEvents_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.WorkflowEvents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput)), true
-	case "Organization.workflowInstances":
-		if e.ComplexityRoot.Organization.WorkflowInstances == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_workflowInstances_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.WorkflowInstances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowInstanceOrder), args["where"].(*generated.WorkflowInstanceWhereInput)), true
-	case "Organization.workflowObjectRefs":
-		if e.ComplexityRoot.Organization.WorkflowObjectRefs == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_workflowObjectRefs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 	case "Organization.workflowsManager":
 		if e.ComplexityRoot.Organization.WorkflowsManager == nil {
 			break
@@ -36883,6 +36536,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Assessment(childComplexity, args["id"].(string)), true
+	case "Query.assessmentPolicies":
+		if e.ComplexityRoot.Query.AssessmentPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Query_assessmentPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AssessmentPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentPolicyOrder), args["where"].(*generated.AssessmentPolicyWhereInput)), true
+	case "Query.assessmentPolicy":
+		if e.ComplexityRoot.Query.AssessmentPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Query_assessmentPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AssessmentPolicy(childComplexity, args["id"].(string)), true
 	case "Query.assessmentResponse":
 		if e.ComplexityRoot.Query.AssessmentResponse == nil {
 			break
@@ -51419,6 +51094,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputActionPlanWhereInput,
 		ec.unmarshalInputAddProgramMembershipInput,
 		ec.unmarshalInputAssessmentOrder,
+		ec.unmarshalInputAssessmentPoliciesInput,
+		ec.unmarshalInputAssessmentPolicyOrder,
+		ec.unmarshalInputAssessmentPolicyWhereInput,
 		ec.unmarshalInputAssessmentResponseOrder,
 		ec.unmarshalInputAssessmentResponseWhereInput,
 		ec.unmarshalInputAssessmentWhereInput,
@@ -51446,6 +51124,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateAPITokenInput,
 		ec.unmarshalInputCreateActionPlanInput,
 		ec.unmarshalInputCreateAssessmentInput,
+		ec.unmarshalInputCreateAssessmentPolicyInput,
 		ec.unmarshalInputCreateAssessmentResponseInput,
 		ec.unmarshalInputCreateAssessmentTemplateInput,
 		ec.unmarshalInputCreateAssetInput,
@@ -51684,6 +51363,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateAPITokenInput,
 		ec.unmarshalInputUpdateActionPlanInput,
 		ec.unmarshalInputUpdateAssessmentInput,
+		ec.unmarshalInputUpdateAssessmentPolicyInput,
 		ec.unmarshalInputUpdateAssetInput,
 		ec.unmarshalInputUpdateCampaignInput,
 		ec.unmarshalInputUpdateCampaignTargetInput,
@@ -52603,6 +52283,209 @@ type AssessmentBulkDeletePayload {
 `, BuiltIn: false},
 	{Name: "../schema/assessmentextended.graphql", Input: `extend type Assessment {
     accessURL: String
+}
+
+"""
+AssessmentPoliciesInput is used to attach internal policies to an assessment
+along with the assessment creation
+"""
+input AssessmentPoliciesInput {
+  internalPolicyID: ID!
+  """
+  the revision of the internal policy, defaults to the current revision of the policy
+  """
+  policyRevision: String
+}
+
+extend type Mutation{
+    """
+    Create a new assessment with internal policies attached
+    """
+    createAssessmentWithPolicies(
+        """
+        values of the assessment to be created
+        """
+        assessmentInput: CreateAssessmentInput!
+        """
+        internal policies to attach to the assessment
+        """
+        policies: [AssessmentPoliciesInput!]
+    ): AssessmentCreatePayload!
+}
+`, BuiltIn: false},
+	{Name: "../schema/assessmentpolicy.graphql", Input: `extend type Query {
+    """
+    Look up assessmentPolicy by ID
+    """
+     assessmentPolicy(
+        """
+        ID of the assessmentPolicy
+        """
+        id: ID!
+    ):  AssessmentPolicy!
+}
+
+extend type Mutation{
+    """
+    Create a new assessmentPolicy
+    """
+    createAssessmentPolicy(
+        """
+        values of the assessmentPolicy
+        """
+        input: CreateAssessmentPolicyInput!
+    ): AssessmentPolicyCreatePayload!
+    """
+    Create multiple new assessmentPolicys
+    """
+    createBulkAssessmentPolicy(
+        """
+        values of the assessmentPolicy
+        """
+        input: [CreateAssessmentPolicyInput!]
+    ): AssessmentPolicyBulkCreatePayload!
+    """
+    Create multiple new assessmentPolicys via file upload
+    """
+    createBulkCSVAssessmentPolicy(
+        """
+        csv file containing values of the assessmentPolicy
+        """
+        input: Upload!
+    ): AssessmentPolicyBulkCreatePayload!
+    """
+    Update multiple existing assessmentPolicys
+    """
+    updateBulkAssessmentPolicy(
+        """
+        IDs of the assessmentPolicys to update
+        """
+        ids: [ID!]!
+        """
+        values to update the assessmentPolicys with
+        """
+        input: UpdateAssessmentPolicyInput!
+    ): AssessmentPolicyBulkUpdatePayload!
+    """
+    Update multiple existing assessmentPolicys via file upload
+    """
+    updateBulkCSVAssessmentPolicy(
+        """
+        csv file containing values of the assessmentPolicy, must include ID column
+        """
+        input: Upload!
+    ): AssessmentPolicyBulkUpdatePayload!
+    """
+    Update an existing assessmentPolicy
+    """
+    updateAssessmentPolicy(
+        """
+        ID of the assessmentPolicy
+        """
+        id: ID!
+        """
+        New values for the assessmentPolicy
+        """
+        input: UpdateAssessmentPolicyInput!
+    ): AssessmentPolicyUpdatePayload!
+    """
+    Delete an existing assessmentPolicy
+    """
+    deleteAssessmentPolicy(
+        """
+        ID of the assessmentPolicy
+        """
+        id: ID!
+    ): AssessmentPolicyDeletePayload!
+    """
+    Delete multiple assessmentPolicys
+    """
+    deleteBulkAssessmentPolicy(
+        """
+        IDs of the assessmentPolicys to delete
+        """
+        ids: [ID!]!
+    ): AssessmentPolicyBulkDeletePayload!
+}
+
+"""
+Return response for createAssessmentPolicy mutation
+"""
+type AssessmentPolicyCreatePayload {
+    """
+    Created assessmentPolicy
+    """
+    assessmentPolicy: AssessmentPolicy!
+}
+
+"""
+Return response for updateAssessmentPolicy mutation
+"""
+type AssessmentPolicyUpdatePayload {
+    """
+    Updated assessmentPolicy
+    """
+    assessmentPolicy: AssessmentPolicy!
+}
+
+"""
+Return response for deleteAssessmentPolicy mutation
+"""
+type AssessmentPolicyDeletePayload {
+    """
+    Deleted assessmentPolicy ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkCreatePayload {
+    """
+    Created assessmentPolicys
+    """
+    assessmentPolicies: [AssessmentPolicy!]
+}
+
+"""
+Return response for updateBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkUpdatePayload {
+    """
+    Updated assessmentPolicys
+    """
+    assessmentPolicies: [AssessmentPolicy!]
+    """
+    IDs of the updated assessmentPolicys
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for deleteBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkDeletePayload {
+    """
+    Deleted assessmentPolicy IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of assessmentPolicies that were not deleted
+    """
+    notDeletedIDs: [ID!]
 }
 `, BuiltIn: false},
 	{Name: "../schema/assessmentresponse.graphql", Input: `extend type AssessmentResponse {
@@ -58410,6 +58293,37 @@ type Assessment implements Node @modules(names: ["compliance_module"]) {
     """
     where: CampaignWhereInput
   ): CampaignConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -58441,6 +58355,37 @@ type Assessment implements Node @modules(names: ["compliance_module"]) {
     """
     where: WorkflowObjectRefWhereInput
   ): WorkflowObjectRefConnection!
+  policyAttestations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentPolicies returned from the connection.
+    """
+    orderBy: [AssessmentPolicyOrder!]
+
+    """
+    Filtering options for AssessmentPolicies returned from the connection.
+    """
+    where: AssessmentPolicyWhereInput
+  ): AssessmentPolicyConnection!
 }
 """
 AssessmentAssessmentType is enum for the field assessment_type
@@ -58501,6 +58446,180 @@ enum AssessmentOrderField {
   name
   assessment_type
   response_due_duration
+}
+type AssessmentPolicy implements Node @modules(names: ["compliance_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the id of the assessment attesting to the policy
+  """
+  assessmentID: ID!
+  """
+  the id of the internal policy being attested to
+  """
+  internalPolicyID: ID!
+  """
+  the revision of the internal policy when it was added to the assessment
+  """
+  policyRevision: String
+  owner: Organization
+  assessment: Assessment!
+  internalPolicy: InternalPolicy!
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentPolicyConnection {
+  """
+  A list of edges.
+  """
+  edges: [AssessmentPolicyEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentPolicyEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AssessmentPolicy
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for AssessmentPolicy connections
+"""
+input AssessmentPolicyOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AssessmentPolicies.
+  """
+  field: AssessmentPolicyOrderField!
+}
+"""
+Properties by which AssessmentPolicy connections can be ordered.
+"""
+enum AssessmentPolicyOrderField {
+  created_at
+  updated_at
+}
+"""
+AssessmentPolicyWhereInput is used for filtering AssessmentPolicy objects.
+Input was generated by ent.
+"""
+input AssessmentPolicyWhereInput {
+  not: AssessmentPolicyWhereInput
+  and: [AssessmentPolicyWhereInput!]
+  or: [AssessmentPolicyWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  policy_revision field predicates
+  """
+  policyRevision: String
+  policyRevisionNEQ: String
+  policyRevisionIn: [String!]
+  policyRevisionNotIn: [String!]
+  policyRevisionContains: String
+  policyRevisionHasPrefix: String
+  policyRevisionHasSuffix: String
+  policyRevisionIsNil: Boolean
+  policyRevisionNotNil: Boolean
+  policyRevisionEqualFold: String
+  policyRevisionContainsFold: String
 }
 type AssessmentResponse implements Node @modules(names: ["compliance_module"]) {
   id: ID!
@@ -59324,10 +59443,20 @@ input AssessmentWhereInput {
   hasCampaigns: Boolean
   hasCampaignsWith: [CampaignWhereInput!]
   """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  """
   workflow_object_refs edge predicates
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  policy_attestations edge predicates
+  """
+  hasPolicyAttestations: Boolean
+  hasPolicyAttestationsWith: [AssessmentPolicyWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -67441,6 +67570,19 @@ input CreateAssessmentInput {
   workflowObjectRefIDs: [ID!]
 }
 """
+CreateAssessmentPolicyInput is used for create AssessmentPolicy object.
+Input was generated by ent.
+"""
+input CreateAssessmentPolicyInput {
+  """
+  the revision of the internal policy when it was added to the assessment
+  """
+  policyRevision: String
+  ownerID: ID
+  assessmentID: ID!
+  internalPolicyID: ID!
+}
+"""
 CreateAssessmentResponseInput is used for create AssessmentResponse object.
 Input was generated by ent.
 """
@@ -70459,6 +70601,7 @@ input CreateOrganizationInput {
   actionPlanCreatorIDs: [ID!]
   apiTokenCreatorIDs: [ID!]
   assessmentCreatorIDs: [ID!]
+  assessmentPolicyCreatorIDs: [ID!]
   assetCreatorIDs: [ID!]
   campaignCreatorIDs: [ID!]
   campaignTargetCreatorIDs: [ID!]
@@ -70533,73 +70676,12 @@ input CreateOrganizationInput {
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
-  apiTokenIDs: [ID!]
-  emailTemplateIDs: [ID!]
-  notificationPreferenceIDs: [ID!]
-  notificationTemplateIDs: [ID!]
   fileIDs: [ID!]
   eventIDs: [ID!]
-  secretIDs: [ID!]
   avatarFileID: ID
-  groupIDs: [ID!]
-  templateIDs: [ID!]
-  integrationIDs: [ID!]
-  documentIDs: [ID!]
   orgSubscriptionIDs: [ID!]
   inviteIDs: [ID!]
-  subscriberIDs: [ID!]
-  entityIDs: [ID!]
-  platformIDs: [ID!]
-  identityHolderIDs: [ID!]
-  campaignIDs: [ID!]
-  campaignTargetIDs: [ID!]
-  entityTypeIDs: [ID!]
-  contactIDs: [ID!]
-  noteIDs: [ID!]
-  taskIDs: [ID!]
-  programIDs: [ID!]
-  systemDetailIDs: [ID!]
-  procedureIDs: [ID!]
-  internalPolicyIDs: [ID!]
-  riskIDs: [ID!]
-  controlObjectiveIDs: [ID!]
-  narrativeIDs: [ID!]
-  controlIDs: [ID!]
-  subcontrolIDs: [ID!]
-  controlImplementationIDs: [ID!]
-  mappedControlIDs: [ID!]
-  evidenceIDs: [ID!]
-  standardIDs: [ID!]
-  actionPlanIDs: [ID!]
-  customDomainIDs: [ID!]
-  dnsVerificationIDs: [ID!]
-  trustCenterIDs: [ID!]
-  assetIDs: [ID!]
-  scanIDs: [ID!]
-  slaDefinitionIDs: [ID!]
-  subprocessorIDs: [ID!]
-  exportIDs: [ID!]
-  trustCenterWatermarkConfigIDs: [ID!]
   impersonationEventIDs: [ID!]
-  assessmentIDs: [ID!]
-  assessmentResponseIDs: [ID!]
-  customTypeEnumIDs: [ID!]
-  tagDefinitionIDs: [ID!]
-  remediationIDs: [ID!]
-  findingIDs: [ID!]
-  reviewIDs: [ID!]
-  vulnerabilityIDs: [ID!]
-  workflowDefinitionIDs: [ID!]
-  workflowInstanceIDs: [ID!]
-  workflowEventIDs: [ID!]
-  workflowAssignmentIDs: [ID!]
-  workflowAssignmentTargetIDs: [ID!]
-  workflowObjectRefIDs: [ID!]
-  directoryAccountIDs: [ID!]
-  directoryGroupIDs: [ID!]
-  discussionIDs: [ID!]
-  vendorScoringConfigIDs: [ID!]
-  vendorRiskScoreIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -93323,6 +93405,37 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
     """
     where: ReviewWhereInput
   ): ReviewConnection!
+  assessments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assessments returned from the connection.
+    """
+    orderBy: [AssessmentOrder!]
+
+    """
+    Filtering options for Assessments returned from the connection.
+    """
+    where: AssessmentWhereInput
+  ): AssessmentConnection!
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -93354,6 +93467,37 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
+  policyAttestations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentPolicies returned from the connection.
+    """
+    orderBy: [AssessmentPolicyOrder!]
+
+    """
+    Filtering options for AssessmentPolicies returned from the connection.
+    """
+    where: AssessmentPolicyWhereInput
+  ): AssessmentPolicyConnection!
 }
 """
 A connection to a list of items.
@@ -94056,10 +94200,20 @@ input InternalPolicyWhereInput {
   hasReviews: Boolean
   hasReviewsWith: [ReviewWhereInput!]
   """
+  assessments edge predicates
+  """
+  hasAssessments: Boolean
+  hasAssessmentsWith: [AssessmentWhereInput!]
+  """
   integrations edge predicates
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  policy_attestations edge predicates
+  """
+  hasPolicyAttestations: Boolean
+  hasPolicyAttestationsWith: [AssessmentPolicyWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -98244,6 +98398,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  assessmentPolicyCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   assetCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -100509,130 +100694,6 @@ type Organization implements Node {
     """
     where: PersonalAccessTokenWhereInput
   ): PersonalAccessTokenConnection!
-  apiTokens(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for APITokens returned from the connection.
-    """
-    orderBy: [APITokenOrder!]
-
-    """
-    Filtering options for APITokens returned from the connection.
-    """
-    where: APITokenWhereInput
-  ): APITokenConnection!
-  emailTemplates(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EmailTemplates returned from the connection.
-    """
-    orderBy: [EmailTemplateOrder!]
-
-    """
-    Filtering options for EmailTemplates returned from the connection.
-    """
-    where: EmailTemplateWhereInput
-  ): EmailTemplateConnection!
-  notificationPreferences(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for NotificationPreferences returned from the connection.
-    """
-    orderBy: [NotificationPreferenceOrder!]
-
-    """
-    Filtering options for NotificationPreferences returned from the connection.
-    """
-    where: NotificationPreferenceWhereInput
-  ): NotificationPreferenceConnection!
-  notificationTemplates(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for NotificationTemplates returned from the connection.
-    """
-    orderBy: [NotificationTemplateOrder!]
-
-    """
-    Filtering options for NotificationTemplates returned from the connection.
-    """
-    where: NotificationTemplateWhereInput
-  ): NotificationTemplateConnection!
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -100726,162 +100787,7 @@ type Organization implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
-  secrets(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Hushes returned from the connection.
-    """
-    orderBy: [HushOrder!]
-
-    """
-    Filtering options for Hushes returned from the connection.
-    """
-    where: HushWhereInput
-  ): HushConnection!
   avatarFile: File
-  groups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  templates(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Templates returned from the connection.
-    """
-    orderBy: [TemplateOrder!]
-
-    """
-    Filtering options for Templates returned from the connection.
-    """
-    where: TemplateWhereInput
-  ): TemplateConnection!
-  integrations(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Integrations returned from the connection.
-    """
-    orderBy: [IntegrationOrder!]
-
-    """
-    Filtering options for Integrations returned from the connection.
-    """
-    where: IntegrationWhereInput
-  ): IntegrationConnection!
-  documents(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DocumentDataSlice returned from the connection.
-    """
-    orderBy: [DocumentDataOrder!]
-
-    """
-    Filtering options for DocumentDataSlice returned from the connection.
-    """
-    where: DocumentDataWhereInput
-  ): DocumentDataConnection!
   orgSubscriptions: [OrgSubscription!]
   invites(
     """
@@ -100914,1680 +100820,6 @@ type Organization implements Node {
     """
     where: InviteWhereInput
   ): InviteConnection!
-  subscribers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Subscribers returned from the connection.
-    """
-    orderBy: [SubscriberOrder!]
-
-    """
-    Filtering options for Subscribers returned from the connection.
-    """
-    where: SubscriberWhereInput
-  ): SubscriberConnection!
-  entities(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Entities returned from the connection.
-    """
-    orderBy: [EntityOrder!]
-
-    """
-    Filtering options for Entities returned from the connection.
-    """
-    where: EntityWhereInput
-  ): EntityConnection!
-  platforms(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Platforms returned from the connection.
-    """
-    orderBy: [PlatformOrder!]
-
-    """
-    Filtering options for Platforms returned from the connection.
-    """
-    where: PlatformWhereInput
-  ): PlatformConnection!
-  identityHolders(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for IdentityHolders returned from the connection.
-    """
-    orderBy: [IdentityHolderOrder!]
-
-    """
-    Filtering options for IdentityHolders returned from the connection.
-    """
-    where: IdentityHolderWhereInput
-  ): IdentityHolderConnection!
-  campaigns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Campaigns returned from the connection.
-    """
-    orderBy: [CampaignOrder!]
-
-    """
-    Filtering options for Campaigns returned from the connection.
-    """
-    where: CampaignWhereInput
-  ): CampaignConnection!
-  campaignTargets(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for CampaignTargets returned from the connection.
-    """
-    orderBy: [CampaignTargetOrder!]
-
-    """
-    Filtering options for CampaignTargets returned from the connection.
-    """
-    where: CampaignTargetWhereInput
-  ): CampaignTargetConnection!
-  entityTypes(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EntityTypes returned from the connection.
-    """
-    orderBy: [EntityTypeOrder!]
-
-    """
-    Filtering options for EntityTypes returned from the connection.
-    """
-    where: EntityTypeWhereInput
-  ): EntityTypeConnection!
-  contacts(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Contacts returned from the connection.
-    """
-    orderBy: [ContactOrder!]
-
-    """
-    Filtering options for Contacts returned from the connection.
-    """
-    where: ContactWhereInput
-  ): ContactConnection!
-  notes(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Notes returned from the connection.
-    """
-    orderBy: [NoteOrder!]
-
-    """
-    Filtering options for Notes returned from the connection.
-    """
-    where: NoteWhereInput
-  ): NoteConnection!
-  tasks(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Tasks returned from the connection.
-    """
-    orderBy: [TaskOrder!]
-
-    """
-    Filtering options for Tasks returned from the connection.
-    """
-    where: TaskWhereInput
-  ): TaskConnection!
-  programs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Programs returned from the connection.
-    """
-    orderBy: [ProgramOrder!]
-
-    """
-    Filtering options for Programs returned from the connection.
-    """
-    where: ProgramWhereInput
-  ): ProgramConnection!
-  systemDetails(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for SystemDetails returned from the connection.
-    """
-    orderBy: [SystemDetailOrder!]
-
-    """
-    Filtering options for SystemDetails returned from the connection.
-    """
-    where: SystemDetailWhereInput
-  ): SystemDetailConnection!
-  procedures(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Procedures returned from the connection.
-    """
-    orderBy: [ProcedureOrder!]
-
-    """
-    Filtering options for Procedures returned from the connection.
-    """
-    where: ProcedureWhereInput
-  ): ProcedureConnection!
-  internalPolicies(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for InternalPolicies returned from the connection.
-    """
-    orderBy: [InternalPolicyOrder!]
-
-    """
-    Filtering options for InternalPolicies returned from the connection.
-    """
-    where: InternalPolicyWhereInput
-  ): InternalPolicyConnection!
-  risks(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Risks returned from the connection.
-    """
-    orderBy: [RiskOrder!]
-
-    """
-    Filtering options for Risks returned from the connection.
-    """
-    where: RiskWhereInput
-  ): RiskConnection!
-  controlObjectives(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlObjectives returned from the connection.
-    """
-    orderBy: [ControlObjectiveOrder!]
-
-    """
-    Filtering options for ControlObjectives returned from the connection.
-    """
-    where: ControlObjectiveWhereInput
-  ): ControlObjectiveConnection!
-  narratives(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Narratives returned from the connection.
-    """
-    orderBy: [NarrativeOrder!]
-
-    """
-    Filtering options for Narratives returned from the connection.
-    """
-    where: NarrativeWhereInput
-  ): NarrativeConnection!
-  controls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Controls returned from the connection.
-    """
-    orderBy: [ControlOrder!]
-
-    """
-    Filtering options for Controls returned from the connection.
-    """
-    where: ControlWhereInput
-  ): ControlConnection!
-  subcontrols(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Subcontrols returned from the connection.
-    """
-    orderBy: [SubcontrolOrder!]
-
-    """
-    Filtering options for Subcontrols returned from the connection.
-    """
-    where: SubcontrolWhereInput
-  ): SubcontrolConnection!
-  controlImplementations(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlImplementations returned from the connection.
-    """
-    orderBy: [ControlImplementationOrder!]
-
-    """
-    Filtering options for ControlImplementations returned from the connection.
-    """
-    where: ControlImplementationWhereInput
-  ): ControlImplementationConnection!
-  mappedControls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for MappedControls returned from the connection.
-    """
-    orderBy: [MappedControlOrder!]
-
-    """
-    Filtering options for MappedControls returned from the connection.
-    """
-    where: MappedControlWhereInput
-  ): MappedControlConnection!
-  evidence(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Evidences returned from the connection.
-    """
-    orderBy: [EvidenceOrder!]
-
-    """
-    Filtering options for Evidences returned from the connection.
-    """
-    where: EvidenceWhereInput
-  ): EvidenceConnection!
-  standards(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Standards returned from the connection.
-    """
-    orderBy: [StandardOrder!]
-
-    """
-    Filtering options for Standards returned from the connection.
-    """
-    where: StandardWhereInput
-  ): StandardConnection!
-  actionPlans(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ActionPlans returned from the connection.
-    """
-    orderBy: [ActionPlanOrder!]
-
-    """
-    Filtering options for ActionPlans returned from the connection.
-    """
-    where: ActionPlanWhereInput
-  ): ActionPlanConnection!
-  customDomains(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for CustomDomains returned from the connection.
-    """
-    orderBy: [CustomDomainOrder!]
-
-    """
-    Filtering options for CustomDomains returned from the connection.
-    """
-    where: CustomDomainWhereInput
-  ): CustomDomainConnection!
-  dnsVerifications(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DNSVerifications returned from the connection.
-    """
-    orderBy: [DNSVerificationOrder!]
-
-    """
-    Filtering options for DNSVerifications returned from the connection.
-    """
-    where: DNSVerificationWhereInput
-  ): DNSVerificationConnection!
-  trustCenters(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for TrustCenters returned from the connection.
-    """
-    orderBy: [TrustCenterOrder!]
-
-    """
-    Filtering options for TrustCenters returned from the connection.
-    """
-    where: TrustCenterWhereInput
-  ): TrustCenterConnection!
-  assets(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Assets returned from the connection.
-    """
-    orderBy: [AssetOrder!]
-
-    """
-    Filtering options for Assets returned from the connection.
-    """
-    where: AssetWhereInput
-  ): AssetConnection!
-  scans(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Scans returned from the connection.
-    """
-    orderBy: [ScanOrder!]
-
-    """
-    Filtering options for Scans returned from the connection.
-    """
-    where: ScanWhereInput
-  ): ScanConnection!
-  slaDefinitions(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for SLADefinitions returned from the connection.
-    """
-    orderBy: [SLADefinitionOrder!]
-
-    """
-    Filtering options for SLADefinitions returned from the connection.
-    """
-    where: SLADefinitionWhereInput
-  ): SLADefinitionConnection!
-  subprocessors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Subprocessors returned from the connection.
-    """
-    orderBy: [SubprocessorOrder!]
-
-    """
-    Filtering options for Subprocessors returned from the connection.
-    """
-    where: SubprocessorWhereInput
-  ): SubprocessorConnection!
-  exports(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Exports returned from the connection.
-    """
-    orderBy: [ExportOrder!]
-
-    """
-    Filtering options for Exports returned from the connection.
-    """
-    where: ExportWhereInput
-  ): ExportConnection!
-  trustCenterWatermarkConfigs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for TrustCenterWatermarkConfigs returned from the connection.
-    """
-    orderBy: [TrustCenterWatermarkConfigOrder!]
-
-    """
-    Filtering options for TrustCenterWatermarkConfigs returned from the connection.
-    """
-    where: TrustCenterWatermarkConfigWhereInput
-  ): TrustCenterWatermarkConfigConnection!
-  assessments(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Assessments returned from the connection.
-    """
-    orderBy: [AssessmentOrder!]
-
-    """
-    Filtering options for Assessments returned from the connection.
-    """
-    where: AssessmentWhereInput
-  ): AssessmentConnection!
-  assessmentResponses(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for AssessmentResponses returned from the connection.
-    """
-    orderBy: [AssessmentResponseOrder!]
-
-    """
-    Filtering options for AssessmentResponses returned from the connection.
-    """
-    where: AssessmentResponseWhereInput
-  ): AssessmentResponseConnection!
-  customTypeEnums(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for CustomTypeEnums returned from the connection.
-    """
-    orderBy: [CustomTypeEnumOrder!]
-
-    """
-    Filtering options for CustomTypeEnums returned from the connection.
-    """
-    where: CustomTypeEnumWhereInput
-  ): CustomTypeEnumConnection!
-  tagDefinitions(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for TagDefinitions returned from the connection.
-    """
-    orderBy: [TagDefinitionOrder!]
-
-    """
-    Filtering options for TagDefinitions returned from the connection.
-    """
-    where: TagDefinitionWhereInput
-  ): TagDefinitionConnection!
-  remediations(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Remediations returned from the connection.
-    """
-    orderBy: [RemediationOrder!]
-
-    """
-    Filtering options for Remediations returned from the connection.
-    """
-    where: RemediationWhereInput
-  ): RemediationConnection!
-  findings(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Findings returned from the connection.
-    """
-    orderBy: [FindingOrder!]
-
-    """
-    Filtering options for Findings returned from the connection.
-    """
-    where: FindingWhereInput
-  ): FindingConnection!
-  findingControls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for FindingControls returned from the connection.
-    """
-    orderBy: [FindingControlOrder!]
-
-    """
-    Filtering options for FindingControls returned from the connection.
-    """
-    where: FindingControlWhereInput
-  ): FindingControlConnection!
-  reviews(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Reviews returned from the connection.
-    """
-    orderBy: [ReviewOrder!]
-
-    """
-    Filtering options for Reviews returned from the connection.
-    """
-    where: ReviewWhereInput
-  ): ReviewConnection!
-  vulnerabilities(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Vulnerabilities returned from the connection.
-    """
-    orderBy: [VulnerabilityOrder!]
-
-    """
-    Filtering options for Vulnerabilities returned from the connection.
-    """
-    where: VulnerabilityWhereInput
-  ): VulnerabilityConnection!
-  workflowDefinitions(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for WorkflowDefinitions returned from the connection.
-    """
-    orderBy: [WorkflowDefinitionOrder!]
-
-    """
-    Filtering options for WorkflowDefinitions returned from the connection.
-    """
-    where: WorkflowDefinitionWhereInput
-  ): WorkflowDefinitionConnection!
-  workflowInstances(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for WorkflowInstances returned from the connection.
-    """
-    orderBy: [WorkflowInstanceOrder!]
-
-    """
-    Filtering options for WorkflowInstances returned from the connection.
-    """
-    where: WorkflowInstanceWhereInput
-  ): WorkflowInstanceConnection!
-  workflowEvents(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for WorkflowEvents returned from the connection.
-    """
-    orderBy: [WorkflowEventOrder!]
-
-    """
-    Filtering options for WorkflowEvents returned from the connection.
-    """
-    where: WorkflowEventWhereInput
-  ): WorkflowEventConnection!
-  workflowAssignments(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for WorkflowAssignments returned from the connection.
-    """
-    orderBy: [WorkflowAssignmentOrder!]
-
-    """
-    Filtering options for WorkflowAssignments returned from the connection.
-    """
-    where: WorkflowAssignmentWhereInput
-  ): WorkflowAssignmentConnection!
-  workflowAssignmentTargets(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for WorkflowAssignmentTargets returned from the connection.
-    """
-    orderBy: [WorkflowAssignmentTargetOrder!]
-
-    """
-    Filtering options for WorkflowAssignmentTargets returned from the connection.
-    """
-    where: WorkflowAssignmentTargetWhereInput
-  ): WorkflowAssignmentTargetConnection!
-  workflowObjectRefs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for WorkflowObjectRefs returned from the connection.
-    """
-    orderBy: [WorkflowObjectRefOrder!]
-
-    """
-    Filtering options for WorkflowObjectRefs returned from the connection.
-    """
-    where: WorkflowObjectRefWhereInput
-  ): WorkflowObjectRefConnection!
-  directoryAccounts(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectoryAccounts returned from the connection.
-    """
-    orderBy: [DirectoryAccountOrder!]
-
-    """
-    Filtering options for DirectoryAccounts returned from the connection.
-    """
-    where: DirectoryAccountWhereInput
-  ): DirectoryAccountConnection!
-  directoryGroups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectoryGroups returned from the connection.
-    """
-    orderBy: [DirectoryGroupOrder!]
-
-    """
-    Filtering options for DirectoryGroups returned from the connection.
-    """
-    where: DirectoryGroupWhereInput
-  ): DirectoryGroupConnection!
-  directoryMemberships(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectoryMemberships returned from the connection.
-    """
-    orderBy: [DirectoryMembershipOrder!]
-
-    """
-    Filtering options for DirectoryMemberships returned from the connection.
-    """
-    where: DirectoryMembershipWhereInput
-  ): DirectoryMembershipConnection!
-  discussions(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Discussions returned from the connection.
-    """
-    orderBy: [DiscussionOrder!]
-
-    """
-    Filtering options for Discussions returned from the connection.
-    """
-    where: DiscussionWhereInput
-  ): DiscussionConnection!
-  vendorScoringConfigs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for VendorScoringConfigs returned from the connection.
-    """
-    orderBy: [VendorScoringConfigOrder!]
-
-    """
-    Filtering options for VendorScoringConfigs returned from the connection.
-    """
-    where: VendorScoringConfigWhereInput
-  ): VendorScoringConfigConnection!
-  vendorRiskScores(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for VendorRiskScores returned from the connection.
-    """
-    orderBy: [VendorRiskScoreOrder!]
-
-    """
-    Filtering options for VendorRiskScores returned from the connection.
-    """
-    where: VendorRiskScoreWhereInput
-  ): VendorRiskScoreConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -103470,6 +101702,11 @@ input OrganizationWhereInput {
   hasAssessmentCreators: Boolean
   hasAssessmentCreatorsWith: [GroupWhereInput!]
   """
+  assessment_policy_creators edge predicates
+  """
+  hasAssessmentPolicyCreators: Boolean
+  hasAssessmentPolicyCreatorsWith: [GroupWhereInput!]
+  """
   asset_creators edge predicates
   """
   hasAssetCreators: Boolean
@@ -103845,26 +102082,6 @@ input OrganizationWhereInput {
   hasPersonalAccessTokens: Boolean
   hasPersonalAccessTokensWith: [PersonalAccessTokenWhereInput!]
   """
-  api_tokens edge predicates
-  """
-  hasAPITokens: Boolean
-  hasAPITokensWith: [APITokenWhereInput!]
-  """
-  email_templates edge predicates
-  """
-  hasEmailTemplates: Boolean
-  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
-  """
-  notification_preferences edge predicates
-  """
-  hasNotificationPreferences: Boolean
-  hasNotificationPreferencesWith: [NotificationPreferenceWhereInput!]
-  """
-  notification_templates edge predicates
-  """
-  hasNotificationTemplates: Boolean
-  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
-  """
   users edge predicates
   """
   hasUsers: Boolean
@@ -103880,35 +102097,10 @@ input OrganizationWhereInput {
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
   """
-  secrets edge predicates
-  """
-  hasSecrets: Boolean
-  hasSecretsWith: [HushWhereInput!]
-  """
   avatar_file edge predicates
   """
   hasAvatarFile: Boolean
   hasAvatarFileWith: [FileWhereInput!]
-  """
-  groups edge predicates
-  """
-  hasGroups: Boolean
-  hasGroupsWith: [GroupWhereInput!]
-  """
-  templates edge predicates
-  """
-  hasTemplates: Boolean
-  hasTemplatesWith: [TemplateWhereInput!]
-  """
-  integrations edge predicates
-  """
-  hasIntegrations: Boolean
-  hasIntegrationsWith: [IntegrationWhereInput!]
-  """
-  documents edge predicates
-  """
-  hasDocuments: Boolean
-  hasDocumentsWith: [DocumentDataWhereInput!]
   """
   org_subscriptions edge predicates
   """
@@ -103919,276 +102111,6 @@ input OrganizationWhereInput {
   """
   hasInvites: Boolean
   hasInvitesWith: [InviteWhereInput!]
-  """
-  subscribers edge predicates
-  """
-  hasSubscribers: Boolean
-  hasSubscribersWith: [SubscriberWhereInput!]
-  """
-  entities edge predicates
-  """
-  hasEntities: Boolean
-  hasEntitiesWith: [EntityWhereInput!]
-  """
-  platforms edge predicates
-  """
-  hasPlatforms: Boolean
-  hasPlatformsWith: [PlatformWhereInput!]
-  """
-  identity_holders edge predicates
-  """
-  hasIdentityHolders: Boolean
-  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
-  """
-  campaigns edge predicates
-  """
-  hasCampaigns: Boolean
-  hasCampaignsWith: [CampaignWhereInput!]
-  """
-  campaign_targets edge predicates
-  """
-  hasCampaignTargets: Boolean
-  hasCampaignTargetsWith: [CampaignTargetWhereInput!]
-  """
-  entity_types edge predicates
-  """
-  hasEntityTypes: Boolean
-  hasEntityTypesWith: [EntityTypeWhereInput!]
-  """
-  contacts edge predicates
-  """
-  hasContacts: Boolean
-  hasContactsWith: [ContactWhereInput!]
-  """
-  notes edge predicates
-  """
-  hasNotes: Boolean
-  hasNotesWith: [NoteWhereInput!]
-  """
-  tasks edge predicates
-  """
-  hasTasks: Boolean
-  hasTasksWith: [TaskWhereInput!]
-  """
-  programs edge predicates
-  """
-  hasPrograms: Boolean
-  hasProgramsWith: [ProgramWhereInput!]
-  """
-  system_details edge predicates
-  """
-  hasSystemDetails: Boolean
-  hasSystemDetailsWith: [SystemDetailWhereInput!]
-  """
-  procedures edge predicates
-  """
-  hasProcedures: Boolean
-  hasProceduresWith: [ProcedureWhereInput!]
-  """
-  internal_policies edge predicates
-  """
-  hasInternalPolicies: Boolean
-  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
-  """
-  risks edge predicates
-  """
-  hasRisks: Boolean
-  hasRisksWith: [RiskWhereInput!]
-  """
-  control_objectives edge predicates
-  """
-  hasControlObjectives: Boolean
-  hasControlObjectivesWith: [ControlObjectiveWhereInput!]
-  """
-  narratives edge predicates
-  """
-  hasNarratives: Boolean
-  hasNarrativesWith: [NarrativeWhereInput!]
-  """
-  controls edge predicates
-  """
-  hasControls: Boolean
-  hasControlsWith: [ControlWhereInput!]
-  """
-  subcontrols edge predicates
-  """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
-  """
-  control_implementations edge predicates
-  """
-  hasControlImplementations: Boolean
-  hasControlImplementationsWith: [ControlImplementationWhereInput!]
-  """
-  mapped_controls edge predicates
-  """
-  hasMappedControls: Boolean
-  hasMappedControlsWith: [MappedControlWhereInput!]
-  """
-  evidence edge predicates
-  """
-  hasEvidence: Boolean
-  hasEvidenceWith: [EvidenceWhereInput!]
-  """
-  standards edge predicates
-  """
-  hasStandards: Boolean
-  hasStandardsWith: [StandardWhereInput!]
-  """
-  action_plans edge predicates
-  """
-  hasActionPlans: Boolean
-  hasActionPlansWith: [ActionPlanWhereInput!]
-  """
-  custom_domains edge predicates
-  """
-  hasCustomDomains: Boolean
-  hasCustomDomainsWith: [CustomDomainWhereInput!]
-  """
-  dns_verifications edge predicates
-  """
-  hasDNSVerifications: Boolean
-  hasDNSVerificationsWith: [DNSVerificationWhereInput!]
-  """
-  trust_centers edge predicates
-  """
-  hasTrustCenters: Boolean
-  hasTrustCentersWith: [TrustCenterWhereInput!]
-  """
-  assets edge predicates
-  """
-  hasAssets: Boolean
-  hasAssetsWith: [AssetWhereInput!]
-  """
-  scans edge predicates
-  """
-  hasScans: Boolean
-  hasScansWith: [ScanWhereInput!]
-  """
-  sla_definitions edge predicates
-  """
-  hasSLADefinitions: Boolean
-  hasSLADefinitionsWith: [SLADefinitionWhereInput!]
-  """
-  subprocessors edge predicates
-  """
-  hasSubprocessors: Boolean
-  hasSubprocessorsWith: [SubprocessorWhereInput!]
-  """
-  exports edge predicates
-  """
-  hasExports: Boolean
-  hasExportsWith: [ExportWhereInput!]
-  """
-  trust_center_watermark_configs edge predicates
-  """
-  hasTrustCenterWatermarkConfigs: Boolean
-  hasTrustCenterWatermarkConfigsWith: [TrustCenterWatermarkConfigWhereInput!]
-  """
-  assessments edge predicates
-  """
-  hasAssessments: Boolean
-  hasAssessmentsWith: [AssessmentWhereInput!]
-  """
-  assessment_responses edge predicates
-  """
-  hasAssessmentResponses: Boolean
-  hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
-  """
-  custom_type_enums edge predicates
-  """
-  hasCustomTypeEnums: Boolean
-  hasCustomTypeEnumsWith: [CustomTypeEnumWhereInput!]
-  """
-  tag_definitions edge predicates
-  """
-  hasTagDefinitions: Boolean
-  hasTagDefinitionsWith: [TagDefinitionWhereInput!]
-  """
-  remediations edge predicates
-  """
-  hasRemediations: Boolean
-  hasRemediationsWith: [RemediationWhereInput!]
-  """
-  findings edge predicates
-  """
-  hasFindings: Boolean
-  hasFindingsWith: [FindingWhereInput!]
-  """
-  finding_controls edge predicates
-  """
-  hasFindingControls: Boolean
-  hasFindingControlsWith: [FindingControlWhereInput!]
-  """
-  reviews edge predicates
-  """
-  hasReviews: Boolean
-  hasReviewsWith: [ReviewWhereInput!]
-  """
-  vulnerabilities edge predicates
-  """
-  hasVulnerabilities: Boolean
-  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
-  """
-  workflow_definitions edge predicates
-  """
-  hasWorkflowDefinitions: Boolean
-  hasWorkflowDefinitionsWith: [WorkflowDefinitionWhereInput!]
-  """
-  workflow_instances edge predicates
-  """
-  hasWorkflowInstances: Boolean
-  hasWorkflowInstancesWith: [WorkflowInstanceWhereInput!]
-  """
-  workflow_events edge predicates
-  """
-  hasWorkflowEvents: Boolean
-  hasWorkflowEventsWith: [WorkflowEventWhereInput!]
-  """
-  workflow_assignments edge predicates
-  """
-  hasWorkflowAssignments: Boolean
-  hasWorkflowAssignmentsWith: [WorkflowAssignmentWhereInput!]
-  """
-  workflow_assignment_targets edge predicates
-  """
-  hasWorkflowAssignmentTargets: Boolean
-  hasWorkflowAssignmentTargetsWith: [WorkflowAssignmentTargetWhereInput!]
-  """
-  workflow_object_refs edge predicates
-  """
-  hasWorkflowObjectRefs: Boolean
-  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
-  """
-  directory_accounts edge predicates
-  """
-  hasDirectoryAccounts: Boolean
-  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
-  """
-  directory_groups edge predicates
-  """
-  hasDirectoryGroups: Boolean
-  hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
-  """
-  directory_memberships edge predicates
-  """
-  hasDirectoryMemberships: Boolean
-  hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
-  """
-  discussions edge predicates
-  """
-  hasDiscussions: Boolean
-  hasDiscussionsWith: [DiscussionWhereInput!]
-  """
-  vendor_scoring_configs edge predicates
-  """
-  hasVendorScoringConfigs: Boolean
-  hasVendorScoringConfigsWith: [VendorScoringConfigWhereInput!]
-  """
-  vendor_risk_scores edge predicates
-  """
-  hasVendorRiskScores: Boolean
-  hasVendorRiskScoresWith: [VendorRiskScoreWhereInput!]
   """
   members edge predicates
   """
@@ -109625,6 +107547,37 @@ type Query {
     """
     where: AssessmentWhereInput
   ): AssessmentConnection!
+  assessmentPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentPolicies returned from the connection.
+    """
+    orderBy: [AssessmentPolicyOrder!]
+
+    """
+    Filtering options for AssessmentPolicies returned from the connection.
+    """
+    where: AssessmentPolicyWhereInput
+  ): AssessmentPolicyConnection!
   assessmentResponses(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -128316,6 +126269,14 @@ input UpdateAssessmentInput {
   clearWorkflowObjectRefs: Boolean
 }
 """
+UpdateAssessmentPolicyInput is used for update AssessmentPolicy object.
+Input was generated by ent.
+"""
+input UpdateAssessmentPolicyInput {
+  ownerID: ID
+  clearOwner: Boolean
+}
+"""
 UpdateAssetInput is used for update Asset object.
 Input was generated by ent.
 """
@@ -132399,6 +130360,9 @@ input UpdateOrganizationInput {
   addAssessmentCreatorIDs: [ID!]
   removeAssessmentCreatorIDs: [ID!]
   clearAssessmentCreators: Boolean
+  addAssessmentPolicyCreatorIDs: [ID!]
+  removeAssessmentPolicyCreatorIDs: [ID!]
+  clearAssessmentPolicyCreators: Boolean
   addAssetCreatorIDs: [ID!]
   removeAssetCreatorIDs: [ID!]
   clearAssetCreators: Boolean
@@ -132617,206 +130581,23 @@ input UpdateOrganizationInput {
   addPersonalAccessTokenIDs: [ID!]
   removePersonalAccessTokenIDs: [ID!]
   clearPersonalAccessTokens: Boolean
-  addAPITokenIDs: [ID!]
-  removeAPITokenIDs: [ID!]
-  clearAPITokens: Boolean
-  addEmailTemplateIDs: [ID!]
-  removeEmailTemplateIDs: [ID!]
-  clearEmailTemplates: Boolean
-  addNotificationPreferenceIDs: [ID!]
-  removeNotificationPreferenceIDs: [ID!]
-  clearNotificationPreferences: Boolean
-  addNotificationTemplateIDs: [ID!]
-  removeNotificationTemplateIDs: [ID!]
-  clearNotificationTemplates: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
-  addSecretIDs: [ID!]
-  removeSecretIDs: [ID!]
-  clearSecrets: Boolean
   avatarFileID: ID
   clearAvatarFile: Boolean
-  addGroupIDs: [ID!]
-  removeGroupIDs: [ID!]
-  clearGroups: Boolean
-  addTemplateIDs: [ID!]
-  removeTemplateIDs: [ID!]
-  clearTemplates: Boolean
-  addIntegrationIDs: [ID!]
-  removeIntegrationIDs: [ID!]
-  clearIntegrations: Boolean
-  addDocumentIDs: [ID!]
-  removeDocumentIDs: [ID!]
-  clearDocuments: Boolean
   addOrgSubscriptionIDs: [ID!]
   removeOrgSubscriptionIDs: [ID!]
   clearOrgSubscriptions: Boolean
   addInviteIDs: [ID!]
   removeInviteIDs: [ID!]
   clearInvites: Boolean
-  addSubscriberIDs: [ID!]
-  removeSubscriberIDs: [ID!]
-  clearSubscribers: Boolean
-  addEntityIDs: [ID!]
-  removeEntityIDs: [ID!]
-  clearEntities: Boolean
-  addPlatformIDs: [ID!]
-  removePlatformIDs: [ID!]
-  clearPlatforms: Boolean
-  addIdentityHolderIDs: [ID!]
-  removeIdentityHolderIDs: [ID!]
-  clearIdentityHolders: Boolean
-  addCampaignIDs: [ID!]
-  removeCampaignIDs: [ID!]
-  clearCampaigns: Boolean
-  addCampaignTargetIDs: [ID!]
-  removeCampaignTargetIDs: [ID!]
-  clearCampaignTargets: Boolean
-  addEntityTypeIDs: [ID!]
-  removeEntityTypeIDs: [ID!]
-  clearEntityTypes: Boolean
-  addContactIDs: [ID!]
-  removeContactIDs: [ID!]
-  clearContacts: Boolean
-  addNoteIDs: [ID!]
-  removeNoteIDs: [ID!]
-  clearNotes: Boolean
-  addTaskIDs: [ID!]
-  removeTaskIDs: [ID!]
-  clearTasks: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearPrograms: Boolean
-  addSystemDetailIDs: [ID!]
-  removeSystemDetailIDs: [ID!]
-  clearSystemDetails: Boolean
-  addProcedureIDs: [ID!]
-  removeProcedureIDs: [ID!]
-  clearProcedures: Boolean
-  addInternalPolicyIDs: [ID!]
-  removeInternalPolicyIDs: [ID!]
-  clearInternalPolicies: Boolean
-  addRiskIDs: [ID!]
-  removeRiskIDs: [ID!]
-  clearRisks: Boolean
-  addControlObjectiveIDs: [ID!]
-  removeControlObjectiveIDs: [ID!]
-  clearControlObjectives: Boolean
-  addNarrativeIDs: [ID!]
-  removeNarrativeIDs: [ID!]
-  clearNarratives: Boolean
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  clearControls: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
-  addControlImplementationIDs: [ID!]
-  removeControlImplementationIDs: [ID!]
-  clearControlImplementations: Boolean
-  addMappedControlIDs: [ID!]
-  removeMappedControlIDs: [ID!]
-  clearMappedControls: Boolean
-  addEvidenceIDs: [ID!]
-  removeEvidenceIDs: [ID!]
-  clearEvidence: Boolean
-  addStandardIDs: [ID!]
-  removeStandardIDs: [ID!]
-  clearStandards: Boolean
-  addActionPlanIDs: [ID!]
-  removeActionPlanIDs: [ID!]
-  clearActionPlans: Boolean
-  addCustomDomainIDs: [ID!]
-  removeCustomDomainIDs: [ID!]
-  clearCustomDomains: Boolean
-  addDNSVerificationIDs: [ID!]
-  removeDNSVerificationIDs: [ID!]
-  clearDNSVerifications: Boolean
-  addTrustCenterIDs: [ID!]
-  removeTrustCenterIDs: [ID!]
-  clearTrustCenters: Boolean
-  addAssetIDs: [ID!]
-  removeAssetIDs: [ID!]
-  clearAssets: Boolean
-  addScanIDs: [ID!]
-  removeScanIDs: [ID!]
-  clearScans: Boolean
-  addSLADefinitionIDs: [ID!]
-  removeSLADefinitionIDs: [ID!]
-  clearSLADefinitions: Boolean
-  addSubprocessorIDs: [ID!]
-  removeSubprocessorIDs: [ID!]
-  clearSubprocessors: Boolean
-  addExportIDs: [ID!]
-  removeExportIDs: [ID!]
-  clearExports: Boolean
-  addTrustCenterWatermarkConfigIDs: [ID!]
-  removeTrustCenterWatermarkConfigIDs: [ID!]
-  clearTrustCenterWatermarkConfigs: Boolean
   addImpersonationEventIDs: [ID!]
   removeImpersonationEventIDs: [ID!]
   clearImpersonationEvents: Boolean
-  addAssessmentIDs: [ID!]
-  removeAssessmentIDs: [ID!]
-  clearAssessments: Boolean
-  addAssessmentResponseIDs: [ID!]
-  removeAssessmentResponseIDs: [ID!]
-  clearAssessmentResponses: Boolean
-  addCustomTypeEnumIDs: [ID!]
-  removeCustomTypeEnumIDs: [ID!]
-  clearCustomTypeEnums: Boolean
-  addTagDefinitionIDs: [ID!]
-  removeTagDefinitionIDs: [ID!]
-  clearTagDefinitions: Boolean
-  addRemediationIDs: [ID!]
-  removeRemediationIDs: [ID!]
-  clearRemediations: Boolean
-  addFindingIDs: [ID!]
-  removeFindingIDs: [ID!]
-  clearFindings: Boolean
-  addReviewIDs: [ID!]
-  removeReviewIDs: [ID!]
-  clearReviews: Boolean
-  addVulnerabilityIDs: [ID!]
-  removeVulnerabilityIDs: [ID!]
-  clearVulnerabilities: Boolean
-  addWorkflowDefinitionIDs: [ID!]
-  removeWorkflowDefinitionIDs: [ID!]
-  clearWorkflowDefinitions: Boolean
-  addWorkflowInstanceIDs: [ID!]
-  removeWorkflowInstanceIDs: [ID!]
-  clearWorkflowInstances: Boolean
-  addWorkflowEventIDs: [ID!]
-  removeWorkflowEventIDs: [ID!]
-  clearWorkflowEvents: Boolean
-  addWorkflowAssignmentIDs: [ID!]
-  removeWorkflowAssignmentIDs: [ID!]
-  clearWorkflowAssignments: Boolean
-  addWorkflowAssignmentTargetIDs: [ID!]
-  removeWorkflowAssignmentTargetIDs: [ID!]
-  clearWorkflowAssignmentTargets: Boolean
-  addWorkflowObjectRefIDs: [ID!]
-  removeWorkflowObjectRefIDs: [ID!]
-  clearWorkflowObjectRefs: Boolean
-  addDirectoryAccountIDs: [ID!]
-  removeDirectoryAccountIDs: [ID!]
-  clearDirectoryAccounts: Boolean
-  addDirectoryGroupIDs: [ID!]
-  removeDirectoryGroupIDs: [ID!]
-  clearDirectoryGroups: Boolean
-  addDiscussionIDs: [ID!]
-  removeDiscussionIDs: [ID!]
-  clearDiscussions: Boolean
-  addVendorScoringConfigIDs: [ID!]
-  removeVendorScoringConfigIDs: [ID!]
-  clearVendorScoringConfigs: Boolean
-  addVendorRiskScoreIDs: [ID!]
-  removeVendorRiskScoreIDs: [ID!]
-  clearVendorRiskScores: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -156837,8 +154618,12 @@ func (ec *executionContext) childFields_Assessment(ctx context.Context, field gr
 		return ec.fieldContext_Assessment_assessmentResponses(ctx, field)
 	case "campaigns":
 		return ec.fieldContext_Assessment_campaigns(ctx, field)
+	case "internalPolicies":
+		return ec.fieldContext_Assessment_internalPolicies(ctx, field)
 	case "workflowObjectRefs":
 		return ec.fieldContext_Assessment_workflowObjectRefs(ctx, field)
+	case "policyAttestations":
+		return ec.fieldContext_Assessment_policyAttestations(ctx, field)
 	case "hasPendingWorkflow":
 		return ec.fieldContext_Assessment_hasPendingWorkflow(ctx, field)
 	case "hasWorkflowHistory":
@@ -156901,6 +154686,118 @@ func (ec *executionContext) childFields_AssessmentEdge(ctx context.Context, fiel
 		return ec.fieldContext_AssessmentEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AssessmentEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicy(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AssessmentPolicy_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AssessmentPolicy_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AssessmentPolicy_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AssessmentPolicy_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AssessmentPolicy_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AssessmentPolicy_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AssessmentPolicy_ownerID(ctx, field)
+	case "assessmentID":
+		return ec.fieldContext_AssessmentPolicy_assessmentID(ctx, field)
+	case "internalPolicyID":
+		return ec.fieldContext_AssessmentPolicy_internalPolicyID(ctx, field)
+	case "policyRevision":
+		return ec.fieldContext_AssessmentPolicy_policyRevision(ctx, field)
+	case "owner":
+		return ec.fieldContext_AssessmentPolicy_owner(ctx, field)
+	case "assessment":
+		return ec.fieldContext_AssessmentPolicy_assessment(ctx, field)
+	case "internalPolicy":
+		return ec.fieldContext_AssessmentPolicy_internalPolicy(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicy", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "assessmentPolicies":
+		return ec.fieldContext_AssessmentPolicyBulkCreatePayload_assessmentPolicies(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyBulkCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedIDs":
+		return ec.fieldContext_AssessmentPolicyBulkDeletePayload_deletedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_AssessmentPolicyBulkDeletePayload_error(ctx, field)
+	case "notDeletedIDs":
+		return ec.fieldContext_AssessmentPolicyBulkDeletePayload_notDeletedIDs(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyBulkDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "assessmentPolicies":
+		return ec.fieldContext_AssessmentPolicyBulkUpdatePayload_assessmentPolicies(ctx, field)
+	case "updatedIDs":
+		return ec.fieldContext_AssessmentPolicyBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_AssessmentPolicyBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_AssessmentPolicyBulkUpdatePayload_error(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyBulkUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AssessmentPolicyConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AssessmentPolicyConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AssessmentPolicyConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "assessmentPolicy":
+		return ec.fieldContext_AssessmentPolicyCreatePayload_assessmentPolicy(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_AssessmentPolicyDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AssessmentPolicyEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AssessmentPolicyEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "assessmentPolicy":
+		return ec.fieldContext_AssessmentPolicyUpdatePayload_assessmentPolicy(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_AssessmentResponse(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -162643,8 +160540,12 @@ func (ec *executionContext) childFields_InternalPolicy(ctx context.Context, fiel
 		return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
 	case "reviews":
 		return ec.fieldContext_InternalPolicy_reviews(ctx, field)
+	case "assessments":
+		return ec.fieldContext_InternalPolicy_assessments(ctx, field)
 	case "integrations":
 		return ec.fieldContext_InternalPolicy_integrations(ctx, field)
+	case "policyAttestations":
+		return ec.fieldContext_InternalPolicy_policyAttestations(ctx, field)
 	case "hasPendingWorkflow":
 		return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
 	case "hasWorkflowHistory":
@@ -163981,6 +161882,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_apiTokenCreators(ctx, field)
 	case "assessmentCreators":
 		return ec.fieldContext_Organization_assessmentCreators(ctx, field)
+	case "assessmentPolicyCreators":
+		return ec.fieldContext_Organization_assessmentPolicyCreators(ctx, field)
 	case "assetCreators":
 		return ec.fieldContext_Organization_assetCreators(ctx, field)
 	case "campaignCreators":
@@ -164131,144 +162034,18 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_setting(ctx, field)
 	case "personalAccessTokens":
 		return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
-	case "apiTokens":
-		return ec.fieldContext_Organization_apiTokens(ctx, field)
-	case "emailTemplates":
-		return ec.fieldContext_Organization_emailTemplates(ctx, field)
-	case "notificationPreferences":
-		return ec.fieldContext_Organization_notificationPreferences(ctx, field)
-	case "notificationTemplates":
-		return ec.fieldContext_Organization_notificationTemplates(ctx, field)
 	case "users":
 		return ec.fieldContext_Organization_users(ctx, field)
 	case "files":
 		return ec.fieldContext_Organization_files(ctx, field)
 	case "events":
 		return ec.fieldContext_Organization_events(ctx, field)
-	case "secrets":
-		return ec.fieldContext_Organization_secrets(ctx, field)
 	case "avatarFile":
 		return ec.fieldContext_Organization_avatarFile(ctx, field)
-	case "groups":
-		return ec.fieldContext_Organization_groups(ctx, field)
-	case "templates":
-		return ec.fieldContext_Organization_templates(ctx, field)
-	case "integrations":
-		return ec.fieldContext_Organization_integrations(ctx, field)
-	case "documents":
-		return ec.fieldContext_Organization_documents(ctx, field)
 	case "orgSubscriptions":
 		return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
 	case "invites":
 		return ec.fieldContext_Organization_invites(ctx, field)
-	case "subscribers":
-		return ec.fieldContext_Organization_subscribers(ctx, field)
-	case "entities":
-		return ec.fieldContext_Organization_entities(ctx, field)
-	case "platforms":
-		return ec.fieldContext_Organization_platforms(ctx, field)
-	case "identityHolders":
-		return ec.fieldContext_Organization_identityHolders(ctx, field)
-	case "campaigns":
-		return ec.fieldContext_Organization_campaigns(ctx, field)
-	case "campaignTargets":
-		return ec.fieldContext_Organization_campaignTargets(ctx, field)
-	case "entityTypes":
-		return ec.fieldContext_Organization_entityTypes(ctx, field)
-	case "contacts":
-		return ec.fieldContext_Organization_contacts(ctx, field)
-	case "notes":
-		return ec.fieldContext_Organization_notes(ctx, field)
-	case "tasks":
-		return ec.fieldContext_Organization_tasks(ctx, field)
-	case "programs":
-		return ec.fieldContext_Organization_programs(ctx, field)
-	case "systemDetails":
-		return ec.fieldContext_Organization_systemDetails(ctx, field)
-	case "procedures":
-		return ec.fieldContext_Organization_procedures(ctx, field)
-	case "internalPolicies":
-		return ec.fieldContext_Organization_internalPolicies(ctx, field)
-	case "risks":
-		return ec.fieldContext_Organization_risks(ctx, field)
-	case "controlObjectives":
-		return ec.fieldContext_Organization_controlObjectives(ctx, field)
-	case "narratives":
-		return ec.fieldContext_Organization_narratives(ctx, field)
-	case "controls":
-		return ec.fieldContext_Organization_controls(ctx, field)
-	case "subcontrols":
-		return ec.fieldContext_Organization_subcontrols(ctx, field)
-	case "controlImplementations":
-		return ec.fieldContext_Organization_controlImplementations(ctx, field)
-	case "mappedControls":
-		return ec.fieldContext_Organization_mappedControls(ctx, field)
-	case "evidence":
-		return ec.fieldContext_Organization_evidence(ctx, field)
-	case "standards":
-		return ec.fieldContext_Organization_standards(ctx, field)
-	case "actionPlans":
-		return ec.fieldContext_Organization_actionPlans(ctx, field)
-	case "customDomains":
-		return ec.fieldContext_Organization_customDomains(ctx, field)
-	case "dnsVerifications":
-		return ec.fieldContext_Organization_dnsVerifications(ctx, field)
-	case "trustCenters":
-		return ec.fieldContext_Organization_trustCenters(ctx, field)
-	case "assets":
-		return ec.fieldContext_Organization_assets(ctx, field)
-	case "scans":
-		return ec.fieldContext_Organization_scans(ctx, field)
-	case "slaDefinitions":
-		return ec.fieldContext_Organization_slaDefinitions(ctx, field)
-	case "subprocessors":
-		return ec.fieldContext_Organization_subprocessors(ctx, field)
-	case "exports":
-		return ec.fieldContext_Organization_exports(ctx, field)
-	case "trustCenterWatermarkConfigs":
-		return ec.fieldContext_Organization_trustCenterWatermarkConfigs(ctx, field)
-	case "assessments":
-		return ec.fieldContext_Organization_assessments(ctx, field)
-	case "assessmentResponses":
-		return ec.fieldContext_Organization_assessmentResponses(ctx, field)
-	case "customTypeEnums":
-		return ec.fieldContext_Organization_customTypeEnums(ctx, field)
-	case "tagDefinitions":
-		return ec.fieldContext_Organization_tagDefinitions(ctx, field)
-	case "remediations":
-		return ec.fieldContext_Organization_remediations(ctx, field)
-	case "findings":
-		return ec.fieldContext_Organization_findings(ctx, field)
-	case "findingControls":
-		return ec.fieldContext_Organization_findingControls(ctx, field)
-	case "reviews":
-		return ec.fieldContext_Organization_reviews(ctx, field)
-	case "vulnerabilities":
-		return ec.fieldContext_Organization_vulnerabilities(ctx, field)
-	case "workflowDefinitions":
-		return ec.fieldContext_Organization_workflowDefinitions(ctx, field)
-	case "workflowInstances":
-		return ec.fieldContext_Organization_workflowInstances(ctx, field)
-	case "workflowEvents":
-		return ec.fieldContext_Organization_workflowEvents(ctx, field)
-	case "workflowAssignments":
-		return ec.fieldContext_Organization_workflowAssignments(ctx, field)
-	case "workflowAssignmentTargets":
-		return ec.fieldContext_Organization_workflowAssignmentTargets(ctx, field)
-	case "workflowObjectRefs":
-		return ec.fieldContext_Organization_workflowObjectRefs(ctx, field)
-	case "directoryAccounts":
-		return ec.fieldContext_Organization_directoryAccounts(ctx, field)
-	case "directoryGroups":
-		return ec.fieldContext_Organization_directoryGroups(ctx, field)
-	case "directoryMemberships":
-		return ec.fieldContext_Organization_directoryMemberships(ctx, field)
-	case "discussions":
-		return ec.fieldContext_Organization_discussions(ctx, field)
-	case "vendorScoringConfigs":
-		return ec.fieldContext_Organization_vendorScoringConfigs(ctx, field)
-	case "vendorRiskScores":
-		return ec.fieldContext_Organization_vendorRiskScores(ctx, field)
 	case "members":
 		return ec.fieldContext_Organization_members(ctx, field)
 	}

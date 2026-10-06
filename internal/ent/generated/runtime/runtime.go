@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -470,6 +471,56 @@ func init() {
 	assessmentDescID := assessmentMixinFields4[0].Descriptor()
 	// assessment.DefaultID holds the default value on creation for the id field.
 	assessment.DefaultID = assessmentDescID.Default.(func() string)
+	assessmentpolicyMixin := schema.AssessmentPolicy{}.Mixin()
+	assessmentpolicy.Policy = privacy.NewPolicies(schema.AssessmentPolicy{})
+	assessmentpolicy.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := assessmentpolicy.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	assessmentpolicyMixinHooks0 := assessmentpolicyMixin[0].Hooks()
+	assessmentpolicyMixinHooks1 := assessmentpolicyMixin[1].Hooks()
+	assessmentpolicyMixinHooks5 := assessmentpolicyMixin[5].Hooks()
+	assessmentpolicyHooks := schema.AssessmentPolicy{}.Hooks()
+
+	assessmentpolicy.Hooks[1] = assessmentpolicyMixinHooks0[0]
+
+	assessmentpolicy.Hooks[2] = assessmentpolicyMixinHooks1[0]
+
+	assessmentpolicy.Hooks[3] = assessmentpolicyMixinHooks5[0]
+
+	assessmentpolicy.Hooks[4] = assessmentpolicyHooks[0]
+	assessmentpolicyMixinInters5 := assessmentpolicyMixin[5].Interceptors()
+	assessmentpolicy.Interceptors[0] = assessmentpolicyMixinInters5[0]
+	assessmentpolicyMixinFields0 := assessmentpolicyMixin[0].Fields()
+	_ = assessmentpolicyMixinFields0
+	assessmentpolicyMixinFields3 := assessmentpolicyMixin[3].Fields()
+	_ = assessmentpolicyMixinFields3
+	assessmentpolicyMixinFields5 := assessmentpolicyMixin[5].Fields()
+	_ = assessmentpolicyMixinFields5
+	assessmentpolicyFields := schema.AssessmentPolicy{}.Fields()
+	_ = assessmentpolicyFields
+	// assessmentpolicyDescCreatedAt is the schema descriptor for created_at field.
+	assessmentpolicyDescCreatedAt := assessmentpolicyMixinFields0[0].Descriptor()
+	// assessmentpolicy.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assessmentpolicy.DefaultCreatedAt = assessmentpolicyDescCreatedAt.Default.(func() time.Time)
+	// assessmentpolicyDescUpdatedAt is the schema descriptor for updated_at field.
+	assessmentpolicyDescUpdatedAt := assessmentpolicyMixinFields0[1].Descriptor()
+	// assessmentpolicy.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assessmentpolicy.DefaultUpdatedAt = assessmentpolicyDescUpdatedAt.Default.(func() time.Time)
+	// assessmentpolicy.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	assessmentpolicy.UpdateDefaultUpdatedAt = assessmentpolicyDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assessmentpolicyDescOwnerID is the schema descriptor for owner_id field.
+	assessmentpolicyDescOwnerID := assessmentpolicyMixinFields5[0].Descriptor()
+	// assessmentpolicy.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	assessmentpolicy.OwnerIDValidator = assessmentpolicyDescOwnerID.Validators[0].(func(string) error)
+	// assessmentpolicyDescID is the schema descriptor for id field.
+	assessmentpolicyDescID := assessmentpolicyMixinFields3[0].Descriptor()
+	// assessmentpolicy.DefaultID holds the default value on creation for the id field.
+	assessmentpolicy.DefaultID = assessmentpolicyDescID.Default.(func() string)
 	assessmentresponseMixin := schema.AssessmentResponse{}.Mixin()
 	assessmentresponse.Policy = privacy.NewPolicies(schema.AssessmentResponse{})
 	assessmentresponse.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -5122,11 +5173,13 @@ func init() {
 
 	organization.Hooks[78] = organizationMixinHooks7[73]
 
-	organization.Hooks[79] = organizationHooks[0]
+	organization.Hooks[79] = organizationMixinHooks7[74]
 
-	organization.Hooks[80] = organizationHooks[1]
+	organization.Hooks[80] = organizationHooks[0]
 
-	organization.Hooks[81] = organizationHooks[2]
+	organization.Hooks[81] = organizationHooks[1]
+
+	organization.Hooks[82] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]

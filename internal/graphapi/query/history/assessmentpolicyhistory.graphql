@@ -1,0 +1,56 @@
+query GetAllAssessmentPolicyHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AssessmentPolicyHistoryOrder!]) {
+	assessmentPolicyHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				createdAt
+				createdBy
+				historyTime
+				id
+				internalPolicyID
+				operation
+				ownerID
+				policyRevision
+				ref
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}
+query GetAssessmentPolicyHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AssessmentPolicyHistoryOrder!], $where: AssessmentPolicyHistoryWhereInput) {
+	assessmentPolicyHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				createdAt
+				createdBy
+				historyTime
+				id
+				internalPolicyID
+				operation
+				ownerID
+				policyRevision
+				ref
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}

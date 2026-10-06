@@ -237,6 +237,18 @@ func defaultEdgeToWithPagination(from any, edgeSchema any) ent.Edge {
 	})
 }
 
+// hiddenOwnerEdge creates the owner edge for an org-owned schema without exposing it in graphql
+func hiddenOwnerEdge(org any, edgeSchema any) ent.Edge {
+	return edgeToWithPagination(&edgeDefinition{
+		fromSchema:         org,
+		edgeSchema:         edgeSchema,
+		cascadeDeleteOwner: true,
+		annotations: []schema.Annotation{
+			entgql.Skip(entgql.SkipAll),
+		},
+	})
+}
+
 // defaultEdgeFromWithPagination uses the default edge definition to create an edge with pagination
 // for the given edge schema, to be used for a M:M relationship using all default settings
 func defaultEdgeFromWithPagination(from any, edgeSchema any) ent.Edge {

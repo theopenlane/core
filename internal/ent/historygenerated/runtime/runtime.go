@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
@@ -211,6 +212,35 @@ func init() {
 	assessmenthistoryDescID := assessmenthistoryFields[10].Descriptor()
 	// assessmenthistory.DefaultID holds the default value on creation for the id field.
 	assessmenthistory.DefaultID = assessmenthistoryDescID.Default.(func() string)
+	assessmentpolicyhistory.Policy = privacy.NewPolicies(historyschema.AssessmentPolicyHistory{})
+	assessmentpolicyhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := assessmentpolicyhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	assessmentpolicyhistoryInters := historyschema.AssessmentPolicyHistory{}.Interceptors()
+	assessmentpolicyhistory.Interceptors[0] = assessmentpolicyhistoryInters[0]
+	assessmentpolicyhistoryFields := historyschema.AssessmentPolicyHistory{}.Fields()
+	_ = assessmentpolicyhistoryFields
+	// assessmentpolicyhistoryDescHistoryTime is the schema descriptor for history_time field.
+	assessmentpolicyhistoryDescHistoryTime := assessmentpolicyhistoryFields[0].Descriptor()
+	// assessmentpolicyhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	assessmentpolicyhistory.DefaultHistoryTime = assessmentpolicyhistoryDescHistoryTime.Default.(func() time.Time)
+	// assessmentpolicyhistoryDescCreatedAt is the schema descriptor for created_at field.
+	assessmentpolicyhistoryDescCreatedAt := assessmentpolicyhistoryFields[3].Descriptor()
+	// assessmentpolicyhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assessmentpolicyhistory.DefaultCreatedAt = assessmentpolicyhistoryDescCreatedAt.Default.(func() time.Time)
+	// assessmentpolicyhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	assessmentpolicyhistoryDescUpdatedAt := assessmentpolicyhistoryFields[4].Descriptor()
+	// assessmentpolicyhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assessmentpolicyhistory.DefaultUpdatedAt = assessmentpolicyhistoryDescUpdatedAt.Default.(func() time.Time)
+	// assessmentpolicyhistoryDescID is the schema descriptor for id field.
+	assessmentpolicyhistoryDescID := assessmentpolicyhistoryFields[8].Descriptor()
+	// assessmentpolicyhistory.DefaultID holds the default value on creation for the id field.
+	assessmentpolicyhistory.DefaultID = assessmentpolicyhistoryDescID.Default.(func() string)
 	assessmentresponsehistory.Policy = privacy.NewPolicies(historyschema.AssessmentResponseHistory{})
 	assessmentresponsehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {

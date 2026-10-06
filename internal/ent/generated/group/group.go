@@ -507,6 +507,7 @@ var ForeignKeys = []string{
 	"organization_action_plan_creators",
 	"organization_api_token_creators",
 	"organization_assessment_creators",
+	"organization_assessment_policy_creators",
 	"organization_asset_creators",
 	"organization_campaign_creators",
 	"organization_campaign_target_creators",

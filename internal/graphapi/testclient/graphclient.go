@@ -29,6 +29,7 @@ type TestGraphClient interface {
 	GetAllAPITokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
 	CreateAssessment(ctx context.Context, input CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessment, error)
+	CreateAssessmentWithPolicies(ctx context.Context, assessmentInput CreateAssessmentInput, policies []*AssessmentPoliciesInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentWithPolicies, error)
 	CreateAssessmentTemplate(ctx context.Context, input CreateAssessmentTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentTemplate, error)
 	DeleteAssessment(ctx context.Context, deleteAssessmentID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessment, error)
 	DeleteBulkAssessment(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkAssessment, error)
@@ -36,6 +37,17 @@ type TestGraphClient interface {
 	GetAssessmentByID(ctx context.Context, assessmentID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentByID, error)
 	GetAssessments(ctx context.Context, first *int64, last *int64, where *AssessmentWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessments, error)
 	UpdateAssessment(ctx context.Context, updateAssessmentID string, input UpdateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessment, error)
+	CreateAssessmentPolicy(ctx context.Context, input CreateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentPolicy, error)
+	CreateBulkAssessmentPolicy(ctx context.Context, input []*CreateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessmentPolicy, error)
+	CreateBulkCSVAssessmentPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessmentPolicy, error)
+	DeleteAssessmentPolicy(ctx context.Context, deleteAssessmentPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentPolicy, error)
+	DeleteBulkAssessmentPolicy(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkAssessmentPolicy, error)
+	GetAllAssessmentPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AssessmentPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentPolicies, error)
+	GetAssessmentPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AssessmentPolicyOrder, where *AssessmentPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentPolicies, error)
+	GetAssessmentPolicyByID(ctx context.Context, assessmentPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentPolicyByID, error)
+	UpdateAssessmentPolicy(ctx context.Context, updateAssessmentPolicyID string, input UpdateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessmentPolicy, error)
+	UpdateBulkAssessmentPolicy(ctx context.Context, ids []string, input UpdateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAssessmentPolicy, error)
+	UpdateBulkCSVAssessmentPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAssessmentPolicy, error)
 	CreateAssessmentResponse(ctx context.Context, input CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentResponse, error)
 	DeleteAssessmentResponse(ctx context.Context, deleteAssessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentResponse, error)
 	GetAllAssessmentResponses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponses, error)
@@ -4243,6 +4255,150 @@ func (t *CreateAssessment_CreateAssessment) GetAssessment() *CreateAssessment_Cr
 	return &t.Assessment
 }
 
+type CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges_Node struct {
+	ID       string  "json:\"id\" graphql:\"id\""
+	Revision *string "json:\"revision,omitempty\" graphql:\"revision\""
+}
+
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges_Node) GetRevision() *string {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges_Node{}
+	}
+	return t.Revision
+}
+
+type CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges struct {
+	Node *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges) GetNode() *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges_Node {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges{}
+	}
+	return t.Node
+}
+
+type CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies struct {
+	Edges []*CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies) GetEdges() []*CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies_Edges {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies{}
+	}
+	return t.Edges
+}
+
+type CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node struct {
+	ID               string  "json:\"id\" graphql:\"id\""
+	InternalPolicyID string  "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	PolicyRevision   *string "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+}
+
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node) GetInternalPolicyID() string {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node{}
+	}
+	return t.InternalPolicyID
+}
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node) GetPolicyRevision() *string {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node{}
+	}
+	return t.PolicyRevision
+}
+
+type CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges struct {
+	Node *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges) GetNode() *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges_Node {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges{}
+	}
+	return t.Node
+}
+
+type CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations struct {
+	Edges []*CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations) GetEdges() []*CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations_Edges {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations{}
+	}
+	return t.Edges
+}
+
+type CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment struct {
+	ID                 string                                                                                  "json:\"id\" graphql:\"id\""
+	InternalPolicies   CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies   "json:\"internalPolicies\" graphql:\"internalPolicies\""
+	Jsonconfig         map[string]any                                                                          "json:\"jsonconfig,omitempty\" graphql:\"jsonconfig\""
+	Name               string                                                                                  "json:\"name\" graphql:\"name\""
+	OwnerID            *string                                                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyAttestations CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations "json:\"policyAttestations\" graphql:\"policyAttestations\""
+}
+
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment) GetID() string {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment{}
+	}
+	return t.ID
+}
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment) GetInternalPolicies() *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_InternalPolicies {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment{}
+	}
+	return &t.InternalPolicies
+}
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment) GetJsonconfig() map[string]any {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment{}
+	}
+	return t.Jsonconfig
+}
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment) GetName() string {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment{}
+	}
+	return t.Name
+}
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment) GetPolicyAttestations() *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment_PolicyAttestations {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment{}
+	}
+	return &t.PolicyAttestations
+}
+
+type CreateAssessmentWithPolicies_CreateAssessmentWithPolicies struct {
+	Assessment CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment "json:\"assessment\" graphql:\"assessment\""
+}
+
+func (t *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies) GetAssessment() *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies_Assessment {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies_CreateAssessmentWithPolicies{}
+	}
+	return &t.Assessment
+}
+
 type CreateAssessmentTemplate_CreateAssessmentTemplate_Template struct {
 	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
 	ID           string              "json:\"id\" graphql:\"id\""
@@ -5093,6 +5249,910 @@ func (t *UpdateAssessment_UpdateAssessment) GetAssessment() *UpdateAssessment_Up
 		t = &UpdateAssessment_UpdateAssessment{}
 	}
 	return &t.Assessment
+}
+
+type CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetID() string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.ID
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetInternalPolicyID() string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.InternalPolicyID
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetPolicyRevision() *string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.PolicyRevision
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type CreateAssessmentPolicy_CreateAssessmentPolicy struct {
+	AssessmentPolicy CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy "json:\"assessmentPolicy\" graphql:\"assessmentPolicy\""
+}
+
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy) GetAssessmentPolicy() *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy{}
+	}
+	return &t.AssessmentPolicy
+}
+
+type CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetID() string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.ID
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetInternalPolicyID() string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.InternalPolicyID
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetPolicyRevision() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.PolicyRevision
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy struct {
+	AssessmentPolicies []*CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies "json:\"assessmentPolicies,omitempty\" graphql:\"assessmentPolicies\""
+}
+
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy) GetAssessmentPolicies() []*CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy{}
+	}
+	return t.AssessmentPolicies
+}
+
+type CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetAssessmentID() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetInternalPolicyID() string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.InternalPolicyID
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetPolicyRevision() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.PolicyRevision
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy struct {
+	AssessmentPolicies []*CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies "json:\"assessmentPolicies,omitempty\" graphql:\"assessmentPolicies\""
+}
+
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy) GetAssessmentPolicies() []*CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy{}
+	}
+	return t.AssessmentPolicies
+}
+
+type DeleteAssessmentPolicy_DeleteAssessmentPolicy struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteAssessmentPolicy_DeleteAssessmentPolicy) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteAssessmentPolicy_DeleteAssessmentPolicy{}
+	}
+	return t.DeletedID
+}
+
+type DeleteBulkAssessmentPolicy_DeleteBulkAssessmentPolicy struct {
+	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+}
+
+func (t *DeleteBulkAssessmentPolicy_DeleteBulkAssessmentPolicy) GetDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkAssessmentPolicy_DeleteBulkAssessmentPolicy{}
+	}
+	return t.DeletedIDs
+}
+
+type GetAllAssessmentPolicies_AssessmentPolicies_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetInternalPolicyID() string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.InternalPolicyID
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetPolicyRevision() *string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.PolicyRevision
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type GetAllAssessmentPolicies_AssessmentPolicies_Edges struct {
+	Node *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges) GetNode() *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssessmentPolicies_AssessmentPolicies struct {
+	Edges      []*GetAllAssessmentPolicies_AssessmentPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssessmentPolicies_AssessmentPolicies_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssessmentPolicies_AssessmentPolicies) GetEdges() []*GetAllAssessmentPolicies_AssessmentPolicies_Edges {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies) GetPageInfo() *GetAllAssessmentPolicies_AssessmentPolicies_PageInfo {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentPolicies_AssessmentPolicies_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssessmentPolicies_AssessmentPolicies_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssessmentPolicies_AssessmentPolicies_Edges_Node struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetInternalPolicyID() string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.InternalPolicyID
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetPolicyRevision() *string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.PolicyRevision
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type GetAssessmentPolicies_AssessmentPolicies_Edges struct {
+	Node *GetAssessmentPolicies_AssessmentPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges) GetNode() *GetAssessmentPolicies_AssessmentPolicies_Edges_Node {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssessmentPolicies_AssessmentPolicies struct {
+	Edges      []*GetAssessmentPolicies_AssessmentPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssessmentPolicies_AssessmentPolicies_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssessmentPolicies_AssessmentPolicies) GetEdges() []*GetAssessmentPolicies_AssessmentPolicies_Edges {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies{}
+	}
+	return t.Edges
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies) GetPageInfo() *GetAssessmentPolicies_AssessmentPolicies_PageInfo {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssessmentPolicies_AssessmentPolicies) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies{}
+	}
+	return t.TotalCount
+}
+
+type GetAssessmentPolicyByID_AssessmentPolicy struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetAssessmentID() string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.AssessmentID
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetID() string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.ID
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetInternalPolicyID() string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.InternalPolicyID
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetPolicyRevision() *string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.PolicyRevision
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetAssessmentID() string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.AssessmentID
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetID() string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.ID
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetInternalPolicyID() string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.InternalPolicyID
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetPolicyRevision() *string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.PolicyRevision
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateAssessmentPolicy_UpdateAssessmentPolicy struct {
+	AssessmentPolicy UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy "json:\"assessmentPolicy\" graphql:\"assessmentPolicy\""
+}
+
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy) GetAssessmentPolicy() *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy{}
+	}
+	return &t.AssessmentPolicy
+}
+
+type UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetAssessmentID() string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.AssessmentID
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetID() string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetInternalPolicyID() string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.InternalPolicyID
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetPolicyRevision() *string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.PolicyRevision
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy struct {
+	AssessmentPolicies []*UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies "json:\"assessmentPolicies,omitempty\" graphql:\"assessmentPolicies\""
+	UpdatedIDs         []string                                                                    "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy) GetAssessmentPolicies() []*UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy{}
+	}
+	return t.AssessmentPolicies
+}
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies struct {
+	AssessmentID          string     "json:\"assessmentID\" graphql:\"assessmentID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	InternalPolicyID      string     "json:\"internalPolicyID\" graphql:\"internalPolicyID\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyRevision        *string    "json:\"policyRevision,omitempty\" graphql:\"policyRevision\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetAssessmentID() string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.AssessmentID
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetID() string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetInternalPolicyID() string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.InternalPolicyID
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetPolicyRevision() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.PolicyRevision
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy struct {
+	AssessmentPolicies []*UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies "json:\"assessmentPolicies,omitempty\" graphql:\"assessmentPolicies\""
+	UpdatedIDs         []string                                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy) GetAssessmentPolicies() []*UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy{}
+	}
+	return t.AssessmentPolicies
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy{}
+	}
+	return t.UpdatedIDs
 }
 
 type CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse struct {
@@ -165270,6 +166330,17 @@ func (t *CreateAssessment) GetCreateAssessment() *CreateAssessment_CreateAssessm
 	return &t.CreateAssessment
 }
 
+type CreateAssessmentWithPolicies struct {
+	CreateAssessmentWithPolicies CreateAssessmentWithPolicies_CreateAssessmentWithPolicies "json:\"createAssessmentWithPolicies\" graphql:\"createAssessmentWithPolicies\""
+}
+
+func (t *CreateAssessmentWithPolicies) GetCreateAssessmentWithPolicies() *CreateAssessmentWithPolicies_CreateAssessmentWithPolicies {
+	if t == nil {
+		t = &CreateAssessmentWithPolicies{}
+	}
+	return &t.CreateAssessmentWithPolicies
+}
+
 type CreateAssessmentTemplate struct {
 	CreateAssessmentTemplate CreateAssessmentTemplate_CreateAssessmentTemplate "json:\"createAssessmentTemplate\" graphql:\"createAssessmentTemplate\""
 }
@@ -165345,6 +166416,127 @@ func (t *UpdateAssessment) GetUpdateAssessment() *UpdateAssessment_UpdateAssessm
 		t = &UpdateAssessment{}
 	}
 	return &t.UpdateAssessment
+}
+
+type CreateAssessmentPolicy struct {
+	CreateAssessmentPolicy CreateAssessmentPolicy_CreateAssessmentPolicy "json:\"createAssessmentPolicy\" graphql:\"createAssessmentPolicy\""
+}
+
+func (t *CreateAssessmentPolicy) GetCreateAssessmentPolicy() *CreateAssessmentPolicy_CreateAssessmentPolicy {
+	if t == nil {
+		t = &CreateAssessmentPolicy{}
+	}
+	return &t.CreateAssessmentPolicy
+}
+
+type CreateBulkAssessmentPolicy struct {
+	CreateBulkAssessmentPolicy CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy "json:\"createBulkAssessmentPolicy\" graphql:\"createBulkAssessmentPolicy\""
+}
+
+func (t *CreateBulkAssessmentPolicy) GetCreateBulkAssessmentPolicy() *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy{}
+	}
+	return &t.CreateBulkAssessmentPolicy
+}
+
+type CreateBulkCSVAssessmentPolicy struct {
+	CreateBulkCSVAssessmentPolicy CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy "json:\"createBulkCSVAssessmentPolicy\" graphql:\"createBulkCSVAssessmentPolicy\""
+}
+
+func (t *CreateBulkCSVAssessmentPolicy) GetCreateBulkCSVAssessmentPolicy() *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy{}
+	}
+	return &t.CreateBulkCSVAssessmentPolicy
+}
+
+type DeleteAssessmentPolicy struct {
+	DeleteAssessmentPolicy DeleteAssessmentPolicy_DeleteAssessmentPolicy "json:\"deleteAssessmentPolicy\" graphql:\"deleteAssessmentPolicy\""
+}
+
+func (t *DeleteAssessmentPolicy) GetDeleteAssessmentPolicy() *DeleteAssessmentPolicy_DeleteAssessmentPolicy {
+	if t == nil {
+		t = &DeleteAssessmentPolicy{}
+	}
+	return &t.DeleteAssessmentPolicy
+}
+
+type DeleteBulkAssessmentPolicy struct {
+	DeleteBulkAssessmentPolicy DeleteBulkAssessmentPolicy_DeleteBulkAssessmentPolicy "json:\"deleteBulkAssessmentPolicy\" graphql:\"deleteBulkAssessmentPolicy\""
+}
+
+func (t *DeleteBulkAssessmentPolicy) GetDeleteBulkAssessmentPolicy() *DeleteBulkAssessmentPolicy_DeleteBulkAssessmentPolicy {
+	if t == nil {
+		t = &DeleteBulkAssessmentPolicy{}
+	}
+	return &t.DeleteBulkAssessmentPolicy
+}
+
+type GetAllAssessmentPolicies struct {
+	AssessmentPolicies GetAllAssessmentPolicies_AssessmentPolicies "json:\"assessmentPolicies\" graphql:\"assessmentPolicies\""
+}
+
+func (t *GetAllAssessmentPolicies) GetAssessmentPolicies() *GetAllAssessmentPolicies_AssessmentPolicies {
+	if t == nil {
+		t = &GetAllAssessmentPolicies{}
+	}
+	return &t.AssessmentPolicies
+}
+
+type GetAssessmentPolicies struct {
+	AssessmentPolicies GetAssessmentPolicies_AssessmentPolicies "json:\"assessmentPolicies\" graphql:\"assessmentPolicies\""
+}
+
+func (t *GetAssessmentPolicies) GetAssessmentPolicies() *GetAssessmentPolicies_AssessmentPolicies {
+	if t == nil {
+		t = &GetAssessmentPolicies{}
+	}
+	return &t.AssessmentPolicies
+}
+
+type GetAssessmentPolicyByID struct {
+	AssessmentPolicy GetAssessmentPolicyByID_AssessmentPolicy "json:\"assessmentPolicy\" graphql:\"assessmentPolicy\""
+}
+
+func (t *GetAssessmentPolicyByID) GetAssessmentPolicy() *GetAssessmentPolicyByID_AssessmentPolicy {
+	if t == nil {
+		t = &GetAssessmentPolicyByID{}
+	}
+	return &t.AssessmentPolicy
+}
+
+type UpdateAssessmentPolicy struct {
+	UpdateAssessmentPolicy UpdateAssessmentPolicy_UpdateAssessmentPolicy "json:\"updateAssessmentPolicy\" graphql:\"updateAssessmentPolicy\""
+}
+
+func (t *UpdateAssessmentPolicy) GetUpdateAssessmentPolicy() *UpdateAssessmentPolicy_UpdateAssessmentPolicy {
+	if t == nil {
+		t = &UpdateAssessmentPolicy{}
+	}
+	return &t.UpdateAssessmentPolicy
+}
+
+type UpdateBulkAssessmentPolicy struct {
+	UpdateBulkAssessmentPolicy UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy "json:\"updateBulkAssessmentPolicy\" graphql:\"updateBulkAssessmentPolicy\""
+}
+
+func (t *UpdateBulkAssessmentPolicy) GetUpdateBulkAssessmentPolicy() *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy{}
+	}
+	return &t.UpdateBulkAssessmentPolicy
+}
+
+type UpdateBulkCSVAssessmentPolicy struct {
+	UpdateBulkCSVAssessmentPolicy UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy "json:\"updateBulkCSVAssessmentPolicy\" graphql:\"updateBulkCSVAssessmentPolicy\""
+}
+
+func (t *UpdateBulkCSVAssessmentPolicy) GetUpdateBulkCSVAssessmentPolicy() *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy{}
+	}
+	return &t.UpdateBulkCSVAssessmentPolicy
 }
 
 type CreateAssessmentResponse struct {
@@ -174201,6 +175393,53 @@ func (c *Client) CreateAssessment(ctx context.Context, input CreateAssessmentInp
 	return &res, nil
 }
 
+const CreateAssessmentWithPoliciesDocument = `mutation CreateAssessmentWithPolicies ($assessmentInput: CreateAssessmentInput!, $policies: [AssessmentPoliciesInput!]) {
+	createAssessmentWithPolicies(assessmentInput: $assessmentInput, policies: $policies) {
+		assessment {
+			id
+			name
+			jsonconfig
+			ownerID
+			internalPolicies {
+				edges {
+					node {
+						id
+						revision
+					}
+				}
+			}
+			policyAttestations {
+				edges {
+					node {
+						id
+						internalPolicyID
+						policyRevision
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateAssessmentWithPolicies(ctx context.Context, assessmentInput CreateAssessmentInput, policies []*AssessmentPoliciesInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentWithPolicies, error) {
+	vars := map[string]any{
+		"assessmentInput": assessmentInput,
+		"policies":        policies,
+	}
+
+	var res CreateAssessmentWithPolicies
+	if err := c.Client.Post(ctx, "CreateAssessmentWithPolicies", CreateAssessmentWithPoliciesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateAssessmentTemplateDocument = `mutation CreateAssessmentTemplate ($input: CreateAssessmentTemplateInput!) {
 	createAssessmentTemplate(input: $input) {
 		template {
@@ -174478,6 +175717,398 @@ func (c *Client) UpdateAssessment(ctx context.Context, updateAssessmentID string
 
 	var res UpdateAssessment
 	if err := c.Client.Post(ctx, "UpdateAssessment", UpdateAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAssessmentPolicyDocument = `mutation CreateAssessmentPolicy ($input: CreateAssessmentPolicyInput!) {
+	createAssessmentPolicy(input: $input) {
+		assessmentPolicy {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) CreateAssessmentPolicy(ctx context.Context, input CreateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentPolicy, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAssessmentPolicy
+	if err := c.Client.Post(ctx, "CreateAssessmentPolicy", CreateAssessmentPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkAssessmentPolicyDocument = `mutation CreateBulkAssessmentPolicy ($input: [CreateAssessmentPolicyInput!]) {
+	createBulkAssessmentPolicy(input: $input) {
+		assessmentPolicies {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkAssessmentPolicy(ctx context.Context, input []*CreateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessmentPolicy, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkAssessmentPolicy
+	if err := c.Client.Post(ctx, "CreateBulkAssessmentPolicy", CreateBulkAssessmentPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVAssessmentPolicyDocument = `mutation CreateBulkCSVAssessmentPolicy ($input: Upload!) {
+	createBulkCSVAssessmentPolicy(input: $input) {
+		assessmentPolicies {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVAssessmentPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessmentPolicy, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVAssessmentPolicy
+	if err := c.Client.Post(ctx, "CreateBulkCSVAssessmentPolicy", CreateBulkCSVAssessmentPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteAssessmentPolicyDocument = `mutation DeleteAssessmentPolicy ($deleteAssessmentPolicyId: ID!) {
+	deleteAssessmentPolicy(id: $deleteAssessmentPolicyId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteAssessmentPolicy(ctx context.Context, deleteAssessmentPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentPolicy, error) {
+	vars := map[string]any{
+		"deleteAssessmentPolicyId": deleteAssessmentPolicyID,
+	}
+
+	var res DeleteAssessmentPolicy
+	if err := c.Client.Post(ctx, "DeleteAssessmentPolicy", DeleteAssessmentPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteBulkAssessmentPolicyDocument = `mutation DeleteBulkAssessmentPolicy ($ids: [ID!]!) {
+	deleteBulkAssessmentPolicy(ids: $ids) {
+		deletedIDs
+	}
+}
+`
+
+func (c *Client) DeleteBulkAssessmentPolicy(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkAssessmentPolicy, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res DeleteBulkAssessmentPolicy
+	if err := c.Client.Post(ctx, "DeleteBulkAssessmentPolicy", DeleteBulkAssessmentPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssessmentPoliciesDocument = `query GetAllAssessmentPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AssessmentPolicyOrder!]) {
+	assessmentPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				createdAt
+				createdBy
+				id
+				internalPolicyID
+				ownerID
+				policyRevision
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssessmentPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AssessmentPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentPolicies, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
+
+	var res GetAllAssessmentPolicies
+	if err := c.Client.Post(ctx, "GetAllAssessmentPolicies", GetAllAssessmentPoliciesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentPoliciesDocument = `query GetAssessmentPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AssessmentPolicyOrder!], $where: AssessmentPolicyWhereInput) {
+	assessmentPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				createdAt
+				createdBy
+				id
+				internalPolicyID
+				ownerID
+				policyRevision
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssessmentPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AssessmentPolicyOrder, where *AssessmentPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentPolicies, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetAssessmentPolicies
+	if err := c.Client.Post(ctx, "GetAssessmentPolicies", GetAssessmentPoliciesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssessmentPolicyByIDDocument = `query GetAssessmentPolicyByID ($assessmentPolicyId: ID!) {
+	assessmentPolicy(id: $assessmentPolicyId) {
+		assessmentID
+		createdAt
+		createdBy
+		id
+		internalPolicyID
+		ownerID
+		policyRevision
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+	}
+}
+`
+
+func (c *Client) GetAssessmentPolicyByID(ctx context.Context, assessmentPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentPolicyByID, error) {
+	vars := map[string]any{
+		"assessmentPolicyId": assessmentPolicyID,
+	}
+
+	var res GetAssessmentPolicyByID
+	if err := c.Client.Post(ctx, "GetAssessmentPolicyByID", GetAssessmentPolicyByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAssessmentPolicyDocument = `mutation UpdateAssessmentPolicy ($updateAssessmentPolicyId: ID!, $input: UpdateAssessmentPolicyInput!) {
+	updateAssessmentPolicy(id: $updateAssessmentPolicyId, input: $input) {
+		assessmentPolicy {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAssessmentPolicy(ctx context.Context, updateAssessmentPolicyID string, input UpdateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessmentPolicy, error) {
+	vars := map[string]any{
+		"updateAssessmentPolicyId": updateAssessmentPolicyID,
+		"input":                    input,
+	}
+
+	var res UpdateAssessmentPolicy
+	if err := c.Client.Post(ctx, "UpdateAssessmentPolicy", UpdateAssessmentPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkAssessmentPolicyDocument = `mutation UpdateBulkAssessmentPolicy ($ids: [ID!]!, $input: UpdateAssessmentPolicyInput!) {
+	updateBulkAssessmentPolicy(ids: $ids, input: $input) {
+		assessmentPolicies {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkAssessmentPolicy(ctx context.Context, ids []string, input UpdateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAssessmentPolicy, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkAssessmentPolicy
+	if err := c.Client.Post(ctx, "UpdateBulkAssessmentPolicy", UpdateBulkAssessmentPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkCSVAssessmentPolicyDocument = `mutation UpdateBulkCSVAssessmentPolicy ($input: Upload!) {
+	updateBulkCSVAssessmentPolicy(input: $input) {
+		assessmentPolicies {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkCSVAssessmentPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAssessmentPolicy, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkCSVAssessmentPolicy
+	if err := c.Client.Post(ctx, "UpdateBulkCSVAssessmentPolicy", UpdateBulkCSVAssessmentPolicyDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -215233,6 +216864,7 @@ var DocumentOperationNames = map[string]string{
 	GetAllAPITokensDocument:                       "GetAllAPITokens",
 	UpdateAPITokenDocument:                        "UpdateAPIToken",
 	CreateAssessmentDocument:                      "CreateAssessment",
+	CreateAssessmentWithPoliciesDocument:          "CreateAssessmentWithPolicies",
 	CreateAssessmentTemplateDocument:              "CreateAssessmentTemplate",
 	DeleteAssessmentDocument:                      "DeleteAssessment",
 	DeleteBulkAssessmentDocument:                  "DeleteBulkAssessment",
@@ -215240,6 +216872,17 @@ var DocumentOperationNames = map[string]string{
 	GetAssessmentByIDDocument:                     "GetAssessmentByID",
 	GetAssessmentsDocument:                        "GetAssessments",
 	UpdateAssessmentDocument:                      "UpdateAssessment",
+	CreateAssessmentPolicyDocument:                "CreateAssessmentPolicy",
+	CreateBulkAssessmentPolicyDocument:            "CreateBulkAssessmentPolicy",
+	CreateBulkCSVAssessmentPolicyDocument:         "CreateBulkCSVAssessmentPolicy",
+	DeleteAssessmentPolicyDocument:                "DeleteAssessmentPolicy",
+	DeleteBulkAssessmentPolicyDocument:            "DeleteBulkAssessmentPolicy",
+	GetAllAssessmentPoliciesDocument:              "GetAllAssessmentPolicies",
+	GetAssessmentPoliciesDocument:                 "GetAssessmentPolicies",
+	GetAssessmentPolicyByIDDocument:               "GetAssessmentPolicyByID",
+	UpdateAssessmentPolicyDocument:                "UpdateAssessmentPolicy",
+	UpdateBulkAssessmentPolicyDocument:            "UpdateBulkAssessmentPolicy",
+	UpdateBulkCSVAssessmentPolicyDocument:         "UpdateBulkCSVAssessmentPolicy",
 	CreateAssessmentResponseDocument:              "CreateAssessmentResponse",
 	DeleteAssessmentResponseDocument:              "DeleteAssessmentResponse",
 	GetAllAssessmentResponsesDocument:             "GetAllAssessmentResponses",
