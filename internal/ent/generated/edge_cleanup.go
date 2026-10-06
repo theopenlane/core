@@ -131,7 +131,8 @@ func AssessmentEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func AssessmentPolicyEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmentpolicy edge")))
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 	return nil
 }

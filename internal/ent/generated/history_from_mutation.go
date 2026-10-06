@@ -1049,9 +1049,7 @@ func (m *AssessmentPolicyMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
