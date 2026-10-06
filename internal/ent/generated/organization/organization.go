@@ -57,6 +57,8 @@ const (
 	EdgeAPITokenCreators = "api_token_creators"
 	// EdgeAssessmentCreators holds the string denoting the assessment_creators edge name in mutations.
 	EdgeAssessmentCreators = "assessment_creators"
+	// EdgeAssessmentPolicyCreators holds the string denoting the assessment_policy_creators edge name in mutations.
+	EdgeAssessmentPolicyCreators = "assessment_policy_creators"
 	// EdgeAssetCreators holds the string denoting the asset_creators edge name in mutations.
 	EdgeAssetCreators = "asset_creators"
 	// EdgeCampaignCreators holds the string denoting the campaign_creators edge name in mutations.
@@ -319,6 +321,8 @@ const (
 	EdgeAssessments = "assessments"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
 	EdgeAssessmentResponses = "assessment_responses"
+	// EdgeAssessmentPolicies holds the string denoting the assessment_policies edge name in mutations.
+	EdgeAssessmentPolicies = "assessment_policies"
 	// EdgeCustomTypeEnums holds the string denoting the custom_type_enums edge name in mutations.
 	EdgeCustomTypeEnums = "custom_type_enums"
 	// EdgeTagDefinitions holds the string denoting the tag_definitions edge name in mutations.
@@ -386,6 +390,13 @@ const (
 	AssessmentCreatorsInverseTable = "groups"
 	// AssessmentCreatorsColumn is the table column denoting the assessment_creators relation/edge.
 	AssessmentCreatorsColumn = "organization_assessment_creators"
+	// AssessmentPolicyCreatorsTable is the table that holds the assessment_policy_creators relation/edge.
+	AssessmentPolicyCreatorsTable = "groups"
+	// AssessmentPolicyCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	AssessmentPolicyCreatorsInverseTable = "groups"
+	// AssessmentPolicyCreatorsColumn is the table column denoting the assessment_policy_creators relation/edge.
+	AssessmentPolicyCreatorsColumn = "organization_assessment_policy_creators"
 	// AssetCreatorsTable is the table that holds the asset_creators relation/edge.
 	AssetCreatorsTable = "groups"
 	// AssetCreatorsInverseTable is the table name for the Group entity.
@@ -1289,6 +1300,13 @@ const (
 	AssessmentResponsesInverseTable = "assessment_responses"
 	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
 	AssessmentResponsesColumn = "owner_id"
+	// AssessmentPoliciesTable is the table that holds the assessment_policies relation/edge.
+	AssessmentPoliciesTable = "assessment_policies"
+	// AssessmentPoliciesInverseTable is the table name for the AssessmentPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "assessmentpolicy" package.
+	AssessmentPoliciesInverseTable = "assessment_policies"
+	// AssessmentPoliciesColumn is the table column denoting the assessment_policies relation/edge.
+	AssessmentPoliciesColumn = "owner_id"
 	// CustomTypeEnumsTable is the table that holds the custom_type_enums relation/edge.
 	CustomTypeEnumsTable = "custom_type_enums"
 	// CustomTypeEnumsInverseTable is the table name for the CustomTypeEnum entity.
@@ -1499,7 +1517,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [82]ent.Hook
+	Hooks        [83]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1660,6 +1678,20 @@ func ByAssessmentCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAssessmentCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAssessmentCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssessmentPolicyCreatorsCount orders the results by assessment_policy_creators count.
+func ByAssessmentPolicyCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentPolicyCreatorsStep(), opts...)
+	}
+}
+
+// ByAssessmentPolicyCreators orders the results by assessment_policy_creators terms.
+func ByAssessmentPolicyCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentPolicyCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -3476,6 +3508,20 @@ func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// ByAssessmentPoliciesCount orders the results by assessment_policies count.
+func ByAssessmentPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentPoliciesStep(), opts...)
+	}
+}
+
+// ByAssessmentPolicies orders the results by assessment_policies terms.
+func ByAssessmentPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCustomTypeEnumsCount orders the results by custom_type_enums count.
 func ByCustomTypeEnumsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -3802,6 +3848,13 @@ func newAssessmentCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssessmentCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentCreatorsTable, AssessmentCreatorsColumn),
+	)
+}
+func newAssessmentPolicyCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentPolicyCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentPolicyCreatorsTable, AssessmentPolicyCreatorsColumn),
 	)
 }
 func newAssetCreatorsStep() *sqlgraph.Step {
@@ -4719,6 +4772,13 @@ func newAssessmentResponsesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssessmentResponsesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
+	)
+}
+func newAssessmentPoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentPoliciesTable, AssessmentPoliciesColumn),
 	)
 }
 func newCustomTypeEnumsStep() *sqlgraph.Step {

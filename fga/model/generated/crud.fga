@@ -20,6 +20,11 @@ extend type organization
     define assessment_creator: [group#member]
     define can_create_assessment: can_edit or can_edit_assessment or assessment_creator or can_manage_campaigns
 
+    define can_view_assessment_policy: [service, user] or can_edit_assessment_policy or full_access
+    define can_edit_assessment_policy: [service, user] or can_delete_assessment_policy or full_access
+    define can_delete_assessment_policy: [service, user] or full_access
+    define can_create_assessment_policy: can_edit or can_edit_assessment_policy
+
     define can_view_asset: [service, user, group#member] or auditor or can_edit_asset or can_manage_compliance or can_manage_registry or full_access
     define can_edit_asset: [service, user, group#member] or can_delete_asset or can_manage_compliance or can_manage_registry or full_access
     define can_delete_asset: [service, user, group#member] or can_manage_compliance or can_manage_registry or full_access

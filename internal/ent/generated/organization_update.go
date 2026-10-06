@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -396,6 +397,21 @@ func (_u *OrganizationUpdate) AddAssessmentCreators(v ...*Group) *OrganizationUp
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentCreatorIDs(ids...)
+}
+
+// AddAssessmentPolicyCreatorIDs adds the "assessment_policy_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddAssessmentPolicyCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddAssessmentPolicyCreatorIDs(ids...)
+	return _u
+}
+
+// AddAssessmentPolicyCreators adds the "assessment_policy_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) AddAssessmentPolicyCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentPolicyCreatorIDs(ids...)
 }
 
 // AddAssetCreatorIDs adds the "asset_creators" edge to the Group entity by IDs.
@@ -2356,6 +2372,21 @@ func (_u *OrganizationUpdate) AddAssessmentResponses(v ...*AssessmentResponse) *
 	return _u.AddAssessmentResponseIDs(ids...)
 }
 
+// AddAssessmentPolicyIDs adds the "assessment_policies" edge to the AssessmentPolicy entity by IDs.
+func (_u *OrganizationUpdate) AddAssessmentPolicyIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddAssessmentPolicyIDs(ids...)
+	return _u
+}
+
+// AddAssessmentPolicies adds the "assessment_policies" edges to the AssessmentPolicy entity.
+func (_u *OrganizationUpdate) AddAssessmentPolicies(v ...*AssessmentPolicy) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentPolicyIDs(ids...)
+}
+
 // AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
 func (_u *OrganizationUpdate) AddCustomTypeEnumIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddCustomTypeEnumIDs(ids...)
@@ -2752,6 +2783,27 @@ func (_u *OrganizationUpdate) RemoveAssessmentCreators(v ...*Group) *Organizatio
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssessmentCreatorIDs(ids...)
+}
+
+// ClearAssessmentPolicyCreators clears all "assessment_policy_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearAssessmentPolicyCreators() *OrganizationUpdate {
+	_u.mutation.ClearAssessmentPolicyCreators()
+	return _u
+}
+
+// RemoveAssessmentPolicyCreatorIDs removes the "assessment_policy_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveAssessmentPolicyCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveAssessmentPolicyCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveAssessmentPolicyCreators removes "assessment_policy_creators" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveAssessmentPolicyCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentPolicyCreatorIDs(ids...)
 }
 
 // ClearAssetCreators clears all "asset_creators" edges to the Group entity.
@@ -5454,6 +5506,27 @@ func (_u *OrganizationUpdate) RemoveAssessmentResponses(v ...*AssessmentResponse
 	return _u.RemoveAssessmentResponseIDs(ids...)
 }
 
+// ClearAssessmentPolicies clears all "assessment_policies" edges to the AssessmentPolicy entity.
+func (_u *OrganizationUpdate) ClearAssessmentPolicies() *OrganizationUpdate {
+	_u.mutation.ClearAssessmentPolicies()
+	return _u
+}
+
+// RemoveAssessmentPolicyIDs removes the "assessment_policies" edge to AssessmentPolicy entities by IDs.
+func (_u *OrganizationUpdate) RemoveAssessmentPolicyIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveAssessmentPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveAssessmentPolicies removes "assessment_policies" edges to AssessmentPolicy entities.
+func (_u *OrganizationUpdate) RemoveAssessmentPolicies(v ...*AssessmentPolicy) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentPolicyIDs(ids...)
+}
+
 // ClearCustomTypeEnums clears all "custom_type_enums" edges to the CustomTypeEnum entity.
 func (_u *OrganizationUpdate) ClearCustomTypeEnums() *OrganizationUpdate {
 	_u.mutation.ClearCustomTypeEnums()
@@ -6204,6 +6277,51 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Inverse: false,
 			Table:   organization.AssessmentCreatorsTable,
 			Columns: []string{organization.AssessmentCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentPolicyCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPolicyCreatorsTable,
+			Columns: []string{organization.AssessmentPolicyCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentPolicyCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentPolicyCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPolicyCreatorsTable,
+			Columns: []string{organization.AssessmentPolicyCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentPolicyCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPolicyCreatorsTable,
+			Columns: []string{organization.AssessmentPolicyCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -12053,6 +12171,51 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AssessmentPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPoliciesTable,
+			Columns: []string{organization.AssessmentPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentPoliciesIDs(); len(nodes) > 0 && !_u.mutation.AssessmentPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPoliciesTable,
+			Columns: []string{organization.AssessmentPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPoliciesTable,
+			Columns: []string{organization.AssessmentPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.CustomTypeEnumsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -13352,6 +13515,21 @@ func (_u *OrganizationUpdateOne) AddAssessmentCreators(v ...*Group) *Organizatio
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentCreatorIDs(ids...)
+}
+
+// AddAssessmentPolicyCreatorIDs adds the "assessment_policy_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddAssessmentPolicyCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddAssessmentPolicyCreatorIDs(ids...)
+	return _u
+}
+
+// AddAssessmentPolicyCreators adds the "assessment_policy_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddAssessmentPolicyCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentPolicyCreatorIDs(ids...)
 }
 
 // AddAssetCreatorIDs adds the "asset_creators" edge to the Group entity by IDs.
@@ -15312,6 +15490,21 @@ func (_u *OrganizationUpdateOne) AddAssessmentResponses(v ...*AssessmentResponse
 	return _u.AddAssessmentResponseIDs(ids...)
 }
 
+// AddAssessmentPolicyIDs adds the "assessment_policies" edge to the AssessmentPolicy entity by IDs.
+func (_u *OrganizationUpdateOne) AddAssessmentPolicyIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddAssessmentPolicyIDs(ids...)
+	return _u
+}
+
+// AddAssessmentPolicies adds the "assessment_policies" edges to the AssessmentPolicy entity.
+func (_u *OrganizationUpdateOne) AddAssessmentPolicies(v ...*AssessmentPolicy) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentPolicyIDs(ids...)
+}
+
 // AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
 func (_u *OrganizationUpdateOne) AddCustomTypeEnumIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddCustomTypeEnumIDs(ids...)
@@ -15708,6 +15901,27 @@ func (_u *OrganizationUpdateOne) RemoveAssessmentCreators(v ...*Group) *Organiza
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssessmentCreatorIDs(ids...)
+}
+
+// ClearAssessmentPolicyCreators clears all "assessment_policy_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearAssessmentPolicyCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearAssessmentPolicyCreators()
+	return _u
+}
+
+// RemoveAssessmentPolicyCreatorIDs removes the "assessment_policy_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveAssessmentPolicyCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveAssessmentPolicyCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveAssessmentPolicyCreators removes "assessment_policy_creators" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveAssessmentPolicyCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentPolicyCreatorIDs(ids...)
 }
 
 // ClearAssetCreators clears all "asset_creators" edges to the Group entity.
@@ -18410,6 +18624,27 @@ func (_u *OrganizationUpdateOne) RemoveAssessmentResponses(v ...*AssessmentRespo
 	return _u.RemoveAssessmentResponseIDs(ids...)
 }
 
+// ClearAssessmentPolicies clears all "assessment_policies" edges to the AssessmentPolicy entity.
+func (_u *OrganizationUpdateOne) ClearAssessmentPolicies() *OrganizationUpdateOne {
+	_u.mutation.ClearAssessmentPolicies()
+	return _u
+}
+
+// RemoveAssessmentPolicyIDs removes the "assessment_policies" edge to AssessmentPolicy entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveAssessmentPolicyIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveAssessmentPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveAssessmentPolicies removes "assessment_policies" edges to AssessmentPolicy entities.
+func (_u *OrganizationUpdateOne) RemoveAssessmentPolicies(v ...*AssessmentPolicy) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentPolicyIDs(ids...)
+}
+
 // ClearCustomTypeEnums clears all "custom_type_enums" edges to the CustomTypeEnum entity.
 func (_u *OrganizationUpdateOne) ClearCustomTypeEnums() *OrganizationUpdateOne {
 	_u.mutation.ClearCustomTypeEnums()
@@ -19190,6 +19425,51 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Inverse: false,
 			Table:   organization.AssessmentCreatorsTable,
 			Columns: []string{organization.AssessmentCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentPolicyCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPolicyCreatorsTable,
+			Columns: []string{organization.AssessmentPolicyCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentPolicyCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentPolicyCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPolicyCreatorsTable,
+			Columns: []string{organization.AssessmentPolicyCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentPolicyCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPolicyCreatorsTable,
+			Columns: []string{organization.AssessmentPolicyCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -25032,6 +25312,51 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPoliciesTable,
+			Columns: []string{organization.AssessmentPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentPoliciesIDs(); len(nodes) > 0 && !_u.mutation.AssessmentPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPoliciesTable,
+			Columns: []string{organization.AssessmentPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPoliciesTable,
+			Columns: []string{organization.AssessmentPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

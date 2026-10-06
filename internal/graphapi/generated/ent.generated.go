@@ -117,6 +117,7 @@ type QueryResolver interface {
 	APITokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) (*generated.APITokenConnection, error)
 	ActionPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) (*generated.ActionPlanConnection, error)
 	Assessments(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) (*generated.AssessmentConnection, error)
+	AssessmentPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) (*generated.AssessmentPolicyConnection, error)
 	AssessmentResponses(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) (*generated.AssessmentResponseConnection, error)
 	Assets(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) (*generated.AssetConnection, error)
 	Campaigns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) (*generated.CampaignConnection, error)
@@ -205,6 +206,7 @@ type QueryResolver interface {
 	ActionPlan(ctx context.Context, id string) (*generated.ActionPlan, error)
 	APIToken(ctx context.Context, id string) (*generated.APIToken, error)
 	Assessment(ctx context.Context, id string) (*generated.Assessment, error)
+	AssessmentPolicy(ctx context.Context, id string) (*generated.AssessmentPolicy, error)
 	AssessmentResponse(ctx context.Context, id string) (*generated.AssessmentResponse, error)
 	Asset(ctx context.Context, id string) (*generated.Asset, error)
 	Campaign(ctx context.Context, id string) (*generated.Campaign, error)
@@ -1821,6 +1823,60 @@ func (ec *executionContext) field_Assessment_identityHolders_args(ctx context.Co
 	return args, nil
 }
 
+func (ec *executionContext) field_Assessment_internalPolicies_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.InternalPolicyOrder, error) {
+			return ec.unmarshalOInternalPolicyOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.InternalPolicyWhereInput, error) {
+			return ec.unmarshalOInternalPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Assessment_platforms_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1867,6 +1923,60 @@ func (ec *executionContext) field_Assessment_platforms_args(ctx context.Context,
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.PlatformWhereInput, error) {
 			return ec.unmarshalOPlatformWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Assessment_policyAttestations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.AssessmentPolicyOrder, error) {
+			return ec.unmarshalOAssessmentPolicyOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.AssessmentPolicyWhereInput, error) {
+			return ec.unmarshalOAssessmentPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -19249,6 +19359,60 @@ func (ec *executionContext) field_Integration_vulnerabilities_args(ctx context.C
 	return args, nil
 }
 
+func (ec *executionContext) field_InternalPolicy_assessments_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.AssessmentOrder, error) {
+			return ec.unmarshalOAssessmentOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.AssessmentWhereInput, error) {
+			return ec.unmarshalOAssessmentWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_InternalPolicy_assets_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -19943,6 +20107,60 @@ func (ec *executionContext) field_InternalPolicy_narratives_args(ctx context.Con
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.NarrativeWhereInput, error) {
 			return ec.unmarshalONarrativeWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_InternalPolicy_policyAttestations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.AssessmentPolicyOrder, error) {
+			return ec.unmarshalOAssessmentPolicyOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.AssessmentPolicyWhereInput, error) {
+			return ec.unmarshalOAssessmentPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -21625,60 +21843,6 @@ func (ec *executionContext) field_Organization_actionPlanCreators_args(ctx conte
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_actionPlans_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ActionPlanOrder, error) {
-			return ec.unmarshalOActionPlanOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ActionPlanWhereInput, error) {
-			return ec.unmarshalOActionPlanWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_apiTokenCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -21725,60 +21889,6 @@ func (ec *executionContext) field_Organization_apiTokenCreators_args(ctx context
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_apiTokens_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.APITokenOrder, error) {
-			return ec.unmarshalOAPITokenOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.APITokenWhereInput, error) {
-			return ec.unmarshalOAPITokenWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -21841,7 +21951,7 @@ func (ec *executionContext) field_Organization_assessmentCreators_args(ctx conte
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_assessmentResponses_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+func (ec *executionContext) field_Organization_assessmentPolicyCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
@@ -21877,70 +21987,16 @@ func (ec *executionContext) field_Organization_assessmentResponses_args(ctx cont
 	}
 	args["last"] = arg3
 	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.AssessmentResponseOrder, error) {
-			return ec.unmarshalOAssessmentResponseOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseOrderᚄ(ctx, v)
+		func(ctx context.Context, v any) ([]*generated.GroupOrder, error) {
+			return ec.unmarshalOGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupOrderᚄ(ctx, v)
 		})
 	if err != nil {
 		return nil, err
 	}
 	args["orderBy"] = arg4
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.AssessmentResponseWhereInput, error) {
-			return ec.unmarshalOAssessmentResponseWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_assessments_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.AssessmentOrder, error) {
-			return ec.unmarshalOAssessmentOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.AssessmentWhereInput, error) {
-			return ec.unmarshalOAssessmentWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentWhereInput(ctx, v)
+		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
+			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -21995,60 +22051,6 @@ func (ec *executionContext) field_Organization_assetCreators_args(ctx context.Co
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_assets_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.AssetOrder, error) {
-			return ec.unmarshalOAssetOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.AssetWhereInput, error) {
-			return ec.unmarshalOAssetWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -22165,60 +22167,6 @@ func (ec *executionContext) field_Organization_campaignTargetCreators_args(ctx c
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_campaignTargets_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.CampaignTargetOrder, error) {
-			return ec.unmarshalOCampaignTargetOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.CampaignTargetWhereInput, error) {
-			return ec.unmarshalOCampaignTargetWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_campaignsManager_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -22265,60 +22213,6 @@ func (ec *executionContext) field_Organization_campaignsManager_args(ctx context
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_campaigns_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.CampaignOrder, error) {
-			return ec.unmarshalOCampaignOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.CampaignWhereInput, error) {
-			return ec.unmarshalOCampaignWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -22543,60 +22437,6 @@ func (ec *executionContext) field_Organization_contactCreators_args(ctx context.
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_contacts_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ContactOrder, error) {
-			return ec.unmarshalOContactOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ContactWhereInput, error) {
-			return ec.unmarshalOContactWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_controlCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -22705,60 +22545,6 @@ func (ec *executionContext) field_Organization_controlImplementationCreators_arg
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_controlImplementations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ControlImplementationOrder, error) {
-			return ec.unmarshalOControlImplementationOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ControlImplementationWhereInput, error) {
-			return ec.unmarshalOControlImplementationWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_controlObjectiveCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -22805,114 +22591,6 @@ func (ec *executionContext) field_Organization_controlObjectiveCreators_args(ctx
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_controlObjectives_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ControlObjectiveOrder, error) {
-			return ec.unmarshalOControlObjectiveOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ControlObjectiveWhereInput, error) {
-			return ec.unmarshalOControlObjectiveWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_controls_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ControlOrder, error) {
-			return ec.unmarshalOControlOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ControlWhereInput, error) {
-			return ec.unmarshalOControlWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -22975,60 +22653,6 @@ func (ec *executionContext) field_Organization_customDomainCreators_args(ctx con
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_customDomains_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.CustomDomainOrder, error) {
-			return ec.unmarshalOCustomDomainOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.CustomDomainWhereInput, error) {
-			return ec.unmarshalOCustomDomainWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_customTypeEnumCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -23075,60 +22699,6 @@ func (ec *executionContext) field_Organization_customTypeEnumCreators_args(ctx c
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_customTypeEnums_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.CustomTypeEnumOrder, error) {
-			return ec.unmarshalOCustomTypeEnumOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.CustomTypeEnumWhereInput, error) {
-			return ec.unmarshalOCustomTypeEnumWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -23191,60 +22761,6 @@ func (ec *executionContext) field_Organization_directoryAccountCreators_args(ctx
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_directoryAccounts_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.DirectoryAccountOrder, error) {
-			return ec.unmarshalODirectoryAccountOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccountOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.DirectoryAccountWhereInput, error) {
-			return ec.unmarshalODirectoryAccountWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccountWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_directoryGroupCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -23291,60 +22807,6 @@ func (ec *executionContext) field_Organization_directoryGroupCreators_args(ctx c
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_directoryGroups_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.DirectoryGroupOrder, error) {
-			return ec.unmarshalODirectoryGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroupOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.DirectoryGroupWhereInput, error) {
-			return ec.unmarshalODirectoryGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroupWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -23407,60 +22869,6 @@ func (ec *executionContext) field_Organization_directoryMembershipCreators_args(
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_directoryMemberships_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.DirectoryMembershipOrder, error) {
-			return ec.unmarshalODirectoryMembershipOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.DirectoryMembershipWhereInput, error) {
-			return ec.unmarshalODirectoryMembershipWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_discussionCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -23507,114 +22915,6 @@ func (ec *executionContext) field_Organization_discussionCreators_args(ctx conte
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_discussions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.DiscussionOrder, error) {
-			return ec.unmarshalODiscussionOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.DiscussionWhereInput, error) {
-			return ec.unmarshalODiscussionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_dnsVerifications_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.DNSVerificationOrder, error) {
-			return ec.unmarshalODNSVerificationOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.DNSVerificationWhereInput, error) {
-			return ec.unmarshalODNSVerificationWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -23677,60 +22977,6 @@ func (ec *executionContext) field_Organization_documentDataCreators_args(ctx con
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_documents_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.DocumentDataOrder, error) {
-			return ec.unmarshalODocumentDataOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.DocumentDataWhereInput, error) {
-			return ec.unmarshalODocumentDataWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_emailTemplateCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -23777,114 +23023,6 @@ func (ec *executionContext) field_Organization_emailTemplateCreators_args(ctx co
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_emailTemplates_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.EmailTemplateOrder, error) {
-			return ec.unmarshalOEmailTemplateOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.EmailTemplateWhereInput, error) {
-			return ec.unmarshalOEmailTemplateWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_entities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.EntityOrder, error) {
-			return ec.unmarshalOEntityOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.EntityWhereInput, error) {
-			return ec.unmarshalOEntityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -24001,60 +23139,6 @@ func (ec *executionContext) field_Organization_entityTypeCreators_args(ctx conte
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_entityTypes_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.EntityTypeOrder, error) {
-			return ec.unmarshalOEntityTypeOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityTypeOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.EntityTypeWhereInput, error) {
-			return ec.unmarshalOEntityTypeWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityTypeWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_events_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -24155,114 +23239,6 @@ func (ec *executionContext) field_Organization_evidenceCreators_args(ctx context
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_evidence_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.EvidenceOrder, error) {
-			return ec.unmarshalOEvidenceOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.EvidenceWhereInput, error) {
-			return ec.unmarshalOEvidenceWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_exports_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ExportOrder, error) {
-			return ec.unmarshalOExportOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExportOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ExportWhereInput, error) {
-			return ec.unmarshalOExportWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExportWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -24433,60 +23409,6 @@ func (ec *executionContext) field_Organization_findingControlCreators_args(ctx c
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_findingControls_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.FindingControlOrder, error) {
-			return ec.unmarshalOFindingControlOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControlOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.FindingControlWhereInput, error) {
-			return ec.unmarshalOFindingControlWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControlWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_findingCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -24533,60 +23455,6 @@ func (ec *executionContext) field_Organization_findingCreators_args(ctx context.
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_findings_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.FindingOrder, error) {
-			return ec.unmarshalOFindingOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.FindingWhereInput, error) {
-			return ec.unmarshalOFindingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -24811,60 +23679,6 @@ func (ec *executionContext) field_Organization_groupSettingCreators_args(ctx con
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_groups_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.GroupOrder, error) {
-			return ec.unmarshalOGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
-			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_hushCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -24965,168 +23779,6 @@ func (ec *executionContext) field_Organization_identityHolderCreators_args(ctx c
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_identityHolders_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.IdentityHolderOrder, error) {
-			return ec.unmarshalOIdentityHolderOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.IdentityHolderWhereInput, error) {
-			return ec.unmarshalOIdentityHolderWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_integrations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.IntegrationOrder, error) {
-			return ec.unmarshalOIntegrationOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.IntegrationWhereInput, error) {
-			return ec.unmarshalOIntegrationWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_internalPolicies_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.InternalPolicyOrder, error) {
-			return ec.unmarshalOInternalPolicyOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.InternalPolicyWhereInput, error) {
-			return ec.unmarshalOInternalPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -25351,60 +24003,6 @@ func (ec *executionContext) field_Organization_mappedControlCreators_args(ctx co
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_mappedControls_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.MappedControlOrder, error) {
-			return ec.unmarshalOMappedControlOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControlOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.MappedControlWhereInput, error) {
-			return ec.unmarshalOMappedControlWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControlWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_members_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -25513,60 +24111,6 @@ func (ec *executionContext) field_Organization_narrativeCreators_args(ctx contex
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_narratives_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.NarrativeOrder, error) {
-			return ec.unmarshalONarrativeOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.NarrativeWhereInput, error) {
-			return ec.unmarshalONarrativeWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_noteCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -25621,114 +24165,6 @@ func (ec *executionContext) field_Organization_noteCreators_args(ctx context.Con
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_notes_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.NoteOrder, error) {
-			return ec.unmarshalONoteOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.NoteWhereInput, error) {
-			return ec.unmarshalONoteWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_notificationPreferences_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.NotificationPreferenceOrder, error) {
-			return ec.unmarshalONotificationPreferenceOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.NotificationPreferenceWhereInput, error) {
-			return ec.unmarshalONotificationPreferenceWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_notificationTemplateCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -25775,60 +24211,6 @@ func (ec *executionContext) field_Organization_notificationTemplateCreators_args
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_notificationTemplates_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.NotificationTemplateOrder, error) {
-			return ec.unmarshalONotificationTemplateOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.NotificationTemplateWhereInput, error) {
-			return ec.unmarshalONotificationTemplateWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -25999,60 +24381,6 @@ func (ec *executionContext) field_Organization_platformCreators_args(ctx context
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_platforms_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.PlatformOrder, error) {
-			return ec.unmarshalOPlatformOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.PlatformWhereInput, error) {
-			return ec.unmarshalOPlatformWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_policiesManager_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -26153,60 +24481,6 @@ func (ec *executionContext) field_Organization_procedureCreators_args(ctx contex
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_procedures_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ProcedureOrder, error) {
-			return ec.unmarshalOProcedureOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ProcedureWhereInput, error) {
-			return ec.unmarshalOProcedureWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -26323,60 +24597,6 @@ func (ec *executionContext) field_Organization_programMembershipCreators_args(ct
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_programs_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ProgramOrder, error) {
-			return ec.unmarshalOProgramOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ProgramWhereInput, error) {
-			return ec.unmarshalOProgramWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_registryManager_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -26485,60 +24705,6 @@ func (ec *executionContext) field_Organization_remediationCreators_args(ctx cont
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_remediations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.RemediationOrder, error) {
-			return ec.unmarshalORemediationOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.RemediationWhereInput, error) {
-			return ec.unmarshalORemediationWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_reviewCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -26585,60 +24751,6 @@ func (ec *executionContext) field_Organization_reviewCreators_args(ctx context.C
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_reviews_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ReviewOrder, error) {
-			return ec.unmarshalOReviewOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ReviewWhereInput, error) {
-			return ec.unmarshalOReviewWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -26755,60 +24867,6 @@ func (ec *executionContext) field_Organization_riskManager_args(ctx context.Cont
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_risks_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.RiskOrder, error) {
-			return ec.unmarshalORiskOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.RiskWhereInput, error) {
-			return ec.unmarshalORiskWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_scanCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -26855,114 +24913,6 @@ func (ec *executionContext) field_Organization_scanCreators_args(ctx context.Con
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_scans_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.ScanOrder, error) {
-			return ec.unmarshalOScanOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.ScanWhereInput, error) {
-			return ec.unmarshalOScanWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_secrets_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.HushOrder, error) {
-			return ec.unmarshalOHushOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.HushWhereInput, error) {
-			return ec.unmarshalOHushWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -27025,60 +24975,6 @@ func (ec *executionContext) field_Organization_slaDefinitionCreators_args(ctx co
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_slaDefinitions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.SLADefinitionOrder, error) {
-			return ec.unmarshalOSLADefinitionOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinitionOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.SLADefinitionWhereInput, error) {
-			return ec.unmarshalOSLADefinitionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinitionWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_standardCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -27125,60 +25021,6 @@ func (ec *executionContext) field_Organization_standardCreators_args(ctx context
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_standards_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.StandardOrder, error) {
-			return ec.unmarshalOStandardOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.StandardWhereInput, error) {
-			return ec.unmarshalOStandardWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -27241,60 +25083,6 @@ func (ec *executionContext) field_Organization_subcontrolCreators_args(ctx conte
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_subcontrols_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.SubcontrolOrder, error) {
-			return ec.unmarshalOSubcontrolOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.SubcontrolWhereInput, error) {
-			return ec.unmarshalOSubcontrolWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_subprocessorCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -27341,60 +25129,6 @@ func (ec *executionContext) field_Organization_subprocessorCreators_args(ctx con
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_subprocessors_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.SubprocessorOrder, error) {
-			return ec.unmarshalOSubprocessorOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.SubprocessorWhereInput, error) {
-			return ec.unmarshalOSubprocessorWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -27457,60 +25191,6 @@ func (ec *executionContext) field_Organization_subscriberCreators_args(ctx conte
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_subscribers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.SubscriberOrder, error) {
-			return ec.unmarshalOSubscriberOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.SubscriberWhereInput, error) {
-			return ec.unmarshalOSubscriberWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_systemDetailCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -27557,60 +25237,6 @@ func (ec *executionContext) field_Organization_systemDetailCreators_args(ctx con
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_systemDetails_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.SystemDetailOrder, error) {
-			return ec.unmarshalOSystemDetailOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.SystemDetailWhereInput, error) {
-			return ec.unmarshalOSystemDetailWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -27673,60 +25299,6 @@ func (ec *executionContext) field_Organization_tagDefinitionCreators_args(ctx co
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_tagDefinitions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.TagDefinitionOrder, error) {
-			return ec.unmarshalOTagDefinitionOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.TagDefinitionWhereInput, error) {
-			return ec.unmarshalOTagDefinitionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_taskCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -27781,60 +25353,6 @@ func (ec *executionContext) field_Organization_taskCreators_args(ctx context.Con
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_tasks_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.TaskOrder, error) {
-			return ec.unmarshalOTaskOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.TaskWhereInput, error) {
-			return ec.unmarshalOTaskWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_templateCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -27881,60 +25399,6 @@ func (ec *executionContext) field_Organization_templateCreators_args(ctx context
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_templates_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.TemplateOrder, error) {
-			return ec.unmarshalOTemplateOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.TemplateWhereInput, error) {
-			return ec.unmarshalOTemplateWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -28429,114 +25893,6 @@ func (ec *executionContext) field_Organization_trustCenterWatermarkConfigCreator
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_trustCenterWatermarkConfigs_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.TrustCenterWatermarkConfigOrder, error) {
-			return ec.unmarshalOTrustCenterWatermarkConfigOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.TrustCenterWatermarkConfigWhereInput, error) {
-			return ec.unmarshalOTrustCenterWatermarkConfigWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_trustCenters_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.TrustCenterOrder, error) {
-			return ec.unmarshalOTrustCenterOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.TrustCenterWhereInput, error) {
-			return ec.unmarshalOTrustCenterWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_users_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -28645,60 +26001,6 @@ func (ec *executionContext) field_Organization_vendorRiskScoreCreators_args(ctx 
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_vendorRiskScores_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.VendorRiskScoreOrder, error) {
-			return ec.unmarshalOVendorRiskScoreOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.VendorRiskScoreWhereInput, error) {
-			return ec.unmarshalOVendorRiskScoreWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_vendorScoringConfigCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -28745,114 +26047,6 @@ func (ec *executionContext) field_Organization_vendorScoringConfigCreators_args(
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_vendorScoringConfigs_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.VendorScoringConfigOrder, error) {
-			return ec.unmarshalOVendorScoringConfigOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.VendorScoringConfigWhereInput, error) {
-			return ec.unmarshalOVendorScoringConfigWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_vulnerabilities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.VulnerabilityOrder, error) {
-			return ec.unmarshalOVulnerabilityOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.VulnerabilityWhereInput, error) {
-			return ec.unmarshalOVulnerabilityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -28915,114 +26109,6 @@ func (ec *executionContext) field_Organization_vulnerabilityCreators_args(ctx co
 	return args, nil
 }
 
-func (ec *executionContext) field_Organization_workflowAssignmentTargets_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.WorkflowAssignmentTargetOrder, error) {
-			return ec.unmarshalOWorkflowAssignmentTargetOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTargetOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.WorkflowAssignmentTargetWhereInput, error) {
-			return ec.unmarshalOWorkflowAssignmentTargetWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTargetWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_workflowAssignments_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.WorkflowAssignmentOrder, error) {
-			return ec.unmarshalOWorkflowAssignmentOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.WorkflowAssignmentWhereInput, error) {
-			return ec.unmarshalOWorkflowAssignmentWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
 func (ec *executionContext) field_Organization_workflowDefinitionCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -29069,222 +26155,6 @@ func (ec *executionContext) field_Organization_workflowDefinitionCreators_args(c
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_workflowDefinitions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.WorkflowDefinitionOrder, error) {
-			return ec.unmarshalOWorkflowDefinitionOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.WorkflowDefinitionWhereInput, error) {
-			return ec.unmarshalOWorkflowDefinitionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_workflowEvents_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.WorkflowEventOrder, error) {
-			return ec.unmarshalOWorkflowEventOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEventOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.WorkflowEventWhereInput, error) {
-			return ec.unmarshalOWorkflowEventWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEventWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_workflowInstances_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.WorkflowInstanceOrder, error) {
-			return ec.unmarshalOWorkflowInstanceOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.WorkflowInstanceWhereInput, error) {
-			return ec.unmarshalOWorkflowInstanceWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Organization_workflowObjectRefs_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) ([]*generated.WorkflowObjectRefOrder, error) {
-			return ec.unmarshalOWorkflowObjectRefOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefOrderᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*generated.WorkflowObjectRefWhereInput, error) {
-			return ec.unmarshalOWorkflowObjectRefWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -33174,6 +30044,74 @@ func (ec *executionContext) field_Query_apiTokens_args(ctx context.Context, rawA
 		return nil, err
 	}
 	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_assessmentPolicies_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.AssessmentPolicyOrder, error) {
+			return ec.unmarshalOAssessmentPolicyOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.AssessmentPolicyWhereInput, error) {
+			return ec.unmarshalOAssessmentPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_assessmentPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -56668,6 +53606,50 @@ func (ec *executionContext) fieldContext_Assessment_campaigns(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Assessment_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *generated.Assessment) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Assessment_internalPolicies(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.InternalPolicies(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.InternalPolicyOrder), fc.Args["where"].(*generated.InternalPolicyWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.InternalPolicyConnection) graphql.Marshaler {
+			return ec.marshalNInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Assessment_internalPolicies(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Assessment",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_InternalPolicyConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Assessment_internalPolicies_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Assessment_workflowObjectRefs(ctx context.Context, field graphql.CollectedField, obj *generated.Assessment) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -56706,6 +53688,50 @@ func (ec *executionContext) fieldContext_Assessment_workflowObjectRefs(ctx conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Assessment_workflowObjectRefs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Assessment_policyAttestations(ctx context.Context, field graphql.CollectedField, obj *generated.Assessment) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Assessment_policyAttestations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.PolicyAttestations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.AssessmentPolicyOrder), fc.Args["where"].(*generated.AssessmentPolicyWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentPolicyConnection) graphql.Marshaler {
+			return ec.marshalNAssessmentPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Assessment_policyAttestations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Assessment",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentPolicyConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Assessment_policyAttestations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -56997,6 +54023,474 @@ func (ec *executionContext) _AssessmentEdge_cursor(ctx context.Context, field gr
 }
 func (ec *executionContext) fieldContext_AssessmentEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("AssessmentEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_id(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_createdAt(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_updatedAt(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_createdBy(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_updatedBy(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_updatedByImpersonator(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedByImpersonator, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_ownerID(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_ownerID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_ownerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_assessmentID(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_assessmentID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AssessmentID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_assessmentID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_internalPolicyID(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_internalPolicyID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalPolicyID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_internalPolicyID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_policyRevision(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_policyRevision(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PolicyRevision, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_policyRevision(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicy_owner(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_owner(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Owner(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
+			return ec.marshalOOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_owner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentPolicy",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Organization(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentPolicy_assessment(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_assessment(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Assessment(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Assessment) graphql.Marshaler {
+			return ec.marshalNAssessment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessment(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_assessment(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentPolicy",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Assessment(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentPolicy_internalPolicy(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_internalPolicy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalPolicy(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.InternalPolicy) graphql.Marshaler {
+			return ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_internalPolicy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentPolicy",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_InternalPolicy(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentPolicyConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicyConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.AssessmentPolicyEdge) graphql.Marshaler {
+			return ec.marshalOAssessmentPolicyEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyEdge(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicyConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentPolicyConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentPolicyEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentPolicyConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicyConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicyConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentPolicyConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentPolicyConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicyConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicyConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicyConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicyConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentPolicyEdge_node(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicyEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicyEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentPolicy) graphql.Marshaler {
+			return ec.marshalOAssessmentPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicy(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicyEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentPolicyEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentPolicy(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentPolicyEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicyEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicyEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicyEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicyEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
 }
 
 func (ec *executionContext) _AssessmentResponse_id(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentResponse) (ret graphql.Marshaler) {
@@ -105060,6 +102554,50 @@ func (ec *executionContext) fieldContext_InternalPolicy_reviews(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _InternalPolicy_assessments(ctx context.Context, field graphql.CollectedField, obj *generated.InternalPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicy_assessments(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Assessments(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.AssessmentOrder), fc.Args["where"].(*generated.AssessmentWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentConnection) graphql.Marshaler {
+			return ec.marshalNAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_InternalPolicy_assessments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "InternalPolicy",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_InternalPolicy_assessments_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _InternalPolicy_integrations(ctx context.Context, field graphql.CollectedField, obj *generated.InternalPolicy) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -105098,6 +102636,50 @@ func (ec *executionContext) fieldContext_InternalPolicy_integrations(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_InternalPolicy_integrations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _InternalPolicy_policyAttestations(ctx context.Context, field graphql.CollectedField, obj *generated.InternalPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicy_policyAttestations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.PolicyAttestations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.AssessmentPolicyOrder), fc.Args["where"].(*generated.AssessmentPolicyWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentPolicyConnection) graphql.Marshaler {
+			return ec.marshalNAssessmentPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_InternalPolicy_policyAttestations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "InternalPolicy",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentPolicyConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_InternalPolicy_policyAttestations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -113600,6 +111182,50 @@ func (ec *executionContext) fieldContext_Organization_assessmentCreators(ctx con
 	return fc, nil
 }
 
+func (ec *executionContext) _Organization_assessmentPolicyCreators(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Organization_assessmentPolicyCreators(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.AssessmentPolicyCreators(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.GroupOrder), fc.Args["where"].(*generated.GroupWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
+			return ec.marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Organization_assessmentPolicyCreators(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_GroupConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Organization_assessmentPolicyCreators_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Organization_assetCreators(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -116876,182 +114502,6 @@ func (ec *executionContext) fieldContext_Organization_personalAccessTokens(ctx c
 	return fc, nil
 }
 
-func (ec *executionContext) _Organization_apiTokens(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_apiTokens(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.APITokens(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.APITokenOrder), fc.Args["where"].(*generated.APITokenWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.APITokenConnection) graphql.Marshaler {
-			return ec.marshalNAPITokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_apiTokens(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_APITokenConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_apiTokens_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_emailTemplates(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_emailTemplates(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.EmailTemplates(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.EmailTemplateOrder), fc.Args["where"].(*generated.EmailTemplateWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailTemplateConnection) graphql.Marshaler {
-			return ec.marshalNEmailTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_emailTemplates(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_EmailTemplateConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_emailTemplates_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_notificationPreferences(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_notificationPreferences(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.NotificationPreferences(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.NotificationPreferenceOrder), fc.Args["where"].(*generated.NotificationPreferenceWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.NotificationPreferenceConnection) graphql.Marshaler {
-			return ec.marshalNNotificationPreferenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_notificationPreferences(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_NotificationPreferenceConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_notificationPreferences_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_notificationTemplates(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_notificationTemplates(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.NotificationTemplates(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.NotificationTemplateOrder), fc.Args["where"].(*generated.NotificationTemplateWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.NotificationTemplateConnection) graphql.Marshaler {
-			return ec.marshalNNotificationTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_notificationTemplates(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_NotificationTemplateConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_notificationTemplates_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Organization_users(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -117184,50 +114634,6 @@ func (ec *executionContext) fieldContext_Organization_events(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Organization_secrets(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_secrets(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Secrets(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.HushOrder), fc.Args["where"].(*generated.HushWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.HushConnection) graphql.Marshaler {
-			return ec.marshalNHushConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_secrets(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_HushConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_secrets_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Organization_avatarFile(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -117256,182 +114662,6 @@ func (ec *executionContext) fieldContext_Organization_avatarFile(_ context.Conte
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_File(ctx, field)
 		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_groups(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_groups(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Groups(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.GroupOrder), fc.Args["where"].(*generated.GroupWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
-			return ec.marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_groups(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_GroupConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_groups_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_templates(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_templates(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Templates(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.TemplateOrder), fc.Args["where"].(*generated.TemplateWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.TemplateConnection) graphql.Marshaler {
-			return ec.marshalNTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_templates(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_TemplateConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_templates_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_integrations(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_integrations(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Integrations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.IntegrationOrder), fc.Args["where"].(*generated.IntegrationWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.IntegrationConnection) graphql.Marshaler {
-			return ec.marshalNIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_integrations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_IntegrationConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_integrations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_documents(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_documents(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Documents(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.DocumentDataOrder), fc.Args["where"].(*generated.DocumentDataWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.DocumentDataConnection) graphql.Marshaler {
-			return ec.marshalNDocumentDataConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_documents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DocumentDataConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_documents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
 	}
 	return fc, nil
 }
@@ -117506,2382 +114736,6 @@ func (ec *executionContext) fieldContext_Organization_invites(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Organization_invites_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_subscribers(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_subscribers(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Subscribers(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.SubscriberOrder), fc.Args["where"].(*generated.SubscriberWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubscriberConnection) graphql.Marshaler {
-			return ec.marshalNSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_subscribers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_SubscriberConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_subscribers_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_entities(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_entities(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Entities(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.EntityOrder), fc.Args["where"].(*generated.EntityWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.EntityConnection) graphql.Marshaler {
-			return ec.marshalNEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_entities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_EntityConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_entities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_platforms(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_platforms(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Platforms(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.PlatformOrder), fc.Args["where"].(*generated.PlatformWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.PlatformConnection) graphql.Marshaler {
-			return ec.marshalNPlatformConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_platforms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_PlatformConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_platforms_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_identityHolders(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_identityHolders(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.IdentityHolders(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.IdentityHolderOrder), fc.Args["where"].(*generated.IdentityHolderWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolderConnection) graphql.Marshaler {
-			return ec.marshalNIdentityHolderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_identityHolders(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_IdentityHolderConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_identityHolders_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_campaigns(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_campaigns(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Campaigns(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.CampaignOrder), fc.Args["where"].(*generated.CampaignWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.CampaignConnection) graphql.Marshaler {
-			return ec.marshalNCampaignConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_campaigns(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_CampaignConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_campaigns_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_campaignTargets(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_campaignTargets(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.CampaignTargets(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.CampaignTargetOrder), fc.Args["where"].(*generated.CampaignTargetWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.CampaignTargetConnection) graphql.Marshaler {
-			return ec.marshalNCampaignTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_campaignTargets(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_CampaignTargetConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_campaignTargets_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_entityTypes(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_entityTypes(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.EntityTypes(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.EntityTypeOrder), fc.Args["where"].(*generated.EntityTypeWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.EntityTypeConnection) graphql.Marshaler {
-			return ec.marshalNEntityTypeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityTypeConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_entityTypes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_EntityTypeConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_entityTypes_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_contacts(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_contacts(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Contacts(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ContactOrder), fc.Args["where"].(*generated.ContactWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ContactConnection) graphql.Marshaler {
-			return ec.marshalNContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_contacts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ContactConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_contacts_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_notes(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_notes(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Notes(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.NoteOrder), fc.Args["where"].(*generated.NoteWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.NoteConnection) graphql.Marshaler {
-			return ec.marshalNNoteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_notes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_NoteConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_notes_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_tasks(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_tasks(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Tasks(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.TaskOrder), fc.Args["where"].(*generated.TaskWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.TaskConnection) graphql.Marshaler {
-			return ec.marshalNTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_tasks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_TaskConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_tasks_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_programs(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_programs(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Programs(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ProgramOrder), fc.Args["where"].(*generated.ProgramWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ProgramConnection) graphql.Marshaler {
-			return ec.marshalNProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_programs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ProgramConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_programs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_systemDetails(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_systemDetails(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.SystemDetails(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.SystemDetailOrder), fc.Args["where"].(*generated.SystemDetailWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.SystemDetailConnection) graphql.Marshaler {
-			return ec.marshalNSystemDetailConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_systemDetails(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_SystemDetailConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_systemDetails_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_procedures(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_procedures(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Procedures(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ProcedureOrder), fc.Args["where"].(*generated.ProcedureWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ProcedureConnection) graphql.Marshaler {
-			return ec.marshalNProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_procedures(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ProcedureConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_procedures_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_internalPolicies(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.InternalPolicies(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.InternalPolicyOrder), fc.Args["where"].(*generated.InternalPolicyWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.InternalPolicyConnection) graphql.Marshaler {
-			return ec.marshalNInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_internalPolicies(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_InternalPolicyConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_internalPolicies_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_risks(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_risks(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Risks(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.RiskOrder), fc.Args["where"].(*generated.RiskWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.RiskConnection) graphql.Marshaler {
-			return ec.marshalNRiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_risks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_RiskConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_risks_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_controlObjectives(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_controlObjectives(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.ControlObjectives(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ControlObjectiveOrder), fc.Args["where"].(*generated.ControlObjectiveWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlObjectiveConnection) graphql.Marshaler {
-			return ec.marshalNControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_controlObjectives(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ControlObjectiveConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_controlObjectives_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_narratives(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_narratives(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Narratives(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.NarrativeOrder), fc.Args["where"].(*generated.NarrativeWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.NarrativeConnection) graphql.Marshaler {
-			return ec.marshalNNarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_narratives(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_NarrativeConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_narratives_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_controls(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_controls(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Controls(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ControlOrder), fc.Args["where"].(*generated.ControlWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlConnection) graphql.Marshaler {
-			return ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_controls(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ControlConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_controls_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_subcontrols(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_subcontrols(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Subcontrols(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.SubcontrolOrder), fc.Args["where"].(*generated.SubcontrolWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubcontrolConnection) graphql.Marshaler {
-			return ec.marshalNSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_subcontrols(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_SubcontrolConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_subcontrols_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_controlImplementations(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_controlImplementations(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.ControlImplementations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ControlImplementationOrder), fc.Args["where"].(*generated.ControlImplementationWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlImplementationConnection) graphql.Marshaler {
-			return ec.marshalNControlImplementationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_controlImplementations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ControlImplementationConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_controlImplementations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_mappedControls(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_mappedControls(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.MappedControls(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.MappedControlOrder), fc.Args["where"].(*generated.MappedControlWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.MappedControlConnection) graphql.Marshaler {
-			return ec.marshalNMappedControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControlConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_mappedControls(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_MappedControlConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_mappedControls_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_evidence(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_evidence(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Evidence(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.EvidenceOrder), fc.Args["where"].(*generated.EvidenceWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.EvidenceConnection) graphql.Marshaler {
-			return ec.marshalNEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_evidence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_EvidenceConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_evidence_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_standards(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_standards(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Standards(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.StandardOrder), fc.Args["where"].(*generated.StandardWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.StandardConnection) graphql.Marshaler {
-			return ec.marshalNStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_standards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_StandardConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_standards_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_actionPlans(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_actionPlans(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.ActionPlans(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ActionPlanOrder), fc.Args["where"].(*generated.ActionPlanWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ActionPlanConnection) graphql.Marshaler {
-			return ec.marshalNActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_actionPlans(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ActionPlanConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_actionPlans_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_customDomains(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_customDomains(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.CustomDomains(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.CustomDomainOrder), fc.Args["where"].(*generated.CustomDomainWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomDomainConnection) graphql.Marshaler {
-			return ec.marshalNCustomDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_customDomains(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_CustomDomainConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_customDomains_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_dnsVerifications(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_dnsVerifications(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.DNSVerifications(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.DNSVerificationOrder), fc.Args["where"].(*generated.DNSVerificationWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.DNSVerificationConnection) graphql.Marshaler {
-			return ec.marshalNDNSVerificationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_dnsVerifications(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DNSVerificationConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_dnsVerifications_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_trustCenters(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_trustCenters(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.TrustCenters(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.TrustCenterOrder), fc.Args["where"].(*generated.TrustCenterWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterConnection) graphql.Marshaler {
-			return ec.marshalNTrustCenterConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_trustCenters(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_TrustCenterConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_trustCenters_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_assets(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_assets(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Assets(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.AssetOrder), fc.Args["where"].(*generated.AssetWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssetConnection) graphql.Marshaler {
-			return ec.marshalNAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_assets(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_AssetConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_assets_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_scans(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_scans(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Scans(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ScanOrder), fc.Args["where"].(*generated.ScanWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ScanConnection) graphql.Marshaler {
-			return ec.marshalNScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_scans(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ScanConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_scans_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_slaDefinitions(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_slaDefinitions(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.SLADefinitions(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.SLADefinitionOrder), fc.Args["where"].(*generated.SLADefinitionWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.SLADefinitionConnection) graphql.Marshaler {
-			return ec.marshalNSLADefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinitionConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_slaDefinitions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_SLADefinitionConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_slaDefinitions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_subprocessors(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_subprocessors(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Subprocessors(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.SubprocessorOrder), fc.Args["where"].(*generated.SubprocessorWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubprocessorConnection) graphql.Marshaler {
-			return ec.marshalNSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_subprocessors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_SubprocessorConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_subprocessors_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_exports(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_exports(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Exports(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ExportOrder), fc.Args["where"].(*generated.ExportWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ExportConnection) graphql.Marshaler {
-			return ec.marshalNExportConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExportConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_exports(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ExportConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_exports_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_trustCenterWatermarkConfigs(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_trustCenterWatermarkConfigs(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.TrustCenterWatermarkConfigs(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.TrustCenterWatermarkConfigOrder), fc.Args["where"].(*generated.TrustCenterWatermarkConfigWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterWatermarkConfigConnection) graphql.Marshaler {
-			return ec.marshalNTrustCenterWatermarkConfigConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_trustCenterWatermarkConfigs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_TrustCenterWatermarkConfigConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_trustCenterWatermarkConfigs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_assessments(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_assessments(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Assessments(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.AssessmentOrder), fc.Args["where"].(*generated.AssessmentWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentConnection) graphql.Marshaler {
-			return ec.marshalNAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_assessments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_AssessmentConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_assessments_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_assessmentResponses(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_assessmentResponses(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.AssessmentResponses(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.AssessmentResponseOrder), fc.Args["where"].(*generated.AssessmentResponseWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentResponseConnection) graphql.Marshaler {
-			return ec.marshalNAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_assessmentResponses(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_AssessmentResponseConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_assessmentResponses_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_customTypeEnums(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_customTypeEnums(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.CustomTypeEnums(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.CustomTypeEnumOrder), fc.Args["where"].(*generated.CustomTypeEnumWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnumConnection) graphql.Marshaler {
-			return ec.marshalNCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_customTypeEnums(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_CustomTypeEnumConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_customTypeEnums_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_tagDefinitions(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_tagDefinitions(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.TagDefinitions(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.TagDefinitionOrder), fc.Args["where"].(*generated.TagDefinitionWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.TagDefinitionConnection) graphql.Marshaler {
-			return ec.marshalNTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_tagDefinitions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_TagDefinitionConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_tagDefinitions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_remediations(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_remediations(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Remediations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.RemediationOrder), fc.Args["where"].(*generated.RemediationWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
-			return ec.marshalNRemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_remediations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_RemediationConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_remediations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_findings(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_findings(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Findings(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FindingOrder), fc.Args["where"].(*generated.FindingWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
-			return ec.marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_findings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_FindingConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_findings_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_findingControls(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_findingControls(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.FindingControls(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FindingControlOrder), fc.Args["where"].(*generated.FindingControlWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingControlConnection) graphql.Marshaler {
-			return ec.marshalNFindingControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControlConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_findingControls(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_FindingControlConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_findingControls_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_reviews(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_reviews(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Reviews(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ReviewOrder), fc.Args["where"].(*generated.ReviewWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.ReviewConnection) graphql.Marshaler {
-			return ec.marshalNReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_reviews(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ReviewConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_reviews_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_vulnerabilities(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_vulnerabilities(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Vulnerabilities(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VulnerabilityOrder), fc.Args["where"].(*generated.VulnerabilityWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
-			return ec.marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_vulnerabilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_VulnerabilityConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_vulnerabilities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_workflowDefinitions(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_workflowDefinitions(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.WorkflowDefinitions(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.WorkflowDefinitionOrder), fc.Args["where"].(*generated.WorkflowDefinitionWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowDefinitionConnection) graphql.Marshaler {
-			return ec.marshalNWorkflowDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_workflowDefinitions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_WorkflowDefinitionConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_workflowDefinitions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_workflowInstances(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_workflowInstances(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.WorkflowInstances(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.WorkflowInstanceOrder), fc.Args["where"].(*generated.WorkflowInstanceWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowInstanceConnection) graphql.Marshaler {
-			return ec.marshalNWorkflowInstanceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_workflowInstances(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_WorkflowInstanceConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_workflowInstances_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_workflowEvents(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_workflowEvents(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.WorkflowEvents(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.WorkflowEventOrder), fc.Args["where"].(*generated.WorkflowEventWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowEventConnection) graphql.Marshaler {
-			return ec.marshalNWorkflowEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEventConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_workflowEvents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_WorkflowEventConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_workflowEvents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_workflowAssignments(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_workflowAssignments(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.WorkflowAssignments(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.WorkflowAssignmentOrder), fc.Args["where"].(*generated.WorkflowAssignmentWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowAssignmentConnection) graphql.Marshaler {
-			return ec.marshalNWorkflowAssignmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_workflowAssignments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_WorkflowAssignmentConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_workflowAssignments_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_workflowAssignmentTargets(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_workflowAssignmentTargets(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.WorkflowAssignmentTargets(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.WorkflowAssignmentTargetOrder), fc.Args["where"].(*generated.WorkflowAssignmentTargetWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowAssignmentTargetConnection) graphql.Marshaler {
-			return ec.marshalNWorkflowAssignmentTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTargetConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_workflowAssignmentTargets(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_WorkflowAssignmentTargetConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_workflowAssignmentTargets_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_workflowObjectRefs(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_workflowObjectRefs(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.WorkflowObjectRefs(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.WorkflowObjectRefOrder), fc.Args["where"].(*generated.WorkflowObjectRefWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowObjectRefConnection) graphql.Marshaler {
-			return ec.marshalNWorkflowObjectRefConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_workflowObjectRefs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_WorkflowObjectRefConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_workflowObjectRefs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_directoryAccounts(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_directoryAccounts(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.DirectoryAccounts(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.DirectoryAccountOrder), fc.Args["where"].(*generated.DirectoryAccountWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryAccountConnection) graphql.Marshaler {
-			return ec.marshalNDirectoryAccountConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccountConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_directoryAccounts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DirectoryAccountConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_directoryAccounts_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_directoryGroups(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_directoryGroups(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.DirectoryGroups(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.DirectoryGroupOrder), fc.Args["where"].(*generated.DirectoryGroupWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryGroupConnection) graphql.Marshaler {
-			return ec.marshalNDirectoryGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroupConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_directoryGroups(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DirectoryGroupConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_directoryGroups_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_directoryMemberships(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_directoryMemberships(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.DirectoryMemberships(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.DirectoryMembershipOrder), fc.Args["where"].(*generated.DirectoryMembershipWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryMembershipConnection) graphql.Marshaler {
-			return ec.marshalNDirectoryMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_directoryMemberships(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DirectoryMembershipConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_directoryMemberships_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_discussions(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_discussions(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.Discussions(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.DiscussionOrder), fc.Args["where"].(*generated.DiscussionWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.DiscussionConnection) graphql.Marshaler {
-			return ec.marshalNDiscussionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_discussions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DiscussionConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_discussions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_vendorScoringConfigs(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_vendorScoringConfigs(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.VendorScoringConfigs(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VendorScoringConfigOrder), fc.Args["where"].(*generated.VendorScoringConfigWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.VendorScoringConfigConnection) graphql.Marshaler {
-			return ec.marshalNVendorScoringConfigConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_vendorScoringConfigs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_VendorScoringConfigConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_vendorScoringConfigs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Organization_vendorRiskScores(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Organization_vendorRiskScores(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return obj.VendorRiskScores(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VendorRiskScoreOrder), fc.Args["where"].(*generated.VendorRiskScoreWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.VendorRiskScoreConnection) graphql.Marshaler {
-			return ec.marshalNVendorRiskScoreConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Organization_vendorRiskScores(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Organization",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_VendorRiskScoreConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Organization_vendorRiskScores_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -130174,6 +125028,50 @@ func (ec *executionContext) fieldContext_Query_assessments(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_assessmentPolicies(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_assessmentPolicies(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().AssessmentPolicies(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.AssessmentPolicyOrder), fc.Args["where"].(*generated.AssessmentPolicyWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentPolicyConnection) graphql.Marshaler {
+			return ec.marshalNAssessmentPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_assessmentPolicies(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentPolicyConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_assessmentPolicies_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_assessmentResponses(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -134040,6 +128938,50 @@ func (ec *executionContext) fieldContext_Query_assessment(ctx context.Context, f
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_assessment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_assessmentPolicy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_assessmentPolicy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().AssessmentPolicy(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentPolicy) graphql.Marshaler {
+			return ec.marshalNAssessmentPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicy(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_assessmentPolicy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentPolicy(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_assessmentPolicy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -184572,6 +179514,539 @@ func (ec *executionContext) unmarshalInputAssessmentOrder(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputAssessmentPolicyOrder(ctx context.Context, obj any) (generated.AssessmentPolicyOrder, error) {
+	var it generated.AssessmentPolicyOrder
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNAssessmentPolicyOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAssessmentPolicyWhereInput(ctx context.Context, obj any) (generated.AssessmentPolicyWhereInput, error) {
+	var it generated.AssessmentPolicyWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "policyRevision", "policyRevisionNEQ", "policyRevisionIn", "policyRevisionNotIn", "policyRevisionContains", "policyRevisionHasPrefix", "policyRevisionHasSuffix", "policyRevisionIsNil", "policyRevisionNotNil", "policyRevisionEqualFold", "policyRevisionContainsFold"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOAssessmentPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOAssessmentPolicyWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOAssessmentPolicyWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDEqualFold = data
+		case "idContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDContainsFold = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIsNil = data
+		case "createdAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotNil = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIsNil = data
+		case "updatedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "updatedByImpersonator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonator = data
+		case "updatedByImpersonatorNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNEQ = data
+		case "updatedByImpersonatorIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIn = data
+		case "updatedByImpersonatorNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotIn = data
+		case "updatedByImpersonatorContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
+		case "updatedByImpersonatorHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasSuffix = data
+		case "updatedByImpersonatorIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIsNil = data
+		case "updatedByImpersonatorNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotNil = data
+		case "updatedByImpersonatorEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorEqualFold = data
+		case "updatedByImpersonatorContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContainsFold = data
+		case "policyRevision":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevision"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevision = data
+		case "policyRevisionNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionNEQ = data
+		case "policyRevisionIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionIn = data
+		case "policyRevisionNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionNotIn = data
+		case "policyRevisionContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionContains = data
+		case "policyRevisionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionHasPrefix = data
+		case "policyRevisionHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionHasSuffix = data
+		case "policyRevisionIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionIsNil = data
+		case "policyRevisionNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionNotNil = data
+		case "policyRevisionEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionEqualFold = data
+		case "policyRevisionContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevisionContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevisionContainsFold = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputAssessmentResponseOrder(ctx context.Context, obj any) (generated.AssessmentResponseOrder, error) {
 	var it generated.AssessmentResponseOrder
 	if obj == nil {
@@ -186278,7 +181753,7 @@ func (ec *executionContext) unmarshalInputAssessmentWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "assessmentType", "assessmentTypeNEQ", "assessmentTypeIn", "assessmentTypeNotIn", "templateID", "templateIDNEQ", "templateIDIn", "templateIDNotIn", "templateIDContains", "templateIDHasPrefix", "templateIDHasSuffix", "templateIDIsNil", "templateIDNotNil", "templateIDEqualFold", "templateIDContainsFold", "responseDueDuration", "responseDueDurationNEQ", "responseDueDurationGT", "responseDueDurationGTE", "responseDueDurationLT", "responseDueDurationLTE", "responseDueDurationIsNil", "responseDueDurationNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasTemplate", "hasTemplateWith", "hasPlatforms", "hasPlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasCampaigns", "hasCampaignsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "assessmentType", "assessmentTypeNEQ", "assessmentTypeIn", "assessmentTypeNotIn", "templateID", "templateIDNEQ", "templateIDIn", "templateIDNotIn", "templateIDContains", "templateIDHasPrefix", "templateIDHasSuffix", "templateIDIsNil", "templateIDNotNil", "templateIDEqualFold", "templateIDContainsFold", "responseDueDuration", "responseDueDurationNEQ", "responseDueDurationGT", "responseDueDurationGTE", "responseDueDurationLT", "responseDueDurationLTE", "responseDueDurationIsNil", "responseDueDurationNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasTemplate", "hasTemplateWith", "hasPlatforms", "hasPlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasCampaigns", "hasCampaignsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasPolicyAttestations", "hasPolicyAttestationsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -187314,6 +182789,20 @@ func (ec *executionContext) unmarshalInputAssessmentWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.HasCampaignsWith = data
+		case "hasInternalPolicies":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalPolicies"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalPolicies = data
+		case "hasInternalPoliciesWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalPoliciesWith"))
+			data, err := ec.unmarshalOInternalPolicyWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalPoliciesWith = data
 		case "hasWorkflowObjectRefs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowObjectRefs"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -187328,6 +182817,20 @@ func (ec *executionContext) unmarshalInputAssessmentWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.HasWorkflowObjectRefsWith = data
+		case "hasPolicyAttestations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPolicyAttestations"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPolicyAttestations = data
+		case "hasPolicyAttestationsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPolicyAttestationsWith"))
+			data, err := ec.unmarshalOAssessmentPolicyWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPolicyAttestationsWith = data
 		case "tagsHas":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tagsHas"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -205293,6 +200796,57 @@ func (ec *executionContext) unmarshalInputCreateAssessmentInput(ctx context.Cont
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCreateAssessmentPolicyInput(ctx context.Context, obj any) (generated.CreateAssessmentPolicyInput, error) {
+	var it generated.CreateAssessmentPolicyInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"policyRevision", "ownerID", "assessmentID", "internalPolicyID"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "policyRevision":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyRevision"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PolicyRevision = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "assessmentID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentID"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssessmentID = data
+		case "internalPolicyID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalPolicyID"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalPolicyID = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateAssessmentResponseInput(ctx context.Context, obj any) (generated.CreateAssessmentResponseInput, error) {
 	var it generated.CreateAssessmentResponseInput
 	if obj == nil {
@@ -214518,7 +210072,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "name", "displayName", "description", "personalOrg", "avatarRemoteURL", "avatarUpdatedAt", "actionPlanCreatorIDs", "apiTokenCreatorIDs", "assessmentCreatorIDs", "assetCreatorIDs", "campaignCreatorIDs", "campaignTargetCreatorIDs", "checkResultCreatorIDs", "contactCreatorIDs", "controlCreatorIDs", "controlImplementationCreatorIDs", "controlObjectiveCreatorIDs", "customDomainCreatorIDs", "customTypeEnumCreatorIDs", "directoryAccountCreatorIDs", "directoryGroupCreatorIDs", "directoryMembershipCreatorIDs", "discussionCreatorIDs", "documentDataCreatorIDs", "emailTemplateCreatorIDs", "entityCreatorIDs", "entityTypeCreatorIDs", "evidenceCreatorIDs", "fileCreatorIDs", "findingCreatorIDs", "findingControlCreatorIDs", "groupCreatorIDs", "groupMembershipCreatorIDs", "groupSettingCreatorIDs", "hushCreatorIDs", "identityHolderCreatorIDs", "internalPolicyCreatorIDs", "inviteCreatorIDs", "mappedControlCreatorIDs", "narrativeCreatorIDs", "noteCreatorIDs", "notificationTemplateCreatorIDs", "orgMembershipCreatorIDs", "platformCreatorIDs", "procedureCreatorIDs", "programCreatorIDs", "programMembershipCreatorIDs", "remediationCreatorIDs", "reviewCreatorIDs", "riskCreatorIDs", "scanCreatorIDs", "slaDefinitionCreatorIDs", "standardCreatorIDs", "subcontrolCreatorIDs", "subprocessorCreatorIDs", "subscriberCreatorIDs", "systemDetailCreatorIDs", "tagDefinitionCreatorIDs", "taskCreatorIDs", "templateCreatorIDs", "trustCenterCreatorIDs", "trustCenterComplianceCreatorIDs", "trustCenterDocCreatorIDs", "trustCenterEntityCreatorIDs", "trustCenterFaqCreatorIDs", "trustCenterNdaRequestCreatorIDs", "trustCenterSubprocessorCreatorIDs", "trustCenterWatermarkConfigCreatorIDs", "vendorRiskScoreCreatorIDs", "vendorScoringConfigCreatorIDs", "vulnerabilityCreatorIDs", "workflowDefinitionCreatorIDs", "campaignsManagerIDs", "complianceManagerIDs", "groupManagerIDs", "policiesManagerIDs", "registryManagerIDs", "riskManagerIDs", "trustCenterManagerIDs", "workflowsManagerIDs", "parentID", "settingID", "personalAccessTokenIDs", "apiTokenIDs", "emailTemplateIDs", "notificationPreferenceIDs", "notificationTemplateIDs", "fileIDs", "eventIDs", "secretIDs", "avatarFileID", "groupIDs", "templateIDs", "integrationIDs", "documentIDs", "orgSubscriptionIDs", "inviteIDs", "subscriberIDs", "entityIDs", "platformIDs", "identityHolderIDs", "campaignIDs", "campaignTargetIDs", "entityTypeIDs", "contactIDs", "noteIDs", "taskIDs", "programIDs", "systemDetailIDs", "procedureIDs", "internalPolicyIDs", "riskIDs", "controlObjectiveIDs", "narrativeIDs", "controlIDs", "subcontrolIDs", "controlImplementationIDs", "mappedControlIDs", "evidenceIDs", "standardIDs", "actionPlanIDs", "customDomainIDs", "dnsVerificationIDs", "trustCenterIDs", "assetIDs", "scanIDs", "slaDefinitionIDs", "subprocessorIDs", "exportIDs", "trustCenterWatermarkConfigIDs", "impersonationEventIDs", "assessmentIDs", "assessmentResponseIDs", "customTypeEnumIDs", "tagDefinitionIDs", "remediationIDs", "findingIDs", "reviewIDs", "vulnerabilityIDs", "workflowDefinitionIDs", "workflowInstanceIDs", "workflowEventIDs", "workflowAssignmentIDs", "workflowAssignmentTargetIDs", "workflowObjectRefIDs", "directoryAccountIDs", "directoryGroupIDs", "discussionIDs", "vendorScoringConfigIDs", "vendorRiskScoreIDs", "createOrgSettings"}
+	fieldsInOrder := [...]string{"tags", "name", "displayName", "description", "personalOrg", "avatarRemoteURL", "avatarUpdatedAt", "actionPlanCreatorIDs", "apiTokenCreatorIDs", "assessmentCreatorIDs", "assessmentPolicyCreatorIDs", "assetCreatorIDs", "campaignCreatorIDs", "campaignTargetCreatorIDs", "checkResultCreatorIDs", "contactCreatorIDs", "controlCreatorIDs", "controlImplementationCreatorIDs", "controlObjectiveCreatorIDs", "customDomainCreatorIDs", "customTypeEnumCreatorIDs", "directoryAccountCreatorIDs", "directoryGroupCreatorIDs", "directoryMembershipCreatorIDs", "discussionCreatorIDs", "documentDataCreatorIDs", "emailTemplateCreatorIDs", "entityCreatorIDs", "entityTypeCreatorIDs", "evidenceCreatorIDs", "fileCreatorIDs", "findingCreatorIDs", "findingControlCreatorIDs", "groupCreatorIDs", "groupMembershipCreatorIDs", "groupSettingCreatorIDs", "hushCreatorIDs", "identityHolderCreatorIDs", "internalPolicyCreatorIDs", "inviteCreatorIDs", "mappedControlCreatorIDs", "narrativeCreatorIDs", "noteCreatorIDs", "notificationTemplateCreatorIDs", "orgMembershipCreatorIDs", "platformCreatorIDs", "procedureCreatorIDs", "programCreatorIDs", "programMembershipCreatorIDs", "remediationCreatorIDs", "reviewCreatorIDs", "riskCreatorIDs", "scanCreatorIDs", "slaDefinitionCreatorIDs", "standardCreatorIDs", "subcontrolCreatorIDs", "subprocessorCreatorIDs", "subscriberCreatorIDs", "systemDetailCreatorIDs", "tagDefinitionCreatorIDs", "taskCreatorIDs", "templateCreatorIDs", "trustCenterCreatorIDs", "trustCenterComplianceCreatorIDs", "trustCenterDocCreatorIDs", "trustCenterEntityCreatorIDs", "trustCenterFaqCreatorIDs", "trustCenterNdaRequestCreatorIDs", "trustCenterSubprocessorCreatorIDs", "trustCenterWatermarkConfigCreatorIDs", "vendorRiskScoreCreatorIDs", "vendorScoringConfigCreatorIDs", "vulnerabilityCreatorIDs", "workflowDefinitionCreatorIDs", "campaignsManagerIDs", "complianceManagerIDs", "groupManagerIDs", "policiesManagerIDs", "registryManagerIDs", "riskManagerIDs", "trustCenterManagerIDs", "workflowsManagerIDs", "parentID", "settingID", "personalAccessTokenIDs", "fileIDs", "eventIDs", "avatarFileID", "orgSubscriptionIDs", "inviteIDs", "impersonationEventIDs", "createOrgSettings"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -214595,6 +210149,13 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.AssessmentCreatorIDs = data
+		case "assessmentPolicyCreatorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentPolicyCreatorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssessmentPolicyCreatorIDs = data
 		case "assetCreatorIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetCreatorIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -215113,34 +210674,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.PersonalAccessTokenIDs = data
-		case "apiTokenIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("apiTokenIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.APITokenIDs = data
-		case "emailTemplateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailTemplateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailTemplateIDs = data
-		case "notificationPreferenceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("notificationPreferenceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NotificationPreferenceIDs = data
-		case "notificationTemplateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("notificationTemplateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NotificationTemplateIDs = data
 		case "fileIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -215155,13 +210688,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.EventIDs = data
-		case "secretIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secretIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SecretIDs = data
 		case "avatarFileID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFileID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -215169,34 +210695,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.AvatarFileID = data
-		case "groupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("groupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.GroupIDs = data
-		case "templateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("templateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.TemplateIDs = data
-		case "integrationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationIDs = data
-		case "documentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DocumentIDs = data
 		case "orgSubscriptionIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orgSubscriptionIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -215211,237 +210709,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.InviteIDs = data
-		case "subscriberIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subscriberIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SubscriberIDs = data
-		case "entityIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EntityIDs = data
-		case "platformIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("platformIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PlatformIDs = data
-		case "identityHolderIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityHolderIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityHolderIDs = data
-		case "campaignIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("campaignIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CampaignIDs = data
-		case "campaignTargetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("campaignTargetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CampaignTargetIDs = data
-		case "entityTypeIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityTypeIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EntityTypeIDs = data
-		case "contactIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contactIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ContactIDs = data
-		case "noteIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NoteIDs = data
-		case "taskIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("taskIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.TaskIDs = data
-		case "programIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("programIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProgramIDs = data
-		case "systemDetailIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemDetailIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SystemDetailIDs = data
-		case "procedureIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("procedureIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProcedureIDs = data
-		case "internalPolicyIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalPolicyIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.InternalPolicyIDs = data
-		case "riskIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("riskIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RiskIDs = data
-		case "controlObjectiveIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlObjectiveIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ControlObjectiveIDs = data
-		case "narrativeIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("narrativeIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NarrativeIDs = data
-		case "controlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ControlIDs = data
-		case "subcontrolIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subcontrolIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SubcontrolIDs = data
-		case "controlImplementationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlImplementationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ControlImplementationIDs = data
-		case "mappedControlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("mappedControlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.MappedControlIDs = data
-		case "evidenceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("evidenceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EvidenceIDs = data
-		case "standardIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.StandardIDs = data
-		case "actionPlanIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("actionPlanIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ActionPlanIDs = data
-		case "customDomainIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDs = data
-		case "dnsVerificationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dnsVerificationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DNSVerificationIDs = data
-		case "trustCenterIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trustCenterIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.TrustCenterIDs = data
-		case "assetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AssetIDs = data
-		case "scanIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("scanIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ScanIDs = data
-		case "slaDefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("slaDefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SLADefinitionIDs = data
-		case "subprocessorIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subprocessorIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SubprocessorIDs = data
-		case "exportIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("exportIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ExportIDs = data
-		case "trustCenterWatermarkConfigIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trustCenterWatermarkConfigIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.TrustCenterWatermarkConfigIDs = data
 		case "impersonationEventIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("impersonationEventIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -215449,139 +210716,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ImpersonationEventIDs = data
-		case "assessmentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AssessmentIDs = data
-		case "assessmentResponseIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentResponseIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AssessmentResponseIDs = data
-		case "customTypeEnumIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customTypeEnumIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomTypeEnumIDs = data
-		case "tagDefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tagDefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.TagDefinitionIDs = data
-		case "remediationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("remediationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemediationIDs = data
-		case "findingIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FindingIDs = data
-		case "reviewIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReviewIDs = data
-		case "vulnerabilityIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.VulnerabilityIDs = data
-		case "workflowDefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowDefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.WorkflowDefinitionIDs = data
-		case "workflowInstanceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowInstanceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.WorkflowInstanceIDs = data
-		case "workflowEventIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowEventIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.WorkflowEventIDs = data
-		case "workflowAssignmentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowAssignmentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.WorkflowAssignmentIDs = data
-		case "workflowAssignmentTargetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowAssignmentTargetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.WorkflowAssignmentTargetIDs = data
-		case "workflowObjectRefIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowObjectRefIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.WorkflowObjectRefIDs = data
-		case "directoryAccountIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("directoryAccountIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DirectoryAccountIDs = data
-		case "directoryGroupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("directoryGroupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DirectoryGroupIDs = data
-		case "discussionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("discussionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.DiscussionIDs = data
-		case "vendorScoringConfigIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vendorScoringConfigIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.VendorScoringConfigIDs = data
-		case "vendorRiskScoreIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vendorRiskScoreIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.VendorRiskScoreIDs = data
 		case "createOrgSettings":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createOrgSettings"))
 			data, err := ec.unmarshalOCreateOrganizationSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput(ctx, v)
@@ -265423,7 +260557,7 @@ func (ec *executionContext) unmarshalInputInternalPolicyWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "managementMode", "managementModeNEQ", "managementModeIn", "managementModeNotIn", "managementModeIsNil", "managementModeNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "reviewDue", "reviewDueGT", "reviewDueGTE", "reviewDueLT", "reviewDueLTE", "reviewDueIsNil", "reviewDueNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "approverID", "approverIDNEQ", "approverIDIn", "approverIDNotIn", "approverIDContains", "approverIDHasPrefix", "approverIDHasSuffix", "approverIDIsNil", "approverIDNotNil", "approverIDEqualFold", "approverIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "externalFileID", "externalFileIDNEQ", "externalFileIDIn", "externalFileIDNotIn", "externalFileIDContains", "externalFileIDHasPrefix", "externalFileIDHasSuffix", "externalFileIDIsNil", "externalFileIDNotNil", "externalFileIDEqualFold", "externalFileIDContainsFold", "externalContents", "externalContentsNEQ", "externalContentsIn", "externalContentsNotIn", "externalContentsContains", "externalContentsHasPrefix", "externalContentsHasSuffix", "externalContentsIsNil", "externalContentsNotNil", "externalContentsEqualFold", "externalContentsContainsFold", "internalPolicyKindName", "internalPolicyKindNameNEQ", "internalPolicyKindNameIn", "internalPolicyKindNameNotIn", "internalPolicyKindNameContains", "internalPolicyKindNameHasPrefix", "internalPolicyKindNameHasSuffix", "internalPolicyKindNameIsNil", "internalPolicyKindNameNotNil", "internalPolicyKindNameEqualFold", "internalPolicyKindNameContainsFold", "internalPolicyKindID", "internalPolicyKindIDNEQ", "internalPolicyKindIDIn", "internalPolicyKindIDNotIn", "internalPolicyKindIDContains", "internalPolicyKindIDHasPrefix", "internalPolicyKindIDHasSuffix", "internalPolicyKindIDIsNil", "internalPolicyKindIDNotNil", "internalPolicyKindIDEqualFold", "internalPolicyKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasApprover", "hasApproverWith", "hasDelegate", "hasDelegateWith", "hasInternalPolicyKind", "hasInternalPolicyKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControlObjectives", "hasControlObjectivesWith", "hasControlImplementations", "hasControlImplementationsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasProcedures", "hasProceduresWith", "hasNarratives", "hasNarrativesWith", "hasTasks", "hasTasksWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasFile", "hasFileWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasReviews", "hasReviewsWith", "hasIntegrations", "hasIntegrationsWith", "tagsHas", "tagSuggestionsHas", "dismissedTagSuggestionsHas", "controlSuggestionsHas", "dismissedControlSuggestionsHas", "improvementSuggestionsHas", "dismissedImprovementSuggestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "managementMode", "managementModeNEQ", "managementModeIn", "managementModeNotIn", "managementModeIsNil", "managementModeNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "reviewDue", "reviewDueGT", "reviewDueGTE", "reviewDueLT", "reviewDueLTE", "reviewDueIsNil", "reviewDueNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "approverID", "approverIDNEQ", "approverIDIn", "approverIDNotIn", "approverIDContains", "approverIDHasPrefix", "approverIDHasSuffix", "approverIDIsNil", "approverIDNotNil", "approverIDEqualFold", "approverIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "externalFileID", "externalFileIDNEQ", "externalFileIDIn", "externalFileIDNotIn", "externalFileIDContains", "externalFileIDHasPrefix", "externalFileIDHasSuffix", "externalFileIDIsNil", "externalFileIDNotNil", "externalFileIDEqualFold", "externalFileIDContainsFold", "externalContents", "externalContentsNEQ", "externalContentsIn", "externalContentsNotIn", "externalContentsContains", "externalContentsHasPrefix", "externalContentsHasSuffix", "externalContentsIsNil", "externalContentsNotNil", "externalContentsEqualFold", "externalContentsContainsFold", "internalPolicyKindName", "internalPolicyKindNameNEQ", "internalPolicyKindNameIn", "internalPolicyKindNameNotIn", "internalPolicyKindNameContains", "internalPolicyKindNameHasPrefix", "internalPolicyKindNameHasSuffix", "internalPolicyKindNameIsNil", "internalPolicyKindNameNotNil", "internalPolicyKindNameEqualFold", "internalPolicyKindNameContainsFold", "internalPolicyKindID", "internalPolicyKindIDNEQ", "internalPolicyKindIDIn", "internalPolicyKindIDNotIn", "internalPolicyKindIDContains", "internalPolicyKindIDHasPrefix", "internalPolicyKindIDHasSuffix", "internalPolicyKindIDIsNil", "internalPolicyKindIDNotNil", "internalPolicyKindIDEqualFold", "internalPolicyKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasApprover", "hasApproverWith", "hasDelegate", "hasDelegateWith", "hasInternalPolicyKind", "hasInternalPolicyKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControlObjectives", "hasControlObjectivesWith", "hasControlImplementations", "hasControlImplementationsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasProcedures", "hasProceduresWith", "hasNarratives", "hasNarrativesWith", "hasTasks", "hasTasksWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasFile", "hasFileWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasReviews", "hasReviewsWith", "hasAssessments", "hasAssessmentsWith", "hasIntegrations", "hasIntegrationsWith", "hasPolicyAttestations", "hasPolicyAttestationsWith", "tagsHas", "tagSuggestionsHas", "dismissedTagSuggestionsHas", "controlSuggestionsHas", "dismissedControlSuggestionsHas", "improvementSuggestionsHas", "dismissedImprovementSuggestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -268342,6 +263476,20 @@ func (ec *executionContext) unmarshalInputInternalPolicyWhereInput(ctx context.C
 				return it, err
 			}
 			it.HasReviewsWith = data
+		case "hasAssessments":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessments"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssessments = data
+		case "hasAssessmentsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessmentsWith"))
+			data, err := ec.unmarshalOAssessmentWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssessmentsWith = data
 		case "hasIntegrations":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIntegrations"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -268356,6 +263504,20 @@ func (ec *executionContext) unmarshalInputInternalPolicyWhereInput(ctx context.C
 				return it, err
 			}
 			it.HasIntegrationsWith = data
+		case "hasPolicyAttestations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPolicyAttestations"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPolicyAttestations = data
+		case "hasPolicyAttestationsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPolicyAttestationsWith"))
+			data, err := ec.unmarshalOAssessmentPolicyWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPolicyAttestationsWith = data
 		case "tagsHas":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tagsHas"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -280730,7 +275892,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "parentOrganizationID", "parentOrganizationIDNEQ", "parentOrganizationIDIn", "parentOrganizationIDNotIn", "parentOrganizationIDContains", "parentOrganizationIDHasPrefix", "parentOrganizationIDHasSuffix", "parentOrganizationIDIsNil", "parentOrganizationIDNotNil", "parentOrganizationIDEqualFold", "parentOrganizationIDContainsFold", "personalOrg", "personalOrgNEQ", "personalOrgIsNil", "personalOrgNotNil", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "slugName", "slugNameNEQ", "slugNameIn", "slugNameNotIn", "slugNameContains", "slugNameHasPrefix", "slugNameHasSuffix", "slugNameIsNil", "slugNameNotNil", "slugNameEqualFold", "slugNameContainsFold", "hasActionPlanCreators", "hasActionPlanCreatorsWith", "hasAPITokenCreators", "hasAPITokenCreatorsWith", "hasAssessmentCreators", "hasAssessmentCreatorsWith", "hasAssetCreators", "hasAssetCreatorsWith", "hasCampaignCreators", "hasCampaignCreatorsWith", "hasCampaignTargetCreators", "hasCampaignTargetCreatorsWith", "hasCheckResultCreators", "hasCheckResultCreatorsWith", "hasContactCreators", "hasContactCreatorsWith", "hasControlCreators", "hasControlCreatorsWith", "hasControlImplementationCreators", "hasControlImplementationCreatorsWith", "hasControlObjectiveCreators", "hasControlObjectiveCreatorsWith", "hasCustomDomainCreators", "hasCustomDomainCreatorsWith", "hasCustomTypeEnumCreators", "hasCustomTypeEnumCreatorsWith", "hasDirectoryAccountCreators", "hasDirectoryAccountCreatorsWith", "hasDirectoryGroupCreators", "hasDirectoryGroupCreatorsWith", "hasDirectoryMembershipCreators", "hasDirectoryMembershipCreatorsWith", "hasDiscussionCreators", "hasDiscussionCreatorsWith", "hasDocumentDataCreators", "hasDocumentDataCreatorsWith", "hasEmailTemplateCreators", "hasEmailTemplateCreatorsWith", "hasEntityCreators", "hasEntityCreatorsWith", "hasEntityTypeCreators", "hasEntityTypeCreatorsWith", "hasEvidenceCreators", "hasEvidenceCreatorsWith", "hasFileCreators", "hasFileCreatorsWith", "hasFindingCreators", "hasFindingCreatorsWith", "hasFindingControlCreators", "hasFindingControlCreatorsWith", "hasGroupCreators", "hasGroupCreatorsWith", "hasGroupMembershipCreators", "hasGroupMembershipCreatorsWith", "hasGroupSettingCreators", "hasGroupSettingCreatorsWith", "hasHushCreators", "hasHushCreatorsWith", "hasIdentityHolderCreators", "hasIdentityHolderCreatorsWith", "hasInternalPolicyCreators", "hasInternalPolicyCreatorsWith", "hasInviteCreators", "hasInviteCreatorsWith", "hasMappedControlCreators", "hasMappedControlCreatorsWith", "hasNarrativeCreators", "hasNarrativeCreatorsWith", "hasNoteCreators", "hasNoteCreatorsWith", "hasNotificationTemplateCreators", "hasNotificationTemplateCreatorsWith", "hasOrgMembershipCreators", "hasOrgMembershipCreatorsWith", "hasPlatformCreators", "hasPlatformCreatorsWith", "hasProcedureCreators", "hasProcedureCreatorsWith", "hasProgramCreators", "hasProgramCreatorsWith", "hasProgramMembershipCreators", "hasProgramMembershipCreatorsWith", "hasRemediationCreators", "hasRemediationCreatorsWith", "hasReviewCreators", "hasReviewCreatorsWith", "hasRiskCreators", "hasRiskCreatorsWith", "hasScanCreators", "hasScanCreatorsWith", "hasSLADefinitionCreators", "hasSLADefinitionCreatorsWith", "hasStandardCreators", "hasStandardCreatorsWith", "hasSubcontrolCreators", "hasSubcontrolCreatorsWith", "hasSubprocessorCreators", "hasSubprocessorCreatorsWith", "hasSubscriberCreators", "hasSubscriberCreatorsWith", "hasSystemDetailCreators", "hasSystemDetailCreatorsWith", "hasTagDefinitionCreators", "hasTagDefinitionCreatorsWith", "hasTaskCreators", "hasTaskCreatorsWith", "hasTemplateCreators", "hasTemplateCreatorsWith", "hasTrustCenterCreators", "hasTrustCenterCreatorsWith", "hasTrustCenterComplianceCreators", "hasTrustCenterComplianceCreatorsWith", "hasTrustCenterDocCreators", "hasTrustCenterDocCreatorsWith", "hasTrustCenterEntityCreators", "hasTrustCenterEntityCreatorsWith", "hasTrustCenterFaqCreators", "hasTrustCenterFaqCreatorsWith", "hasTrustCenterNdaRequestCreators", "hasTrustCenterNdaRequestCreatorsWith", "hasTrustCenterSubprocessorCreators", "hasTrustCenterSubprocessorCreatorsWith", "hasTrustCenterWatermarkConfigCreators", "hasTrustCenterWatermarkConfigCreatorsWith", "hasVendorRiskScoreCreators", "hasVendorRiskScoreCreatorsWith", "hasVendorScoringConfigCreators", "hasVendorScoringConfigCreatorsWith", "hasVulnerabilityCreators", "hasVulnerabilityCreatorsWith", "hasWorkflowDefinitionCreators", "hasWorkflowDefinitionCreatorsWith", "hasCampaignsManager", "hasCampaignsManagerWith", "hasComplianceManager", "hasComplianceManagerWith", "hasGroupManager", "hasGroupManagerWith", "hasPoliciesManager", "hasPoliciesManagerWith", "hasRegistryManager", "hasRegistryManagerWith", "hasRiskManager", "hasRiskManagerWith", "hasTrustCenterManager", "hasTrustCenterManagerWith", "hasWorkflowsManager", "hasWorkflowsManagerWith", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith", "hasSetting", "hasSettingWith", "hasPersonalAccessTokens", "hasPersonalAccessTokensWith", "hasAPITokens", "hasAPITokensWith", "hasEmailTemplates", "hasEmailTemplatesWith", "hasNotificationPreferences", "hasNotificationPreferencesWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasUsers", "hasUsersWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasSecrets", "hasSecretsWith", "hasAvatarFile", "hasAvatarFileWith", "hasGroups", "hasGroupsWith", "hasTemplates", "hasTemplatesWith", "hasIntegrations", "hasIntegrationsWith", "hasDocuments", "hasDocumentsWith", "hasOrgSubscriptions", "hasOrgSubscriptionsWith", "hasInvites", "hasInvitesWith", "hasSubscribers", "hasSubscribersWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasEntityTypes", "hasEntityTypesWith", "hasContacts", "hasContactsWith", "hasNotes", "hasNotesWith", "hasTasks", "hasTasksWith", "hasPrograms", "hasProgramsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasRisks", "hasRisksWith", "hasControlObjectives", "hasControlObjectivesWith", "hasNarratives", "hasNarrativesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasMappedControls", "hasMappedControlsWith", "hasEvidence", "hasEvidenceWith", "hasStandards", "hasStandardsWith", "hasActionPlans", "hasActionPlansWith", "hasCustomDomains", "hasCustomDomainsWith", "hasDNSVerifications", "hasDNSVerificationsWith", "hasTrustCenters", "hasTrustCentersWith", "hasAssets", "hasAssetsWith", "hasScans", "hasScansWith", "hasSLADefinitions", "hasSLADefinitionsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasExports", "hasExportsWith", "hasTrustCenterWatermarkConfigs", "hasTrustCenterWatermarkConfigsWith", "hasAssessments", "hasAssessmentsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasCustomTypeEnums", "hasCustomTypeEnumsWith", "hasTagDefinitions", "hasTagDefinitionsWith", "hasRemediations", "hasRemediationsWith", "hasFindings", "hasFindingsWith", "hasFindingControls", "hasFindingControlsWith", "hasReviews", "hasReviewsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasWorkflowDefinitions", "hasWorkflowDefinitionsWith", "hasWorkflowInstances", "hasWorkflowInstancesWith", "hasWorkflowEvents", "hasWorkflowEventsWith", "hasWorkflowAssignments", "hasWorkflowAssignmentsWith", "hasWorkflowAssignmentTargets", "hasWorkflowAssignmentTargetsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasDiscussions", "hasDiscussionsWith", "hasVendorScoringConfigs", "hasVendorScoringConfigsWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "parentOrganizationID", "parentOrganizationIDNEQ", "parentOrganizationIDIn", "parentOrganizationIDNotIn", "parentOrganizationIDContains", "parentOrganizationIDHasPrefix", "parentOrganizationIDHasSuffix", "parentOrganizationIDIsNil", "parentOrganizationIDNotNil", "parentOrganizationIDEqualFold", "parentOrganizationIDContainsFold", "personalOrg", "personalOrgNEQ", "personalOrgIsNil", "personalOrgNotNil", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "slugName", "slugNameNEQ", "slugNameIn", "slugNameNotIn", "slugNameContains", "slugNameHasPrefix", "slugNameHasSuffix", "slugNameIsNil", "slugNameNotNil", "slugNameEqualFold", "slugNameContainsFold", "hasActionPlanCreators", "hasActionPlanCreatorsWith", "hasAPITokenCreators", "hasAPITokenCreatorsWith", "hasAssessmentCreators", "hasAssessmentCreatorsWith", "hasAssessmentPolicyCreators", "hasAssessmentPolicyCreatorsWith", "hasAssetCreators", "hasAssetCreatorsWith", "hasCampaignCreators", "hasCampaignCreatorsWith", "hasCampaignTargetCreators", "hasCampaignTargetCreatorsWith", "hasCheckResultCreators", "hasCheckResultCreatorsWith", "hasContactCreators", "hasContactCreatorsWith", "hasControlCreators", "hasControlCreatorsWith", "hasControlImplementationCreators", "hasControlImplementationCreatorsWith", "hasControlObjectiveCreators", "hasControlObjectiveCreatorsWith", "hasCustomDomainCreators", "hasCustomDomainCreatorsWith", "hasCustomTypeEnumCreators", "hasCustomTypeEnumCreatorsWith", "hasDirectoryAccountCreators", "hasDirectoryAccountCreatorsWith", "hasDirectoryGroupCreators", "hasDirectoryGroupCreatorsWith", "hasDirectoryMembershipCreators", "hasDirectoryMembershipCreatorsWith", "hasDiscussionCreators", "hasDiscussionCreatorsWith", "hasDocumentDataCreators", "hasDocumentDataCreatorsWith", "hasEmailTemplateCreators", "hasEmailTemplateCreatorsWith", "hasEntityCreators", "hasEntityCreatorsWith", "hasEntityTypeCreators", "hasEntityTypeCreatorsWith", "hasEvidenceCreators", "hasEvidenceCreatorsWith", "hasFileCreators", "hasFileCreatorsWith", "hasFindingCreators", "hasFindingCreatorsWith", "hasFindingControlCreators", "hasFindingControlCreatorsWith", "hasGroupCreators", "hasGroupCreatorsWith", "hasGroupMembershipCreators", "hasGroupMembershipCreatorsWith", "hasGroupSettingCreators", "hasGroupSettingCreatorsWith", "hasHushCreators", "hasHushCreatorsWith", "hasIdentityHolderCreators", "hasIdentityHolderCreatorsWith", "hasInternalPolicyCreators", "hasInternalPolicyCreatorsWith", "hasInviteCreators", "hasInviteCreatorsWith", "hasMappedControlCreators", "hasMappedControlCreatorsWith", "hasNarrativeCreators", "hasNarrativeCreatorsWith", "hasNoteCreators", "hasNoteCreatorsWith", "hasNotificationTemplateCreators", "hasNotificationTemplateCreatorsWith", "hasOrgMembershipCreators", "hasOrgMembershipCreatorsWith", "hasPlatformCreators", "hasPlatformCreatorsWith", "hasProcedureCreators", "hasProcedureCreatorsWith", "hasProgramCreators", "hasProgramCreatorsWith", "hasProgramMembershipCreators", "hasProgramMembershipCreatorsWith", "hasRemediationCreators", "hasRemediationCreatorsWith", "hasReviewCreators", "hasReviewCreatorsWith", "hasRiskCreators", "hasRiskCreatorsWith", "hasScanCreators", "hasScanCreatorsWith", "hasSLADefinitionCreators", "hasSLADefinitionCreatorsWith", "hasStandardCreators", "hasStandardCreatorsWith", "hasSubcontrolCreators", "hasSubcontrolCreatorsWith", "hasSubprocessorCreators", "hasSubprocessorCreatorsWith", "hasSubscriberCreators", "hasSubscriberCreatorsWith", "hasSystemDetailCreators", "hasSystemDetailCreatorsWith", "hasTagDefinitionCreators", "hasTagDefinitionCreatorsWith", "hasTaskCreators", "hasTaskCreatorsWith", "hasTemplateCreators", "hasTemplateCreatorsWith", "hasTrustCenterCreators", "hasTrustCenterCreatorsWith", "hasTrustCenterComplianceCreators", "hasTrustCenterComplianceCreatorsWith", "hasTrustCenterDocCreators", "hasTrustCenterDocCreatorsWith", "hasTrustCenterEntityCreators", "hasTrustCenterEntityCreatorsWith", "hasTrustCenterFaqCreators", "hasTrustCenterFaqCreatorsWith", "hasTrustCenterNdaRequestCreators", "hasTrustCenterNdaRequestCreatorsWith", "hasTrustCenterSubprocessorCreators", "hasTrustCenterSubprocessorCreatorsWith", "hasTrustCenterWatermarkConfigCreators", "hasTrustCenterWatermarkConfigCreatorsWith", "hasVendorRiskScoreCreators", "hasVendorRiskScoreCreatorsWith", "hasVendorScoringConfigCreators", "hasVendorScoringConfigCreatorsWith", "hasVulnerabilityCreators", "hasVulnerabilityCreatorsWith", "hasWorkflowDefinitionCreators", "hasWorkflowDefinitionCreatorsWith", "hasCampaignsManager", "hasCampaignsManagerWith", "hasComplianceManager", "hasComplianceManagerWith", "hasGroupManager", "hasGroupManagerWith", "hasPoliciesManager", "hasPoliciesManagerWith", "hasRegistryManager", "hasRegistryManagerWith", "hasRiskManager", "hasRiskManagerWith", "hasTrustCenterManager", "hasTrustCenterManagerWith", "hasWorkflowsManager", "hasWorkflowsManagerWith", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith", "hasSetting", "hasSettingWith", "hasPersonalAccessTokens", "hasPersonalAccessTokensWith", "hasUsers", "hasUsersWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasAvatarFile", "hasAvatarFileWith", "hasOrgSubscriptions", "hasOrgSubscriptionsWith", "hasInvites", "hasInvitesWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -281619,6 +276781,20 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasAssessmentCreatorsWith = data
+		case "hasAssessmentPolicyCreators":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessmentPolicyCreators"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssessmentPolicyCreators = data
+		case "hasAssessmentPolicyCreatorsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessmentPolicyCreatorsWith"))
+			data, err := ec.unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssessmentPolicyCreatorsWith = data
 		case "hasAssetCreators":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssetCreators"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -282669,62 +277845,6 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasPersonalAccessTokensWith = data
-		case "hasAPITokens":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAPITokens"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasAPITokens = data
-		case "hasAPITokensWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAPITokensWith"))
-			data, err := ec.unmarshalOAPITokenWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasAPITokensWith = data
-		case "hasEmailTemplates":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEmailTemplates"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasEmailTemplates = data
-		case "hasEmailTemplatesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEmailTemplatesWith"))
-			data, err := ec.unmarshalOEmailTemplateWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasEmailTemplatesWith = data
-		case "hasNotificationPreferences":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNotificationPreferences"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasNotificationPreferences = data
-		case "hasNotificationPreferencesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNotificationPreferencesWith"))
-			data, err := ec.unmarshalONotificationPreferenceWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasNotificationPreferencesWith = data
-		case "hasNotificationTemplates":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNotificationTemplates"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasNotificationTemplates = data
-		case "hasNotificationTemplatesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNotificationTemplatesWith"))
-			data, err := ec.unmarshalONotificationTemplateWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasNotificationTemplatesWith = data
 		case "hasUsers":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasUsers"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -282767,20 +277887,6 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasEventsWith = data
-		case "hasSecrets":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSecrets"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSecrets = data
-		case "hasSecretsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSecretsWith"))
-			data, err := ec.unmarshalOHushWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSecretsWith = data
 		case "hasAvatarFile":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAvatarFile"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -282795,62 +277901,6 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasAvatarFileWith = data
-		case "hasGroups":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasGroups"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasGroups = data
-		case "hasGroupsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasGroupsWith"))
-			data, err := ec.unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasGroupsWith = data
-		case "hasTemplates":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTemplates"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTemplates = data
-		case "hasTemplatesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTemplatesWith"))
-			data, err := ec.unmarshalOTemplateWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTemplatesWith = data
-		case "hasIntegrations":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIntegrations"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasIntegrations = data
-		case "hasIntegrationsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIntegrationsWith"))
-			data, err := ec.unmarshalOIntegrationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasIntegrationsWith = data
-		case "hasDocuments":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDocuments"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDocuments = data
-		case "hasDocumentsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDocumentsWith"))
-			data, err := ec.unmarshalODocumentDataWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDocumentsWith = data
 		case "hasOrgSubscriptions":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOrgSubscriptions"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -282879,762 +277929,6 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasInvitesWith = data
-		case "hasSubscribers":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSubscribers"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSubscribers = data
-		case "hasSubscribersWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSubscribersWith"))
-			data, err := ec.unmarshalOSubscriberWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSubscribersWith = data
-		case "hasEntities":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEntities"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasEntities = data
-		case "hasEntitiesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEntitiesWith"))
-			data, err := ec.unmarshalOEntityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasEntitiesWith = data
-		case "hasPlatforms":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPlatforms"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasPlatforms = data
-		case "hasPlatformsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPlatformsWith"))
-			data, err := ec.unmarshalOPlatformWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasPlatformsWith = data
-		case "hasIdentityHolders":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIdentityHolders"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasIdentityHolders = data
-		case "hasIdentityHoldersWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIdentityHoldersWith"))
-			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasIdentityHoldersWith = data
-		case "hasCampaigns":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCampaigns"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCampaigns = data
-		case "hasCampaignsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCampaignsWith"))
-			data, err := ec.unmarshalOCampaignWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCampaignsWith = data
-		case "hasCampaignTargets":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCampaignTargets"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCampaignTargets = data
-		case "hasCampaignTargetsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCampaignTargetsWith"))
-			data, err := ec.unmarshalOCampaignTargetWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCampaignTargetsWith = data
-		case "hasEntityTypes":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEntityTypes"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasEntityTypes = data
-		case "hasEntityTypesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEntityTypesWith"))
-			data, err := ec.unmarshalOEntityTypeWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityTypeWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasEntityTypesWith = data
-		case "hasContacts":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasContacts"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasContacts = data
-		case "hasContactsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasContactsWith"))
-			data, err := ec.unmarshalOContactWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasContactsWith = data
-		case "hasNotes":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNotes"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasNotes = data
-		case "hasNotesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNotesWith"))
-			data, err := ec.unmarshalONoteWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasNotesWith = data
-		case "hasTasks":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTasks"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTasks = data
-		case "hasTasksWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTasksWith"))
-			data, err := ec.unmarshalOTaskWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTasksWith = data
-		case "hasPrograms":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPrograms"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasPrograms = data
-		case "hasProgramsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProgramsWith"))
-			data, err := ec.unmarshalOProgramWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasProgramsWith = data
-		case "hasSystemDetails":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSystemDetails"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSystemDetails = data
-		case "hasSystemDetailsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSystemDetailsWith"))
-			data, err := ec.unmarshalOSystemDetailWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSystemDetailsWith = data
-		case "hasProcedures":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProcedures"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasProcedures = data
-		case "hasProceduresWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProceduresWith"))
-			data, err := ec.unmarshalOProcedureWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasProceduresWith = data
-		case "hasInternalPolicies":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalPolicies"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasInternalPolicies = data
-		case "hasInternalPoliciesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalPoliciesWith"))
-			data, err := ec.unmarshalOInternalPolicyWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasInternalPoliciesWith = data
-		case "hasRisks":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRisks"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasRisks = data
-		case "hasRisksWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRisksWith"))
-			data, err := ec.unmarshalORiskWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasRisksWith = data
-		case "hasControlObjectives":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlObjectives"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasControlObjectives = data
-		case "hasControlObjectivesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlObjectivesWith"))
-			data, err := ec.unmarshalOControlObjectiveWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasControlObjectivesWith = data
-		case "hasNarratives":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNarratives"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasNarratives = data
-		case "hasNarrativesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNarrativesWith"))
-			data, err := ec.unmarshalONarrativeWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasNarrativesWith = data
-		case "hasControls":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControls"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasControls = data
-		case "hasControlsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlsWith"))
-			data, err := ec.unmarshalOControlWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasControlsWith = data
-		case "hasSubcontrols":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSubcontrols"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSubcontrols = data
-		case "hasSubcontrolsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSubcontrolsWith"))
-			data, err := ec.unmarshalOSubcontrolWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSubcontrolsWith = data
-		case "hasControlImplementations":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlImplementations"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasControlImplementations = data
-		case "hasControlImplementationsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlImplementationsWith"))
-			data, err := ec.unmarshalOControlImplementationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasControlImplementationsWith = data
-		case "hasMappedControls":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasMappedControls"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasMappedControls = data
-		case "hasMappedControlsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasMappedControlsWith"))
-			data, err := ec.unmarshalOMappedControlWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControlWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasMappedControlsWith = data
-		case "hasEvidence":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEvidence"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasEvidence = data
-		case "hasEvidenceWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEvidenceWith"))
-			data, err := ec.unmarshalOEvidenceWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasEvidenceWith = data
-		case "hasStandards":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasStandards"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasStandards = data
-		case "hasStandardsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasStandardsWith"))
-			data, err := ec.unmarshalOStandardWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasStandardsWith = data
-		case "hasActionPlans":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasActionPlans"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasActionPlans = data
-		case "hasActionPlansWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasActionPlansWith"))
-			data, err := ec.unmarshalOActionPlanWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasActionPlansWith = data
-		case "hasCustomDomains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomDomains"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCustomDomains = data
-		case "hasCustomDomainsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomDomainsWith"))
-			data, err := ec.unmarshalOCustomDomainWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCustomDomainsWith = data
-		case "hasDNSVerifications":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDNSVerifications"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDNSVerifications = data
-		case "hasDNSVerificationsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDNSVerificationsWith"))
-			data, err := ec.unmarshalODNSVerificationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDNSVerificationsWith = data
-		case "hasTrustCenters":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTrustCenters"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTrustCenters = data
-		case "hasTrustCentersWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTrustCentersWith"))
-			data, err := ec.unmarshalOTrustCenterWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTrustCentersWith = data
-		case "hasAssets":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssets"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasAssets = data
-		case "hasAssetsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssetsWith"))
-			data, err := ec.unmarshalOAssetWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasAssetsWith = data
-		case "hasScans":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasScans"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasScans = data
-		case "hasScansWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasScansWith"))
-			data, err := ec.unmarshalOScanWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasScansWith = data
-		case "hasSLADefinitions":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSLADefinitions"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSLADefinitions = data
-		case "hasSLADefinitionsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSLADefinitionsWith"))
-			data, err := ec.unmarshalOSLADefinitionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinitionWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSLADefinitionsWith = data
-		case "hasSubprocessors":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSubprocessors"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSubprocessors = data
-		case "hasSubprocessorsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSubprocessorsWith"))
-			data, err := ec.unmarshalOSubprocessorWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasSubprocessorsWith = data
-		case "hasExports":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasExports"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasExports = data
-		case "hasExportsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasExportsWith"))
-			data, err := ec.unmarshalOExportWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExportWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasExportsWith = data
-		case "hasTrustCenterWatermarkConfigs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTrustCenterWatermarkConfigs"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTrustCenterWatermarkConfigs = data
-		case "hasTrustCenterWatermarkConfigsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTrustCenterWatermarkConfigsWith"))
-			data, err := ec.unmarshalOTrustCenterWatermarkConfigWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTrustCenterWatermarkConfigsWith = data
-		case "hasAssessments":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessments"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasAssessments = data
-		case "hasAssessmentsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessmentsWith"))
-			data, err := ec.unmarshalOAssessmentWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasAssessmentsWith = data
-		case "hasAssessmentResponses":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessmentResponses"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasAssessmentResponses = data
-		case "hasAssessmentResponsesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessmentResponsesWith"))
-			data, err := ec.unmarshalOAssessmentResponseWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasAssessmentResponsesWith = data
-		case "hasCustomTypeEnums":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomTypeEnums"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCustomTypeEnums = data
-		case "hasCustomTypeEnumsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomTypeEnumsWith"))
-			data, err := ec.unmarshalOCustomTypeEnumWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasCustomTypeEnumsWith = data
-		case "hasTagDefinitions":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTagDefinitions"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTagDefinitions = data
-		case "hasTagDefinitionsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTagDefinitionsWith"))
-			data, err := ec.unmarshalOTagDefinitionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasTagDefinitionsWith = data
-		case "hasRemediations":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediations"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasRemediations = data
-		case "hasRemediationsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediationsWith"))
-			data, err := ec.unmarshalORemediationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasRemediationsWith = data
-		case "hasFindings":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindings"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasFindings = data
-		case "hasFindingsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingsWith"))
-			data, err := ec.unmarshalOFindingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasFindingsWith = data
-		case "hasFindingControls":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingControls"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasFindingControls = data
-		case "hasFindingControlsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingControlsWith"))
-			data, err := ec.unmarshalOFindingControlWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControlWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasFindingControlsWith = data
-		case "hasReviews":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviews"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasReviews = data
-		case "hasReviewsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewsWith"))
-			data, err := ec.unmarshalOReviewWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasReviewsWith = data
-		case "hasVulnerabilities":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilities"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasVulnerabilities = data
-		case "hasVulnerabilitiesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilitiesWith"))
-			data, err := ec.unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasVulnerabilitiesWith = data
-		case "hasWorkflowDefinitions":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowDefinitions"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowDefinitions = data
-		case "hasWorkflowDefinitionsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowDefinitionsWith"))
-			data, err := ec.unmarshalOWorkflowDefinitionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowDefinitionsWith = data
-		case "hasWorkflowInstances":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowInstances"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowInstances = data
-		case "hasWorkflowInstancesWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowInstancesWith"))
-			data, err := ec.unmarshalOWorkflowInstanceWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowInstancesWith = data
-		case "hasWorkflowEvents":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowEvents"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowEvents = data
-		case "hasWorkflowEventsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowEventsWith"))
-			data, err := ec.unmarshalOWorkflowEventWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEventWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowEventsWith = data
-		case "hasWorkflowAssignments":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowAssignments"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowAssignments = data
-		case "hasWorkflowAssignmentsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowAssignmentsWith"))
-			data, err := ec.unmarshalOWorkflowAssignmentWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowAssignmentsWith = data
-		case "hasWorkflowAssignmentTargets":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowAssignmentTargets"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowAssignmentTargets = data
-		case "hasWorkflowAssignmentTargetsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowAssignmentTargetsWith"))
-			data, err := ec.unmarshalOWorkflowAssignmentTargetWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTargetWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowAssignmentTargetsWith = data
-		case "hasWorkflowObjectRefs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowObjectRefs"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowObjectRefs = data
-		case "hasWorkflowObjectRefsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowObjectRefsWith"))
-			data, err := ec.unmarshalOWorkflowObjectRefWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasWorkflowObjectRefsWith = data
-		case "hasDirectoryAccounts":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDirectoryAccounts"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDirectoryAccounts = data
-		case "hasDirectoryAccountsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDirectoryAccountsWith"))
-			data, err := ec.unmarshalODirectoryAccountWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccountWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDirectoryAccountsWith = data
-		case "hasDirectoryGroups":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDirectoryGroups"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDirectoryGroups = data
-		case "hasDirectoryGroupsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDirectoryGroupsWith"))
-			data, err := ec.unmarshalODirectoryGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroupWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDirectoryGroupsWith = data
-		case "hasDirectoryMemberships":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDirectoryMemberships"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDirectoryMemberships = data
-		case "hasDirectoryMembershipsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDirectoryMembershipsWith"))
-			data, err := ec.unmarshalODirectoryMembershipWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDirectoryMembershipsWith = data
-		case "hasDiscussions":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDiscussions"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDiscussions = data
-		case "hasDiscussionsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDiscussionsWith"))
-			data, err := ec.unmarshalODiscussionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasDiscussionsWith = data
-		case "hasVendorScoringConfigs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVendorScoringConfigs"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasVendorScoringConfigs = data
-		case "hasVendorScoringConfigsWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVendorScoringConfigsWith"))
-			data, err := ec.unmarshalOVendorScoringConfigWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasVendorScoringConfigsWith = data
-		case "hasVendorRiskScores":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVendorRiskScores"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasVendorRiskScores = data
-		case "hasVendorRiskScoresWith":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVendorRiskScoresWith"))
-			data, err := ec.unmarshalOVendorRiskScoreWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HasVendorRiskScoresWith = data
 		case "hasMembers":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasMembers"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -332746,6 +327040,43 @@ func (ec *executionContext) unmarshalInputUpdateAssessmentInput(ctx context.Cont
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateAssessmentPolicyInput(ctx context.Context, obj any) (generated.UpdateAssessmentPolicyInput, error) {
+	var it generated.UpdateAssessmentPolicyInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"ownerID", "clearOwner"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "clearOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearOwner"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearOwner = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateAssetInput(ctx context.Context, obj any) (generated.UpdateAssetInput, error) {
 	var it generated.UpdateAssetInput
 	if obj == nil {
@@ -350789,7 +345120,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "displayName", "description", "clearDescription", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "addActionPlanCreatorIDs", "removeActionPlanCreatorIDs", "clearActionPlanCreators", "addAPITokenCreatorIDs", "removeAPITokenCreatorIDs", "clearAPITokenCreators", "addAssessmentCreatorIDs", "removeAssessmentCreatorIDs", "clearAssessmentCreators", "addAssetCreatorIDs", "removeAssetCreatorIDs", "clearAssetCreators", "addCampaignCreatorIDs", "removeCampaignCreatorIDs", "clearCampaignCreators", "addCampaignTargetCreatorIDs", "removeCampaignTargetCreatorIDs", "clearCampaignTargetCreators", "addCheckResultCreatorIDs", "removeCheckResultCreatorIDs", "clearCheckResultCreators", "addContactCreatorIDs", "removeContactCreatorIDs", "clearContactCreators", "addControlCreatorIDs", "removeControlCreatorIDs", "clearControlCreators", "addControlImplementationCreatorIDs", "removeControlImplementationCreatorIDs", "clearControlImplementationCreators", "addControlObjectiveCreatorIDs", "removeControlObjectiveCreatorIDs", "clearControlObjectiveCreators", "addCustomDomainCreatorIDs", "removeCustomDomainCreatorIDs", "clearCustomDomainCreators", "addCustomTypeEnumCreatorIDs", "removeCustomTypeEnumCreatorIDs", "clearCustomTypeEnumCreators", "addDirectoryAccountCreatorIDs", "removeDirectoryAccountCreatorIDs", "clearDirectoryAccountCreators", "addDirectoryGroupCreatorIDs", "removeDirectoryGroupCreatorIDs", "clearDirectoryGroupCreators", "addDirectoryMembershipCreatorIDs", "removeDirectoryMembershipCreatorIDs", "clearDirectoryMembershipCreators", "addDiscussionCreatorIDs", "removeDiscussionCreatorIDs", "clearDiscussionCreators", "addDocumentDataCreatorIDs", "removeDocumentDataCreatorIDs", "clearDocumentDataCreators", "addEmailTemplateCreatorIDs", "removeEmailTemplateCreatorIDs", "clearEmailTemplateCreators", "addEntityCreatorIDs", "removeEntityCreatorIDs", "clearEntityCreators", "addEntityTypeCreatorIDs", "removeEntityTypeCreatorIDs", "clearEntityTypeCreators", "addEvidenceCreatorIDs", "removeEvidenceCreatorIDs", "clearEvidenceCreators", "addFileCreatorIDs", "removeFileCreatorIDs", "clearFileCreators", "addFindingCreatorIDs", "removeFindingCreatorIDs", "clearFindingCreators", "addFindingControlCreatorIDs", "removeFindingControlCreatorIDs", "clearFindingControlCreators", "addGroupCreatorIDs", "removeGroupCreatorIDs", "clearGroupCreators", "addGroupMembershipCreatorIDs", "removeGroupMembershipCreatorIDs", "clearGroupMembershipCreators", "addGroupSettingCreatorIDs", "removeGroupSettingCreatorIDs", "clearGroupSettingCreators", "addHushCreatorIDs", "removeHushCreatorIDs", "clearHushCreators", "addIdentityHolderCreatorIDs", "removeIdentityHolderCreatorIDs", "clearIdentityHolderCreators", "addInternalPolicyCreatorIDs", "removeInternalPolicyCreatorIDs", "clearInternalPolicyCreators", "addInviteCreatorIDs", "removeInviteCreatorIDs", "clearInviteCreators", "addMappedControlCreatorIDs", "removeMappedControlCreatorIDs", "clearMappedControlCreators", "addNarrativeCreatorIDs", "removeNarrativeCreatorIDs", "clearNarrativeCreators", "addNoteCreatorIDs", "removeNoteCreatorIDs", "clearNoteCreators", "addNotificationTemplateCreatorIDs", "removeNotificationTemplateCreatorIDs", "clearNotificationTemplateCreators", "addOrgMembershipCreatorIDs", "removeOrgMembershipCreatorIDs", "clearOrgMembershipCreators", "addPlatformCreatorIDs", "removePlatformCreatorIDs", "clearPlatformCreators", "addProcedureCreatorIDs", "removeProcedureCreatorIDs", "clearProcedureCreators", "addProgramCreatorIDs", "removeProgramCreatorIDs", "clearProgramCreators", "addProgramMembershipCreatorIDs", "removeProgramMembershipCreatorIDs", "clearProgramMembershipCreators", "addRemediationCreatorIDs", "removeRemediationCreatorIDs", "clearRemediationCreators", "addReviewCreatorIDs", "removeReviewCreatorIDs", "clearReviewCreators", "addRiskCreatorIDs", "removeRiskCreatorIDs", "clearRiskCreators", "addScanCreatorIDs", "removeScanCreatorIDs", "clearScanCreators", "addSLADefinitionCreatorIDs", "removeSLADefinitionCreatorIDs", "clearSLADefinitionCreators", "addStandardCreatorIDs", "removeStandardCreatorIDs", "clearStandardCreators", "addSubcontrolCreatorIDs", "removeSubcontrolCreatorIDs", "clearSubcontrolCreators", "addSubprocessorCreatorIDs", "removeSubprocessorCreatorIDs", "clearSubprocessorCreators", "addSubscriberCreatorIDs", "removeSubscriberCreatorIDs", "clearSubscriberCreators", "addSystemDetailCreatorIDs", "removeSystemDetailCreatorIDs", "clearSystemDetailCreators", "addTagDefinitionCreatorIDs", "removeTagDefinitionCreatorIDs", "clearTagDefinitionCreators", "addTaskCreatorIDs", "removeTaskCreatorIDs", "clearTaskCreators", "addTemplateCreatorIDs", "removeTemplateCreatorIDs", "clearTemplateCreators", "addTrustCenterCreatorIDs", "removeTrustCenterCreatorIDs", "clearTrustCenterCreators", "addTrustCenterComplianceCreatorIDs", "removeTrustCenterComplianceCreatorIDs", "clearTrustCenterComplianceCreators", "addTrustCenterDocCreatorIDs", "removeTrustCenterDocCreatorIDs", "clearTrustCenterDocCreators", "addTrustCenterEntityCreatorIDs", "removeTrustCenterEntityCreatorIDs", "clearTrustCenterEntityCreators", "addTrustCenterFaqCreatorIDs", "removeTrustCenterFaqCreatorIDs", "clearTrustCenterFaqCreators", "addTrustCenterNdaRequestCreatorIDs", "removeTrustCenterNdaRequestCreatorIDs", "clearTrustCenterNdaRequestCreators", "addTrustCenterSubprocessorCreatorIDs", "removeTrustCenterSubprocessorCreatorIDs", "clearTrustCenterSubprocessorCreators", "addTrustCenterWatermarkConfigCreatorIDs", "removeTrustCenterWatermarkConfigCreatorIDs", "clearTrustCenterWatermarkConfigCreators", "addVendorRiskScoreCreatorIDs", "removeVendorRiskScoreCreatorIDs", "clearVendorRiskScoreCreators", "addVendorScoringConfigCreatorIDs", "removeVendorScoringConfigCreatorIDs", "clearVendorScoringConfigCreators", "addVulnerabilityCreatorIDs", "removeVulnerabilityCreatorIDs", "clearVulnerabilityCreators", "addWorkflowDefinitionCreatorIDs", "removeWorkflowDefinitionCreatorIDs", "clearWorkflowDefinitionCreators", "addCampaignsManagerIDs", "removeCampaignsManagerIDs", "clearCampaignsManager", "addComplianceManagerIDs", "removeComplianceManagerIDs", "clearComplianceManager", "addGroupManagerIDs", "removeGroupManagerIDs", "clearGroupManager", "addPoliciesManagerIDs", "removePoliciesManagerIDs", "clearPoliciesManager", "addRegistryManagerIDs", "removeRegistryManagerIDs", "clearRegistryManager", "addRiskManagerIDs", "removeRiskManagerIDs", "clearRiskManager", "addTrustCenterManagerIDs", "removeTrustCenterManagerIDs", "clearTrustCenterManager", "addWorkflowsManagerIDs", "removeWorkflowsManagerIDs", "clearWorkflowsManager", "settingID", "clearSetting", "addPersonalAccessTokenIDs", "removePersonalAccessTokenIDs", "clearPersonalAccessTokens", "addAPITokenIDs", "removeAPITokenIDs", "clearAPITokens", "addEmailTemplateIDs", "removeEmailTemplateIDs", "clearEmailTemplates", "addNotificationPreferenceIDs", "removeNotificationPreferenceIDs", "clearNotificationPreferences", "addNotificationTemplateIDs", "removeNotificationTemplateIDs", "clearNotificationTemplates", "addFileIDs", "removeFileIDs", "clearFiles", "addEventIDs", "removeEventIDs", "clearEvents", "addSecretIDs", "removeSecretIDs", "clearSecrets", "avatarFileID", "clearAvatarFile", "addGroupIDs", "removeGroupIDs", "clearGroups", "addTemplateIDs", "removeTemplateIDs", "clearTemplates", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addDocumentIDs", "removeDocumentIDs", "clearDocuments", "addOrgSubscriptionIDs", "removeOrgSubscriptionIDs", "clearOrgSubscriptions", "addInviteIDs", "removeInviteIDs", "clearInvites", "addSubscriberIDs", "removeSubscriberIDs", "clearSubscribers", "addEntityIDs", "removeEntityIDs", "clearEntities", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addCampaignTargetIDs", "removeCampaignTargetIDs", "clearCampaignTargets", "addEntityTypeIDs", "removeEntityTypeIDs", "clearEntityTypes", "addContactIDs", "removeContactIDs", "clearContacts", "addNoteIDs", "removeNoteIDs", "clearNotes", "addTaskIDs", "removeTaskIDs", "clearTasks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addRiskIDs", "removeRiskIDs", "clearRisks", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addMappedControlIDs", "removeMappedControlIDs", "clearMappedControls", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addStandardIDs", "removeStandardIDs", "clearStandards", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addCustomDomainIDs", "removeCustomDomainIDs", "clearCustomDomains", "addDNSVerificationIDs", "removeDNSVerificationIDs", "clearDNSVerifications", "addTrustCenterIDs", "removeTrustCenterIDs", "clearTrustCenters", "addAssetIDs", "removeAssetIDs", "clearAssets", "addScanIDs", "removeScanIDs", "clearScans", "addSLADefinitionIDs", "removeSLADefinitionIDs", "clearSLADefinitions", "addSubprocessorIDs", "removeSubprocessorIDs", "clearSubprocessors", "addExportIDs", "removeExportIDs", "clearExports", "addTrustCenterWatermarkConfigIDs", "removeTrustCenterWatermarkConfigIDs", "clearTrustCenterWatermarkConfigs", "addImpersonationEventIDs", "removeImpersonationEventIDs", "clearImpersonationEvents", "addAssessmentIDs", "removeAssessmentIDs", "clearAssessments", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addCustomTypeEnumIDs", "removeCustomTypeEnumIDs", "clearCustomTypeEnums", "addTagDefinitionIDs", "removeTagDefinitionIDs", "clearTagDefinitions", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addFindingIDs", "removeFindingIDs", "clearFindings", "addReviewIDs", "removeReviewIDs", "clearReviews", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addWorkflowDefinitionIDs", "removeWorkflowDefinitionIDs", "clearWorkflowDefinitions", "addWorkflowInstanceIDs", "removeWorkflowInstanceIDs", "clearWorkflowInstances", "addWorkflowEventIDs", "removeWorkflowEventIDs", "clearWorkflowEvents", "addWorkflowAssignmentIDs", "removeWorkflowAssignmentIDs", "clearWorkflowAssignments", "addWorkflowAssignmentTargetIDs", "removeWorkflowAssignmentTargetIDs", "clearWorkflowAssignmentTargets", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addDirectoryGroupIDs", "removeDirectoryGroupIDs", "clearDirectoryGroups", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "addVendorScoringConfigIDs", "removeVendorScoringConfigIDs", "clearVendorScoringConfigs", "addVendorRiskScoreIDs", "removeVendorRiskScoreIDs", "clearVendorRiskScores", "addOrgMembers", "removeOrgMembers", "updateOrgSettings"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "displayName", "description", "clearDescription", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "addActionPlanCreatorIDs", "removeActionPlanCreatorIDs", "clearActionPlanCreators", "addAPITokenCreatorIDs", "removeAPITokenCreatorIDs", "clearAPITokenCreators", "addAssessmentCreatorIDs", "removeAssessmentCreatorIDs", "clearAssessmentCreators", "addAssessmentPolicyCreatorIDs", "removeAssessmentPolicyCreatorIDs", "clearAssessmentPolicyCreators", "addAssetCreatorIDs", "removeAssetCreatorIDs", "clearAssetCreators", "addCampaignCreatorIDs", "removeCampaignCreatorIDs", "clearCampaignCreators", "addCampaignTargetCreatorIDs", "removeCampaignTargetCreatorIDs", "clearCampaignTargetCreators", "addCheckResultCreatorIDs", "removeCheckResultCreatorIDs", "clearCheckResultCreators", "addContactCreatorIDs", "removeContactCreatorIDs", "clearContactCreators", "addControlCreatorIDs", "removeControlCreatorIDs", "clearControlCreators", "addControlImplementationCreatorIDs", "removeControlImplementationCreatorIDs", "clearControlImplementationCreators", "addControlObjectiveCreatorIDs", "removeControlObjectiveCreatorIDs", "clearControlObjectiveCreators", "addCustomDomainCreatorIDs", "removeCustomDomainCreatorIDs", "clearCustomDomainCreators", "addCustomTypeEnumCreatorIDs", "removeCustomTypeEnumCreatorIDs", "clearCustomTypeEnumCreators", "addDirectoryAccountCreatorIDs", "removeDirectoryAccountCreatorIDs", "clearDirectoryAccountCreators", "addDirectoryGroupCreatorIDs", "removeDirectoryGroupCreatorIDs", "clearDirectoryGroupCreators", "addDirectoryMembershipCreatorIDs", "removeDirectoryMembershipCreatorIDs", "clearDirectoryMembershipCreators", "addDiscussionCreatorIDs", "removeDiscussionCreatorIDs", "clearDiscussionCreators", "addDocumentDataCreatorIDs", "removeDocumentDataCreatorIDs", "clearDocumentDataCreators", "addEmailTemplateCreatorIDs", "removeEmailTemplateCreatorIDs", "clearEmailTemplateCreators", "addEntityCreatorIDs", "removeEntityCreatorIDs", "clearEntityCreators", "addEntityTypeCreatorIDs", "removeEntityTypeCreatorIDs", "clearEntityTypeCreators", "addEvidenceCreatorIDs", "removeEvidenceCreatorIDs", "clearEvidenceCreators", "addFileCreatorIDs", "removeFileCreatorIDs", "clearFileCreators", "addFindingCreatorIDs", "removeFindingCreatorIDs", "clearFindingCreators", "addFindingControlCreatorIDs", "removeFindingControlCreatorIDs", "clearFindingControlCreators", "addGroupCreatorIDs", "removeGroupCreatorIDs", "clearGroupCreators", "addGroupMembershipCreatorIDs", "removeGroupMembershipCreatorIDs", "clearGroupMembershipCreators", "addGroupSettingCreatorIDs", "removeGroupSettingCreatorIDs", "clearGroupSettingCreators", "addHushCreatorIDs", "removeHushCreatorIDs", "clearHushCreators", "addIdentityHolderCreatorIDs", "removeIdentityHolderCreatorIDs", "clearIdentityHolderCreators", "addInternalPolicyCreatorIDs", "removeInternalPolicyCreatorIDs", "clearInternalPolicyCreators", "addInviteCreatorIDs", "removeInviteCreatorIDs", "clearInviteCreators", "addMappedControlCreatorIDs", "removeMappedControlCreatorIDs", "clearMappedControlCreators", "addNarrativeCreatorIDs", "removeNarrativeCreatorIDs", "clearNarrativeCreators", "addNoteCreatorIDs", "removeNoteCreatorIDs", "clearNoteCreators", "addNotificationTemplateCreatorIDs", "removeNotificationTemplateCreatorIDs", "clearNotificationTemplateCreators", "addOrgMembershipCreatorIDs", "removeOrgMembershipCreatorIDs", "clearOrgMembershipCreators", "addPlatformCreatorIDs", "removePlatformCreatorIDs", "clearPlatformCreators", "addProcedureCreatorIDs", "removeProcedureCreatorIDs", "clearProcedureCreators", "addProgramCreatorIDs", "removeProgramCreatorIDs", "clearProgramCreators", "addProgramMembershipCreatorIDs", "removeProgramMembershipCreatorIDs", "clearProgramMembershipCreators", "addRemediationCreatorIDs", "removeRemediationCreatorIDs", "clearRemediationCreators", "addReviewCreatorIDs", "removeReviewCreatorIDs", "clearReviewCreators", "addRiskCreatorIDs", "removeRiskCreatorIDs", "clearRiskCreators", "addScanCreatorIDs", "removeScanCreatorIDs", "clearScanCreators", "addSLADefinitionCreatorIDs", "removeSLADefinitionCreatorIDs", "clearSLADefinitionCreators", "addStandardCreatorIDs", "removeStandardCreatorIDs", "clearStandardCreators", "addSubcontrolCreatorIDs", "removeSubcontrolCreatorIDs", "clearSubcontrolCreators", "addSubprocessorCreatorIDs", "removeSubprocessorCreatorIDs", "clearSubprocessorCreators", "addSubscriberCreatorIDs", "removeSubscriberCreatorIDs", "clearSubscriberCreators", "addSystemDetailCreatorIDs", "removeSystemDetailCreatorIDs", "clearSystemDetailCreators", "addTagDefinitionCreatorIDs", "removeTagDefinitionCreatorIDs", "clearTagDefinitionCreators", "addTaskCreatorIDs", "removeTaskCreatorIDs", "clearTaskCreators", "addTemplateCreatorIDs", "removeTemplateCreatorIDs", "clearTemplateCreators", "addTrustCenterCreatorIDs", "removeTrustCenterCreatorIDs", "clearTrustCenterCreators", "addTrustCenterComplianceCreatorIDs", "removeTrustCenterComplianceCreatorIDs", "clearTrustCenterComplianceCreators", "addTrustCenterDocCreatorIDs", "removeTrustCenterDocCreatorIDs", "clearTrustCenterDocCreators", "addTrustCenterEntityCreatorIDs", "removeTrustCenterEntityCreatorIDs", "clearTrustCenterEntityCreators", "addTrustCenterFaqCreatorIDs", "removeTrustCenterFaqCreatorIDs", "clearTrustCenterFaqCreators", "addTrustCenterNdaRequestCreatorIDs", "removeTrustCenterNdaRequestCreatorIDs", "clearTrustCenterNdaRequestCreators", "addTrustCenterSubprocessorCreatorIDs", "removeTrustCenterSubprocessorCreatorIDs", "clearTrustCenterSubprocessorCreators", "addTrustCenterWatermarkConfigCreatorIDs", "removeTrustCenterWatermarkConfigCreatorIDs", "clearTrustCenterWatermarkConfigCreators", "addVendorRiskScoreCreatorIDs", "removeVendorRiskScoreCreatorIDs", "clearVendorRiskScoreCreators", "addVendorScoringConfigCreatorIDs", "removeVendorScoringConfigCreatorIDs", "clearVendorScoringConfigCreators", "addVulnerabilityCreatorIDs", "removeVulnerabilityCreatorIDs", "clearVulnerabilityCreators", "addWorkflowDefinitionCreatorIDs", "removeWorkflowDefinitionCreatorIDs", "clearWorkflowDefinitionCreators", "addCampaignsManagerIDs", "removeCampaignsManagerIDs", "clearCampaignsManager", "addComplianceManagerIDs", "removeComplianceManagerIDs", "clearComplianceManager", "addGroupManagerIDs", "removeGroupManagerIDs", "clearGroupManager", "addPoliciesManagerIDs", "removePoliciesManagerIDs", "clearPoliciesManager", "addRegistryManagerIDs", "removeRegistryManagerIDs", "clearRegistryManager", "addRiskManagerIDs", "removeRiskManagerIDs", "clearRiskManager", "addTrustCenterManagerIDs", "removeTrustCenterManagerIDs", "clearTrustCenterManager", "addWorkflowsManagerIDs", "removeWorkflowsManagerIDs", "clearWorkflowsManager", "settingID", "clearSetting", "addPersonalAccessTokenIDs", "removePersonalAccessTokenIDs", "clearPersonalAccessTokens", "addFileIDs", "removeFileIDs", "clearFiles", "addEventIDs", "removeEventIDs", "clearEvents", "avatarFileID", "clearAvatarFile", "addOrgSubscriptionIDs", "removeOrgSubscriptionIDs", "clearOrgSubscriptions", "addInviteIDs", "removeInviteIDs", "clearInvites", "addImpersonationEventIDs", "removeImpersonationEventIDs", "clearImpersonationEvents", "addOrgMembers", "removeOrgMembers", "updateOrgSettings"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -350929,6 +345260,27 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearAssessmentCreators = data
+		case "addAssessmentPolicyCreatorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAssessmentPolicyCreatorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddAssessmentPolicyCreatorIDs = data
+		case "removeAssessmentPolicyCreatorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeAssessmentPolicyCreatorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveAssessmentPolicyCreatorIDs = data
+		case "clearAssessmentPolicyCreators":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAssessmentPolicyCreators"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAssessmentPolicyCreators = data
 		case "addAssetCreatorIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAssetCreatorIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -352455,90 +346807,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearPersonalAccessTokens = data
-		case "addAPITokenIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAPITokenIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddAPITokenIDs = data
-		case "removeAPITokenIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeAPITokenIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveAPITokenIDs = data
-		case "clearAPITokens":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAPITokens"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAPITokens = data
-		case "addEmailTemplateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addEmailTemplateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddEmailTemplateIDs = data
-		case "removeEmailTemplateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeEmailTemplateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveEmailTemplateIDs = data
-		case "clearEmailTemplates":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEmailTemplates"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearEmailTemplates = data
-		case "addNotificationPreferenceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addNotificationPreferenceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddNotificationPreferenceIDs = data
-		case "removeNotificationPreferenceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeNotificationPreferenceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveNotificationPreferenceIDs = data
-		case "clearNotificationPreferences":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearNotificationPreferences"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearNotificationPreferences = data
-		case "addNotificationTemplateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addNotificationTemplateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddNotificationTemplateIDs = data
-		case "removeNotificationTemplateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeNotificationTemplateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveNotificationTemplateIDs = data
-		case "clearNotificationTemplates":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearNotificationTemplates"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearNotificationTemplates = data
 		case "addFileIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFileIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -352581,27 +346849,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearEvents = data
-		case "addSecretIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSecretIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddSecretIDs = data
-		case "removeSecretIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeSecretIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveSecretIDs = data
-		case "clearSecrets":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSecrets"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSecrets = data
 		case "avatarFileID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFileID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -352616,90 +346863,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearAvatarFile = data
-		case "addGroupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addGroupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddGroupIDs = data
-		case "removeGroupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeGroupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveGroupIDs = data
-		case "clearGroups":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearGroups"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearGroups = data
-		case "addTemplateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addTemplateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddTemplateIDs = data
-		case "removeTemplateIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeTemplateIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveTemplateIDs = data
-		case "clearTemplates":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearTemplates"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearTemplates = data
-		case "addIntegrationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addIntegrationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddIntegrationIDs = data
-		case "removeIntegrationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeIntegrationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveIntegrationIDs = data
-		case "clearIntegrations":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrations"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrations = data
-		case "addDocumentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addDocumentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddDocumentIDs = data
-		case "removeDocumentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeDocumentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveDocumentIDs = data
-		case "clearDocuments":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDocuments"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearDocuments = data
 		case "addOrgSubscriptionIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addOrgSubscriptionIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -352742,699 +346905,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearInvites = data
-		case "addSubscriberIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSubscriberIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddSubscriberIDs = data
-		case "removeSubscriberIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeSubscriberIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveSubscriberIDs = data
-		case "clearSubscribers":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSubscribers"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSubscribers = data
-		case "addEntityIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addEntityIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddEntityIDs = data
-		case "removeEntityIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeEntityIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveEntityIDs = data
-		case "clearEntities":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEntities"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearEntities = data
-		case "addPlatformIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addPlatformIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddPlatformIDs = data
-		case "removePlatformIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removePlatformIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemovePlatformIDs = data
-		case "clearPlatforms":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPlatforms"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearPlatforms = data
-		case "addIdentityHolderIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addIdentityHolderIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddIdentityHolderIDs = data
-		case "removeIdentityHolderIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeIdentityHolderIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveIdentityHolderIDs = data
-		case "clearIdentityHolders":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIdentityHolders"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIdentityHolders = data
-		case "addCampaignIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addCampaignIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddCampaignIDs = data
-		case "removeCampaignIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeCampaignIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveCampaignIDs = data
-		case "clearCampaigns":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCampaigns"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCampaigns = data
-		case "addCampaignTargetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addCampaignTargetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddCampaignTargetIDs = data
-		case "removeCampaignTargetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeCampaignTargetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveCampaignTargetIDs = data
-		case "clearCampaignTargets":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCampaignTargets"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCampaignTargets = data
-		case "addEntityTypeIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addEntityTypeIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddEntityTypeIDs = data
-		case "removeEntityTypeIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeEntityTypeIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveEntityTypeIDs = data
-		case "clearEntityTypes":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEntityTypes"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearEntityTypes = data
-		case "addContactIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addContactIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddContactIDs = data
-		case "removeContactIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeContactIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveContactIDs = data
-		case "clearContacts":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearContacts"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearContacts = data
-		case "addNoteIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addNoteIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddNoteIDs = data
-		case "removeNoteIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeNoteIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveNoteIDs = data
-		case "clearNotes":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearNotes"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearNotes = data
-		case "addTaskIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addTaskIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddTaskIDs = data
-		case "removeTaskIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeTaskIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveTaskIDs = data
-		case "clearTasks":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearTasks"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearTasks = data
-		case "addProgramIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addProgramIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddProgramIDs = data
-		case "removeProgramIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeProgramIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveProgramIDs = data
-		case "clearPrograms":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPrograms"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearPrograms = data
-		case "addSystemDetailIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSystemDetailIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddSystemDetailIDs = data
-		case "removeSystemDetailIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeSystemDetailIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveSystemDetailIDs = data
-		case "clearSystemDetails":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemDetails"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSystemDetails = data
-		case "addProcedureIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addProcedureIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddProcedureIDs = data
-		case "removeProcedureIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeProcedureIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveProcedureIDs = data
-		case "clearProcedures":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearProcedures"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearProcedures = data
-		case "addInternalPolicyIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addInternalPolicyIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddInternalPolicyIDs = data
-		case "removeInternalPolicyIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeInternalPolicyIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveInternalPolicyIDs = data
-		case "clearInternalPolicies":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearInternalPolicies"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearInternalPolicies = data
-		case "addRiskIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addRiskIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddRiskIDs = data
-		case "removeRiskIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeRiskIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveRiskIDs = data
-		case "clearRisks":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearRisks"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearRisks = data
-		case "addControlObjectiveIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addControlObjectiveIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddControlObjectiveIDs = data
-		case "removeControlObjectiveIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeControlObjectiveIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveControlObjectiveIDs = data
-		case "clearControlObjectives":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearControlObjectives"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearControlObjectives = data
-		case "addNarrativeIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addNarrativeIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddNarrativeIDs = data
-		case "removeNarrativeIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeNarrativeIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveNarrativeIDs = data
-		case "clearNarratives":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearNarratives"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearNarratives = data
-		case "addControlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addControlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddControlIDs = data
-		case "removeControlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeControlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveControlIDs = data
-		case "clearControls":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearControls"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearControls = data
-		case "addSubcontrolIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSubcontrolIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddSubcontrolIDs = data
-		case "removeSubcontrolIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeSubcontrolIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveSubcontrolIDs = data
-		case "clearSubcontrols":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSubcontrols"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSubcontrols = data
-		case "addControlImplementationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addControlImplementationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddControlImplementationIDs = data
-		case "removeControlImplementationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeControlImplementationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveControlImplementationIDs = data
-		case "clearControlImplementations":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearControlImplementations"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearControlImplementations = data
-		case "addMappedControlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addMappedControlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddMappedControlIDs = data
-		case "removeMappedControlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeMappedControlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveMappedControlIDs = data
-		case "clearMappedControls":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearMappedControls"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearMappedControls = data
-		case "addEvidenceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addEvidenceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddEvidenceIDs = data
-		case "removeEvidenceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeEvidenceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveEvidenceIDs = data
-		case "clearEvidence":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEvidence"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearEvidence = data
-		case "addStandardIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addStandardIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddStandardIDs = data
-		case "removeStandardIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeStandardIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveStandardIDs = data
-		case "clearStandards":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearStandards"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearStandards = data
-		case "addActionPlanIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addActionPlanIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddActionPlanIDs = data
-		case "removeActionPlanIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeActionPlanIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveActionPlanIDs = data
-		case "clearActionPlans":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearActionPlans"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearActionPlans = data
-		case "addCustomDomainIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addCustomDomainIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddCustomDomainIDs = data
-		case "removeCustomDomainIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeCustomDomainIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveCustomDomainIDs = data
-		case "clearCustomDomains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCustomDomains"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCustomDomains = data
-		case "addDNSVerificationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addDNSVerificationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddDNSVerificationIDs = data
-		case "removeDNSVerificationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeDNSVerificationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveDNSVerificationIDs = data
-		case "clearDNSVerifications":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDNSVerifications"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearDNSVerifications = data
-		case "addTrustCenterIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addTrustCenterIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddTrustCenterIDs = data
-		case "removeTrustCenterIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeTrustCenterIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveTrustCenterIDs = data
-		case "clearTrustCenters":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearTrustCenters"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearTrustCenters = data
-		case "addAssetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAssetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddAssetIDs = data
-		case "removeAssetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeAssetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveAssetIDs = data
-		case "clearAssets":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAssets"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAssets = data
-		case "addScanIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addScanIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddScanIDs = data
-		case "removeScanIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeScanIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveScanIDs = data
-		case "clearScans":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearScans"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearScans = data
-		case "addSLADefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSLADefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddSLADefinitionIDs = data
-		case "removeSLADefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeSLADefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveSLADefinitionIDs = data
-		case "clearSLADefinitions":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSLADefinitions"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSLADefinitions = data
-		case "addSubprocessorIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSubprocessorIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddSubprocessorIDs = data
-		case "removeSubprocessorIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeSubprocessorIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveSubprocessorIDs = data
-		case "clearSubprocessors":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSubprocessors"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSubprocessors = data
-		case "addExportIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addExportIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddExportIDs = data
-		case "removeExportIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeExportIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveExportIDs = data
-		case "clearExports":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExports"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearExports = data
-		case "addTrustCenterWatermarkConfigIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addTrustCenterWatermarkConfigIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddTrustCenterWatermarkConfigIDs = data
-		case "removeTrustCenterWatermarkConfigIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeTrustCenterWatermarkConfigIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveTrustCenterWatermarkConfigIDs = data
-		case "clearTrustCenterWatermarkConfigs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearTrustCenterWatermarkConfigs"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearTrustCenterWatermarkConfigs = data
 		case "addImpersonationEventIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addImpersonationEventIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -353456,405 +346926,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearImpersonationEvents = data
-		case "addAssessmentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAssessmentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddAssessmentIDs = data
-		case "removeAssessmentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeAssessmentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveAssessmentIDs = data
-		case "clearAssessments":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAssessments"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAssessments = data
-		case "addAssessmentResponseIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAssessmentResponseIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddAssessmentResponseIDs = data
-		case "removeAssessmentResponseIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeAssessmentResponseIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveAssessmentResponseIDs = data
-		case "clearAssessmentResponses":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAssessmentResponses"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearAssessmentResponses = data
-		case "addCustomTypeEnumIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addCustomTypeEnumIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddCustomTypeEnumIDs = data
-		case "removeCustomTypeEnumIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeCustomTypeEnumIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveCustomTypeEnumIDs = data
-		case "clearCustomTypeEnums":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCustomTypeEnums"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCustomTypeEnums = data
-		case "addTagDefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addTagDefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddTagDefinitionIDs = data
-		case "removeTagDefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeTagDefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveTagDefinitionIDs = data
-		case "clearTagDefinitions":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearTagDefinitions"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearTagDefinitions = data
-		case "addRemediationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addRemediationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddRemediationIDs = data
-		case "removeRemediationIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeRemediationIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveRemediationIDs = data
-		case "clearRemediations":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearRemediations"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearRemediations = data
-		case "addFindingIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFindingIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddFindingIDs = data
-		case "removeFindingIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeFindingIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveFindingIDs = data
-		case "clearFindings":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFindings"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearFindings = data
-		case "addReviewIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addReviewIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddReviewIDs = data
-		case "removeReviewIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeReviewIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveReviewIDs = data
-		case "clearReviews":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearReviews"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearReviews = data
-		case "addVulnerabilityIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVulnerabilityIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddVulnerabilityIDs = data
-		case "removeVulnerabilityIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVulnerabilityIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveVulnerabilityIDs = data
-		case "clearVulnerabilities":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVulnerabilities"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearVulnerabilities = data
-		case "addWorkflowDefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addWorkflowDefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddWorkflowDefinitionIDs = data
-		case "removeWorkflowDefinitionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeWorkflowDefinitionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveWorkflowDefinitionIDs = data
-		case "clearWorkflowDefinitions":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearWorkflowDefinitions"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearWorkflowDefinitions = data
-		case "addWorkflowInstanceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addWorkflowInstanceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddWorkflowInstanceIDs = data
-		case "removeWorkflowInstanceIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeWorkflowInstanceIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveWorkflowInstanceIDs = data
-		case "clearWorkflowInstances":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearWorkflowInstances"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearWorkflowInstances = data
-		case "addWorkflowEventIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addWorkflowEventIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddWorkflowEventIDs = data
-		case "removeWorkflowEventIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeWorkflowEventIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveWorkflowEventIDs = data
-		case "clearWorkflowEvents":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearWorkflowEvents"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearWorkflowEvents = data
-		case "addWorkflowAssignmentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addWorkflowAssignmentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddWorkflowAssignmentIDs = data
-		case "removeWorkflowAssignmentIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeWorkflowAssignmentIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveWorkflowAssignmentIDs = data
-		case "clearWorkflowAssignments":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearWorkflowAssignments"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearWorkflowAssignments = data
-		case "addWorkflowAssignmentTargetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addWorkflowAssignmentTargetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddWorkflowAssignmentTargetIDs = data
-		case "removeWorkflowAssignmentTargetIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeWorkflowAssignmentTargetIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveWorkflowAssignmentTargetIDs = data
-		case "clearWorkflowAssignmentTargets":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearWorkflowAssignmentTargets"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearWorkflowAssignmentTargets = data
-		case "addWorkflowObjectRefIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addWorkflowObjectRefIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddWorkflowObjectRefIDs = data
-		case "removeWorkflowObjectRefIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeWorkflowObjectRefIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveWorkflowObjectRefIDs = data
-		case "clearWorkflowObjectRefs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearWorkflowObjectRefs"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearWorkflowObjectRefs = data
-		case "addDirectoryAccountIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addDirectoryAccountIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddDirectoryAccountIDs = data
-		case "removeDirectoryAccountIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeDirectoryAccountIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveDirectoryAccountIDs = data
-		case "clearDirectoryAccounts":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDirectoryAccounts"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearDirectoryAccounts = data
-		case "addDirectoryGroupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addDirectoryGroupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddDirectoryGroupIDs = data
-		case "removeDirectoryGroupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeDirectoryGroupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveDirectoryGroupIDs = data
-		case "clearDirectoryGroups":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDirectoryGroups"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearDirectoryGroups = data
-		case "addDiscussionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addDiscussionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddDiscussionIDs = data
-		case "removeDiscussionIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeDiscussionIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveDiscussionIDs = data
-		case "clearDiscussions":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDiscussions"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearDiscussions = data
-		case "addVendorScoringConfigIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVendorScoringConfigIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddVendorScoringConfigIDs = data
-		case "removeVendorScoringConfigIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVendorScoringConfigIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveVendorScoringConfigIDs = data
-		case "clearVendorScoringConfigs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVendorScoringConfigs"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearVendorScoringConfigs = data
-		case "addVendorRiskScoreIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVendorRiskScoreIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddVendorRiskScoreIDs = data
-		case "removeVendorRiskScoreIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVendorRiskScoreIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveVendorRiskScoreIDs = data
-		case "clearVendorRiskScores":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVendorRiskScores"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearVendorRiskScores = data
 		case "addOrgMembers":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addOrgMembers"))
 			data, err := ec.unmarshalOCreateOrgMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrgMembershipInputᚄ(ctx, v)
@@ -390328,6 +383399,11 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._AssessmentResponse(ctx, sel, obj)
+	case *generated.AssessmentPolicy:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._AssessmentPolicy(ctx, sel, obj)
 	case *generated.Assessment:
 		if obj == nil {
 			return graphql.Null
@@ -392353,6 +385429,44 @@ func (ec *executionContext) _Assessment(ctx context.Context, sel ast.SelectionSe
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "internalPolicies":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Assessment_internalPolicies(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "workflowObjectRefs":
 			field := field
 
@@ -392363,6 +385477,44 @@ func (ec *executionContext) _Assessment(ctx context.Context, sel ast.SelectionSe
 					}
 				}()
 				res = ec._Assessment_workflowObjectRefs(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "policyAttestations":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Assessment_policyAttestations(ctx, field, obj)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -392636,6 +385788,294 @@ func (ec *executionContext) _AssessmentEdge(ctx context.Context, sel ast.Selecti
 			}
 		case "cursor":
 			out.Values[i] = ec._AssessmentEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var assessmentPolicyImplementors = []string{"AssessmentPolicy", "Node"}
+
+func (ec *executionContext) _AssessmentPolicy(ctx context.Context, sel ast.SelectionSet, obj *generated.AssessmentPolicy) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentPolicyImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssessmentPolicy")
+		case "id":
+			out.Values[i] = ec._AssessmentPolicy_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdAt":
+			out.Values[i] = ec._AssessmentPolicy_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedAt":
+			out.Values[i] = ec._AssessmentPolicy_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdBy":
+			out.Values[i] = ec._AssessmentPolicy_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._AssessmentPolicy_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedByImpersonator":
+			out.Values[i] = ec._AssessmentPolicy_updatedByImpersonator(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "ownerID":
+			out.Values[i] = ec._AssessmentPolicy_ownerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "assessmentID":
+			out.Values[i] = ec._AssessmentPolicy_assessmentID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "internalPolicyID":
+			out.Values[i] = ec._AssessmentPolicy_internalPolicyID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "policyRevision":
+			out.Values[i] = ec._AssessmentPolicy_policyRevision(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "owner":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._AssessmentPolicy_owner(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "assessment":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._AssessmentPolicy_assessment(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "internalPolicy":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._AssessmentPolicy_internalPolicy(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var assessmentPolicyConnectionImplementors = []string{"AssessmentPolicyConnection"}
+
+func (ec *executionContext) _AssessmentPolicyConnection(ctx context.Context, sel ast.SelectionSet, obj *generated.AssessmentPolicyConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentPolicyConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssessmentPolicyConnection")
+		case "edges":
+			out.Values[i] = ec._AssessmentPolicyConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._AssessmentPolicyConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._AssessmentPolicyConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var assessmentPolicyEdgeImplementors = []string{"AssessmentPolicyEdge"}
+
+func (ec *executionContext) _AssessmentPolicyEdge(ctx context.Context, sel ast.SelectionSet, obj *generated.AssessmentPolicyEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentPolicyEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssessmentPolicyEdge")
+		case "node":
+			out.Values[i] = ec._AssessmentPolicyEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._AssessmentPolicyEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -421743,6 +415183,44 @@ func (ec *executionContext) _InternalPolicy(ctx context.Context, sel ast.Selecti
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "assessments":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._InternalPolicy_assessments(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "integrations":
 			field := field
 
@@ -421753,6 +415231,44 @@ func (ec *executionContext) _InternalPolicy(ctx context.Context, sel ast.Selecti
 					}
 				}()
 				res = ec._InternalPolicy_integrations(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "policyAttestations":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._InternalPolicy_policyAttestations(ctx, field, obj)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -426374,6 +419890,44 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "assessmentPolicyCreators":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Organization_assessmentPolicyCreators(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "assetCreators":
 			field := field
 
@@ -429224,158 +422778,6 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "apiTokens":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_apiTokens(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "emailTemplates":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_emailTemplates(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "notificationPreferences":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_notificationPreferences(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "notificationTemplates":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_notificationTemplates(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "users":
 			field := field
 
@@ -429490,44 +422892,6 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "secrets":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_secrets(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "avatarFile":
 			field := field
 
@@ -429539,158 +422903,6 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 				}()
 				res = ec._Organization_avatarFile(ctx, field, obj)
 				if res == graphql.RequiredNull {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "groups":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_groups(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "templates":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_templates(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "integrations":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_integrations(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "documents":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_documents(ctx, field, obj)
-				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
 				return res
@@ -429766,2058 +422978,6 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 					}
 				}()
 				res = ec._Organization_invites(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "subscribers":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_subscribers(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "entities":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_entities(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "platforms":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_platforms(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "identityHolders":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_identityHolders(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "campaigns":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_campaigns(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "campaignTargets":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_campaignTargets(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "entityTypes":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_entityTypes(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "contacts":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_contacts(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "notes":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_notes(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "tasks":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_tasks(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "programs":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_programs(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "systemDetails":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_systemDetails(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "procedures":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_procedures(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "internalPolicies":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_internalPolicies(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "risks":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_risks(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "controlObjectives":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_controlObjectives(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "narratives":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_narratives(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "controls":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_controls(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "subcontrols":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_subcontrols(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "controlImplementations":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_controlImplementations(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "mappedControls":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_mappedControls(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "evidence":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_evidence(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "standards":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_standards(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "actionPlans":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_actionPlans(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "customDomains":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_customDomains(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "dnsVerifications":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_dnsVerifications(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "trustCenters":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_trustCenters(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "assets":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_assets(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "scans":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_scans(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "slaDefinitions":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_slaDefinitions(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "subprocessors":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_subprocessors(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "exports":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_exports(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "trustCenterWatermarkConfigs":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_trustCenterWatermarkConfigs(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "assessments":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_assessments(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "assessmentResponses":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_assessmentResponses(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "customTypeEnums":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_customTypeEnums(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "tagDefinitions":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_tagDefinitions(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "remediations":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_remediations(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "findings":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_findings(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "findingControls":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_findingControls(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "reviews":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_reviews(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "vulnerabilities":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_vulnerabilities(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "workflowDefinitions":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_workflowDefinitions(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "workflowInstances":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_workflowInstances(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "workflowEvents":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_workflowEvents(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "workflowAssignments":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_workflowAssignments(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "workflowAssignmentTargets":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_workflowAssignmentTargets(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "workflowObjectRefs":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_workflowObjectRefs(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "directoryAccounts":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_directoryAccounts(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "directoryGroups":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_directoryGroups(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "directoryMemberships":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_directoryMemberships(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "discussions":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_discussions(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "vendorScoringConfigs":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_vendorScoringConfigs(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			if field.IsDeferred() {
-				deferredFieldSet.AddField(field)
-				fieldIndex := len(deferredFieldSet.Values) - 1
-				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, deferredFieldSet)
-				})
-
-				for _, deferrable := range field.Deferrables {
-					view, ok := deferLabelToView[deferrable.Label]
-					if !ok {
-						view = deferredFieldSet.NewView()
-						deferLabelToView[deferrable.Label] = view
-					}
-					view.AddIndices(fieldIndex)
-				}
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "vendorRiskScores":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Organization_vendorRiskScores(ctx, field, obj)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -438103,6 +429263,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "assessmentPolicies":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_assessmentPolicies(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "assessmentResponses":
 			field := field
 
@@ -440027,6 +431209,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_assessment(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "assessmentPolicy":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_assessmentPolicy(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -467369,6 +458573,52 @@ func (ec *executionContext) marshalNAssessmentOrderField2ᚖgithubᚗcomᚋtheop
 	return v
 }
 
+func (ec *executionContext) marshalNAssessmentPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicy(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentPolicy) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AssessmentPolicy(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAssessmentPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentPolicyConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AssessmentPolicyConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNAssessmentPolicyOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrder(ctx context.Context, v any) (*generated.AssessmentPolicyOrder, error) {
+	res, err := ec.unmarshalInputAssessmentPolicyOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNAssessmentPolicyOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrderField(ctx context.Context, v any) (*generated.AssessmentPolicyOrderField, error) {
+	var res = new(generated.AssessmentPolicyOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAssessmentPolicyOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentPolicyOrderField) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNAssessmentPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInput(ctx context.Context, v any) (*generated.AssessmentPolicyWhereInput, error) {
+	res, err := ec.unmarshalInputAssessmentPolicyWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467971,6 +459221,16 @@ func (ec *executionContext) unmarshalNCreateActionPlanInput2ᚖgithubᚗcomᚋth
 func (ec *executionContext) unmarshalNCreateAssessmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAssessmentInput(ctx context.Context, v any) (generated.CreateAssessmentInput, error) {
 	res, err := ec.unmarshalInputCreateAssessmentInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateAssessmentPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAssessmentPolicyInput(ctx context.Context, v any) (generated.CreateAssessmentPolicyInput, error) {
+	res, err := ec.unmarshalInputCreateAssessmentPolicyInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateAssessmentPolicyInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAssessmentPolicyInput(ctx context.Context, v any) (*generated.CreateAssessmentPolicyInput, error) {
+	res, err := ec.unmarshalInputCreateAssessmentPolicyInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateAssessmentResponseInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAssessmentResponseInput(ctx context.Context, v any) (generated.CreateAssessmentResponseInput, error) {
@@ -472555,6 +463815,11 @@ func (ec *executionContext) unmarshalNUpdateAssessmentInput2githubᚗcomᚋtheop
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNUpdateAssessmentPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateAssessmentPolicyInput(ctx context.Context, v any) (generated.UpdateAssessmentPolicyInput, error) {
+	res, err := ec.unmarshalInputUpdateAssessmentPolicyInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpdateAssetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateAssetInput(ctx context.Context, v any) (generated.UpdateAssetInput, error) {
 	res, err := ec.unmarshalInputUpdateAssetInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -474196,6 +465461,94 @@ func (ec *executionContext) unmarshalOAssessmentOrder2ᚕᚖgithubᚗcomᚋtheop
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) marshalOAssessmentPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.AssessmentPolicy) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNAssessmentPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicy(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalOAssessmentPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicy(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentPolicy) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._AssessmentPolicy(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOAssessmentPolicyEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.AssessmentPolicyEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalOAssessmentPolicyEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyEdge(ctx, sel, v[i])
+	})
+
+	return ret
+}
+
+func (ec *executionContext) marshalOAssessmentPolicyEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyEdge(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentPolicyEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._AssessmentPolicyEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOAssessmentPolicyOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrderᚄ(ctx context.Context, v any) ([]*generated.AssessmentPolicyOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.AssessmentPolicyOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAssessmentPolicyOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAssessmentPolicyWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInputᚄ(ctx context.Context, v any) ([]*generated.AssessmentPolicyWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.AssessmentPolicyWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAssessmentPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAssessmentPolicyWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentPolicyWhereInput(ctx context.Context, v any) (*generated.AssessmentPolicyWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputAssessmentPolicyWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentResponse) graphql.Marshaler {
@@ -475984,6 +467337,23 @@ func (ec *executionContext) unmarshalOCreateActionPlanInput2ᚕᚖgithubᚗcom�
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNCreateActionPlanInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCreateAssessmentPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAssessmentPolicyInputᚄ(ctx context.Context, v any) ([]*generated.CreateAssessmentPolicyInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.CreateAssessmentPolicyInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCreateAssessmentPolicyInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAssessmentPolicyInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}

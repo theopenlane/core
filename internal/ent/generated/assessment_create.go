@@ -12,10 +12,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
@@ -392,6 +394,21 @@ func (_c *AssessmentCreate) AddCampaigns(v ...*Campaign) *AssessmentCreate {
 	return _c.AddCampaignIDs(ids...)
 }
 
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_c *AssessmentCreate) AddInternalPolicyIDs(ids ...string) *AssessmentCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_c *AssessmentCreate) AddInternalPolicies(v ...*InternalPolicy) *AssessmentCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddInternalPolicyIDs(ids...)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_c *AssessmentCreate) AddWorkflowObjectRefIDs(ids ...string) *AssessmentCreate {
 	_c.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -405,6 +422,21 @@ func (_c *AssessmentCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Asse
 		ids[i] = v[i].ID
 	}
 	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
+// AddPolicyAttestationIDs adds the "policy_attestations" edge to the AssessmentPolicy entity by IDs.
+func (_c *AssessmentCreate) AddPolicyAttestationIDs(ids ...string) *AssessmentCreate {
+	_c.mutation.AddPolicyAttestationIDs(ids...)
+	return _c
+}
+
+// AddPolicyAttestations adds the "policy_attestations" edges to the AssessmentPolicy entity.
+func (_c *AssessmentCreate) AddPolicyAttestations(v ...*AssessmentPolicy) *AssessmentCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPolicyAttestationIDs(ids...)
 }
 
 // Mutation returns the AssessmentMutation object of the builder.
@@ -756,6 +788,29 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.InternalPoliciesTable,
+			Columns: assessment.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &AssessmentPolicyCreate{config: _c.config, mutation: newAssessmentPolicyMutation(_c.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -765,6 +820,22 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PolicyAttestationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessment.PolicyAttestationsTable,
+			Columns: []string{assessment.PolicyAttestationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

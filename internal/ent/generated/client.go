@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -147,6 +148,8 @@ type Client struct {
 	ActionPlan *ActionPlanClient
 	// Assessment is the client for interacting with the Assessment builders.
 	Assessment *AssessmentClient
+	// AssessmentPolicy is the client for interacting with the AssessmentPolicy builders.
+	AssessmentPolicy *AssessmentPolicyClient
 	// AssessmentResponse is the client for interacting with the AssessmentResponse builders.
 	AssessmentResponse *AssessmentResponseClient
 	// Asset is the client for interacting with the Asset builders.
@@ -362,6 +365,7 @@ func (c *Client) init() {
 	c.APIToken = NewAPITokenClient(c.config)
 	c.ActionPlan = NewActionPlanClient(c.config)
 	c.Assessment = NewAssessmentClient(c.config)
+	c.AssessmentPolicy = NewAssessmentPolicyClient(c.config)
 	c.AssessmentResponse = NewAssessmentResponseClient(c.config)
 	c.Asset = NewAssetClient(c.config)
 	c.Campaign = NewCampaignClient(c.config)
@@ -659,6 +663,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		APIToken:                   NewAPITokenClient(cfg),
 		ActionPlan:                 NewActionPlanClient(cfg),
 		Assessment:                 NewAssessmentClient(cfg),
+		AssessmentPolicy:           NewAssessmentPolicyClient(cfg),
 		AssessmentResponse:         NewAssessmentResponseClient(cfg),
 		Asset:                      NewAssetClient(cfg),
 		Campaign:                   NewCampaignClient(cfg),
@@ -777,6 +782,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		APIToken:                   NewAPITokenClient(cfg),
 		ActionPlan:                 NewActionPlanClient(cfg),
 		Assessment:                 NewAssessmentClient(cfg),
+		AssessmentPolicy:           NewAssessmentPolicyClient(cfg),
 		AssessmentResponse:         NewAssessmentResponseClient(cfg),
 		Asset:                      NewAssetClient(cfg),
 		Campaign:                   NewCampaignClient(cfg),
@@ -902,19 +908,19 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentResponse, c.Asset,
-		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
-		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
-		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.Discussion, c.DocumentData, c.EmailTemplate, c.EmailVerificationToken,
-		c.Entity, c.EntityType, c.Event, c.Evidence, c.Export, c.File,
-		c.FileDownloadToken, c.Finding, c.FindingControl, c.Group, c.GroupMembership,
-		c.GroupSetting, c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
-		c.IntegrationRun, c.IntegrationWebhook, c.InternalPolicy, c.Invite,
-		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
-		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
-		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
-		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentPolicy,
+		c.AssessmentResponse, c.Asset, c.Campaign, c.CampaignTarget, c.CheckResult,
+		c.Contact, c.Control, c.ControlImplementation, c.ControlObjective,
+		c.CustomDomain, c.CustomTypeEnum, c.DNSVerification, c.DirectoryAccount,
+		c.DirectoryGroup, c.DirectoryMembership, c.Discussion, c.DocumentData,
+		c.EmailTemplate, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
+		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
+		c.Group, c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
+		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
+		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
+		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
+		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
@@ -934,19 +940,19 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentResponse, c.Asset,
-		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
-		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
-		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.Discussion, c.DocumentData, c.EmailTemplate, c.EmailVerificationToken,
-		c.Entity, c.EntityType, c.Event, c.Evidence, c.Export, c.File,
-		c.FileDownloadToken, c.Finding, c.FindingControl, c.Group, c.GroupMembership,
-		c.GroupSetting, c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
-		c.IntegrationRun, c.IntegrationWebhook, c.InternalPolicy, c.Invite,
-		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
-		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
-		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
-		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentPolicy,
+		c.AssessmentResponse, c.Asset, c.Campaign, c.CampaignTarget, c.CheckResult,
+		c.Contact, c.Control, c.ControlImplementation, c.ControlObjective,
+		c.CustomDomain, c.CustomTypeEnum, c.DNSVerification, c.DirectoryAccount,
+		c.DirectoryGroup, c.DirectoryMembership, c.Discussion, c.DocumentData,
+		c.EmailTemplate, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
+		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
+		c.Group, c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
+		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
+		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
+		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
+		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
@@ -1043,6 +1049,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ActionPlan.mutate(ctx, m)
 	case *AssessmentMutation:
 		return c.Assessment.mutate(ctx, m)
+	case *AssessmentPolicyMutation:
+		return c.AssessmentPolicy.mutate(ctx, m)
 	case *AssessmentResponseMutation:
 		return c.AssessmentResponse.mutate(ctx, m)
 	case *AssetMutation:
@@ -2098,6 +2106,22 @@ func (c *AssessmentClient) QueryCampaigns(_m *Assessment) *CampaignQuery {
 	return query
 }
 
+// QueryInternalPolicies queries the internal_policies edge of a Assessment.
+func (c *AssessmentClient) QueryInternalPolicies(_m *Assessment) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, assessment.InternalPoliciesTable, assessment.InternalPoliciesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Assessment.
 func (c *AssessmentClient) QueryWorkflowObjectRefs(_m *Assessment) *WorkflowObjectRefQuery {
 	query := (&WorkflowObjectRefClient{config: c.config}).Query()
@@ -2107,6 +2131,22 @@ func (c *AssessmentClient) QueryWorkflowObjectRefs(_m *Assessment) *WorkflowObje
 			sqlgraph.From(assessment.Table, assessment.FieldID, id),
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, assessment.WorkflowObjectRefsTable, assessment.WorkflowObjectRefsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPolicyAttestations queries the policy_attestations edge of a Assessment.
+func (c *AssessmentClient) QueryPolicyAttestations(_m *Assessment) *AssessmentPolicyQuery {
+	query := (&AssessmentPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(assessmentpolicy.Table, assessmentpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, assessment.PolicyAttestationsTable, assessment.PolicyAttestationsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -2138,6 +2178,189 @@ func (c *AssessmentClient) mutate(ctx context.Context, m *AssessmentMutation) (V
 		return (&AssessmentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Assessment mutation op: %q", m.Op())
+	}
+}
+
+// AssessmentPolicyClient is a client for the AssessmentPolicy schema.
+type AssessmentPolicyClient struct {
+	config
+}
+
+// NewAssessmentPolicyClient returns a client for the AssessmentPolicy from the given config.
+func NewAssessmentPolicyClient(c config) *AssessmentPolicyClient {
+	return &AssessmentPolicyClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assessmentpolicy.Hooks(f(g(h())))`.
+func (c *AssessmentPolicyClient) Use(hooks ...Hook) {
+	c.hooks.AssessmentPolicy = append(c.hooks.AssessmentPolicy, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assessmentpolicy.Intercept(f(g(h())))`.
+func (c *AssessmentPolicyClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AssessmentPolicy = append(c.inters.AssessmentPolicy, interceptors...)
+}
+
+// Create returns a builder for creating a AssessmentPolicy entity.
+func (c *AssessmentPolicyClient) Create() *AssessmentPolicyCreate {
+	mutation := newAssessmentPolicyMutation(c.config, OpCreate)
+	return &AssessmentPolicyCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AssessmentPolicy entities.
+func (c *AssessmentPolicyClient) CreateBulk(builders ...*AssessmentPolicyCreate) *AssessmentPolicyCreateBulk {
+	return &AssessmentPolicyCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssessmentPolicyClient) MapCreateBulk(slice any, setFunc func(*AssessmentPolicyCreate, int)) *AssessmentPolicyCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssessmentPolicyCreateBulk{err: fmt.Errorf("calling to AssessmentPolicyClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssessmentPolicyCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssessmentPolicyCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AssessmentPolicy.
+func (c *AssessmentPolicyClient) Update() *AssessmentPolicyUpdate {
+	mutation := newAssessmentPolicyMutation(c.config, OpUpdate)
+	return &AssessmentPolicyUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssessmentPolicyClient) UpdateOne(_m *AssessmentPolicy) *AssessmentPolicyUpdateOne {
+	mutation := newAssessmentPolicyMutation(c.config, OpUpdateOne, withAssessmentPolicy(_m))
+	return &AssessmentPolicyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssessmentPolicyClient) UpdateOneID(id string) *AssessmentPolicyUpdateOne {
+	mutation := newAssessmentPolicyMutation(c.config, OpUpdateOne, withAssessmentPolicyID(id))
+	return &AssessmentPolicyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AssessmentPolicy.
+func (c *AssessmentPolicyClient) Delete() *AssessmentPolicyDelete {
+	mutation := newAssessmentPolicyMutation(c.config, OpDelete)
+	return &AssessmentPolicyDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssessmentPolicyClient) DeleteOne(_m *AssessmentPolicy) *AssessmentPolicyDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssessmentPolicyClient) DeleteOneID(id string) *AssessmentPolicyDeleteOne {
+	builder := c.Delete().Where(assessmentpolicy.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssessmentPolicyDeleteOne{builder}
+}
+
+// Query returns a query builder for AssessmentPolicy.
+func (c *AssessmentPolicyClient) Query() *AssessmentPolicyQuery {
+	return &AssessmentPolicyQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssessmentPolicy},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AssessmentPolicy entity by its id.
+func (c *AssessmentPolicyClient) Get(ctx context.Context, id string) (*AssessmentPolicy, error) {
+	return c.Query().Where(assessmentpolicy.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssessmentPolicyClient) GetX(ctx context.Context, id string) *AssessmentPolicy {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a AssessmentPolicy.
+func (c *AssessmentPolicyClient) QueryOwner(_m *AssessmentPolicy) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentpolicy.Table, assessmentpolicy.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentpolicy.OwnerTable, assessmentpolicy.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessment queries the assessment edge of a AssessmentPolicy.
+func (c *AssessmentPolicyClient) QueryAssessment(_m *AssessmentPolicy) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentpolicy.Table, assessmentpolicy.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessmentpolicy.AssessmentTable, assessmentpolicy.AssessmentColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicy queries the internal_policy edge of a AssessmentPolicy.
+func (c *AssessmentPolicyClient) QueryInternalPolicy(_m *AssessmentPolicy) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentpolicy.Table, assessmentpolicy.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessmentpolicy.InternalPolicyTable, assessmentpolicy.InternalPolicyColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AssessmentPolicyClient) Hooks() []Hook {
+	hooks := c.hooks.AssessmentPolicy
+	return append(hooks[:len(hooks):len(hooks)], assessmentpolicy.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssessmentPolicyClient) Interceptors() []Interceptor {
+	inters := c.inters.AssessmentPolicy
+	return append(inters[:len(inters):len(inters)], assessmentpolicy.Interceptors[:]...)
+}
+
+func (c *AssessmentPolicyClient) mutate(ctx context.Context, m *AssessmentPolicyMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssessmentPolicyCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssessmentPolicyUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssessmentPolicyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssessmentPolicyDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown AssessmentPolicy mutation op: %q", m.Op())
 	}
 }
 
@@ -15419,6 +15642,22 @@ func (c *InternalPolicyClient) QueryReviews(_m *InternalPolicy) *ReviewQuery {
 	return query
 }
 
+// QueryAssessments queries the assessments edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryAssessments(_m *InternalPolicy) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.AssessmentsTable, internalpolicy.AssessmentsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegrations queries the integrations edge of a InternalPolicy.
 func (c *InternalPolicyClient) QueryIntegrations(_m *InternalPolicy) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -15428,6 +15667,22 @@ func (c *InternalPolicyClient) QueryIntegrations(_m *InternalPolicy) *Integratio
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.IntegrationsTable, internalpolicy.IntegrationsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPolicyAttestations queries the policy_attestations edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryPolicyAttestations(_m *InternalPolicy) *AssessmentPolicyQuery {
+	query := (&AssessmentPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(assessmentpolicy.Table, assessmentpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, internalpolicy.PolicyAttestationsTable, internalpolicy.PolicyAttestationsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -18516,6 +18771,22 @@ func (c *OrganizationClient) QueryAssessmentCreators(_m *Organization) *GroupQue
 	return query
 }
 
+// QueryAssessmentPolicyCreators queries the assessment_policy_creators edge of a Organization.
+func (c *OrganizationClient) QueryAssessmentPolicyCreators(_m *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentPolicyCreatorsTable, organization.AssessmentPolicyCreatorsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssetCreators queries the asset_creators edge of a Organization.
 func (c *OrganizationClient) QueryAssetCreators(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -20605,6 +20876,22 @@ func (c *OrganizationClient) QueryAssessmentResponses(_m *Organization) *Assessm
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentResponsesTable, organization.AssessmentResponsesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentPolicies queries the assessment_policies edge of a Organization.
+func (c *OrganizationClient) QueryAssessmentPolicies(_m *Organization) *AssessmentPolicyQuery {
+	query := (&AssessmentPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(assessmentpolicy.Table, assessmentpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentPoliciesTable, organization.AssessmentPoliciesColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -34799,8 +35086,8 @@ func (c *WorkflowProposalClient) mutate(ctx context.Context, m *WorkflowProposal
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
-		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
+		APIToken, ActionPlan, Assessment, AssessmentPolicy, AssessmentResponse, Asset,
+		Campaign, CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
 		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
 		DirectoryAccount, DirectoryGroup, DirectoryMembership, Discussion,
 		DocumentData, EmailTemplate, EmailVerificationToken, Entity, EntityType, Event,
@@ -34822,8 +35109,8 @@ type (
 		WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
-		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
-		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
+		APIToken, ActionPlan, Assessment, AssessmentPolicy, AssessmentResponse, Asset,
+		Campaign, CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
 		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
 		DirectoryAccount, DirectoryGroup, DirectoryMembership, Discussion,
 		DocumentData, EmailTemplate, EmailVerificationToken, Entity, EntityType, Event,

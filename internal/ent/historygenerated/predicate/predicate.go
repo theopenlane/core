@@ -14,6 +14,9 @@ type ActionPlanHistory func(*sql.Selector)
 // AssessmentHistory is the predicate function for assessmenthistory builders.
 type AssessmentHistory func(*sql.Selector)
 
+// AssessmentPolicyHistory is the predicate function for assessmentpolicyhistory builders.
+type AssessmentPolicyHistory func(*sql.Selector)
+
 // AssessmentResponseHistory is the predicate function for assessmentresponsehistory builders.
 type AssessmentResponseHistory func(*sql.Selector)
 

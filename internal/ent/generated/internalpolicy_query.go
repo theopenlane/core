@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
@@ -74,7 +76,9 @@ type InternalPolicyQuery struct {
 	withEntities                    *EntityQuery
 	withIdentityHolders             *IdentityHolderQuery
 	withReviews                     *ReviewQuery
+	withAssessments                 *AssessmentQuery
 	withIntegrations                *IntegrationQuery
+	withPolicyAttestations          *AssessmentPolicyQuery
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*InternalPolicy) error
 	modifiers                       []func(*sql.Selector)
@@ -97,7 +101,9 @@ type InternalPolicyQuery struct {
 	withNamedEntities               map[string]*EntityQuery
 	withNamedIdentityHolders        map[string]*IdentityHolderQuery
 	withNamedReviews                map[string]*ReviewQuery
+	withNamedAssessments            map[string]*AssessmentQuery
 	withNamedIntegrations           map[string]*IntegrationQuery
+	withNamedPolicyAttestations     map[string]*AssessmentPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -706,6 +712,28 @@ func (_q *InternalPolicyQuery) QueryReviews() *ReviewQuery {
 	return query
 }
 
+// QueryAssessments chains the current query on the "assessments" edge.
+func (_q *InternalPolicyQuery) QueryAssessments() *AssessmentQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.AssessmentsTable, internalpolicy.AssessmentsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryIntegrations chains the current query on the "integrations" edge.
 func (_q *InternalPolicyQuery) QueryIntegrations() *IntegrationQuery {
 	query := (&IntegrationClient{config: _q.config}).Query()
@@ -721,6 +749,28 @@ func (_q *InternalPolicyQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.IntegrationsTable, internalpolicy.IntegrationsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPolicyAttestations chains the current query on the "policy_attestations" edge.
+func (_q *InternalPolicyQuery) QueryPolicyAttestations() *AssessmentPolicyQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(assessmentpolicy.Table, assessmentpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, internalpolicy.PolicyAttestationsTable, internalpolicy.PolicyAttestationsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -946,7 +996,9 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withEntities:               _q.withEntities.Clone(),
 		withIdentityHolders:        _q.withIdentityHolders.Clone(),
 		withReviews:                _q.withReviews.Clone(),
+		withAssessments:            _q.withAssessments.Clone(),
 		withIntegrations:           _q.withIntegrations.Clone(),
+		withPolicyAttestations:     _q.withPolicyAttestations.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1240,6 +1292,17 @@ func (_q *InternalPolicyQuery) WithReviews(opts ...func(*ReviewQuery)) *Internal
 	return _q
 }
 
+// WithAssessments tells the query-builder to eager-load the nodes that are connected to
+// the "assessments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithAssessments(opts ...func(*AssessmentQuery)) *InternalPolicyQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessments = query
+	return _q
+}
+
 // WithIntegrations tells the query-builder to eager-load the nodes that are connected to
 // the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *InternalPolicyQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *InternalPolicyQuery {
@@ -1248,6 +1311,17 @@ func (_q *InternalPolicyQuery) WithIntegrations(opts ...func(*IntegrationQuery))
 		opt(query)
 	}
 	_q.withIntegrations = query
+	return _q
+}
+
+// WithPolicyAttestations tells the query-builder to eager-load the nodes that are connected to
+// the "policy_attestations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithPolicyAttestations(opts ...func(*AssessmentPolicyQuery)) *InternalPolicyQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPolicyAttestations = query
 	return _q
 }
 
@@ -1336,7 +1410,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*InternalPolicy{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [29]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
@@ -1363,7 +1437,9 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withEntities != nil,
 			_q.withIdentityHolders != nil,
 			_q.withReviews != nil,
+			_q.withAssessments != nil,
 			_q.withIntegrations != nil,
+			_q.withPolicyAttestations != nil,
 		}
 	)
 	if withFKs {
@@ -1575,10 +1651,26 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withAssessments; query != nil {
+		if err := _q.loadAssessments(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Assessments = []*Assessment{} },
+			func(n *InternalPolicy, e *Assessment) { n.Edges.Assessments = append(n.Edges.Assessments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withIntegrations; query != nil {
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.Integrations = []*Integration{} },
 			func(n *InternalPolicy, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPolicyAttestations; query != nil {
+		if err := _q.loadPolicyAttestations(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.PolicyAttestations = []*AssessmentPolicy{} },
+			func(n *InternalPolicy, e *AssessmentPolicy) {
+				n.Edges.PolicyAttestations = append(n.Edges.PolicyAttestations, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -1715,10 +1807,24 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedAssessments {
+		if err := _q.loadAssessments(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedAssessments(name) },
+			func(n *InternalPolicy, e *Assessment) { n.appendNamedAssessments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedIntegrations {
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedIntegrations(name) },
 			func(n *InternalPolicy, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPolicyAttestations {
+		if err := _q.loadPolicyAttestations(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedPolicyAttestations(name) },
+			func(n *InternalPolicy, e *AssessmentPolicy) { n.appendNamedPolicyAttestations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2975,6 +3081,67 @@ func (_q *InternalPolicyQuery) loadReviews(ctx context.Context, query *ReviewQue
 	}
 	return nil
 }
+func (_q *InternalPolicyQuery) loadAssessments(ctx context.Context, query *AssessmentQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Assessment)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.AssessmentsTable)
+		s.Join(joinT).On(s.C(assessment.FieldID), joinT.C(internalpolicy.AssessmentsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.AssessmentsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.AssessmentsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Assessment](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "assessments" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *InternalPolicyQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Integration)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*InternalPolicy)
@@ -3033,6 +3200,36 @@ func (_q *InternalPolicyQuery) loadIntegrations(ctx context.Context, query *Inte
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *InternalPolicyQuery) loadPolicyAttestations(ctx context.Context, query *AssessmentPolicyQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *AssessmentPolicy)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*InternalPolicy)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(assessmentpolicy.FieldInternalPolicyID)
+	}
+	query.Where(predicate.AssessmentPolicy(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(internalpolicy.PolicyAttestationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.InternalPolicyID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "internal_policy_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -3418,6 +3615,20 @@ func (_q *InternalPolicyQuery) WithNamedReviews(name string, opts ...func(*Revie
 	return _q
 }
 
+// WithNamedAssessments tells the query-builder to eager-load the nodes that are connected to the "assessments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithNamedAssessments(name string, opts ...func(*AssessmentQuery)) *InternalPolicyQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessments == nil {
+		_q.withNamedAssessments = make(map[string]*AssessmentQuery)
+	}
+	_q.withNamedAssessments[name] = query
+	return _q
+}
+
 // WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *InternalPolicyQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *InternalPolicyQuery {
@@ -3429,6 +3640,20 @@ func (_q *InternalPolicyQuery) WithNamedIntegrations(name string, opts ...func(*
 		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
 	}
 	_q.withNamedIntegrations[name] = query
+	return _q
+}
+
+// WithNamedPolicyAttestations tells the query-builder to eager-load the nodes that are connected to the "policy_attestations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithNamedPolicyAttestations(name string, opts ...func(*AssessmentPolicyQuery)) *InternalPolicyQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPolicyAttestations == nil {
+		_q.withNamedPolicyAttestations = make(map[string]*AssessmentPolicyQuery)
+	}
+	_q.withNamedPolicyAttestations[name] = query
 	return _q
 }
 

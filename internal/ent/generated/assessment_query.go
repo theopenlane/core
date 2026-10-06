@@ -14,10 +14,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -43,7 +45,9 @@ type AssessmentQuery struct {
 	withIdentityHolders          *IdentityHolderQuery
 	withAssessmentResponses      *AssessmentResponseQuery
 	withCampaigns                *CampaignQuery
+	withInternalPolicies         *InternalPolicyQuery
 	withWorkflowObjectRefs       *WorkflowObjectRefQuery
+	withPolicyAttestations       *AssessmentPolicyQuery
 	loadTotal                    []func(context.Context, []*Assessment) error
 	modifiers                    []func(*sql.Selector)
 	withNamedBlockedGroups       map[string]*GroupQuery
@@ -53,7 +57,9 @@ type AssessmentQuery struct {
 	withNamedIdentityHolders     map[string]*IdentityHolderQuery
 	withNamedAssessmentResponses map[string]*AssessmentResponseQuery
 	withNamedCampaigns           map[string]*CampaignQuery
+	withNamedInternalPolicies    map[string]*InternalPolicyQuery
 	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
+	withNamedPolicyAttestations  map[string]*AssessmentPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -288,6 +294,28 @@ func (_q *AssessmentQuery) QueryCampaigns() *CampaignQuery {
 	return query
 }
 
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *AssessmentQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, assessment.InternalPoliciesTable, assessment.InternalPoliciesPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
 func (_q *AssessmentQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
@@ -303,6 +331,28 @@ func (_q *AssessmentQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, assessment.WorkflowObjectRefsTable, assessment.WorkflowObjectRefsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPolicyAttestations chains the current query on the "policy_attestations" edge.
+func (_q *AssessmentQuery) QueryPolicyAttestations() *AssessmentPolicyQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
+			sqlgraph.To(assessmentpolicy.Table, assessmentpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, assessment.PolicyAttestationsTable, assessment.PolicyAttestationsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -511,7 +561,9 @@ func (_q *AssessmentQuery) Clone() *AssessmentQuery {
 		withIdentityHolders:     _q.withIdentityHolders.Clone(),
 		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
 		withCampaigns:           _q.withCampaigns.Clone(),
+		withInternalPolicies:    _q.withInternalPolicies.Clone(),
 		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
+		withPolicyAttestations:  _q.withPolicyAttestations.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -618,6 +670,17 @@ func (_q *AssessmentQuery) WithCampaigns(opts ...func(*CampaignQuery)) *Assessme
 	return _q
 }
 
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *AssessmentQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
+	return _q
+}
+
 // WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
 // the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssessmentQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *AssessmentQuery {
@@ -626,6 +689,17 @@ func (_q *AssessmentQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRe
 		opt(query)
 	}
 	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
+// WithPolicyAttestations tells the query-builder to eager-load the nodes that are connected to
+// the "policy_attestations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithPolicyAttestations(opts ...func(*AssessmentPolicyQuery)) *AssessmentQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPolicyAttestations = query
 	return _q
 }
 
@@ -713,7 +787,7 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	var (
 		nodes       = []*Assessment{}
 		_spec       = _q.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [12]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -723,7 +797,9 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			_q.withIdentityHolders != nil,
 			_q.withAssessmentResponses != nil,
 			_q.withCampaigns != nil,
+			_q.withInternalPolicies != nil,
 			_q.withWorkflowObjectRefs != nil,
+			_q.withPolicyAttestations != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -810,11 +886,27 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Assessment) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Assessment, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withWorkflowObjectRefs; query != nil {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Assessment) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
 			func(n *Assessment, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPolicyAttestations; query != nil {
+		if err := _q.loadPolicyAttestations(ctx, query, nodes,
+			func(n *Assessment) { n.Edges.PolicyAttestations = []*AssessmentPolicy{} },
+			func(n *Assessment, e *AssessmentPolicy) {
+				n.Edges.PolicyAttestations = append(n.Edges.PolicyAttestations, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -868,10 +960,24 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Assessment) { n.appendNamedInternalPolicies(name) },
+			func(n *Assessment, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedWorkflowObjectRefs {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Assessment) { n.appendNamedWorkflowObjectRefs(name) },
 			func(n *Assessment, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPolicyAttestations {
+		if err := _q.loadPolicyAttestations(ctx, query, nodes,
+			func(n *Assessment) { n.appendNamedPolicyAttestations(name) },
+			func(n *Assessment, e *AssessmentPolicy) { n.appendNamedPolicyAttestations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1216,6 +1322,67 @@ func (_q *AssessmentQuery) loadCampaigns(ctx context.Context, query *CampaignQue
 	}
 	return nil
 }
+func (_q *AssessmentQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Assessment)
+	nids := make(map[string]map[*Assessment]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(assessment.InternalPoliciesTable)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(assessment.InternalPoliciesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(assessment.InternalPoliciesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(assessment.InternalPoliciesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Assessment]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *AssessmentQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *WorkflowObjectRef)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Assessment)
@@ -1232,6 +1399,36 @@ func (_q *AssessmentQuery) loadWorkflowObjectRefs(ctx context.Context, query *Wo
 	}
 	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(assessment.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.AssessmentID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "assessment_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *AssessmentQuery) loadPolicyAttestations(ctx context.Context, query *AssessmentPolicyQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *AssessmentPolicy)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Assessment)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(assessmentpolicy.FieldAssessmentID)
+	}
+	query.Where(predicate.AssessmentPolicy(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(assessment.PolicyAttestationsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -1446,6 +1643,20 @@ func (_q *AssessmentQuery) WithNamedCampaigns(name string, opts ...func(*Campaig
 	return _q
 }
 
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *AssessmentQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
+	return _q
+}
+
 // WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssessmentQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *AssessmentQuery {
@@ -1457,6 +1668,20 @@ func (_q *AssessmentQuery) WithNamedWorkflowObjectRefs(name string, opts ...func
 		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
 	}
 	_q.withNamedWorkflowObjectRefs[name] = query
+	return _q
+}
+
+// WithNamedPolicyAttestations tells the query-builder to eager-load the nodes that are connected to the "policy_attestations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithNamedPolicyAttestations(name string, opts ...func(*AssessmentPolicyQuery)) *AssessmentQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPolicyAttestations == nil {
+		_q.withNamedPolicyAttestations = make(map[string]*AssessmentPolicyQuery)
+	}
+	_q.withNamedPolicyAttestations[name] = query
 	return _q
 }
 

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -1623,6 +1624,359 @@ func (_m *Assessment) ToEdge(order *AssessmentOrder) *AssessmentEdge {
 		order = DefaultAssessmentOrder
 	}
 	return &AssessmentEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// AssessmentPolicyEdge is the edge representation of AssessmentPolicy.
+type AssessmentPolicyEdge struct {
+	Node   *AssessmentPolicy `json:"node"`
+	Cursor Cursor            `json:"cursor"`
+}
+
+// AssessmentPolicyConnection is the connection containing edges to AssessmentPolicy.
+type AssessmentPolicyConnection struct {
+	Edges      []*AssessmentPolicyEdge `json:"edges"`
+	PageInfo   PageInfo                `json:"pageInfo"`
+	TotalCount int                     `json:"totalCount"`
+}
+
+func (c *AssessmentPolicyConnection) build(nodes []*AssessmentPolicy, pager *assessmentpolicyPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *AssessmentPolicy
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *AssessmentPolicy {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *AssessmentPolicy {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*AssessmentPolicyEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &AssessmentPolicyEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// AssessmentPolicyPaginateOption enables pagination customization.
+type AssessmentPolicyPaginateOption func(*assessmentpolicyPager) error
+
+// WithAssessmentPolicyOrder configures pagination ordering.
+func WithAssessmentPolicyOrder(order []*AssessmentPolicyOrder) AssessmentPolicyPaginateOption {
+	return func(pager *assessmentpolicyPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithAssessmentPolicyFilter configures pagination filter.
+func WithAssessmentPolicyFilter(filter func(*AssessmentPolicyQuery) (*AssessmentPolicyQuery, error)) AssessmentPolicyPaginateOption {
+	return func(pager *assessmentpolicyPager) error {
+		if filter == nil {
+			return errors.New("AssessmentPolicyQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type assessmentpolicyPager struct {
+	reverse bool
+	order   []*AssessmentPolicyOrder
+	filter  func(*AssessmentPolicyQuery) (*AssessmentPolicyQuery, error)
+}
+
+func newAssessmentPolicyPager(opts []AssessmentPolicyPaginateOption, reverse bool) (*assessmentpolicyPager, error) {
+	pager := &assessmentpolicyPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *assessmentpolicyPager) applyFilter(query *AssessmentPolicyQuery) (*AssessmentPolicyQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *assessmentpolicyPager) toCursor(_m *AssessmentPolicy) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *assessmentpolicyPager) applyCursors(query *AssessmentPolicyQuery, after, before *Cursor) (*AssessmentPolicyQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultAssessmentPolicyOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *assessmentpolicyPager) applyOrder(query *AssessmentPolicyQuery) *AssessmentPolicyQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultAssessmentPolicyOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultAssessmentPolicyOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *assessmentpolicyPager) orderExpr(query *AssessmentPolicyQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultAssessmentPolicyOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to AssessmentPolicy.
+func (_m *AssessmentPolicyQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...AssessmentPolicyPaginateOption,
+) (*AssessmentPolicyConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newAssessmentPolicyPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &AssessmentPolicyConnection{Edges: []*AssessmentPolicyEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// AssessmentPolicyOrderFieldCreatedAt orders AssessmentPolicy by created_at.
+	AssessmentPolicyOrderFieldCreatedAt = &AssessmentPolicyOrderField{
+		Value: func(_m *AssessmentPolicy) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: assessmentpolicy.FieldCreatedAt,
+		toTerm: assessmentpolicy.ByCreatedAt,
+		toCursor: func(_m *AssessmentPolicy) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// AssessmentPolicyOrderFieldUpdatedAt orders AssessmentPolicy by updated_at.
+	AssessmentPolicyOrderFieldUpdatedAt = &AssessmentPolicyOrderField{
+		Value: func(_m *AssessmentPolicy) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: assessmentpolicy.FieldUpdatedAt,
+		toTerm: assessmentpolicy.ByUpdatedAt,
+		toCursor: func(_m *AssessmentPolicy) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f AssessmentPolicyOrderField) String() string {
+	var str string
+	switch f.column {
+	case AssessmentPolicyOrderFieldCreatedAt.column:
+		str = "created_at"
+	case AssessmentPolicyOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f AssessmentPolicyOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *AssessmentPolicyOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("AssessmentPolicyOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *AssessmentPolicyOrderFieldCreatedAt
+	case "updated_at":
+		*f = *AssessmentPolicyOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid AssessmentPolicyOrderField", str)
+	}
+	return nil
+}
+
+// AssessmentPolicyOrderField defines the ordering field of AssessmentPolicy.
+type AssessmentPolicyOrderField struct {
+	// Value extracts the ordering value from the given AssessmentPolicy.
+	Value    func(*AssessmentPolicy) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) assessmentpolicy.OrderOption
+	toCursor func(*AssessmentPolicy) Cursor
+}
+
+// AssessmentPolicyOrder defines the ordering of AssessmentPolicy.
+type AssessmentPolicyOrder struct {
+	Direction OrderDirection              `json:"direction"`
+	Field     *AssessmentPolicyOrderField `json:"field"`
+}
+
+// DefaultAssessmentPolicyOrder is the default ordering of AssessmentPolicy.
+var DefaultAssessmentPolicyOrder = &AssessmentPolicyOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &AssessmentPolicyOrderField{
+		Value: func(_m *AssessmentPolicy) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: assessmentpolicy.FieldID,
+		toTerm: assessmentpolicy.ByID,
+		toCursor: func(_m *AssessmentPolicy) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts AssessmentPolicy into AssessmentPolicyEdge.
+func (_m *AssessmentPolicy) ToEdge(order *AssessmentPolicyOrder) *AssessmentPolicyEdge {
+	if order == nil {
+		order = DefaultAssessmentPolicyOrder
+	}
+	return &AssessmentPolicyEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

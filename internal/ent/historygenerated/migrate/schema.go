@@ -123,6 +123,35 @@ var (
 			},
 		},
 	}
+	// AssessmentPolicyHistoryColumns holds the columns for the "assessment_policy_history" table.
+	AssessmentPolicyHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "policy_revision", Type: field.TypeString, Nullable: true},
+	}
+	// AssessmentPolicyHistoryTable holds the schema information for the "assessment_policy_history" table.
+	AssessmentPolicyHistoryTable = &schema.Table{
+		Name:       "assessment_policy_history",
+		Columns:    AssessmentPolicyHistoryColumns,
+		PrimaryKey: []*schema.Column{AssessmentPolicyHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "assessmentpolicyhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentPolicyHistoryColumns[1]},
+			},
+		},
+	}
 	// AssessmentResponseHistoryColumns holds the columns for the "assessment_response_history" table.
 	AssessmentResponseHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3178,6 +3207,7 @@ var (
 	Tables = []*schema.Table{
 		ActionPlanHistoryTable,
 		AssessmentHistoryTable,
+		AssessmentPolicyHistoryTable,
 		AssessmentResponseHistoryTable,
 		AssetHistoryTable,
 		CampaignHistoryTable,
@@ -3251,6 +3281,9 @@ func init() {
 	}
 	AssessmentHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_history",
+	}
+	AssessmentPolicyHistoryTable.Annotation = &entsql.Annotation{
+		Table: "assessment_policy_history",
 	}
 	AssessmentResponseHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_response_history",

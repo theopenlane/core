@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -128,6 +129,7 @@ const (
 	TypeAPIToken                   = "APIToken"
 	TypeActionPlan                 = "ActionPlan"
 	TypeAssessment                 = "Assessment"
+	TypeAssessmentPolicy           = "AssessmentPolicy"
 	TypeAssessmentResponse         = "AssessmentResponse"
 	TypeAsset                      = "Asset"
 	TypeCampaign                   = "Campaign"
@@ -7763,9 +7765,15 @@ type AssessmentMutation struct {
 	campaigns                   map[string]struct{}
 	removedcampaigns            map[string]struct{}
 	clearedcampaigns            bool
+	internal_policies           map[string]struct{}
+	removedinternal_policies    map[string]struct{}
+	clearedinternal_policies    bool
 	workflow_object_refs        map[string]struct{}
 	removedworkflow_object_refs map[string]struct{}
 	clearedworkflow_object_refs bool
+	policy_attestations         map[string]struct{}
+	removedpolicy_attestations  map[string]struct{}
+	clearedpolicy_attestations  bool
 	done                        bool
 	oldValue                    func(context.Context) (*Assessment, error)
 	predicates                  []predicate.Assessment
@@ -9249,6 +9257,60 @@ func (m *AssessmentMutation) ResetCampaigns() {
 	m.removedcampaigns = nil
 }
 
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by ids.
+func (m *AssessmentMutation) AddInternalPolicyIDs(ids ...string) {
+	if m.internal_policies == nil {
+		m.internal_policies = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.internal_policies[ids[i]] = struct{}{}
+	}
+}
+
+// ClearInternalPolicies clears the "internal_policies" edge to the InternalPolicy entity.
+func (m *AssessmentMutation) ClearInternalPolicies() {
+	m.clearedinternal_policies = true
+}
+
+// InternalPoliciesCleared reports if the "internal_policies" edge to the InternalPolicy entity was cleared.
+func (m *AssessmentMutation) InternalPoliciesCleared() bool {
+	return m.clearedinternal_policies
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (m *AssessmentMutation) RemoveInternalPolicyIDs(ids ...string) {
+	if m.removedinternal_policies == nil {
+		m.removedinternal_policies = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.internal_policies, ids[i])
+		m.removedinternal_policies[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedInternalPolicies returns the removed IDs of the "internal_policies" edge to the InternalPolicy entity.
+func (m *AssessmentMutation) RemovedInternalPoliciesIDs() (ids []string) {
+	for id := range m.removedinternal_policies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// InternalPoliciesIDs returns the "internal_policies" edge IDs in the mutation.
+func (m *AssessmentMutation) InternalPoliciesIDs() (ids []string) {
+	for id := range m.internal_policies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetInternalPolicies resets all changes to the "internal_policies" edge.
+func (m *AssessmentMutation) ResetInternalPolicies() {
+	m.internal_policies = nil
+	m.clearedinternal_policies = false
+	m.removedinternal_policies = nil
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by ids.
 func (m *AssessmentMutation) AddWorkflowObjectRefIDs(ids ...string) {
 	if m.workflow_object_refs == nil {
@@ -9301,6 +9363,60 @@ func (m *AssessmentMutation) ResetWorkflowObjectRefs() {
 	m.workflow_object_refs = nil
 	m.clearedworkflow_object_refs = false
 	m.removedworkflow_object_refs = nil
+}
+
+// AddPolicyAttestationIDs adds the "policy_attestations" edge to the AssessmentPolicy entity by ids.
+func (m *AssessmentMutation) AddPolicyAttestationIDs(ids ...string) {
+	if m.policy_attestations == nil {
+		m.policy_attestations = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.policy_attestations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPolicyAttestations clears the "policy_attestations" edge to the AssessmentPolicy entity.
+func (m *AssessmentMutation) ClearPolicyAttestations() {
+	m.clearedpolicy_attestations = true
+}
+
+// PolicyAttestationsCleared reports if the "policy_attestations" edge to the AssessmentPolicy entity was cleared.
+func (m *AssessmentMutation) PolicyAttestationsCleared() bool {
+	return m.clearedpolicy_attestations
+}
+
+// RemovePolicyAttestationIDs removes the "policy_attestations" edge to the AssessmentPolicy entity by IDs.
+func (m *AssessmentMutation) RemovePolicyAttestationIDs(ids ...string) {
+	if m.removedpolicy_attestations == nil {
+		m.removedpolicy_attestations = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.policy_attestations, ids[i])
+		m.removedpolicy_attestations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPolicyAttestations returns the removed IDs of the "policy_attestations" edge to the AssessmentPolicy entity.
+func (m *AssessmentMutation) RemovedPolicyAttestationsIDs() (ids []string) {
+	for id := range m.removedpolicy_attestations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PolicyAttestationsIDs returns the "policy_attestations" edge IDs in the mutation.
+func (m *AssessmentMutation) PolicyAttestationsIDs() (ids []string) {
+	for id := range m.policy_attestations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPolicyAttestations resets all changes to the "policy_attestations" edge.
+func (m *AssessmentMutation) ResetPolicyAttestations() {
+	m.policy_attestations = nil
+	m.clearedpolicy_attestations = false
+	m.removedpolicy_attestations = nil
 }
 
 // Where appends a list predicates to the AssessmentMutation builder.
@@ -9862,7 +9978,7 @@ func (m *AssessmentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AssessmentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 12)
 	if m.owner != nil {
 		edges = append(edges, assessment.EdgeOwner)
 	}
@@ -9890,8 +10006,14 @@ func (m *AssessmentMutation) AddedEdges() []string {
 	if m.campaigns != nil {
 		edges = append(edges, assessment.EdgeCampaigns)
 	}
+	if m.internal_policies != nil {
+		edges = append(edges, assessment.EdgeInternalPolicies)
+	}
 	if m.workflow_object_refs != nil {
 		edges = append(edges, assessment.EdgeWorkflowObjectRefs)
+	}
+	if m.policy_attestations != nil {
+		edges = append(edges, assessment.EdgePolicyAttestations)
 	}
 	return edges
 }
@@ -9950,9 +10072,21 @@ func (m *AssessmentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case assessment.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.internal_policies))
+		for id := range m.internal_policies {
+			ids = append(ids, id)
+		}
+		return ids
 	case assessment.EdgeWorkflowObjectRefs:
 		ids := make([]ent.Value, 0, len(m.workflow_object_refs))
 		for id := range m.workflow_object_refs {
+			ids = append(ids, id)
+		}
+		return ids
+	case assessment.EdgePolicyAttestations:
+		ids := make([]ent.Value, 0, len(m.policy_attestations))
+		for id := range m.policy_attestations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -9962,7 +10096,7 @@ func (m *AssessmentMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AssessmentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 12)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, assessment.EdgeBlockedGroups)
 	}
@@ -9984,8 +10118,14 @@ func (m *AssessmentMutation) RemovedEdges() []string {
 	if m.removedcampaigns != nil {
 		edges = append(edges, assessment.EdgeCampaigns)
 	}
+	if m.removedinternal_policies != nil {
+		edges = append(edges, assessment.EdgeInternalPolicies)
+	}
 	if m.removedworkflow_object_refs != nil {
 		edges = append(edges, assessment.EdgeWorkflowObjectRefs)
+	}
+	if m.removedpolicy_attestations != nil {
+		edges = append(edges, assessment.EdgePolicyAttestations)
 	}
 	return edges
 }
@@ -10036,9 +10176,21 @@ func (m *AssessmentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case assessment.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policies))
+		for id := range m.removedinternal_policies {
+			ids = append(ids, id)
+		}
+		return ids
 	case assessment.EdgeWorkflowObjectRefs:
 		ids := make([]ent.Value, 0, len(m.removedworkflow_object_refs))
 		for id := range m.removedworkflow_object_refs {
+			ids = append(ids, id)
+		}
+		return ids
+	case assessment.EdgePolicyAttestations:
+		ids := make([]ent.Value, 0, len(m.removedpolicy_attestations))
+		for id := range m.removedpolicy_attestations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -10048,7 +10200,7 @@ func (m *AssessmentMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AssessmentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 12)
 	if m.clearedowner {
 		edges = append(edges, assessment.EdgeOwner)
 	}
@@ -10076,8 +10228,14 @@ func (m *AssessmentMutation) ClearedEdges() []string {
 	if m.clearedcampaigns {
 		edges = append(edges, assessment.EdgeCampaigns)
 	}
+	if m.clearedinternal_policies {
+		edges = append(edges, assessment.EdgeInternalPolicies)
+	}
 	if m.clearedworkflow_object_refs {
 		edges = append(edges, assessment.EdgeWorkflowObjectRefs)
+	}
+	if m.clearedpolicy_attestations {
+		edges = append(edges, assessment.EdgePolicyAttestations)
 	}
 	return edges
 }
@@ -10104,8 +10262,12 @@ func (m *AssessmentMutation) EdgeCleared(name string) bool {
 		return m.clearedassessment_responses
 	case assessment.EdgeCampaigns:
 		return m.clearedcampaigns
+	case assessment.EdgeInternalPolicies:
+		return m.clearedinternal_policies
 	case assessment.EdgeWorkflowObjectRefs:
 		return m.clearedworkflow_object_refs
+	case assessment.EdgePolicyAttestations:
+		return m.clearedpolicy_attestations
 	}
 	return false
 }
@@ -10155,11 +10317,1063 @@ func (m *AssessmentMutation) ResetEdge(name string) error {
 	case assessment.EdgeCampaigns:
 		m.ResetCampaigns()
 		return nil
+	case assessment.EdgeInternalPolicies:
+		m.ResetInternalPolicies()
+		return nil
 	case assessment.EdgeWorkflowObjectRefs:
 		m.ResetWorkflowObjectRefs()
 		return nil
+	case assessment.EdgePolicyAttestations:
+		m.ResetPolicyAttestations()
+		return nil
 	}
 	return fmt.Errorf("unknown Assessment edge %s", name)
+}
+
+// AssessmentPolicyMutation represents an operation that mutates the AssessmentPolicy nodes in the graph.
+type AssessmentPolicyMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	policy_revision         *string
+	clearedFields           map[string]struct{}
+	owner                   *string
+	clearedowner            bool
+	assessment              *string
+	clearedassessment       bool
+	internal_policy         *string
+	clearedinternal_policy  bool
+	done                    bool
+	oldValue                func(context.Context) (*AssessmentPolicy, error)
+	predicates              []predicate.AssessmentPolicy
+}
+
+var _ ent.Mutation = (*AssessmentPolicyMutation)(nil)
+
+// assessmentpolicyOption allows management of the mutation configuration using functional options.
+type assessmentpolicyOption func(*AssessmentPolicyMutation)
+
+// newAssessmentPolicyMutation creates new mutation for the AssessmentPolicy entity.
+func newAssessmentPolicyMutation(c config, op Op, opts ...assessmentpolicyOption) *AssessmentPolicyMutation {
+	m := &AssessmentPolicyMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAssessmentPolicy,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAssessmentPolicyID sets the ID field of the mutation.
+func withAssessmentPolicyID(id string) assessmentpolicyOption {
+	return func(m *AssessmentPolicyMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AssessmentPolicy
+		)
+		m.oldValue = func(ctx context.Context) (*AssessmentPolicy, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AssessmentPolicy.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAssessmentPolicy sets the old AssessmentPolicy of the mutation.
+func withAssessmentPolicy(node *AssessmentPolicy) assessmentpolicyOption {
+	return func(m *AssessmentPolicyMutation) {
+		m.oldValue = func(context.Context) (*AssessmentPolicy, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AssessmentPolicyMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AssessmentPolicyMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of AssessmentPolicy entities.
+func (m *AssessmentPolicyMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AssessmentPolicyMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AssessmentPolicyMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AssessmentPolicy.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AssessmentPolicyMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AssessmentPolicyMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *AssessmentPolicyMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[assessmentpolicy.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *AssessmentPolicyMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicy.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AssessmentPolicyMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, assessmentpolicy.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AssessmentPolicyMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AssessmentPolicyMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *AssessmentPolicyMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[assessmentpolicy.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *AssessmentPolicyMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicy.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AssessmentPolicyMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, assessmentpolicy.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *AssessmentPolicyMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *AssessmentPolicyMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *AssessmentPolicyMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[assessmentpolicy.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *AssessmentPolicyMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicy.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *AssessmentPolicyMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, assessmentpolicy.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *AssessmentPolicyMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *AssessmentPolicyMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *AssessmentPolicyMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[assessmentpolicy.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *AssessmentPolicyMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicy.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *AssessmentPolicyMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, assessmentpolicy.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *AssessmentPolicyMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *AssessmentPolicyMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *AssessmentPolicyMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[assessmentpolicy.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *AssessmentPolicyMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicy.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *AssessmentPolicyMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, assessmentpolicy.FieldUpdatedByImpersonator)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *AssessmentPolicyMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *AssessmentPolicyMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *AssessmentPolicyMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[assessmentpolicy.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *AssessmentPolicyMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicy.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *AssessmentPolicyMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, assessmentpolicy.FieldOwnerID)
+}
+
+// SetAssessmentID sets the "assessment_id" field.
+func (m *AssessmentPolicyMutation) SetAssessmentID(s string) {
+	m.assessment = &s
+}
+
+// AssessmentID returns the value of the "assessment_id" field in the mutation.
+func (m *AssessmentPolicyMutation) AssessmentID() (r string, exists bool) {
+	v := m.assessment
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAssessmentID returns the old "assessment_id" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldAssessmentID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAssessmentID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAssessmentID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAssessmentID: %w", err)
+	}
+	return oldValue.AssessmentID, nil
+}
+
+// ResetAssessmentID resets all changes to the "assessment_id" field.
+func (m *AssessmentPolicyMutation) ResetAssessmentID() {
+	m.assessment = nil
+}
+
+// SetInternalPolicyID sets the "internal_policy_id" field.
+func (m *AssessmentPolicyMutation) SetInternalPolicyID(s string) {
+	m.internal_policy = &s
+}
+
+// InternalPolicyID returns the value of the "internal_policy_id" field in the mutation.
+func (m *AssessmentPolicyMutation) InternalPolicyID() (r string, exists bool) {
+	v := m.internal_policy
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalPolicyID returns the old "internal_policy_id" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldInternalPolicyID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalPolicyID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalPolicyID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalPolicyID: %w", err)
+	}
+	return oldValue.InternalPolicyID, nil
+}
+
+// ResetInternalPolicyID resets all changes to the "internal_policy_id" field.
+func (m *AssessmentPolicyMutation) ResetInternalPolicyID() {
+	m.internal_policy = nil
+}
+
+// SetPolicyRevision sets the "policy_revision" field.
+func (m *AssessmentPolicyMutation) SetPolicyRevision(s string) {
+	m.policy_revision = &s
+}
+
+// PolicyRevision returns the value of the "policy_revision" field in the mutation.
+func (m *AssessmentPolicyMutation) PolicyRevision() (r string, exists bool) {
+	v := m.policy_revision
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPolicyRevision returns the old "policy_revision" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldPolicyRevision(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPolicyRevision is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPolicyRevision requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPolicyRevision: %w", err)
+	}
+	return oldValue.PolicyRevision, nil
+}
+
+// ClearPolicyRevision clears the value of the "policy_revision" field.
+func (m *AssessmentPolicyMutation) ClearPolicyRevision() {
+	m.policy_revision = nil
+	m.clearedFields[assessmentpolicy.FieldPolicyRevision] = struct{}{}
+}
+
+// PolicyRevisionCleared returns if the "policy_revision" field was cleared in this mutation.
+func (m *AssessmentPolicyMutation) PolicyRevisionCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicy.FieldPolicyRevision]
+	return ok
+}
+
+// ResetPolicyRevision resets all changes to the "policy_revision" field.
+func (m *AssessmentPolicyMutation) ResetPolicyRevision() {
+	m.policy_revision = nil
+	delete(m.clearedFields, assessmentpolicy.FieldPolicyRevision)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *AssessmentPolicyMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[assessmentpolicy.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *AssessmentPolicyMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *AssessmentPolicyMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *AssessmentPolicyMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// ClearAssessment clears the "assessment" edge to the Assessment entity.
+func (m *AssessmentPolicyMutation) ClearAssessment() {
+	m.clearedassessment = true
+	m.clearedFields[assessmentpolicy.FieldAssessmentID] = struct{}{}
+}
+
+// AssessmentCleared reports if the "assessment" edge to the Assessment entity was cleared.
+func (m *AssessmentPolicyMutation) AssessmentCleared() bool {
+	return m.clearedassessment
+}
+
+// AssessmentIDs returns the "assessment" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AssessmentID instead. It exists only for internal usage by the builders.
+func (m *AssessmentPolicyMutation) AssessmentIDs() (ids []string) {
+	if id := m.assessment; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAssessment resets all changes to the "assessment" edge.
+func (m *AssessmentPolicyMutation) ResetAssessment() {
+	m.assessment = nil
+	m.clearedassessment = false
+}
+
+// ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
+func (m *AssessmentPolicyMutation) ClearInternalPolicy() {
+	m.clearedinternal_policy = true
+	m.clearedFields[assessmentpolicy.FieldInternalPolicyID] = struct{}{}
+}
+
+// InternalPolicyCleared reports if the "internal_policy" edge to the InternalPolicy entity was cleared.
+func (m *AssessmentPolicyMutation) InternalPolicyCleared() bool {
+	return m.clearedinternal_policy
+}
+
+// InternalPolicyIDs returns the "internal_policy" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalPolicyID instead. It exists only for internal usage by the builders.
+func (m *AssessmentPolicyMutation) InternalPolicyIDs() (ids []string) {
+	if id := m.internal_policy; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalPolicy resets all changes to the "internal_policy" edge.
+func (m *AssessmentPolicyMutation) ResetInternalPolicy() {
+	m.internal_policy = nil
+	m.clearedinternal_policy = false
+}
+
+// Where appends a list predicates to the AssessmentPolicyMutation builder.
+func (m *AssessmentPolicyMutation) Where(ps ...predicate.AssessmentPolicy) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the AssessmentPolicyMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *AssessmentPolicyMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.AssessmentPolicy, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *AssessmentPolicyMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *AssessmentPolicyMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (AssessmentPolicy).
+func (m *AssessmentPolicyMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AssessmentPolicyMutation) Fields() []string {
+	fields := make([]string, 0, 9)
+	if m.created_at != nil {
+		fields = append(fields, assessmentpolicy.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, assessmentpolicy.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, assessmentpolicy.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, assessmentpolicy.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, assessmentpolicy.FieldUpdatedByImpersonator)
+	}
+	if m.owner != nil {
+		fields = append(fields, assessmentpolicy.FieldOwnerID)
+	}
+	if m.assessment != nil {
+		fields = append(fields, assessmentpolicy.FieldAssessmentID)
+	}
+	if m.internal_policy != nil {
+		fields = append(fields, assessmentpolicy.FieldInternalPolicyID)
+	}
+	if m.policy_revision != nil {
+		fields = append(fields, assessmentpolicy.FieldPolicyRevision)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AssessmentPolicyMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case assessmentpolicy.FieldCreatedAt:
+		return m.CreatedAt()
+	case assessmentpolicy.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case assessmentpolicy.FieldCreatedBy:
+		return m.CreatedBy()
+	case assessmentpolicy.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case assessmentpolicy.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case assessmentpolicy.FieldOwnerID:
+		return m.OwnerID()
+	case assessmentpolicy.FieldAssessmentID:
+		return m.AssessmentID()
+	case assessmentpolicy.FieldInternalPolicyID:
+		return m.InternalPolicyID()
+	case assessmentpolicy.FieldPolicyRevision:
+		return m.PolicyRevision()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AssessmentPolicyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case assessmentpolicy.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case assessmentpolicy.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case assessmentpolicy.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case assessmentpolicy.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case assessmentpolicy.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case assessmentpolicy.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case assessmentpolicy.FieldAssessmentID:
+		return m.OldAssessmentID(ctx)
+	case assessmentpolicy.FieldInternalPolicyID:
+		return m.OldInternalPolicyID(ctx)
+	case assessmentpolicy.FieldPolicyRevision:
+		return m.OldPolicyRevision(ctx)
+	}
+	return nil, fmt.Errorf("unknown AssessmentPolicy field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AssessmentPolicyMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case assessmentpolicy.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case assessmentpolicy.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case assessmentpolicy.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case assessmentpolicy.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case assessmentpolicy.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case assessmentpolicy.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case assessmentpolicy.FieldAssessmentID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAssessmentID(v)
+		return nil
+	case assessmentpolicy.FieldInternalPolicyID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalPolicyID(v)
+		return nil
+	case assessmentpolicy.FieldPolicyRevision:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPolicyRevision(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AssessmentPolicy field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AssessmentPolicyMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AssessmentPolicyMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AssessmentPolicyMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown AssessmentPolicy numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AssessmentPolicyMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(assessmentpolicy.FieldCreatedAt) {
+		fields = append(fields, assessmentpolicy.FieldCreatedAt)
+	}
+	if m.FieldCleared(assessmentpolicy.FieldUpdatedAt) {
+		fields = append(fields, assessmentpolicy.FieldUpdatedAt)
+	}
+	if m.FieldCleared(assessmentpolicy.FieldCreatedBy) {
+		fields = append(fields, assessmentpolicy.FieldCreatedBy)
+	}
+	if m.FieldCleared(assessmentpolicy.FieldUpdatedBy) {
+		fields = append(fields, assessmentpolicy.FieldUpdatedBy)
+	}
+	if m.FieldCleared(assessmentpolicy.FieldUpdatedByImpersonator) {
+		fields = append(fields, assessmentpolicy.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(assessmentpolicy.FieldOwnerID) {
+		fields = append(fields, assessmentpolicy.FieldOwnerID)
+	}
+	if m.FieldCleared(assessmentpolicy.FieldPolicyRevision) {
+		fields = append(fields, assessmentpolicy.FieldPolicyRevision)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AssessmentPolicyMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AssessmentPolicyMutation) ClearField(name string) error {
+	switch name {
+	case assessmentpolicy.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case assessmentpolicy.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case assessmentpolicy.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case assessmentpolicy.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case assessmentpolicy.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case assessmentpolicy.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case assessmentpolicy.FieldPolicyRevision:
+		m.ClearPolicyRevision()
+		return nil
+	}
+	return fmt.Errorf("unknown AssessmentPolicy nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AssessmentPolicyMutation) ResetField(name string) error {
+	switch name {
+	case assessmentpolicy.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case assessmentpolicy.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case assessmentpolicy.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case assessmentpolicy.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case assessmentpolicy.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case assessmentpolicy.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case assessmentpolicy.FieldAssessmentID:
+		m.ResetAssessmentID()
+		return nil
+	case assessmentpolicy.FieldInternalPolicyID:
+		m.ResetInternalPolicyID()
+		return nil
+	case assessmentpolicy.FieldPolicyRevision:
+		m.ResetPolicyRevision()
+		return nil
+	}
+	return fmt.Errorf("unknown AssessmentPolicy field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AssessmentPolicyMutation) AddedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.owner != nil {
+		edges = append(edges, assessmentpolicy.EdgeOwner)
+	}
+	if m.assessment != nil {
+		edges = append(edges, assessmentpolicy.EdgeAssessment)
+	}
+	if m.internal_policy != nil {
+		edges = append(edges, assessmentpolicy.EdgeInternalPolicy)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AssessmentPolicyMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case assessmentpolicy.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case assessmentpolicy.EdgeAssessment:
+		if id := m.assessment; id != nil {
+			return []ent.Value{*id}
+		}
+	case assessmentpolicy.EdgeInternalPolicy:
+		if id := m.internal_policy; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AssessmentPolicyMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 3)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AssessmentPolicyMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AssessmentPolicyMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.clearedowner {
+		edges = append(edges, assessmentpolicy.EdgeOwner)
+	}
+	if m.clearedassessment {
+		edges = append(edges, assessmentpolicy.EdgeAssessment)
+	}
+	if m.clearedinternal_policy {
+		edges = append(edges, assessmentpolicy.EdgeInternalPolicy)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AssessmentPolicyMutation) EdgeCleared(name string) bool {
+	switch name {
+	case assessmentpolicy.EdgeOwner:
+		return m.clearedowner
+	case assessmentpolicy.EdgeAssessment:
+		return m.clearedassessment
+	case assessmentpolicy.EdgeInternalPolicy:
+		return m.clearedinternal_policy
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AssessmentPolicyMutation) ClearEdge(name string) error {
+	switch name {
+	case assessmentpolicy.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	case assessmentpolicy.EdgeAssessment:
+		m.ClearAssessment()
+		return nil
+	case assessmentpolicy.EdgeInternalPolicy:
+		m.ClearInternalPolicy()
+		return nil
+	}
+	return fmt.Errorf("unknown AssessmentPolicy unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AssessmentPolicyMutation) ResetEdge(name string) error {
+	switch name {
+	case assessmentpolicy.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case assessmentpolicy.EdgeAssessment:
+		m.ResetAssessment()
+		return nil
+	case assessmentpolicy.EdgeInternalPolicy:
+		m.ResetInternalPolicy()
+		return nil
+	}
+	return fmt.Errorf("unknown AssessmentPolicy edge %s", name)
 }
 
 // AssessmentResponseMutation represents an operation that mutates the AssessmentResponse nodes in the graph.
@@ -127748,9 +128962,15 @@ type InternalPolicyMutation struct {
 	reviews                                 map[string]struct{}
 	removedreviews                          map[string]struct{}
 	clearedreviews                          bool
+	assessments                             map[string]struct{}
+	removedassessments                      map[string]struct{}
+	clearedassessments                      bool
 	integrations                            map[string]struct{}
 	removedintegrations                     map[string]struct{}
 	clearedintegrations                     bool
+	policy_attestations                     map[string]struct{}
+	removedpolicy_attestations              map[string]struct{}
+	clearedpolicy_attestations              bool
 	done                                    bool
 	oldValue                                func(context.Context) (*InternalPolicy, error)
 	predicates                              []predicate.InternalPolicy
@@ -131529,6 +132749,60 @@ func (m *InternalPolicyMutation) ResetReviews() {
 	m.removedreviews = nil
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by ids.
+func (m *InternalPolicyMutation) AddAssessmentIDs(ids ...string) {
+	if m.assessments == nil {
+		m.assessments = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.assessments[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAssessments clears the "assessments" edge to the Assessment entity.
+func (m *InternalPolicyMutation) ClearAssessments() {
+	m.clearedassessments = true
+}
+
+// AssessmentsCleared reports if the "assessments" edge to the Assessment entity was cleared.
+func (m *InternalPolicyMutation) AssessmentsCleared() bool {
+	return m.clearedassessments
+}
+
+// RemoveAssessmentIDs removes the "assessments" edge to the Assessment entity by IDs.
+func (m *InternalPolicyMutation) RemoveAssessmentIDs(ids ...string) {
+	if m.removedassessments == nil {
+		m.removedassessments = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.assessments, ids[i])
+		m.removedassessments[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAssessments returns the removed IDs of the "assessments" edge to the Assessment entity.
+func (m *InternalPolicyMutation) RemovedAssessmentsIDs() (ids []string) {
+	for id := range m.removedassessments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AssessmentsIDs returns the "assessments" edge IDs in the mutation.
+func (m *InternalPolicyMutation) AssessmentsIDs() (ids []string) {
+	for id := range m.assessments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAssessments resets all changes to the "assessments" edge.
+func (m *InternalPolicyMutation) ResetAssessments() {
+	m.assessments = nil
+	m.clearedassessments = false
+	m.removedassessments = nil
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by ids.
 func (m *InternalPolicyMutation) AddIntegrationIDs(ids ...string) {
 	if m.integrations == nil {
@@ -131581,6 +132855,60 @@ func (m *InternalPolicyMutation) ResetIntegrations() {
 	m.integrations = nil
 	m.clearedintegrations = false
 	m.removedintegrations = nil
+}
+
+// AddPolicyAttestationIDs adds the "policy_attestations" edge to the AssessmentPolicy entity by ids.
+func (m *InternalPolicyMutation) AddPolicyAttestationIDs(ids ...string) {
+	if m.policy_attestations == nil {
+		m.policy_attestations = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.policy_attestations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPolicyAttestations clears the "policy_attestations" edge to the AssessmentPolicy entity.
+func (m *InternalPolicyMutation) ClearPolicyAttestations() {
+	m.clearedpolicy_attestations = true
+}
+
+// PolicyAttestationsCleared reports if the "policy_attestations" edge to the AssessmentPolicy entity was cleared.
+func (m *InternalPolicyMutation) PolicyAttestationsCleared() bool {
+	return m.clearedpolicy_attestations
+}
+
+// RemovePolicyAttestationIDs removes the "policy_attestations" edge to the AssessmentPolicy entity by IDs.
+func (m *InternalPolicyMutation) RemovePolicyAttestationIDs(ids ...string) {
+	if m.removedpolicy_attestations == nil {
+		m.removedpolicy_attestations = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.policy_attestations, ids[i])
+		m.removedpolicy_attestations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPolicyAttestations returns the removed IDs of the "policy_attestations" edge to the AssessmentPolicy entity.
+func (m *InternalPolicyMutation) RemovedPolicyAttestationsIDs() (ids []string) {
+	for id := range m.removedpolicy_attestations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PolicyAttestationsIDs returns the "policy_attestations" edge IDs in the mutation.
+func (m *InternalPolicyMutation) PolicyAttestationsIDs() (ids []string) {
+	for id := range m.policy_attestations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPolicyAttestations resets all changes to the "policy_attestations" edge.
+func (m *InternalPolicyMutation) ResetPolicyAttestations() {
+	m.policy_attestations = nil
+	m.clearedpolicy_attestations = false
+	m.removedpolicy_attestations = nil
 }
 
 // Where appends a list predicates to the InternalPolicyMutation builder.
@@ -132794,7 +134122,7 @@ func (m *InternalPolicyMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *InternalPolicyMutation) AddedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.integration_runs != nil {
 		edges = append(edges, internalpolicy.EdgeIntegrationRuns)
 	}
@@ -132873,8 +134201,14 @@ func (m *InternalPolicyMutation) AddedEdges() []string {
 	if m.reviews != nil {
 		edges = append(edges, internalpolicy.EdgeReviews)
 	}
+	if m.assessments != nil {
+		edges = append(edges, internalpolicy.EdgeAssessments)
+	}
 	if m.integrations != nil {
 		edges = append(edges, internalpolicy.EdgeIntegrations)
+	}
+	if m.policy_attestations != nil {
+		edges = append(edges, internalpolicy.EdgePolicyAttestations)
 	}
 	return edges
 }
@@ -133025,9 +134359,21 @@ func (m *InternalPolicyMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case internalpolicy.EdgeAssessments:
+		ids := make([]ent.Value, 0, len(m.assessments))
+		for id := range m.assessments {
+			ids = append(ids, id)
+		}
+		return ids
 	case internalpolicy.EdgeIntegrations:
 		ids := make([]ent.Value, 0, len(m.integrations))
 		for id := range m.integrations {
+			ids = append(ids, id)
+		}
+		return ids
+	case internalpolicy.EdgePolicyAttestations:
+		ids := make([]ent.Value, 0, len(m.policy_attestations))
+		for id := range m.policy_attestations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -133037,7 +134383,7 @@ func (m *InternalPolicyMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *InternalPolicyMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, internalpolicy.EdgeIntegrationRuns)
 	}
@@ -133095,8 +134441,14 @@ func (m *InternalPolicyMutation) RemovedEdges() []string {
 	if m.removedreviews != nil {
 		edges = append(edges, internalpolicy.EdgeReviews)
 	}
+	if m.removedassessments != nil {
+		edges = append(edges, internalpolicy.EdgeAssessments)
+	}
 	if m.removedintegrations != nil {
 		edges = append(edges, internalpolicy.EdgeIntegrations)
+	}
+	if m.removedpolicy_attestations != nil {
+		edges = append(edges, internalpolicy.EdgePolicyAttestations)
 	}
 	return edges
 }
@@ -133219,9 +134571,21 @@ func (m *InternalPolicyMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case internalpolicy.EdgeAssessments:
+		ids := make([]ent.Value, 0, len(m.removedassessments))
+		for id := range m.removedassessments {
+			ids = append(ids, id)
+		}
+		return ids
 	case internalpolicy.EdgeIntegrations:
 		ids := make([]ent.Value, 0, len(m.removedintegrations))
 		for id := range m.removedintegrations {
+			ids = append(ids, id)
+		}
+		return ids
+	case internalpolicy.EdgePolicyAttestations:
+		ids := make([]ent.Value, 0, len(m.removedpolicy_attestations))
+		for id := range m.removedpolicy_attestations {
 			ids = append(ids, id)
 		}
 		return ids
@@ -133231,7 +134595,7 @@ func (m *InternalPolicyMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *InternalPolicyMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.clearedintegration_runs {
 		edges = append(edges, internalpolicy.EdgeIntegrationRuns)
 	}
@@ -133310,8 +134674,14 @@ func (m *InternalPolicyMutation) ClearedEdges() []string {
 	if m.clearedreviews {
 		edges = append(edges, internalpolicy.EdgeReviews)
 	}
+	if m.clearedassessments {
+		edges = append(edges, internalpolicy.EdgeAssessments)
+	}
 	if m.clearedintegrations {
 		edges = append(edges, internalpolicy.EdgeIntegrations)
+	}
+	if m.clearedpolicy_attestations {
+		edges = append(edges, internalpolicy.EdgePolicyAttestations)
 	}
 	return edges
 }
@@ -133372,8 +134742,12 @@ func (m *InternalPolicyMutation) EdgeCleared(name string) bool {
 		return m.clearedidentity_holders
 	case internalpolicy.EdgeReviews:
 		return m.clearedreviews
+	case internalpolicy.EdgeAssessments:
+		return m.clearedassessments
 	case internalpolicy.EdgeIntegrations:
 		return m.clearedintegrations
+	case internalpolicy.EdgePolicyAttestations:
+		return m.clearedpolicy_attestations
 	}
 	return false
 }
@@ -133489,8 +134863,14 @@ func (m *InternalPolicyMutation) ResetEdge(name string) error {
 	case internalpolicy.EdgeReviews:
 		m.ResetReviews()
 		return nil
+	case internalpolicy.EdgeAssessments:
+		m.ResetAssessments()
+		return nil
 	case internalpolicy.EdgeIntegrations:
 		m.ResetIntegrations()
+		return nil
+	case internalpolicy.EdgePolicyAttestations:
+		m.ResetPolicyAttestations()
 		return nil
 	}
 	return fmt.Errorf("unknown InternalPolicy edge %s", name)
@@ -159283,6 +160663,9 @@ type OrganizationMutation struct {
 	assessment_creators                           map[string]struct{}
 	removedassessment_creators                    map[string]struct{}
 	clearedassessment_creators                    bool
+	assessment_policy_creators                    map[string]struct{}
+	removedassessment_policy_creators             map[string]struct{}
+	clearedassessment_policy_creators             bool
 	asset_creators                                map[string]struct{}
 	removedasset_creators                         map[string]struct{}
 	clearedasset_creators                         bool
@@ -159673,6 +161056,9 @@ type OrganizationMutation struct {
 	assessment_responses                          map[string]struct{}
 	removedassessment_responses                   map[string]struct{}
 	clearedassessment_responses                   bool
+	assessment_policies                           map[string]struct{}
+	removedassessment_policies                    map[string]struct{}
+	clearedassessment_policies                    bool
 	custom_type_enums                             map[string]struct{}
 	removedcustom_type_enums                      map[string]struct{}
 	clearedcustom_type_enums                      bool
@@ -160880,6 +162266,60 @@ func (m *OrganizationMutation) ResetAssessmentCreators() {
 	m.assessment_creators = nil
 	m.clearedassessment_creators = false
 	m.removedassessment_creators = nil
+}
+
+// AddAssessmentPolicyCreatorIDs adds the "assessment_policy_creators" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddAssessmentPolicyCreatorIDs(ids ...string) {
+	if m.assessment_policy_creators == nil {
+		m.assessment_policy_creators = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.assessment_policy_creators[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAssessmentPolicyCreators clears the "assessment_policy_creators" edge to the Group entity.
+func (m *OrganizationMutation) ClearAssessmentPolicyCreators() {
+	m.clearedassessment_policy_creators = true
+}
+
+// AssessmentPolicyCreatorsCleared reports if the "assessment_policy_creators" edge to the Group entity was cleared.
+func (m *OrganizationMutation) AssessmentPolicyCreatorsCleared() bool {
+	return m.clearedassessment_policy_creators
+}
+
+// RemoveAssessmentPolicyCreatorIDs removes the "assessment_policy_creators" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveAssessmentPolicyCreatorIDs(ids ...string) {
+	if m.removedassessment_policy_creators == nil {
+		m.removedassessment_policy_creators = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.assessment_policy_creators, ids[i])
+		m.removedassessment_policy_creators[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAssessmentPolicyCreators returns the removed IDs of the "assessment_policy_creators" edge to the Group entity.
+func (m *OrganizationMutation) RemovedAssessmentPolicyCreatorsIDs() (ids []string) {
+	for id := range m.removedassessment_policy_creators {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AssessmentPolicyCreatorsIDs returns the "assessment_policy_creators" edge IDs in the mutation.
+func (m *OrganizationMutation) AssessmentPolicyCreatorsIDs() (ids []string) {
+	for id := range m.assessment_policy_creators {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAssessmentPolicyCreators resets all changes to the "assessment_policy_creators" edge.
+func (m *OrganizationMutation) ResetAssessmentPolicyCreators() {
+	m.assessment_policy_creators = nil
+	m.clearedassessment_policy_creators = false
+	m.removedassessment_policy_creators = nil
 }
 
 // AddAssetCreatorIDs adds the "asset_creators" edge to the Group entity by ids.
@@ -167913,6 +169353,60 @@ func (m *OrganizationMutation) ResetAssessmentResponses() {
 	m.removedassessment_responses = nil
 }
 
+// AddAssessmentPolicyIDs adds the "assessment_policies" edge to the AssessmentPolicy entity by ids.
+func (m *OrganizationMutation) AddAssessmentPolicyIDs(ids ...string) {
+	if m.assessment_policies == nil {
+		m.assessment_policies = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.assessment_policies[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAssessmentPolicies clears the "assessment_policies" edge to the AssessmentPolicy entity.
+func (m *OrganizationMutation) ClearAssessmentPolicies() {
+	m.clearedassessment_policies = true
+}
+
+// AssessmentPoliciesCleared reports if the "assessment_policies" edge to the AssessmentPolicy entity was cleared.
+func (m *OrganizationMutation) AssessmentPoliciesCleared() bool {
+	return m.clearedassessment_policies
+}
+
+// RemoveAssessmentPolicyIDs removes the "assessment_policies" edge to the AssessmentPolicy entity by IDs.
+func (m *OrganizationMutation) RemoveAssessmentPolicyIDs(ids ...string) {
+	if m.removedassessment_policies == nil {
+		m.removedassessment_policies = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.assessment_policies, ids[i])
+		m.removedassessment_policies[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAssessmentPolicies returns the removed IDs of the "assessment_policies" edge to the AssessmentPolicy entity.
+func (m *OrganizationMutation) RemovedAssessmentPoliciesIDs() (ids []string) {
+	for id := range m.removedassessment_policies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AssessmentPoliciesIDs returns the "assessment_policies" edge IDs in the mutation.
+func (m *OrganizationMutation) AssessmentPoliciesIDs() (ids []string) {
+	for id := range m.assessment_policies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAssessmentPolicies resets all changes to the "assessment_policies" edge.
+func (m *OrganizationMutation) ResetAssessmentPolicies() {
+	m.assessment_policies = nil
+	m.clearedassessment_policies = false
+	m.removedassessment_policies = nil
+}
+
 // AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by ids.
 func (m *OrganizationMutation) AddCustomTypeEnumIDs(ids ...string) {
 	if m.custom_type_enums == nil {
@@ -169622,7 +171116,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 156)
+	edges := make([]string, 0, 158)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -169631,6 +171125,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.assessment_creators != nil {
 		edges = append(edges, organization.EdgeAssessmentCreators)
+	}
+	if m.assessment_policy_creators != nil {
+		edges = append(edges, organization.EdgeAssessmentPolicyCreators)
 	}
 	if m.asset_creators != nil {
 		edges = append(edges, organization.EdgeAssetCreators)
@@ -170025,6 +171522,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.assessment_responses != nil {
 		edges = append(edges, organization.EdgeAssessmentResponses)
 	}
+	if m.assessment_policies != nil {
+		edges = append(edges, organization.EdgeAssessmentPolicies)
+	}
 	if m.custom_type_enums != nil {
 		edges = append(edges, organization.EdgeCustomTypeEnums)
 	}
@@ -170113,6 +171613,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 	case organization.EdgeAssessmentCreators:
 		ids := make([]ent.Value, 0, len(m.assessment_creators))
 		for id := range m.assessment_creators {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeAssessmentPolicyCreators:
+		ids := make([]ent.Value, 0, len(m.assessment_policy_creators))
+		for id := range m.assessment_policy_creators {
 			ids = append(ids, id)
 		}
 		return ids
@@ -170896,6 +172402,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeAssessmentPolicies:
+		ids := make([]ent.Value, 0, len(m.assessment_policies))
+		for id := range m.assessment_policies {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeCustomTypeEnums:
 		ids := make([]ent.Value, 0, len(m.custom_type_enums))
 		for id := range m.custom_type_enums {
@@ -171034,7 +172546,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 156)
+	edges := make([]string, 0, 158)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -171043,6 +172555,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedassessment_creators != nil {
 		edges = append(edges, organization.EdgeAssessmentCreators)
+	}
+	if m.removedassessment_policy_creators != nil {
+		edges = append(edges, organization.EdgeAssessmentPolicyCreators)
 	}
 	if m.removedasset_creators != nil {
 		edges = append(edges, organization.EdgeAssetCreators)
@@ -171428,6 +172943,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedassessment_responses != nil {
 		edges = append(edges, organization.EdgeAssessmentResponses)
 	}
+	if m.removedassessment_policies != nil {
+		edges = append(edges, organization.EdgeAssessmentPolicies)
+	}
 	if m.removedcustom_type_enums != nil {
 		edges = append(edges, organization.EdgeCustomTypeEnums)
 	}
@@ -171516,6 +173034,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 	case organization.EdgeAssessmentCreators:
 		ids := make([]ent.Value, 0, len(m.removedassessment_creators))
 		for id := range m.removedassessment_creators {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeAssessmentPolicyCreators:
+		ids := make([]ent.Value, 0, len(m.removedassessment_policy_creators))
+		for id := range m.removedassessment_policy_creators {
 			ids = append(ids, id)
 		}
 		return ids
@@ -172287,6 +173811,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeAssessmentPolicies:
+		ids := make([]ent.Value, 0, len(m.removedassessment_policies))
+		for id := range m.removedassessment_policies {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeCustomTypeEnums:
 		ids := make([]ent.Value, 0, len(m.removedcustom_type_enums))
 		for id := range m.removedcustom_type_enums {
@@ -172425,7 +173955,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 156)
+	edges := make([]string, 0, 158)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -172434,6 +173964,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	}
 	if m.clearedassessment_creators {
 		edges = append(edges, organization.EdgeAssessmentCreators)
+	}
+	if m.clearedassessment_policy_creators {
+		edges = append(edges, organization.EdgeAssessmentPolicyCreators)
 	}
 	if m.clearedasset_creators {
 		edges = append(edges, organization.EdgeAssetCreators)
@@ -172828,6 +174361,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedassessment_responses {
 		edges = append(edges, organization.EdgeAssessmentResponses)
 	}
+	if m.clearedassessment_policies {
+		edges = append(edges, organization.EdgeAssessmentPolicies)
+	}
 	if m.clearedcustom_type_enums {
 		edges = append(edges, organization.EdgeCustomTypeEnums)
 	}
@@ -172907,6 +174443,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedapi_token_creators
 	case organization.EdgeAssessmentCreators:
 		return m.clearedassessment_creators
+	case organization.EdgeAssessmentPolicyCreators:
+		return m.clearedassessment_policy_creators
 	case organization.EdgeAssetCreators:
 		return m.clearedasset_creators
 	case organization.EdgeCampaignCreators:
@@ -173169,6 +174707,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedassessments
 	case organization.EdgeAssessmentResponses:
 		return m.clearedassessment_responses
+	case organization.EdgeAssessmentPolicies:
+		return m.clearedassessment_policies
 	case organization.EdgeCustomTypeEnums:
 		return m.clearedcustom_type_enums
 	case organization.EdgeTagDefinitions:
@@ -173246,6 +174786,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeAssessmentCreators:
 		m.ResetAssessmentCreators()
+		return nil
+	case organization.EdgeAssessmentPolicyCreators:
+		m.ResetAssessmentPolicyCreators()
 		return nil
 	case organization.EdgeAssetCreators:
 		m.ResetAssetCreators()
@@ -173639,6 +175182,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeAssessmentResponses:
 		m.ResetAssessmentResponses()
+		return nil
+	case organization.EdgeAssessmentPolicies:
+		m.ResetAssessmentPolicies()
 		return nil
 	case organization.EdgeCustomTypeEnums:
 		m.ResetCustomTypeEnums()

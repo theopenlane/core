@@ -1,0 +1,172 @@
+mutation CreateAssessmentPolicy ($input: CreateAssessmentPolicyInput!) {
+	createAssessmentPolicy(input: $input) {
+		assessmentPolicy {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+mutation CreateBulkAssessmentPolicy ($input: [CreateAssessmentPolicyInput!]) {
+	createBulkAssessmentPolicy(input: $input) {
+		assessmentPolicies {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+mutation CreateBulkCSVAssessmentPolicy ($input: Upload!) {
+	createBulkCSVAssessmentPolicy(input: $input) {
+		assessmentPolicies {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+mutation DeleteAssessmentPolicy ($deleteAssessmentPolicyId: ID!) {
+	deleteAssessmentPolicy(id: $deleteAssessmentPolicyId) {
+		deletedID
+	}
+}
+mutation DeleteBulkAssessmentPolicy ($ids: [ID!]!) {
+	deleteBulkAssessmentPolicy(ids: $ids) {
+		deletedIDs
+	}
+}
+query GetAllAssessmentPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AssessmentPolicyOrder!]) {
+	assessmentPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				createdAt
+				createdBy
+				id
+				internalPolicyID
+				ownerID
+				policyRevision
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}
+query GetAssessmentPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AssessmentPolicyOrder!], $where: AssessmentPolicyWhereInput) {
+	assessmentPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				createdAt
+				createdBy
+				id
+				internalPolicyID
+				ownerID
+				policyRevision
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}
+query GetAssessmentPolicyByID ($assessmentPolicyId: ID!) {
+	assessmentPolicy(id: $assessmentPolicyId) {
+		assessmentID
+		createdAt
+		createdBy
+		id
+		internalPolicyID
+		ownerID
+		policyRevision
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+	}
+}
+mutation UpdateAssessmentPolicy ($updateAssessmentPolicyId: ID!, $input: UpdateAssessmentPolicyInput!) {
+	updateAssessmentPolicy(id: $updateAssessmentPolicyId, input: $input) {
+		assessmentPolicy {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+mutation UpdateBulkAssessmentPolicy ($ids: [ID!]!, $input: UpdateAssessmentPolicyInput!) {
+	updateBulkAssessmentPolicy(ids: $ids, input: $input) {
+		assessmentPolicies {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+		updatedIDs
+	}
+}
+mutation UpdateBulkCSVAssessmentPolicy ($input: Upload!) {
+	updateBulkCSVAssessmentPolicy(input: $input) {
+		assessmentPolicies {
+			assessmentID
+			createdAt
+			createdBy
+			id
+			internalPolicyID
+			ownerID
+			policyRevision
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+		updatedIDs
+	}
+}

@@ -164,11 +164,37 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "internal_policies": {
+	ObjectType:          "internal_policy",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
 }, "workflow_object_refs": {
 	ObjectType:          "workflow_object_ref",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "policy_attestations": {
+	ObjectType:          "internal_policy",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+},
+}, "assessment_policy": {"owner": {
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "assessment": {
+	ObjectType:          "assessment",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "internal_policy": {
+	ObjectType:          "internal_policy",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
 },
 }, "assessment_response": {"owner": {
 	ObjectType:          "organization",
@@ -2762,10 +2788,20 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "assessments": {
+	ObjectType:          "assessment",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 }, "integrations": {
 	ObjectType:          "organization",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "policy_attestations": {
+	ObjectType:          "assessment_policy",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 },
 }, "invite": {"owner": {
@@ -3108,6 +3144,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "assessment_creators": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "assessment_policy_creators": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
@@ -3764,6 +3805,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "assessment_responses": {
 	ObjectType:          "assessment_response",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "assessment_policies": {
+	ObjectType:          "assessment_policy",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,

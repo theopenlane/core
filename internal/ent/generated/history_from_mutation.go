@@ -1043,6 +1043,215 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *AssessmentPolicyMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
+
+}
+
+func (m *AssessmentPolicyMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.AssessmentPolicyHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if assessmentID, exists := m.AssessmentID(); exists {
+		create = create.SetAssessmentID(assessmentID)
+	}
+
+	if internalPolicyID, exists := m.InternalPolicyID(); exists {
+		create = create.SetInternalPolicyID(internalPolicyID)
+	}
+
+	if policyRevision, exists := m.PolicyRevision(); exists {
+		create = create.SetPolicyRevision(policyRevision)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *AssessmentPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessmentpolicy, err := client.AssessmentPolicy.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AssessmentPolicyHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(assessmentpolicy.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(assessmentpolicy.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(assessmentpolicy.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(assessmentpolicy.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(assessmentpolicy.UpdatedByImpersonator)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(assessmentpolicy.OwnerID)
+		}
+
+		if assessmentID, exists := m.AssessmentID(); exists {
+			create = create.SetAssessmentID(assessmentID)
+		} else {
+			create = create.SetAssessmentID(assessmentpolicy.AssessmentID)
+		}
+
+		if internalPolicyID, exists := m.InternalPolicyID(); exists {
+			create = create.SetInternalPolicyID(internalPolicyID)
+		} else {
+			create = create.SetInternalPolicyID(assessmentpolicy.InternalPolicyID)
+		}
+
+		if policyRevision, exists := m.PolicyRevision(); exists {
+			create = create.SetPolicyRevision(policyRevision)
+		} else {
+			create = create.SetPolicyRevision(assessmentpolicy.PolicyRevision)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AssessmentPolicyMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessmentpolicy, err := client.AssessmentPolicy.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AssessmentPolicyHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(assessmentpolicy.CreatedAt).
+			SetUpdatedAt(assessmentpolicy.UpdatedAt).
+			SetCreatedBy(assessmentpolicy.CreatedBy).
+			SetUpdatedBy(assessmentpolicy.UpdatedBy).
+			SetNillableUpdatedByImpersonator(assessmentpolicy.UpdatedByImpersonator).
+			SetOwnerID(assessmentpolicy.OwnerID).
+			SetAssessmentID(assessmentpolicy.AssessmentID).
+			SetInternalPolicyID(assessmentpolicy.InternalPolicyID).
+			SetPolicyRevision(assessmentpolicy.PolicyRevision).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *AssessmentResponseMutation) skipper(ctx context.Context) bool {
 
 	if PurgeHistoryEnabled(ctx) {

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -392,6 +393,21 @@ func (_c *OrganizationCreate) AddAssessmentCreators(v ...*Group) *OrganizationCr
 		ids[i] = v[i].ID
 	}
 	return _c.AddAssessmentCreatorIDs(ids...)
+}
+
+// AddAssessmentPolicyCreatorIDs adds the "assessment_policy_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddAssessmentPolicyCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAssessmentPolicyCreatorIDs(ids...)
+	return _c
+}
+
+// AddAssessmentPolicyCreators adds the "assessment_policy_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddAssessmentPolicyCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentPolicyCreatorIDs(ids...)
 }
 
 // AddAssetCreatorIDs adds the "asset_creators" edge to the Group entity by IDs.
@@ -2371,6 +2387,21 @@ func (_c *OrganizationCreate) AddAssessmentResponses(v ...*AssessmentResponse) *
 	return _c.AddAssessmentResponseIDs(ids...)
 }
 
+// AddAssessmentPolicyIDs adds the "assessment_policies" edge to the AssessmentPolicy entity by IDs.
+func (_c *OrganizationCreate) AddAssessmentPolicyIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAssessmentPolicyIDs(ids...)
+	return _c
+}
+
+// AddAssessmentPolicies adds the "assessment_policies" edges to the AssessmentPolicy entity.
+func (_c *OrganizationCreate) AddAssessmentPolicies(v ...*AssessmentPolicy) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentPolicyIDs(ids...)
+}
+
 // AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
 func (_c *OrganizationCreate) AddCustomTypeEnumIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddCustomTypeEnumIDs(ids...)
@@ -2946,6 +2977,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.AssessmentCreatorsTable,
 			Columns: []string{organization.AssessmentCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentPolicyCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPolicyCreatorsTable,
+			Columns: []string{organization.AssessmentPolicyCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -5054,6 +5101,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentPoliciesTable,
+			Columns: []string{organization.AssessmentPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

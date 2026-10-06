@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
@@ -969,6 +971,21 @@ func (_c *InternalPolicyCreate) AddReviews(v ...*Review) *InternalPolicyCreate {
 	return _c.AddReviewIDs(ids...)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (_c *InternalPolicyCreate) AddAssessmentIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddAssessmentIDs(ids...)
+	return _c
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (_c *InternalPolicyCreate) AddAssessments(v ...*Assessment) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentIDs(ids...)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_c *InternalPolicyCreate) AddIntegrationIDs(ids ...string) *InternalPolicyCreate {
 	_c.mutation.AddIntegrationIDs(ids...)
@@ -982,6 +999,21 @@ func (_c *InternalPolicyCreate) AddIntegrations(v ...*Integration) *InternalPoli
 		ids[i] = v[i].ID
 	}
 	return _c.AddIntegrationIDs(ids...)
+}
+
+// AddPolicyAttestationIDs adds the "policy_attestations" edge to the AssessmentPolicy entity by IDs.
+func (_c *InternalPolicyCreate) AddPolicyAttestationIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddPolicyAttestationIDs(ids...)
+	return _c
+}
+
+// AddPolicyAttestations adds the "policy_attestations" edges to the AssessmentPolicy entity.
+func (_c *InternalPolicyCreate) AddPolicyAttestations(v ...*AssessmentPolicy) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPolicyAttestationIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -1770,6 +1802,29 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.AssessmentsTable,
+			Columns: internalpolicy.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &AssessmentPolicyCreate{config: _c.config, mutation: newAssessmentPolicyMutation(_c.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1779,6 +1834,22 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PolicyAttestationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   internalpolicy.PolicyAttestationsTable,
+			Columns: []string{internalpolicy.PolicyAttestationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
