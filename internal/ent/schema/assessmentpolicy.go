@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -9,6 +11,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
@@ -118,8 +121,32 @@ func (AssessmentPolicy) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CanCreateObjectsUnderParents([]string{Assessment{}.Name(), InternalPolicy{}.Name()}),
-			// policy.CanEditObjectUnderParents([]string{Assessment{}.Name()}, assessmentPolicyParentID),
+			policy.CanEditObjectUnderParents([]string{Assessment{}.Name()}, assessmentPolicyParentID),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// assessmentPolicyParentID returns the value of a parent id field on the assessment_policy being mutated
+func assessmentPolicyParentID(ctx context.Context, m generated.Mutation, field string) (string, error) {
+	apm, ok := m.(*generated.AssessmentPolicyMutation)
+	if !ok {
+		return "", nil
+	}
+
+	id, ok := apm.ID()
+	if !ok {
+		return "", nil
+	}
+
+	ap, err := apm.Client().AssessmentPolicy.Get(ctx, id)
+	if err != nil {
+		return "", err
+	}
+
+	if field == "assessment_id" {
+		return ap.AssessmentID, nil
+	}
+
+	return "", nil
 }

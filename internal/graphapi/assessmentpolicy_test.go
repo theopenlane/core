@@ -222,6 +222,100 @@ func TestMutationCreateBulkAssessmentPolicy(t *testing.T) {
 	})
 }
 
+func TestMutationDeleteAssessmentPolicy(t *testing.T) {
+	editorGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, GroupID: editorGroup.ID, UserID: th.SharedViewOnlyUser.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	editableResp, err := suite.Client.API.CreateAssessment(th.SharedTestUser1.UserCtx, testclient.CreateAssessmentInput{
+		Name:       "Policy sign off " + gofakeit.UUID(),
+		Jsonconfig: policySignOffJSONConfig,
+		EditorIDs:  []string{editorGroup.ID},
+	})
+	assert.NilError(t, err)
+
+	editableAssessment := editableResp.CreateAssessment.Assessment
+	assessment := createPolicySignOffAssessment(t)
+
+	policy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: editableAssessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: policy.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, ID: editorGroup.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	createResp, err := suite.Client.API.CreateBulkAssessmentPolicy(th.SharedTestUser1.UserCtx, []*testclient.CreateAssessmentPolicyInput{
+		{AssessmentID: editableAssessment.ID, InternalPolicyID: policy.ID},
+		{AssessmentID: assessment.ID, InternalPolicyID: policy.ID},
+	})
+	assert.NilError(t, err)
+
+	attestationIDs := map[string]string{}
+	for _, ap := range createResp.CreateBulkAssessmentPolicy.AssessmentPolicies {
+		attestationIDs[ap.AssessmentID] = ap.ID
+	}
+
+	editableAttestationID := attestationIDs[editableAssessment.ID]
+	attestationID := attestationIDs[assessment.ID]
+
+	testCases := []struct {
+		name        string
+		idToDelete  string
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:        "not authorized, view only user without edit access to the assessment",
+			idToDelete:  attestationID,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:       "happy path, view only user with edit access to the assessment",
+			idToDelete: editableAttestationID,
+			client:     suite.Client.API,
+			ctx:        th.SharedViewOnlyUser.UserCtx,
+		},
+		{
+			name:        "not authorized, different organization",
+			idToDelete:  attestationID,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
+		},
+		{
+			name:       "happy path, org user",
+			idToDelete: attestationID,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:        "already deleted, not found",
+			idToDelete:  attestationID,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteAssessmentPolicy(tc.ctx, tc.idToDelete)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteAssessmentPolicy.DeletedID))
+		})
+	}
+}
+
 func TestMutationCreateAssessmentWithPolicies(t *testing.T) {
 	policy1 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	policy2 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
