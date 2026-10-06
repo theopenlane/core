@@ -53,6 +53,9 @@ func (Subscriber) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("trust_center_id").
 			Comment("the trust center the subscriber is subscribed to, null for legacy organization-level subscribers").
+			Annotations(
+				entx.AnonymousField(),
+			).
 			Optional().
 			Nillable().
 			Immutable(),
@@ -61,6 +64,7 @@ func (Subscriber) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("email"),
+				entx.AnonymousField(),
 			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
@@ -196,7 +200,6 @@ func (Subscriber) Annotations() []schema.Annotation {
 			Exclude: true,
 		},
 		entx.NewExportable(),
-		entx.AnonymousFields("email", "trust_center_id"),
 	}
 }
 

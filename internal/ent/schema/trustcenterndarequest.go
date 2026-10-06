@@ -52,17 +52,29 @@ func (TrustCenterNDARequest) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("ID of the trust center").
 			NotEmpty().
+			Annotations(
+				entx.AnonymousField(),
+			).
 			Immutable().
 			Optional(),
 		field.String("first_name").
 			Comment("first name of the requester").
+			Annotations(
+				entx.AnonymousField(),
+			).
 			NotEmpty(),
 		field.String("last_name").
 			Comment("last name of the requester").
+			Annotations(
+				entx.AnonymousField(),
+			).
 			NotEmpty(),
 		field.String("email").
 			Comment("email address of the requester").
 			NotEmpty().
+			Annotations(
+				entx.AnonymousField(),
+			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
 				return err
@@ -70,15 +82,24 @@ func (TrustCenterNDARequest) Fields() []ent.Field {
 		field.String("company_name").
 			Comment("company name of the requester").
 			Optional().
+			Annotations(
+				entx.AnonymousField(),
+			).
 			Nillable(),
 		field.String("reason").
 			Comment("reason for the NDA request").
 			Optional().
+			Annotations(
+				entx.AnonymousField(),
+			).
 			Nillable(),
 		field.Enum("access_level").
 			GoType(enums.TrustCenterNDARequestAccessLevel("")).
 			Default(enums.TrustCenterNDARequestAccessLevelFull.String()).
 			Optional().
+			Annotations(
+				entx.AnonymousField(),
+			).
 			Comment("access level requested"),
 		field.Enum("status").
 			GoType(enums.TrustCenterNDARequestStatus("")).
@@ -211,6 +232,5 @@ func (TrustCenterNDARequest) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaTrustCenterNDARequest),
 		entfga.SelfAccessChecks(),
 		entx.ConsoleRoute(entx.WithConsoleBase("trust-center/NDAs")),
-		entx.AnonymousFields("trust_center_id", "first_name", "last_name", "email", "company_name", "reason", "access_level"),
 	}
 }
