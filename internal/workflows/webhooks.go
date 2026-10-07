@@ -12,10 +12,11 @@ import (
 
 // blockedWebhookHeaders are lowercased request headers that cloud metadata services require
 var blockedWebhookHeaders = map[string]struct{}{
-	"metadata-flavor":           {},
-	"x-google-metadata-request": {},
-	"metadata":                  {},
-	"x-aws-ec2-metadata-token":  {},
+	"metadata-flavor":                      {},
+	"x-google-metadata-request":            {},
+	"metadata":                             {},
+	"x-aws-ec2-metadata-token":             {},
+	"x-aws-ec2-metadata-token-ttl-seconds": {},
 }
 
 // ValidateWebhookDestinations rejects webhook actions that send cloud metadata headers or, unless

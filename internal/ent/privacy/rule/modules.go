@@ -234,8 +234,12 @@ func evaluateFeatures(ctx context.Context, requireAll bool, modules ...models.Or
 		}
 
 		// requires a module other than base module, this could be any of supported modules
-		if f == models.CatalogAnyModule && anyModule {
-			return true, nil, nil
+		if f == models.CatalogAnyModule {
+			if anyModule {
+				return true, nil, nil
+			}
+
+			continue
 		}
 
 		if _, ok := enabledSet[f.String()]; ok {
@@ -319,7 +323,7 @@ func DenyIfMissingAllModules() privacy.MutationRule {
 		}
 
 		if !ok {
-			return privacy.Denyf("features are not enabled")
+			return privacy.Denyf("%w", ErrFeaturesNotEnabled)
 		}
 
 		return privacy.Skip

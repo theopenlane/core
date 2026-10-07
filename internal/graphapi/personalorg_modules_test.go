@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -12,25 +11,17 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
-	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 )
-
-func personalOrgOwnerCtx(t *testing.T) context.Context {
-	t.Helper()
-
-	user := suite.UserBuilder(context.Background(), t)
-
-	return th.SetUserContext(auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID, auth.WithOrganizationRole(auth.OwnerRole)), suite.Client.DB)
-}
 
 func TestPersonalOrgCannotCreateModuleGatedObjects(t *testing.T) {
 	t.Parallel()
 
-	ctx := personalOrgOwnerCtx(t)
+	ctx := suite.UserBuilder(context.Background(), t).PersonalOrgCtx
+	featureErr := interceptors.ErrFeatureNotEnabled.Error()
 
 	t.Run("task", func(t *testing.T) {
 		_, err := suite.Client.API.CreateTask(ctx, testclient.CreateTaskInput{Title: "personal org task"})
-		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+		assert.ErrorContains(t, err, featureErr)
 	})
 
 	t.Run("workflow definition", func(t *testing.T) {
@@ -47,34 +38,34 @@ func TestPersonalOrgCannotCreateModuleGatedObjects(t *testing.T) {
 				},
 			},
 		})
-		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+		assert.ErrorContains(t, err, featureErr)
 	})
 
 	t.Run("tag definition", func(t *testing.T) {
 		_, err := suite.Client.API.CreateTagDefinition(ctx, testclient.CreateTagDefinitionInput{Name: "personal-org-tag"})
-		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+		assert.ErrorContains(t, err, featureErr)
 	})
 
 	t.Run("custom type enum", func(t *testing.T) {
 		_, err := suite.Client.API.CreateCustomTypeEnum(ctx, testclient.CreateCustomTypeEnumInput{Name: "personal-org-enum", ObjectType: "task"})
-		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+		assert.ErrorContains(t, err, featureErr)
 	})
 
 	t.Run("api token", func(t *testing.T) {
 		_, err := suite.Client.API.CreateAPIToken(ctx, testclient.CreateAPITokenInput{Name: "personal-org-token"})
-		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+		assert.ErrorContains(t, err, featureErr)
 	})
 
 	t.Run("personal access token", func(t *testing.T) {
 		_, err := suite.Client.API.CreatePersonalAccessToken(ctx, testclient.CreatePersonalAccessTokenInput{Name: "personal-org-pat"})
-		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+		assert.ErrorContains(t, err, featureErr)
 	})
 }
 
 func TestPersonalOrgCannotQueryModuleGatedObjects(t *testing.T) {
 	t.Parallel()
 
-	ctx := personalOrgOwnerCtx(t)
+	ctx := suite.UserBuilder(context.Background(), t).PersonalOrgCtx
 	featureErr := interceptors.ErrFeatureNotEnabled.Error()
 
 	t.Run("tasks", func(t *testing.T) {
@@ -106,7 +97,7 @@ func TestPersonalOrgCannotQueryModuleGatedObjects(t *testing.T) {
 func TestPersonalOrgCanQueryBaseObjects(t *testing.T) {
 	t.Parallel()
 
-	ctx := personalOrgOwnerCtx(t)
+	ctx := suite.UserBuilder(context.Background(), t).PersonalOrgCtx
 
 	resp, err := suite.Client.API.GetAllOrganizationSettings(ctx)
 	assert.NilError(t, err)
