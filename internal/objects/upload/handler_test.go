@@ -3,6 +3,7 @@ package upload
 import (
 	"bytes"
 	"context"
+	"io"
 	"strings"
 	"testing"
 
@@ -120,4 +121,24 @@ func TestMergeUploadedFileMetadata(t *testing.T) {
 	assert.Equal(t, src.CorrelatedObjectID, dest.CorrelatedObjectID)
 	assert.Equal(t, src.CorrelatedObjectType, dest.CorrelatedObjectType)
 	assert.NotEmpty(t, dest.Metadata)
+}
+
+func TestComputeDigests(t *testing.T) {
+	file := bytes.NewReader([]byte("test"))
+
+	md5Hex, sha256Hex, err := ComputeDigests(file)
+	assert.NoError(t, err)
+	assert.Equal(t, "098f6bcd4621d373cade4e832627b4f6", string(md5Hex))
+	assert.Equal(t, "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08", string(sha256Hex))
+
+	pos, err := file.Seek(0, io.SeekCurrent)
+	assert.NoError(t, err)
+	assert.Zero(t, pos)
+}
+
+func TestComputeDigestsNilFile(t *testing.T) {
+	md5Hex, sha256Hex, err := ComputeDigests(nil)
+	assert.NoError(t, err)
+	assert.Nil(t, md5Hex)
+	assert.Nil(t, sha256Hex)
 }

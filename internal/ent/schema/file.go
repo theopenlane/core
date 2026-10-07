@@ -64,6 +64,10 @@ func (File) Fields() []ent.Field {
 		field.String("md5_hash").
 			Comment("the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage").
 			Optional(),
+		field.String("sha256_hash").
+			Comment("the computed sha256 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage").
+			Optional().
+			Immutable(),
 		field.String("detected_content_type").
 			Comment("the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types"),
 		field.String("store_key").
@@ -90,6 +94,13 @@ func (File) Fields() []ent.Field {
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the file").
 			Optional(),
+		field.JSON("provenance", map[string]any{}).
+			Comment("the client-supplied capture record for the file, validated against the received contents and immutable once stored").
+			Optional().
+			Immutable().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
 		field.String("storage_region").
 			Comment("the region the file is stored in, if applicable").
 			Optional(),

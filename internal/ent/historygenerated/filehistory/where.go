@@ -192,6 +192,11 @@ func Md5Hash(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldMd5Hash, v))
 }
 
+// Sha256Hash applies equality check predicate on the "sha256_hash" field. It's identical to Sha256HashEQ.
+func Sha256Hash(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldSha256Hash, v))
+}
+
 // DetectedContentType applies equality check predicate on the "detected_content_type" field. It's identical to DetectedContentTypeEQ.
 func DetectedContentType(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldDetectedContentType, v))
@@ -1912,6 +1917,81 @@ func Md5HashContainsFold(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldContainsFold(FieldMd5Hash, v))
 }
 
+// Sha256HashEQ applies the EQ predicate on the "sha256_hash" field.
+func Sha256HashEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldSha256Hash, v))
+}
+
+// Sha256HashNEQ applies the NEQ predicate on the "sha256_hash" field.
+func Sha256HashNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldSha256Hash, v))
+}
+
+// Sha256HashIn applies the In predicate on the "sha256_hash" field.
+func Sha256HashIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldSha256Hash, vs...))
+}
+
+// Sha256HashNotIn applies the NotIn predicate on the "sha256_hash" field.
+func Sha256HashNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldSha256Hash, vs...))
+}
+
+// Sha256HashGT applies the GT predicate on the "sha256_hash" field.
+func Sha256HashGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldSha256Hash, v))
+}
+
+// Sha256HashGTE applies the GTE predicate on the "sha256_hash" field.
+func Sha256HashGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldSha256Hash, v))
+}
+
+// Sha256HashLT applies the LT predicate on the "sha256_hash" field.
+func Sha256HashLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldSha256Hash, v))
+}
+
+// Sha256HashLTE applies the LTE predicate on the "sha256_hash" field.
+func Sha256HashLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldSha256Hash, v))
+}
+
+// Sha256HashContains applies the Contains predicate on the "sha256_hash" field.
+func Sha256HashContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldSha256Hash, v))
+}
+
+// Sha256HashHasPrefix applies the HasPrefix predicate on the "sha256_hash" field.
+func Sha256HashHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldSha256Hash, v))
+}
+
+// Sha256HashHasSuffix applies the HasSuffix predicate on the "sha256_hash" field.
+func Sha256HashHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldSha256Hash, v))
+}
+
+// Sha256HashIsNil applies the IsNil predicate on the "sha256_hash" field.
+func Sha256HashIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldSha256Hash))
+}
+
+// Sha256HashNotNil applies the NotNil predicate on the "sha256_hash" field.
+func Sha256HashNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldSha256Hash))
+}
+
+// Sha256HashEqualFold applies the EqualFold predicate on the "sha256_hash" field.
+func Sha256HashEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldSha256Hash, v))
+}
+
+// Sha256HashContainsFold applies the ContainsFold predicate on the "sha256_hash" field.
+func Sha256HashContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldSha256Hash, v))
+}
+
 // DetectedContentTypeEQ applies the EQ predicate on the "detected_content_type" field.
 func DetectedContentTypeEQ(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldDetectedContentType, v))
@@ -2410,6 +2490,16 @@ func MetadataIsNil() predicate.FileHistory {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldNotNull(FieldMetadata))
+}
+
+// ProvenanceIsNil applies the IsNil predicate on the "provenance" field.
+func ProvenanceIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldProvenance))
+}
+
+// ProvenanceNotNil applies the NotNil predicate on the "provenance" field.
+func ProvenanceNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldProvenance))
 }
 
 // StorageRegionEQ applies the EQ predicate on the "storage_region" field.

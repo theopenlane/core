@@ -138,6 +138,10 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 
 		ctx, _, err = upload.HandleUploads(ctx, u, uploads)
 		if err != nil {
+			if errors.Is(err, upload.ErrInvalidProvenance) {
+				return nil, NewValidationErrorWithFields(err.Error(), "provenance")
+			}
+
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to handle file uploads")
 
 			return nil, err
@@ -1220,6 +1224,10 @@ func applyUploadMetadataFromVariables(variables map[string]any, uploadArg string
 	metadata := metadataInputForUploadArg(variables, uploadArg, index)
 	if len(metadata) == 0 {
 		return
+	}
+
+	if provenance, ok := metadata["provenance"].(map[string]any); ok {
+		upload.ProvenanceClaims = provenance
 	}
 
 	if upload.Metadata == nil {

@@ -2,6 +2,7 @@ package common //nolint:revive
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
@@ -803,6 +804,36 @@ func TestApplyUploadMetadataFromVariables(t *testing.T) {
 		assert.Check(t, is.Equal("SOC 2 Report", upload.Name))
 		assert.Check(t, is.Equal("SOC 2 Report", upload.Metadata["name"]))
 		assert.Check(t, is.Equal("soc2", upload.Metadata["classification"]))
+	})
+
+	t.Run("provenance is carried separately from metadata", func(t *testing.T) {
+		upload := &pkgobjects.File{}
+		provenance := map[string]any{"schema_version": json.Number("1"), "artifact_sha256": "abc"}
+		variables := map[string]any{
+			"evidenceFilesMetadata": []any{
+				map[string]any{
+					"metadata":   map[string]any{"classification": "screenshot"},
+					"provenance": provenance,
+				},
+			},
+		}
+
+		applyUploadMetadataFromVariables(variables, "evidenceFiles", 0, upload)
+
+		assert.Check(t, is.DeepEqual(provenance, upload.ProvenanceClaims))
+		assert.Check(t, is.Equal("screenshot", upload.Metadata["classification"]))
+		assert.Check(t, is.Nil(upload.Metadata["provenance"]))
+	})
+
+	t.Run("empty provenance is kept so it is still attested", func(t *testing.T) {
+		upload := &pkgobjects.File{}
+		variables := map[string]any{
+			"evidenceFilesMetadata": []any{map[string]any{"provenance": map[string]any{}}},
+		}
+
+		applyUploadMetadataFromVariables(variables, "evidenceFiles", 0, upload)
+
+		assert.Check(t, upload.ProvenanceClaims != nil)
 	})
 }
 

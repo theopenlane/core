@@ -836,11 +836,13 @@ type FileProjection struct {
 	Metadata              map[string]interface{} `json:"metadata,omitempty"`
 	Name                  string                 `json:"name,omitempty"`
 	PersistedFileSize     int64                  `json:"persisted_file_size,omitempty"`
+	Provenance            map[string]interface{} `json:"provenance,omitempty"`
 	ProvidedFileExtension string                 `json:"provided_file_extension,omitempty"`
 	ProvidedFileName      string                 `json:"provided_file_name,omitempty"`
 	ProvidedFileSize      int64                  `json:"provided_file_size,omitempty"`
 	ScopeID               string                 `json:"scope_id,omitempty"`
 	ScopeName             string                 `json:"scope_name,omitempty"`
+	Sha256Hash            string                 `json:"sha256_hash,omitempty"`
 	StoragePath           string                 `json:"storage_path,omitempty"`
 	StorageProvider       string                 `json:"storage_provider,omitempty"`
 	StorageRegion         string                 `json:"storage_region,omitempty"`

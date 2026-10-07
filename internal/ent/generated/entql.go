@@ -1270,6 +1270,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldPersistedFileSize:     {Type: field.TypeInt64, Column: file.FieldPersistedFileSize},
 			file.FieldDetectedMimeType:      {Type: field.TypeString, Column: file.FieldDetectedMimeType},
 			file.FieldMd5Hash:               {Type: field.TypeString, Column: file.FieldMd5Hash},
+			file.FieldSha256Hash:            {Type: field.TypeString, Column: file.FieldSha256Hash},
 			file.FieldDetectedContentType:   {Type: field.TypeString, Column: file.FieldDetectedContentType},
 			file.FieldStoreKey:              {Type: field.TypeString, Column: file.FieldStoreKey},
 			file.FieldURI:                   {Type: field.TypeString, Column: file.FieldURI},
@@ -1278,6 +1279,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldStoragePath:           {Type: field.TypeString, Column: file.FieldStoragePath},
 			file.FieldFileContents:          {Type: field.TypeBytes, Column: file.FieldFileContents},
 			file.FieldMetadata:              {Type: field.TypeJSON, Column: file.FieldMetadata},
+			file.FieldProvenance:            {Type: field.TypeJSON, Column: file.FieldProvenance},
 			file.FieldStorageRegion:         {Type: field.TypeString, Column: file.FieldStorageRegion},
 			file.FieldStorageProvider:       {Type: field.TypeString, Column: file.FieldStorageProvider},
 			file.FieldBackupState:           {Type: field.TypeJSON, Column: file.FieldBackupState},
@@ -28792,6 +28794,11 @@ func (f *FileFilter) WhereMd5Hash(p entql.StringP) {
 	f.Where(p.Field(file.FieldMd5Hash))
 }
 
+// WhereSha256Hash applies the entql string predicate on the sha256_hash field.
+func (f *FileFilter) WhereSha256Hash(p entql.StringP) {
+	f.Where(p.Field(file.FieldSha256Hash))
+}
+
 // WhereDetectedContentType applies the entql string predicate on the detected_content_type field.
 func (f *FileFilter) WhereDetectedContentType(p entql.StringP) {
 	f.Where(p.Field(file.FieldDetectedContentType))
@@ -28830,6 +28837,11 @@ func (f *FileFilter) WhereFileContents(p entql.BytesP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *FileFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(file.FieldMetadata))
+}
+
+// WhereProvenance applies the entql json.RawMessage predicate on the provenance field.
+func (f *FileFilter) WhereProvenance(p entql.BytesP) {
+	f.Where(p.Field(file.FieldProvenance))
 }
 
 // WhereStorageRegion applies the entql string predicate on the storage_region field.

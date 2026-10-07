@@ -5,6 +5,7 @@ package testharness
 import (
 	"bytes"
 	"crypto/md5"
+	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"os"
@@ -64,6 +65,18 @@ func GetMD5Hash(t *testing.T, path string) string {
 	assert.NilError(t, err)
 
 	sum := md5.Sum(data)
+
+	return hex.EncodeToString(sum[:])
+}
+
+// GetSHA256Hash returns the hex-encoded SHA-256 of the file at path
+func GetSHA256Hash(t *testing.T, path string) string {
+	t.Helper()
+
+	data, err := os.ReadFile(path)
+	assert.NilError(t, err)
+
+	sum := sha256.Sum256(data)
 
 	return hex.EncodeToString(sum[:])
 }

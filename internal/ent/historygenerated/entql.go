@@ -944,6 +944,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldPersistedFileSize:     {Type: field.TypeInt64, Column: filehistory.FieldPersistedFileSize},
 			filehistory.FieldDetectedMimeType:      {Type: field.TypeString, Column: filehistory.FieldDetectedMimeType},
 			filehistory.FieldMd5Hash:               {Type: field.TypeString, Column: filehistory.FieldMd5Hash},
+			filehistory.FieldSha256Hash:            {Type: field.TypeString, Column: filehistory.FieldSha256Hash},
 			filehistory.FieldDetectedContentType:   {Type: field.TypeString, Column: filehistory.FieldDetectedContentType},
 			filehistory.FieldStoreKey:              {Type: field.TypeString, Column: filehistory.FieldStoreKey},
 			filehistory.FieldURI:                   {Type: field.TypeString, Column: filehistory.FieldURI},
@@ -952,6 +953,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldStoragePath:           {Type: field.TypeString, Column: filehistory.FieldStoragePath},
 			filehistory.FieldFileContents:          {Type: field.TypeBytes, Column: filehistory.FieldFileContents},
 			filehistory.FieldMetadata:              {Type: field.TypeJSON, Column: filehistory.FieldMetadata},
+			filehistory.FieldProvenance:            {Type: field.TypeJSON, Column: filehistory.FieldProvenance},
 			filehistory.FieldStorageRegion:         {Type: field.TypeString, Column: filehistory.FieldStorageRegion},
 			filehistory.FieldStorageProvider:       {Type: field.TypeString, Column: filehistory.FieldStorageProvider},
 			filehistory.FieldBackupState:           {Type: field.TypeJSON, Column: filehistory.FieldBackupState},
@@ -6860,6 +6862,11 @@ func (f *FileHistoryFilter) WhereMd5Hash(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldMd5Hash))
 }
 
+// WhereSha256Hash applies the entql string predicate on the sha256_hash field.
+func (f *FileHistoryFilter) WhereSha256Hash(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldSha256Hash))
+}
+
 // WhereDetectedContentType applies the entql string predicate on the detected_content_type field.
 func (f *FileHistoryFilter) WhereDetectedContentType(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldDetectedContentType))
@@ -6898,6 +6905,11 @@ func (f *FileHistoryFilter) WhereFileContents(p entql.BytesP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *FileHistoryFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(filehistory.FieldMetadata))
+}
+
+// WhereProvenance applies the entql json.RawMessage predicate on the provenance field.
+func (f *FileHistoryFilter) WhereProvenance(p entql.BytesP) {
+	f.Where(p.Field(filehistory.FieldProvenance))
 }
 
 // WhereStorageRegion applies the entql string predicate on the storage_region field.

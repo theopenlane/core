@@ -85072,6 +85072,29 @@ func (ec *executionContext) fieldContext_File_md5Hash(_ context.Context, field g
 	return graphql.NewScalarFieldContext("File", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
+func (ec *executionContext) _File_sha256Hash(ctx context.Context, field graphql.CollectedField, obj *generated.File) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_File_sha256Hash(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Sha256Hash, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_File_sha256Hash(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("File", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
 func (ec *executionContext) _File_detectedContentType(ctx context.Context, field graphql.CollectedField, obj *generated.File) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -85230,6 +85253,29 @@ func (ec *executionContext) _File_metadata(ctx context.Context, field graphql.Co
 	)
 }
 func (ec *executionContext) fieldContext_File_metadata(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("File", field, false, false, errors.New("field of type Map does not have child fields"))
+}
+
+func (ec *executionContext) _File_provenance(ctx context.Context, field graphql.CollectedField, obj *generated.File) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_File_provenance(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Provenance, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalOMap2map(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_File_provenance(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("File", field, false, false, errors.New("field of type Map does not have child fields"))
 }
 
@@ -206130,7 +206176,7 @@ func (ec *executionContext) unmarshalInputCreateFileInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "environmentName", "scopeName", "categoryName", "name", "providedFileName", "providedFileExtension", "providedFileSize", "persistedFileSize", "detectedMimeType", "md5Hash", "detectedContentType", "storeKey", "uri", "storageScheme", "storageVolume", "storagePath", "metadata", "storageRegion", "storageProvider", "lastAccessedAt", "environmentID", "scopeID", "categoryID", "organizationIDs", "groupIDs", "contactIDs", "entityIDs", "organizationSettingIDs", "templateIDs", "documentIDs", "programIDs", "platformIDs", "evidenceIDs", "identityHolderIDs", "scanIDs", "eventIDs", "integrationIDs", "secretIDs", "trustCenterEntityIDs", "trustCenterDocIDs", "originalTrustCenterDocIDs"}
+	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "environmentName", "scopeName", "categoryName", "name", "providedFileName", "providedFileExtension", "providedFileSize", "persistedFileSize", "detectedMimeType", "md5Hash", "sha256Hash", "detectedContentType", "storeKey", "uri", "storageScheme", "storageVolume", "storagePath", "metadata", "storageRegion", "storageProvider", "lastAccessedAt", "environmentID", "scopeID", "categoryID", "organizationIDs", "groupIDs", "contactIDs", "entityIDs", "organizationSettingIDs", "templateIDs", "documentIDs", "programIDs", "platformIDs", "evidenceIDs", "identityHolderIDs", "scanIDs", "eventIDs", "integrationIDs", "secretIDs", "trustCenterEntityIDs", "trustCenterDocIDs", "originalTrustCenterDocIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -206262,6 +206308,13 @@ func (ec *executionContext) unmarshalInputCreateFileInput(ctx context.Context, o
 				return it, err
 			}
 			it.Md5Hash = data
+		case "sha256Hash":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256Hash"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256Hash = data
 		case "detectedContentType":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("detectedContentType"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -241794,7 +241847,7 @@ func (ec *executionContext) unmarshalInputFileWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "categoryName", "categoryNameNEQ", "categoryNameIn", "categoryNameNotIn", "categoryNameContains", "categoryNameHasPrefix", "categoryNameHasSuffix", "categoryNameIsNil", "categoryNameNotNil", "categoryNameEqualFold", "categoryNameContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "providedFileName", "providedFileNameNEQ", "providedFileNameIn", "providedFileNameNotIn", "providedFileNameContains", "providedFileNameHasPrefix", "providedFileNameHasSuffix", "providedFileNameEqualFold", "providedFileNameContainsFold", "providedFileExtension", "providedFileExtensionNEQ", "providedFileExtensionIn", "providedFileExtensionNotIn", "providedFileExtensionContains", "providedFileExtensionHasPrefix", "providedFileExtensionHasSuffix", "providedFileExtensionEqualFold", "providedFileExtensionContainsFold", "providedFileSize", "providedFileSizeNEQ", "providedFileSizeGT", "providedFileSizeGTE", "providedFileSizeLT", "providedFileSizeLTE", "providedFileSizeIsNil", "providedFileSizeNotNil", "persistedFileSize", "persistedFileSizeNEQ", "persistedFileSizeGT", "persistedFileSizeGTE", "persistedFileSizeLT", "persistedFileSizeLTE", "persistedFileSizeIsNil", "persistedFileSizeNotNil", "detectedMimeType", "detectedMimeTypeNEQ", "detectedMimeTypeIn", "detectedMimeTypeNotIn", "detectedMimeTypeContains", "detectedMimeTypeHasPrefix", "detectedMimeTypeHasSuffix", "detectedMimeTypeIsNil", "detectedMimeTypeNotNil", "detectedMimeTypeEqualFold", "detectedMimeTypeContainsFold", "md5Hash", "md5HashNEQ", "md5HashIn", "md5HashNotIn", "md5HashContains", "md5HashHasPrefix", "md5HashHasSuffix", "md5HashIsNil", "md5HashNotNil", "md5HashEqualFold", "md5HashContainsFold", "detectedContentType", "detectedContentTypeNEQ", "detectedContentTypeIn", "detectedContentTypeNotIn", "detectedContentTypeContains", "detectedContentTypeHasPrefix", "detectedContentTypeHasSuffix", "detectedContentTypeEqualFold", "detectedContentTypeContainsFold", "storeKey", "storeKeyNEQ", "storeKeyIn", "storeKeyNotIn", "storeKeyContains", "storeKeyHasPrefix", "storeKeyHasSuffix", "storeKeyIsNil", "storeKeyNotNil", "storeKeyEqualFold", "storeKeyContainsFold", "uri", "uriNEQ", "uriIn", "uriNotIn", "uriContains", "uriHasPrefix", "uriHasSuffix", "uriIsNil", "uriNotNil", "uriEqualFold", "uriContainsFold", "storageScheme", "storageSchemeNEQ", "storageSchemeIn", "storageSchemeNotIn", "storageSchemeContains", "storageSchemeHasPrefix", "storageSchemeHasSuffix", "storageSchemeIsNil", "storageSchemeNotNil", "storageSchemeEqualFold", "storageSchemeContainsFold", "storageVolume", "storageVolumeNEQ", "storageVolumeIn", "storageVolumeNotIn", "storageVolumeContains", "storageVolumeHasPrefix", "storageVolumeHasSuffix", "storageVolumeIsNil", "storageVolumeNotNil", "storageVolumeEqualFold", "storageVolumeContainsFold", "storagePath", "storagePathNEQ", "storagePathIn", "storagePathNotIn", "storagePathContains", "storagePathHasPrefix", "storagePathHasSuffix", "storagePathIsNil", "storagePathNotNil", "storagePathEqualFold", "storagePathContainsFold", "storageRegion", "storageRegionNEQ", "storageRegionIn", "storageRegionNotIn", "storageRegionContains", "storageRegionHasPrefix", "storageRegionHasSuffix", "storageRegionIsNil", "storageRegionNotNil", "storageRegionEqualFold", "storageRegionContainsFold", "storageProvider", "storageProviderNEQ", "storageProviderIn", "storageProviderNotIn", "storageProviderContains", "storageProviderHasPrefix", "storageProviderHasSuffix", "storageProviderIsNil", "storageProviderNotNil", "storageProviderEqualFold", "storageProviderContainsFold", "lastAccessedAt", "lastAccessedAtGT", "lastAccessedAtGTE", "lastAccessedAtLT", "lastAccessedAtLTE", "lastAccessedAtIsNil", "lastAccessedAtNotNil", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasCategory", "hasCategoryWith", "hasOrganization", "hasOrganizationWith", "hasGroups", "hasGroupsWith", "hasContact", "hasContactWith", "hasEntity", "hasEntityWith", "hasOrganizationSetting", "hasOrganizationSettingWith", "hasTemplate", "hasTemplateWith", "hasDocument", "hasDocumentWith", "hasProgram", "hasProgramWith", "hasPlatform", "hasPlatformWith", "hasEvidence", "hasEvidenceWith", "hasIdentityHolder", "hasIdentityHolderWith", "hasScan", "hasScanWith", "hasEvents", "hasEventsWith", "hasIntegrations", "hasIntegrationsWith", "hasSecrets", "hasSecretsWith", "hasTrustCenterEntities", "hasTrustCenterEntitiesWith", "hasTrustCenterDoc", "hasTrustCenterDocWith", "hasOriginalTrustCenterDoc", "hasOriginalTrustCenterDocWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "categoryName", "categoryNameNEQ", "categoryNameIn", "categoryNameNotIn", "categoryNameContains", "categoryNameHasPrefix", "categoryNameHasSuffix", "categoryNameIsNil", "categoryNameNotNil", "categoryNameEqualFold", "categoryNameContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "providedFileName", "providedFileNameNEQ", "providedFileNameIn", "providedFileNameNotIn", "providedFileNameContains", "providedFileNameHasPrefix", "providedFileNameHasSuffix", "providedFileNameEqualFold", "providedFileNameContainsFold", "providedFileExtension", "providedFileExtensionNEQ", "providedFileExtensionIn", "providedFileExtensionNotIn", "providedFileExtensionContains", "providedFileExtensionHasPrefix", "providedFileExtensionHasSuffix", "providedFileExtensionEqualFold", "providedFileExtensionContainsFold", "providedFileSize", "providedFileSizeNEQ", "providedFileSizeGT", "providedFileSizeGTE", "providedFileSizeLT", "providedFileSizeLTE", "providedFileSizeIsNil", "providedFileSizeNotNil", "persistedFileSize", "persistedFileSizeNEQ", "persistedFileSizeGT", "persistedFileSizeGTE", "persistedFileSizeLT", "persistedFileSizeLTE", "persistedFileSizeIsNil", "persistedFileSizeNotNil", "detectedMimeType", "detectedMimeTypeNEQ", "detectedMimeTypeIn", "detectedMimeTypeNotIn", "detectedMimeTypeContains", "detectedMimeTypeHasPrefix", "detectedMimeTypeHasSuffix", "detectedMimeTypeIsNil", "detectedMimeTypeNotNil", "detectedMimeTypeEqualFold", "detectedMimeTypeContainsFold", "md5Hash", "md5HashNEQ", "md5HashIn", "md5HashNotIn", "md5HashContains", "md5HashHasPrefix", "md5HashHasSuffix", "md5HashIsNil", "md5HashNotNil", "md5HashEqualFold", "md5HashContainsFold", "sha256Hash", "sha256HashNEQ", "sha256HashIn", "sha256HashNotIn", "sha256HashContains", "sha256HashHasPrefix", "sha256HashHasSuffix", "sha256HashIsNil", "sha256HashNotNil", "sha256HashEqualFold", "sha256HashContainsFold", "detectedContentType", "detectedContentTypeNEQ", "detectedContentTypeIn", "detectedContentTypeNotIn", "detectedContentTypeContains", "detectedContentTypeHasPrefix", "detectedContentTypeHasSuffix", "detectedContentTypeEqualFold", "detectedContentTypeContainsFold", "storeKey", "storeKeyNEQ", "storeKeyIn", "storeKeyNotIn", "storeKeyContains", "storeKeyHasPrefix", "storeKeyHasSuffix", "storeKeyIsNil", "storeKeyNotNil", "storeKeyEqualFold", "storeKeyContainsFold", "uri", "uriNEQ", "uriIn", "uriNotIn", "uriContains", "uriHasPrefix", "uriHasSuffix", "uriIsNil", "uriNotNil", "uriEqualFold", "uriContainsFold", "storageScheme", "storageSchemeNEQ", "storageSchemeIn", "storageSchemeNotIn", "storageSchemeContains", "storageSchemeHasPrefix", "storageSchemeHasSuffix", "storageSchemeIsNil", "storageSchemeNotNil", "storageSchemeEqualFold", "storageSchemeContainsFold", "storageVolume", "storageVolumeNEQ", "storageVolumeIn", "storageVolumeNotIn", "storageVolumeContains", "storageVolumeHasPrefix", "storageVolumeHasSuffix", "storageVolumeIsNil", "storageVolumeNotNil", "storageVolumeEqualFold", "storageVolumeContainsFold", "storagePath", "storagePathNEQ", "storagePathIn", "storagePathNotIn", "storagePathContains", "storagePathHasPrefix", "storagePathHasSuffix", "storagePathIsNil", "storagePathNotNil", "storagePathEqualFold", "storagePathContainsFold", "storageRegion", "storageRegionNEQ", "storageRegionIn", "storageRegionNotIn", "storageRegionContains", "storageRegionHasPrefix", "storageRegionHasSuffix", "storageRegionIsNil", "storageRegionNotNil", "storageRegionEqualFold", "storageRegionContainsFold", "storageProvider", "storageProviderNEQ", "storageProviderIn", "storageProviderNotIn", "storageProviderContains", "storageProviderHasPrefix", "storageProviderHasSuffix", "storageProviderIsNil", "storageProviderNotNil", "storageProviderEqualFold", "storageProviderContainsFold", "lastAccessedAt", "lastAccessedAtGT", "lastAccessedAtGTE", "lastAccessedAtLT", "lastAccessedAtLTE", "lastAccessedAtIsNil", "lastAccessedAtNotNil", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasCategory", "hasCategoryWith", "hasOrganization", "hasOrganizationWith", "hasGroups", "hasGroupsWith", "hasContact", "hasContactWith", "hasEntity", "hasEntityWith", "hasOrganizationSetting", "hasOrganizationSettingWith", "hasTemplate", "hasTemplateWith", "hasDocument", "hasDocumentWith", "hasProgram", "hasProgramWith", "hasPlatform", "hasPlatformWith", "hasEvidence", "hasEvidenceWith", "hasIdentityHolder", "hasIdentityHolderWith", "hasScan", "hasScanWith", "hasEvents", "hasEventsWith", "hasIntegrations", "hasIntegrationsWith", "hasSecrets", "hasSecretsWith", "hasTrustCenterEntities", "hasTrustCenterEntitiesWith", "hasTrustCenterDoc", "hasTrustCenterDocWith", "hasOriginalTrustCenterDoc", "hasOriginalTrustCenterDocWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -243306,6 +243359,83 @@ func (ec *executionContext) unmarshalInputFileWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.Md5HashContainsFold = data
+		case "sha256Hash":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256Hash"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256Hash = data
+		case "sha256HashNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashNEQ = data
+		case "sha256HashIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashIn = data
+		case "sha256HashNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashNotIn = data
+		case "sha256HashContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashContains = data
+		case "sha256HashHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashHasPrefix = data
+		case "sha256HashHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashHasSuffix = data
+		case "sha256HashIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashIsNil = data
+		case "sha256HashNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashNotNil = data
+		case "sha256HashEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashEqualFold = data
+		case "sha256HashContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sha256HashContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sha256HashContainsFold = data
 		case "detectedContentType":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("detectedContentType"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -403827,6 +403957,11 @@ func (ec *executionContext) _File(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sha256Hash":
+			out.Values[i] = ec._File_sha256Hash(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "detectedContentType":
 			out.Values[i] = ec._File_detectedContentType(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -403859,6 +403994,11 @@ func (ec *executionContext) _File(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "metadata":
 			out.Values[i] = ec._File_metadata(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "provenance":
+			out.Values[i] = ec._File_provenance(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

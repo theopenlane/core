@@ -76,6 +76,8 @@ type FileHistory struct {
 	DetectedMimeType string `json:"detected_mime_type,omitempty"`
 	// the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
 	Md5Hash string `json:"md5_hash,omitempty"`
+	// the computed sha256 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+	Sha256Hash string `json:"sha256_hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detected_content_type,omitempty"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
@@ -92,6 +94,8 @@ type FileHistory struct {
 	FileContents []byte `json:"file_contents,omitempty"`
 	// additional metadata about the file
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the client-supplied capture record for the file, validated against the received contents and immutable once stored
+	Provenance map[string]interface{} `json:"provenance,omitempty"`
 	// the region the file is stored in, if applicable
 	StorageRegion string `json:"storage_region,omitempty"`
 	// the storage provider the file is stored in, if applicable
@@ -108,7 +112,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case filehistory.FieldTags, filehistory.FieldFileContents, filehistory.FieldMetadata, filehistory.FieldBackupState:
+		case filehistory.FieldTags, filehistory.FieldFileContents, filehistory.FieldMetadata, filehistory.FieldProvenance, filehistory.FieldBackupState:
 			values[i] = new([]byte)
 		case filehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -116,7 +120,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldUpdatedByImpersonator, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldEnvironmentName, filehistory.FieldEnvironmentID, filehistory.FieldScopeName, filehistory.FieldScopeID, filehistory.FieldCategoryName, filehistory.FieldCategoryID, filehistory.FieldName, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldUpdatedByImpersonator, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldEnvironmentName, filehistory.FieldEnvironmentID, filehistory.FieldScopeName, filehistory.FieldScopeID, filehistory.FieldCategoryName, filehistory.FieldCategoryID, filehistory.FieldName, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldSha256Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt, filehistory.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -308,6 +312,12 @@ func (_m *FileHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Md5Hash = value.String
 			}
+		case filehistory.FieldSha256Hash:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sha256_hash", values[i])
+			} else if value.Valid {
+				_m.Sha256Hash = value.String
+			}
 		case filehistory.FieldDetectedContentType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field detected_content_type", values[i])
@@ -356,6 +366,14 @@ func (_m *FileHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case filehistory.FieldProvenance:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field provenance", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Provenance); err != nil {
+					return fmt.Errorf("unmarshal field provenance: %w", err)
 				}
 			}
 		case filehistory.FieldStorageRegion:
@@ -508,6 +526,9 @@ func (_m *FileHistory) String() string {
 	builder.WriteString("md5_hash=")
 	builder.WriteString(_m.Md5Hash)
 	builder.WriteString(", ")
+	builder.WriteString("sha256_hash=")
+	builder.WriteString(_m.Sha256Hash)
+	builder.WriteString(", ")
 	builder.WriteString("detected_content_type=")
 	builder.WriteString(_m.DetectedContentType)
 	builder.WriteString(", ")
@@ -531,6 +552,9 @@ func (_m *FileHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("provenance=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Provenance))
 	builder.WriteString(", ")
 	builder.WriteString("storage_region=")
 	builder.WriteString(_m.StorageRegion)

@@ -85991,6 +85991,7 @@ type FileMutation struct {
 	addpersisted_file_size           *int64
 	detected_mime_type               *string
 	md5_hash                         *string
+	sha256_hash                      *string
 	detected_content_type            *string
 	store_key                        *string
 	uri                              *string
@@ -85999,6 +86000,7 @@ type FileMutation struct {
 	storage_path                     *string
 	file_contents                    *[]byte
 	metadata                         *map[string]interface{}
+	provenance                       *map[string]interface{}
 	storage_region                   *string
 	storage_provider                 *string
 	backup_state                     *models.FileBackupState
@@ -87381,6 +87383,55 @@ func (m *FileMutation) ResetMd5Hash() {
 	delete(m.clearedFields, file.FieldMd5Hash)
 }
 
+// SetSha256Hash sets the "sha256_hash" field.
+func (m *FileMutation) SetSha256Hash(s string) {
+	m.sha256_hash = &s
+}
+
+// Sha256Hash returns the value of the "sha256_hash" field in the mutation.
+func (m *FileMutation) Sha256Hash() (r string, exists bool) {
+	v := m.sha256_hash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSha256Hash returns the old "sha256_hash" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldSha256Hash(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSha256Hash is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSha256Hash requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSha256Hash: %w", err)
+	}
+	return oldValue.Sha256Hash, nil
+}
+
+// ClearSha256Hash clears the value of the "sha256_hash" field.
+func (m *FileMutation) ClearSha256Hash() {
+	m.sha256_hash = nil
+	m.clearedFields[file.FieldSha256Hash] = struct{}{}
+}
+
+// Sha256HashCleared returns if the "sha256_hash" field was cleared in this mutation.
+func (m *FileMutation) Sha256HashCleared() bool {
+	_, ok := m.clearedFields[file.FieldSha256Hash]
+	return ok
+}
+
+// ResetSha256Hash resets all changes to the "sha256_hash" field.
+func (m *FileMutation) ResetSha256Hash() {
+	m.sha256_hash = nil
+	delete(m.clearedFields, file.FieldSha256Hash)
+}
+
 // SetDetectedContentType sets the "detected_content_type" field.
 func (m *FileMutation) SetDetectedContentType(s string) {
 	m.detected_content_type = &s
@@ -87758,6 +87809,55 @@ func (m *FileMutation) MetadataCleared() bool {
 func (m *FileMutation) ResetMetadata() {
 	m.metadata = nil
 	delete(m.clearedFields, file.FieldMetadata)
+}
+
+// SetProvenance sets the "provenance" field.
+func (m *FileMutation) SetProvenance(value map[string]interface{}) {
+	m.provenance = &value
+}
+
+// Provenance returns the value of the "provenance" field in the mutation.
+func (m *FileMutation) Provenance() (r map[string]interface{}, exists bool) {
+	v := m.provenance
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProvenance returns the old "provenance" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldProvenance(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProvenance is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProvenance requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProvenance: %w", err)
+	}
+	return oldValue.Provenance, nil
+}
+
+// ClearProvenance clears the value of the "provenance" field.
+func (m *FileMutation) ClearProvenance() {
+	m.provenance = nil
+	m.clearedFields[file.FieldProvenance] = struct{}{}
+}
+
+// ProvenanceCleared returns if the "provenance" field was cleared in this mutation.
+func (m *FileMutation) ProvenanceCleared() bool {
+	_, ok := m.clearedFields[file.FieldProvenance]
+	return ok
+}
+
+// ResetProvenance resets all changes to the "provenance" field.
+func (m *FileMutation) ResetProvenance() {
+	m.provenance = nil
+	delete(m.clearedFields, file.FieldProvenance)
 }
 
 // SetStorageRegion sets the "storage_region" field.
@@ -89043,7 +89143,7 @@ func (m *FileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileMutation) Fields() []string {
-	fields := make([]string, 0, 36)
+	fields := make([]string, 0, 38)
 	if m.created_at != nil {
 		fields = append(fields, file.FieldCreatedAt)
 	}
@@ -89116,6 +89216,9 @@ func (m *FileMutation) Fields() []string {
 	if m.md5_hash != nil {
 		fields = append(fields, file.FieldMd5Hash)
 	}
+	if m.sha256_hash != nil {
+		fields = append(fields, file.FieldSha256Hash)
+	}
 	if m.detected_content_type != nil {
 		fields = append(fields, file.FieldDetectedContentType)
 	}
@@ -89139,6 +89242,9 @@ func (m *FileMutation) Fields() []string {
 	}
 	if m.metadata != nil {
 		fields = append(fields, file.FieldMetadata)
+	}
+	if m.provenance != nil {
+		fields = append(fields, file.FieldProvenance)
 	}
 	if m.storage_region != nil {
 		fields = append(fields, file.FieldStorageRegion)
@@ -89208,6 +89314,8 @@ func (m *FileMutation) Field(name string) (ent.Value, bool) {
 		return m.DetectedMimeType()
 	case file.FieldMd5Hash:
 		return m.Md5Hash()
+	case file.FieldSha256Hash:
+		return m.Sha256Hash()
 	case file.FieldDetectedContentType:
 		return m.DetectedContentType()
 	case file.FieldStoreKey:
@@ -89224,6 +89332,8 @@ func (m *FileMutation) Field(name string) (ent.Value, bool) {
 		return m.FileContents()
 	case file.FieldMetadata:
 		return m.Metadata()
+	case file.FieldProvenance:
+		return m.Provenance()
 	case file.FieldStorageRegion:
 		return m.StorageRegion()
 	case file.FieldStorageProvider:
@@ -89289,6 +89399,8 @@ func (m *FileMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDetectedMimeType(ctx)
 	case file.FieldMd5Hash:
 		return m.OldMd5Hash(ctx)
+	case file.FieldSha256Hash:
+		return m.OldSha256Hash(ctx)
 	case file.FieldDetectedContentType:
 		return m.OldDetectedContentType(ctx)
 	case file.FieldStoreKey:
@@ -89305,6 +89417,8 @@ func (m *FileMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldFileContents(ctx)
 	case file.FieldMetadata:
 		return m.OldMetadata(ctx)
+	case file.FieldProvenance:
+		return m.OldProvenance(ctx)
 	case file.FieldStorageRegion:
 		return m.OldStorageRegion(ctx)
 	case file.FieldStorageProvider:
@@ -89490,6 +89604,13 @@ func (m *FileMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMd5Hash(v)
 		return nil
+	case file.FieldSha256Hash:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSha256Hash(v)
+		return nil
 	case file.FieldDetectedContentType:
 		v, ok := value.(string)
 		if !ok {
@@ -89545,6 +89666,13 @@ func (m *FileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMetadata(v)
+		return nil
+	case file.FieldProvenance:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProvenance(v)
 		return nil
 	case file.FieldStorageRegion:
 		v, ok := value.(string)
@@ -89697,6 +89825,9 @@ func (m *FileMutation) ClearedFields() []string {
 	if m.FieldCleared(file.FieldMd5Hash) {
 		fields = append(fields, file.FieldMd5Hash)
 	}
+	if m.FieldCleared(file.FieldSha256Hash) {
+		fields = append(fields, file.FieldSha256Hash)
+	}
 	if m.FieldCleared(file.FieldStoreKey) {
 		fields = append(fields, file.FieldStoreKey)
 	}
@@ -89717,6 +89848,9 @@ func (m *FileMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(file.FieldMetadata) {
 		fields = append(fields, file.FieldMetadata)
+	}
+	if m.FieldCleared(file.FieldProvenance) {
+		fields = append(fields, file.FieldProvenance)
 	}
 	if m.FieldCleared(file.FieldStorageRegion) {
 		fields = append(fields, file.FieldStorageRegion)
@@ -89810,6 +89944,9 @@ func (m *FileMutation) ClearField(name string) error {
 	case file.FieldMd5Hash:
 		m.ClearMd5Hash()
 		return nil
+	case file.FieldSha256Hash:
+		m.ClearSha256Hash()
+		return nil
 	case file.FieldStoreKey:
 		m.ClearStoreKey()
 		return nil
@@ -89830,6 +89967,9 @@ func (m *FileMutation) ClearField(name string) error {
 		return nil
 	case file.FieldMetadata:
 		m.ClearMetadata()
+		return nil
+	case file.FieldProvenance:
+		m.ClearProvenance()
 		return nil
 	case file.FieldStorageRegion:
 		m.ClearStorageRegion()
@@ -89923,6 +90063,9 @@ func (m *FileMutation) ResetField(name string) error {
 	case file.FieldMd5Hash:
 		m.ResetMd5Hash()
 		return nil
+	case file.FieldSha256Hash:
+		m.ResetSha256Hash()
+		return nil
 	case file.FieldDetectedContentType:
 		m.ResetDetectedContentType()
 		return nil
@@ -89946,6 +90089,9 @@ func (m *FileMutation) ResetField(name string) error {
 		return nil
 	case file.FieldMetadata:
 		m.ResetMetadata()
+		return nil
+	case file.FieldProvenance:
+		m.ResetProvenance()
 		return nil
 	case file.FieldStorageRegion:
 		m.ResetStorageRegion()

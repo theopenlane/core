@@ -8032,6 +8032,10 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetMd5Hash(md5Hash)
 	}
 
+	if sha256Hash, exists := m.Sha256Hash(); exists {
+		create = create.SetSha256Hash(sha256Hash)
+	}
+
 	if detectedContentType, exists := m.DetectedContentType(); exists {
 		create = create.SetDetectedContentType(detectedContentType)
 	}
@@ -8062,6 +8066,10 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if metadata, exists := m.Metadata(); exists {
 		create = create.SetMetadata(metadata)
+	}
+
+	if provenance, exists := m.Provenance(); exists {
+		create = create.SetProvenance(provenance)
 	}
 
 	if storageRegion, exists := m.StorageRegion(); exists {
@@ -8258,6 +8266,12 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMd5Hash(file.Md5Hash)
 		}
 
+		if sha256Hash, exists := m.Sha256Hash(); exists {
+			create = create.SetSha256Hash(sha256Hash)
+		} else {
+			create = create.SetSha256Hash(file.Sha256Hash)
+		}
+
 		if detectedContentType, exists := m.DetectedContentType(); exists {
 			create = create.SetDetectedContentType(detectedContentType)
 		} else {
@@ -8304,6 +8318,12 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMetadata(metadata)
 		} else {
 			create = create.SetMetadata(file.Metadata)
+		}
+
+		if provenance, exists := m.Provenance(); exists {
+			create = create.SetProvenance(provenance)
+		} else {
+			create = create.SetProvenance(file.Provenance)
 		}
 
 		if storageRegion, exists := m.StorageRegion(); exists {
@@ -8392,6 +8412,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetPersistedFileSize(file.PersistedFileSize).
 			SetDetectedMimeType(file.DetectedMimeType).
 			SetMd5Hash(file.Md5Hash).
+			SetSha256Hash(file.Sha256Hash).
 			SetDetectedContentType(file.DetectedContentType).
 			SetStoreKey(file.StoreKey).
 			SetURI(file.URI).
@@ -8400,6 +8421,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStoragePath(file.StoragePath).
 			SetFileContents(file.FileContents).
 			SetMetadata(file.Metadata).
+			SetProvenance(file.Provenance).
 			SetStorageRegion(file.StorageRegion).
 			SetStorageProvider(file.StorageProvider).
 			SetBackupState(file.BackupState).

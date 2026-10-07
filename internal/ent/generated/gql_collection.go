@@ -27251,6 +27251,11 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, file.FieldMd5Hash)
 				fieldSeen[file.FieldMd5Hash] = struct{}{}
 			}
+		case "sha256Hash":
+			if _, ok := fieldSeen[file.FieldSha256Hash]; !ok {
+				selectedFields = append(selectedFields, file.FieldSha256Hash)
+				fieldSeen[file.FieldSha256Hash] = struct{}{}
+			}
 		case "detectedContentType":
 			if _, ok := fieldSeen[file.FieldDetectedContentType]; !ok {
 				selectedFields = append(selectedFields, file.FieldDetectedContentType)
@@ -27285,6 +27290,11 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[file.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, file.FieldMetadata)
 				fieldSeen[file.FieldMetadata] = struct{}{}
+			}
+		case "provenance":
+			if _, ok := fieldSeen[file.FieldProvenance]; !ok {
+				selectedFields = append(selectedFields, file.FieldProvenance)
+				fieldSeen[file.FieldProvenance] = struct{}{}
 			}
 		case "storageRegion":
 			if _, ok := fieldSeen[file.FieldStorageRegion]; !ok {

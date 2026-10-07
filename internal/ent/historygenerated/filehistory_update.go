@@ -139,6 +139,9 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.Md5HashCleared() {
 		_spec.ClearField(filehistory.FieldMd5Hash, field.TypeString)
 	}
+	if _u.mutation.Sha256HashCleared() {
+		_spec.ClearField(filehistory.FieldSha256Hash, field.TypeString)
+	}
 	if _u.mutation.StoreKeyCleared() {
 		_spec.ClearField(filehistory.FieldStoreKey, field.TypeString)
 	}
@@ -159,6 +162,9 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(filehistory.FieldMetadata, field.TypeJSON)
+	}
+	if _u.mutation.ProvenanceCleared() {
+		_spec.ClearField(filehistory.FieldProvenance, field.TypeJSON)
 	}
 	if _u.mutation.StorageRegionCleared() {
 		_spec.ClearField(filehistory.FieldStorageRegion, field.TypeString)
@@ -332,6 +338,9 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	if _u.mutation.Md5HashCleared() {
 		_spec.ClearField(filehistory.FieldMd5Hash, field.TypeString)
 	}
+	if _u.mutation.Sha256HashCleared() {
+		_spec.ClearField(filehistory.FieldSha256Hash, field.TypeString)
+	}
 	if _u.mutation.StoreKeyCleared() {
 		_spec.ClearField(filehistory.FieldStoreKey, field.TypeString)
 	}
@@ -352,6 +361,9 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(filehistory.FieldMetadata, field.TypeJSON)
+	}
+	if _u.mutation.ProvenanceCleared() {
+		_spec.ClearField(filehistory.FieldProvenance, field.TypeJSON)
 	}
 	if _u.mutation.StorageRegionCleared() {
 		_spec.ClearField(filehistory.FieldStorageRegion, field.TypeString)

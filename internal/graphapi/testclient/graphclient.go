@@ -245,6 +245,7 @@ type TestGraphClient interface {
 	UpdateEvent(ctx context.Context, updateEventID string, input UpdateEventInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEvent, error)
 	CreateBulkCSVEvidence(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEvidence, error)
 	CreateEvidence(ctx context.Context, input CreateEvidenceInput, evidenceFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateEvidence, error)
+	CreateEvidenceWithFileProvenance(ctx context.Context, input CreateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*FileMetadataInput, interceptors ...clientv2.RequestInterceptor) (*CreateEvidenceWithFileProvenance, error)
 	DeleteEvidence(ctx context.Context, deleteEvidenceID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEvidence, error)
 	GetAllEvidences(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEvidences, error)
 	GetEvidenceByID(ctx context.Context, evidenceID string, interceptors ...clientv2.RequestInterceptor) (*GetEvidenceByID, error)
@@ -47201,6 +47202,96 @@ func (t *CreateEvidence_CreateEvidence) GetEvidence() *CreateEvidence_CreateEvid
 	return &t.Evidence
 }
 
+type CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node struct {
+	CreatedBy  *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID         string         "json:\"id\" graphql:\"id\""
+	Md5Hash    *string        "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	Provenance map[string]any "json:\"provenance,omitempty\" graphql:\"provenance\""
+	Sha256Hash *string        "json:\"sha256Hash,omitempty\" graphql:\"sha256Hash\""
+}
+
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node) GetMd5Hash() *string {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node{}
+	}
+	return t.Md5Hash
+}
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node) GetProvenance() map[string]any {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node{}
+	}
+	return t.Provenance
+}
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node) GetSha256Hash() *string {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node{}
+	}
+	return t.Sha256Hash
+}
+
+type CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges struct {
+	Node *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges) GetNode() *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges_Node {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges{}
+	}
+	return t.Node
+}
+
+type CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files struct {
+	Edges []*CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files) GetEdges() []*CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files_Edges {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files{}
+	}
+	return t.Edges
+}
+
+type CreateEvidenceWithFileProvenance_CreateEvidence_Evidence struct {
+	Files CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files "json:\"files\" graphql:\"files\""
+	ID    string                                                         "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence) GetFiles() *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence_Files {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence{}
+	}
+	return &t.Files
+}
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence) GetID() string {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence_Evidence{}
+	}
+	return t.ID
+}
+
+type CreateEvidenceWithFileProvenance_CreateEvidence struct {
+	Evidence CreateEvidenceWithFileProvenance_CreateEvidence_Evidence "json:\"evidence\" graphql:\"evidence\""
+}
+
+func (t *CreateEvidenceWithFileProvenance_CreateEvidence) GetEvidence() *CreateEvidenceWithFileProvenance_CreateEvidence_Evidence {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance_CreateEvidence{}
+	}
+	return &t.Evidence
+}
+
 type DeleteEvidence_DeleteEvidence struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -51137,11 +51228,13 @@ type GetFileByID_File struct {
 	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name                  *string        "json:\"name,omitempty\" graphql:\"name\""
 	PersistedFileSize     *int64         "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	Provenance            map[string]any "json:\"provenance,omitempty\" graphql:\"provenance\""
 	ProvidedFileExtension string         "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
 	ProvidedFileName      string         "json:\"providedFileName\" graphql:\"providedFileName\""
 	ProvidedFileSize      *int64         "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
 	ScopeID               *string        "json:\"scopeID,omitempty\" graphql:\"scopeID\""
 	ScopeName             *string        "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Sha256Hash            *string        "json:\"sha256Hash,omitempty\" graphql:\"sha256Hash\""
 	StoragePath           *string        "json:\"storagePath,omitempty\" graphql:\"storagePath\""
 	StorageProvider       *string        "json:\"storageProvider,omitempty\" graphql:\"storageProvider\""
 	StorageRegion         *string        "json:\"storageRegion,omitempty\" graphql:\"storageRegion\""
@@ -51247,6 +51340,12 @@ func (t *GetFileByID_File) GetPersistedFileSize() *int64 {
 	}
 	return t.PersistedFileSize
 }
+func (t *GetFileByID_File) GetProvenance() map[string]any {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.Provenance
+}
 func (t *GetFileByID_File) GetProvidedFileExtension() string {
 	if t == nil {
 		t = &GetFileByID_File{}
@@ -51276,6 +51375,12 @@ func (t *GetFileByID_File) GetScopeName() *string {
 		t = &GetFileByID_File{}
 	}
 	return t.ScopeName
+}
+func (t *GetFileByID_File) GetSha256Hash() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.Sha256Hash
 }
 func (t *GetFileByID_File) GetStoragePath() *string {
 	if t == nil {
@@ -168706,6 +168811,17 @@ func (t *CreateEvidence) GetCreateEvidence() *CreateEvidence_CreateEvidence {
 	return &t.CreateEvidence
 }
 
+type CreateEvidenceWithFileProvenance struct {
+	CreateEvidence CreateEvidenceWithFileProvenance_CreateEvidence "json:\"createEvidence\" graphql:\"createEvidence\""
+}
+
+func (t *CreateEvidenceWithFileProvenance) GetCreateEvidence() *CreateEvidenceWithFileProvenance_CreateEvidence {
+	if t == nil {
+		t = &CreateEvidenceWithFileProvenance{}
+	}
+	return &t.CreateEvidence
+}
+
 type DeleteEvidence struct {
 	DeleteEvidence DeleteEvidence_DeleteEvidence "json:\"deleteEvidence\" graphql:\"deleteEvidence\""
 }
@@ -186739,6 +186855,45 @@ func (c *Client) CreateEvidence(ctx context.Context, input CreateEvidenceInput, 
 	return &res, nil
 }
 
+const CreateEvidenceWithFileProvenanceDocument = `mutation CreateEvidenceWithFileProvenance ($input: CreateEvidenceInput!, $evidenceFiles: [Upload!], $evidenceFilesMetadata: [FileMetadataInput!]) {
+	createEvidence(input: $input, evidenceFiles: $evidenceFiles, evidenceFilesMetadata: $evidenceFilesMetadata) {
+		evidence {
+			id
+			files {
+				edges {
+					node {
+						id
+						createdBy
+						md5Hash
+						provenance
+						sha256Hash
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateEvidenceWithFileProvenance(ctx context.Context, input CreateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*FileMetadataInput, interceptors ...clientv2.RequestInterceptor) (*CreateEvidenceWithFileProvenance, error) {
+	vars := map[string]any{
+		"input":                 input,
+		"evidenceFiles":         evidenceFiles,
+		"evidenceFilesMetadata": evidenceFilesMetadata,
+	}
+
+	var res CreateEvidenceWithFileProvenance
+	if err := c.Client.Post(ctx, "CreateEvidenceWithFileProvenance", CreateEvidenceWithFileProvenanceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteEvidenceDocument = `mutation DeleteEvidence ($deleteEvidenceId: ID!) {
 	deleteEvidence(id: $deleteEvidenceId) {
 		deletedID
@@ -187734,11 +187889,13 @@ const GetFileByIDDocument = `query GetFileByID ($fileId: ID!) {
 		metadata
 		name
 		persistedFileSize
+		provenance
 		providedFileExtension
 		providedFileName
 		providedFileSize
 		scopeID
 		scopeName
+		sha256Hash
 		storagePath
 		storageProvider
 		storageRegion
@@ -217080,6 +217237,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateEventDocument:                           "UpdateEvent",
 	CreateBulkCSVEvidenceDocument:                 "CreateBulkCSVEvidence",
 	CreateEvidenceDocument:                        "CreateEvidence",
+	CreateEvidenceWithFileProvenanceDocument:      "CreateEvidenceWithFileProvenance",
 	DeleteEvidenceDocument:                        "DeleteEvidence",
 	GetAllEvidencesDocument:                       "GetAllEvidences",
 	GetEvidenceByIDDocument:                       "GetEvidenceByID",

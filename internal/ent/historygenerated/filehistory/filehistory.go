@@ -73,6 +73,8 @@ const (
 	FieldDetectedMimeType = "detected_mime_type"
 	// FieldMd5Hash holds the string denoting the md5_hash field in the database.
 	FieldMd5Hash = "md5_hash"
+	// FieldSha256Hash holds the string denoting the sha256_hash field in the database.
+	FieldSha256Hash = "sha256_hash"
 	// FieldDetectedContentType holds the string denoting the detected_content_type field in the database.
 	FieldDetectedContentType = "detected_content_type"
 	// FieldStoreKey holds the string denoting the store_key field in the database.
@@ -89,6 +91,8 @@ const (
 	FieldFileContents = "file_contents"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldProvenance holds the string denoting the provenance field in the database.
+	FieldProvenance = "provenance"
 	// FieldStorageRegion holds the string denoting the storage_region field in the database.
 	FieldStorageRegion = "storage_region"
 	// FieldStorageProvider holds the string denoting the storage_provider field in the database.
@@ -131,6 +135,7 @@ var Columns = []string{
 	FieldPersistedFileSize,
 	FieldDetectedMimeType,
 	FieldMd5Hash,
+	FieldSha256Hash,
 	FieldDetectedContentType,
 	FieldStoreKey,
 	FieldURI,
@@ -139,6 +144,7 @@ var Columns = []string{
 	FieldStoragePath,
 	FieldFileContents,
 	FieldMetadata,
+	FieldProvenance,
 	FieldStorageRegion,
 	FieldStorageProvider,
 	FieldBackupState,
@@ -324,6 +330,11 @@ func ByDetectedMimeType(opts ...sql.OrderTermOption) OrderOption {
 // ByMd5Hash orders the results by the md5_hash field.
 func ByMd5Hash(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMd5Hash, opts...).ToFunc()
+}
+
+// BySha256Hash orders the results by the sha256_hash field.
+func BySha256Hash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSha256Hash, opts...).ToFunc()
 }
 
 // ByDetectedContentType orders the results by the detected_content_type field.

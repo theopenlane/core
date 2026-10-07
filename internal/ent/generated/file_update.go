@@ -1562,6 +1562,9 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.Md5HashCleared() {
 		_spec.ClearField(file.FieldMd5Hash, field.TypeString)
 	}
+	if _u.mutation.Sha256HashCleared() {
+		_spec.ClearField(file.FieldSha256Hash, field.TypeString)
+	}
 	if value, ok := _u.mutation.DetectedContentType(); ok {
 		_spec.SetField(file.FieldDetectedContentType, field.TypeString, value)
 	}
@@ -1606,6 +1609,9 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(file.FieldMetadata, field.TypeJSON)
+	}
+	if _u.mutation.ProvenanceCleared() {
+		_spec.ClearField(file.FieldProvenance, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.StorageRegion(); ok {
 		_spec.SetField(file.FieldStorageRegion, field.TypeString, value)
@@ -4093,6 +4099,9 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	if _u.mutation.Md5HashCleared() {
 		_spec.ClearField(file.FieldMd5Hash, field.TypeString)
 	}
+	if _u.mutation.Sha256HashCleared() {
+		_spec.ClearField(file.FieldSha256Hash, field.TypeString)
+	}
 	if value, ok := _u.mutation.DetectedContentType(); ok {
 		_spec.SetField(file.FieldDetectedContentType, field.TypeString, value)
 	}
@@ -4137,6 +4146,9 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(file.FieldMetadata, field.TypeJSON)
+	}
+	if _u.mutation.ProvenanceCleared() {
+		_spec.ClearField(file.FieldProvenance, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.StorageRegion(); ok {
 		_spec.SetField(file.FieldStorageRegion, field.TypeString, value)

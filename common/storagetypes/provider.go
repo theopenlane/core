@@ -90,6 +90,10 @@ type File struct {
 	FieldName string `json:"field_name,omitempty"`
 	// MD5 hash of the file for integrity checking
 	MD5 []byte `json:"md5,omitempty"`
+	// SHA256 hash of the file, used to verify client provenance claims
+	SHA256 []byte `json:"sha256,omitempty"`
+	// ProvenanceClaims is the client-supplied capture record, validated and persisted immutably at creation
+	ProvenanceClaims map[string]any `json:"-"`
 	// ProvidedExtension is the extension provided by the client
 	ProvidedExtension string `json:"provided_extension,omitempty"`
 	// CreatedAt is the time the file was created

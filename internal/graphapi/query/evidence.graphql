@@ -125,6 +125,24 @@ mutation CreateEvidence ($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]
 		}
 	}
 }
+mutation CreateEvidenceWithFileProvenance ($input: CreateEvidenceInput!, $evidenceFiles: [Upload!], $evidenceFilesMetadata: [FileMetadataInput!]) {
+	createEvidence(input: $input, evidenceFiles: $evidenceFiles, evidenceFilesMetadata: $evidenceFilesMetadata) {
+		evidence {
+			id
+			files {
+				edges {
+					node {
+						id
+						createdBy
+						md5Hash
+						provenance
+						sha256Hash
+					}
+				}
+			}
+		}
+	}
+}
 mutation DeleteEvidence ($deleteEvidenceId: ID!) {
 	deleteEvidence(id: $deleteEvidenceId) {
 		deletedID

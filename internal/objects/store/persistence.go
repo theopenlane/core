@@ -86,6 +86,10 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 		set.Md5Hash = lo.ToPtr(string(f.MD5))
 	}
 
+	if len(f.SHA256) > 0 {
+		set.Sha256Hash = lo.ToPtr(string(f.SHA256))
+	}
+
 	if name := getCategoryNameForSchema(f); name != "" {
 		set.CategoryName = &name
 	}
@@ -94,10 +98,13 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 		set.OrganizationIDs = []string{orgID}
 	}
 
+	create := txFileClientFromContext(ctx).Create().SetInput(set)
+	if f.ProvenanceClaims != nil {
+		create = create.SetProvenance(f.ProvenanceClaims)
+	}
+
 	internalCtx := auth.WithInternalOperationContext(ctx)
-	entFile, err := txFileClientFromContext(ctx).Create().
-		SetInput(set).
-		Save(internalCtx)
+	entFile, err := create.Save(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create file")
 
