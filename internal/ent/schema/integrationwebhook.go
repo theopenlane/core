@@ -188,7 +188,7 @@ func (w IntegrationWebhook) Mixin() []ent.Mixin {
 // Modules of the IntegrationWebhook.
 func (IntegrationWebhook) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

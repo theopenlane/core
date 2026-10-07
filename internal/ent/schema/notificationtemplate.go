@@ -231,7 +231,7 @@ func (n NotificationTemplate) Mixin() []ent.Mixin {
 // Modules of the NotificationTemplate.
 func (NotificationTemplate) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

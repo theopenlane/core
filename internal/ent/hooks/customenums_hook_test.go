@@ -3,12 +3,16 @@
 package hooks_test
 
 import (
+	"context"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
@@ -18,6 +22,10 @@ func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
 	require.NotEmpty(t, systemAdmin.Edges.OrgMemberships)
 
 	orgID := systemAdmin.Edges.OrgMemberships[0].OrganizationID
+
+	err := entitlements.CreateFeatureTuples(context.Background(), &suite.client.Authz, orgID,
+		[]models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
+	require.NoError(t, err)
 
 	// system admin context — used to create system-owned enums
 	sysCtx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)

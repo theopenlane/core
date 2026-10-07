@@ -9077,6 +9077,10 @@ func init() {
 	workflowdefinitionDescApprovalEdges := workflowdefinitionFields[13].Descriptor()
 	// workflowdefinition.DefaultApprovalEdges holds the default value on creation for the approval_edges field.
 	workflowdefinition.DefaultApprovalEdges = workflowdefinitionDescApprovalEdges.Default.([]string)
+	// workflowdefinitionDescDefinitionJSON is the schema descriptor for definition_json field.
+	workflowdefinitionDescDefinitionJSON := workflowdefinitionFields[15].Descriptor()
+	// workflowdefinition.DefinitionJSONValidator is a validator for the "definition_json" field. It is called by the builders before save.
+	workflowdefinition.DefinitionJSONValidator = workflowdefinitionDescDefinitionJSON.Validators[0].(func(models.WorkflowDefinitionDocument) error)
 	// workflowdefinitionDescID is the schema descriptor for id field.
 	workflowdefinitionDescID := workflowdefinitionMixinFields4[0].Descriptor()
 	// workflowdefinition.DefaultID holds the default value on creation for the id field.

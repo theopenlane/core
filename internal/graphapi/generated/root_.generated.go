@@ -56335,7 +56335,7 @@ extend type Query {
 `, BuiltIn: false},
 	{Name: "../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
-type APIToken implements Node {
+type APIToken implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -73561,7 +73561,7 @@ input CustomDomainWhereInput {
   """
   tagsHas: String
 }
-type CustomTypeEnum implements Node {
+type CustomTypeEnum implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -76978,7 +76978,7 @@ input DirectoryMembershipWhereInput {
   observedAtLT: Time
   observedAtLTE: Time
 }
-type Discussion implements Node {
+type Discussion implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -77593,7 +77593,7 @@ input DocumentDataWhereInput {
   """
   tagsHas: String
 }
-type EmailTemplate implements Node {
+type EmailTemplate implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -79601,7 +79601,7 @@ enum EntityOrderField {
   external_id
   observed_at
 }
-type EntityType implements Node {
+type EntityType implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -82498,7 +82498,7 @@ input EvidenceWhereInput {
   """
   tagsHas: String
 }
-type Export implements Node {
+type Export implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -82904,7 +82904,7 @@ input ExportWhereInput {
   """
   fieldsHas: String
 }
-type File implements Node {
+type File implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -90545,7 +90545,7 @@ input IdentityHolderWhereInput {
   """
   emailAliasesHas: String
 }
-type Integration implements Node {
+type Integration implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -91352,7 +91352,7 @@ enum IntegrationOrderField {
   status
   expires_at
 }
-type IntegrationRun implements Node {
+type IntegrationRun implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -95894,7 +95894,7 @@ interface Node @goModel(model: "github.com/theopenlane/core/v2/internal/ent/gene
   """
   id: ID!
 }
-type Note implements Node {
+type Note implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -96951,7 +96951,7 @@ input NotificationPreferenceWhereInput {
   """
   topicPatternsHas: String
 }
-type NotificationTemplate implements Node {
+type NotificationTemplate implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -102143,7 +102143,7 @@ type PageInfo {
   """
   endCursor: Cursor
 }
-type PersonalAccessToken implements Node {
+type PersonalAccessToken implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -118599,7 +118599,7 @@ input SubprocessorWhereInput {
   """
   tagsHas: String
 }
-type Subscriber implements Node {
+type Subscriber implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -119618,7 +119618,7 @@ input TFASettingWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [UserWhereInput!]
 }
-type TagDefinition implements Node {
+type TagDefinition implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -119910,7 +119910,7 @@ input TagDefinitionWhereInput {
   """
   aliasesHas: String
 }
-type Task implements Node {
+type Task implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -138634,7 +138634,7 @@ input WebauthnWhereInput {
   """
   tagsHas: String
 }
-type WorkflowAssignment implements Node {
+type WorkflowAssignment implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -138815,7 +138815,7 @@ enum WorkflowAssignmentOrderField {
   created_at
   updated_at
 }
-type WorkflowAssignmentTarget implements Node {
+type WorkflowAssignmentTarget implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -139390,7 +139390,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
   REJECTED
   CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node {
+type WorkflowDefinition implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140026,7 +140026,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
   LIFECYCLE
   NOTIFICATION
 }
-type WorkflowEvent implements Node {
+type WorkflowEvent implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140275,7 +140275,7 @@ enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core
   EMIT_RECOVERED
   EMIT_FAILED_TERMINAL
 }
-type WorkflowInstance implements Node {
+type WorkflowInstance implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -141192,7 +141192,7 @@ enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenla
   FAILED
   PAUSED
 }
-type WorkflowObjectRef implements Node {
+type WorkflowObjectRef implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -141938,7 +141938,7 @@ input WorkflowObjectRefWhereInput {
   hasRemediation: Boolean
   hasRemediationWith: [RemediationWhereInput!]
 }
-type WorkflowProposal implements Node {
+type WorkflowProposal implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time

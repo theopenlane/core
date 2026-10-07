@@ -54,6 +54,7 @@ func TestConfigOptions(t *testing.T) {
 			FailOnEnqueueError: true,
 			QueueName:          "events",
 		},
+		WebhookAllowPrivateAddresses: true,
 	}
 	cfg = NewDefaultConfig(WithConfig(override))
 	assert.Equal(t, override.Enabled, cfg.Enabled)
@@ -64,6 +65,7 @@ func TestConfigOptions(t *testing.T) {
 	assert.Equal(t, override.Gala.MaxRetries, cfg.Gala.MaxRetries)
 	assert.Equal(t, override.Gala.FailOnEnqueueError, cfg.Gala.FailOnEnqueueError)
 	assert.Equal(t, override.Gala.QueueName, cfg.Gala.QueueName)
+	assert.Equal(t, override.WebhookAllowPrivateAddresses, cfg.WebhookAllowPrivateAddresses)
 }
 
 func TestConfigIsEnabledNil(t *testing.T) {
