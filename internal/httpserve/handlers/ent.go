@@ -384,7 +384,7 @@ func (h *Handler) getUserByInviteToken(ctx context.Context, token string) (*ent.
 func (h *Handler) countVerificationTokensUserByEmail(ctx context.Context, email string) (int, error) {
 	attempts, err := transaction.FromContext(ctx).EmailVerificationToken.Query().WithOwner().Where(
 		emailverificationtoken.And(
-			emailverificationtoken.Email(email),
+			emailverificationtoken.EmailEqualFold(email),
 		)).Count(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error counting verification reset tokens")
@@ -399,7 +399,7 @@ func (h *Handler) countVerificationTokensUserByEmail(ctx context.Context, email 
 func (h *Handler) expireAllVerificationTokensUserByEmail(ctx context.Context, email string) error {
 	prs, err := transaction.FromContext(ctx).EmailVerificationToken.Query().WithOwner().Where(
 		emailverificationtoken.And(
-			emailverificationtoken.Email(email),
+			emailverificationtoken.EmailEqualFold(email),
 			emailverificationtoken.TTLGT(time.Now()),
 		)).All(ctx)
 	if err != nil {

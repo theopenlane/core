@@ -18,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
@@ -31,6 +32,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 
 	// Register test handler
 	suite.registerTestHandler("POST", "register", suite.h.RegisterHandler)
+	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 
 	var bonkers = "b!a!n!a!n!a!s!"
 
@@ -45,6 +47,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 		expectedErrorCode  rout.ErrorCode
 		expectedStatus     int
 		invitationType     string
+		verifyEmail        bool
 	}{
 		{
 			name:           "happy path",
@@ -77,6 +80,16 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			password:       bonkers,
 			emailExpected:  true,
 			expectedStatus: http.StatusCreated,
+		},
+		{
+			name:           "happy path, mixed case email can be verified",
+			email:          "Mixed.Case@TheOpenlane.io",
+			firstName:      "Princess",
+			lastName:       "Fiona",
+			password:       bonkers,
+			emailExpected:  true,
+			expectedStatus: http.StatusCreated,
+			verifyEmail:    true,
 		},
 		{
 			name:               "invalid email",
@@ -248,7 +261,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			assert.Equal(t, tc.expectedErrorCode, out.ErrorCode)
 
 			if tc.expectedStatus == http.StatusCreated {
-				assert.Equal(t, out.Email, email)
+				assert.Equal(t, out.Email, strings.ToLower(email))
 				assert.NotEmpty(t, out.Message)
 				assert.NotEmpty(t, out.ID)
 
@@ -333,10 +346,30 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 					// regular registration — verification email
 					require.NotEmpty(t, msgs)
 					assert.Contains(t, msgs[0].Subject, "Please verify your email address")
-					assert.Equal(t, []string{tc.email}, msgs[0].To)
+					assert.Equal(t, []string{strings.ToLower(tc.email)}, msgs[0].To)
 				}
 			} else {
 				assert.Empty(t, msgs)
+			}
+
+			if tc.verifyEmail {
+				ctx := auth.WithInternalOperationContext(auth.NewTestContextWithValidUser(out.ID))
+
+				evToken, err := suite.db.EmailVerificationToken.Query().Where(emailverificationtoken.OwnerID(out.ID)).Only(ctx)
+				require.NoError(t, err)
+				assert.Equal(t, strings.ToLower(email), evToken.Email)
+
+				verifyReq := httptest.NewRequest(http.MethodGet, "/verify?token="+evToken.Token, nil)
+				verifyRecorder := httptest.NewRecorder()
+
+				suite.e.ServeHTTP(verifyRecorder, verifyReq)
+
+				var verifyOut *models.VerifyResponse
+				require.NoError(t, json.NewDecoder(verifyRecorder.Body).Decode(&verifyOut))
+
+				assert.Equal(t, http.StatusOK, verifyRecorder.Code)
+				assert.True(t, verifyOut.Success)
+				assert.Equal(t, strings.ToLower(email), verifyOut.Email)
 			}
 		})
 	}
