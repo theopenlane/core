@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -203,19 +202,13 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	// check program access if a program is specified
-	var programToImportInto *generated.Program
-
 	if programID != nil {
-		programToImportInto, err = withTransactionalMutation(ctx).Program.Query().
-			Where(program.ID(*programID)).
-			Only(internalCtx)
-
-		if generated.IsNotFound(err) {
-			return nil, generated.ErrPermissionDenied
-		}
-
+		exists, err := r.db.Program.Query().Where(program.ID(*programID)).Exist(internalCtx)
 		if err != nil {
 			return nil, err
+		}
+		if !exists {
+			return nil, generated.ErrPermissionDenied
 		}
 
 		if err := checkProgramAccess(ctx, r.db, *programID); err != nil {
@@ -276,17 +269,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// add existingControlIDs to createdControlIDs
 	createdControlIDs = append(createdControlIDs, existingControlIDs...)
-
-	templateControlIDs := make([]string, 0, len(controlsToClone))
-	for _, c := range controlsToClone {
-		if controls.IsOpenlaneBaseControl(c) {
-			templateControlIDs = append(templateControlIDs, c.ID)
-		}
-	}
-
-	if err := r.cloneTemplateMappings(ctx, templateControlIDs, orgID, programToImportInto); err != nil {
-		return nil, err
-	}
 
 	// get the cloned controls to return in the response
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.IDIn(createdControlIDs...)).
