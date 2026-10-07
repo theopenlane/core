@@ -48,6 +48,10 @@ func TaskRuleListeners() []gala.Registration {
 			listener.Match = []entityops.FieldMatch{{Field: organization.FieldPersonalOrg, In: []string{"true"}, Negate: true}}
 		}
 
+		if schema.Name == generated.TypeNotification {
+			listener.Match = []entityops.FieldMatch{{Field: notification.FieldTopic, In: taskrules.NotificationTaskRuleTopics}}
+		}
+
 		return listener
 	})
 }
