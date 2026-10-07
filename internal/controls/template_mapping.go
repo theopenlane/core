@@ -1,4 +1,4 @@
-package graphapi
+package controls
 
 import (
 	"context"
@@ -9,12 +9,15 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+)
+
+const (
+	batchSize = 100
 )
 
 type controlMappings struct {
@@ -47,14 +50,12 @@ func (c controlMappings) uniqueKey() dedupSetKey {
 	}
 }
 
-// cloneTemplateMappings replaces template IDs with organization IDs in their mappings.
+// CloneTemplateMappings replaces template IDs with organization IDs in their mappings.
 // Framework controls keep their system IDs; reports resolve them to organization copies.
-func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []string, orgID string, program *generated.Program) error {
+func CloneTemplateMappings(ctx context.Context, client *generated.Client, ids []string, orgID string, program *generated.Program) error {
 	if len(ids) == 0 {
 		return nil
 	}
-
-	client := withTransactionalMutation(ctx)
 
 	readCtx := auth.WithInternalReadContext(ctx)
 
@@ -67,7 +68,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 	}
 
 	// check mappings from either the to side or from of controls or subcontrols
-	mappings, err := client.MappedControl.Query().Where(
+	query := client.MappedControl.Query().Where(
 		mappedcontrol.SystemOwned(true),
 		mappedcontrol.Or(
 			mappedcontrol.HasFromControlsWith(control.IDIn(ids...)),
@@ -80,13 +81,41 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 		WithToControls(controlIDsOnlyPredicate).
 		WithFromSubcontrols(subcontrolReferencesPredicate).
 		WithToSubcontrols(subcontrolReferencesPredicate).
-		All(readCtx)
-	if err != nil {
-		return err
-	}
+		Order(mappedcontrol.ByID()).
+		Limit(batchSize)
 
-	if len(mappings) == 0 {
-		return nil
+	var lastProcessedID string
+	for {
+		cloned := query.Clone()
+		if lastProcessedID != "" {
+			cloned.Where(mappedcontrol.IDGT(lastProcessedID))
+		}
+
+		mappings, err := cloned.All(readCtx)
+		if err != nil {
+			return err
+		}
+
+		if len(mappings) == 0 {
+			return nil
+		}
+
+		if err := cloneTemplateMapping(ctx, client, ids, orgID, program, mappings); err != nil {
+			return err
+		}
+
+		lastProcessedID = mappings[len(mappings)-1].ID
+		if len(mappings) < batchSize {
+			return nil
+		}
+	}
+}
+
+func cloneTemplateMapping(ctx context.Context, client *generated.Client, ids []string, orgID string, program *generated.Program, mappings []*generated.MappedControl) error {
+	readCtx := auth.WithInternalReadContext(ctx)
+
+	controlIDsOnlyPredicate := func(q *generated.ControlQuery) {
+		q.Select(control.FieldID)
 	}
 
 	var controlIDs []string
@@ -141,7 +170,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 
 	// filter out to match known system templates
 	templateControls := lo.Filter(matchedControls, func(c *generated.Control, _ int) bool {
-		return controls.IsOpenlaneBaseControl(c)
+		return IsOpenlaneBaseControl(c)
 	})
 
 	if len(templateControls) == 0 {
@@ -198,7 +227,7 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 		return c.ID
 	})
 
-	existingMappedControls, err := client.MappedControl.Query().
+	existingQuery := client.MappedControl.Query().
 		Where(
 			mappedcontrol.Or(
 				mappedcontrol.HasFromControlsWith(control.IDIn(destinationIDs...)),
@@ -216,15 +245,36 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 		WithToSubcontrols(func(q *generated.SubcontrolQuery) {
 			q.Select(subcontrol.FieldID)
 		}).
-		All(readCtx)
-	if err != nil {
-		return err
-	}
+		Order(mappedcontrol.ByID()).
+		Limit(batchSize)
 
-	existingMappings := lo.Associate(existingMappedControls, func(m *generated.MappedControl) (dedupSetKey, struct{}) {
-		mappingControls, _ := buildMappings(m, nil, nil)
-		return mappingControls.uniqueKey(), struct{}{}
-	})
+	existingMappings := map[dedupSetKey]struct{}{}
+
+	var lastProcessedID string
+
+	for {
+
+		cloned := existingQuery.Clone()
+		if lastProcessedID != "" {
+			cloned.Where(mappedcontrol.IDGT(lastProcessedID))
+		}
+
+		existingMappedControls, err := cloned.All(readCtx)
+		if err != nil {
+			return err
+		}
+
+		for _, m := range existingMappedControls {
+			mappingControls, _ := buildMappings(m, nil, nil)
+			existingMappings[mappingControls.uniqueKey()] = struct{}{}
+		}
+
+		if len(existingMappedControls) < batchSize {
+			break
+		}
+
+		lastProcessedID = existingMappedControls[len(existingMappedControls)-1].ID
+	}
 
 	mapped := lo.FilterMap(mappings, func(m *generated.MappedControl, _ int) (*generated.CreateMappedControlInput, bool) {
 
@@ -278,8 +328,12 @@ func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []stri
 		return nil
 	}
 
-	_, err = r.bulkCreateMappedControl(auth.WithInternalOperationContext(ctx), mapped)
-	return err
+	builders := make([]*generated.MappedControlCreate, len(mapped))
+	for i, input := range mapped {
+		builders[i] = client.MappedControl.Create().SetInput(*input)
+	}
+
+	return client.MappedControl.CreateBulk(builders...).Exec(auth.WithInternalOperationContext(ctx))
 }
 
 // mapControls tries to match the templates to the already retrieved org control copies

@@ -1299,6 +1299,8 @@ func TestMutationCreateControlsByClone_Mappings(t *testing.T) {
 			assert.Equal(t, orgTemplate.Programs.Edges[0].Node.ID, selectedProgram.ID)
 			orgSubcontrolID := orgTemplate.Subcontrols.Edges[0].Node.ID
 
+			assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
+
 			mappings, err := suite.Client.API.GetMappedControls(ctx, nil, nil, getMappedFilter)
 			assert.NilError(t, err)
 			assert.Equal(t, mappings.MappedControls.TotalCount, int64(tc.expectedCount))
@@ -1308,6 +1310,8 @@ func TestMutationCreateControlsByClone_Mappings(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, is.Len(secondImportRun.CreateControlsByClone.Controls, 1))
 			assert.Equal(t, secondImportRun.CreateControlsByClone.Controls[0].ID, orgTemplate.ID)
+
+			assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
 
 			mappedControls2, err := suite.Client.API.GetMappedControls(ctx, nil, nil, getMappedFilter)
 			assert.NilError(t, err)

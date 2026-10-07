@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
@@ -20,10 +21,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/schema"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -203,12 +206,10 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	// check program access if a program is specified
-	var programToImportInto *generated.Program
-
 	if programID != nil {
-		programToImportInto, err = withTransactionalMutation(ctx).Program.Query().
+		_, err = withTransactionalMutation(ctx).Program.Query().
 			Where(program.ID(*programID)).
-			Only(internalCtx)
+			Exist(internalCtx)
 
 		if generated.IsNotFound(err) {
 			return nil, generated.ErrPermissionDenied
@@ -284,7 +285,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 	}
 
-	if err := r.cloneTemplateMappings(ctx, templateControlIDs, orgID, programToImportInto); err != nil {
+	if err := r.queueTemplateMappings(ctx, templateControlIDs, programID); err != nil {
 		return nil, err
 	}
 
@@ -299,6 +300,29 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	return query.All(internalCtx)
+}
+
+func (r *mutationResolver) queueTemplateMappings(ctx context.Context, ids []string, programID *string) error {
+	if len(ids) == 0 {
+		return nil
+	}
+
+	if r.integrationsRuntime == nil {
+		return gala.ErrGalaRequired
+	}
+
+	runtime := r.integrationsRuntime.Gala()
+	if runtime == nil {
+		return gala.ErrGalaRequired
+	}
+
+	req := hooks.TemplateMappingRequest{
+		ControlIDs: ids,
+		ProgramID:  lo.FromPtr(programID),
+	}
+
+	_, err := runtime.EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{})
+	return err
 }
 
 // checkProgramAccess checks the users access to the specific program id
