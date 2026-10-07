@@ -1,0 +1,12 @@
+extend type Query {
+    """
+    entitiesCatalog lists the externally visible system-owned entities available for adoption
+    """
+    entitiesCatalog(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [EntityOrder!], where: EntityWhereInput): EntityConnection!
+}
+extend type Mutation {
+    """
+    adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
+    """
+    adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
+}
