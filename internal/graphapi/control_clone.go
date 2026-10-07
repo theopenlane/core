@@ -132,6 +132,28 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 	}
 
+	templateControlIDs := make([]string, 0, len(controlsToClone))
+	for _, c := range controlsToClone {
+		if controls.IsOpenlaneBaseControl(c) {
+			templateControlIDs = append(templateControlIDs, c.ID)
+		}
+	}
+
+	if len(templateControlIDs) > 0 {
+
+		oc, _ := gala.OperationContextFromContext(ctx)
+
+		err := gala.SetAttributes(&oc, hooks.TemplateMappingRequest{
+			ControlIDs: templateControlIDs,
+			ProgramID:  lo.FromPtr(programID),
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		ctx = gala.WithOperationContext(ctx, oc)
+	}
+
 	wherePredicate := []predicate.Control{}
 	for _, c := range controlsToClone {
 		cloneInput, _ := controls.CreateCloneControlInput(c, nil, orgID)
@@ -278,17 +300,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// add existingControlIDs to createdControlIDs
 	createdControlIDs = append(createdControlIDs, existingControlIDs...)
 
-	templateControlIDs := make([]string, 0, len(controlsToClone))
-	for _, c := range controlsToClone {
-		if controls.IsOpenlaneBaseControl(c) {
-			templateControlIDs = append(templateControlIDs, c.ID)
-		}
-	}
-
-	if err := r.queueTemplateMappings(ctx, templateControlIDs, programID); err != nil {
-		return nil, err
-	}
-
 	// get the cloned controls to return in the response
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.IDIn(createdControlIDs...)).
 		WithSubcontrols().
@@ -300,29 +311,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	return query.All(internalCtx)
-}
-
-func (r *mutationResolver) queueTemplateMappings(ctx context.Context, ids []string, programID *string) error {
-	if len(ids) == 0 {
-		return nil
-	}
-
-	if r.integrationsRuntime == nil {
-		return gala.ErrGalaRequired
-	}
-
-	runtime := r.integrationsRuntime.Gala()
-	if runtime == nil {
-		return gala.ErrGalaRequired
-	}
-
-	req := hooks.TemplateMappingRequest{
-		ControlIDs: ids,
-		ProgramID:  lo.FromPtr(programID),
-	}
-
-	_, err := runtime.EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{})
-	return err
 }
 
 // checkProgramAccess checks the users access to the specific program id

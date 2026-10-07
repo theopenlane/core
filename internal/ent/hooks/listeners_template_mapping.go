@@ -4,6 +4,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/controls"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
@@ -15,13 +16,12 @@ type TemplateMappingRequest struct {
 	ProgramID  string   `json:"program_id,omitempty"`
 }
 
-var TemplateMappingTopic = gala.NamespacedTopic[TemplateMappingRequest](gala.System, "template.mappings.requested")
-
 func TemplateMappingListeners() []gala.Registration {
 	return []gala.Registration{
-		gala.Definition[TemplateMappingRequest]{
-			Topic: TemplateMappingTopic,
-			Caller: func(restored *auth.Caller, _ TemplateMappingRequest) *auth.Caller {
+		entityops.MutationListener{
+			Schema:     entityops.SchemaControl,
+			Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return restored.WithCapabilities(auth.CapInternalOperation)
 			},
 			Handle: handleTemplateMappings,
@@ -29,22 +29,26 @@ func TemplateMappingListeners() []gala.Registration {
 	}
 }
 
-func handleTemplateMappings(ctx gala.HandlerContext, req TemplateMappingRequest) error {
-	client := generated.FromContext(ctx.Context)
-	if client == nil {
-		return ErrClientResolveFailed
+func handleTemplateMappings(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	oc, ok := gala.OperationContextFromContext(inv.Context)
+	if !ok || len(oc.Attributes) == 0 {
+		return nil
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx.Context)
+	req, err := gala.DecodeAttributes[TemplateMappingRequest](oc)
 	if err != nil {
 		return err
+	}
+
+	if len(req.ControlIDs) == 0 {
+		return nil
 	}
 
 	var program *generated.Program
 
 	if req.ProgramID != "" {
 
-		program, err = client.Program.Get(ctx.Context, req.ProgramID)
+		program, err = inv.Client.Program.Get(inv.Context, req.ProgramID)
 		if generated.IsNotFound(err) {
 			return nil
 		}
@@ -54,5 +58,5 @@ func handleTemplateMappings(ctx gala.HandlerContext, req TemplateMappingRequest)
 		}
 	}
 
-	return controls.CloneTemplateMappings(ctx.Context, client, req.ControlIDs, orgID, program)
+	return controls.CloneTemplateMappings(inv.Context, inv.Client, req.ControlIDs, inv.Caller.OrganizationID, program)
 }
