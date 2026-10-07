@@ -191,5 +191,6 @@ func (WorkflowDefinition) Policy() ent.Policy {
 func (WorkflowDefinition) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookWorkflowDefinitionPrefilter(),
+		hooks.HookWorkflowDefinitionWebhookAddress(),
 	}
 }

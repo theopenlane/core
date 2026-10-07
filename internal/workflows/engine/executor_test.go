@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"sync/atomic"
 
 	"github.com/oklog/ulid/v2"
 
@@ -19,6 +20,7 @@ import (
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // TestWorkflowEngineExecute verifies basic workflow engine initialization and action execution
@@ -473,6 +475,31 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
 		s.Error(err)
+	})
+
+	s.Run("blocks webhook to non-public address", func() {
+		var calls atomic.Int32
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			calls.Add(1)
+			w.WriteHeader(http.StatusOK)
+		}))
+		defer server.Close()
+
+		guardedEngine := s.NewIsolatedEngine(nil)
+
+		paramsBytes, err := json.Marshal(workflows.WebhookActionParams{URL: server.URL})
+		s.Require().NoError(err)
+
+		action := models.WorkflowAction{
+			Type:   enums.WorkflowActionTypeWebhook.String(),
+			Key:    "test_webhook_private",
+			Params: paramsBytes,
+		}
+
+		err = guardedEngine.Execute(userCtx, action, instance, obj)
+		s.ErrorIs(err, engine.ErrWebhookFailed)
+		s.ErrorIs(err, urlx.ErrNonPublicHost)
+		s.Zero(calls.Load())
 	})
 }
 

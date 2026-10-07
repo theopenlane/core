@@ -17,4 +17,6 @@ var (
 	ErrUnsupportedScheme = errors.New("urlx: unsupported url scheme")
 	// ErrSizeLimitExceeded indicates a response body exceeded the configured size limit
 	ErrSizeLimitExceeded = errors.New("urlx: response size limit exceeded")
+	// ErrNonPublicHost indicates the URL targets localhost or an address that is not publicly routable
+	ErrNonPublicHost = errors.New("urlx: url host must be a publicly routable address")
 )

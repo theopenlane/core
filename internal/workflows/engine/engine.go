@@ -81,6 +81,11 @@ func NewWorkflowEngineWithConfig(client *generated.Client, runtime *gala.Gala, c
 	}, nil
 }
 
+// WebhookAllowPrivateAddresses reports whether webhook actions may target non-public addresses
+func (e *WorkflowEngine) WebhookAllowPrivateAddresses() bool {
+	return e.config.WebhookAllowPrivateAddresses
+}
+
 // TriggerWorkflow starts a new workflow instance
 func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, input TriggerInput) (instance *generated.WorkflowInstance, err error) {
 	scope := observability.BeginEngine(ctx, e.observer, observability.OpTriggerWorkflow, input.EventType, lo.Assign(observability.Fields(obj.ObservabilityFields()), observability.Fields{

@@ -2179,6 +2179,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**enabled**|`boolean`|||
 |[**cel**](#defsworkflowscelconfig)|`object`|||
 |[**gala**](#defsworkflowsgalaconfig)|`object`|||
+|**webhookallowprivateaddresses**|`boolean`|||
 
 **Additional Properties:** not allowed   
 **Example**

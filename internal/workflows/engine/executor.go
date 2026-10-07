@@ -26,6 +26,7 @@ import (
 	wfworkflows "github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/core/v2/pkg/celx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (
@@ -502,13 +503,18 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 		idempotencyKey = fmt.Sprintf("wf_%s_%s_%s", instance.ID, action.Key, hex.EncodeToString(payloadSum[:]))
 	}
 
+	clientOpts := []httpclient.Option{httpclient.Timeout(time.Duration(timeoutMS) * time.Millisecond)}
+	if !e.config.WebhookAllowPrivateAddresses {
+		clientOpts = append(clientOpts, urlx.PublicOnly())
+	}
+
 	requestOpts := []httpsling.Option{
 		httpsling.Method(method),
 		httpsling.URL(params.URL),
 		httpsling.Body(basePayload),
 		httpsling.ContentType(httpsling.ContentTypeJSON),
 		httpsling.Accept(httpsling.ContentTypeJSON),
-		httpsling.Client(httpclient.Timeout(time.Duration(timeoutMS) * time.Millisecond)),
+		httpsling.Client(clientOpts...),
 		httpsling.Header("Idempotency-Key", idempotencyKey),
 		httpsling.Header("X-Workflow-Idempotency-Key", idempotencyKey),
 	}
@@ -538,6 +544,10 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 
 		if err == nil && httpsling.IsSuccess(resp) {
 			return nil
+		}
+
+		if errors.Is(err, urlx.ErrNonPublicHost) {
+			return fmt.Errorf("%w: %w", ErrWebhookFailed, err)
 		}
 
 		if err == nil && resp != nil && resp.StatusCode >= httpStatusClientErrorMin && resp.StatusCode < httpStatusClientErrorMax {

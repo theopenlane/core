@@ -1383,6 +1383,9 @@ data:
         queuename: {{ .Values.openlane.coreConfiguration.workflows.gala.queuename | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.workflows.webhookallowprivateaddresses }}
+      webhookallowprivateaddresses: {{ .Values.openlane.coreConfiguration.workflows.webhookallowprivateaddresses }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.cloudflare }}
     cloudflare:

@@ -768,6 +768,7 @@ coreConfiguration:
       maxretries: 5  # @schema type:integer; default:5
       failonenqueueerror: false  # @schema type:boolean; default:false
       queuename: "events"  # @schema type:string; default:events
+    webhookallowprivateaddresses: false  # @schema type:boolean; default:false
   # -- Cloudflare contains configuration for Cloudflare integration
   cloudflare:
     # -- Enabled toggles the Cloudflare snapshot handler

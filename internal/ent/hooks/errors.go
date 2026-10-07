@@ -10,6 +10,8 @@ var (
 	ErrInternalServerError = errors.New("internal server error")
 	// ErrInvalidInput is returned when the input is invalid.
 	ErrInvalidInput = errors.New("invalid input")
+	// ErrWorkflowWebhookURLNotAllowed is returned when a workflow webhook action url is not a publicly routable http(s) address
+	ErrWorkflowWebhookURLNotAllowed = errors.New("workflow webhook action url must be a publicly routable http(s) address")
 	// ErrPersonalOrgsNoChildren is returned when personal org attempts to add a child org
 	ErrPersonalOrgsNoChildren = errors.New("personal organizations are not allowed to have child organizations")
 	// ErrPersonalOrgsNoMembers is returned when personal org attempts to add members

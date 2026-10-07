@@ -8937,6 +8937,8 @@ func init() {
 	workflowdefinition.Hooks[11] = workflowdefinitionMixinHooks9[0]
 
 	workflowdefinition.Hooks[12] = workflowdefinitionHooks[0]
+
+	workflowdefinition.Hooks[13] = workflowdefinitionHooks[1]
 	workflowdefinitionMixinInters3 := workflowdefinitionMixin[3].Interceptors()
 	workflowdefinitionMixinInters7 := workflowdefinitionMixin[7].Interceptors()
 	workflowdefinition.Interceptors[0] = workflowdefinitionMixinInters3[0]

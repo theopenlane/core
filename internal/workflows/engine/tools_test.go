@@ -180,7 +180,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	})
 	s.Require().NoError(err)
 
-	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true))
+	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true), workflows.WithWebhookAllowPrivateAddresses(true))
 
 	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, nil, opts)
 	s.Require().NoError(err)
