@@ -221,8 +221,8 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 
 	common.WithResultLimit(srv, &MaxResultLimit)
 
-	// prevent synthetic support-user list edges from falling through to QueryXxx()
-	graphapi.WithSupportUserEdges(srv)
+	// restrict what support and anonymous callers can do, same as the server
+	graphapi.WithCallerExtensions(srv)
 
 	// Set the error presenter to use the custom error presenter
 	srv.SetErrorPresenter(gqlerrors.ErrorPresenter)

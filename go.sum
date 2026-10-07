@@ -820,8 +820,8 @@ github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rM
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4lY=
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
-github.com/theopenlane/entx v0.36.0 h1:ZUlnDzfvUturk4p6VlPRxXqFA4iPFumYbsjJ2xrtQRY=
-github.com/theopenlane/entx v0.36.0/go.mod h1:ynxsXIZLnxjiqFL7wedJuPO7SQoa6CHb6uT6x9VjCgU=
+github.com/theopenlane/entx v0.36.2 h1:I0HdWpm4cVoNKrI0wN7fxo0bcJB/FNlCtdNbTdKmsqc=
+github.com/theopenlane/entx v0.36.2/go.mod h1:RE4logzauh5ssl+wLj8gAD9LukC8DDIgDKC8uVgD/yU=
 github.com/theopenlane/go-client v0.14.1 h1:GgwLjm71/j327rEjQEQbtVZCORkZguUmZqdcDEqxzMc=
 github.com/theopenlane/go-client v0.14.1/go.mod h1:lhKySZzvREDbEutwBpkO3/yZXcxFro7RMU8UNJnF/+k=
 github.com/theopenlane/gqlgen-plugins v0.18.2 h1:ZJs1ntx+Gtm6wDAu+ZvGRPmzsydBdS1YP+/4ME6Vm+k=
