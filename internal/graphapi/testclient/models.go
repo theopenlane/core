@@ -7381,6 +7381,8 @@ type CreateFileInput struct {
 	DetectedMimeType *string `json:"detectedMimeType,omitempty"`
 	// the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
 	Md5Hash *string `json:"md5Hash,omitempty"`
+	// the computed sha256 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+	Sha256Hash *string `json:"sha256Hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detectedContentType"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
@@ -15447,6 +15449,8 @@ type File struct {
 	DetectedMimeType *string `json:"detectedMimeType,omitempty"`
 	// the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
 	Md5Hash *string `json:"md5Hash,omitempty"`
+	// the computed sha256 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+	Sha256Hash *string `json:"sha256Hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detectedContentType"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
@@ -15461,6 +15465,8 @@ type File struct {
 	StoragePath *string `json:"storagePath,omitempty"`
 	// additional metadata about the file
 	Metadata map[string]any `json:"metadata,omitempty"`
+	// the client-supplied capture record for the file, validated against the received contents and immutable once stored
+	Provenance map[string]any `json:"provenance,omitempty"`
 	// the region the file is stored in, if applicable
 	StorageRegion *string `json:"storageRegion,omitempty"`
 	// the storage provider the file is stored in, if applicable
@@ -15522,6 +15528,8 @@ type FileMetadataInput struct {
 	Name *string `json:"name,omitempty"`
 	// additional extracted or client-provided metadata for the file
 	Metadata map[string]any `json:"metadata,omitempty"`
+	// the client-side capture record for the file, stored immutably; only accepted on evidence files, at most 16KB encoded, and an artifact_sha256 claim must match the uploaded bytes
+	Provenance map[string]any `json:"provenance,omitempty"`
 }
 
 // Ordering options for File connections
@@ -15772,6 +15780,18 @@ type FileWhereInput struct {
 	Md5HashNotNil       *bool    `json:"md5HashNotNil,omitempty"`
 	Md5HashEqualFold    *string  `json:"md5HashEqualFold,omitempty"`
 	Md5HashContainsFold *string  `json:"md5HashContainsFold,omitempty"`
+	// sha256_hash field predicates
+	Sha256Hash             *string  `json:"sha256Hash,omitempty"`
+	Sha256HashNeq          *string  `json:"sha256HashNEQ,omitempty"`
+	Sha256HashIn           []string `json:"sha256HashIn,omitempty"`
+	Sha256HashNotIn        []string `json:"sha256HashNotIn,omitempty"`
+	Sha256HashContains     *string  `json:"sha256HashContains,omitempty"`
+	Sha256HashHasPrefix    *string  `json:"sha256HashHasPrefix,omitempty"`
+	Sha256HashHasSuffix    *string  `json:"sha256HashHasSuffix,omitempty"`
+	Sha256HashIsNil        *bool    `json:"sha256HashIsNil,omitempty"`
+	Sha256HashNotNil       *bool    `json:"sha256HashNotNil,omitempty"`
+	Sha256HashEqualFold    *string  `json:"sha256HashEqualFold,omitempty"`
+	Sha256HashContainsFold *string  `json:"sha256HashContainsFold,omitempty"`
 	// detected_content_type field predicates
 	DetectedContentType             *string  `json:"detectedContentType,omitempty"`
 	DetectedContentTypeNeq          *string  `json:"detectedContentTypeNEQ,omitempty"`

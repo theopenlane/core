@@ -351,6 +351,20 @@ func (_c *FileCreate) SetNillableMd5Hash(v *string) *FileCreate {
 	return _c
 }
 
+// SetSha256Hash sets the "sha256_hash" field.
+func (_c *FileCreate) SetSha256Hash(v string) *FileCreate {
+	_c.mutation.SetSha256Hash(v)
+	return _c
+}
+
+// SetNillableSha256Hash sets the "sha256_hash" field if the given value is not nil.
+func (_c *FileCreate) SetNillableSha256Hash(v *string) *FileCreate {
+	if v != nil {
+		_c.SetSha256Hash(*v)
+	}
+	return _c
+}
+
 // SetDetectedContentType sets the "detected_content_type" field.
 func (_c *FileCreate) SetDetectedContentType(v string) *FileCreate {
 	_c.mutation.SetDetectedContentType(v)
@@ -436,6 +450,12 @@ func (_c *FileCreate) SetFileContents(v []byte) *FileCreate {
 // SetMetadata sets the "metadata" field.
 func (_c *FileCreate) SetMetadata(v map[string]interface{}) *FileCreate {
 	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetProvenance sets the "provenance" field.
+func (_c *FileCreate) SetProvenance(v map[string]interface{}) *FileCreate {
+	_c.mutation.SetProvenance(v)
 	return _c
 }
 
@@ -1003,6 +1023,10 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldMd5Hash, field.TypeString, value)
 		_node.Md5Hash = value
 	}
+	if value, ok := _c.mutation.Sha256Hash(); ok {
+		_spec.SetField(file.FieldSha256Hash, field.TypeString, value)
+		_node.Sha256Hash = value
+	}
 	if value, ok := _c.mutation.DetectedContentType(); ok {
 		_spec.SetField(file.FieldDetectedContentType, field.TypeString, value)
 		_node.DetectedContentType = value
@@ -1034,6 +1058,10 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(file.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.Provenance(); ok {
+		_spec.SetField(file.FieldProvenance, field.TypeJSON, value)
+		_node.Provenance = value
 	}
 	if value, ok := _c.mutation.StorageRegion(); ok {
 		_spec.SetField(file.FieldStorageRegion, field.TypeString, value)

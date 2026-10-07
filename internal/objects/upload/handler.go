@@ -3,6 +3,7 @@ package upload
 import (
 	"context"
 	"crypto/md5" // #nosec G501 -- not used for security
+	"crypto/sha256"
 	"encoding/hex"
 	"io"
 	"path"
@@ -27,9 +28,21 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 		return ctx, nil, nil
 	}
 
+	// we are intentionally swallowing this error because if we can't get the org ID
+	// we just won't populate the provider hints with it. The upload can still proceed
+	// without it - failing at this stage prevents the upload from ever progressing
+	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
+
+	prepared, err := prepareUploads(ctx, files, orgID)
+	if err != nil {
+		return ctx, nil, err
+	}
+
 	var uploadedFiles []pkgobjects.File
 
-	for _, file := range files {
+	for _, p := range prepared {
+		file, uploadOpts := p.file, p.opts
+
 		pkgobjects.AddUpload()
 		metrics.StartFileUpload()
 		startTime := time.Now()
@@ -38,30 +51,6 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 			metrics.FinishFileUpload(status, time.Since(startTime).Seconds())
 			pkgobjects.DoneUpload()
 		}
-
-		// we are intentionally swallowing this error because if we can't get the org ID
-		// we just won't populate the provider hints with it. The upload can still proceed
-		// without it - failing at this stage prevents the upload from ever progressing
-		orgID, err := auth.GetOrganizationIDFromContext(ctx)
-
-		if err == nil && file.Parent.ID == "" && file.CorrelatedObjectID == "" && file.CorrelatedObjectType == "" {
-			file.CorrelatedObjectID = orgID
-			file.CorrelatedObjectType = "organization"
-		}
-
-		// Normalize metadata (content type, hints) before we persist the file record so
-		// downstream storage providers see consistent values.
-		uploadOpts := BuildUploadOptions(ctx, &file)
-
-		hashSum, err := ComputeMD5Hash(file.RawFile)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("file", file.OriginalName).Msg("failed to calculate md5 hash")
-			finish("error")
-
-			return ctx, nil, err
-		}
-
-		file.MD5 = hashSum
 
 		entFile, err := store.CreateFileRecord(ctx, file)
 		if err != nil {
@@ -125,6 +114,47 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 
 	ctx = pkgobjects.WriteFilesToContext(ctx, contextFilesMap)
 	return ctx, uploadedFiles, nil
+}
+
+type preparedUpload struct {
+	file pkgobjects.File
+	opts *pkgobjects.UploadOptions
+}
+
+// prepareUploads normalizes, hashes and validates every file before any is persisted, so a rejected
+// file cannot leave the files before it orphaned in storage
+func prepareUploads(ctx context.Context, files []pkgobjects.File, orgID string) ([]preparedUpload, error) {
+	prepared := make([]preparedUpload, 0, len(files))
+
+	for _, file := range files {
+		if orgID != "" && file.Parent.ID == "" && file.CorrelatedObjectID == "" && file.CorrelatedObjectType == "" {
+			file.CorrelatedObjectID = orgID
+			file.CorrelatedObjectType = "organization"
+		}
+
+		// Normalize metadata (content type, hints) before we persist the file record so
+		// downstream storage providers see consistent values.
+		uploadOpts := BuildUploadOptions(ctx, &file)
+
+		md5Hex, sha256Hex, err := ComputeDigests(file.RawFile)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("file", file.OriginalName).Msg("failed to calculate file digests")
+
+			return nil, err
+		}
+
+		file.MD5, file.SHA256 = md5Hex, sha256Hex
+
+		if err := validateProvenance(file); err != nil {
+			logx.FromContext(ctx).Info().Err(err).Str("file", file.OriginalName).Msg("rejected file provenance")
+
+			return nil, err
+		}
+
+		prepared = append(prepared, preparedUpload{file: file, opts: uploadOpts})
+	}
+
+	return prepared, nil
 }
 
 // HandleRollback removes uploaded files from storage in case of an error during processing the rest of the request.
@@ -205,32 +235,28 @@ func BuildUploadOptions(ctx context.Context, f *pkgobjects.File) *pkgobjects.Upl
 	}
 }
 
-// ComputeMD5Hash returns the MD5 digest calculated from the contents of a file
-func ComputeMD5Hash(file io.ReadSeeker) ([]byte, error) {
+// ComputeDigests returns the hex-encoded MD5 and SHA-256 digests of a file's contents in a single read
+func ComputeDigests(file io.ReadSeeker) (md5Hex, sha256Hex []byte, err error) {
 	if file == nil {
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	if _, err := file.Seek(0, io.SeekStart); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	h := md5.New() // #nosec G401 -- not used for security
-	if _, err := io.Copy(h, file); err != nil {
-		return nil, err
+	md5Hash := md5.New() // #nosec G401 -- not used for security
+	sha256Hash := sha256.New()
+
+	if _, err := io.Copy(io.MultiWriter(md5Hash, sha256Hash), file); err != nil {
+		return nil, nil, err
 	}
 
 	if _, err := file.Seek(0, io.SeekStart); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	sum := h.Sum(nil)
-
-	encoded := make([]byte, hex.EncodedLen(len(sum)))
-
-	_ = hex.Encode(encoded, sum)
-
-	return encoded, nil
+	return hex.AppendEncode(nil, md5Hash.Sum(nil)), hex.AppendEncode(nil, sha256Hash.Sum(nil)), nil
 }
 
 func mergeUploadedFileMetadata(dest *pkgobjects.File, entFileID string, src pkgobjects.File) {

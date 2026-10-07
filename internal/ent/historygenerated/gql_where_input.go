@@ -21609,6 +21609,19 @@ type FileHistoryWhereInput struct {
 	Md5HashEqualFold    *string  `json:"md5HashEqualFold,omitempty"`
 	Md5HashContainsFold *string  `json:"md5HashContainsFold,omitempty"`
 
+	// "sha256_hash" field predicates.
+	Sha256Hash             *string  `json:"sha256Hash,omitempty"`
+	Sha256HashNEQ          *string  `json:"sha256HashNEQ,omitempty"`
+	Sha256HashIn           []string `json:"sha256HashIn,omitempty"`
+	Sha256HashNotIn        []string `json:"sha256HashNotIn,omitempty"`
+	Sha256HashContains     *string  `json:"sha256HashContains,omitempty"`
+	Sha256HashHasPrefix    *string  `json:"sha256HashHasPrefix,omitempty"`
+	Sha256HashHasSuffix    *string  `json:"sha256HashHasSuffix,omitempty"`
+	Sha256HashIsNil        bool     `json:"sha256HashIsNil,omitempty"`
+	Sha256HashNotNil       bool     `json:"sha256HashNotNil,omitempty"`
+	Sha256HashEqualFold    *string  `json:"sha256HashEqualFold,omitempty"`
+	Sha256HashContainsFold *string  `json:"sha256HashContainsFold,omitempty"`
+
 	// "detected_content_type" field predicates.
 	DetectedContentType             *string  `json:"detectedContentType,omitempty"`
 	DetectedContentTypeNEQ          *string  `json:"detectedContentTypeNEQ,omitempty"`
@@ -22490,6 +22503,39 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	}
 	if i.Md5HashContainsFold != nil {
 		predicates = append(predicates, filehistory.Md5HashContainsFold(*i.Md5HashContainsFold))
+	}
+	if i.Sha256Hash != nil {
+		predicates = append(predicates, filehistory.Sha256HashEQ(*i.Sha256Hash))
+	}
+	if i.Sha256HashNEQ != nil {
+		predicates = append(predicates, filehistory.Sha256HashNEQ(*i.Sha256HashNEQ))
+	}
+	if len(i.Sha256HashIn) > 0 {
+		predicates = append(predicates, filehistory.Sha256HashIn(i.Sha256HashIn...))
+	}
+	if len(i.Sha256HashNotIn) > 0 {
+		predicates = append(predicates, filehistory.Sha256HashNotIn(i.Sha256HashNotIn...))
+	}
+	if i.Sha256HashContains != nil {
+		predicates = append(predicates, filehistory.Sha256HashContains(*i.Sha256HashContains))
+	}
+	if i.Sha256HashHasPrefix != nil {
+		predicates = append(predicates, filehistory.Sha256HashHasPrefix(*i.Sha256HashHasPrefix))
+	}
+	if i.Sha256HashHasSuffix != nil {
+		predicates = append(predicates, filehistory.Sha256HashHasSuffix(*i.Sha256HashHasSuffix))
+	}
+	if i.Sha256HashIsNil {
+		predicates = append(predicates, filehistory.Sha256HashIsNil())
+	}
+	if i.Sha256HashNotNil {
+		predicates = append(predicates, filehistory.Sha256HashNotNil())
+	}
+	if i.Sha256HashEqualFold != nil {
+		predicates = append(predicates, filehistory.Sha256HashEqualFold(*i.Sha256HashEqualFold))
+	}
+	if i.Sha256HashContainsFold != nil {
+		predicates = append(predicates, filehistory.Sha256HashContainsFold(*i.Sha256HashContainsFold))
 	}
 	if i.DetectedContentType != nil {
 		predicates = append(predicates, filehistory.DetectedContentTypeEQ(*i.DetectedContentType))

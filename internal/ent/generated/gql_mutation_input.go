@@ -9470,6 +9470,7 @@ type CreateFileInput struct {
 	PersistedFileSize         *int64                 `json:"persisted_file_size,omitempty"`
 	DetectedMimeType          *string                `json:"detected_mime_type,omitempty"`
 	Md5Hash                   *string                `json:"md5_hash,omitempty"`
+	Sha256Hash                *string                `json:"sha256_hash,omitempty"`
 	DetectedContentType       string                 `json:"detected_content_type,omitempty"`
 	StoreKey                  *string                `json:"store_key,omitempty"`
 	URI                       *string                `json:"uri,omitempty"`
@@ -9539,6 +9540,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.Md5Hash; v != nil {
 		m.SetMd5Hash(*v)
+	}
+	if v := i.Sha256Hash; v != nil {
+		m.SetSha256Hash(*v)
 	}
 	m.SetDetectedContentType(i.DetectedContentType)
 	if v := i.StoreKey; v != nil {

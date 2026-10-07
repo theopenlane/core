@@ -1527,6 +1527,8 @@ type FileMetadataInput struct {
 	Name *string `json:"name,omitempty"`
 	// additional extracted or client-provided metadata for the file
 	Metadata map[string]any `json:"metadata,omitempty"`
+	// the client-side capture record for the file, stored immutably; only accepted on evidence files, at most 16KB encoded, and an artifact_sha256 claim must match the uploaded bytes
+	Provenance map[string]any `json:"provenance,omitempty"`
 }
 
 // Return response for createBulkFinding mutation

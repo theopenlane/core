@@ -52,11 +52,13 @@ query GetFileByID ($fileId: ID!) {
 		metadata
 		name
 		persistedFileSize
+		provenance
 		providedFileExtension
 		providedFileName
 		providedFileSize
 		scopeID
 		scopeName
+		sha256Hash
 		storagePath
 		storageProvider
 		storageRegion

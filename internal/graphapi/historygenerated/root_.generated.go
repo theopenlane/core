@@ -873,12 +873,14 @@ type ComplexityRoot struct {
 		Name                  func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
+		Provenance            func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
 		ProvidedFileName      func(childComplexity int) int
 		ProvidedFileSize      func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		ScopeID               func(childComplexity int) int
 		ScopeName             func(childComplexity int) int
+		Sha256Hash            func(childComplexity int) int
 		StoragePath           func(childComplexity int) int
 		StorageProvider       func(childComplexity int) int
 		StorageRegion         func(childComplexity int) int
@@ -7150,6 +7152,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.PersistedFileSize(childComplexity), true
+	case "FileHistory.provenance":
+		if e.ComplexityRoot.FileHistory.Provenance == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.Provenance(childComplexity), true
 	case "FileHistory.providedFileExtension":
 		if e.ComplexityRoot.FileHistory.ProvidedFileExtension == nil {
 			break
@@ -7186,6 +7194,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.ScopeName(childComplexity), true
+	case "FileHistory.sha256Hash":
+		if e.ComplexityRoot.FileHistory.Sha256Hash == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.Sha256Hash(childComplexity), true
 	case "FileHistory.storagePath":
 		if e.ComplexityRoot.FileHistory.StoragePath == nil {
 			break
@@ -28016,6 +28030,10 @@ type FileHistory implements Node {
   """
   md5Hash: String
   """
+  the computed sha256 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+  """
+  sha256Hash: String
+  """
   the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
   """
   detectedContentType: String!
@@ -28043,6 +28061,10 @@ type FileHistory implements Node {
   additional metadata about the file
   """
   metadata: Map
+  """
+  the client-supplied capture record for the file, validated against the received contents and immutable once stored
+  """
+  provenance: Map
   """
   the region the file is stored in, if applicable
   """
@@ -28428,6 +28450,20 @@ input FileHistoryWhereInput {
   md5HashNotNil: Boolean
   md5HashEqualFold: String
   md5HashContainsFold: String
+  """
+  sha256_hash field predicates
+  """
+  sha256Hash: String
+  sha256HashNEQ: String
+  sha256HashIn: [String!]
+  sha256HashNotIn: [String!]
+  sha256HashContains: String
+  sha256HashHasPrefix: String
+  sha256HashHasSuffix: String
+  sha256HashIsNil: Boolean
+  sha256HashNotNil: Boolean
+  sha256HashEqualFold: String
+  sha256HashContainsFold: String
   """
   detected_content_type field predicates
   """
@@ -55537,6 +55573,8 @@ func (ec *executionContext) childFields_FileHistory(ctx context.Context, field g
 		return ec.fieldContext_FileHistory_detectedMimeType(ctx, field)
 	case "md5Hash":
 		return ec.fieldContext_FileHistory_md5Hash(ctx, field)
+	case "sha256Hash":
+		return ec.fieldContext_FileHistory_sha256Hash(ctx, field)
 	case "detectedContentType":
 		return ec.fieldContext_FileHistory_detectedContentType(ctx, field)
 	case "storeKey":
@@ -55551,6 +55589,8 @@ func (ec *executionContext) childFields_FileHistory(ctx context.Context, field g
 		return ec.fieldContext_FileHistory_storagePath(ctx, field)
 	case "metadata":
 		return ec.fieldContext_FileHistory_metadata(ctx, field)
+	case "provenance":
+		return ec.fieldContext_FileHistory_provenance(ctx, field)
 	case "storageRegion":
 		return ec.fieldContext_FileHistory_storageRegion(ctx, field)
 	case "storageProvider":

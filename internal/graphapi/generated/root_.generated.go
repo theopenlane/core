@@ -2390,6 +2390,7 @@ type ComplexityRoot struct {
 		Platform               func(childComplexity int) int
 		PresignedURL           func(childComplexity int) int
 		Program                func(childComplexity int) int
+		Provenance             func(childComplexity int) int
 		ProvidedFileExtension  func(childComplexity int) int
 		ProvidedFileName       func(childComplexity int) int
 		ProvidedFileSize       func(childComplexity int) int
@@ -2398,6 +2399,7 @@ type ComplexityRoot struct {
 		ScopeID                func(childComplexity int) int
 		ScopeName              func(childComplexity int) int
 		Secrets                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		Sha256Hash             func(childComplexity int) int
 		StoragePath            func(childComplexity int) int
 		StorageProvider        func(childComplexity int) int
 		StorageRegion          func(childComplexity int) int
@@ -18767,6 +18769,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.File.Program(childComplexity), true
+	case "File.provenance":
+		if e.ComplexityRoot.File.Provenance == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.Provenance(childComplexity), true
 	case "File.providedFileExtension":
 		if e.ComplexityRoot.File.ProvidedFileExtension == nil {
 			break
@@ -18820,6 +18828,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.File.Secrets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
+	case "File.sha256Hash":
+		if e.ComplexityRoot.File.Sha256Hash == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.Sha256Hash(childComplexity), true
 	case "File.storagePath":
 		if e.ComplexityRoot.File.StoragePath == nil {
 			break
@@ -69341,6 +69355,10 @@ input CreateFileInput {
   """
   md5Hash: String
   """
+  the computed sha256 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+  """
+  sha256Hash: String
+  """
   the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
   """
   detectedContentType: String!
@@ -82980,6 +82998,10 @@ type File implements Node {
   """
   md5Hash: String
   """
+  the computed sha256 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+  """
+  sha256Hash: String
+  """
   the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
   """
   detectedContentType: String!
@@ -83007,6 +83029,10 @@ type File implements Node {
   additional metadata about the file
   """
   metadata: Map
+  """
+  the client-supplied capture record for the file, validated against the received contents and immutable once stored
+  """
+  provenance: Map
   """
   the region the file is stored in, if applicable
   """
@@ -83525,6 +83551,20 @@ input FileWhereInput {
   md5HashNotNil: Boolean
   md5HashEqualFold: String
   md5HashContainsFold: String
+  """
+  sha256_hash field predicates
+  """
+  sha256Hash: String
+  sha256HashNEQ: String
+  sha256HashIn: [String!]
+  sha256HashNotIn: [String!]
+  sha256HashContains: String
+  sha256HashHasPrefix: String
+  sha256HashHasSuffix: String
+  sha256HashIsNil: Boolean
+  sha256HashNotNil: Boolean
+  sha256HashEqualFold: String
+  sha256HashContainsFold: String
   """
   detected_content_type field predicates
   """
@@ -142942,6 +142982,10 @@ input FileMetadataInput {
     additional extracted or client-provided metadata for the file
     """
     metadata: Map
+    """
+    the client-side capture record for the file, stored immutably; only accepted on evidence files, at most 16KB encoded, and an artifact_sha256 claim must match the uploaded bytes
+    """
+    provenance: Map
 }
 `, BuiltIn: false},
 	{Name: "../schema/finding.graphql", Input: `extend type Finding {
@@ -158756,6 +158800,8 @@ func (ec *executionContext) childFields_File(ctx context.Context, field graphql.
 		return ec.fieldContext_File_detectedMimeType(ctx, field)
 	case "md5Hash":
 		return ec.fieldContext_File_md5Hash(ctx, field)
+	case "sha256Hash":
+		return ec.fieldContext_File_sha256Hash(ctx, field)
 	case "detectedContentType":
 		return ec.fieldContext_File_detectedContentType(ctx, field)
 	case "storeKey":
@@ -158770,6 +158816,8 @@ func (ec *executionContext) childFields_File(ctx context.Context, field graphql.
 		return ec.fieldContext_File_storagePath(ctx, field)
 	case "metadata":
 		return ec.fieldContext_File_metadata(ctx, field)
+	case "provenance":
+		return ec.fieldContext_File_provenance(ctx, field)
 	case "storageRegion":
 		return ec.fieldContext_File_storageRegion(ctx, field)
 	case "storageProvider":

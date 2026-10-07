@@ -68,6 +68,8 @@ type File struct {
 	DetectedMimeType string `json:"detected_mime_type,omitempty"`
 	// the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
 	Md5Hash string `json:"md5_hash,omitempty"`
+	// the computed sha256 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+	Sha256Hash string `json:"sha256_hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detected_content_type,omitempty"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
@@ -84,6 +86,8 @@ type File struct {
 	FileContents []byte `json:"file_contents,omitempty"`
 	// additional metadata about the file
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the client-supplied capture record for the file, validated against the received contents and immutable once stored
+	Provenance map[string]interface{} `json:"provenance,omitempty"`
 	// the region the file is stored in, if applicable
 	StorageRegion string `json:"storage_region,omitempty"`
 	// the storage provider the file is stored in, if applicable
@@ -384,13 +388,13 @@ func (*File) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case file.FieldTags, file.FieldFileContents, file.FieldMetadata, file.FieldBackupState:
+		case file.FieldTags, file.FieldFileContents, file.FieldMetadata, file.FieldProvenance, file.FieldBackupState:
 			values[i] = new([]byte)
 		case file.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldUpdatedByImpersonator, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldCategoryName, file.FieldCategoryID, file.FieldName, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldUpdatedByImpersonator, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldCategoryName, file.FieldCategoryID, file.FieldName, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldSha256Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -586,6 +590,12 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Md5Hash = value.String
 			}
+		case file.FieldSha256Hash:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sha256_hash", values[i])
+			} else if value.Valid {
+				_m.Sha256Hash = value.String
+			}
 		case file.FieldDetectedContentType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field detected_content_type", values[i])
@@ -634,6 +644,14 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case file.FieldProvenance:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field provenance", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Provenance); err != nil {
+					return fmt.Errorf("unmarshal field provenance: %w", err)
 				}
 			}
 		case file.FieldStorageRegion:
@@ -959,6 +977,9 @@ func (_m *File) String() string {
 	builder.WriteString("md5_hash=")
 	builder.WriteString(_m.Md5Hash)
 	builder.WriteString(", ")
+	builder.WriteString("sha256_hash=")
+	builder.WriteString(_m.Sha256Hash)
+	builder.WriteString(", ")
 	builder.WriteString("detected_content_type=")
 	builder.WriteString(_m.DetectedContentType)
 	builder.WriteString(", ")
@@ -982,6 +1003,9 @@ func (_m *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("provenance=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Provenance))
 	builder.WriteString(", ")
 	builder.WriteString("storage_region=")
 	builder.WriteString(_m.StorageRegion)

@@ -370,6 +370,20 @@ func (_c *FileHistoryCreate) SetNillableMd5Hash(v *string) *FileHistoryCreate {
 	return _c
 }
 
+// SetSha256Hash sets the "sha256_hash" field.
+func (_c *FileHistoryCreate) SetSha256Hash(v string) *FileHistoryCreate {
+	_c.mutation.SetSha256Hash(v)
+	return _c
+}
+
+// SetNillableSha256Hash sets the "sha256_hash" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableSha256Hash(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetSha256Hash(*v)
+	}
+	return _c
+}
+
 // SetDetectedContentType sets the "detected_content_type" field.
 func (_c *FileHistoryCreate) SetDetectedContentType(v string) *FileHistoryCreate {
 	_c.mutation.SetDetectedContentType(v)
@@ -455,6 +469,12 @@ func (_c *FileHistoryCreate) SetFileContents(v []byte) *FileHistoryCreate {
 // SetMetadata sets the "metadata" field.
 func (_c *FileHistoryCreate) SetMetadata(v map[string]interface{}) *FileHistoryCreate {
 	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetProvenance sets the "provenance" field.
+func (_c *FileHistoryCreate) SetProvenance(v map[string]interface{}) *FileHistoryCreate {
+	_c.mutation.SetProvenance(v)
 	return _c
 }
 
@@ -769,6 +789,10 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 		_spec.SetField(filehistory.FieldMd5Hash, field.TypeString, value)
 		_node.Md5Hash = value
 	}
+	if value, ok := _c.mutation.Sha256Hash(); ok {
+		_spec.SetField(filehistory.FieldSha256Hash, field.TypeString, value)
+		_node.Sha256Hash = value
+	}
 	if value, ok := _c.mutation.DetectedContentType(); ok {
 		_spec.SetField(filehistory.FieldDetectedContentType, field.TypeString, value)
 		_node.DetectedContentType = value
@@ -800,6 +824,10 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(filehistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.Provenance(); ok {
+		_spec.SetField(filehistory.FieldProvenance, field.TypeJSON, value)
+		_node.Provenance = value
 	}
 	if value, ok := _c.mutation.StorageRegion(); ok {
 		_spec.SetField(filehistory.FieldStorageRegion, field.TypeString, value)
