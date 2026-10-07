@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -76,7 +75,7 @@ func (r *queryResolver) EntitiesCatalog(ctx context.Context, after *entgql.Curso
 		}
 	}
 
-	ctx = rule.WithInternalContext(ctx)
+	ctx = auth.WithInternalReadContext(ctx)
 
 	query, err := withTransactionalMutation(ctx).Entity.Query().CollectFields(ctx)
 	if err != nil {

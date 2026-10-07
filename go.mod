@@ -120,7 +120,7 @@ require (
 	github.com/theopenlane/eddy v0.1.0
 	github.com/theopenlane/entx v0.36.2
 	github.com/theopenlane/go-client v0.14.1
-	github.com/theopenlane/gqlgen-plugins v0.18.2
+	github.com/theopenlane/gqlgen-plugins v0.18.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.40.0
 	github.com/theopenlane/newman v0.4.4
