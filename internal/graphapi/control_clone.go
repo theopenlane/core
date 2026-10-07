@@ -207,16 +207,16 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// check program access if a program is specified
 	if programID != nil {
-		_, err = withTransactionalMutation(ctx).Program.Query().
+		exists, err := withTransactionalMutation(ctx).Program.Query().
 			Where(program.ID(*programID)).
 			Exist(internalCtx)
 
-		if generated.IsNotFound(err) {
-			return nil, generated.ErrPermissionDenied
-		}
-
 		if err != nil {
 			return nil, err
+		}
+
+		if !exists {
+			return nil, generated.ErrPermissionDenied
 		}
 
 		if err := checkProgramAccess(ctx, r.db, *programID); err != nil {
