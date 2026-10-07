@@ -7,6 +7,7 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
 
 func webhookDocument(params string) models.WorkflowDefinitionDocument {
@@ -45,32 +46,32 @@ func TestValidateWebhookDestinations(t *testing.T) {
 					{Key: "hook", Type: "webhook", Params: json.RawMessage(`{"url": "http://169.254.169.254/"}`)},
 				},
 			},
-			wantErr: ErrWebhookURLNotPublic,
+			wantErr: validator.ErrURLNotPublic,
 		},
 		{
 			name:    "gcp metadata hostname",
 			doc:     webhookDocument(`{"url": "http://metadata.google.internal/computeMetadata/v1/instance/id"}`),
-			wantErr: ErrWebhookURLNotPublic,
+			wantErr: validator.ErrURLNotPublic,
 		},
 		{
 			name:    "link local metadata ip",
 			doc:     webhookDocument(`{"url": "http://169.254.169.254/computeMetadata/v1/"}`),
-			wantErr: ErrWebhookURLNotPublic,
+			wantErr: validator.ErrURLNotPublic,
 		},
 		{
 			name:    "loopback ip",
 			doc:     webhookDocument(`{"url": "http://127.0.0.2:8080/admin"}`),
-			wantErr: ErrWebhookURLNotPublic,
+			wantErr: validator.ErrURLNotPublic,
 		},
 		{
 			name:    "private ip",
 			doc:     webhookDocument(`{"url": "https://10.0.0.5/hook"}`),
-			wantErr: ErrWebhookURLNotPublic,
+			wantErr: validator.ErrURLNotPublic,
 		},
 		{
 			name:    "metadata flavor header",
 			doc:     webhookDocument(`{"url": "https://example.com/hook", "headers": {"Metadata-Flavor": "Google"}}`),
-			wantErr: ErrWebhookHeaderNotAllowed,
+			wantErr: validator.ErrHeaderNotAllowed,
 		},
 		{
 			name:    "malformed params",
@@ -86,7 +87,7 @@ func TestValidateWebhookDestinations(t *testing.T) {
 			name:         "metadata header still blocked when private addresses are allowed",
 			doc:          webhookDocument(`{"url": "http://127.0.0.1:8080/hook", "headers": {"Metadata-Flavor": "Google"}}`),
 			allowPrivate: true,
-			wantErr:      ErrWebhookHeaderNotAllowed,
+			wantErr:      validator.ErrHeaderNotAllowed,
 		},
 	}
 

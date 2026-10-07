@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 )
 
 // WorkflowDefinition stores workflow configurations, both system-provided templates and organization-specific instances
@@ -118,9 +120,17 @@ func definitionJSONField() ent.Field {
 		Comment("Typed document describing triggers, conditions, and actions").
 		Optional()
 
-	definitionJSON.Descriptor().Validators = append(definitionJSON.Descriptor().Validators, hooks.ValidateWorkflowDefinitionWebhooks)
+	definitionJSON.Descriptor().Validators = append(definitionJSON.Descriptor().Validators, validateDefinitionWebhooks)
 
 	return definitionJSON
+}
+
+// validateDefinitionWebhooks checks webhook destinations, honoring the registered engine's private address
+// setting and staying strict when no engine is registered
+func validateDefinitionWebhooks(doc models.WorkflowDefinitionDocument) error {
+	wfEngine := engine.Default()
+
+	return workflows.ValidateWebhookDestinations(doc, wfEngine != nil && wfEngine.WebhookAllowPrivateAddresses())
 }
 
 // Edges of the WorkflowDefinition

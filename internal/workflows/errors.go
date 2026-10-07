@@ -43,8 +43,4 @@ var (
 	ErrRuntimeDefinitionDuplicateKey = errors.New("runtime definition key already registered")
 	// ErrWebhookParamsInvalid is returned when webhook action params cannot be decoded
 	ErrWebhookParamsInvalid = errors.New("invalid webhook action params")
-	// ErrWebhookURLNotPublic is returned when a webhook action targets a private, loopback, link-local, or internal host
-	ErrWebhookURLNotPublic = errors.New("webhook url must be a public address")
-	// ErrWebhookHeaderNotAllowed is returned when a webhook action sets a header reserved for cloud metadata services
-	ErrWebhookHeaderNotAllowed = errors.New("webhook header is not allowed")
 )

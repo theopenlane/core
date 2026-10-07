@@ -7,17 +7,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
-
-// blockedWebhookHeaders are lowercased request headers that cloud metadata services require
-var blockedWebhookHeaders = map[string]struct{}{
-	"metadata-flavor":                      {},
-	"x-google-metadata-request":            {},
-	"metadata":                             {},
-	"x-aws-ec2-metadata-token":             {},
-	"x-aws-ec2-metadata-token-ttl-seconds": {},
-}
 
 // ValidateWebhookDestinations rejects webhook actions that send cloud metadata headers or, unless
 // allowPrivateAddresses is set, target non-public destinations
@@ -33,27 +24,17 @@ func ValidateWebhookDestinations(doc models.WorkflowDefinitionDocument, allowPri
 			return fmt.Errorf("%w: %s", ErrWebhookParamsInvalid, action.Key)
 		}
 
-		if err := validateWebhookDestination(params, allowPrivateAddresses); err != nil {
+		if err := validator.ValidateOutboundHeaders()(params.Headers); err != nil {
 			return fmt.Errorf("%w: %s", err, action.Key)
 		}
-	}
 
-	return nil
-}
-
-func validateWebhookDestination(params WebhookActionParams, allowPrivateAddresses bool) error {
-	for name := range params.Headers {
-		if _, blocked := blockedWebhookHeaders[strings.ToLower(strings.TrimSpace(name))]; blocked {
-			return fmt.Errorf("%w: %s", ErrWebhookHeaderNotAllowed, name)
+		if allowPrivateAddresses || strings.TrimSpace(params.URL) == "" {
+			continue
 		}
-	}
 
-	if allowPrivateAddresses || strings.TrimSpace(params.URL) == "" {
-		return nil
-	}
-
-	if _, err := urlx.ValidatePublicURL(params.URL); err != nil {
-		return fmt.Errorf("%w: %w", ErrWebhookURLNotPublic, err)
+		if err := validator.ValidatePublicURL()(params.URL); err != nil {
+			return fmt.Errorf("%w: %s", err, action.Key)
+		}
 	}
 
 	return nil
