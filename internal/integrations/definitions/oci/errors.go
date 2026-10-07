@@ -3,10 +3,6 @@ package oci
 import "errors"
 
 var (
-	// ErrCredentialMetadataRequired indicates no credential metadata was provided
-	ErrCredentialMetadataRequired = errors.New("oci: credential metadata required")
-	// ErrMetadataDecode indicates credential metadata could not be decoded
-	ErrMetadataDecode = errors.New("oci: failed to decode credential metadata")
 	// ErrConfigurationProviderInvalid indicates the API signing key inputs are invalid
 	ErrConfigurationProviderInvalid = errors.New("oci: configuration provider invalid")
 	// ErrIdentityClientCreate indicates the OCI Identity client could not be created
@@ -21,6 +17,4 @@ var (
 	ErrListProblemsFailed = errors.New("oci: list problems failed")
 	// ErrPayloadEncode indicates a provider payload could not be serialized
 	ErrPayloadEncode = errors.New("oci: payload encode failed")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("oci: result encode failed")
 )

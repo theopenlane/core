@@ -7,23 +7,40 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// Client builds Slack clients for one customer installation
-type Client struct{}
+// channelMetadata is the default channel read from the installation's metadata map
+type channelMetadata struct {
+	// DefaultChannel is the channel id used for system messages when no explicit channel is specified
+	DefaultChannel string `json:"defaultChannel,omitempty"`
+}
 
-// Build constructs the unified SlackClient for one customer installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*SlackClient, error) {
-	token, err := resolveAccessToken(req.Credentials)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
+// oauthClient builds the SlackClient from the stored OAuth credential
+func oauthClient(_ context.Context, req types.ConnectionRequest[slackCred]) (*SlackClient, error) {
+	if req.Credential.AccessToken == "" {
+		return nil, ErrOAuthTokenMissing
 	}
 
-	var metadata InstallationMetadata
-	if req.Integration != nil && len(req.Integration.Metadata) > 0 {
-		raw, err := jsonx.ToRawMessage(req.Integration.Metadata)
+	return newSlackClient(req.Credential.AccessToken, req.Integration)
+}
+
+// botTokenClient builds the SlackClient from the stored bot token credential
+func botTokenClient(_ context.Context, req types.ConnectionRequest[slackBotTokenCred]) (*SlackClient, error) {
+	if req.Credential.BotToken == "" {
+		return nil, ErrBotTokenMissing
+	}
+
+	return newSlackClient(req.Credential.BotToken, req.Integration)
+}
+
+// newSlackClient constructs the unified SlackClient for one customer installation
+func newSlackClient(token string, integration *generated.Integration) (*SlackClient, error) {
+	var metadata channelMetadata
+	if integration != nil && len(integration.Metadata) > 0 {
+		raw, err := jsonx.ToRawMessage(integration.Metadata)
 		if err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 		}
@@ -103,29 +120,4 @@ func (c *SlackClient) sendText(ctx context.Context, text, channel string) error 
 	}
 
 	return ErrDefaultChannelMissing
-}
-
-// resolveAccessToken returns a usable Slack API token from whichever credential slot is bound
-func resolveAccessToken(bindings types.CredentialBindings) (string, error) {
-	if oauthCred, ok, err := slackCredential.Resolve(bindings); err != nil {
-		return "", ErrCredentialDecode
-	} else if ok {
-		if oauthCred.AccessToken == "" {
-			return "", ErrOAuthTokenMissing
-		}
-
-		return oauthCred.AccessToken, nil
-	}
-
-	if botCred, ok, err := slackBotTokenCredential.Resolve(bindings); err != nil {
-		return "", ErrCredentialDecode
-	} else if ok {
-		if botCred.BotToken == "" {
-			return "", ErrBotTokenMissing
-		}
-
-		return botCred.BotToken, nil
-	}
-
-	return "", ErrNoCredentialResolved
 }

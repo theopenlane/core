@@ -16,24 +16,20 @@ import (
 )
 
 // runAssetCollect collects Cloudflare domain registrations and emits asset ingest payloads
-func runAssetCollect(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ AssetSync) ([]types.IngestPayloadSet, error) {
-	meta, err := resolveCredential(request.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if meta.AccountID == "" {
+func runAssetCollect(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, _ AssetSync) ([]types.IngestPayloadSet, error) {
+	accountID := client.Config.AccountID
+	if accountID == "" {
 		return nil, ErrAccountIDMissing
 	}
 
-	registrations, err := fetchRegistrarRegistrations(ctx, client, meta.AccountID)
+	registrations, err := fetchRegistrarRegistrations(ctx, client, accountID)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrAssetsFetchFailed, err)
 	}
 
 	envelopes := make([]types.MappingEnvelope, 0, len(registrations))
 	for _, registration := range registrations {
-		envelope, err := providerkit.MarshalEnvelope(meta.AccountID, registration, ErrPayloadEncode)
+		envelope, err := providerkit.MarshalEnvelope(accountID, registration, ErrPayloadEncode)
 		if err != nil {
 			return nil, err
 		}

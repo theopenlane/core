@@ -34,7 +34,7 @@ type DomainScanGatherEnrichmentResult struct {
 //
 //nolint:revive
 var DomainScanEnrichmentOp = types.OperationPayloadOf[DomainScanGatherEnrichment]().
-	Handles(cloudflareClient, runDomainScanGatherEnrichment).
+	Handles(runDomainScanGatherEnrichment).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
 	CustomerSelectable(false).
 	Internal()

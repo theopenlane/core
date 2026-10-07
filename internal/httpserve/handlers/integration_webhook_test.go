@@ -184,7 +184,7 @@ func (suite *HandlerTestSuite) createWebhookTestIntegration(t *testing.T, ctx co
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
-	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, integrationRec, webhookTestCredentialRef.ID(), credential, nil)
+	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, integrationRec, webhookTestCredentialRef, credential)
 	require.NoError(t, err)
 
 	webhookRec, err := suite.h.IntegrationsRuntime.EnsureWebhook(ctx, integrationRec, "inbound.events", "")

@@ -1,5 +1,6 @@
 {
-  "version": "497efd73d1a8129f60a2994f7d7d489583e4daee441bb772d9e58d94f5ba1fd4",
+  "hash": "37d01a6851fa5cdb7df672d74d1c0a811e41fb1b5af7a247ff9b1ca1c7ed36d2",
+  "version": "01M49CHH2NPBMN1CMF923RZCVC",
   "surface": {
     "id": "def_01K0KEYCLOAK000000000000001",
     "credentials": [
@@ -97,7 +98,7 @@
         "name": "DirectorySync",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/directory-sync",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/providerkit/directory-sync",
           "$ref": "#/$defs/DirectorySync",
           "$defs": {
             "DirectorySync": {
@@ -115,7 +116,7 @@
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
-                  "description": "Only sync users disable group and membership sync operations"
+                  "description": "Only sync users and skip group and membership sync"
                 }
               },
               "additionalProperties": false,

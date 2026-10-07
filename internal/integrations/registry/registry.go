@@ -105,14 +105,14 @@ type SurfaceWebhook struct {
 
 // DefinitionSurface projects a definition onto its installation-facing surface
 func DefinitionSurface(def types.Definition) Surface {
-	credentials := sortedProjection(def.CredentialRegistrations, func(registration types.CredentialRegistration) SurfaceCredential {
-		replaces := lo.Map(registration.Replaces, func(slot types.CredentialSlotID, _ int) string { return slot.String() })
+	declared := def.ConnectionList()
 
-		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: registration.Stored.Schema, Upgrade: registration.Stored.Upgrade != nil}, Replaces: replaces}
+	credentials := sortedProjection(declared, func(connection types.Connection) SurfaceCredential {
+		return SurfaceCredential{Ref: connection.Credential.Name, SurfaceSchema: SurfaceSchema{Schema: connection.Credential.Schema, Upgrade: connection.Credential.Upgrade != nil}, Replaces: connection.Replaces}
 	}, func(credential SurfaceCredential) string { return credential.Ref })
 
-	connections := lo.Map(def.Connections, func(connection types.ConnectionRegistration, _ int) string {
-		return connection.CredentialRef.String()
+	connections := lo.Map(declared, func(connection types.Connection, _ int) string {
+		return connection.Credential.Name
 	})
 
 	slices.Sort(connections)
@@ -143,7 +143,7 @@ func DefinitionSurface(def types.Definition) Surface {
 	}
 
 	if def.Installation != nil && len(def.Installation.Schema) > 0 {
-		surface.Installation = &SurfaceSchema{Schema: def.Installation.Schema}
+		surface.Installation = &SurfaceSchema{Schema: def.Installation.Schema, Upgrade: def.Installation.Upgrade != nil}
 	}
 
 	return surface
@@ -164,8 +164,6 @@ func sortedProjection[T, R any](items []T, project func(T) R, key func(R) string
 type definitionEntry struct {
 	// definition holds the original definition as supplied by the caller
 	definition types.Definition
-	// clients maps client ID to its client registration
-	clients map[types.ClientID]types.ClientRegistration
 	// operations maps operation name to its operation registration
 	operations map[string]types.OperationRegistration
 	// webhooks maps webhook name to its webhook registration
@@ -209,6 +207,8 @@ func (r *Registry) Register(def types.Definition) error {
 	if err != nil {
 		return err
 	}
+
+	def = stampTopics(def)
 
 	if err := r.validateDefinition(def); err != nil {
 		return err
@@ -261,6 +261,27 @@ func (r *Registry) Register(def types.Definition) error {
 	r.galaListeners = append(r.galaListeners, def.GalaListeners...)
 
 	return nil
+}
+
+// stampTopics derives every operation and webhook event topic from the definition id
+func stampTopics(def types.Definition) types.Definition {
+	ref := types.NewDefinitionRef(def.ID)
+
+	def.Operations = slices.Clone(def.Operations)
+	for i := range def.Operations {
+		def.Operations[i].Topic = ref.OperationTopic(def.Operations[i].Name)
+	}
+
+	def.Webhooks = slices.Clone(def.Webhooks)
+	for i := range def.Webhooks {
+		def.Webhooks[i].Events = slices.Clone(def.Webhooks[i].Events)
+
+		for j := range def.Webhooks[i].Events {
+			def.Webhooks[i].Events[j].Topic = ref.WebhookEventTopic(def.Webhooks[i].Events[j].Name)
+		}
+	}
+
+	return def
 }
 
 // indexUnique indexes items by key, rejecting a key repeated within items or already held by taken
@@ -316,13 +337,6 @@ func (r *Registry) Definitions() []types.Definition {
 	return mapx.SortedProjection(r.definitions, func(e definitionEntry) types.Definition { return e.definition }, func(d types.Definition) string { return d.ID })
 }
 
-// Client returns one client registration for a definition
-func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegistration, error) {
-	return lookupInEntry(r, id, clientID, func(e definitionEntry) map[types.ClientID]types.ClientRegistration {
-		return e.clients
-	}, ErrClientNotFound)
-}
-
 // Operation returns one operation registration for a definition
 func (r *Registry) Operation(id string, name string) (types.OperationRegistration, error) {
 	return lookupInEntry(r, id, name, func(e definitionEntry) map[string]types.OperationRegistration {
@@ -351,7 +365,7 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrDefinitionAlreadyRegistered
 	case def.OperatorConfig != nil && len(def.OperatorConfig.Schema) == 0:
 		return ErrOperatorConfigSchemaRequired
-	case lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool { return len(credential.Stored.Schema) == 0 }):
+	case lo.ContainsBy(def.ConnectionList(), func(connection types.Connection) bool { return len(connection.Credential.Schema) == 0 }):
 		return ErrCredentialSchemaRequired
 	case def.UserInput != nil && len(def.UserInput.Schema) == 0:
 		return ErrUserInputSchemaRequired
@@ -359,43 +373,43 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrRuntimeBuildRequired
 	}
 
-	if err := validateHealthCheck(def); err != nil {
+	if err := validateConnections(def); err != nil {
 		return err
 	}
 
 	return validateMappingLinks(def.Mappings)
 }
 
-// validateHealthCheck requires a health check handler when connections are declared
-func validateHealthCheck(def types.Definition) error {
-	check := def.HealthCheck
+// validateConnections requires each connection to verify under a client it provides and to return the definition's installation layout
+func validateConnections(def types.Definition) error {
+	connections := def.ConnectionList()
 
-	switch {
-	case check == nil && len(def.Connections) > 0:
-		return ErrHealthCheckRequired
-	case check == nil:
-		return nil
-	case check.Handle == nil:
-		return ErrConnectionHealthCheckHandlerRequired
-	case !check.ClientRef.Valid():
-		return nil
+	for _, connection := range connections {
+		name := connection.Credential.Name
+
+		var err error
+
+		switch {
+		case connection.Verify.Handle == nil:
+			err = ErrConnectionVerifyRequired
+		case !lo.HasKey(connection.Clients, connection.Verify.ClientRef):
+			err = ErrConnectionVerifyClientNotProvided
+		case def.Installation == nil:
+			err = ErrInstallationRequired
+		case connection.Verify.Installation != def.Installation.Name:
+			err = ErrInstallationSchemaMismatch
+		}
+
+		if err != nil {
+			return fmt.Errorf("%w: definition %s connection %s", err, def.ID, name)
+		}
 	}
 
-	client, declared := lo.Find(def.Clients, func(client types.ClientRegistration) bool {
-		return client.Ref == check.ClientRef
-	})
-	if !declared {
-		return ErrConnectionClientRefNotDeclared
-	}
+	_, err := indexUnique(def.ID, "connection", connections, func(connection types.Connection) string {
+		return connection.Credential.Name
+	}, nil)
 
-	uncovered, found := lo.Find(def.Connections, func(connection types.ConnectionRegistration) bool {
-		return !lo.Contains(client.CredentialRefs, connection.CredentialRef)
-	})
-	if found {
-		return fmt.Errorf("%w: definition %s client %s connection %s", ErrHealthCheckClientCredentialMissing, def.ID, check.ClientRef, uncovered.CredentialRef)
-	}
-
-	return nil
+	return err
 }
 
 // populateMappingLinkTargets fills each mapping's cross-link inventory from the entityops catalog
@@ -568,23 +582,10 @@ func validateSourceKey(sourceSchema *entityops.Schema, key string, wantList bool
 	return nil
 }
 
-// compileDefinition builds the indexed client, operation, and webhook event maps for one definition
+// compileDefinition builds the indexed operation and webhook event maps for one definition
 func compileDefinition(def types.Definition) (definitionEntry, error) {
-	declared := lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) types.CredentialSlotID {
-		return registration.Ref
-	})
-
-	clients, err := indexClients(def.ID, def.Clients, declared)
+	operations, err := indexOperations(def.ID, def.Operations, def)
 	if err != nil {
-		return definitionEntry{}, err
-	}
-
-	operations, err := indexOperations(def.ID, def.Operations, clients)
-	if err != nil {
-		return definitionEntry{}, err
-	}
-
-	if err := validateConnections(def.ID, def.Connections, declared); err != nil {
 		return definitionEntry{}, err
 	}
 
@@ -595,53 +596,16 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 
 	return definitionEntry{
 		definition:    def,
-		clients:       clients,
 		operations:    operations,
 		webhooks:      webhooks,
 		webhookEvents: webhookEvents,
 	}, nil
 }
 
-// indexClients indexes clients by ref, requiring declared credential slots
-func indexClients(definitionID string, clients []types.ClientRegistration, declared []types.CredentialSlotID) (map[types.ClientID]types.ClientRegistration, error) {
-	for _, client := range clients {
-		switch {
-		case !client.Ref.Valid():
-			return nil, ErrClientRequired
-		case !lo.Every(declared, client.CredentialRefs):
-			return nil, ErrCredentialRefNotDeclared
-		}
-	}
+// indexOperations indexes operations by name, validating handler requirements and that every connection provides the operation's client
+func indexOperations(definitionID string, operations []types.OperationRegistration, def types.Definition) (map[string]types.OperationRegistration, error) {
+	connections := def.ConnectionList()
 
-	return indexUnique(definitionID, "client", clients, func(client types.ClientRegistration) types.ClientID { return client.Ref }, nil)
-}
-
-// validateConnections requires each connection's slots to be declared and its selecting slot unique
-func validateConnections(definitionID string, connections []types.ConnectionRegistration, declared []types.CredentialSlotID) error {
-	for _, connection := range connections {
-		slots := append([]types.CredentialSlotID{connection.CredentialRef}, connection.CredentialRefs...)
-
-		switch {
-		case connection.CredentialRef == (types.CredentialSlotID{}):
-			return ErrConnectionCredentialRefRequired
-		case !lo.Every(declared, slots):
-			return ErrConnectionCredentialRefNotDeclared
-		case connection.Auth != nil && !lo.Contains(slots, connection.Auth.CredentialRef):
-			return ErrConnectionAuthCredentialRefNotDeclared
-		case connection.Disconnect != nil && !lo.Contains(slots, connection.Disconnect.CredentialRef):
-			return ErrConnectionDisconnectCredentialRefNotDeclared
-		}
-	}
-
-	_, err := indexUnique(definitionID, "connection", connections, func(connection types.ConnectionRegistration) types.CredentialSlotID {
-		return connection.CredentialRef
-	}, nil)
-
-	return err
-}
-
-// indexOperations indexes operations by name, validating handler and client requirements
-func indexOperations(definitionID string, operations []types.OperationRegistration, clients map[types.ClientID]types.ClientRegistration) (map[string]types.OperationRegistration, error) {
 	for _, operation := range operations {
 		switch {
 		case operation.Handle == nil && operation.IngestHandle == nil:
@@ -652,8 +616,17 @@ func indexOperations(definitionID string, operations []types.OperationRegistrati
 			return nil, ErrIngestContractsRequired
 		case operation.Policy.Snapshot && operation.IngestHandle == nil:
 			return nil, ErrIngestSnapshotRequiresIngestHandle
-		case operation.ClientRef.Valid() && !lo.HasKey(clients, operation.ClientRef):
-			return nil, ErrClientNotFound
+		case operation.ClientRef == "":
+			continue
+		case len(connections) == 0 && def.RuntimeIntegration == nil:
+			return nil, fmt.Errorf("%w: definition %s operation %s", ErrClientNotFound, definitionID, operation.Name)
+		}
+
+		missing, found := lo.Find(connections, func(connection types.Connection) bool {
+			return !lo.HasKey(connection.Clients, operation.ClientRef)
+		})
+		if found {
+			return nil, fmt.Errorf("%w: definition %s operation %s connection %s", ErrConnectionClientNotProvided, definitionID, operation.Name, missing.Credential.Name)
 		}
 	}
 

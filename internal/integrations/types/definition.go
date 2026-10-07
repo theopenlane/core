@@ -3,7 +3,6 @@ package types //nolint:revive
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/samber/lo"
 
@@ -43,16 +42,10 @@ type Definition struct {
 	OperatorConfig *OperatorConfigRegistration `json:"operatorConfig,omitempty"`
 	// UserInput describes installation-scoped user input for the definition
 	UserInput *InputRegistration `json:"userInput,omitempty"`
-	// CredentialRegistrations describes the credential slots exposed by the definition
-	CredentialRegistrations []CredentialRegistration `json:"credentialRegistrations,omitempty"`
-	// Connections describes the connection modes exposed by the definition
-	Connections []ConnectionRegistration `json:"connections,omitempty"`
-	// HealthCheck exercises the active connection's credentials before persistence
-	HealthCheck *HealthCheckRegistration `json:"-"`
-	// Installation describes installation-scoped metadata derived for the definition
+	// Connections lists the connection methods exposed by the definition
+	Connections []Connector `json:"-"`
+	// Installation describes the installation metadata layout declared once for the definition
 	Installation *InstallationRegistration `json:"installation,omitempty"`
-	// Clients lists the clients the definition can build
-	Clients []ClientRegistration `json:"clients,omitempty"`
 	// Operations lists the operations the definition exposes
 	Operations []OperationRegistration `json:"operations,omitempty"`
 	// Mappings lists the default mappings shipped with the definition
@@ -104,50 +97,6 @@ func (r InputRegistration) Clone() InputRegistration {
 	return r
 }
 
-// CredentialRegistration declares how a definition accepts credentials
-type CredentialRegistration struct {
-	// Ref is the durable credential slot identifier
-	Ref CredentialSlotID `json:"ref"`
-	// Name is the user-facing credential slot name
-	Name string `json:"name,omitempty"`
-	// Description describes when this credential slot should be used
-	Description string `json:"description,omitempty"`
-	// Schema is the JSON schema used to collect credentials
-	Schema json.RawMessage `json:"schema,omitempty"`
-	// Stored is the persisted credential payload's layout, keyed by the slot name, with its declared upgrade and validation
-	Stored InputRegistration `json:"-"`
-	// Recommended indicates the method that is recommend if there are multiple options
-	Recommended bool `json:"recommended,omitempty"`
-	// Replaces lists the retired slots whose stored payloads move onto this slot
-	Replaces []CredentialSlotID `json:"-"`
-}
-
-// ConnectionRegistration describes one connection mode for a definition
-type ConnectionRegistration struct {
-	// CredentialRef is the user-facing credential schema that selects this connection mode
-	CredentialRef CredentialSlotID `json:"credentialRef"`
-	// Name is the user-facing connection mode name
-	Name string `json:"name,omitempty"`
-	// Description explains what the connection mode does
-	Description string `json:"description,omitempty"`
-	// Meta is additional data the user might need to setup the integration with key-value pairs
-	Meta map[string]MetaInfo `json:"meta,omitempty"`
-	// CredentialRefs lists the credential slots used by this connection mode
-	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
-	// Auth describes how this connection mode performs auth when supported
-	Auth *AuthRegistration `json:"auth,omitempty"`
-	// Disconnect describes how this connection mode tears down an installation
-	Disconnect *DisconnectRegistration `json:"disconnect,omitempty"`
-}
-
-// HealthCheckRegistration declares the definition's health check on the active connection
-type HealthCheckRegistration struct {
-	// ClientRef identifies which client the check builds; empty means only credential bindings
-	ClientRef ClientID `json:"-"`
-	// Handle executes the check
-	Handle OperationHandler `json:"-"`
-}
-
 // MetaInfo is data shown to the user during credential setup of an integration
 type MetaInfo struct {
 	// Value is the Value to show to the user
@@ -156,16 +105,18 @@ type MetaInfo struct {
 	AllowCopy bool
 }
 
-// CredentialRegistration returns the credential registration for the given ref
-func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegistration, error) {
-	reg, found := lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
-		return r.Ref == ref
+// ConnectionList returns the connections declared by the definition
+func (d Definition) ConnectionList() []Connection {
+	return lo.Map(d.Connections, func(c Connector, _ int) Connection {
+		return c.Connection()
 	})
-	if !found {
-		return CredentialRegistration{}, ErrCredentialRefNotFound
-	}
+}
 
-	return reg, nil
+// Connection returns the connection with the given name
+func (d Definition) Connection(name string) (Connection, bool) {
+	return lo.Find(d.ConnectionList(), func(c Connection) bool {
+		return c.Credential.Name == name
+	})
 }
 
 // Operation returns the operation registration for the given name
@@ -193,11 +144,11 @@ func resolveReplaced[T any, K comparable](registrations []T, key K, id func(T) K
 	return registration, ok, ok
 }
 
-// ResolveCredential returns the registration for the slot, or the one whose slot replaces it; replaced reports the fallback
-func (d Definition) ResolveCredential(ref CredentialSlotID) (registration CredentialRegistration, replaced bool, ok bool) {
-	return resolveReplaced(d.CredentialRegistrations, ref,
-		func(r CredentialRegistration) CredentialSlotID { return r.Ref },
-		func(r CredentialRegistration) []CredentialSlotID { return r.Replaces })
+// ResolveConnection returns the connection for the name, or the one whose connection replaces it; replaced reports the fallback
+func (d Definition) ResolveConnection(name string) (registration Connection, replaced bool, ok bool) {
+	return resolveReplaced(d.ConnectionList(), name,
+		func(c Connection) string { return c.Credential.Name },
+		func(c Connection) []string { return c.Replaces })
 }
 
 // ResolveOperation returns the registration for the name, or the one whose operation replaces it; replaced reports the fallback
@@ -214,22 +165,10 @@ func (d Definition) ResolveWebhook(name string) (registration WebhookRegistratio
 		func(r WebhookRegistration) []string { return r.Replaces })
 }
 
-// ConnectionRegistration returns the connection registration for the given credential slot
-func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegistration, error) {
-	reg, found := lo.Find(d.Connections, func(r ConnectionRegistration) bool {
-		return r.CredentialRef == ref
-	})
-	if !found {
-		return ConnectionRegistration{}, fmt.Errorf("%w: %s not found", ErrConnectionRefNotFound, ref)
-	}
-
-	return reg, nil
-}
-
 // DefinitionProviderState stores installation-scoped state for one definition
 type DefinitionProviderState struct {
-	// CredentialRef identifies the credential-selected connection mode active for the installation
-	CredentialRef CredentialSlotID `json:"credentialRef"`
+	// CredentialRef identifies the connection active for the installation
+	CredentialRef string `json:"credentialRef"`
 }
 
 // ProviderState returns the persisted provider state for this definition

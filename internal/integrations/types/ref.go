@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"maps"
 	"reflect"
 	"slices"
 	"strings"
@@ -87,149 +88,197 @@ func upgraded[T any](fn func(context.Context, InstallationRequest, string, json.
 }
 
 // =========
-// Identities
+// Connections
 // =========
 
-// ID is the durable string identity of one registered entity of kind K, compared and persisted by name
-type ID[K any] struct {
-	// name is the stable name used for persistence, indexing, and equality comparisons
-	name string
+// ConnectionRef builds one Connection whose credential is T
+type ConnectionRef[T any] struct {
+	// connection is the connection under construction
+	connection Connection
+	// authManaged reports whether an auth flow obtains the credential, so no form is shown
+	authManaged bool
 }
 
-// String returns the stable name
-func (id ID[K]) String() string {
-	return id.name
+// ConnectionOf creates a connection handle named after T's reflected schema
+func ConnectionOf[T any]() ConnectionRef[T] {
+	return ConnectionRef[T]{connection: Connection{Credential: reflectedInput[T]("")}}
 }
 
-// Valid reports whether the identity was initialized
-func (id ID[K]) Valid() bool {
-	return id.name != ""
+// NewConnection creates a connection handle with a literal name
+func NewConnection[T any](name string) ConnectionRef[T] {
+	return ConnectionRef[T]{connection: Connection{Credential: reflectedInput[T](name)}}
 }
 
-// Compare orders identities by name
-func (id ID[K]) Compare(other ID[K]) int {
-	return strings.Compare(id.name, other.name)
-}
-
-// MarshalJSON encodes the identity as its stable name string
-func (id ID[K]) MarshalJSON() ([]byte, error) {
-	return json.Marshal(id.name)
-}
-
-// UnmarshalJSON decodes an identity from its stable name string
-func (id *ID[K]) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &id.name)
-}
-
-// credentialSlotKind is the identity kind of a credential slot
-type credentialSlotKind struct{}
-
-// clientKind is the identity kind of a registered client
-type clientKind struct{}
-
-// CredentialSlotID is the durable identity of one credential slot used by a definition
-type CredentialSlotID = ID[credentialSlotKind]
-
-// ClientID is the in-process identity of one registered client, unique within a definition
-type ClientID = ID[clientKind]
-
-// NewCredentialSlotID creates a credential slot identity with a stable name for persistence
-func NewCredentialSlotID(name string) CredentialSlotID {
-	return CredentialSlotID{name: name}
-}
-
-// NewClientID creates a client identity from its name
-func NewClientID(name string) ClientID {
-	return ClientID{name: name}
-}
-
-// =========
-// Credentials
-// =========
-
-// CredentialRef is a typed handle for one credential slot, parameterized by its schema type
-type CredentialRef[T any] struct {
-	// input is the slot name, the credential type's reflected schema, and its declared upgrade and validation
-	input InputRegistration
-	// replaces lists the retired slots whose stored payloads move onto this slot
-	replaces []CredentialSlotID
-}
-
-// NewCredentialRef creates a typed credential slot identity handle with the schema reflected from T
-func NewCredentialRef[T any](name string) CredentialRef[T] {
-	return CredentialRef[T]{input: reflectedInput[T](name)}
-}
-
-// CredentialRefOf creates a typed credential slot handle named after T's reflected schema
-func CredentialRefOf[T any]() CredentialRef[T] {
-	return CredentialRef[T]{input: reflectedInput[T]("")}
-}
-
-// ID returns the non-generic credential slot identity
-func (r CredentialRef[T]) ID() CredentialSlotID {
-	return NewCredentialSlotID(r.input.Name)
-}
-
-// String returns the stable credential name used for persistence and equality comparisons
-func (r CredentialRef[T]) String() string {
-	return r.input.Name
-}
-
-// Schema returns a copy of the reflected JSON schema of the credential type
-func (r CredentialRef[T]) Schema() json.RawMessage {
-	return jsonx.CloneRawMessage(r.input.Schema)
-}
-
-// Resolve decodes the credential bound to this slot from the supplied bindings
-func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) {
-	cred, ok := bindings.Resolve(r.ID())
-	if !ok {
-		var zero T
-		return zero, false, nil
-	}
-
-	out, err := jsonx.Decode[T](cred.Data)
-
-	return out, true, err
-}
-
-// Replacing declares that the slot takes over the payloads stored under old
-func (r CredentialRef[T]) Replacing[Old any](old CredentialRef[Old]) CredentialRef[T] {
-	r.replaces = append(slices.Clone(r.replaces), old.ID())
+// Name declares the user-facing connection name
+func (r ConnectionRef[T]) Name(name string) ConnectionRef[T] {
+	r.connection.Name = name
 
 	return r
 }
 
-// Upgraded declares how a stored payload is reshaped from the slot it was persisted under into T
-func (r CredentialRef[T]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (T, error)) CredentialRef[T] {
-	r.input.Upgrade = upgraded(fn)
+// Description declares what the connection does
+func (r ConnectionRef[T]) Description(description string) ConnectionRef[T] {
+	r.connection.Description = description
+
+	return r
+}
+
+// Recommended marks the connection as the recommended method
+func (r ConnectionRef[T]) Recommended() ConnectionRef[T] {
+	r.connection.Recommended = true
+
+	return r
+}
+
+// Meta declares the additional data the user might need to set up the connection
+func (r ConnectionRef[T]) Meta(meta map[string]MetaInfo) ConnectionRef[T] {
+	r.connection.Meta = maps.Clone(meta)
+
+	return r
+}
+
+// Replacing declares that the connection takes over the payloads stored under old
+func (r ConnectionRef[T]) Replacing[Old any](old ConnectionRef[Old]) ConnectionRef[T] {
+	r.connection.Replaces = append(slices.Clone(r.connection.Replaces), old.connection.Credential.Name)
+
+	return r
+}
+
+// Upgraded declares how a stored credential payload is reshaped from the connection it was persisted under into T
+func (r ConnectionRef[T]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (T, error)) ConnectionRef[T] {
+	r.connection.Credential.Upgrade = upgraded(fn)
 
 	return r
 }
 
 // Validated declares a semantic check run on a schema-valid credential payload decoded as T
-func (r CredentialRef[T]) Validated(fn func(context.Context, InstallationRequest, *T) error) CredentialRef[T] {
-	r.input.Validate = validated(fn)
+func (r ConnectionRef[T]) Validated(fn func(context.Context, InstallationRequest, *T) error) ConnectionRef[T] {
+	r.connection.Credential.Validate = validated(fn)
 
 	return r
 }
 
-// Replaces lists the retired slots whose stored payloads this slot takes over, sorted
-func (r CredentialRef[T]) Replaces() []CredentialSlotID {
-	return sortedUnique(r.replaces, CredentialSlotID.Compare)
+// Authenticates declares the auth flow that obtains the credential
+func (r ConnectionRef[T]) Authenticates(flow AuthFlow[T]) ConnectionRef[T] {
+	registration := flow.registration
+	r.connection.Auth = &registration
+	r.authManaged = true
+
+	return r
 }
 
-// Registration projects the slot identity and lifecycle onto base
-func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRegistration {
-	base.Ref = r.ID()
-	base.Stored = r.input.Clone()
-	base.Replaces = nil
+// Disconnects declares the teardown description and the optional hook receiving the decoded credential
+func (r ConnectionRef[T]) Disconnects(description string, fn func(context.Context, DisconnectRequest[T]) (DisconnectResult, error)) ConnectionRef[T] {
+	registration := &DisconnectRegistration{Description: description}
 
-	if len(r.replaces) > 0 {
-		base.Replaces = r.Replaces()
+	if fn != nil {
+		registration.Disconnect = func(ctx context.Context, input ConnectionInput) (DisconnectResult, error) {
+			credential, err := decodeCredential[T](input)
+			if err != nil {
+				return DisconnectResult{}, err
+			}
+
+			return fn(ctx, DisconnectRequest[T]{Integration: input.Integration, Credential: credential, UserInput: input.UserInput})
+		}
 	}
 
-	return base
+	r.connection.Disconnect = registration
+
+	return r
+}
+
+// Provides declares the client the connection builds from its decoded credential
+func (r ConnectionRef[T]) Provides[C any](build func(context.Context, ConnectionRequest[T]) (C, error)) ConnectionRef[T] {
+	builder := func(ctx context.Context, input ConnectionInput) (any, error) {
+		request, err := connectionRequest[T](input)
+		if err != nil {
+			return nil, err
+		}
+
+		return build(ctx, request)
+	}
+
+	r.connection.Clients = lo.Assign(r.connection.Clients, map[string]ClientBuilderFunc{clientName[C](): builder})
+
+	return r
+}
+
+// Verified declares the verification run against client C that returns the installation metadata M
+func (r ConnectionRef[T]) Verified[C, M any](fn func(context.Context, ConnectionRequest[T], C) (M, error)) ConnectionRef[T] {
+	r.connection.Verify = VerifyRegistration{
+		ClientRef:    clientName[C](),
+		Installation: jsonx.SchemaID(jsonx.SchemaFrom[M]()),
+		Handle: func(ctx context.Context, input ConnectionInput) (IntegrationInstallationMetadata, error) {
+			request, err := connectionRequest[T](input)
+			if err != nil {
+				return IntegrationInstallationMetadata{}, err
+			}
+
+			client, err := castClient[C](input.Client)
+			if err != nil {
+				return IntegrationInstallationMetadata{}, err
+			}
+
+			metadata, err := fn(ctx, request, client)
+			if err != nil {
+				return IntegrationInstallationMetadata{}, err
+			}
+
+			attributes, err := jsonx.ToRawMessage(metadata)
+			if err != nil {
+				return IntegrationInstallationMetadata{}, err
+			}
+
+			result := IntegrationInstallationMetadata{Attributes: attributes, Display: IntegrationInstallationIdentity{ExternalID: input.Integration.ID}}
+
+			if identifiable, ok := any(metadata).(InstallationIdentifiable); ok {
+				result.Display = identifiable.InstallationIdentity()
+			}
+
+			return result, nil
+		},
+	}
+
+	return r
+}
+
+// Connection returns the connection with its replaced names sorted, its form derived, and its slices and maps copied
+func (r ConnectionRef[T]) Connection() Connection {
+	connection := r.connection
+	connection.Credential = connection.Credential.Clone()
+	connection.Meta = maps.Clone(connection.Meta)
+	connection.Clients = maps.Clone(connection.Clients)
+	connection.Replaces = nil
+	connection.Form = nil
+
+	if len(r.connection.Replaces) > 0 {
+		connection.Replaces = sortedUnique(r.connection.Replaces, strings.Compare)
+	}
+
+	if !r.authManaged {
+		connection.Form = jsonx.CloneRawMessage(connection.Credential.Schema)
+	}
+
+	return connection
+}
+
+// connectionRequest decodes the credential of the erased input into the typed connection request
+func connectionRequest[T any](input ConnectionInput) (ConnectionRequest[T], error) {
+	credential, err := decodeCredential[T](input)
+	if err != nil {
+		return ConnectionRequest[T]{}, err
+	}
+
+	return ConnectionRequest[T]{Integration: input.Integration, Credential: credential, TokenManager: input.TokenManager}, nil
+}
+
+// decodeCredential decodes the stored credential as T, treating an absent payload as the zero value
+func decodeCredential[T any](input ConnectionInput) (T, error) {
+	var credential T
+
+	err := jsonx.UnmarshalIfPresent(input.Credential.Data, &credential)
+
+	return credential, err
 }
 
 // =========
@@ -277,81 +326,27 @@ func (r UserInputRef[T]) Registration() *InputRegistration {
 // Clients
 // =========
 
-// ClientRef is a typed handle for one registered client identity
-type ClientRef[C any] struct {
-	id    ClientID
-	slots []CredentialSlotID
-}
-
-// NewClientRef creates a typed client identity handle with a literal name
-func NewClientRef[C any](name string) ClientRef[C] {
-	return ClientRef[C]{id: NewClientID(name)}
-}
-
-// ClientRefOf creates a typed client identity handle named after the client type
-func ClientRefOf[C any]() ClientRef[C] {
+// clientName returns the client name derived from C, with pointers stripped so *X and X share a name
+func clientName[C any]() string {
 	clientType := reflect.TypeFor[C]()
 
 	for clientType.Kind() == reflect.Pointer {
 		clientType = clientType.Elem()
 	}
 
-	return NewClientRef[C](clientType.String())
+	return clientType.String()
 }
 
-// ID returns the opaque client identity
-func (r ClientRef[C]) ID() ClientID {
-	return r.id
-}
-
-// Cast type-asserts a registered client instance to the typed client value
-func (r ClientRef[C]) Cast(client any) (C, error) {
-	c, ok := client.(C)
+// castClient type-asserts a built client instance to the typed client value
+func castClient[C any](client any) (C, error) {
+	typed, ok := client.(C)
 	if !ok {
 		var zero C
+
 		return zero, ErrClientCastFailed
 	}
-	return c, nil
-}
 
-// Using declares that the client is built from the given credential slot
-func (r ClientRef[C]) Using[T any](cred CredentialRef[T]) ClientRef[C] {
-	r.slots = append(slices.Clone(r.slots), cred.ID())
-
-	return r
-}
-
-// Registration projects the client identity, credential slots, and build function onto base
-func (r ClientRef[C]) Registration(build func(context.Context, ClientBuildRequest) (C, error), base ClientRegistration) ClientRegistration {
-	base.Ref = r.ID()
-	base.CredentialRefs = slices.Clone(r.slots)
-	base.Build = func(ctx context.Context, req ClientBuildRequest) (any, error) {
-		client, err := build(ctx, req)
-
-		return client, err
-	}
-
-	return base
-}
-
-// HealthCheck binds fn as a definition health check that runs against this client
-func (r ClientRef[C]) HealthCheck(fn func(context.Context, OperationRequest, C) (json.RawMessage, error)) *HealthCheckRegistration {
-	return &HealthCheckRegistration{
-		ClientRef: r.ID(),
-		Handle: func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
-			client, err := r.Cast(request.Client)
-			if err != nil {
-				return nil, err
-			}
-
-			return fn(ctx, request, client)
-		},
-	}
-}
-
-// CredentialHealthCheck binds fn as a health check receiving only credential bindings
-func CredentialHealthCheck(fn func(context.Context, OperationRequest) (json.RawMessage, error)) *HealthCheckRegistration {
-	return &HealthCheckRegistration{Handle: fn}
+	return typed, nil
 }
 
 // =========
@@ -364,8 +359,8 @@ type OperationRef[Config any] struct {
 	input InputRegistration
 	// description describes what the operation does
 	description string
-	// client is the registered client the operation runs against, invalid when the operation has none
-	client ClientID
+	// client is the name of the client the operation runs against, empty when the operation has none
+	client string
 	// healthCheck probes the operation's prerequisites under its client
 	healthCheck OperationHandler
 	// handle executes the operation when it does not produce ingest payloads
@@ -433,20 +428,6 @@ func decodeConfig[Config any](raw json.RawMessage) (Config, error) {
 	return cfg, nil
 }
 
-// bindRequest casts the request client through client and decodes the request config into Config
-func bindRequest[C, Config any](client ClientRef[C], request OperationRequest) (C, Config, error) {
-	typed, err := client.Cast(request.Client)
-	if err != nil {
-		var cfg Config
-
-		return typed, cfg, err
-	}
-
-	cfg, err := decodeConfig[Config](request.Config)
-
-	return typed, cfg, err
-}
-
 // sortedUnique returns the items sorted by compare with duplicates removed
 func sortedUnique[T comparable](items []T, compare func(a, b T) int) []T {
 	return slices.Compact(slices.SortedFunc(slices.Values(items), compare))
@@ -469,18 +450,31 @@ func (r OperationRef[Config]) Description(description string) OperationRef[Confi
 	return r
 }
 
-// HealthCheck binds check as the probe of the operation's prerequisites, run under the operation's client
-func (r OperationRef[Config]) HealthCheck(check *HealthCheckRegistration) OperationRef[Config] {
-	r.healthCheck = check.Handle
+// HealthCheck binds fn as the probe of the operation's prerequisites, run under the client C
+func (r OperationRef[Config]) HealthCheck[C any](fn func(context.Context, OperationRequest, C) error) OperationRef[Config] {
+	r.client = clientName[C]()
+	r.healthCheck = func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
+		typed, err := castClient[C](request.Client)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, fn(ctx, request, typed)
+	}
 
 	return r
 }
 
-// Ingests binds fn as the ingest handler, run against client with the decoded config
-func (r OperationRef[Config]) Ingests[C any](client ClientRef[C], fn func(context.Context, OperationRequest, C, Config) ([]IngestPayloadSet, error)) OperationRef[Config] {
-	r.client = client.ID()
+// Ingests binds fn as the ingest handler, run against client C with the decoded config
+func (r OperationRef[Config]) Ingests[C any](fn func(context.Context, OperationRequest, C, Config) ([]IngestPayloadSet, error)) OperationRef[Config] {
+	r.client = clientName[C]()
 	r.ingest = func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error) {
-		typed, cfg, err := bindRequest[C, Config](client, request)
+		typed, err := castClient[C](request.Client)
+		if err != nil {
+			return nil, err
+		}
+
+		cfg, err := decodeConfig[Config](request.Config)
 		if err != nil {
 			return nil, err
 		}
@@ -491,11 +485,16 @@ func (r OperationRef[Config]) Ingests[C any](client ClientRef[C], fn func(contex
 	return r
 }
 
-// Handles binds fn as the handler, run against client with the decoded config
-func (r OperationRef[Config]) Handles[C any](client ClientRef[C], fn func(context.Context, OperationRequest, C, Config) (json.RawMessage, error)) OperationRef[Config] {
-	r.client = client.ID()
+// Handles binds fn as the handler, run against client C with the decoded config
+func (r OperationRef[Config]) Handles[C any](fn func(context.Context, OperationRequest, C, Config) (json.RawMessage, error)) OperationRef[Config] {
+	r.client = clientName[C]()
 	r.handle = func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
-		typed, cfg, err := bindRequest[C, Config](client, request)
+		typed, err := castClient[C](request.Client)
+		if err != nil {
+			return nil, err
+		}
+
+		cfg, err := decodeConfig[Config](request.Config)
 		if err != nil {
 			return nil, err
 		}
@@ -633,12 +632,11 @@ func (r OperationRef[Config]) DisabledForAll(disabled bool) OperationRef[Config]
 }
 
 // Registration builds the operation registration from the operation's identity, handler, stored input, and declared behavior
-func (r OperationRef[Config]) Registration(definition DefinitionRef) OperationRegistration {
+func (r OperationRef[Config]) Registration() OperationRegistration {
 	registration := OperationRegistration{
 		Name:                  r.input.Name,
 		Description:           r.description,
 		RequiredPermissions:   slices.Clone(r.permissions),
-		Topic:                 definition.OperationTopic(r.input.Name),
 		ClientRef:             r.client,
 		CustomerSelectable:    r.customerSelectable,
 		Internal:              r.internal,
@@ -667,41 +665,51 @@ func (r OperationRef[Config]) Registration(definition DefinitionRef) OperationRe
 // Installations
 // =========
 
-// InstallationRef is a typed handle for one definition's installation metadata derivation
-type InstallationRef[T any] struct {
-	schema json.RawMessage
-	fn     func(ctx context.Context, req InstallationRequest) (T, bool, error)
+// InstallationRef is a typed handle for one definition's installation metadata layout
+type InstallationRef[M any] struct {
+	// input is the layout name reflected from M, its schema, and its declared upgrade and validation
+	input InputRegistration
 }
 
-// NewInstallationRef creates a typed installation metadata handle
-func NewInstallationRef[T any](fn func(ctx context.Context, req InstallationRequest) (T, bool, error)) InstallationRef[T] {
-	return InstallationRef[T]{schema: jsonx.SchemaFrom[T](), fn: fn}
+// InstallationOf creates an installation metadata layout handle named after M's reflected schema
+func InstallationOf[M any]() InstallationRef[M] {
+	return InstallationRef[M]{input: reflectedInput[M]("")}
 }
 
-// Resolve derives and marshals installation metadata for one installation
-func (r InstallationRef[T]) Resolve(ctx context.Context, req InstallationRequest) (IntegrationInstallationMetadata, bool, error) {
-	typed, ok, err := r.fn(ctx, req)
-	if err != nil || !ok {
-		return IntegrationInstallationMetadata{}, ok, err
-	}
+// Upgraded declares how stored installation metadata is reshaped from the layout it was persisted under into M
+func (r InstallationRef[M]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (M, error)) InstallationRef[M] {
+	r.input.Upgrade = upgraded(fn)
 
-	raw, err := jsonx.ToRawMessage(typed)
-	if err != nil {
-		return IntegrationInstallationMetadata{}, false, err
-	}
-
-	meta := IntegrationInstallationMetadata{Attributes: raw}
-
-	if identifiable, ok := any(typed).(InstallationIdentifiable); ok {
-		meta.Display = identifiable.InstallationIdentity()
-	}
-
-	return meta, true, nil
+	return r
 }
 
-// Registration adapts the typed ref to the InstallationRegistration contract
-func (r InstallationRef[T]) Registration() *InstallationRegistration {
-	return &InstallationRegistration{Resolve: r.Resolve, Schema: jsonx.CloneRawMessage(r.schema)}
+// Validated declares a semantic check run on schema-valid installation metadata decoded as M
+func (r InstallationRef[M]) Validated(fn func(context.Context, InstallationRequest, *M) error) InstallationRef[M] {
+	r.input.Validate = validated(fn)
+
+	return r
+}
+
+// Registration returns the layout and its identity derivation as an installation registration
+func (r InstallationRef[M]) Registration() *InstallationRegistration {
+	_, identifiable := any(lo.Empty[M]()).(InstallationIdentifiable)
+
+	return &InstallationRegistration{
+		InputRegistration: r.input.Clone(),
+		Identifiable:      identifiable,
+		Identify: func(stored json.RawMessage) (IntegrationInstallationIdentity, error) {
+			metadata, err := jsonx.Decode[M](stored)
+			if err != nil {
+				return IntegrationInstallationIdentity{}, err
+			}
+
+			if identifiable, ok := any(metadata).(InstallationIdentifiable); ok {
+				return identifiable.InstallationIdentity(), nil
+			}
+
+			return IntegrationInstallationIdentity{}, nil
+		},
+	}
 }
 
 // =========
@@ -767,10 +775,9 @@ func (r WebhookEventRef[T]) UnmarshalPayload(raw json.RawMessage) (T, error) {
 	return out, jsonx.UnmarshalIfPresent(raw, &out)
 }
 
-// Registration projects the event name and its topic under definition onto base
-func (r WebhookEventRef[T]) Registration(definition DefinitionRef, base WebhookEventRegistration) WebhookEventRegistration {
+// Registration projects the event name onto base
+func (r WebhookEventRef[T]) Registration(base WebhookEventRegistration) WebhookEventRegistration {
 	base.Name = r.name
-	base.Topic = definition.WebhookEventTopic(r.name)
 
 	return base
 }

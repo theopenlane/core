@@ -83,7 +83,7 @@ func (e ScanTaskErrors) Error() string {
 //
 //nolint:revive
 var DomainScanPollOp = types.OperationPayloadOf[DomainScanPoll]().
-	Handles(cloudflareClient, runDomainScanPoll).
+	Handles(runDomainScanPoll).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
 	CustomerSelectable(false).
 	Internal()

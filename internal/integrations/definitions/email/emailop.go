@@ -226,12 +226,12 @@ func (e Operation[T]) renderToMessage(client *Client, input T, extraOpts ...newm
 
 // Registration returns the types.OperationRegistration for wiring into the definition builder
 func (e Operation[T]) Registration() types.OperationRegistration {
-	return e.Op.Handles(emailClientRef, func(ctx context.Context, req types.OperationRequest, client *Client, input T) (json.RawMessage, error) {
+	return e.Op.Handles(func(ctx context.Context, req types.OperationRequest, client *Client, input T) (json.RawMessage, error) {
 		return nil, e.dispatch(ctx, req, client, input)
 	}).
 		CustomerSelectable(e.CustomerSelectable != nil && *e.CustomerSelectable).
 		Description(e.Description).
-		Registration(DefinitionID)
+		Registration()
 }
 
 // RenderCatalogPreview renders a customer-selectable catalog entry to HTML for UI preview

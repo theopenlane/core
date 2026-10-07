@@ -30,51 +30,36 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[RuntimeConfig](),
 			},
-			HealthCheck:  cloudflareClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				cloudflareCredential.Registration(types.CredentialRegistration{
-					Name:        "Cloudflare API Credential",
-					Description: "API token used to access Cloudflare account and zone data.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: cloudflareCredential.ID(),
-					Name:          "Cloudflare API Token",
-					Description:   "Configure Cloudflare access using an API token scoped to your account and zones.",
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: cloudflareCredential.ID(),
-						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Cloudflare dashboard.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				cloudflareClient.Registration(Client{}.Build, types.ClientRegistration{
-					Description: "Cloudflare REST API client",
-				}),
+			Connections: []types.Connector{
+				apiToken.
+					Name("Cloudflare API Token").
+					Description("Configure Cloudflare access using an API token scoped to your account and zones.").
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Cloudflare dashboard.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[DirectorySync]().
-					Ingests(cloudflareClient, runDirectorySync).
+					Ingests(runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Permissions("Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read").
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().
 					Description("Collect account members as directory accounts").
-					Registration(DefinitionID),
+					Registration(),
 				types.OperationRefOf[FindingsSync]().
-					Ingests(cloudflareClient, runFindingsCollect).
+					Ingests(runFindingsCollect).
 					// TODO: remove with providerkit.UpgradeFromSection once every installation has been upgraded off main's client config
 					Upgraded(providerkit.UpgradeFromSection[FindingsSync](mainFindingSyncKey)).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaFinding.Name}).
 					Permissions("Account Security Center Insights Read").
 					Description("Collect Cloudflare Security Center insights as findings").
-					Registration(DefinitionID),
+					Registration(),
 				types.OperationRefOf[AssetSync]().
-					Ingests(cloudflareClient, runAssetCollect).
+					Ingests(runAssetCollect).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaAsset.Name}).
 					Permissions("Registrar Domains Read").
@@ -85,13 +70,13 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					}).
 					SkipDefaultLookback().
 					Description("Collect Cloudflare domain registrations as assets").
-					Registration(DefinitionID),
-				DomainScanSubmitOp.Description("Submit domains to Cloudflare's URL Scanner for scanning").Registration(DefinitionID),
-				DomainScanPollOp.Description("Poll a previously submitted Cloudflare URL Scanner result").Registration(DefinitionID),
-				DomainScanEnrichmentOp.Description("Gather company profile, compliance, and DNS vendor data for a domain").Registration(DefinitionID),
-				DomainScanBuildReportOp.Description("Build the onboarding domain scan report from a completed URL Scanner result and gathered enrichment").Registration(DefinitionID),
-				domainScanRequestOp.Description("Request a domain scan for a single domain").Registration(DefinitionID),
-				DomainScanImportOp.Description("Import a reviewer-accepted domain scan report into real records").Registration(DefinitionID),
+					Registration(),
+				DomainScanSubmitOp.Description("Submit domains to Cloudflare's URL Scanner for scanning").Registration(),
+				DomainScanPollOp.Description("Poll a previously submitted Cloudflare URL Scanner result").Registration(),
+				DomainScanEnrichmentOp.Description("Gather company profile, compliance, and DNS vendor data for a domain").Registration(),
+				DomainScanBuildReportOp.Description("Build the onboarding domain scan report from a completed URL Scanner result and gathered enrichment").Registration(),
+				domainScanRequestOp.Description("Request a domain scan for a single domain").Registration(),
+				DomainScanImportOp.Description("Import a reviewer-accepted domain scan report into real records").Registration(),
 			},
 			GalaListeners: []types.GalaListenerRegistration{
 				domainScanListeners(),

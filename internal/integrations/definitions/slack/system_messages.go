@@ -112,13 +112,13 @@ Organizations marked for deletion: {{ .Count }}
 
 // systemMessageRegistration builds an OperationRegistration for a system message
 func systemMessageRegistration[T any](op types.OperationRef[T], description string, tmpl *template.Template) types.OperationRegistration {
-	return op.Handles(slackClient, func(ctx context.Context, _ types.OperationRequest, c *SlackClient, cfg T) (json.RawMessage, error) {
+	return op.Handles(func(ctx context.Context, _ types.OperationRequest, c *SlackClient, cfg T) (json.RawMessage, error) {
 		return nil, renderAndSendSystemMessage(ctx, c, tmpl, cfg)
 	}).
 		CustomerSelectable(false).
 		Policy(types.ExecutionPolicy{SkipRunRecord: true}).
 		Description(description).
-		Registration(DefinitionID)
+		Registration()
 }
 
 // renderAndSendSystemMessage executes tmpl against input and posts the result through c's transport

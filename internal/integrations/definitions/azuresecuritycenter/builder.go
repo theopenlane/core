@@ -19,43 +19,28 @@ func Builder() registry.Builder {
 			Tags:         []string{"vulnerabilities", "assets"},
 			Active:       false,
 			Visible:      true,
-			HealthCheck:  securityCenterClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				securityCenterCredential.Registration(types.CredentialRegistration{
-					Name:        "Azure Security Center Credential",
-					Description: "Azure service principal used to access Microsoft Defender for Cloud.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: securityCenterCredential.ID(),
-					Name:          "Azure Service Principal",
-					Description:   "Configure Defender for Cloud access using an Azure service principal.",
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: securityCenterCredential.ID(),
-						Description:   "Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				securityCenterClient.Registration(Client{}.Build, types.ClientRegistration{
-					Description: "Azure Security Center assessments and sub-assessments client",
-				}),
+			Connections: []types.Connector{
+				securityCenterConnection.
+					Name("Azure Service Principal").
+					Description("Configure Defender for Cloud access using an Azure service principal.").
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[AssessmentsCollect]().
-					Ingests(securityCenterClient, runAssessmentsCollect).
+					Ingests(runAssessmentsCollect).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
 					Description("Collect unhealthy security posture assessment findings for vulnerability ingestion").
-					Registration(definitionID),
+					Registration(),
 				types.OperationRefOf[SubAssessmentsCollect]().
-					Ingests(securityCenterClient, runSubAssessmentsCollect).
+					Ingests(runSubAssessmentsCollect).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
 					Description("Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)").
-					Registration(definitionID),
+					Registration(),
 			},
 			Mappings: []types.MappingRegistration{
 				{

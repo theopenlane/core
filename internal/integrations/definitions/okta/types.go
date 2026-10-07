@@ -1,8 +1,6 @@
 package okta
 
 import (
-	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -10,11 +8,9 @@ var (
 	// definitionID is the stable identifier for the Okta integration definition
 	definitionID = types.NewDefinitionRef("def_01K0OKTA0000000000000000001")
 	// installation is the typed installation metadata handle for the Okta definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// oktaCredential is the typed credential slot used by the Okta client
-	oktaCredential = types.CredentialRefOf[CredentialSchema]()
-	// oktaClient is the client ref for the Okta API client used by this definition
-	oktaClient = types.ClientRefOf[*oktagosdk.APIClient]()
+	installation = types.InstallationOf[InstallationMetadata]()
+	// oktaConnection is the typed connection handle for the Okta API token
+	oktaConnection = types.ConnectionOf[CredentialSchema]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )

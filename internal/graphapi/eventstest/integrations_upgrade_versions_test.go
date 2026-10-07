@@ -78,7 +78,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("initial-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("initial-token"))
 		require.Equal(t, v1.Registry().Version(versionedDefinitionID.ID()), installation.DefinitionVersion)
 		require.Equal(t, testint.UserInputV1.Name(), installation.UserInput.Layout)
 		require.JSONEq(t, `{"pattern":"initial"}`, string(installation.OperationConfig.For(testint.SyncOp.Name())))
@@ -99,8 +99,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"initial-token"}`, string(rows[testint.TokenV2.ID()].Data))
-		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV1.ID()))
+		require.JSONEq(t, `{"token":"initial-token"}`, string(rows[testint.TokenV2.Connection().Credential.Name].Data))
+		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV1.Connection().Credential.Name))
 
 		retired, err := v2.Registry().Operation(versionedDefinitionID.ID(), testint.SyncOp.Name())
 		require.NoError(t, err)
@@ -143,8 +143,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		rows, err = store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"initial-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV3.ID()].Data))
-		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV2.ID()))
+		require.JSONEq(t, `{"token":"initial-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV3.Connection().Credential.Name].Data))
+		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV2.Connection().Credential.Name))
 
 		names, err := suite.Client.DB.IntegrationRun.Query().
 			Where(integrationrun.IntegrationIDEQ(installation.ID), integrationrun.OperationNameIn(testint.SyncOp.Name(), testint.SyncOpV3.Name())).
@@ -170,7 +170,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("initial-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("initial-token"))
 
 		retired, err := v1.Registry().Operation(versionedDefinitionID.ID(), testint.SyncOp.Name())
 		require.NoError(t, err)
@@ -210,8 +210,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"initial-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV3.ID()].Data))
-		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV1.ID()))
+		require.JSONEq(t, `{"token":"initial-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV3.Connection().Credential.Name].Data))
+		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV1.Connection().Credential.Name))
 
 		movedAt, err := operations.LastSuccessfulRunAt(subCtx, suite.Client.DB, installation.ID, testint.SyncOpV3.Name())
 		require.NoError(t, err)
@@ -230,7 +230,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("converged-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("converged-token"))
 
 		retired, err := v1.Registry().Operation(versionedDefinitionID.ID(), testint.SyncOp.Name())
 		require.NoError(t, err)
@@ -289,7 +289,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"converged-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV4.ID()].Data))
+		require.JSONEq(t, `{"token":"converged-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV4.Connection().Credential.Name].Data))
 
 		runs, err := suite.Client.DB.IntegrationRun.Query().
 			Where(integrationrun.IntegrationIDEQ(installation.ID)).
@@ -316,7 +316,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), nil, testint.TokenV1.ID(), testint.TokenV1Set("stranded-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), nil, testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("stranded-token"))
 		require.Equal(t, v1.Registry().Version(versionedDefinitionID.ID()), installation.DefinitionVersion)
 
 		installedWebhooks := endpointRows(t, subCtx, installation.ID)
@@ -342,8 +342,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"accessToken":"stranded-token"}`, string(rows[testint.TokenV1.ID()].Data))
-		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV4.ID()))
+		require.JSONEq(t, `{"accessToken":"stranded-token"}`, string(rows[testint.TokenV1.Connection().Credential.Name].Data))
+		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV4.Connection().Credential.Name))
 
 		webhookRows := endpointRows(t, subCtx, installation.ID)
 		require.Len(t, webhookRows, 1)
@@ -363,7 +363,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		def, ok := v3.Registry().Definition(versionedDefinitionID.ID())
 		require.True(t, ok)
 
-		state, err := def.WithProviderState(integrationtypes.IntegrationProviderState{}, integrationtypes.DefinitionProviderState{CredentialRef: testint.TokenV3.ID()})
+		state, err := def.WithProviderState(integrationtypes.IntegrationProviderState{}, integrationtypes.DefinitionProviderState{CredentialRef: testint.TokenV3.Connection().Credential.Name})
 		require.NoError(t, err)
 
 		installation, err := suite.Client.DB.Integration.Create().
@@ -377,7 +377,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		require.NoError(t, err)
 		require.Empty(t, installation.DefinitionVersion)
 
-		require.NoError(t, store.SaveCredential(subCtx, installation, testint.TokenV3.ID(), integrationtypes.CredentialSet{Data: json.RawMessage(`{"token":"incomplete-token"}`)}))
+		require.NoError(t, store.SaveCredential(subCtx, installation, testint.TokenV3.Connection().Credential.Name, integrationtypes.CredentialSet{Data: json.RawMessage(`{"token":"incomplete-token"}`)}))
 
 		v3Version := v3.Registry().Version(versionedDefinitionID.ID())
 
@@ -389,7 +389,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
-		require.JSONEq(t, `{"token":"incomplete-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV3.ID()].Data))
+		require.JSONEq(t, `{"token":"incomplete-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV3.Connection().Credential.Name].Data))
 	})
 
 	t.Run("installation metadata is refreshed by the upgrade", func(t *testing.T) {
@@ -397,11 +397,16 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"x"}`), nil, testint.TokenV1.ID(), testint.TokenV1Set("meta-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"x"}`), nil, testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("meta-token"))
 
 		before := reloadIntegration(t, subCtx, installation.ID).InstallationMetadata
 		require.Equal(t, installation.ID, before.Display.ExternalID)
-		require.Empty(t, before.Attributes)
+
+		var beforeAttrs struct {
+			Region string `json:"region"`
+		}
+		require.NoError(t, json.Unmarshal(before.Attributes, &beforeAttrs))
+		require.Empty(t, beforeAttrs.Region)
 
 		v3 := versionedRuntime(t, testint.BuilderV3())
 
@@ -425,13 +430,13 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 		v3 := versionedRuntime(t, testint.BuilderV3())
 		operationConfig := map[string]json.RawMessage{testint.SyncOpV3.Name(): json.RawMessage(`{"filter":"only-mine"}`)}
-		installation := installOn(t, subCtx, v3, json.RawMessage(`{"filter":"global"}`), operationConfig, testint.TokenV3.ID(), testint.TokenV3Set("token", "region-1"))
+		installation := installOn(t, subCtx, v3, json.RawMessage(`{"filter":"global"}`), operationConfig, testint.TokenV3.Connection().Credential.Name, testint.TokenV3Set("token", "region-1"))
 		require.JSONEq(t, `{"filter":"only-mine"}`, string(installation.OperationConfig.For(testint.SyncOpV3.Name())))
 
 		syncOp, err := v3.Registry().Operation(versionedDefinitionID.ID(), testint.SyncOpV3.Name())
 		require.NoError(t, err)
 
-		_, err = v3.ExecuteOperation(subCtx, installation, syncOp, nil, nil)
+		_, err = v3.ExecuteOperation(subCtx, installation, syncOp, nil)
 		require.NoError(t, err)
 
 		select {

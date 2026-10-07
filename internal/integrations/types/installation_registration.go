@@ -1,33 +1,27 @@
 package types //nolint:revive
 
 import (
-	"context"
 	"encoding/json"
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
-// InstallationRequest bundles the inputs used to resolve installation metadata
+// InstallationRequest bundles the inputs used by installation upgrade and validation hooks
 type InstallationRequest struct {
 	// Integration is the target installation record
 	Integration *generated.Integration
-	// Connection is the resolved connection mode for the installation when available
-	Connection ConnectionRegistration
-	// Credentials lists all resolved credential bundles participating in the connection mode
-	Credentials CredentialBindings
+	// Credentials lists every stored credential bundle by slot name
+	Credentials map[string]CredentialSet
 	// UserInput is the stored installation-scoped user input document
 	UserInput json.RawMessage
-	// Input is provider-defined raw input used to derive installation metadata
-	Input json.RawMessage
 }
 
-// InstallationFunc derives installation metadata for a connection; false means none was produced
-type InstallationFunc func(ctx context.Context, req InstallationRequest) (IntegrationInstallationMetadata, bool, error)
-
-// InstallationRegistration describes how one connection mode derives installation metadata
+// InstallationRegistration is the definition's installation metadata layout, declared once
 type InstallationRegistration struct {
-	// Resolve derives installation metadata for the connection mode
-	Resolve InstallationFunc `json:"-"`
-	// Schema is the reflected JSON schema of the derived metadata type, filled from the typed ref
-	Schema json.RawMessage `json:"-"`
+	// InputRegistration is the layout name, schema, upgrade, and validation of the metadata type
+	InputRegistration
+	// Identifiable reports whether the metadata type derives its own identity; otherwise the installation keeps its own id
+	Identifiable bool `json:"-"`
+	// Identify recomputes the display identity from a stored metadata document
+	Identify func(json.RawMessage) (IntegrationInstallationIdentity, error) `json:"-"`
 }

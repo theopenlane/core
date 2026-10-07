@@ -28,7 +28,7 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 
 	logx.FromContext(ctx).Info().Msg("scheduled operation cycle started")
 
-	response, err := r.executeOperationInline(ctx, nil, src.DefinitionID, operation, nil, nil)
+	response, err := r.executeOperationInline(ctx, nil, src.DefinitionID, operation, nil)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("scheduled operation cycle failed")
 

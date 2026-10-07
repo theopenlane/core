@@ -1,5 +1,6 @@
 {
-  "version": "17ffa518b1cd4f825284dfd96843d7e62e5aba90f70b687e6f8180fa2052c623",
+  "hash": "e60ffc060fe3c4c3e067b985dc65c2eacc198caf90a1ff998e010cd27fcb1cdc",
+  "version": "01M49CHH2NPBMN1CMF8P5F7GH9",
   "surface": {
     "id": "def_01K0CFLARE00000000000000001",
     "credentials": [
@@ -150,7 +151,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "upgrade": true
       }
     ]
   }

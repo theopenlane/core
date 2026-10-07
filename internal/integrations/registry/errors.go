@@ -11,12 +11,18 @@ var (
 	ErrDefinitionNotFound = errors.New("integrations/registry: definition not found")
 	// ErrDuplicateRegistration indicates a definition registers the same item more than once
 	ErrDuplicateRegistration = errors.New("integrations/registry: duplicate registration")
-	// ErrClientRequired indicates a client registration is missing its identity
-	ErrClientRequired = errors.New("integrations/registry: client required")
 	// ErrClientNotFound indicates the requested client does not exist
 	ErrClientNotFound = errors.New("integrations/registry: client not found")
-	// ErrConnectionCredentialRefRequired indicates a connection is missing its credential ref
-	ErrConnectionCredentialRefRequired = errors.New("integrations/registry: connection credential ref required")
+	// ErrConnectionVerifyRequired indicates a connection declares no verification
+	ErrConnectionVerifyRequired = errors.New("integrations/registry: connection verification required")
+	// ErrConnectionVerifyClientNotProvided indicates a connection's verification client is not among its clients
+	ErrConnectionVerifyClientNotProvided = errors.New("integrations/registry: connection does not provide its verification client")
+	// ErrConnectionClientNotProvided indicates a connection does not provide a client an operation uses
+	ErrConnectionClientNotProvided = errors.New("integrations/registry: connection does not provide a client an operation uses")
+	// ErrInstallationRequired indicates a definition with connections declares no installation metadata layout
+	ErrInstallationRequired = errors.New("integrations/registry: installation metadata layout required when the definition declares connections")
+	// ErrInstallationSchemaMismatch indicates a connection's verification returns a layout other than the definition's
+	ErrInstallationSchemaMismatch = errors.New("integrations/registry: connection verification returns a different installation metadata layout than the definition declares")
 	// ErrOperationNotFound indicates the requested operation does not exist
 	ErrOperationNotFound = errors.New("integrations/registry: operation not found")
 	// ErrOperationHandlerRequired indicates an operation is missing both Handle and IngestHandle
@@ -37,18 +43,6 @@ var (
 	ErrOperatorConfigSchemaRequired = errors.New("integrations/registry: operator config schema required")
 	// ErrCredentialSchemaRequired indicates a credential registration's slot reflects no schema
 	ErrCredentialSchemaRequired = errors.New("integrations/registry: credential schema required")
-	// ErrCredentialRefNotDeclared indicates a client references an undeclared credential ref
-	ErrCredentialRefNotDeclared = errors.New("integrations/registry: client credential ref not declared by definition")
-	// ErrConnectionCredentialRefNotDeclared indicates a connection's credential ref is undeclared
-	ErrConnectionCredentialRefNotDeclared = errors.New("integrations/registry: connection credential ref not declared by definition")
-	// ErrConnectionClientRefNotDeclared indicates a connection's client ref is undeclared
-	ErrConnectionClientRefNotDeclared = errors.New("integrations/registry: connection client ref not declared by definition")
-	// ErrConnectionHealthCheckHandlerRequired indicates a connection health check has no handler
-	ErrConnectionHealthCheckHandlerRequired = errors.New("integrations/registry: connection health check handler required")
-	// ErrConnectionAuthCredentialRefNotDeclared indicates auth uses an undeclared credential ref
-	ErrConnectionAuthCredentialRefNotDeclared = errors.New("integrations/registry: connection auth credential ref not declared by connection")
-	// ErrConnectionDisconnectCredentialRefNotDeclared indicates disconnect uses an undeclared ref
-	ErrConnectionDisconnectCredentialRefNotDeclared = errors.New("integrations/registry: connection disconnect credential ref not declared by connection")
 	// ErrUserInputSchemaRequired indicates a definition has a user input block with no schema
 	ErrUserInputSchemaRequired = errors.New("integrations/registry: user input schema required")
 	// ErrBuilderNil indicates a builder dependency was nil
@@ -67,10 +61,6 @@ var (
 	ErrLinkTargetFieldInvalid = errors.New("integrations/registry: link target field is not a match key on the target schema")
 	// ErrLinkSourceFieldInvalid indicates the source field is not a mapped input key of that shape
 	ErrLinkSourceFieldInvalid = errors.New("integrations/registry: link source field is not a mapped input key of the required shape")
-	// ErrHealthCheckRequired indicates a definition declares connections without a health check
-	ErrHealthCheckRequired = errors.New("integrations/registry: health check required when the definition declares connections")
-	// ErrHealthCheckClientCredentialMissing indicates the health check misses a credential slot
-	ErrHealthCheckClientCredentialMissing = errors.New("integrations/registry: health check client does not use every connection credential slot")
 	// ErrOperationFilterExprInvalid indicates a stored operation input carries a filter expression that does not compile
 	ErrOperationFilterExprInvalid = errors.New("integrations/registry: operation filter expression invalid")
 	// ErrDestructiveSurfaceChange indicates a removed slot, operation, or webhook has no replacement

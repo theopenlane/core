@@ -24,21 +24,12 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[Config](),
 			},
 			UserInput:    userInput.Registration(),
-			HealthCheck:  teamsClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				teamsCredential.Registration(types.CredentialRegistration{
-					Name:        "Microsoft Teams Credential",
-					Description: "OAuth credential used to send messages to Microsoft Teams channels.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: teamsCredential.ID(),
-					Name:          "Microsoft Teams OAuth",
-					Description:   "Connect your Microsoft Teams workspace using OAuth.",
-					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
-						CredentialRef: teamsCredential,
+			Connections: []types.Connector{
+				oauthConnection.
+					Name("Microsoft Teams OAuth").
+					Description("Connect your Microsoft Teams workspace using OAuth.").
+					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
@@ -59,23 +50,16 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,
-					}),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: teamsCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				teamsClient.Registration(Client{}.Build, types.ClientRegistration{
-					Description: "Microsoft Graph API client",
-				}),
+					})).
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationPayloadOf[MessageSendOperation]().
-					Handles(teamsClient, MessageSend{}.Run).
+					Handles(MessageSend{}.Run).
 					Description("Send a Teams channel message via Microsoft Graph").
-					Registration(DefinitionID),
+					Registration(),
 			},
 		}, nil
 	})

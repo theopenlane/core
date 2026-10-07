@@ -16,8 +16,8 @@ import (
 var protoJSON = protojson.MarshalOptions{UseProtoNames: true, UseEnumNumbers: true}
 
 // runDirectorySync collects Zitadel directory users
-func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *client.Client, _ DirectorySync) ([]types.IngestPayloadSet, error) {
-	users, err := listDirectoryUsers(ctx, c)
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c Client, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+	users, err := listDirectoryUsers(ctx, c.Client)
 	if err != nil {
 		return nil, err
 	}

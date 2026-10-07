@@ -7,8 +7,6 @@ var (
 	ErrAPIRequest = errors.New("githubapp: api request failed")
 	// ErrAccessTokenMissing indicates the access token is not present in the credential
 	ErrAccessTokenMissing = errors.New("githubapp: access token missing")
-	// ErrCredentialDecode indicates the credential data could not be decoded
-	ErrCredentialDecode = errors.New("githubapp: credential decode failed")
 	// ErrCredentialEncode indicates the credential data could not be encoded
 	ErrCredentialEncode = errors.New("githubapp: credential encode failed")
 	// ErrAppIDMissing indicates the GitHub App ID is missing from operator config
@@ -35,8 +33,6 @@ var (
 	ErrAppSlugMissing = errors.New("githubapp: app slug missing")
 	// ErrClientNil indicates the provided client was unable to be created and is nil
 	ErrClientNil = errors.New("githubapp: unexpected nil client")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("githubapp: result encode failed")
 	// ErrAuthStateEncode indicates auth state could not be serialized
 	ErrAuthStateEncode = errors.New("githubapp: auth state encode failed")
 	// ErrAuthStateDecode indicates auth state could not be decoded

@@ -9,9 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -21,20 +19,6 @@ const (
 	// AccountScopeSpecific indicates operations should be limited to explicitly listed accounts
 	AccountScopeSpecific = "specific"
 )
-
-// resolveAssumeRoleCredential extracts and validates the assume-role credential from the bindings
-func resolveAssumeRoleCredential(bindings types.CredentialBindings) (AssumeRoleCredentialSchema, error) {
-	decoded, ok, err := awsAssumeRoleCredential.Resolve(bindings)
-	if err != nil {
-		return AssumeRoleCredentialSchema{}, ErrCredentialMetadataInvalid
-	}
-
-	if !ok {
-		return AssumeRoleCredentialSchema{}, ErrCredentialMetadataRequired
-	}
-
-	return decoded, nil
-}
 
 // buildAWSConfig constructs an AWS SDK config with assume-role credentials
 func buildAWSConfig(ctx context.Context, assumeRoleCredential AssumeRoleCredentialSchema, opCfg Config) (awssdk.Config, error) {
@@ -65,59 +49,6 @@ func buildAWSConfig(ctx context.Context, assumeRoleCredential AssumeRoleCredenti
 	cfg.Credentials = awssdk.NewCredentialsCache(provider)
 
 	return cfg, nil
-}
-
-// buildAWSServiceClient builds a typed AWS service client from the bound credential
-func buildAWSServiceClient[T any](ctx context.Context, cfg Config, req types.ClientBuildRequest, build func(awssdk.Config) T) (T, error) {
-	_, hasAssumeRole := req.Credentials.Resolve(awsAssumeRoleCredential.ID())
-	if hasAssumeRole {
-		return buildAWSServiceClientViaAssumeRole(ctx, cfg, req, build)
-	}
-
-	return buildAWSServiceClientViaStaticCreds(ctx, req, build)
-}
-
-// buildAWSServiceClientViaAssumeRole constructs a client using STS cross-account assume-role
-func buildAWSServiceClientViaAssumeRole[T any](ctx context.Context, opCfg Config, req types.ClientBuildRequest, build func(awssdk.Config) T) (T, error) {
-	assumeRoleCredential, err := resolveAssumeRoleCredential(req.Credentials)
-	if err != nil {
-		return lo.Empty[T](), err
-	}
-
-	if assumeRoleCredential.RoleARN == "" {
-		return lo.Empty[T](), ErrRoleARNMissing
-	}
-
-	if assumeRoleCredential.HomeRegion == "" {
-		return lo.Empty[T](), ErrRegionMissing
-	}
-
-	cfg, err := buildAWSConfig(ctx, assumeRoleCredential, opCfg)
-	if err != nil {
-		return lo.Empty[T](), err
-	}
-
-	return build(cfg), nil
-}
-
-// buildAWSServiceClientViaStaticCreds constructs a client using static IAM credentials directly
-func buildAWSServiceClientViaStaticCreds[T any](ctx context.Context, req types.ClientBuildRequest, build func(awssdk.Config) T) (T, error) {
-	serviceAccount, ok, err := awsServiceAccountCredential.Resolve(req.Credentials)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("awssecurityhub: error resolving aws credentials")
-		return lo.Empty[T](), ErrCredentialMetadataInvalid
-	}
-
-	if !ok {
-		return lo.Empty[T](), ErrCredentialMetadataRequired
-	}
-
-	cfg, err := buildAWSConfigFromStaticCreds(ctx, serviceAccount)
-	if err != nil {
-		return lo.Empty[T](), err
-	}
-
-	return build(cfg), nil
 }
 
 // buildAWSConfigFromStaticCreds constructs an AWS SDK config from static IAM credentials

@@ -3,18 +3,16 @@ package googleworkspace
 import (
 	"time"
 
-	admin "google.golang.org/api/admin/directory/v1"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the Google Workspace integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
-	// workspaceCredential is the credential slot for Google Workspace OAuth credentials
-	workspaceCredential = types.CredentialRefOf[googleWorkspaceCred]()
-	// workspaceClient is the client ref for the Google Workspace Admin SDK
-	workspaceClient = types.ClientRefOf[*admin.Service]()
+	// oauthConnection is the Google Workspace OAuth connection
+	oauthConnection = types.ConnectionOf[googleWorkspaceCred]()
+	// installation is the installation metadata layout
+	installation = types.InstallationOf[InstallationMetadata]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )

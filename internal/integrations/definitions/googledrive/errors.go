@@ -11,10 +11,8 @@ var (
 	ErrHealthCheckFailed = errors.New("googledrive: health check failed")
 	// ErrCredentialEncode indicates the credential could not be serialized
 	ErrCredentialEncode = errors.New("googledrive: credential encode failed")
-	// ErrCredentialDecode indicates the credential could not be deserialized
-	ErrCredentialDecode = errors.New("googledrive: credential decode failed")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("googledrive: result encode failed")
+	// ErrAccountUnresolved indicates the Drive About API did not report the connected account
+	ErrAccountUnresolved = errors.New("googledrive: account unresolved")
 	// ErrFolderIDMissing indicates the folder ID is not configured
 	ErrFolderIDMissing = errors.New("googledrive: folder id missing from user input")
 	// ErrFolderListFailed indicates the Drive folder listing request failed

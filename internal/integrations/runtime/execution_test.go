@@ -16,16 +16,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// executionTestAPIKey is the credential type bound to the operation under test
-type executionTestAPIKey struct{}
-
-var executionTestAPIKeyRef = types.NewCredentialRef[executionTestAPIKey]("executionTestAPIKey")
-
 func TestExecuteOperationNilInstallation(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
-	_, err := rt.ExecuteOperation(context.Background(), nil, types.OperationRegistration{}, nil, nil)
+	_, err := rt.ExecuteOperation(context.Background(), nil, types.OperationRegistration{}, nil)
 	if !errors.Is(err, ErrInstallationRequired) {
 		t.Fatalf("expected ErrInstallationRequired, got %v", err)
 	}
@@ -45,7 +40,7 @@ func TestExecuteOperationInvalidConfig(t *testing.T) {
 	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
-	}, op, nil, json.RawMessage(`{}`))
+	}, op, json.RawMessage(`{}`))
 	if !errors.Is(err, types.ErrOperationConfigInvalid) {
 		t.Fatalf("expected ErrOperationConfigInvalid, got %v", err)
 	}
@@ -83,7 +78,7 @@ func TestExecuteOperationValidConfigNoSchema(t *testing.T) {
 			called = true
 			return json.RawMessage(`{"ok":true}`), nil
 		},
-	}, nil, nil)
+	}, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -111,7 +106,7 @@ func TestExecuteOperationHandlerError(t *testing.T) {
 		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 			return nil, handlerErr
 		},
-	}, nil, nil)
+	}, nil)
 	if !errors.Is(err, handlerErr) {
 		t.Fatalf("expected handler error, got %v", err)
 	}
@@ -135,7 +130,7 @@ func TestExecuteOperationValidConfigWithSchema(t *testing.T) {
 	result, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
-	}, op, nil, json.RawMessage(`{"url":"https://example.com"}`))
+	}, op, json.RawMessage(`{"url":"https://example.com"}`))
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -167,48 +162,13 @@ func TestExecuteOperationEmptyConfigSkipsValidation(t *testing.T) {
 	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
-	}, op, nil, nil)
+	}, op, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
 
 	if !called {
 		t.Fatal("expected handler to be called with nil config")
-	}
-}
-
-func TestExecuteOperationWithCredentials(t *testing.T) {
-	t.Parallel()
-
-	rt := NewForTesting(registry.New())
-
-	ref := executionTestAPIKeyRef.ID()
-	credentials := types.CredentialBindings{
-		{Ref: ref, Credential: types.CredentialSet{Data: json.RawMessage(`{"key":"secret"}`)}},
-	}
-
-	var captured types.OperationRequest
-
-	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
-		ID:           "install-1",
-		DefinitionID: "test-def",
-	}, types.OperationRegistration{
-		Name: "test-op",
-		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-			captured = req
-			return nil, nil
-		},
-	}, credentials, nil)
-	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-
-	if len(captured.Credentials) != 1 {
-		t.Fatalf("expected 1 credential binding, got %d", len(captured.Credentials))
-	}
-
-	if captured.Credentials[0].Ref != ref {
-		t.Fatalf("expected credential ref %v, got %v", ref, captured.Credentials[0].Ref)
 	}
 }
 
@@ -229,7 +189,7 @@ func TestExecuteOperationAppliesDefaultLookbackWhenNoLastRun(t *testing.T) {
 			captured = req
 			return nil, nil
 		},
-	}, nil, nil)
+	}, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, captured.LastRunAt != nil, "expected LastRunAt to be set via default lookback")
 
@@ -256,7 +216,7 @@ func TestExecuteOperationSkipDefaultLookbackLeavesLastRunAtNil(t *testing.T) {
 			captured = req
 			return nil, nil
 		},
-	}, nil, nil)
+	}, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, captured.LastRunAt == nil, "expected LastRunAt to be nil when SkipDefaultLookback is set")
 }
@@ -278,7 +238,7 @@ func TestExecuteOperationPassesRequestFields(t *testing.T) {
 			captured = req
 			return nil, nil
 		},
-	}, nil, config)
+	}, config)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -309,7 +269,7 @@ func TestExecuteOperationResolvesConfigFromInstallation(t *testing.T) {
 			captured = req
 			return nil, nil
 		},
-	}, nil, nil)
+	}, nil)
 	assert.NilError(t, err)
 	assert.Equal(t, string(captured.Config), `{"filterExpr":"payload.active"}`)
 }
@@ -341,7 +301,7 @@ func TestExecuteOperationRefusesDisabledOperation(t *testing.T) {
 			return nil, nil
 		}
 
-		_, err := rt.ExecuteOperation(context.Background(), installation, op, nil, nil)
+		_, err := rt.ExecuteOperation(context.Background(), installation, op, nil)
 		if !errors.Is(err, operations.ErrOperationDisabled) {
 			t.Fatalf("%s: expected ErrOperationDisabled, got %v", name, err)
 		}
@@ -369,7 +329,7 @@ func TestExecuteOperationExplicitConfigWinsOverStored(t *testing.T) {
 			captured = req
 			return nil, nil
 		},
-	}, nil, json.RawMessage(`{"key":"value"}`))
+	}, json.RawMessage(`{"key":"value"}`))
 	assert.NilError(t, err)
 	assert.Equal(t, string(captured.Config), `{"key":"value"}`)
 }

@@ -496,7 +496,13 @@ type testOAuthCredential struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-var testAuthCredentialRef = types.CredentialRefOf[testOAuthCredential]()
+// testOAuthClient is the client the test OAuth connection provides
+type testOAuthClient struct{}
+
+// testOAuthInstallation is the installation metadata layout of the test OAuth definition
+type testOAuthInstallation struct{}
+
+var testAuthCredentialRef = types.ConnectionOf[testOAuthCredential]().Connection().Credential.Name
 
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
@@ -515,38 +521,26 @@ func (suite *HandlerTestSuite) mockEmailSender() *mockprovider.EmailSender {
 }
 
 func buildTestOAuthDefinition() (types.Definition, error) {
+	connection := types.ConnectionOf[testOAuthCredential]().
+		Name("Test OAuth").
+		Description("Authenticate the test definition using the OAuth callback fixture.").
+		Authenticates(types.NewAuthFlow[testOAuthCredential](testAuthStart, testAuthComplete)).
+		Provides(func(context.Context, types.ConnectionRequest[testOAuthCredential]) (*testOAuthClient, error) {
+			return &testOAuthClient{}, nil
+		}).
+		Verified(func(context.Context, types.ConnectionRequest[testOAuthCredential], *testOAuthClient) (testOAuthInstallation, error) {
+			return testOAuthInstallation{}, nil
+		}).
+		Disconnects("Remove the persisted test OAuth credential and disconnect this installation.", nil)
+
 	return types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          testAuthDefinitionID,
 			DisplayName: "Test OAuth",
 			Active:      true,
 		},
-		CredentialRegistrations: []types.CredentialRegistration{
-			testAuthCredentialRef.Registration(types.CredentialRegistration{
-				Name:        "Test OAuth Credential",
-				Description: "Auth-managed credential slot used by the test OAuth definition.",
-			}),
-		},
-		HealthCheck: types.CredentialHealthCheck(func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-			return json.RawMessage(`{"ok":true}`), nil
-		}),
-		Connections: []types.ConnectionRegistration{
-			{
-				CredentialRef:  testAuthCredentialRef.ID(),
-				Name:           "Test OAuth",
-				Description:    "Authenticate the test definition using the OAuth callback fixture.",
-				CredentialRefs: []types.CredentialSlotID{testAuthCredentialRef.ID()},
-				Auth: &types.AuthRegistration{
-					CredentialRef: testAuthCredentialRef.ID(),
-					Start:         testAuthStart,
-					Complete:      testAuthComplete,
-				},
-				Disconnect: &types.DisconnectRegistration{
-					CredentialRef: testAuthCredentialRef.ID(),
-					Description:   "Remove the persisted test OAuth credential and disconnect this installation.",
-				},
-			},
-		},
+		Installation: types.InstallationOf[testOAuthInstallation]().Registration(),
+		Connections:  []types.Connector{connection},
 	}, nil
 }
 

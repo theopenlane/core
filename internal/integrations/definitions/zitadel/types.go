@@ -9,17 +9,23 @@ import (
 var (
 	// definitionID is the stable identifier for the Zitadel integration definition
 	definitionID = types.NewDefinitionRef("def_01K0ZITADEL000000000000001")
-	// installation is the typed installation metadata handle for the Zitadel definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// zitadelPATCredential is the typed runtime ref for resolving the PAT credential
-	zitadelPATCredential = types.CredentialRefOf[CredentialSchema]()
-	// zitadelOAuthCredential is the typed runtime ref for resolving the OAuth credential
-	zitadelOAuthCredential = types.CredentialRefOf[OAuthCredentialSchema]()
-	// zitadelClient is the client ref for the Zitadel unified API client
-	zitadelClient = types.ClientRefOf[*client.Client]()
+	// installation is the typed installation metadata layout handle for the Zitadel definition
+	installation = types.InstallationOf[InstallationMetadata]()
+	// patConnection is the connection for Personal Access Token credentials
+	patConnection = types.ConnectionOf[CredentialSchema]()
+	// oauthConnection is the connection for OAuth client-credentials
+	oauthConnection = types.ConnectionOf[OAuthCredentialSchema]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )
+
+// Client is the Zitadel API client together with the instance domain it targets
+type Client struct {
+	// Client is the Zitadel API client
+	*client.Client
+	// Domain is the Zitadel instance domain the client was built for
+	Domain string
+}
 
 // CredentialSchema holds the Zitadel instance credentials for one installation
 type CredentialSchema struct {

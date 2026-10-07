@@ -74,18 +74,13 @@ type cloudflareGroupMemberPayload struct {
 }
 
 // runDirectorySync collects Cloudflare account members and emits directory account ingest payloads
-func runDirectorySync(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
-	meta, err := resolveCredential(request.Credentials)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error attempting to resolve credentials")
-		return nil, err
-	}
-
-	if meta.AccountID == "" {
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+	accountID := client.Config.AccountID
+	if accountID == "" {
 		return nil, ErrAccountIDMissing
 	}
 
-	members, err := listDirectoryUsers(ctx, client, meta.AccountID)
+	members, err := listDirectoryUsers(ctx, client, accountID)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +89,7 @@ func runDirectorySync(ctx context.Context, request types.OperationRequest, clien
 	includedUsers := make(map[string]struct{}, len(members))
 
 	for _, m := range members {
-		resource := meta.AccountID + "/" + m.Email
+		resource := accountID + "/" + m.Email
 
 		envelope, err := providerkit.MarshalEnvelope(resource, m, ErrPayloadEncode)
 		if err != nil {
@@ -107,7 +102,7 @@ func runDirectorySync(ctx context.Context, request types.OperationRequest, clien
 		includedUsers[m.Email] = struct{}{}
 	}
 
-	groups, err := listDirectoryGroups(ctx, client, meta.AccountID)
+	groups, err := listDirectoryGroups(ctx, client, accountID)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +111,7 @@ func runDirectorySync(ctx context.Context, request types.OperationRequest, clien
 	membershipEnvelopes := make([]types.MappingEnvelope, 0)
 
 	for _, group := range groups {
-		resource := meta.AccountID + "/" + group.ID
+		resource := accountID + "/" + group.ID
 
 		envelope, err := providerkit.MarshalEnvelope(resource, group, ErrPayloadEncode)
 		if err != nil {
@@ -132,7 +127,7 @@ func runDirectorySync(ctx context.Context, request types.OperationRequest, clien
 		}
 
 		for _, membership := range member.Memberships {
-			resource := meta.AccountID + "/" + membership.GroupID + ":" + membership.UserID
+			resource := accountID + "/" + membership.GroupID + ":" + membership.UserID
 			envelope, err := providerkit.MarshalEnvelope(resource, membership, ErrPayloadEncode)
 			if err != nil {
 				return nil, err

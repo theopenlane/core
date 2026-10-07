@@ -12,8 +12,6 @@ import (
 // Builder returns the Google Drive definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
-		installation := installationRef(cfg)
-
 		return types.Definition{
 			ID:          definitionID.ID(),
 			Family:      "Google Drive",
@@ -28,21 +26,12 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[Config](),
 			},
 			UserInput:    userInput.Registration(),
-			HealthCheck:  driveClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				driveCredential.Registration(types.CredentialRegistration{
-					Name:        "Google Drive Credential",
-					Description: "OAuth credential used to access Google Drive documents.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: driveCredential.ID(),
-					Name:          "Google Drive OAuth",
-					Description:   "Connect your Google account using OAuth to access Drive documents.",
-					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleDriveCred]{
-						CredentialRef: driveCredential,
+			Connections: []types.Connector{
+				oauthConnection.
+					Name("Google Drive OAuth").
+					Description("Connect your Google account using OAuth to access Drive documents.").
+					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleDriveCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
@@ -63,27 +52,20 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,
-					}),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: driveCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google account under Security > Third-party access.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				driveClient.Registration(Client{cfg: cfg}.Build, types.ClientRegistration{
-					Description: "Google Drive API client",
-				}),
+					})).
+					Provides(clientBuilder(cfg)).
+					Verified(verify).
+					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google account under Security > Third-party access.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				documentExportOperation.Description("Export a Google Doc as HTML via the Drive files.export endpoint").Registration(definitionID),
+				documentExportOperation.Description("Export a Google Doc as HTML via the Drive files.export endpoint").Registration(),
 				types.OperationRefOf[FolderSync]().
-					Ingests(driveClient, runFolderSync).
+					Ingests(runFolderSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaInternalPolicy.Name}).
 					Schedule(gala.NewFullFetchSchedule()).
 					Description("List Google Docs in the configured folder and emit policy ingest envelopes").
-					Registration(definitionID),
+					Registration(),
 			},
 			Mappings: []types.MappingRegistration{
 				{

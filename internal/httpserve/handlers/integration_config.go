@@ -59,7 +59,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	}
 
 	if payload.HasCredentialBody() {
-		if err := h.IntegrationsRuntime.ReconcileCredential(systemCtx, installationRec, types.NewCredentialSlotID(payload.CredentialRef), types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}, nil); err != nil {
+		if err := h.IntegrationsRuntime.ReconcileCredential(systemCtx, installationRec, payload.CredentialRef, types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Msg("credential reconcile failed")
 
 			return h.BadRequest(ctx, err)

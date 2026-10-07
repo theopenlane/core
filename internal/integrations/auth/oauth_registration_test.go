@@ -156,13 +156,12 @@ func TestAsAuthCodeOptionReturnsOption(t *testing.T) {
 func TestOAuthRegistrationStartDelegates(t *testing.T) {
 	t.Parallel()
 
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("testCredential"),
-		Config:        testOAuthCfg,
+	reg := types.ConnectionOf[testCredential]().Authenticates(OAuthRegistration(OAuthRegistrationOptions[testCredential]{
+		Config: testOAuthCfg,
 		Material: func(mat OAuthMaterial) (testCredential, error) {
 			return testCredential{AccessToken: mat.AccessToken}, nil
 		},
-	})
+	})).Connection().Auth
 
 	result, err := reg.Start(context.Background(), nil)
 	if err != nil {
@@ -177,13 +176,12 @@ func TestOAuthRegistrationStartDelegates(t *testing.T) {
 func TestOAuthRegistrationCompleteCodeExchangeError(t *testing.T) {
 	t.Parallel()
 
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("testCredential"),
-		Config:        testOAuthCfg,
+	reg := types.ConnectionOf[testCredential]().Authenticates(OAuthRegistration(OAuthRegistrationOptions[testCredential]{
+		Config: testOAuthCfg,
 		Material: func(mat OAuthMaterial) (testCredential, error) {
 			return testCredential{AccessToken: mat.AccessToken}, nil
 		},
-	})
+	})).Connection().Auth
 
 	state := json.RawMessage(`{}`)
 	input := types.AuthCallbackInput{

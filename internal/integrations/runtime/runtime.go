@@ -176,18 +176,13 @@ func New(config Config) (*Runtime, error) {
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		lookupDefinition := func(id string) (types.Definition, bool) { return rt.Registry().Definition(id) }
 
-		return keymaker.NewService(lookupDefinition, func(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
+		return keymaker.NewService(lookupDefinition, func(ctx context.Context, integrationID string, connectionName string, def types.Definition, result types.AuthCompleteResult) error {
 			installation, err := rt.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: integrationID, DefinitionID: def.ID})
 			if err != nil {
 				return err
 			}
 
-			connection, err := def.ConnectionRegistration(credentialRef)
-			if err != nil {
-				return err
-			}
-
-			if err := rt.ReconcileCredential(ctx, installation, connection.Auth.CredentialRef, result.Credential, result.InstallationInput); err != nil {
+			if err := rt.ReconcileCredential(ctx, installation, connectionName, result.Credential); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("installation_id", installation.ID).Msg("failed to reconcile completed auth credential")
 
 				return err

@@ -59,7 +59,9 @@ type iamMembershipPayload struct {
 }
 
 // runDirectorySync collects AWS IAM users, and optionally groups and memberships
-func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *iam.Client, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c Client, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
+	client := c.IAM()
+
 	users, err := listIAMUsers(ctx, client)
 	if err != nil {
 		return nil, err

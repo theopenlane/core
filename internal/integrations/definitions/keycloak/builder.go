@@ -20,39 +20,24 @@ func Builder() registry.Builder {
 			Active:       false,
 			Visible:      true,
 			UserInput:    userInput.Registration(),
-			HealthCheck:  keycloakClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				keycloakCredential.Registration(types.CredentialRegistration{
-					Name:        "Keycloak Credential",
-					Description: "Client credentials used to access Keycloak realm data.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: keycloakCredential.ID(),
-					Name:          "Keycloak Client Credentials",
-					Description:   "Configure Keycloak access using client credentials from your realm.",
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: keycloakCredential.ID(),
-						Description:   "Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				keycloakClient.Registration(Client{}.Build, types.ClientRegistration{
-					Description: "Keycloak API client",
-				}),
+			Connections: []types.Connector{
+				clientCredentials.
+					Name("Keycloak Client Credentials").
+					Description("Configure Keycloak access using client credentials from your realm.").
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[providerkit.DirectorySync]().
-					Ingests(keycloakClient, runDirectorySync).
+					Ingests(runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					SkipDefaultLookback().
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Permissions("view-realm", "view-users", "query-groups", "view-events").
 					Description("Collect Keycloak realm users, groups, and memberships as directory accounts").
-					Registration(definitionID),
+					Registration(),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

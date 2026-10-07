@@ -32,21 +32,12 @@ func Builder(cfg Config) registry.Builder {
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				oidcCredential.Registration(types.CredentialRegistration{
-					Name:        "Local OIDC Credential",
-					Description: "Auth-managed OIDC credential issued by the local Dex development provider.",
-				}),
-			},
-			HealthCheck:  types.CredentialHealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: oidcCredential.ID(),
-					Name:          "Local Dex OIDC",
-					Description:   "Connect through the local Dex development provider to test integration OAuth callback flows end to end.",
-					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[oidcLocalCred]{
-						CredentialRef: oidcCredential,
+			Connections: []types.Connector{
+				oidcConnection.
+					Name("Local Dex OIDC").
+					Description("Connect through the local Dex development provider to test integration OAuth callback flows end to end.").
+					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[oidcLocalCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
@@ -84,19 +75,17 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,
-					}),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: oidcCredential.ID(),
-						Description:   "Removes the stored local Dex credential from Openlane.",
-					},
-				},
+					})).
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored local Dex credential from Openlane.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationPayloadOf[ClaimsInspect]().
-					HandlesRequest(inspectClaims).
+					Handles(inspectClaims).
 					Policy(types.ExecutionPolicy{Inline: true}).
 					Description("Return the raw OIDC ID token claims stored with the auth-managed credential.").
-					Registration(definitionID),
+					Registration(),
 			},
 		}, nil
 	})

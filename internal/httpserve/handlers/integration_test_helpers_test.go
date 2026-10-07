@@ -17,9 +17,15 @@ type githubTestCredential struct {
 	Token string `json:"token"`
 }
 
+// githubTestClient is the client the GitHub disconnect test connection provides
+type githubTestClient struct{}
+
+// githubTestInstallation is the installation metadata layout of the GitHub disconnect test definition
+type githubTestInstallation struct{}
+
 var (
 	githubAppDefinitionID   = githubapp.DefinitionID.ID()
-	githubTestCredentialRef = types.CredentialRefOf[githubTestCredential]()
+	githubTestCredentialRef = types.ConnectionOf[githubTestCredential]().Connection().Credential.Name
 )
 
 // withDefinitionRuntime returns a restore function that resets IntegrationsConfig
@@ -46,6 +52,17 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg
 // githubTestDefinitionBuilder returns a minimal test definition used for disconnect tests
 func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		connection := types.ConnectionOf[githubTestCredential]().
+			Name("GitHub Test Connection").
+			Description("Test connection used for handler disconnect flows.").
+			Provides(func(context.Context, types.ConnectionRequest[githubTestCredential]) (*githubTestClient, error) {
+				return &githubTestClient{}, nil
+			}).
+			Verified(func(context.Context, types.ConnectionRequest[githubTestCredential], *githubTestClient) (githubTestInstallation, error) {
+				return githubTestInstallation{}, nil
+			}).
+			Disconnects("Remove the persisted GitHub test credential and disconnect this installation.", nil)
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -53,27 +70,8 @@ func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				githubTestCredentialRef.Registration(types.CredentialRegistration{
-					Name:        "GitHub Test Credential",
-					Description: "Credential slot used by the GitHub disconnect test definition.",
-				}),
-			},
-			HealthCheck: types.CredentialHealthCheck(func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-				return json.RawMessage(`{"ok":true}`), nil
-			}),
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  githubTestCredentialRef.ID(),
-					Name:           "GitHub Test Connection",
-					Description:    "Test connection used for handler disconnect flows.",
-					CredentialRefs: []types.CredentialSlotID{githubTestCredentialRef.ID()},
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: githubTestCredentialRef.ID(),
-						Description:   "Remove the persisted GitHub test credential and disconnect this installation.",
-					},
-				},
-			},
+			Installation: types.InstallationOf[githubTestInstallation]().Registration(),
+			Connections:  []types.Connector{connection},
 		}, nil
 	})
 }

@@ -1,5 +1,6 @@
 {
-  "version": "f635ce8b33166e55daaca6a1ac8c488e3fbd0716cf3ac8239a5c5694b29304b2",
+  "hash": "86b293aca8c68d72a1d9496fe5df26a64ca2a6d910bbeac63bfcf52b9f2d1e80",
+  "version": "01M49CHH2PQ6VZ1EN88BMEE4P6",
   "surface": {
     "id": "def_01K0TAILSCALE0000000000001",
     "credentials": [
@@ -91,7 +92,7 @@
         "name": "DirectorySync",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale/directory-sync",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/providerkit/directory-sync",
           "$ref": "#/$defs/DirectorySync",
           "$defs": {
             "DirectorySync": {
@@ -109,7 +110,7 @@
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
-                  "description": "Only sync users from Tailscale; disable role-based group sync"
+                  "description": "Only sync users and skip group and membership sync"
                 }
               },
               "additionalProperties": false,

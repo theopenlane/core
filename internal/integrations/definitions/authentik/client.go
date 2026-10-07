@@ -16,21 +16,14 @@ const (
 	authentikRequestTimeout = 30 * time.Second
 )
 
-// Client builds Authentik API clients for one installation
-type Client struct{}
+// buildClient constructs the Authentik API client for one installation
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*authentikSDK.APIClient, error) {
+	cred := req.Credential
 
-// Build constructs the Authentik API client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*authentikSDK.APIClient, error) {
-	cred, err := resolveCredential(req.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if cred.Token == "" {
+	switch {
+	case cred.Token == "":
 		return nil, ErrAPITokenMissing
-	}
-
-	if cred.BaseURL == "" {
+	case cred.BaseURL == "":
 		return nil, ErrBaseURLMissing
 	}
 
@@ -50,18 +43,4 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*authentik
 	cfg.AddDefaultHeader("Authorization", "Bearer "+cred.Token)
 
 	return authentikSDK.NewAPIClient(cfg), nil
-}
-
-// resolveCredential extracts the CredentialSchema from the provided credential bindings
-func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
-	cred, ok, err := authentikCredential.Resolve(bindings)
-	if err != nil {
-		return CredentialSchema{}, ErrCredentialDecode
-	}
-
-	if !ok {
-		return CredentialSchema{}, ErrCredentialDecode
-	}
-
-	return cred, nil
 }

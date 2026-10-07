@@ -17,19 +17,12 @@ import (
 // versionSecondCredential is the credential type behind the extra slot added in the version test
 type versionSecondCredential struct{}
 
-// versionMetadata is the derived installation metadata type behind the surface tests
-type versionMetadata struct {
-	Tenant string `json:"tenant"`
-}
-
 // retiredUserInput is the user input layout an earlier definition version stored
 type retiredUserInput struct {
 	Zone string `json:"zone"`
 }
 
 var (
-	// versionSecondCredentialRef is the extra credential slot added in the version test
-	versionSecondCredentialRef = integrationtypes.CredentialRefOf[versionSecondCredential]()
 	// retiredUserInputRef is the user input layout an earlier definition version stored
 	retiredUserInputRef = integrationtypes.UserInputRefOf[retiredUserInput]()
 	// surfaceUserInputRef is the current layout upgrading documents stored under the retired one
@@ -51,27 +44,17 @@ var (
 
 // surfaceDefinition returns a definition exercising every surfaced kind in reverse name order
 func surfaceDefinition(id string) integrationtypes.Definition {
-	def, clientRef := minimalDefinition(id)
+	def := minimalDefinition(id)
 	defRef := integrationtypes.NewDefinitionRef(id)
 
 	def.UserInput = surfaceUserInputRef.Registration()
-
-	def.Connections = []integrationtypes.ConnectionRegistration{
-		{CredentialRef: testCredentialRef.ID()},
-	}
-
-	def.HealthCheck = &integrationtypes.HealthCheckRegistration{ClientRef: clientRef.ID(), Handle: newTestHandler()}
-
-	def.Installation = integrationtypes.NewInstallationRef(func(context.Context, integrationtypes.InstallationRequest) (versionMetadata, bool, error) {
-		return versionMetadata{}, true, nil
-	}).Registration()
 
 	def.Operations = []integrationtypes.OperationRegistration{
 		{
 			Name:      "sync.users",
 			Replaces:  []string{"sync.people"},
 			Topic:     defRef.OperationTopic("sync.users"),
-			ClientRef: clientRef.ID(),
+			ClientRef: testClientRef,
 			Input:     integrationtypes.InputRegistration{Name: "sync.users", Schema: jsonx.SchemaFrom[finalizeConfig]()},
 			Stored:    true,
 			Handle:    newTestHandler(),
@@ -79,7 +62,7 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 		{
 			Name:      "sync.groups",
 			Topic:     defRef.OperationTopic("sync.groups"),
-			ClientRef: clientRef.ID(),
+			ClientRef: testClientRef,
 			Stored:    true,
 			Input: integrationtypes.InputRegistration{
 				Name:   "sync.groups",
@@ -189,7 +172,7 @@ func TestDefinitionSurface(t *testing.T) {
 		t.Fatalf("static webhook = %+v, want no events and no replacements", surface.Webhooks[1])
 	}
 
-	unfinalized, _ := minimalDefinition("minimal-def")
+	unfinalized := minimalDefinition("minimal-def")
 
 	minimal, err := finalizeDefinition(unfinalized)
 	if err != nil {
@@ -206,7 +189,7 @@ func TestDefinitionSurface(t *testing.T) {
 		t.Fatalf("decode: %v", err)
 	}
 
-	for _, absent := range []string{"userInput", "installation", "webhooks"} {
+	for _, absent := range []string{"userInput", "webhooks"} {
 		if _, present := keys[absent]; present {
 			t.Fatalf("expected %s to be omitted from a surface without it: %s", absent, encoded)
 		}
@@ -270,7 +253,7 @@ func versionOf(t *testing.T, def integrationtypes.Definition) string {
 func TestCommittedVersion(t *testing.T) {
 	t.Parallel()
 
-	def, _ := minimalDefinition("snapshot-def")
+	def := minimalDefinition("snapshot-def")
 
 	hash := versionOf(t, def)
 
@@ -308,40 +291,42 @@ func TestCommittedVersion(t *testing.T) {
 func TestVersionIsStableAndChangesWithTheDefinition(t *testing.T) {
 	t.Parallel()
 
-	base, _ := minimalDefinition("version-def")
-	same, _ := minimalDefinition("version-def")
+	base := minimalDefinition("version-def")
+	same := minimalDefinition("version-def")
 
 	if versionOf(t, base) != versionOf(t, same) {
 		t.Fatal("expected identical definitions to share a version")
 	}
 
-	type testCredential struct {
+	type requiredCredential struct {
 		Token string `json:"token" jsonschema:"required"`
 	}
 
-	requiredField, _ := minimalDefinition("version-def")
-	requiredField.CredentialRegistrations[0].Stored.Schema = jsonx.SchemaFrom[testCredential]()
+	required := base.ConnectionList()[0]
+	required.Credential.Schema = jsonx.SchemaFrom[requiredCredential]()
 
-	addedSlot, _ := minimalDefinition("version-def")
-	addedSlot.CredentialRegistrations = append(addedSlot.CredentialRegistrations, versionSecondCredentialRef.Registration(integrationtypes.CredentialRegistration{}))
+	requiredField := minimalDefinition("version-def")
+	requiredField.Connections = []integrationtypes.Connector{testConnector(required)}
 
-	connectionAdded, _ := minimalDefinition("version-def")
-	connectionAdded.Connections = []integrationtypes.ConnectionRegistration{
-		{CredentialRef: testCredentialRef.ID()},
-	}
-	connectionAdded.HealthCheck = newTestHealthCheck()
+	addedConnection := minimalDefinition("version-def")
+	addedConnection.Connections = append(addedConnection.Connections, testConnectionOf[versionSecondCredential]())
+
+	removedConnection := minimalDefinition("version-def")
+	removedConnection.Connections = nil
+	removedConnection.Installation = nil
+	removedConnection.Operations = nil
 
 	for name, def := range map[string]integrationtypes.Definition{
 		"same slot with a required field": requiredField,
-		"added slot":                      addedSlot,
-		"connection added":                connectionAdded,
+		"added connection":                addedConnection,
+		"connection removed":              removedConnection,
 	} {
 		if versionOf(t, def) == versionOf(t, base) {
 			t.Fatalf("%s: expected the version to change", name)
 		}
 	}
 
-	description, _ := minimalDefinition("version-def")
+	description := minimalDefinition("version-def")
 	description.Description = "changed"
 
 	if versionOf(t, description) != versionOf(t, base) {
@@ -356,12 +341,12 @@ func TestVersionIsStableAndChangesWithTheDefinition(t *testing.T) {
 func TestVersionChangesWhenASlotDeclaresAReplacement(t *testing.T) {
 	t.Parallel()
 
-	base, _ := minimalDefinition("version-def")
+	base := minimalDefinition("version-def")
 
-	slot := testCredentialRef.Replacing(versionSecondCredentialRef)
+	retired := testConnectionOf[versionSecondCredential]()
 
-	replacing, _ := minimalDefinition("version-def")
-	replacing.CredentialRegistrations[0].Replaces = slot.Replaces()
+	replacing := minimalDefinition("version-def")
+	replacing.Connections = []integrationtypes.Connector{testConnectionOf[testCredential]().Replacing(retired)}
 
 	if versionOf(t, replacing) == versionOf(t, base) {
 		t.Fatal("expected declaring a replacement to change the version")
@@ -369,7 +354,7 @@ func TestVersionChangesWhenASlotDeclaresAReplacement(t *testing.T) {
 
 	surface := DefinitionSurface(replacing)
 
-	if got, want := surface.Credentials[0].Replaces, []string{versionSecondCredentialRef.String()}; !slices.Equal(got, want) {
+	if got, want := surface.Credentials[0].Replaces, []string{retired.Connection().Credential.Name}; !slices.Equal(got, want) {
 		t.Fatalf("Replaces = %v, want %v", got, want)
 	}
 }
@@ -446,7 +431,9 @@ func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
 
 	changed := surfaceDefinition("version-def")
 	changed.Description = "a new description"
-	changed.Connections[0].Meta = map[string]integrationtypes.MetaInfo{"note": {Value: "hello"}}
+	changed.Connections = []integrationtypes.Connector{
+		testConnectionOf[testCredential]().Meta(map[string]integrationtypes.MetaInfo{"note": {Value: "hello"}}),
+	}
 	changed.Operations[0].Handle = newTestHandler()
 	changed.Webhooks[1].Events[0].Handle = func(context.Context, integrationtypes.WebhookHandleRequest) error { return nil }
 
@@ -459,22 +446,19 @@ func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
 func TestVersionChangesWhenAuthManagedCredentialSchemaChanges(t *testing.T) {
 	t.Parallel()
 
+	authFlow := integrationtypes.NewAuthFlow[testAuthCredential](nil, nil)
+
 	build := func(storedSchema json.RawMessage) integrationtypes.Definition {
-		def, _ := minimalDefinition("version-def")
-		def.CredentialRegistrations = append(def.CredentialRegistrations, integrationtypes.CredentialRegistration{Ref: testAuthCredentialRef.ID(), Stored: integrationtypes.InputRegistration{Schema: storedSchema}})
-		def.Connections = []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  testAuthCredentialRef.ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{testAuthCredentialRef.ID()},
-				Auth:           &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID()},
-			},
-		}
-		def.HealthCheck = newTestHealthCheck()
+		connection := testConnectionOf[testAuthCredential]().Authenticates(authFlow).Connection()
+		connection.Credential.Schema = storedSchema
+
+		def := minimalDefinition("version-def")
+		def.Connections = []integrationtypes.Connector{testConnector(connection)}
 
 		return def
 	}
 
-	base := build(testAuthCredentialRef.Schema())
+	base := build(jsonx.SchemaFrom[testAuthCredential]())
 	changed := build(json.RawMessage(`{"type":"object","required":["token"]}`))
 
 	if versionOf(t, changed) == versionOf(t, base) {

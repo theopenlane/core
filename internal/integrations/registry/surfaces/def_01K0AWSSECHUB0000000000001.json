@@ -1,5 +1,6 @@
 {
-  "version": "cc61418808a25d24d0aec4e39697e7489312f2cf32191057f127fc1e5340868f",
+  "hash": "7c0e4f60b97ae03e1120aed07a5e45e01d48b30c3dc9f296be98f00de7af41e6",
+  "version": "01M49CHH2MZM8GW7H6HT41J8YR",
   "surface": {
     "id": "def_01K0AWSSECHUB0000000000001",
     "credentials": [
@@ -226,7 +227,7 @@
         "name": "DirectorySync",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/directory-sync",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/providerkit/directory-sync",
           "$ref": "#/$defs/DirectorySync",
           "$defs": {
             "DirectorySync": {
@@ -244,7 +245,7 @@
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
-                  "description": "Only sync users from AWS IAM"
+                  "description": "Only sync users and skip group and membership sync"
                 }
               },
               "additionalProperties": false,

@@ -19,56 +19,48 @@ import (
 // graphScope is the default scope used for Microsoft Graph client requests
 const graphScope = "https://graph.microsoft.com/.default"
 
-// Client builds OneDrive Graph clients for one installation
-type Client struct {
-	// cfg is the operator-level OneDrive configuration
-	cfg Config
-}
+// clientBuilder returns the OneDrive Graph client builder bound to the operator config
+func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[oneDriveCred]) (*DriveClient, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[oneDriveCred]) (*DriveClient, error) {
+		cred := req.Credential
 
-// Build constructs a DriveClient with an auto-refreshing OAuth2 token source
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*DriveClient, error) {
-	cred, _, err := oneDriveCredential.Resolve(req.Credentials)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error decoding onedrive credentials")
-		return nil, ErrCredentialDecode
+		if cred.AccessToken == "" {
+			return nil, ErrOAuthTokenMissing
+		}
+
+		base := fmt.Sprintf(microsoftAuthBaseURL, "common")
+
+		oauthCfg := &oauth2.Config{
+			ClientID:     cfg.ClientID,
+			ClientSecret: cfg.ClientSecret,
+			Endpoint: oauth2.Endpoint{
+				AuthURL:  base + "/authorize",
+				TokenURL: base + "/token",
+			},
+			Scopes: []string{
+				"https://graph.microsoft.com/Files.Read",
+				"https://graph.microsoft.com/User.Read",
+				"offline_access",
+			},
+		}
+
+		ts := oauthCfg.TokenSource(context.Background(), providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+
+		tokenCred := &oauthTokenCredential{ts: ts}
+
+		authProvider, err := kiotaauth.NewAzureIdentityAuthenticationProviderWithScopes(tokenCred, []string{graphScope})
+		if err != nil {
+			return nil, ErrClientBuildFailed
+		}
+
+		adapter, err := msgraphsdk.NewGraphRequestAdapter(authProvider)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error building onedrive client")
+			return nil, ErrClientBuildFailed
+		}
+
+		return &DriveClient{Graph: msgraphsdk.NewGraphServiceClient(adapter), TS: ts, Cfg: cfg}, nil
 	}
-
-	if cred.AccessToken == "" {
-		return nil, ErrOAuthTokenMissing
-	}
-
-	base := fmt.Sprintf(microsoftAuthBaseURL, "common")
-
-	oauthCfg := &oauth2.Config{
-		ClientID:     c.cfg.ClientID,
-		ClientSecret: c.cfg.ClientSecret,
-		Endpoint: oauth2.Endpoint{
-			AuthURL:  base + "/authorize",
-			TokenURL: base + "/token",
-		},
-		Scopes: []string{
-			"https://graph.microsoft.com/Files.Read",
-			"https://graph.microsoft.com/User.Read",
-			"offline_access",
-		},
-	}
-
-	ts := oauthCfg.TokenSource(context.Background(), providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
-
-	tokenCred := &oauthTokenCredential{ts: ts}
-
-	authProvider, err := kiotaauth.NewAzureIdentityAuthenticationProviderWithScopes(tokenCred, []string{graphScope})
-	if err != nil {
-		return nil, ErrClientBuildFailed
-	}
-
-	adapter, err := msgraphsdk.NewGraphRequestAdapter(authProvider)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error building onedrive client")
-		return nil, ErrClientBuildFailed
-	}
-
-	return &DriveClient{Graph: msgraphsdk.NewGraphServiceClient(adapter), TS: ts, Cfg: c.cfg}, nil
 }
 
 // oauthTokenCredential adapts an oauth2.TokenSource to azcore.TokenCredential

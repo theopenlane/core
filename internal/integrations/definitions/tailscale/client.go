@@ -8,21 +8,14 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Client builds Tailscale API clients for one installation
-type Client struct{}
+// buildClient constructs the Tailscale API client for one installation
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*tsclient.Client, error) {
+	cred := req.Credential
 
-// Build constructs the Tailscale API client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*tsclient.Client, error) {
-	cred, err := resolveCredential(req.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if cred.ClientID == "" {
+	switch {
+	case cred.ClientID == "":
 		return nil, ErrClientIDMissing
-	}
-
-	if cred.ClientSecret == "" {
+	case cred.ClientSecret == "":
 		return nil, ErrClientSecretMissing
 	}
 
@@ -35,18 +28,4 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*tsclient.
 		Tailnet: "-",
 		HTTP:    httpClient,
 	}, nil
-}
-
-// resolveCredential extracts the Tailscale credential from the binding set
-func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
-	cred, ok, err := tailscaleCredential.Resolve(bindings)
-	if err != nil {
-		return CredentialSchema{}, ErrCredentialInvalid
-	}
-
-	if !ok {
-		return CredentialSchema{}, ErrCredentialMetadataRequired
-	}
-
-	return cred, nil
 }

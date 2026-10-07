@@ -33,7 +33,7 @@ type DomainScanBuildReportResult struct {
 //
 //nolint:revive
 var DomainScanBuildReportOp = types.OperationPayloadOf[DomainScanBuildReport]().
-	Handles(cloudflareClient, runDomainScanBuildReport).
+	Handles(runDomainScanBuildReport).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
 	CustomerSelectable(false).
 	Internal()

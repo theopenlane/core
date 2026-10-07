@@ -1,5 +1,6 @@
 {
-  "version": "92d7c6b9165bd14cc29e444c24fb6c96796be960dc749b41c7a3229213145966",
+  "hash": "1794ade7d8e4fb91d633861678de3aecdbf1f90b2946125ad02c213caf192b83",
+  "version": "01M49CHH2MZM8GW7H6HPXW4ZWP",
   "surface": {
     "id": "def_01K0AUTHENTIK000000000000001",
     "credentials": [
@@ -87,7 +88,7 @@
         "name": "DirectorySync",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/directory-sync",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/providerkit/directory-sync",
           "$ref": "#/$defs/DirectorySync",
           "$defs": {
             "DirectorySync": {
@@ -105,7 +106,7 @@
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
-                  "description": "Only sync users disable group and membership sync operations"
+                  "description": "Only sync users and skip group and membership sync"
                 }
               },
               "additionalProperties": false,

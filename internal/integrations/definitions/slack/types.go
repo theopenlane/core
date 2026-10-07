@@ -11,14 +11,12 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Slack integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
-	// installation is the typed installation metadata handle for the Slack definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// slackCredential is the auth-managed credential slot used by the OAuth connection
-	slackCredential = types.CredentialRefOf[slackCred]()
-	// slackBotTokenCredential is the credential slot for user-provisioned bot tokens
-	slackBotTokenCredential = types.CredentialRefOf[slackBotTokenCred]()
-	// slackClient is the unified client ref for every Slack operation
-	slackClient = types.ClientRefOf[*SlackClient]()
+	// installation is the typed installation metadata layout handle for the Slack definition
+	installation = types.InstallationOf[InstallationMetadata]()
+	// oauthConnection is the auth-managed connection used by the OAuth method
+	oauthConnection = types.ConnectionOf[slackCred]()
+	// botTokenConnection is the connection for user-provisioned bot tokens
+	botTokenConnection = types.ConnectionOf[slackBotTokenCred]()
 	// userInput is the installation user input layout for the Slack definition
 	userInput = types.UserInputRefOf[UserInput]()
 )
@@ -83,14 +81,6 @@ type InstallationMetadata struct {
 	TeamID string `json:"teamId,omitempty" jsonschema:"title=Team ID"`
 	// TeamName is the Slack workspace display name
 	TeamName string `json:"teamName,omitempty" jsonschema:"title=Team Name"`
-	// DefaultChannel is the Slack channel id used for system notifications
-	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel"`
-}
-
-// InstallationInput is the provider-defined input supplied when installing the Slack integration
-type InstallationInput struct {
-	// DefaultChannel is the Slack channel id used as the default delivery target for system messages
-	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel,description=Slack channel id used as the default delivery target for system notifications"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable

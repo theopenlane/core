@@ -25,45 +25,28 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[Config](),
 			},
 			UserInput:    userInput.Registration(),
-			HealthCheck:  entraCredential.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				entraTenantCredential.Registration(types.CredentialRegistration{
-					Name:        "Azure Entra ID Credential",
-					Description: "OAuth credential used to access Microsoft Graph for Entra ID directory data.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: entraTenantCredential.ID(),
-					Name:          "Azure Entra ID Admin Consent",
-					Description:   "Connect your Azure Entra ID tenant using admin consent.",
-					Auth:          adminConsentRegistration(cfg),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: entraTenantCredential.ID(),
-						Description:   "Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				entraCredential.Registration(CredentialClient{cfg: cfg}.Build, types.ClientRegistration{
-					Description: "Azure client credentials token credential for auth verification",
-				}),
-				entraClient.Registration(GraphClient{cfg: cfg}.Build, types.ClientRegistration{
-					Description: "Microsoft Graph service client for directory operations",
-				}),
+			Connections: []types.Connector{
+				adminConsent.
+					Name("Azure Entra ID Admin Consent").
+					Description("Connect your Azure Entra ID tenant using admin consent.").
+					Authenticates(adminConsentFlow(cfg)).
+					Provides(tokenCredentialClient(cfg)).
+					Provides(graphClient(cfg)).
+					Verified(verify).
+					Disconnects("Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[DirectorySync]().
-					Ingests(entraClient, runDirectorySync).
+					Ingests(runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Permissions("User.Read.All", "Group.Read.All", "GroupMember.Read.All", "Directory.Read.All").
-					HealthCheck(entraClient.HealthCheck(probeDirectory)).
+					HealthCheck(probeDirectory).
 					Description("Collect Azure Entra ID users, groups, and memberships as directory accounts").
-					Registration(definitionID),
+					Registration(),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

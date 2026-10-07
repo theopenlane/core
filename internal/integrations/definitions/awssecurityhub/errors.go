@@ -3,10 +3,6 @@ package awssecurityhub
 import "errors"
 
 var (
-	// ErrCredentialMetadataRequired indicates no credential metadata was provided
-	ErrCredentialMetadataRequired = errors.New("awssecurityhub: credential metadata required")
-	// ErrCredentialMetadataInvalid indicates credential metadata could not be decoded
-	ErrCredentialMetadataInvalid = errors.New("awssecurityhub: credential metadata invalid")
 	// ErrRoleARNMissing indicates the IAM role ARN is missing from the credential
 	ErrRoleARNMissing = errors.New("awssecurityhub: roleArn required")
 	// ErrRoleARNInvalid is returned when the assume-role ARN does not carry an account id
@@ -29,8 +25,6 @@ var (
 	ErrFindingsFetchFailed = errors.New("awssecurityhub: findings fetch failed")
 	// ErrFindingEncode indicates a finding payload could not be serialized
 	ErrFindingEncode = errors.New("awssecurityhub: finding encode failed")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("awssecurityhub: result encode failed")
 	// ErrIAMUsersFetchFailed indicates ListUsers failed
 	ErrIAMUsersFetchFailed = errors.New("awsiam: IAM users fetch failed")
 	// ErrIAMGroupsFetchFailed indicates ListGroups failed

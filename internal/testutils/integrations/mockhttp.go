@@ -25,15 +25,13 @@ var MockHTTPDefinitionID = types.NewDefinitionRef("def_01K0MOCKHTTP0000000000000
 const MockHTTPSyncOperation = "mock.sync"
 
 var (
-	// MockHTTPCredential is the credential slot the mock provider authenticates with
-	MockHTTPCredential = types.CredentialRefOf[mockHTTPCred]()
-	// mockHTTPInstallation is the installation metadata resolver
-	mockHTTPInstallation = types.NewInstallationRef(resolveMockHTTPMetadata)
-	// mockHTTPClient is the client ref for the mock provider
-	mockHTTPClient = types.ClientRefOf[*mockHTTPClientInstance]().Using(MockHTTPCredential)
+	// MockHTTPConnection is the connection the mock provider authenticates with
+	MockHTTPConnection = types.ConnectionOf[mockHTTPCred]()
+	// mockHTTPInstallation is the installation metadata layout of the mock provider
+	mockHTTPInstallation = types.InstallationOf[MockHTTPInstallationMetadata]()
 	// mockHTTPSyncOp is the mock provider's directory sync operation
 	mockHTTPSyncOp = types.NewOperationRef[mockHTTPSync](MockHTTPSyncOperation).
-			Ingests(mockHTTPClient, mockHTTPIngest).
+			Ingests(mockHTTPIngest).
 			Policy(types.ExecutionPolicy{Snapshot: true}).
 			Ingest(
 			types.IngestContract{Schema: entityops.SchemaDirectoryAccount.Name},
@@ -60,16 +58,15 @@ func MockHTTPCredentialSet(token, baseURL string) types.CredentialSet {
 	return credentialSet(mockHTTPCred{Token: token, BaseURL: baseURL})
 }
 
-// mockHTTPClientInstance is the stateless mock provider operation client
-type mockHTTPClientInstance struct{}
+// mockHTTPClientInstance is the mock provider operation client
+type mockHTTPClientInstance struct {
+	// cred is the bearer token and base URL the client requests with
+	cred mockHTTPCred
+}
 
-// buildMockHTTPClient returns the mock provider client if the credential resolves
-func buildMockHTTPClient(_ context.Context, req types.ClientBuildRequest) (*mockHTTPClientInstance, error) {
-	if _, ok, err := MockHTTPCredential.Resolve(req.Credentials); err != nil || !ok {
-		return nil, ErrMockHTTPUnhealthy
-	}
-
-	return &mockHTTPClientInstance{}, nil
+// buildMockHTTPClient returns the mock provider client carrying the decoded credential
+func buildMockHTTPClient(_ context.Context, req types.ConnectionRequest[mockHTTPCred]) (*mockHTTPClientInstance, error) {
+	return &mockHTTPClientInstance{cred: req.Credential}, nil
 }
 
 // MockHTTPInstallationMetadata is the identity the mock provider reports for an installation
@@ -83,41 +80,23 @@ func (m MockHTTPInstallationMetadata) InstallationIdentity() types.IntegrationIn
 	return types.IntegrationInstallationIdentity{ExternalID: m.InstanceID}
 }
 
-// resolveMockHTTPMetadata returns the mock provider's external instance id
-func resolveMockHTTPMetadata(ctx context.Context, req types.InstallationRequest) (MockHTTPInstallationMetadata, bool, error) {
-	body, err := mockHTTPGet(ctx, req.Credentials, "/instance")
+// verifyMockHTTP returns the mock provider's external instance id
+func verifyMockHTTP(ctx context.Context, req types.ConnectionRequest[mockHTTPCred], _ *mockHTTPClientInstance) (MockHTTPInstallationMetadata, error) {
+	body, err := mockHTTPGet(ctx, req.Credential, "/instance")
 	if err != nil {
-		return MockHTTPInstallationMetadata{}, false, err
+		return MockHTTPInstallationMetadata{}, err
 	}
 
 	var metadata MockHTTPInstallationMetadata
 	if err := json.Unmarshal(body, &metadata); err != nil {
-		return MockHTTPInstallationMetadata{}, false, ErrMockHTTPDecode
+		return MockHTTPInstallationMetadata{}, ErrMockHTTPDecode
 	}
 
-	if metadata.InstanceID == "" {
-		return MockHTTPInstallationMetadata{}, false, nil
-	}
-
-	return metadata, true, nil
-}
-
-// mockHTTPHealthCheck returns the mock provider's health check result
-func mockHTTPHealthCheck(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-	if _, err := mockHTTPGet(ctx, req.Credentials, "/health"); err != nil {
-		return nil, err
-	}
-
-	return json.RawMessage(`{"ok":true}`), nil
+	return metadata, nil
 }
 
 // mockHTTPGet returns the response body of a GET to path on the mock provider
-func mockHTTPGet(ctx context.Context, credentials types.CredentialBindings, path string) ([]byte, error) {
-	cred, ok, err := MockHTTPCredential.Resolve(credentials)
-	if err != nil || !ok {
-		return nil, ErrMockHTTPUnhealthy
-	}
-
+func mockHTTPGet(ctx context.Context, cred mockHTTPCred, path string) ([]byte, error) {
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, cred.BaseURL+path, nil)
 	if err != nil {
 		return nil, err
@@ -150,8 +129,8 @@ type mockHTTPDirectory struct {
 }
 
 // mockHTTPIngest returns the mock provider's directory as ingest payload sets
-func mockHTTPIngest(ctx context.Context, req types.OperationRequest, _ *mockHTTPClientInstance, _ mockHTTPSync) ([]types.IngestPayloadSet, error) {
-	body, err := mockHTTPGet(ctx, req.Credentials, "/directory")
+func mockHTTPIngest(ctx context.Context, _ types.OperationRequest, client *mockHTTPClientInstance, _ mockHTTPSync) ([]types.IngestPayloadSet, error) {
+	body, err := mockHTTPGet(ctx, client.cred, "/directory")
 	if err != nil {
 		return nil, err
 	}
@@ -188,32 +167,17 @@ func MockHTTPBuilder() registry.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				MockHTTPCredential.Registration(types.CredentialRegistration{
-					Name:        "Mock HTTP Token",
-					Description: "Bearer token and base URL the mock provider validates.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: MockHTTPCredential.ID(),
-					Name:          "Mock HTTP",
-					Description:   "Connect to the mock HTTP provider and resolve its instance id.",
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: MockHTTPCredential.ID(),
-						Description:   "Remove the persisted mock provider credential and disconnect this installation.",
-					},
-				},
-			},
-			HealthCheck:  types.CredentialHealthCheck(mockHTTPHealthCheck),
 			Installation: mockHTTPInstallation.Registration(),
-			Clients: []types.ClientRegistration{
-				mockHTTPClient.Registration(buildMockHTTPClient, types.ClientRegistration{
-					Description: "Mock provider client built from the stored token and base URL credential.",
-				}),
+			Connections: []types.Connector{
+				MockHTTPConnection.
+					Name("Mock HTTP").
+					Description("Connect to the mock HTTP provider and resolve its instance id.").
+					Provides(buildMockHTTPClient).
+					Verified(verifyMockHTTP).
+					Disconnects("Remove the persisted mock provider credential and disconnect this installation.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				mockHTTPSyncOp.Description("Directory sync ingest for the mock provider").Registration(MockHTTPDefinitionID),
+				mockHTTPSyncOp.Description("Directory sync ingest for the mock provider").Registration(),
 			},
 			Mappings: []types.MappingRegistration{
 				{Schema: entityops.SchemaDirectoryAccount.Name, Spec: types.MappingOverride{MapExpr: "payload"}},

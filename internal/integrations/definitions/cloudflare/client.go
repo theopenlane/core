@@ -35,17 +35,9 @@ type ClientConfig struct {
 	DomainScan domainscan.ReportConfig
 }
 
-// Client builds Cloudflare API clients for one installation
-type Client struct{}
-
-// Build constructs the Cloudflare API client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*CloudflareClient, error) {
-	cred, err := resolveCredential(req.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if cred.APIToken == "" {
+// buildClient constructs the Cloudflare API client for one installation
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*CloudflareClient, error) {
+	if req.Credential.APIToken == "" {
 		return nil, ErrAPITokenMissing
 	}
 
@@ -56,12 +48,12 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*Cloudflar
 
 	return &CloudflareClient{
 		Client: cf.NewClient(
-			option.WithAPIToken(cred.APIToken),
+			option.WithAPIToken(req.Credential.APIToken),
 			option.WithHTTPClient(httpClient),
 		),
 		Config: ClientConfig{
-			AccountID: cred.AccountID,
-			APIToken:  cred.APIToken,
+			AccountID: req.Credential.AccountID,
+			APIToken:  req.Credential.APIToken,
 		},
 	}, nil
 }
@@ -95,17 +87,4 @@ func runtimeCloudflareClientBuilder() func(context.Context, json.RawMessage) (an
 			},
 		}, nil
 	}
-}
-
-func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
-	cred, ok, err := cloudflareCredential.Resolve(bindings)
-	if err != nil {
-		return CredentialSchema{}, ErrCredentialInvalid
-	}
-
-	if !ok {
-		return CredentialSchema{}, ErrCredentialMetadataRequired
-	}
-
-	return cred, nil
 }

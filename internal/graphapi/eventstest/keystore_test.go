@@ -18,11 +18,11 @@ import (
 )
 
 // slotRowIDs returns the ids of every row stored under one slot for an installation
-func slotRowIDs(t *testing.T, ctx context.Context, integrationID string, slot integrationtypes.CredentialSlotID) []string {
+func slotRowIDs(t *testing.T, ctx context.Context, integrationID string, slot string) []string {
 	t.Helper()
 
 	ids, err := suite.Client.DB.Hush.Query().
-		Where(hush.HasIntegrationsWith(integration.IDEQ(integrationID)), hush.SecretNameEQ(slot.String())).
+		Where(hush.HasIntegrationsWith(integration.IDEQ(integrationID)), hush.SecretNameEQ(slot)).
 		IDs(ctx)
 	require.NoError(t, err)
 
@@ -38,16 +38,17 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 
 	installation, _ := newHarnessInstallation(t, ctx, testint.ModeRecurring)
 
-	token := testint.TokenCredential.ID()
-	serviceAccount := testint.ServiceAccountCredential.ID()
+	token := testint.Token.Connection().Credential.Name
+	serviceAccount := testint.ServiceAccount.Connection().Credential.Name
+	oauth := testint.OAuth.Connection().Credential.Name
 
 	t.Run("LoadAllCredentials returns every slot with the newest row winning", func(t *testing.T) {
 		require.NoError(t, store.SaveCredential(ctx, installation, serviceAccount, testint.ServiceAccountCredentialSet("proj", "svc@example.com")))
 
 		require.NoError(t, suite.Client.DB.Hush.Create().
 			SetOwnerID(org.OrganizationID).
-			SetName(token.String()).
-			SetSecretName(token.String()).
+			SetName(token).
+			SetSecretName(token).
 			SetCredentialSet(testint.TokenCredentialSet("newest-token")).
 			AddIntegrationIDs(installation.ID).
 			Exec(ctx))
@@ -66,7 +67,7 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 
 		serviceAccountIDs := slotRowIDs(t, ctx, installation.ID, serviceAccount)
 
-		next := map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
+		next := map[string]integrationtypes.CredentialSet{
 			token:          testint.TokenCredentialSet("replaced-token"),
 			serviceAccount: before[serviceAccount],
 		}
@@ -84,9 +85,9 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 		before, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
 
-		next := map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			serviceAccount:               testint.ServiceAccountCredentialSet("proj", "svc@example.com"),
-			testint.OAuthCredential.ID(): {Data: json.RawMessage(`{"access_token":"a"}`)},
+		next := map[string]integrationtypes.CredentialSet{
+			serviceAccount: testint.ServiceAccountCredentialSet("proj", "svc@example.com"),
+			oauth:          {Data: json.RawMessage(`{"access_token":"a"}`)},
 		}
 		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, next))
 
@@ -94,35 +95,32 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 		require.NoError(t, err)
 		require.Len(t, rows, 2)
 		require.Empty(t, slotRowIDs(t, ctx, installation.ID, token))
-		require.Len(t, slotRowIDs(t, ctx, installation.ID, testint.OAuthCredential.ID()), 1)
+		require.Len(t, slotRowIDs(t, ctx, installation.ID, oauth), 1)
 	})
 
 	t.Run("ReplaceCredentials evicts pooled clients", func(t *testing.T) {
 		builds := 0
 
-		registration := integrationtypes.ClientRegistration{
-			Ref: integrationtypes.ClientRefOf[string]().ID(),
-			Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) {
-				builds++
+		build := func(context.Context, integrationtypes.ConnectionInput) (any, error) {
+			builds++
 
-				return "client", nil
-			},
+			return "client", nil
 		}
 
-		_, err := store.BuildClient(ctx, installation, registration, nil, nil, false)
+		_, err := store.BuildClient(ctx, installation, token, "string", build, integrationtypes.CredentialSet{}, false)
 		require.NoError(t, err)
-		_, err = store.BuildClient(ctx, installation, registration, nil, nil, false)
+		_, err = store.BuildClient(ctx, installation, token, "string", build, integrationtypes.CredentialSet{}, false)
 		require.NoError(t, err)
 		require.Equal(t, 1, builds)
 
 		before, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
 
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
+		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
 			serviceAccount: testint.ServiceAccountCredentialSet("proj", "svc@example.com"),
 		}))
 
-		_, err = store.BuildClient(ctx, installation, registration, nil, nil, false)
+		_, err = store.BuildClient(ctx, installation, token, "string", build, integrationtypes.CredentialSet{}, false)
 		require.NoError(t, err)
 		require.Equal(t, 2, builds)
 	})
@@ -133,7 +131,7 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 
 		require.NoError(t, store.SaveCredential(ctx, installation, token, testint.TokenCredentialSet("concurrent-token")))
 
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
+		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
 			serviceAccount: before[serviceAccount],
 		}))
 
@@ -152,7 +150,7 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 
 		tokenIDs := slotRowIDs(t, ctx, installation.ID, token)
 
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
+		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
 			serviceAccount: before[serviceAccount],
 			token:          testint.TokenCredentialSet("overwritten-token"),
 		}))

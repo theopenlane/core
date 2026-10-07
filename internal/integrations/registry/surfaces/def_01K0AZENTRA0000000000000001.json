@@ -1,5 +1,6 @@
 {
-  "version": "b46dcaee3198103a7e34f91d5243f9e74a830616a709c36a94e4ed6d6c19e084",
+  "hash": "bd63c9b1289f6167c9e331e95fc942e517781b1509b4e26d8bcdf20ec314d3e5",
+  "version": "01M49CHH2NPBMN1CMF8MGZAXAZ",
   "surface": {
     "id": "def_01K0AZENTRA0000000000000001",
     "credentials": [
@@ -114,7 +115,7 @@
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
-                  "description": "Only sync users from Azure Entra ID"
+                  "description": "Only sync users and skip group and membership sync"
                 },
                 "includeGuestUsers": {
                   "type": "boolean",

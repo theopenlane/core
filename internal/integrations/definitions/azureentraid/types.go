@@ -1,9 +1,6 @@
 package azureentraid
 
 import (
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
-
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -11,14 +8,10 @@ import (
 var (
 	// definitionID is the stable identifier for the Azure Entra ID integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	// adminConsent is the connection handle for the consented tenant credential
+	adminConsent = types.ConnectionOf[entraIDCred]()
 	// installation is the typed installation metadata handle for the Azure Entra ID definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// entraTenantCredential is the credential slot holding the consented tenant
-	entraTenantCredential = types.CredentialRefOf[entraIDCred]()
-	// entraCredential is the client ref for the Azure token credential used by the health check
-	entraCredential = types.ClientRefOf[azcore.TokenCredential]()
-	// entraClient is the client ref for the Microsoft Graph service client
-	entraClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]()
+	installation = types.InstallationOf[InstallationMetadata]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )

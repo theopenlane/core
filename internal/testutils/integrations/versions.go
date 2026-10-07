@@ -67,20 +67,20 @@ type tokenV3 struct {
 }
 
 var (
-	// TokenV1 is the version 1 token credential slot
-	TokenV1 = types.CredentialRefOf[tokenV1]()
-	// TokenV2 is the version 2 token credential slot
-	TokenV2 = types.CredentialRefOf[tokenV2]().Replacing(TokenV1).Upgraded(upgradeTokenV2)
-	// TokenV4 is the version 4 token credential slot
-	TokenV4 = types.CredentialRefOf[tokenV3]()
-	// TokenV3 is the version 3 token credential slot
+	// TokenV1 is the version 1 token connection
+	TokenV1 = types.ConnectionOf[tokenV1]()
+	// TokenV2 is the version 2 token connection
+	TokenV2 = types.ConnectionOf[tokenV2]().Replacing(TokenV1).Upgraded(upgradeTokenV2)
+	// TokenV4 is the version 4 token connection
+	TokenV4 = types.ConnectionOf[tokenV3]()
+	// TokenV3 is the version 3 token connection
 	TokenV3 = TokenV4.Replacing(TokenV2).Replacing(TokenV1).Upgraded(upgradeTokenV3)
 )
 
 // upgradeTokenV2 maps a version 1 payload onto the version 2 token shape
 func upgradeTokenV2(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (tokenV2, error) {
 	switch from {
-	case TokenV1.ID().String():
+	case TokenV1.Connection().Credential.Name:
 		old, err := jsonx.Decode[tokenV1](stored)
 		if err != nil {
 			return tokenV2{}, err
@@ -100,12 +100,12 @@ func upgradeTokenV3(_ context.Context, req types.InstallationRequest, from strin
 	)
 
 	switch from {
-	case TokenV1.ID().String():
+	case TokenV1.Connection().Credential.Name:
 		var old tokenV1
 
 		old, err = jsonx.Decode[tokenV1](stored)
 		current = tokenV3{Token: old.AccessToken}
-	case TokenV2.ID().String():
+	case TokenV2.Connection().Credential.Name:
 		var old tokenV2
 
 		old, err = jsonx.Decode[tokenV2](stored)
@@ -229,15 +229,8 @@ func (m versionMetadata) InstallationIdentity() types.IntegrationInstallationIde
 	return types.IntegrationInstallationIdentity{ExternalID: m.ExternalID}
 }
 
-// versionMetadataV3 is the version 3 installation metadata resolver
-var versionMetadataV3 = types.NewInstallationRef(func(_ context.Context, req types.InstallationRequest) (versionMetadata, bool, error) {
-	cred, ok, err := TokenV3.Resolve(req.Credentials)
-	if err != nil || !ok {
-		return versionMetadata{}, false, nil
-	}
-
-	return versionMetadata{ExternalID: req.Integration.ID, Region: cred.Region}, true, nil
-})
+// versionMetadataV3 is the version 3 installation metadata layout
+var versionMetadataV3 = types.InstallationOf[versionMetadata]()
 
 // syncCfg is the stored input layout of the reconcile operation shared by versions 1 and 2
 type syncCfg struct {
@@ -307,7 +300,7 @@ func BuilderV2() registry.Builder {
 }
 
 // sharedVersionBuilder returns a shared test definition builder for one version
-func sharedVersionBuilder[In, Cred any](input types.UserInputRef[In], token types.CredentialRef[Cred], tokenOf func(Cred) string) registry.Builder {
+func sharedVersionBuilder[In, Cred any](input types.UserInputRef[In], token types.ConnectionRef[Cred], tokenOf func(Cred) string) registry.Builder {
 	return func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -315,27 +308,19 @@ func sharedVersionBuilder[In, Cred any](input types.UserInputRef[In], token type
 				DisplayName: "Test Integration",
 				Active:      true,
 			},
-			UserInput: input.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				token.Registration(types.CredentialRegistration{
-					Name: "Test Token",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: token.ID(),
-					Name:          "Test Token",
-					Disconnect:    &types.DisconnectRegistration{CredentialRef: token.ID()},
-				},
-			},
-			HealthCheck: types.CredentialHealthCheck(healthHandler),
-			Clients: []types.ClientRegistration{
-				types.ClientRefOf[*Client]().Using(token).Registration(tokenClient(token, tokenOf), types.ClientRegistration{
-					Description: "Version client built from the token credential.",
-				}),
+			UserInput:    input.Registration(),
+			Installation: types.InstallationOf[versionMetadata]().Registration(),
+			Connections: []types.Connector{
+				token.
+					Name("Test Token").
+					Provides(tokenClient(tokenOf)).
+					Verified(func(_ context.Context, req types.ConnectionRequest[Cred], _ *Client) (versionMetadata, error) {
+						return versionMetadata{ExternalID: req.Integration.ID}, nil
+					}).
+					Disconnects("", nil),
 			},
 			Operations: []types.OperationRegistration{
-				SyncOp.Registration(DefinitionID),
+				SyncOp.Registration(),
 			},
 			Webhooks: []types.WebhookRegistration{
 				WebhookV1V2.Registration(types.WebhookRegistration{}),
@@ -355,7 +340,7 @@ func BuilderV4() registry.Builder {
 }
 
 // latestVersionBuilder returns a shared test definition builder for the latest version
-func latestVersionBuilder(input types.UserInputRef[userInputV3], token types.CredentialRef[tokenV3], operation types.OperationRef[syncCfgV3], webhook types.WebhookRef) registry.Builder {
+func latestVersionBuilder(input types.UserInputRef[userInputV3], token types.ConnectionRef[tokenV3], operation types.OperationRef[syncCfgV3], webhook types.WebhookRef) registry.Builder {
 	return func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -363,28 +348,19 @@ func latestVersionBuilder(input types.UserInputRef[userInputV3], token types.Cre
 				DisplayName: "Test Integration",
 				Active:      true,
 			},
-			UserInput: input.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				token.Registration(types.CredentialRegistration{
-					Name: "Test Token",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: token.ID(),
-					Name:          "Test Token",
-					Disconnect:    &types.DisconnectRegistration{CredentialRef: token.ID()},
-				},
-			},
-			HealthCheck:  types.CredentialHealthCheck(healthHandler),
+			UserInput:    input.Registration(),
 			Installation: versionMetadataV3.Registration(),
-			Clients: []types.ClientRegistration{
-				types.ClientRefOf[*Client]().Using(token).Registration(tokenClient(token, func(c tokenV3) string { return c.Token }), types.ClientRegistration{
-					Description: "Version 3 client built from the version 3 token credential.",
-				}),
+			Connections: []types.Connector{
+				token.
+					Name("Test Token").
+					Provides(tokenClient(func(c tokenV3) string { return c.Token })).
+					Verified(func(_ context.Context, req types.ConnectionRequest[tokenV3], _ *Client) (versionMetadata, error) {
+						return versionMetadata{ExternalID: req.Integration.ID, Region: req.Credential.Region}, nil
+					}).
+					Disconnects("", nil),
 			},
 			Operations: []types.OperationRegistration{
-				operation.Registration(DefinitionID),
+				operation.Registration(),
 			},
 			Webhooks: []types.WebhookRegistration{
 				webhook.Registration(types.WebhookRegistration{}),

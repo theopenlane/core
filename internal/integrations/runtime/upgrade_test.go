@@ -35,6 +35,12 @@ type upgradeUserInput struct {
 	Region string `json:"region" jsonschema:"required,minLength=1"`
 }
 
+// upgradeInstallationMetadata is the installation metadata type with a required non-empty tenant
+type upgradeInstallationMetadata struct {
+	// Tenant is the required non-empty tenant
+	Tenant string `json:"tenant" jsonschema:"required,minLength=1"`
+}
+
 // upgradeCredentialRegion is a credential type whose region is required by presence only
 type upgradeCredentialRegion struct {
 	// Token is the token field
@@ -58,10 +64,10 @@ type retiredOperationConfigCfg struct {
 }
 
 // upgradeRetiredCredential maps a payload stored under the retired slot onto the current credential layout
-func upgradeRetiredCredential(retired types.CredentialRef[retiredCredential]) func(context.Context, types.InstallationRequest, string, json.RawMessage) (upgradeCredential, error) {
+func upgradeRetiredCredential(retired types.ConnectionRef[retiredCredential]) func(context.Context, types.InstallationRequest, string, json.RawMessage) (upgradeCredential, error) {
 	return func(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (upgradeCredential, error) {
 		switch from {
-		case retired.ID().String():
+		case retired.Connection().Credential.Name:
 			old, err := jsonx.Decode[retiredCredential](stored)
 			if err != nil {
 				return upgradeCredential{}, err
@@ -77,7 +83,6 @@ func upgradeRetiredCredential(retired types.CredentialRef[retiredCredential]) fu
 func TestConformDocuments(t *testing.T) {
 	t.Parallel()
 
-	definition := types.NewDefinitionRef("test-def")
 	retiredOp := types.OperationRefOf[retiredOperationConfigCfg]()
 	currentOp := types.OperationRefOf[upgradeOperationConfigCfg]().
 		Replacing(retiredOp).
@@ -95,15 +100,21 @@ func TestConformDocuments(t *testing.T) {
 			}
 		})
 
-	operationDef := types.Definition{Operations: []types.OperationRegistration{currentOp.Registration(definition)}}
+	operationDef := types.Definition{Operations: []types.OperationRegistration{currentOp.Registration()}}
 
-	retiredSlot := types.NewCredentialRef[retiredCredential]("retiredCredential")
-	currentSlot := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retiredSlot).Upgraded(upgradeRetiredCredential(retiredSlot))
+	retiredConnection := types.NewConnection[retiredCredential]("retiredCredential")
+	currentConnection := types.NewConnection[upgradeCredential]("upgradeCredential").Replacing(retiredConnection).Upgraded(upgradeRetiredCredential(retiredConnection))
+	retiredSlot := retiredConnection.Connection().Credential.Name
+	currentSlot := currentConnection.Connection().Credential.Name
 
-	credentialDef := types.Definition{CredentialRegistrations: []types.CredentialRegistration{currentSlot.Registration(types.CredentialRegistration{})}}
+	credentialDef := types.Definition{Connections: []types.Connector{currentConnection}}
 
 	userInput := types.UserInputRefOf[upgradeUserInput]()
 	userInputDef := types.Definition{UserInput: userInput.Registration()}
+
+	installationRef := types.InstallationOf[upgradeInstallationMetadata]()
+	installationDef := types.Definition{Installation: installationRef.Registration()}
+	installationLayout := installationDef.Installation.Name
 
 	hooked := types.UserInputRefOf[upgradeUserInput]().Upgraded(func(context.Context, types.InstallationRequest, string, json.RawMessage) (upgradeUserInput, error) {
 		return upgradeUserInput{}, ErrUpgradeHookCalled
@@ -162,17 +173,17 @@ func TestConformDocuments(t *testing.T) {
 		{
 			name:   "retired credential slot is upgraded onto its replacement",
 			kind:   credentialKind(credentialDef),
-			stored: map[string]json.RawMessage{retiredSlot.String(): json.RawMessage(`{"accessToken":"t"}`)},
-			want:   map[string]string{currentSlot.String(): `{"token":"t","region":""}`},
+			stored: map[string]json.RawMessage{retiredSlot: json.RawMessage(`{"accessToken":"t"}`)},
+			want:   map[string]string{currentSlot: `{"token":"t","region":""}`},
 		},
 		{
 			name: "retired credential slot is dropped unconformed when its replacement is already stored",
 			kind: credentialKind(credentialDef),
 			stored: map[string]json.RawMessage{
-				retiredSlot.String(): json.RawMessage(`{"accessToken":""}`),
-				currentSlot.String(): json.RawMessage(`{"token":"t","region":"eu"}`),
+				retiredSlot: json.RawMessage(`{"accessToken":""}`),
+				currentSlot: json.RawMessage(`{"token":"t","region":"eu"}`),
 			},
-			want: map[string]string{currentSlot.String(): `{"token":"t","region":"eu"}`},
+			want: map[string]string{currentSlot: `{"token":"t","region":"eu"}`},
 		},
 		{
 			name:   "undeclared credential slot is left untouched",
@@ -183,8 +194,20 @@ func TestConformDocuments(t *testing.T) {
 		{
 			name:    "credential that still fails validation is rejected with the credential sentinel",
 			kind:    credentialKind(credentialDef),
-			stored:  map[string]json.RawMessage{retiredSlot.String(): json.RawMessage(`{"accessToken":""}`)},
+			stored:  map[string]json.RawMessage{retiredSlot: json.RawMessage(`{"accessToken":""}`)},
 			wantErr: ErrCredentialInvalid,
+		},
+		{
+			name:   "installation metadata stored under an empty layout is persisted under the current name",
+			kind:   installationKind(installationDef),
+			stored: map[string]json.RawMessage{"": json.RawMessage(`{"tenant":"t"}`)},
+			want:   map[string]string{installationLayout: `{"tenant":"t"}`},
+		},
+		{
+			name:    "installation metadata that fails validation is rejected with the installation sentinel",
+			kind:    installationKind(installationDef),
+			stored:  map[string]json.RawMessage{installationLayout: json.RawMessage(`{"tenant":""}`)},
+			wantErr: ErrInstallationMetadataInvalid,
 		},
 		{
 			name:   "user input stored under an empty layout is persisted under the current name",
@@ -235,38 +258,38 @@ func TestConformDocuments(t *testing.T) {
 func TestConformStored(t *testing.T) {
 	t.Parallel()
 
-	retired := types.NewCredentialRef[retiredCredential]("retiredCredential")
+	retired := types.NewConnection[retiredCredential]("retiredCredential")
 	credentialSchema := jsonx.SchemaFrom[upgradeCredential]()
 
-	filling := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
+	filling := types.NewConnection[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
 		value, err := jsonx.Decode[upgradeCredential](stored)
 		value.Token = "filled"
 
 		return value, err
-	}).Registration(types.CredentialRegistration{})
+	}).Connection()
 
-	idle := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
+	idle := types.NewConnection[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
 		return jsonx.Decode[upgradeCredential](stored)
-	}).Registration(types.CredentialRegistration{})
+	}).Connection()
 
-	retagging := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
+	retagging := types.NewConnection[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
 		value, err := jsonx.Decode[upgradeCredential](stored)
 		value.Region = "override"
 
 		return value, err
-	}).Registration(types.CredentialRegistration{})
+	}).Connection()
 
-	renaming := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retired).Upgraded(upgradeRetiredCredential(retired)).Registration(types.CredentialRegistration{})
+	renaming := types.NewConnection[upgradeCredential]("upgradeCredential").Replacing(retired).Upgraded(upgradeRetiredCredential(retired)).Connection()
 
 	regionSchema := jsonx.SchemaFrom[upgradeCredentialRegion]()
-	regionFilling := types.NewCredentialRef[upgradeCredentialRegion]("upgradeCredentialRegion").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredentialRegion, error) {
+	regionFilling := types.NewConnection[upgradeCredentialRegion]("upgradeCredentialRegion").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredentialRegion, error) {
 		value, err := jsonx.Decode[upgradeCredentialRegion](stored)
 		if value.Region == "" {
 			value.Region = "resolved"
 		}
 
 		return value, err
-	}).Registration(types.CredentialRegistration{})
+	}).Connection()
 
 	tests := []struct {
 		name     string
@@ -309,7 +332,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "missing required without default is filled by the declared upgrade",
 			schema:   credentialSchema,
-			upgrade:  filling.Stored.Upgrade,
+			upgrade:  filling.Credential.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"region":"eu"}`,
 			want:     `{"token":"filled","region":"eu"}`,
@@ -317,7 +340,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "upgrade that leaves the payload invalid is rejected",
 			schema:   credentialSchema,
-			upgrade:  idle.Stored.Upgrade,
+			upgrade:  idle.Credential.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"region":"eu"}`,
 			wantErr:  ErrCredentialInvalid,
@@ -332,7 +355,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "declared upgrade runs even when the stored payload already validates",
 			schema:   credentialSchema,
-			upgrade:  retagging.Stored.Upgrade,
+			upgrade:  retagging.Credential.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"token":"t","region":"eu"}`,
 			want:     `{"token":"t","region":"override"}`,
@@ -340,8 +363,8 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "payload stored under a retired slot is mapped by the declared upgrade",
 			schema:   credentialSchema,
-			upgrade:  renaming.Stored.Upgrade,
-			from:     retired.ID().String(),
+			upgrade:  renaming.Credential.Upgrade,
+			from:     retired.Connection().Credential.Name,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"accessToken":"t"}`,
 			want:     `{"token":"t","region":""}`,
@@ -349,7 +372,7 @@ func TestConformStored(t *testing.T) {
 		{
 			name:     "a required field present but empty is filled by the declared upgrade",
 			schema:   regionSchema,
-			upgrade:  regionFilling.Stored.Upgrade,
+			upgrade:  regionFilling.Credential.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"token":"t","region":""}`,
 			want:     `{"token":"t","region":"resolved"}`,
@@ -386,7 +409,6 @@ func TestConformStored(t *testing.T) {
 func TestLegacyDocuments(t *testing.T) {
 	t.Parallel()
 
-	definition := types.NewDefinitionRef("legacy-def")
 	userInput := types.UserInputRefOf[upgradeUserInput]()
 	sectioned := types.NewOperationRef[upgradeOperationConfigCfg]("DirectorySync")
 	flat := types.NewOperationRef[retiredOperationConfigCfg]("AssetSync")
@@ -395,9 +417,9 @@ func TestLegacyDocuments(t *testing.T) {
 	def := types.Definition{
 		UserInput: userInput.Registration(),
 		Operations: []types.OperationRegistration{
-			sectioned.Registration(definition),
-			flat.Registration(definition),
-			payload.Registration(definition),
+			sectioned.Registration(),
+			flat.Registration(),
+			payload.Registration(),
 		},
 	}
 
@@ -444,11 +466,10 @@ func TestLegacyDocuments(t *testing.T) {
 func TestRetiredHealth(t *testing.T) {
 	t.Parallel()
 
-	definition := types.NewDefinitionRef("health-def")
 	retired := types.NewOperationRef[retiredOperationConfigCfg]("old")
 	current := types.NewOperationRef[upgradeOperationConfigCfg]("current").Replacing(retired)
 
-	def := types.Definition{Operations: []types.OperationRegistration{current.Registration(definition)}}
+	def := types.Definition{Operations: []types.OperationRegistration{current.Registration()}}
 
 	assert.DeepEqual(t, retiredHealth(map[string]string{"old": "failing", "gone": "undeclared"}, def), map[string]string{"current": "failing"})
 	assert.Assert(t, retiredHealth(map[string]string{"gone": "undeclared"}, def) == nil)

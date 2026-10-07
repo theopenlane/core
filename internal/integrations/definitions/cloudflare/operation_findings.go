@@ -21,16 +21,12 @@ const (
 
 // runFindingsCollect collects Cloudflare Security Center insights and emits finding ingest payloads
 func runFindingsCollect(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ FindingsSync) ([]types.IngestPayloadSet, error) {
-	meta, err := resolveCredential(request.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if meta.AccountID == "" {
+	accountID := client.Config.AccountID
+	if accountID == "" {
 		return nil, ErrAccountIDMissing
 	}
 
-	issues, err := fetchSecurityInsights(ctx, client, meta.AccountID)
+	issues, err := fetchSecurityInsights(ctx, client, accountID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error fetching Security Center insights")
 		return nil, ErrFindingsFetchFailed
@@ -42,7 +38,7 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, cli
 			continue
 		}
 
-		envelope, err := providerkit.MarshalEnvelope(meta.AccountID, issue, ErrPayloadEncode)
+		envelope, err := providerkit.MarshalEnvelope(accountID, issue, ErrPayloadEncode)
 		if err != nil {
 			return nil, err
 		}

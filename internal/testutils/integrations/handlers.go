@@ -9,17 +9,20 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// healthHandler validates the bound credential, failing on the marker values
-func healthHandler(_ context.Context, req types.OperationRequest) (json.RawMessage, error) {
-	if sa, ok, err := ServiceAccountCredential.Resolve(req.Credentials); err == nil && ok && sa.ProjectID == FailProjectID {
-		return nil, ErrHealthFailed
+// verifyAny validates the decoded credential, failing on the marker values
+func verifyAny[T any](_ context.Context, req types.ConnectionRequest[T], _ *Client) (testMetadata, error) {
+	switch credential := any(req.Credential).(type) {
+	case serviceAccountCred:
+		if credential.ProjectID == FailProjectID {
+			return testMetadata{}, ErrHealthFailed
+		}
+	case tokenCred:
+		if credential.Token == FailToken {
+			return testMetadata{}, ErrHealthFailed
+		}
 	}
 
-	if tok, ok, err := TokenCredential.Resolve(req.Credentials); err == nil && ok && tok.Token == FailToken {
-		return nil, ErrHealthFailed
-	}
-
-	return json.RawMessage(`{"ok":true}`), nil
+	return testMetadata{}, nil
 }
 
 // repoSyncHandler runs with the built client

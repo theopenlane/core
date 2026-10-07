@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 // documentKind projects one stored document kind onto name-keyed documents
@@ -71,7 +72,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		return fmt.Errorf("resolve provider state: %w", err)
 	}
 
-	req, records, err := r.installationRequest(ctx, installation, def)
+	req, records, err := r.installationRequest(ctx, installation)
 	if err != nil {
 		return fmt.Errorf("load credentials: %w", err)
 	}
@@ -100,13 +101,33 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	operationConfig = types.IntegrationOperationConfig{Operations: operationDocuments}
 
 	providerStateNext := installation.ProviderState
+	nextState := providerState
 
-	if registration, replaced, ok := def.ResolveCredential(providerState.CredentialRef); ok && replaced {
-		providerStateNext, err = def.WithProviderState(installation.ProviderState, types.DefinitionProviderState{CredentialRef: registration.Ref})
+	connection, replaced, resolved := def.ResolveConnection(providerState.CredentialRef)
+
+	switch {
+	case resolved && replaced:
+		nextState.CredentialRef = connection.Credential.Name
+	case providerState.CredentialRef == "" && len(def.ConnectionList()) > 0:
+		named := lo.FilterMap(lo.Keys(records), func(slot string, _ int) (string, bool) {
+			held, _, ok := def.ResolveConnection(slot)
+
+			return held.Credential.Name, ok
+		})
+
+		if unique := lo.Uniq(named); len(unique) == 1 {
+			nextState.CredentialRef = unique[0]
+		}
+	}
+
+	if nextState != providerState {
+		providerStateNext, err = def.WithProviderState(installation.ProviderState, nextState)
 		if err != nil {
 			return fmt.Errorf("resolve provider state: %w", err)
 		}
 	}
+
+	installationMetadataNext, metadataNext := installation.InstallationMetadata, installation.Metadata
 
 	health := installation.Health
 	health.UnhealthyOperations = retiredHealth(installation.Health.UnhealthyOperations, def)
@@ -138,6 +159,54 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 		if err := r.keystore().ReplaceCredentials(ctx, installation, records, credentials); err != nil {
 			return false, fmt.Errorf("replace credentials: %w", err)
+		}
+
+		if def.Installation != nil && len(def.ConnectionList()) > 0 {
+			current, err := tx.Integration.Get(ctx, installation.ID)
+			if err != nil {
+				return false, err
+			}
+
+			stored := map[string]json.RawMessage{}
+
+			if current.InstallationMetadata.Layout != "" || !jsonx.IsEmptyRawMessage(current.InstallationMetadata.Attributes) {
+				stored[current.InstallationMetadata.Layout] = current.InstallationMetadata.Attributes
+			}
+
+			conformed, err := conformDocuments(ctx, req, installationKind(def), stored)
+			if err != nil {
+				return false, fmt.Errorf("upgrade installation metadata: %w", err)
+			}
+
+			if len(conformed) > 0 {
+				attributes := conformed[def.Installation.Name]
+				display := current.InstallationMetadata.Display
+				display.CredentialRef = nextState.CredentialRef
+
+				switch {
+				case def.Installation.Identifiable:
+					identity, err := def.Installation.Identify(attributes)
+					if err != nil {
+						return false, fmt.Errorf("upgrade installation metadata: %w", err)
+					}
+
+					display.ExternalID, display.ExternalName = identity.ExternalID, identity.ExternalName
+				default:
+					display.ExternalID = installation.ID
+				}
+
+				displayMap, _ := jsonx.ToMap(display)
+
+				installationMetadataNext = types.IntegrationInstallationMetadata{Layout: def.Installation.Name, Attributes: attributes, Display: display}
+				metadataNext = mapx.DeepMergeMapAny(current.Metadata, mapx.PruneMapZeroAny(displayMap))
+
+				if err := tx.Integration.UpdateOneID(installation.ID).
+					SetInstallationMetadata(installationMetadataNext).
+					SetMetadata(metadataNext).
+					Exec(ctx); err != nil {
+					return false, err
+				}
+			}
 		}
 
 		if err := tx.Integration.UpdateOneID(installation.ID).
@@ -203,6 +272,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	installation.UserInput = userInput
 	installation.OperationConfig = operationConfig
 	installation.ProviderState = providerStateNext
+	installation.InstallationMetadata = installationMetadataNext
+	installation.Metadata = metadataNext
 	installation.Health = health
 	installation.DefinitionVersion = version
 
@@ -292,11 +363,11 @@ func retiredHealth(unhealthy map[string]string, def types.Definition) map[string
 }
 
 // conformCredentials conforms every stored credential onto its current slot, failing when any credential does not conform
-func conformCredentials(ctx context.Context, req types.InstallationRequest, def types.Definition, records map[types.CredentialSlotID]types.CredentialSet) (map[types.CredentialSlotID]types.CredentialSet, error) {
+func conformCredentials(ctx context.Context, req types.InstallationRequest, def types.Definition, records map[string]types.CredentialSet) (map[string]types.CredentialSet, error) {
 	stored := make(map[string]json.RawMessage, len(records))
 
 	for slot, credential := range records {
-		stored[slot.String()] = credential.Data
+		stored[slot] = credential.Data
 	}
 
 	conformed, err := conformDocuments(ctx, req, credentialKind(def), stored)
@@ -304,10 +375,10 @@ func conformCredentials(ctx context.Context, req types.InstallationRequest, def 
 		return nil, err
 	}
 
-	next := make(map[types.CredentialSlotID]types.CredentialSet, len(conformed))
+	next := make(map[string]types.CredentialSet, len(conformed))
 
 	for name, document := range conformed {
-		next[types.NewCredentialSlotID(name)] = types.CredentialSet{Data: document}
+		next[name] = types.CredentialSet{Data: document}
 	}
 
 	return next, nil
@@ -337,15 +408,30 @@ func conformUserInput(ctx context.Context, req types.InstallationRequest, def ty
 	return types.IntegrationUserInput{Layout: def.UserInput.Name, Data: conformed[def.UserInput.Name]}, nil
 }
 
-// credentialKind projects stored credential slots onto the definition's credential registrations
+// credentialKind projects stored credential slots onto the definition's connections
 func credentialKind(def types.Definition) documentKind {
 	return documentKind{
 		label:    "slot",
 		sentinel: ErrCredentialInvalid,
 		resolve: func(name string) (types.InputRegistration, bool, bool) {
-			registration, replaced, ok := def.ResolveCredential(types.NewCredentialSlotID(name))
+			connection, replaced, ok := def.ResolveConnection(name)
 
-			return registration.Stored, replaced, ok
+			return connection.Credential, replaced, ok
+		},
+	}
+}
+
+// installationKind projects the stored installation metadata document onto the definition's installation layout
+func installationKind(def types.Definition) documentKind {
+	return documentKind{
+		label:    "installation",
+		sentinel: ErrInstallationMetadataInvalid,
+		resolve: func(name string) (types.InputRegistration, bool, bool) {
+			if def.Installation == nil {
+				return types.InputRegistration{}, false, false
+			}
+
+			return def.Installation.InputRegistration, name != def.Installation.Name, true
 		},
 	}
 }

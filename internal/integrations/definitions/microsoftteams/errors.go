@@ -17,6 +17,6 @@ var (
 	ErrResultEncode = errors.New("microsoftteams: result encode failed")
 	// ErrCredentialEncode indicates the credential could not be serialized
 	ErrCredentialEncode = errors.New("microsoftteams: credential encode failed")
-	// ErrCredentialDecode indicates the credential could not be deserialized
-	ErrCredentialDecode = errors.New("microsoftteams: credential decode failed")
+	// ErrTenantUnresolved indicates the access token did not carry a tenant identifier
+	ErrTenantUnresolved = errors.New("microsoftteams: tenant unresolved")
 )

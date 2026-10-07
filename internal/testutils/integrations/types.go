@@ -19,7 +19,7 @@ var DefinitionID = types.NewDefinitionRef("def_01K0TESTDEF0000000000000001")
 
 var (
 	// RepoSyncOp is the async client-resolving operation
-	RepoSyncOp = types.OperationPayloadOf[repoSync]().Handles(testClient, repoSyncHandler)
+	RepoSyncOp = types.OperationPayloadOf[repoSync]().Handles(repoSyncHandler)
 	// ValidatedOp is the inline operation with a required config field
 	ValidatedOp = types.OperationPayloadOf[validatedRun]().HandlesRequest(validatedHandler).Policy(types.ExecutionPolicy{Inline: true})
 	// RecurringOp is the healthy idle loop
@@ -34,18 +34,18 @@ var (
 			Schedule(&gala.Schedule{MinInterval: exhaustingInterval, MaxErrorStreak: exhaustingMaxErrorStreak})
 	// UnresolvableOp is the client-resolving loop seeded without a credential
 	UnresolvableOp = types.OperationRefOf[unresolvableCycle]().
-			Handles(testClient, idleClientCycle).
+			Handles(idleClientCycle).
 			Policy(types.ExecutionPolicy{Reconcile: true}).
 			Schedule(&gala.Schedule{MinInterval: recurringInterval})
 
-	// LegacyTokenCredential is the unregistered legacy token credential slot
-	LegacyTokenCredential = types.CredentialRefOf[legacyTokenCred]()
-	// TokenCredential is the token slot the test client is built from, taking over the legacy slot's payloads
-	TokenCredential = types.CredentialRefOf[tokenCred]().Replacing(LegacyTokenCredential).Upgraded(upgradeLegacyToken)
-	// OAuthCredential is the auth-managed slot filled by the OAuth fixture
-	OAuthCredential = types.CredentialRefOf[oauthTokenCred]()
-	// ServiceAccountCredential is the strict-schema service account credential slot
-	ServiceAccountCredential = types.CredentialRefOf[serviceAccountCred]().Upgraded(func(_ context.Context, req types.InstallationRequest, _ string, stored json.RawMessage) (serviceAccountCred, error) {
+	// LegacyToken is the unregistered legacy token connection
+	LegacyToken = types.ConnectionOf[legacyTokenCred]()
+	// Token is the token connection the test client is built from, taking over the legacy connection's payloads
+	Token = types.ConnectionOf[tokenCred]().Replacing(LegacyToken).Upgraded(upgradeLegacyToken)
+	// OAuth is the auth-managed connection filled by the OAuth fixture
+	OAuth = types.ConnectionOf[oauthTokenCred]()
+	// ServiceAccount is the strict-schema service account connection
+	ServiceAccount = types.ConnectionOf[serviceAccountCred]().Upgraded(func(_ context.Context, req types.InstallationRequest, _ string, stored json.RawMessage) (serviceAccountCred, error) {
 		c, err := jsonx.Decode[serviceAccountCred](stored)
 		if err != nil {
 			return serviceAccountCred{}, err
@@ -58,8 +58,8 @@ var (
 		return c, nil
 	})
 
-	// testClient is the client built from the token credential
-	testClient = types.ClientRefOf[*Client]().Using(TokenCredential)
+	// installation is the installation metadata layout of the shared test definition
+	installation = types.InstallationOf[testMetadata]()
 
 	// WebhookAlertCreated is the webhook event contract
 	WebhookAlertCreated = types.NewWebhookEventRef[webhookAlertEnvelope]("alert.created")
@@ -88,6 +88,9 @@ const (
 )
 
 type repoSync struct{}
+
+// testMetadata is the installation metadata of the shared test definition
+type testMetadata struct{}
 
 // validatedRun is the config for the inline operation with a required field
 type validatedRun struct {
@@ -157,7 +160,7 @@ type legacyTokenCred struct {
 // upgradeLegacyToken maps a payload stored under the legacy token slot onto the current token shape
 func upgradeLegacyToken(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (tokenCred, error) {
 	switch from {
-	case LegacyTokenCredential.ID().String():
+	case LegacyToken.Connection().Credential.Name:
 		legacy, err := jsonx.Decode[legacyTokenCred](stored)
 		if err != nil {
 			return tokenCred{}, err

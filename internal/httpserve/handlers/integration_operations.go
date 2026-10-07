@@ -111,7 +111,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 	}
 
 	if inlineExecution {
-		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, integrationRef, operation, nil, configDoc)
+		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, integrationRef, operation, configDoc)
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation execution failed")
 

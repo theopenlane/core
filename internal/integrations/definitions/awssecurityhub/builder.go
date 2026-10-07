@@ -21,59 +21,31 @@ func Builder(cfg Config) registry.Builder {
 			Tags:         []string{"findings", "directory", "assets"},
 			Active:       true,
 			Visible:      true,
-			HealthCheck:  securityHubClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				awsAssumeRoleCredential.Registration(types.CredentialRegistration{
-					Name:        "AWS Assume Role",
-					Description: "Cross-account IAM role used to access Security Hub.",
-					Recommended: true,
-				}),
-				awsServiceAccountCredential.Registration(types.CredentialRegistration{
-					Name:        "AWS Static Credentials",
-					Description: "Static IAM access keys for direct Security Hub access without assume-role.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: awsAssumeRoleCredential.ID(),
-					Name:          "AWS Assume Role",
-					Description:   "Configure Security Hub access using a cross-account IAM role.",
-					Meta: map[string]types.MetaInfo{
+			Connections: []types.Connector{
+				assumeRole.
+					Name("AWS Assume Role").
+					Description("Configure Security Hub access using a cross-account IAM role.").
+					Recommended().
+					Meta(map[string]types.MetaInfo{
 						"Openlane Principal ARN": {
 							Value:     cfg.ARN,
 							AllowCopy: true,
 						},
-					},
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: awsAssumeRoleCredential.ID(),
-						Description:   "Removes the stored IAM assume-role configuration from Openlane. If the cross-account IAM role is no longer needed, delete it from your AWS account.",
-					},
-				},
-				{
-					CredentialRef: awsServiceAccountCredential.ID(),
-					Name:          "AWS Static Credentials",
-					Description:   "Configure Security Hub access using static IAM access keys.",
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: awsServiceAccountCredential.ID(),
-						Description:   "Removes the stored IAM access key credentials from Openlane. If the IAM user is no longer needed, delete it from your AWS account.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				securityHubClient.Registration(SecurityHubClientBuilder{cfg: cfg}.Build, types.ClientRegistration{
-					Description: "AWS Security Hub client",
-				}),
-				configServiceClient.Registration(ConfigServiceClientBuilder{cfg: cfg}.Build, types.ClientRegistration{
-					Description: "AWS Config client",
-				}),
-				iamClient.Registration(IAMClientBuilder{cfg: cfg}.Build, types.ClientRegistration{
-					Description: "AWS IAM client",
-				}),
+					}).
+					Provides(assumeRoleClient(cfg)).
+					Verified(verifyAssumeRole).
+					Disconnects("Removes the stored IAM assume-role configuration from Openlane. If the cross-account IAM role is no longer needed, delete it from your AWS account.", nil),
+				staticCredentials.
+					Name("AWS Static Credentials").
+					Description("Configure Security Hub access using static IAM access keys.").
+					Provides(staticClient).
+					Verified(verifyStatic).
+					Disconnects("Removes the stored IAM access key credentials from Openlane. If the IAM user is no longer needed, delete it from your AWS account.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[FindingSync]().
-					Ingests(securityHubClient, runFindingsCollect).
+					Ingests(runFindingsCollect).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(
 						types.IngestContract{Schema: entityops.SchemaFinding.Name},
@@ -81,18 +53,18 @@ func Builder(cfg Config) registry.Builder {
 					).
 					Permissions("AWSSecurityHubReadOnlyAccess").
 					Description("Collect AWS Security Hub for findings and vulnerability ingestion").
-					Registration(definitionID),
+					Registration(),
 				types.OperationRefOf[providerkit.DirectorySync]().
-					Ingests(iamClient, runDirectorySync).
+					Ingests(runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Permissions("iam:ListUsers", "iam:ListGroups", "iam:ListGroupsForUser", "iam:ListUserTags").
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().
 					Description("Sync AWS IAM users, groups, and memberships as directory accounts").
-					Registration(definitionID),
+					Registration(),
 				types.OperationRefOf[CheckSync]().
-					Ingests(configServiceClient, runCheckSync).
+					Ingests(runCheckSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaCheckResult.Name}).
 					Permissions(
@@ -104,15 +76,15 @@ func Builder(cfg Config) registry.Builder {
 					).
 					DisabledForAll(true).
 					Description("Sync AWS Config rules and check results").
-					Registration(definitionID),
+					Registration(),
 				types.OperationRefOf[AssetSync]().
-					Ingests(configServiceClient, runAssetSync).
+					Ingests(runAssetSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaAsset.Name}).
 					Permissions("AWSSecurityHubReadOnlyAccess").
 					DisabledForAll(true).
 					Description("Sync assets from AWS").
-					Registration(definitionID),
+					Registration(),
 			},
 			Mappings: append([]types.MappingRegistration{
 				providerkit.FindingMapping(mapExprFinding),

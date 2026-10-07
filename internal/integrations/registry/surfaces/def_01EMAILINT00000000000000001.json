@@ -1,5 +1,6 @@
 {
-  "version": "626b6099041f7861c0165abebaa653e467d34ac0243cfaf48da2777e9bf701c5",
+  "hash": "1eef7dec386bef6956aaa19b6ef9e9ded1c87df5a6afe067b9e0a1b174471023",
+  "version": "01M4A6JGR0FY812CJSXEMVR843",
   "surface": {
     "id": "def_01EMAILINT00000000000000001",
     "credentials": [
@@ -62,6 +63,27 @@
               "fromEmail",
               "companyName"
             ]
+          }
+        }
+      }
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/email/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "provider": {
+                "type": "string"
+              },
+              "fromEmail": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
           }
         }
       }

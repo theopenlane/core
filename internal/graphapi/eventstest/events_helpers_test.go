@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keystore"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -70,15 +71,21 @@ func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*en
 	installation, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, ownerID, "", def, nil, testint.ModeOperationConfig(mode))
 	require.NoError(t, err)
 
-	credentialRef := testint.TokenCredential.ID()
+	credentialRef := testint.Token.Connection().Credential.Name
 	credential := testint.TokenCredentialSet("test-token")
 
 	if mode == testint.ModeUnresolvable {
-		credentialRef = testint.ServiceAccountCredential.ID()
+		credentialRef = testint.ServiceAccount.Connection().Credential.Name
 		credential = testint.ServiceAccountCredentialSet("test-project", "svc@example.com")
 	}
 
-	require.NoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, installation, credentialRef, credential, nil))
+	require.NoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, installation, credentialRef, credential))
+
+	if mode == testint.ModeUnresolvable {
+		store, err := keystore.NewStore(suite.Client.DB)
+		require.NoError(t, err)
+		require.NoError(t, store.DeleteCredential(ctx, installation.ID))
+	}
 
 	fragment := reconcileLoopFragment(t, installation.ID, harnessReconcileOperation(t, mode))
 

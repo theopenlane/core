@@ -20,37 +20,22 @@ func Builder() registry.Builder {
 			Active:       true,
 			Visible:      true,
 			UserInput:    userInput.Registration(),
-			HealthCheck:  authentikClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				authentikCredential.Registration(types.CredentialRegistration{
-					Name:        "Authentik Credential",
-					Description: "API token used to access Authentik instance data.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: authentikCredential.ID(),
-					Name:          "Authentik API Token",
-					Description:   "Configure Authentik access using an API token from your instance.",
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: authentikCredential.ID(),
-						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				authentikClient.Registration(Client{}.Build, types.ClientRegistration{
-					Description: "Authentik API client",
-				}),
+			Connections: []types.Connector{
+				authentikConnection.
+					Name("Authentik API Token").
+					Description("Configure Authentik access using an API token from your instance.").
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[providerkit.DirectorySync]().
-					Ingests(authentikClient, runDirectorySync).
+					Ingests(runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
 					Ingest(providerkit.DirectoryIngestContracts()...).
 					Description("Collect Authentik directory users, groups, and memberships as directory accounts").
-					Registration(definitionID),
+					Registration(),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

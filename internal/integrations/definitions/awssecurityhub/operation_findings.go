@@ -23,17 +23,15 @@ const (
 )
 
 // runFindingsCollect collects Security Hub findings
-func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *securityhub.Client, _ FindingSync) ([]types.IngestPayloadSet, error) {
+func runFindingsCollect(ctx context.Context, request types.OperationRequest, c Client, _ FindingSync) ([]types.IngestPayloadSet, error) {
 	var (
 		findingEnvelopes       []types.MappingEnvelope
 		vulnerabilityEnvelopes []types.MappingEnvelope
 		nextToken              *string
 	)
 
-	filters, err := buildFilters(ctx, request.Credentials, request.LastRunAt)
-	if err != nil {
-		return nil, err
-	}
+	filters := buildFilters(c.Scope, request.LastRunAt)
+	hub := c.SecurityHub()
 
 	if filters.AwsAccountId != nil {
 		logx.FromContext(ctx).Debug().Interface("account filters", filters.AwsAccountId).Msg("awssecurityhub: using the account filter")
@@ -50,7 +48,7 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *
 			input.NextToken = nextToken
 		}
 
-		resp, err := c.GetFindings(ctx, input)
+		resp, err := hub.GetFindings(ctx, input)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("awssecurityhub: error fetching findings")
 			return nil, ErrFindingsFetchFailed
@@ -88,19 +86,15 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *
 	}, nil
 }
 
-func buildFilters(ctx context.Context, creds types.CredentialBindings, lastRunAt *time.Time) (*securityhubtypes.AwsSecurityFindingFilters, error) {
+// buildFilters builds the Security Hub finding filters for the collection scope and last run time
+func buildFilters(scope CollectionScope, lastRunAt *time.Time) *securityhubtypes.AwsSecurityFindingFilters {
 	filters := &securityhubtypes.AwsSecurityFindingFilters{}
-	meta, err := resolveAssumeRoleCredential(creds)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("awssecurityhub: error resolving credentials for filter")
 
-		return nil, err
-	}
-
-	if meta.AccountScope != AccountScopeAll {
-		if len(meta.AccountIDs) > 0 {
-			accountFilters := make([]securityhubtypes.StringFilter, len(meta.AccountIDs))
-			for i, id := range meta.AccountIDs {
+	if scope.AccountScope != AccountScopeAll {
+		switch {
+		case len(scope.AccountIDs) > 0:
+			accountFilters := make([]securityhubtypes.StringFilter, len(scope.AccountIDs))
+			for i, id := range scope.AccountIDs {
 				accountFilters[i] = securityhubtypes.StringFilter{
 					Value:      aws.String(id),
 					Comparison: securityhubtypes.StringFilterComparisonEquals,
@@ -108,21 +102,19 @@ func buildFilters(ctx context.Context, creds types.CredentialBindings, lastRunAt
 			}
 
 			filters.AwsAccountId = accountFilters
-		} else if meta.AccountID != "" {
-			accountFilters := make([]securityhubtypes.StringFilter, 1)
-
-			accountFilters[0] = securityhubtypes.StringFilter{
-				Value:      aws.String(meta.AccountID),
-				Comparison: securityhubtypes.StringFilterComparisonEquals,
+		case scope.AccountID != "":
+			filters.AwsAccountId = []securityhubtypes.StringFilter{
+				{
+					Value:      aws.String(scope.AccountID),
+					Comparison: securityhubtypes.StringFilterComparisonEquals,
+				},
 			}
-
-			filters.AwsAccountId = accountFilters
 		}
 	}
 
-	if len(meta.LinkedRegions) > 0 {
-		regionFilters := make([]securityhubtypes.StringFilter, len(meta.LinkedRegions))
-		for i, reg := range meta.LinkedRegions {
+	if len(scope.LinkedRegions) > 0 {
+		regionFilters := make([]securityhubtypes.StringFilter, len(scope.LinkedRegions))
+		for i, reg := range scope.LinkedRegions {
 			regionFilters[i] = securityhubtypes.StringFilter{
 				Value:      aws.String(reg),
 				Comparison: securityhubtypes.StringFilterComparisonEquals,
@@ -141,7 +133,7 @@ func buildFilters(ctx context.Context, creds types.CredentialBindings, lastRunAt
 		}
 	}
 
-	return filters, nil
+	return filters
 }
 
 // buildFindingEnvelope serializes one Security Hub finding into an ingest envelope

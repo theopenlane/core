@@ -14,7 +14,7 @@ import (
 )
 
 // MessageSendOp is the operation ref for the Slack message send operation
-var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(slackClient, MessageSend{}.Run).Permissions(scopes...) //nolint:revive
+var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(MessageSend{}.Run).Permissions(scopes...) //nolint:revive
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {

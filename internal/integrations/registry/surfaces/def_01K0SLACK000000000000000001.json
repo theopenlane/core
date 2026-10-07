@@ -1,5 +1,6 @@
 {
-  "version": "e9a413a808086030d42130f8234ebaf7b0c63d566387eb6458fe95f2003c35e3",
+  "hash": "215f8967eb644ffbd2ddf167ce34305bf061deedec1b28a4a904e3743f85ffcf",
+  "version": "01M4A6JGR5QZEWAH24J7259TZG",
   "surface": {
     "id": "def_01K0SLACK000000000000000001",
     "credentials": [
@@ -88,10 +89,6 @@
               "teamName": {
                 "type": "string",
                 "title": "Team Name"
-              },
-              "defaultChannel": {
-                "type": "string",
-                "title": "Default Channel"
               }
             },
             "additionalProperties": false,

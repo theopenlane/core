@@ -13,12 +13,21 @@ type AuthCompleteFunc func(ctx context.Context, state json.RawMessage, input Aut
 
 // AuthRegistration describes how one connection mode starts and completes auth
 type AuthRegistration struct {
-	// CredentialRef identifies which credential slot receives the auth result
-	CredentialRef CredentialSlotID `json:"credentialRef"`
 	// Start initiates the auth flow
 	Start AuthStartFunc `json:"-"`
 	// Complete finalizes the auth flow and returns the resulting credential
 	Complete AuthCompleteFunc `json:"-"`
+}
+
+// AuthFlow is an auth registration whose completed credential is T
+type AuthFlow[T any] struct {
+	// registration is the erased auth registration
+	registration AuthRegistration
+}
+
+// NewAuthFlow creates a typed auth flow from its start and complete functions
+func NewAuthFlow[T any](start AuthStartFunc, complete AuthCompleteFunc) AuthFlow[T] {
+	return AuthFlow[T]{registration: AuthRegistration{Start: start, Complete: complete}}
 }
 
 // AuthStartResult captures the output of an auth start function
@@ -33,8 +42,6 @@ type AuthStartResult struct {
 type AuthCompleteResult struct {
 	// Credential is the credential material produced by the auth flow
 	Credential CredentialSet `json:"credential"`
-	// InstallationInput is optional installation-scoped input captured during auth completion
-	InstallationInput json.RawMessage `json:"installationInput,omitempty"`
 }
 
 // AuthCallbackValue captures one callback parameter and its values

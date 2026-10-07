@@ -28,6 +28,15 @@ type directoryMembershipPayload struct {
 	Member *oktagosdk.User `json:"member,omitempty"`
 }
 
+// probeUser verifies the Okta token can read users
+func probeUser(ctx context.Context, _ types.OperationRequest, c *oktagosdk.APIClient) error {
+	if _, _, err := c.UserAPI.GetUser(ctx, "me").Execute(); err != nil {
+		return types.Degraded(ErrUserLookupFailed, "the Okta token cannot read users; grant the users read scope")
+	}
+
+	return nil
+}
+
 // runDirectorySync collects Okta directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *oktagosdk.APIClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c, cfg)

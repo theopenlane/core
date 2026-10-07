@@ -4,11 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"reflect"
 	"slices"
 	"testing"
-
-	"github.com/samber/lo"
 
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -42,7 +39,7 @@ func finalizeOperation[Cfg integrationtypes.OperationInput]() integrationtypes.O
 		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, Cfg) (json.RawMessage, error) {
 			return nil, nil
 		}).
-		Registration(finalizeDefinitionRef)
+		Registration()
 }
 
 // operationDefinition returns a definition with the given operations
@@ -68,72 +65,6 @@ func propertyKeys(t *testing.T, schema json.RawMessage) []string {
 	}
 
 	return keys
-}
-
-// sameJSON reports whether two raw documents decode to the same value regardless of encoding
-func sameJSON(a, b json.RawMessage) bool {
-	var left, right any
-
-	if err := json.Unmarshal(a, &left); err != nil {
-		return false
-	}
-
-	if err := json.Unmarshal(b, &right); err != nil {
-		return false
-	}
-
-	return reflect.DeepEqual(left, right)
-}
-
-// TestFinalizeCredentialFormSchema verifies form/stored schema derivation across slot kinds
-func TestFinalizeCredentialFormSchema(t *testing.T) {
-	t.Parallel()
-
-	literalSchema := json.RawMessage(`{"type":"object"}`)
-	literalSlot := integrationtypes.NewCredentialSlotID("literal")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_finalize_credentials"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			testCredentialRef.Registration(integrationtypes.CredentialRegistration{}),
-			testAuthCredentialRef.Registration(integrationtypes.CredentialRegistration{}),
-			{Ref: literalSlot, Schema: literalSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef: testAuthCredentialRef.ID(),
-				Auth:          &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID()},
-			},
-		},
-	}
-
-	finalized, err := finalizeDefinition(def)
-	if err != nil {
-		t.Fatalf("finalizeDefinition() error = %v", err)
-	}
-
-	form, _ := finalized.CredentialRegistration(testCredentialRef.ID())
-	if !sameJSON(form.Schema, testCredentialRef.Schema()) {
-		t.Fatalf("form slot Schema = %s, want its stored schema", form.Schema)
-	}
-
-	authManaged, _ := finalized.CredentialRegistration(testAuthCredentialRef.ID())
-	if len(authManaged.Schema) != 0 {
-		t.Fatalf("auth-managed slot Schema = %s, want empty", authManaged.Schema)
-	}
-
-	if !sameJSON(authManaged.Stored.Schema, testAuthCredentialRef.Schema()) {
-		t.Fatalf("auth-managed slot Stored.Schema = %s, want the reflected schema", authManaged.Stored.Schema)
-	}
-
-	literal, _ := finalized.CredentialRegistration(literalSlot)
-	if !sameJSON(literal.Stored.Schema, literalSchema) || !sameJSON(literal.Schema, literalSchema) {
-		t.Fatalf("literal slot = %+v, want stored and form schema from the literal", literal)
-	}
-
-	if len(def.CredentialRegistrations[0].Schema) != 0 {
-		t.Fatal("expected finalize to leave the builder's registrations untouched")
-	}
 }
 
 // TestFinalizeKeepsEmbeddedOperationInputSchema verifies a stored-input config's embedded settings lead its one schema
@@ -205,7 +136,7 @@ func TestFinalizeValidatesOperationFilterExpr(t *testing.T) {
 
 			return nil
 		}).
-		Registration(finalizeDefinitionRef)
+		Registration()
 
 	finalized, err := finalizeDefinition(operationDefinition(limited, finalizeOperation[finalizeEmptyConfig]()))
 	if err != nil {
@@ -249,7 +180,7 @@ func TestFinalizeLeavesOperationsWithoutInput(t *testing.T) {
 		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, finalizePayload) (json.RawMessage, error) {
 			return nil, nil
 		}).
-		Registration(finalizeDefinitionRef)
+		Registration()
 
 	def := operationDefinition(integrationtypes.OperationRegistration{Name: "literal", Handle: newTestHandler()}, payload)
 
@@ -266,63 +197,5 @@ func TestFinalizeLeavesOperationsWithoutInput(t *testing.T) {
 
 	if got := propertyKeys(t, finalized.Operations[1].Input.Schema); !slices.Equal(got, []string{"target"}) {
 		t.Fatalf("payload config properties = %v, want only the payload keys", got)
-	}
-}
-
-// TestFinalizeDefaultsCredentialSlots verifies clients and connections without slots take the declared ones
-func TestFinalizeDefaultsCredentialSlots(t *testing.T) {
-	t.Parallel()
-
-	clientRef := integrationtypes.ClientRefOf[string]()
-	explicit := integrationtypes.NewClientRef[int]("explicit").Using(testAuthCredentialRef)
-	build := func(context.Context, integrationtypes.ClientBuildRequest) (string, error) { return "", nil }
-	buildInt := func(context.Context, integrationtypes.ClientBuildRequest) (int, error) { return 0, nil }
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_finalize_slots"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			testCredentialRef.Registration(integrationtypes.CredentialRegistration{}),
-			testAuthCredentialRef.Registration(integrationtypes.CredentialRegistration{}),
-		},
-		Clients: []integrationtypes.ClientRegistration{
-			clientRef.Registration(build, integrationtypes.ClientRegistration{}),
-			explicit.Registration(buildInt, integrationtypes.ClientRegistration{}),
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{CredentialRef: testCredentialRef.ID()},
-			{CredentialRef: testAuthCredentialRef.ID(), CredentialRefs: []integrationtypes.CredentialSlotID{testAuthCredentialRef.ID(), testCredentialRef.ID()}},
-		},
-	}
-
-	finalized, err := finalizeDefinition(def)
-	if err != nil {
-		t.Fatalf("finalizeDefinition() error = %v", err)
-	}
-
-	declared := []integrationtypes.CredentialSlotID{testCredentialRef.ID(), testAuthCredentialRef.ID()}
-
-	if got := finalized.Clients[0].CredentialRefs; !slices.Equal(got, declared) {
-		t.Fatalf("defaulted client CredentialRefs = %v, want every declared slot", got)
-	}
-
-	if got := finalized.Clients[1].CredentialRefs; !slices.Equal(got, []integrationtypes.CredentialSlotID{testAuthCredentialRef.ID()}) {
-		t.Fatalf("explicit client CredentialRefs = %v, want the declared slot kept", got)
-	}
-
-	if got := finalized.Connections[0].CredentialRefs; !slices.Equal(got, []integrationtypes.CredentialSlotID{testCredentialRef.ID()}) {
-		t.Fatalf("defaulted connection CredentialRefs = %v, want the selecting slot", got)
-	}
-
-	if got := finalized.Connections[1].CredentialRefs; len(got) != 2 {
-		t.Fatalf("explicit connection CredentialRefs = %v, want the authored slots kept", got)
-	}
-
-	if len(def.Clients[0].CredentialRefs) != 0 || len(def.Connections[0].CredentialRefs) != 0 {
-		t.Fatal("expected finalize to leave the builder's registrations untouched")
-	}
-
-	names := lo.Map(finalized.Clients, func(client integrationtypes.ClientRegistration, _ int) string { return client.Ref.String() })
-	if !slices.Equal(names, []string{clientRef.ID().String(), explicit.ID().String()}) {
-		t.Fatalf("expected client order preserved, got %v", names)
 	}
 }

@@ -12,41 +12,30 @@ import (
 func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
-			ID:          DefinitionID.ID(),
-			Family:      "email",
-			DisplayName: "Email",
-			Description: "Send templated transactional and campaign emails via resend.",
-			Category:    "messaging",
-			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/email/overview",
-			Tags:        []string{"email", "messaging", "notifications"},
-			Active:      true,
-			Visible:     true,
-			CredentialRegistrations: []types.CredentialRegistration{
-				emailCredentialRef.Registration(types.CredentialRegistration{
-					Name:        "Email Provider Credential",
-					Description: "API key and provider selection for email delivery",
-				}),
-			},
-			HealthCheck: emailClientRef.HealthCheck(checkHealth),
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: emailCredentialRef.ID(),
-					Name:          "Email Provider API Key",
-					Description:   "Configure email delivery using an API key for resend, sendgrid, or postmark",
-				},
-			},
-			Clients: []types.ClientRegistration{
-				emailClientRef.Registration(buildCustomerClient, types.ClientRegistration{
-					Description: "Email provider client via newman",
-				}),
+			ID:           DefinitionID.ID(),
+			Family:       "email",
+			DisplayName:  "Email",
+			Description:  "Send templated transactional and campaign emails via resend.",
+			Category:     "messaging",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/email/overview",
+			Tags:         []string{"email", "messaging", "notifications"},
+			Active:       true,
+			Visible:      true,
+			Installation: installation.Registration(),
+			Connections: []types.Connector{
+				apiKeyConnection.
+					Name("Email Provider API Key").
+					Description("Configure email delivery using an API key for resend, sendgrid, or postmark").
+					Provides(buildCustomerClient).
+					Verified(verify),
 			},
 			UserInput: userInput.Registration(),
 			Operations: append(AllEmailOperations(),
-				SendEmailOp.Description("Send a single templated email").Registration(DefinitionID),
-				SendCampaignOp.Description("Dispatch an email campaign").Registration(DefinitionID),
-				SendQuestionnaireCampaignOp.Description("Dispatch a questionnaire campaign").Registration(DefinitionID),
-				RecurringCampaignOp.Description("Dispatch due recurring campaigns").Registration(DefinitionID),
-				TrustCenterNotificationOp.Description("Notify trust center subscribers about stable posts and subprocessor changes").Registration(DefinitionID),
+				SendEmailOp.Description("Send a single templated email").Registration(),
+				SendCampaignOp.Description("Dispatch an email campaign").Registration(),
+				SendQuestionnaireCampaignOp.Description("Dispatch a questionnaire campaign").Registration(),
+				RecurringCampaignOp.Description("Dispatch due recurring campaigns").Registration(),
+				TrustCenterNotificationOp.Description("Notify trust center subscribers about stable posts and subprocessor changes").Registration(),
 			),
 		}
 
@@ -59,12 +48,12 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 				Verify:       ResendWebhook{Secret: cfg.ResendSecret}.Verify,
 				Event:        ResendWebhook{}.Event,
 				Events: []types.WebhookEventRegistration{
-					resendEmailSentEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailDeliveredEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailOpenedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailClickedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailBouncedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailFailedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailSentEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailDeliveredEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailOpenedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailClickedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailBouncedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailFailedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
 				},
 			}),
 		}

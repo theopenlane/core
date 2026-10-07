@@ -65,6 +65,8 @@ type IntegrationInstallationIdentity struct {
 
 // IntegrationInstallationMetadata stores stable, non-secret installation identity metadata
 type IntegrationInstallationMetadata struct {
+	// Layout is the reflected type name of the metadata layout the attributes conform to
+	Layout string `json:"layout,omitempty"`
 	// Attributes is the provider-defined installation metadata payload
 	Attributes json.RawMessage `json:"attributes,omitempty"`
 	// Display is the normalized installation identity for UI rendering

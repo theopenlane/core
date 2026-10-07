@@ -58,7 +58,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: "def_invalid_000000000000000000", CredentialRef: testAuthCredentialRef.String()})
+	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: "def_invalid_000000000000000000", CredentialRef: testAuthCredentialRef})
 	assert.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -80,7 +80,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_UndeclaredOperationConfig() {
 
 	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{
 		DefinitionID:    testAuthDefinitionID,
-		CredentialRef:   testAuthCredentialRef.String(),
+		CredentialRef:   testAuthCredentialRef,
 		OperationConfig: map[string]json.RawMessage{"undeclared_operation": json.RawMessage(`{}`)},
 	})
 	assert.NoError(t, err)
@@ -99,7 +99,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
-	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID, CredentialRef: testAuthCredentialRef.String()})
+	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID, CredentialRef: testAuthCredentialRef})
 	assert.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -375,7 +375,7 @@ func (suite *HandlerTestSuite) startIntegrationAuth(t *testing.T, ctx context.Co
 	t.Helper()
 
 	if request.CredentialRef == "" {
-		request.CredentialRef = testAuthCredentialRef.String()
+		request.CredentialRef = testAuthCredentialRef
 	}
 
 	body, err := json.Marshal(request)

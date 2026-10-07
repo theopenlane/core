@@ -7,8 +7,6 @@ var (
 	ErrAPITokenMissing = errors.New("authentik: api token missing")
 	// ErrBaseURLMissing indicates the Authentik base URL is missing from the credential
 	ErrBaseURLMissing = errors.New("authentik: base url missing")
-	// ErrCredentialDecode indicates the credential could not be deserialized
-	ErrCredentialDecode = errors.New("authentik: credential decode failed")
 	// ErrHealthCheckFailed indicates the health check request failed
 	ErrHealthCheckFailed = errors.New("authentik: health check failed")
 	// ErrBrandFetchFailed indicates the default brand lookup request failed
@@ -21,6 +19,4 @@ var (
 	ErrDirectoryGroupsFetchFailed = errors.New("authentik: directory groups fetch failed")
 	// ErrPayloadEncode indicates a provider payload could not be serialized
 	ErrPayloadEncode = errors.New("authentik: payload encode failed")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("authentik: result encode failed")
 )

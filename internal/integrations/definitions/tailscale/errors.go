@@ -7,14 +7,6 @@ var (
 	ErrClientIDMissing = errors.New("tailscale: oauth client id missing")
 	// ErrClientSecretMissing indicates the OAuth client secret is missing from the credential
 	ErrClientSecretMissing = errors.New("tailscale: oauth client secret missing")
-	// ErrCredentialInvalid indicates credential metadata could not be decoded
-	ErrCredentialInvalid = errors.New("tailscale: credential invalid")
-	// ErrCredentialMetadataRequired indicates no credential metadata was provided
-	ErrCredentialMetadataRequired = errors.New("tailscale: credential metadata required")
-	// ErrHealthCheckFailed indicates the Tailscale API health check failed
-	ErrHealthCheckFailed = errors.New("tailscale: health check failed")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("tailscale: result encode failed")
 	// ErrUsersFetchFailed indicates the Tailscale users list request failed
 	ErrUsersFetchFailed = errors.New("tailscale: users fetch failed")
 	// ErrTailnetUnresolved indicates no member user carried a tailnet name to identify the tailnet by

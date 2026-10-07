@@ -1,5 +1,6 @@
 {
-  "version": "0c8cbc4b98bfe5cb65e771b314658fa346717e68efae4bd28259baf0cead9652",
+  "hash": "c87f5da9dc23cfc07f9e30047cd04a06c3ae450a0052db335cce4fc72d5782be",
+  "version": "01M49CHH2NPBMN1CMF8WS6QFXK",
   "surface": {
     "id": "def_01K0GHAPP000000000000000001",
     "credentials": [
@@ -67,7 +68,7 @@
         "name": "DirectorySync",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/directory-sync",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/providerkit/directory-sync",
           "$ref": "#/$defs/DirectorySync",
           "$defs": {
             "DirectorySync": {
@@ -85,7 +86,7 @@
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
-                  "description": "Only sync users from GitHub"
+                  "description": "Only sync users and skip group and membership sync"
                 }
               },
               "additionalProperties": false,
@@ -149,7 +150,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "upgrade": true
       }
     ],
     "webhooks": [

@@ -18,7 +18,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -101,7 +103,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 
 	cycle := reconcileCycle{installation: installation, operation: envelope.Operation, src: src, runID: runRecord.ID, startedAt: startedAt}
 
-	response, ingestResult, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, operations.IngestOptionsFromOperationContext(oc))
+	response, ingestResult, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, false, operations.IngestOptionsFromOperationContext(oc))
 	if execErr != nil {
 		return 0, r.failReconcileCycle(ctx, cycle, response, ingestResult, execErr)
 	}
@@ -284,7 +286,7 @@ func executionRunResult(ingest bool, response json.RawMessage, ingestResult oper
 }
 
 // ExecuteOperation runs one integration operation inline without run tracking
-func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
+func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, config json.RawMessage) (json.RawMessage, error) {
 	if integration == nil {
 		return nil, ErrInstallationRequired
 	}
@@ -295,7 +297,7 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 		return nil, err
 	}
 
-	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, credentials, config)
+	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, config)
 }
 
 // ExecuteRuntimeOperation runs a system-initiated operation inline with no installation
@@ -305,11 +307,11 @@ func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, ope
 		return nil, err
 	}
 
-	return r.executeOperationInline(ctx, nil, definitionID, operation, nil, config)
+	return r.executeOperationInline(ctx, nil, definitionID, operation, config)
 }
 
 // executeOperationInline runs one integration operation inline without run tracking
-func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.Integration, definitionID string, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
+func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.Integration, definitionID string, operation types.OperationRegistration, config json.RawMessage) (json.RawMessage, error) {
 	switch {
 	case integration == nil:
 		ctx = intobvs.WithContext(ctx, types.NewOperationContext("", operation.Name, types.IntegrationSource{
@@ -330,7 +332,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 		}
 	}
 
-	response, _, err := r.executeResolvedOperation(ctx, integration, operation, credentials, config, false, operations.IngestOptions{})
+	response, _, err := r.executeResolvedOperation(ctx, integration, operation, config, false, operations.IngestOptions{})
 
 	return response, err
 }
@@ -396,7 +398,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return finish(err, false, nil, operations.IngestResult{})
 	}
 
-	response, ingestResult, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, operations.IngestOptionsFromOperationContext(oc))
+	response, ingestResult, err := r.executeResolvedOperation(ctx, integration, operation, envelope.Config, envelope.ForceClientRebuild, operations.IngestOptionsFromOperationContext(oc))
 
 	switch {
 	case err != nil:
@@ -438,23 +440,42 @@ func (r *Runtime) resumeTrackedRun(ctx context.Context, oc *gala.OperationContex
 }
 
 // BuildClientForIntegration builds a typed client for a specific integration installation
-func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *ent.Integration, clientID types.ClientID) (any, error) {
-	registration, err := r.Registry().Client(integration.DefinitionID, clientID)
+func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *ent.Integration, clientName string) (any, error) {
+	return r.buildInstallationClient(ctx, integration, clientName, false)
+}
+
+// buildInstallationClient builds the named client from the installation's active connection and its stored credential
+func (r *Runtime) buildInstallationClient(ctx context.Context, integration *ent.Integration, clientName string, force bool) (any, error) {
+	def, err := r.resolveDefinitionForInstallation(integration)
 	if err != nil {
 		return nil, err
 	}
 
-	credentials, err := r.keystore().LoadCredentials(ctx, integration, registration.CredentialRefs)
+	connection, err := r.resolvePersistedConnection(def, integration)
 	if err != nil {
 		return nil, err
 	}
 
-	return r.keystore().BuildClient(ctx, integration, registration, credentials, nil, false)
+	build, ok := connection.Clients[clientName]
+	if !ok {
+		return nil, fmt.Errorf("%w: %s", registry.ErrClientNotFound, clientName)
+	}
+
+	credential, found, err := r.keystore().LoadCredential(ctx, integration, connection.Credential.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	if !found {
+		return nil, keystore.ErrCredentialNotFound
+	}
+
+	return r.keystore().BuildClient(ctx, integration, connection.Credential.Name, clientName, build, credential, force)
 }
 
 // executeResolvedOperation executes the given operation against the resolved client and config
-func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, operations.IngestResult, error) {
-	client, credentials, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
+func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, operations.IngestResult, error) {
+	client, err := r.resolveOperationClient(ctx, integration, operation, clientForce)
 	if err != nil {
 		return nil, operations.IngestResult{}, err
 	}
@@ -490,7 +511,6 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 	req := types.OperationRequest{
 		Integration: integration,
-		Credentials: credentials,
 		Client:      client,
 		Config:      jsonx.CloneRawMessage(config),
 		LastRunAt:   lastRunAt,
@@ -669,42 +689,30 @@ func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID strin
 	return purged, nil
 }
 
-// resolveOperationClient resolves the client and credentials an operation runs with
-func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool) (any, types.CredentialBindings, error) {
+// resolveOperationClient resolves the client an operation runs with
+func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, clientForce bool) (any, error) {
 	switch {
-	case !operation.ClientRef.Valid():
-		return nil, credentials, nil
+	case operation.ClientRef == "":
+		return nil, nil
 	case integration == nil:
 		oc, _ := gala.OperationContextFromContext(ctx)
 
 		client, ok := r.Registry().RuntimeClient(types.IntegrationSourceFrom(oc).DefinitionID)
 		if !ok {
-			return nil, credentials, ErrRuntimeClientNotFound
+			return nil, ErrRuntimeClientNotFound
 		}
 
 		logx.FromContext(ctx).Debug().Msg("runtime client resolved")
 
-		return client, credentials, nil
+		return client, nil
 	}
 
-	registration, err := r.Registry().Client(integration.DefinitionID, operation.ClientRef)
+	client, err := r.buildInstallationClient(ctx, integration, operation.ClientRef, clientForce)
 	if err != nil {
-		return nil, credentials, err
-	}
-
-	if credentials == nil {
-		credentials, err = r.keystore().LoadCredentials(ctx, integration, registration.CredentialRefs)
-		if err != nil {
-			return nil, credentials, err
-		}
-	}
-
-	client, err := r.keystore().BuildClient(ctx, integration, registration, credentials, config, clientForce)
-	if err != nil {
-		return nil, credentials, types.Unhealthy(err, fmt.Sprintf(clientUnresolvedReasonFmt, err))
+		return nil, types.Unhealthy(err, fmt.Sprintf(clientUnresolvedReasonFmt, err))
 	}
 
 	logx.FromContext(ctx).Debug().Msg("client initialized")
 
-	return client, credentials, nil
+	return client, nil
 }

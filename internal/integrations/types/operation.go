@@ -97,8 +97,6 @@ type IngestContract struct {
 type OperationRequest struct {
 	// Integration is the target installation record
 	Integration *generated.Integration
-	// Credentials lists all resolved credential bundles for the operation by slot ref
-	Credentials CredentialBindings
 	// Client is the built client instance for this operation when one is registered
 	Client any
 	// Config is the operation-specific configuration payload
@@ -132,7 +130,7 @@ type OperationRegistration struct {
 	// Topic is the gala topic used to execute the operation
 	Topic gala.TopicName `json:"topic"`
 	// ClientRef identifies which registered client the operation uses
-	ClientRef ClientID `json:"-"`
+	ClientRef string `json:"-"`
 	// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces
 	CustomerSelectable *bool `json:"customerSelectable,omitempty"`
 	// Internal marks the operation as reachable only through its own listener or saga machinery

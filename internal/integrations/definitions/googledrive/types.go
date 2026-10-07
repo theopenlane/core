@@ -11,10 +11,10 @@ import (
 var (
 	// definitionID is the stable identifier for the Google Drive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GDRIVE00000000000000001")
-	// driveCredential is the credential slot for Google Drive OAuth credentials
-	driveCredential = types.CredentialRefOf[googleDriveCred]()
-	// driveClient is the client ref for the Google Drive SDK
-	driveClient = types.ClientRefOf[DriveClient]()
+	// oauthConnection is the Google Drive OAuth connection
+	oauthConnection = types.ConnectionOf[googleDriveCred]()
+	// installation is the installation metadata layout
+	installation = types.InstallationOf[InstallationMetadata]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )

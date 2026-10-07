@@ -15,21 +15,14 @@ const (
 	oktaRequestTimeout = 30
 )
 
-// Client builds Okta API clients for one installation
-type Client struct{}
+// buildClient constructs the Okta API client for one installation
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*oktagosdk.APIClient, error) {
+	cred := req.Credential
 
-// Build constructs the Okta API client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*oktagosdk.APIClient, error) {
-	cred, _, err := oktaCredential.Resolve(req.Credentials)
-	if err != nil {
-		return nil, ErrCredentialInvalid
-	}
-
-	if cred.APIToken == "" {
+	switch {
+	case cred.APIToken == "":
 		return nil, ErrAPITokenMissing
-	}
-
-	if cred.OrgURL == "" {
+	case cred.OrgURL == "":
 		return nil, ErrOrgURLMissing
 	}
 

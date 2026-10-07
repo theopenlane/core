@@ -12,12 +12,10 @@ import (
 var (
 	// definitionID is the stable identifier for the OneDrive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0ONEDRIVE00000000000001")
-	// installation is the typed installation metadata handle for the OneDrive definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// oneDriveCredential is the auth-managed credential slot for OneDrive OAuth credentials
-	oneDriveCredential = types.CredentialRefOf[oneDriveCred]()
-	// oneDriveClient is the client ref for the wrapped OneDrive graph client
-	oneDriveClient = types.ClientRefOf[*DriveClient]()
+	// installation is the installation metadata layout
+	installation = types.InstallationOf[InstallationMetadata]()
+	// oauthConnection is the OneDrive OAuth connection
+	oauthConnection = types.ConnectionOf[oneDriveCred]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )

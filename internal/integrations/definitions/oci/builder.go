@@ -19,41 +19,23 @@ func Builder() registry.Builder {
 			Tags:         []string{"findings"},
 			Active:       false,
 			Visible:      true,
-			HealthCheck:  identityClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				ociCredential.Registration(types.CredentialRegistration{
-					Name:        "OCI API Key Credential",
-					Description: "OCI API signing key used to authenticate against the tenancy.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: ociCredential.ID(),
-					Name:          "OCI API Key",
-					Description:   "Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.",
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: ociCredential.ID(),
-						Description:   "Removes the stored API signing key from Openlane. If the key is no longer needed, delete it from the user's API keys in the OCI console.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				identityClient.Registration(IdentityClientBuilder{}.Build, types.ClientRegistration{
-					Description: "Oracle Cloud Infrastructure Identity client",
-				}),
-				cloudGuardClient.Registration(CloudGuardClientBuilder{}.Build, types.ClientRegistration{
-					Description: "Oracle Cloud Infrastructure Cloud Guard client",
-				}),
+			Connections: []types.Connector{
+				apiKey.
+					Name("OCI API Key").
+					Description("Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.").
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored API signing key from Openlane. If the key is no longer needed, delete it from the user's API keys in the OCI console.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[FindingsSync]().
-					Ingests(cloudGuardClient, runFindingsSync).
+					Ingests(runFindingsSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaFinding.Name}).
 					Permissions("read cloud-guard-problems in tenancy").
 					Description("Collect OCI Cloud Guard problems as findings").
-					Registration(definitionID),
+					Registration(),
 			},
 			Mappings: []types.MappingRegistration{
 				{

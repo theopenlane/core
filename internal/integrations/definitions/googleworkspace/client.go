@@ -10,27 +10,20 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Client builds Google Workspace Admin SDK clients for one installation
-type Client struct {
-	// cfg is the operator-level Google Workspace configuration
-	cfg Config
-}
+// clientBuilder returns the Google Workspace Admin SDK client builder bound to the operator config
+func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[googleWorkspaceCred]) (*admin.Service, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[googleWorkspaceCred]) (*admin.Service, error) {
+		cred := req.Credential
 
-// Build constructs the Google Workspace Admin SDK client for one installation
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*admin.Service, error) {
-	cred, _, err := workspaceCredential.Resolve(req.Credentials)
-	if err != nil {
-		return nil, ErrCredentialDecode
+		if cred.AccessToken == "" {
+			return nil, ErrOAuthTokenMissing
+		}
+
+		svc, err := admin.NewService(ctx, option.WithTokenSource(providerkit.GoogleTokenSource(ctx, cfg.ClientID, cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))))
+		if err != nil {
+			return nil, ErrAdminServiceBuildFailed
+		}
+
+		return svc, nil
 	}
-
-	if cred.AccessToken == "" {
-		return nil, ErrOAuthTokenMissing
-	}
-
-	svc, err := admin.NewService(ctx, option.WithTokenSource(providerkit.GoogleTokenSource(ctx, c.cfg.ClientID, c.cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))))
-	if err != nil {
-		return nil, ErrAdminServiceBuildFailed
-	}
-
-	return svc, nil
 }

@@ -30,21 +30,12 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[Config](),
 			},
 			UserInput:    userInput.Registration(),
-			HealthCheck:  oneDriveClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				oneDriveCredential.Registration(types.CredentialRegistration{
-					Name:        "OneDrive Credential",
-					Description: "OAuth credential used to access Microsoft OneDrive documents.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: oneDriveCredential.ID(),
-					Name:          "OneDrive OAuth",
-					Description:   "Connect your Microsoft account using OAuth to access OneDrive documents.",
-					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
-						CredentialRef: oneDriveCredential,
+			Connections: []types.Connector{
+				oauthConnection.
+					Name("OneDrive OAuth").
+					Description("Connect your Microsoft account using OAuth to access OneDrive documents.").
+					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
@@ -65,27 +56,20 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,
-					}),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: oneDriveCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Microsoft account under Account settings > Privacy.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				oneDriveClient.Registration(Client{cfg: cfg}.Build, types.ClientRegistration{
-					Description: "Microsoft OneDrive Graph API client",
-				}),
+					})).
+					Provides(clientBuilder(cfg)).
+					Verified(verify).
+					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Microsoft account under Account settings > Privacy.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				documentExportOperation.Description("Download a OneDrive file and return its content").Registration(definitionID),
+				documentExportOperation.Description("Download a OneDrive file and return its content").Registration(),
 				types.OperationRefOf[FolderSync]().
-					Ingests(oneDriveClient, runFolderSync).
+					Ingests(runFolderSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaInternalPolicy.Name}).
 					Schedule(gala.NewFullFetchSchedule()).
 					Description("List document files in the configured OneDrive folder and emit policy ingest envelopes").
-					Registration(definitionID),
+					Registration(),
 			},
 			Mappings: []types.MappingRegistration{
 				{

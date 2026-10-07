@@ -301,7 +301,7 @@ func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx 
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, operationTestCredentialRef.ID(), credential, nil)
+	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, operationTestCredentialRef, credential)
 	require.NoError(t, err)
 
 	return rec.ID

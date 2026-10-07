@@ -162,11 +162,11 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 
 	mirrorUserInput(create.Mutation(), userInput)
 
-	if len(def.CredentialRegistrations) > 0 {
+	if len(def.ConnectionList()) > 0 {
 		create.SetStatus(enums.IntegrationStatusPending).SetExpiresAt(time.Now().Add(PendingInstallationTTL))
 	}
 
-	if len(def.Connections) == 0 {
+	if len(def.ConnectionList()) == 0 {
 		metadata := selfInstanceMetadata(id)
 		display, _ := jsonx.ToMap(metadata.Display)
 
@@ -216,13 +216,19 @@ func (r *Runtime) updateInstallationInput(ctx context.Context, installation *ent
 		return updated, false, nil
 	}
 
-	checkErr, err := r.verifyConnection(ctx, updated, def)
+	verified, checkErr, err := r.verifyConnection(ctx, updated, def)
 	if err != nil {
 		return nil, false, err
 	}
 
 	if checkErr != nil {
 		return nil, false, checkErr
+	}
+
+	if len(def.ConnectionList()) > 0 {
+		if err := r.saveInstallationMetadata(privacy.DecisionContext(ctx, privacy.Allow), updated, def, verified.Connection, verified.Metadata); err != nil {
+			return nil, false, err
+		}
 	}
 
 	if err := r.ClearIntegrationUnhealthy(ctx, updated); err != nil {

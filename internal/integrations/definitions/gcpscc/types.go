@@ -12,15 +12,21 @@ import (
 var (
 	// definitionID is the stable identifier for the GCP Security Command Center integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
+	// workloadIdentity is the connection for GCP workload identity federation
+	workloadIdentity = types.ConnectionOf[WorkloadIdentityCredentialSchema]()
+	// serviceAccount is the connection for GCP service account key credentials
+	serviceAccount = types.ConnectionOf[CredentialSchema]()
 	// installation is the typed installation metadata handle for the definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// sccCredential is the credential slot for GCP Security Command Center service account credentials
-	sccCredential = types.CredentialRefOf[CredentialSchema]()
-	// workloadIdentityCredential is the credential slot for GCP workload identity federation
-	workloadIdentityCredential = types.CredentialRefOf[WorkloadIdentityCredentialSchema]()
-	// sccClient is the client ref for the GCP Security Command Center client used by this definition
-	sccClient = types.ClientRefOf[*cloudscc.Client]()
+	installation = types.InstallationOf[InstallationMetadata]()
 )
+
+// Client is the GCP Security Command Center client with the collection scope it targets
+type Client struct {
+	// Client is the embedded Security Command Center v2 client
+	*cloudscc.Client
+	// Scope is the SCC collection targeting
+	Scope CollectionScope
+}
 
 const (
 	// projectScopeSpecific indicates collection should target only the explicitly listed project IDs

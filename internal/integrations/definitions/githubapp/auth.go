@@ -104,29 +104,52 @@ func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, 
 		return types.AuthCompleteResult{}, err
 	}
 
-	installInput, err := jsonx.ToRawMessage(InstallationMetadata{
-		InstallationID:   strconv.FormatInt(integrationID, 10),
-		OrganizationName: orgName,
-	})
+	return types.AuthCompleteResult{Credential: cred}, nil
+}
+
+// appInstallFlow is the GitHub App install auth flow
+func appInstallFlow(cfg Config) types.AuthFlow[githubAppCredential] {
+	return types.NewAuthFlow[githubAppCredential](
+		func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+			return startAppInstall(cfg)
+		},
+		func(ctx context.Context, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
+			return completeAppInstall(ctx, cfg, state, input)
+		},
+	)
+}
+
+// disconnectApp directs the user to uninstall the GitHub App from GitHub
+func disconnectApp(ctx context.Context, req types.DisconnectRequest[githubAppCredential]) (types.DisconnectResult, error) {
+	integrationID, name, err := disconnectInstallationID(ctx, req)
 	if err != nil {
-		return types.AuthCompleteResult{}, ErrInstallationMetadataEncode
+		return types.DisconnectResult{}, err
 	}
 
-	return types.AuthCompleteResult{
-		Credential:        cred,
-		InstallationInput: installInput,
+	details, err := jsonx.ToRawMessage(disconnectDetails{
+		InstallationID:   strconv.FormatInt(integrationID, 10),
+		OrganizationName: name,
+	})
+	if err != nil {
+		return types.DisconnectResult{}, ErrInstallationMetadataEncode
+	}
+
+	url := fmt.Sprintf("https://github.com/settings/installations/%d", integrationID)
+	if name != "" {
+		url = fmt.Sprintf("https://github.com/organizations/%s/settings/installations/%d", name, integrationID)
+	}
+
+	return types.DisconnectResult{
+		RedirectURL: url,
+		Message:     "Uninstall the Openlane GitHub App in GitHub to finish disconnecting this integration.",
+		Details:     details,
 	}, nil
 }
 
 // disconnectInstallationID extracts the installation ID from the credential or installation metadata
-func disconnectInstallationID(ctx context.Context, req types.DisconnectRequest) (int64, string, error) {
-	cred, ok, err := gitHubAppCredential.Resolve(req.Credentials)
-	if err != nil {
-		return 0, "", ErrCredentialDecode
-	}
-
-	if ok && cred.InstallationID != 0 {
-		return cred.InstallationID, cred.OrganizationName, nil
+func disconnectInstallationID(ctx context.Context, req types.DisconnectRequest[githubAppCredential]) (int64, string, error) {
+	if req.Credential.InstallationID != 0 {
+		return req.Credential.InstallationID, req.Credential.OrganizationName, nil
 	}
 
 	var metadata InstallationMetadata

@@ -7,8 +7,6 @@ var (
 	ErrOAuthTokenMissing = errors.New("slack: oauth token missing")
 	// ErrBotTokenMissing indicates the Slack bot token is missing from the credential
 	ErrBotTokenMissing = errors.New("slack: bot token missing")
-	// ErrNoCredentialResolved indicates neither OAuth nor bot token credential was found
-	ErrNoCredentialResolved = errors.New("slack: no credential resolved")
 	// ErrChannelMissing indicates the Slack channel is missing from the operation config
 	ErrChannelMissing = errors.New("slack: channel missing")
 	// ErrMessageEmpty indicates the Slack message has no content
@@ -25,8 +23,6 @@ var (
 	ErrPayloadEncode = errors.New("slack: ingest payload encode failed")
 	// ErrCredentialEncode indicates the credential could not be serialized
 	ErrCredentialEncode = errors.New("slack: credential encode failed")
-	// ErrCredentialDecode indicates the credential could not be deserialized
-	ErrCredentialDecode = errors.New("slack: credential decode failed")
 	// ErrInstallationMetadataDecode indicates installation metadata could not be decoded
 	ErrInstallationMetadataDecode = errors.New("slack: installation metadata decode failed")
 	// ErrTeamIDMissing indicates the Slack team ID is missing
@@ -43,6 +39,4 @@ var (
 	ErrDefaultChannelMissing = errors.New("slack: default channel missing")
 	// ErrTemplateRenderFailed indicates a system message template could not be rendered
 	ErrTemplateRenderFailed = errors.New("slack: template render failed")
-	// ErrInstallationInputDecode indicates the installation input payload could not be deserialized
-	ErrInstallationInputDecode = errors.New("slack: installation input decode failed")
 )

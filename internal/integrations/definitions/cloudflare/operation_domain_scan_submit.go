@@ -33,7 +33,7 @@ type DomainScanSubmitResult struct {
 //
 //nolint:revive
 var DomainScanSubmitOp = types.OperationPayloadOf[DomainScanSubmit]().
-	Handles(cloudflareClient, runDomainScanSubmit).
+	Handles(runDomainScanSubmit).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
 	CustomerSelectable(false).
 	Internal()

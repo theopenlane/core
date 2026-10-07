@@ -44,10 +44,8 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 
-	credentialRef := types.NewCredentialSlotID(in.CredentialRef)
-
-	connection, err := def.ConnectionRegistration(credentialRef)
-	if err != nil {
+	connection, ok := def.Connection(in.CredentialRef)
+	if !ok {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType)
 	}
 
@@ -88,7 +86,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 	begin, err := h.IntegrationsRuntime.BeginAuth(requestCtx, keymaker.BeginRequest{
 		DefinitionID:   def.ID,
 		InstallationID: installationRec.ID,
-		CredentialRef:  credentialRef,
+		CredentialRef:  in.CredentialRef,
 	})
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to begin auth flow")

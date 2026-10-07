@@ -731,47 +731,22 @@
           },
           "providers": {
             "items": {
-              "description": "Definition is the installable and executable integration unit",
+              "description": "IntegrationProvider is the provider listing projection of one definition",
               "properties": {
-                "clients": {
-                  "items": {
-                    "description": "ClientRegistration declares one buildable client for a definition",
-                    "properties": {
-                      "configSchema": {},
-                      "credentialRefs": {
-                        "items": {
-                          "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
-                        },
-                        "type": "array"
-                      },
-                      "description": {
-                        "type": "string"
-                      }
-                    },
-                    "type": "object"
-                  },
-                  "type": "array"
-                },
                 "connections": {
                   "items": {
-                    "description": "ConnectionRegistration describes one connection mode for a definition",
+                    "description": "IntegrationProviderConnection is one connection as the console reads it",
                     "properties": {
                       "auth": {
-                        "description": "AuthRegistration describes how one connection mode starts and completes auth",
-                        "nullable": true,
-                        "properties": {
-                          "credentialRef": {
-                            "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
-                          }
-                        },
-                        "type": "object"
+                        "description": "IntegrationProviderAuth marks a connection whose credential an auth flow obtains",
+                        "nullable": true
                       },
                       "credentialRef": {
-                        "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
+                        "type": "string"
                       },
                       "credentialRefs": {
                         "items": {
-                          "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
+                          "type": "string"
                         },
                         "type": "array"
                       },
@@ -782,9 +757,6 @@
                         "description": "DisconnectRegistration describes how one definition handles installation teardown",
                         "nullable": true,
                         "properties": {
-                          "credentialRef": {
-                            "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
-                          },
                           "description": {
                             "type": "string"
                           },
@@ -817,7 +789,7 @@
                 },
                 "credentialRegistrations": {
                   "items": {
-                    "description": "CredentialRegistration declares how a definition accepts credentials",
+                    "description": "IntegrationProviderCredential is one connection's credential form as the console reads it",
                     "properties": {
                       "description": {
                         "type": "string"
@@ -829,121 +801,9 @@
                         "type": "boolean"
                       },
                       "ref": {
-                        "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
+                        "type": "string"
                       },
                       "schema": {}
-                    },
-                    "type": "object"
-                  },
-                  "type": "array"
-                },
-                "installation": {
-                  "description": "InstallationRegistration describes how one connection mode derives installation metadata",
-                  "nullable": true
-                },
-                "mappings": {
-                  "items": {
-                    "description": "MappingRegistration declares one default mapping shipped with a definition",
-                    "properties": {
-                      "linkTargets": {
-                        "items": {
-                          "description": "LinkTargetInfo describes one edge an ingested record of a schema can be cross-linked through,\nwith the fields available on each side for composing a LinkRule. One entry is emitted per edge,\nso a schema with several edges to the same target type surfaces each as a distinct choice",
-                          "properties": {
-                            "edge": {
-                              "type": "string"
-                            },
-                            "label": {
-                              "type": "string"
-                            },
-                            "sourceFields": {
-                              "items": {
-                                "description": "LinkFieldInfo is one field available for cross-link matching",
-                                "properties": {
-                                  "label": {
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "type": "string"
-                                  },
-                                  "type": {
-                                    "type": "string"
-                                  }
-                                },
-                                "type": "object"
-                              },
-                              "type": "array"
-                            },
-                            "targetFields": {
-                              "items": {
-                                "description": "LinkFieldInfo is one field available for cross-link matching",
-                                "properties": {
-                                  "label": {
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "type": "string"
-                                  },
-                                  "type": {
-                                    "type": "string"
-                                  }
-                                },
-                                "type": "object"
-                              },
-                              "type": "array"
-                            },
-                            "targetType": {
-                              "type": "string"
-                            }
-                          },
-                          "type": "object"
-                        },
-                        "type": "array"
-                      },
-                      "schema": {
-                        "type": "string"
-                      },
-                      "spec": {
-                        "description": "MappingOverride is one mapping customization",
-                        "properties": {
-                          "filterExpr": {
-                            "type": "string"
-                          },
-                          "links": {
-                            "items": {
-                              "description": "LinkRule describes one cross-object link: which target object type to link the ingested record to\nand how to match candidates — either a field match (target field equals a source field/list value,\npushed into the query as an indexed predicate) or a CEL expression evaluated per candidate.\nField names are the entityops catalog identifiers surfaced in the mapping's LinkTargets inventory:\nTargetField is a match-key column on the target, SourceField/SourceList are mapping input keys on\nthe source. Registration validates every rule against the catalog so typos fail at startup",
-                              "properties": {
-                                "edge": {
-                                  "type": "string"
-                                },
-                                "expression": {
-                                  "type": "string"
-                                },
-                                "sourceField": {
-                                  "type": "string"
-                                },
-                                "sourceList": {
-                                  "type": "string"
-                                },
-                                "targetField": {
-                                  "type": "string"
-                                },
-                                "targetSchema": {
-                                  "type": "string"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "type": "array"
-                          },
-                          "mapExpr": {
-                            "type": "string"
-                          }
-                        },
-                        "type": "object"
-                      },
-                      "variant": {
-                        "type": "string"
-                      }
                     },
                     "type": "object"
                   },
@@ -953,7 +813,6 @@
                   "items": {
                     "description": "OperationRegistration declares one executable operation for a definition",
                     "properties": {
-                      "configSchema": {},
                       "customerSelectable": {
                         "nullable": true,
                         "type": "boolean"
@@ -978,7 +837,6 @@
                       },
                       "input": {
                         "description": "InputRegistration describes one stored installation-scoped input layout and how older documents move onto it",
-                        "nullable": true,
                         "properties": {
                           "name": {
                             "type": "string"
@@ -1017,10 +875,12 @@
                         },
                         "type": "array"
                       },
+                      "stored": {
+                        "type": "boolean"
+                      },
                       "topic": {
                         "type": "string"
-                      },
-                      "uiSchema": {}
+                      }
                     },
                     "type": "object"
                   },
@@ -1028,14 +888,6 @@
                 },
                 "operatorConfig": {
                   "description": "OperatorConfigRegistration describes operator-owned configuration for a definition",
-                  "nullable": true,
-                  "properties": {
-                    "schema": {}
-                  },
-                  "type": "object"
-                },
-                "runtimeIntegration": {
-                  "description": "RuntimeIntegrationRegistration declares a definition provisioned from a runtime config struct",
                   "nullable": true,
                   "properties": {
                     "schema": {}

@@ -28,13 +28,8 @@ const (
 )
 
 // runFindingsCollect collects GCP SCC findings from configured sources
-func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
-	scope, err := resolveScope(request.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	sources, err := resolveSources(scope)
+func runFindingsCollect(ctx context.Context, request types.OperationRequest, c Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
+	sources, err := resolveSources(c.Scope)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +54,7 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *
 	}
 
 	for _, sourceName := range sources {
-		pageResults, err := listAllFindings(ctx, c, sourceName, pageSize, timeFilter)
+		pageResults, err := listAllFindings(ctx, c.Client, sourceName, pageSize, timeFilter)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error listing findings")
 			return nil, ErrListFindingsFailed

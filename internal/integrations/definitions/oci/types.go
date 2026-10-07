@@ -3,6 +3,7 @@ package oci
 import (
 	"github.com/oracle/oci-go-sdk/v65/cloudguard"
 	"github.com/oracle/oci-go-sdk/v65/identity"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -10,15 +11,30 @@ import (
 var (
 	// definitionID is the stable identifier for the Oracle Cloud Infrastructure integration definition
 	definitionID = types.NewDefinitionRef("def_01K0OCI00000000000000000001")
+	// apiKey is the connection for OCI API signing key credentials
+	apiKey = types.ConnectionOf[CredentialSchema]()
 	// installation is the typed installation metadata handle for the definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// ociCredential is the typed credential slot for OCI API signing key credentials
-	ociCredential = types.CredentialRefOf[CredentialSchema]()
-	// identityClient is the client ref for the OCI Identity client used by the health check
-	identityClient = types.ClientRefOf[*identity.IdentityClient]()
-	// cloudGuardClient is the client ref for the OCI Cloud Guard client used by findings collection
-	cloudGuardClient = types.ClientRefOf[*cloudguard.CloudGuardClient]()
+	installation = types.InstallationOf[InstallationMetadata]()
 )
+
+// Client holds the OCI SDK clients with the tenancy scope for one installation
+type Client struct {
+	// Identity is the OCI Identity client used by verification
+	Identity *identity.IdentityClient
+	// CloudGuard is the OCI Cloud Guard client used by findings collection
+	CloudGuard *cloudguard.CloudGuardClient
+	// TenancyOCID is the OCID of the tenancy the credentials belong to
+	TenancyOCID string
+	// CompartmentOCID is the compartment collection is rooted at when one was configured
+	CompartmentOCID string
+	// Region is the OCI region API calls are issued against
+	Region string
+}
+
+// Compartment returns the compartment collection is rooted at, defaulting to the tenancy
+func (c Client) Compartment() string {
+	return lo.CoalesceOrEmpty(c.CompartmentOCID, c.TenancyOCID)
+}
 
 // FindingsSync holds installation-specific configuration for OCI Cloud Guard problem collection
 type FindingsSync struct {

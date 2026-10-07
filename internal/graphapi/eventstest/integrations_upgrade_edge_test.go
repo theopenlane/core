@@ -16,7 +16,6 @@ import (
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // oauthTokenCredV1 is the earlier OAuth credential shape without a refresh token
@@ -43,11 +42,13 @@ type strictRegionInput struct {
 var strictRegionInputRef = integrationtypes.UserInputRefOf[strictRegionInput]()
 
 // previousOAuthDefinition returns an earlier version of the shared test definition
-func previousOAuthDefinition(t *testing.T, current integrationtypes.Definition, schema json.RawMessage) registry.Builder {
+func previousOAuthDefinition[T any](t *testing.T, current integrationtypes.Definition) registry.Builder {
 	t.Helper()
 
-	connection, err := current.ConnectionRegistration(testint.OAuthCredential.ID())
-	require.NoError(t, err)
+	connection, ok := current.Connection(testint.OAuth.Connection().Credential.Name)
+	require.True(t, ok)
+
+	flow := integrationtypes.NewAuthFlow[T](connection.Auth.Start, connection.Auth.Complete)
 
 	return func() (integrationtypes.Definition, error) {
 		return integrationtypes.Definition{
@@ -56,20 +57,9 @@ func previousOAuthDefinition(t *testing.T, current integrationtypes.Definition, 
 				DisplayName: "Test Integration",
 				Active:      true,
 			},
-			CredentialRegistrations: []integrationtypes.CredentialRegistration{
-				{Ref: testint.OAuthCredential.ID(), Stored: integrationtypes.InputRegistration{Schema: schema}},
-			},
-			HealthCheck: current.HealthCheck,
-			Connections: []integrationtypes.ConnectionRegistration{
-				{
-					CredentialRef:  testint.OAuthCredential.ID(),
-					CredentialRefs: []integrationtypes.CredentialSlotID{testint.OAuthCredential.ID()},
-					Auth: &integrationtypes.AuthRegistration{
-						CredentialRef: testint.OAuthCredential.ID(),
-						Start:         connection.Auth.Start,
-						Complete:      connection.Auth.Complete,
-					},
-				},
+			Installation: integrationtypes.InstallationOf[testMetadata]().Registration(),
+			Connections: []integrationtypes.Connector{
+				slotOf(integrationtypes.NewConnection[T](connection.Credential.Name).Authenticates(flow)).connector,
 			},
 		}, nil
 	}
@@ -89,8 +79,8 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		installation, previous := installUnder(t, subCtx, previousOAuthDefinition(t, def, jsonx.SchemaFrom[oauthTokenCredV1]()), testint.OAuthCredential.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			testint.OAuthCredential.ID(): {Data: json.RawMessage(`{"access_token":"legacy-oauth-token","legacy":"drop-me"}`)},
+		installation, previous := installUnder(t, subCtx, previousOAuthDefinition[oauthTokenCredV1](t, def), testint.OAuth.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			testint.OAuth.Connection().Credential.Name: {Data: json.RawMessage(`{"access_token":"legacy-oauth-token","legacy":"drop-me"}`)},
 		})
 		require.Less(t, previous, current)
 		require.Equal(t, previous, installation.DefinitionVersion)
@@ -102,19 +92,19 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"access_token":"legacy-oauth-token"}`, string(rows[testint.OAuthCredential.ID()].Data))
+		require.JSONEq(t, `{"access_token":"legacy-oauth-token"}`, string(rows[testint.OAuth.Connection().Credential.Name].Data))
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, current, reloaded.DefinitionVersion)
 
 		state, err := def.ProviderState(reloaded.ProviderState)
 		require.NoError(t, err)
-		require.Equal(t, testint.OAuthCredential.ID(), state.CredentialRef)
+		require.Equal(t, testint.OAuth.Connection().Credential.Name, state.CredentialRef)
 
-		registration, err := def.CredentialRegistration(testint.OAuthCredential.ID())
-		require.NoError(t, err)
-		require.NotEmpty(t, registration.Stored.Schema)
-		require.Empty(t, registration.Schema)
+		connection, ok := def.Connection(testint.OAuth.Connection().Credential.Name)
+		require.True(t, ok)
+		require.NotEmpty(t, connection.Credential.Schema)
+		require.Empty(t, connection.Form)
 	})
 
 	t.Run("a user input the current schema rejects with no conversion fails the upgrade and marks the installation errored", func(t *testing.T) {
@@ -124,7 +114,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = zoneInputRef.Registration()
 		}))
-		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 		require.Equal(t, zoneInputRef.Name(), installation.UserInput.Layout)
 		require.JSONEq(t, `{"zone":"eu"}`, string(installation.UserInput.Data))
 
@@ -155,7 +145,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = zoneInputRef.Registration()
 		}))
-		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 
 		strict := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = strictRegionInputRef.Registration()
@@ -183,7 +173,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 
 		rows, err := store.LoadAllCredentials(subCtx, repaired)
 		require.NoError(t, err)
-		require.JSONEq(t, `{"token":"token"}`, string(rows[testint.TokenCredential.ID()].Data))
+		require.JSONEq(t, `{"token":"token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
 	})
 
 	t.Run("operation config supplied to reconcile still upgrades every other stored document and completes the upgrade", func(t *testing.T) {
@@ -194,7 +184,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 			def.UserInput = zoneInputRef.Registration()
 			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
 		}))
-		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), map[string]json.RawMessage{retiredSyncOp.Name(): json.RawMessage(`{"disable":true}`)}, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), map[string]json.RawMessage{retiredSyncOp.Name(): json.RawMessage(`{"disable":true}`)}, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 		require.JSONEq(t, `{"disable":true}`, string(installation.OperationConfig.For(retiredSyncOp.Name())))
 
 		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
@@ -220,8 +210,8 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 	})
 
 	t.Run("the auth-managed slot's schema participates in the version hash", func(t *testing.T) {
-		v1 := runtimeFor(t, previousOAuthDefinition(t, def, jsonx.SchemaFrom[oauthTokenCredV1]()))
-		v2 := runtimeFor(t, previousOAuthDefinition(t, def, jsonx.SchemaFrom[oauthTokenCredV2]()))
+		v1 := runtimeFor(t, previousOAuthDefinition[oauthTokenCredV1](t, def))
+		v2 := runtimeFor(t, previousOAuthDefinition[oauthTokenCredV2](t, def))
 
 		require.NotEqual(t, v1.Registry().Version(testint.DefinitionID.ID()), v2.Registry().Version(testint.DefinitionID.ID()))
 	})

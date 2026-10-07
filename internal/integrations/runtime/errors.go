@@ -21,8 +21,10 @@ var (
 	ErrUserInputInvalid = errors.New("integrations/runtime: user input invalid")
 	// ErrCredentialInvalid indicates the credential payload failed schema validation
 	ErrCredentialInvalid = errors.New("integrations/runtime: credential invalid")
-	// ErrCredentialNotDeclared indicates the credential is not declared on the resolved connection
-	ErrCredentialNotDeclared = errors.New("integrations/runtime: credential not declared on connection")
+	// ErrConnectionMismatch indicates the credential belongs to a different connection than the installation's
+	ErrConnectionMismatch = errors.New("integrations/runtime: credential belongs to a different connection than the installation's")
+	// ErrInstallationMetadataInvalid indicates the installation metadata document failed schema validation
+	ErrInstallationMetadataInvalid = errors.New("integrations/runtime: installation metadata invalid")
 	// ErrRuntimeClientNotFound indicates no pre-built runtime client exists for the definition
 	ErrRuntimeClientNotFound = errors.New("integrations/runtime: runtime client not found")
 	// ErrOperationRateLimited indicates the operation's RateLimit policy rejected this run

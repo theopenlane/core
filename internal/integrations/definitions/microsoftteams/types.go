@@ -3,20 +3,16 @@ package microsoftteams
 import (
 	"time"
 
-	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// DefinitionID is the stable identifier for the Microsoft Teams integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
-	// installation is the typed installation metadata handle for the Microsoft Teams definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// teamsCredential is the auth-managed credential slot used by the Teams client
-	teamsCredential = types.CredentialRefOf[teamsCred]()
-	// teamsClient is the client ref for the Microsoft Graph service client used by this definition
-	teamsClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]()
+	// installation is the installation metadata layout
+	installation = types.InstallationOf[InstallationMetadata]()
+	// oauthConnection is the Microsoft Teams OAuth connection
+	oauthConnection = types.ConnectionOf[teamsCred]()
 	// userInput is the installation user input layout for the Microsoft Teams definition
 	userInput = types.UserInputRefOf[UserInput]()
 )

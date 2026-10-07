@@ -14,14 +14,14 @@ type Client struct {
 	Token string
 }
 
-// tokenClient returns a client builder reading the token from slot
-func tokenClient[T any](slot types.CredentialRef[T], token func(T) string) func(context.Context, types.ClientBuildRequest) (*Client, error) {
-	return func(_ context.Context, req types.ClientBuildRequest) (*Client, error) {
-		cred, ok, err := slot.Resolve(req.Credentials)
-		if err != nil || !ok || token(cred) == "" {
+// tokenClient returns a client builder reading the token from the decoded credential
+func tokenClient[T any](token func(T) string) func(context.Context, types.ConnectionRequest[T]) (*Client, error) {
+	return func(_ context.Context, req types.ConnectionRequest[T]) (*Client, error) {
+		value := token(req.Credential)
+		if value == "" {
 			return nil, ErrTokenMissing
 		}
 
-		return &Client{Token: token(cred)}, nil
+		return &Client{Token: value}, nil
 	}
 }

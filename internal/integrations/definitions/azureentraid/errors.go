@@ -7,8 +7,6 @@ var (
 	ErrCredentialMetadataRequired = errors.New("azureentraid: credential metadata required")
 	// ErrTokenAcquireFailed indicates the client credentials token request failed
 	ErrTokenAcquireFailed = errors.New("azureentraid: failed to acquire access token")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("azureentraid: result encode failed")
 	// ErrUsersFetchFailed indicates the Microsoft Graph users listing request failed
 	ErrUsersFetchFailed = errors.New("azureentraid: users fetch failed")
 	// ErrGroupsFetchFailed indicates the Microsoft Graph groups listing request failed
@@ -21,8 +19,6 @@ var (
 	ErrTenantIDNotFound = errors.New("azureentraid: tenant id not found in claims")
 	// ErrCredentialEncode indicates the credential could not be serialized
 	ErrCredentialEncode = errors.New("azureentraid: credential encode failed")
-	// ErrCredentialDecode indicates the credential could not be deserialized
-	ErrCredentialDecode = errors.New("azureentraid: credential decode failed")
 	// ErrConsentStateGeneration indicates the CSRF state could not be generated
 	ErrConsentStateGeneration = errors.New("azureentraid: admin consent state generation failed")
 	// ErrConsentStateInvalid indicates the stored admin consent start state could not be decoded

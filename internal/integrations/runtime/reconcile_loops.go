@@ -47,7 +47,7 @@ func (r *Runtime) resetReconcileLoop(ctx context.Context, installation *ent.Inte
 		logx.FromContext(ctx).Info().Int("purged", purged).Msg("purged duplicate reconcile jobs")
 	}
 
-	if op.ClientRef.Valid() {
+	if op.ClientRef != "" {
 		if _, err := r.BuildClientForIntegration(ctx, installation, op.ClientRef); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("client unresolved, marking unhealthy instead of seeding loop")
 

@@ -139,7 +139,7 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 		Data: json.RawMessage(`{"token":"secret"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, githubTestCredentialRef.ID(), credential, nil)
+	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, githubTestCredentialRef, credential)
 	assert.NoError(t, err)
 
 	return rec.ID

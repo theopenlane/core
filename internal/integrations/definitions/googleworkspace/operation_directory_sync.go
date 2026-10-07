@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	admin "google.golang.org/api/admin/directory/v1"
+	"google.golang.org/api/googleapi"
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -17,6 +18,28 @@ const directoryDefaultPageSize = int64(200)
 
 // defaultCustomerID is Google's alias for the authorized account's own customer
 const defaultCustomerID = "my_customer"
+
+// probeMaxResults is the maximum number of users to fetch during the directory probe
+const probeMaxResults = int64(1)
+
+// probeUsers verifies the connection can list Google Workspace users
+func probeUsers(ctx context.Context, _ types.OperationRequest, svc *admin.Service) error {
+	_, err := svc.Users.List().
+		Customer(defaultCustomerID).
+		MaxResults(probeMaxResults).
+		Projection("basic").
+		ViewType("admin_view").
+		Fields(googleapi.Field("users(id),nextPageToken")).
+		Context(ctx).
+		Do()
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("googleworkspace: users probe failed")
+
+		return types.Degraded(ErrHealthCheckFailed, "the connection cannot list Google Workspace users; grant the directory scopes")
+	}
+
+	return nil
+}
 
 // runDirectorySync collects Google Workspace directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, request types.OperationRequest, svc *admin.Service, _ DirectorySync) ([]types.IngestPayloadSet, error) {

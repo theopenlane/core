@@ -1,6 +1,7 @@
 package awssecurityhub
 
 import (
+	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/configservice"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
@@ -11,19 +12,48 @@ import (
 var (
 	// definitionID is the stable identifier for the AWS Security Hub integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
+	// assumeRole is the connection for AWS STS assume-role auth
+	assumeRole = types.ConnectionOf[AssumeRoleCredentialSchema]()
+	// staticCredentials is the connection for static IAM access keys
+	staticCredentials = types.ConnectionOf[ServiceAccountCredentialSchema]()
 	// installation is the typed installation metadata handle for the AWS Security Hub definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// awsAssumeRoleCredential is the typed credential slot for AWS STS assume-role auth
-	awsAssumeRoleCredential = types.CredentialRefOf[AssumeRoleCredentialSchema]()
-	// awsServiceAccountCredential is the credential slot for static service account credentials
-	awsServiceAccountCredential = types.CredentialRefOf[ServiceAccountCredentialSchema]()
-	// securityHubClient is the client ref for the AWS Security Hub client used by this definition
-	securityHubClient = types.ClientRefOf[*securityhub.Client]()
-	// configServiceClient is the client ref for the AWS Config client
-	configServiceClient = types.ClientRefOf[*configservice.Client]()
-	// iamClient is the client ref for the AWS IAM client used by directory sync operations
-	iamClient = types.ClientRefOf[*iam.Client]()
+	installation = types.InstallationOf[InstallationMetadata]()
 )
+
+// Client is the AWS client every operation of this definition runs against
+type Client struct {
+	// Config is the AWS SDK config the service clients are built from
+	Config awssdk.Config
+	// Scope is the non-secret collection scope of the connection
+	Scope CollectionScope
+}
+
+// CollectionScope is the account and region scope the connection collects
+type CollectionScope struct {
+	// AccountID is the primary AWS account identifier
+	AccountID string
+	// AccountScope indicates whether collection targets all delegated accounts or a specific set
+	AccountScope string
+	// AccountIDs lists the explicitly selected AWS account identifiers when account scope is specific
+	AccountIDs []string
+	// LinkedRegions limits collection to the listed AWS source regions when configured
+	LinkedRegions []string
+}
+
+// SecurityHub returns the AWS Security Hub client
+func (c Client) SecurityHub() *securityhub.Client {
+	return securityhub.NewFromConfig(c.Config)
+}
+
+// ConfigService returns the AWS Config client
+func (c Client) ConfigService() *configservice.Client {
+	return configservice.NewFromConfig(c.Config)
+}
+
+// IAM returns the AWS IAM client
+func (c Client) IAM() *iam.Client {
+	return iam.NewFromConfig(c.Config)
+}
 
 // FindingSync are configuration settings for the findings sync
 type FindingSync struct {

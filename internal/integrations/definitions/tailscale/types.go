@@ -1,8 +1,6 @@
 package tailscale
 
 import (
-	tsclient "github.com/tailscale/tailscale-client-go/v2"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -10,11 +8,9 @@ var (
 	// definitionID is the stable identifier for the Tailscale integration definition
 	definitionID = types.NewDefinitionRef("def_01K0TAILSCALE0000000000001")
 	// installation is the typed installation metadata handle for the Tailscale definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// tailscaleCredential is the credential slot for the Tailscale integration definition
-	tailscaleCredential = types.CredentialRefOf[CredentialSchema]()
-	// tailscaleClient is the client ref for the Tailscale API client used by this definition
-	tailscaleClient = types.ClientRefOf[*tsclient.Client]()
+	installation = types.InstallationOf[InstallationMetadata]()
+	// tailscaleConnection is the typed connection handle for the Tailscale OAuth client
+	tailscaleConnection = types.ConnectionOf[CredentialSchema]()
 )
 
 // AssetSync holds configuration for the Tailscale asset sync operation

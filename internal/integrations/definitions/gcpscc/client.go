@@ -13,88 +13,38 @@ import (
 // defaultScope is the GCP OAuth scope requested for every SCC credential
 const defaultScope = "https://www.googleapis.com/auth/cloud-platform"
 
-// Client builds GCP Security Command Center clients for one installation
-type Client struct{}
-
-// Build constructs the GCP Security Command Center client for one installation
-func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (*cloudscc.Client, error) {
-	scope, err := resolveScope(req.Credentials)
+// workloadIdentityClient builds the SCC client authenticating through workload identity federation
+func workloadIdentityClient(ctx context.Context, req types.ConnectionRequest[WorkloadIdentityCredentialSchema]) (Client, error) {
+	source, err := federationSource(ctx, req.TokenManager, req.Integration.OwnerID, req.Credential)
 	if err != nil {
-		return nil, err
+		return Client{}, err
 	}
 
-	clientOpts, err := clientOptions(ctx, req)
+	return newClient(ctx, req.Credential.CollectionScope, option.WithTokenSource(source))
+}
+
+// serviceAccountClient builds the SCC client authenticating with a service account key
+func serviceAccountClient(ctx context.Context, req types.ConnectionRequest[CredentialSchema]) (Client, error) {
+	creds, err := serviceAccountCredentials(ctx, req.Credential.ServiceAccountKey)
 	if err != nil {
-		return nil, err
+		return Client{}, err
 	}
 
-	opts := append([]option.ClientOption{}, clientOpts...)
+	return newClient(ctx, req.Credential.CollectionScope, option.WithCredentials(creds))
+}
+
+// newClient creates the SCC client for a collection scope, setting the quota project when the scope names one
+func newClient(ctx context.Context, scope CollectionScope, opts ...option.ClientOption) (Client, error) {
 	if scope.ProjectID != "" {
 		opts = append(opts, option.WithQuotaProject(scope.ProjectID))
 	}
 
-	client, err := cloudscc.NewClient(ctx, opts...)
+	scc, err := cloudscc.NewClient(ctx, opts...)
 	if err != nil {
-		return nil, ErrSecurityCenterClientCreate
+		return Client{}, ErrSecurityCenterClientCreate
 	}
 
-	return client, nil
-}
-
-// resolveCredential decodes SCC service account credential metadata from the credential bindings
-func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
-	cred, ok, err := sccCredential.Resolve(bindings)
-	if err != nil {
-		return CredentialSchema{}, ErrMetadataDecode
-	}
-
-	if !ok {
-		return CredentialSchema{}, ErrCredentialMetadataRequired
-	}
-
-	return cred, nil
-}
-
-// resolveScope decodes the collection scope from whichever credential slot the installation bound
-func resolveScope(bindings types.CredentialBindings) (CollectionScope, error) {
-	federated, ok, err := workloadIdentityCredential.Resolve(bindings)
-	if err != nil {
-		return CollectionScope{}, ErrMetadataDecode
-	}
-
-	if ok {
-		return federated.CollectionScope, nil
-	}
-
-	meta, err := resolveCredential(bindings)
-	if err != nil {
-		return CollectionScope{}, err
-	}
-
-	return meta.CollectionScope, nil
-}
-
-// clientOptions builds client options for whichever credential slot the installation bound
-func clientOptions(ctx context.Context, req types.ClientBuildRequest) ([]option.ClientOption, error) {
-	if _, ok := req.Credentials.Resolve(workloadIdentityCredential.ID()); ok {
-		return workloadIdentityOptions(ctx, req)
-	}
-
-	meta, err := resolveCredential(req.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if meta.ServiceAccountKey == "" {
-		return nil, ErrServiceAccountKeyInvalid
-	}
-
-	creds, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey)
-	if err != nil {
-		return nil, err
-	}
-
-	return []option.ClientOption{option.WithCredentials(creds)}, nil
+	return Client{Client: scc, Scope: scope}, nil
 }
 
 // serviceAccountCredentials parses and validates a service account key

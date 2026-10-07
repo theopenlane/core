@@ -9,12 +9,10 @@ import (
 var (
 	// DefinitionID is the stable identifier for the GitHub App integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GHAPP000000000000000001")
+	// appInstall is the connection ref for GitHub App installation credentials
+	appInstall = types.ConnectionOf[githubAppCredential]()
 	// installation is the typed installation metadata handle for the GitHub App definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// gitHubAppCredential is the credential slot for GitHub App installation credentials
-	gitHubAppCredential = types.CredentialRefOf[githubAppCredential]()
-	// gitHubClient is the client ref for the GitHub GraphQL client used by this definition
-	gitHubClient = types.ClientRefOf[GraphQLClient]()
+	installation = types.InstallationOf[InstallationMetadata]()
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// pingWebhookEvent is the webhook event ref for GitHub ping events

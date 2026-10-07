@@ -10,10 +10,10 @@ import (
 var (
 	// DefinitionID is the stable identifier for the email integration definition
 	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
-	// emailCredentialRef is the typed credential ref for customer-provisioned email
-	emailCredentialRef = types.CredentialRefOf[Credential]()
-	// emailClientRef is the client ref for the email client used by this definition
-	emailClientRef = types.ClientRefOf[*Client]()
+	// apiKeyConnection is the typed connection handle for customer-provisioned email
+	apiKeyConnection = types.ConnectionOf[Credential]()
+	// installation is the typed installation metadata handle for the email definition
+	installation = types.InstallationOf[InstallationMetadata]()
 	// userInput is the installation user input layout for customer-provisioned email
 	userInput = types.UserInputRefOf[UserInput]()
 	// resendWebhookRef is the webhook ref for inbound Resend delivery events
@@ -143,6 +143,14 @@ type Credential struct {
 	APIKey string `json:"apiKey" jsonschema:"required,description=Email provider API key"`
 	// Provider is the email service provider name
 	Provider string `json:"provider" jsonschema:"required,enum=resend,description=Email service provider"`
+}
+
+// InstallationMetadata holds the verified delivery configuration for one installation
+type InstallationMetadata struct {
+	// Provider is the email service provider name
+	Provider string `json:"provider,omitempty"`
+	// FromEmail is the address customer-initiated emails are sent from
+	FromEmail string `json:"fromEmail,omitempty"`
 }
 
 // UserInput is the installation-scoped configuration that customers provide when setting up their own email integration

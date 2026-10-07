@@ -276,7 +276,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 
 	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 		UserInput: json.RawMessage(
 			mustMarshalJSON(t, map[string]any{"filterExpr": "payload.severity == \"HIGH\""}),
@@ -297,7 +297,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 		).
 		OnlyX(testUser.UserCtx)
 
-	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
+	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef)
 	assert.NoError(t, err)
 	assert.True(t, ok)
 	assert.Contains(t, string(credential.Data), "projectId")
@@ -318,7 +318,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderStoresOperationCo
 
 	resp := performIntegrationConfigRequest(t, suite, testUser.UserCtx, operationTestDefinitionID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  operationTestDefinitionID,
-		CredentialRef: operationTestCredentialRef.ID().String(),
+		CredentialRef: operationTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"token": "test-token"})),
 		OperationConfig: map[string]json.RawMessage{
 			opTestValidatedOperation.Name(): json.RawMessage(`{"target":"repo","disable":true}`),
@@ -344,7 +344,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInvalidOpe
 
 	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  operationTestDefinitionID,
-		CredentialRef: operationTestCredentialRef.ID().String(),
+		CredentialRef: operationTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"token": "test-token"})),
 		OperationConfig: map[string]json.RawMessage{
 			opTestValidatedOperation.Name(): json.RawMessage(`{"target":1}`),
@@ -372,7 +372,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInvalidFil
 
 	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  operationTestDefinitionID,
-		CredentialRef: operationTestCredentialRef.ID().String(),
+		CredentialRef: operationTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"token": "test-token"})),
 		OperationConfig: map[string]json.RawMessage{
 			opTestValidatedOperation.Name(): json.RawMessage(`{"target":"repo","filterExpr":"payload."}`),
@@ -448,7 +448,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 
 	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
@@ -468,7 +468,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 
 	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
@@ -488,7 +488,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectP
 
 	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(`["not","an","object"]`),
 	})
 
@@ -505,7 +505,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 
 	rec := sendIntegrationConfigRequest(t, suite, context.Background(), configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
@@ -525,13 +525,13 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 
 	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
 	})
 
 	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		IntegrationID: first.IntegrationID,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "updated-project", "serviceAccountEmail": "updated@example.iam.gserviceaccount.com"})),
 	})
@@ -539,7 +539,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	assert.Equal(t, first.IntegrationID, second.IntegrationID)
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, first.IntegrationID)
-	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
+	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef)
 	assert.NoError(t, err)
 	assert.True(t, ok)
 
@@ -561,7 +561,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 
 	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
 	})
 
@@ -577,7 +577,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
 	assert.Equal(t, `payload.category == "critical"`, decodeUserInputField(t, stored.UserInput.Data, "filterExpr"))
 
-	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
+	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef)
 	assert.NoError(t, err)
 	assert.True(t, ok)
 
@@ -600,14 +600,14 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 
 	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
 	})
 
 	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
 		IntegrationID: first.IntegrationID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(`{}`),
 		UserInput:     json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.category == \"critical\""})),
 	})
@@ -618,7 +618,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
 	assert.Equal(t, `payload.category == "critical"`, decodeUserInputField(t, stored.UserInput.Data, "filterExpr"))
 
-	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef.ID())
+	credential, ok, err := suite.keystore.LoadCredential(testUser.UserCtx, stored, configTestCredentialRef)
 	assert.NoError(t, err)
 	assert.True(t, ok)
 
@@ -678,13 +678,13 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 
 	other := performIntegrationConfigRequest(t, suite, testUser.UserCtx, "def_01K0TESTOTH00000000000001", handlers.ConfigureIntegrationRequest{
 		DefinitionID:  "def_01K0TESTOTH00000000000001",
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "other-project", "serviceAccountEmail": "other@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		IntegrationID: other.IntegrationID,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
@@ -705,7 +705,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 
 	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestFailHealthProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestFailHealthProviderID,
-		CredentialRef: configTestCredentialRef.ID().String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
@@ -721,7 +721,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	assert.Len(t, records, 1, "expected one PENDING installation row after failed setup")
 	assert.Equal(t, enums.IntegrationStatusPending, records[0].Status)
 
-	_, credOk, credErr := suite.keystore.LoadCredential(testUser.UserCtx, records[0], configTestCredentialRef.ID())
+	_, credOk, credErr := suite.keystore.LoadCredential(testUser.UserCtx, records[0], configTestCredentialRef)
 	assert.NoError(t, credErr)
 	assert.False(t, credOk, "credential must not be stored after a failed health check")
 }

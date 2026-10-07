@@ -18,16 +18,34 @@ const (
 	zitadelDefaultPageSize = 100
 )
 
-// Client builds Zitadel user service clients for one installation
-type Client struct{}
-
-// Build constructs the Zitadel user service client for one installation
-func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (*client.Client, error) {
-	domain, auth, err := resolveAuth(req.Credentials)
-	if err != nil {
-		return nil, err
+// patClient builds the Zitadel client from a Personal Access Token credential
+func patClient(ctx context.Context, req types.ConnectionRequest[CredentialSchema]) (Client, error) {
+	switch {
+	case req.Credential.Domain == "":
+		return Client{}, ErrDomainMissing
+	case req.Credential.Token == "":
+		return Client{}, ErrTokenMissing
 	}
 
+	return newClient(ctx, req.Credential.Domain, client.PAT(req.Credential.Token))
+}
+
+// oauthClient builds the Zitadel client from an OAuth client-credentials credential
+func oauthClient(ctx context.Context, req types.ConnectionRequest[OAuthCredentialSchema]) (Client, error) {
+	switch {
+	case req.Credential.Domain == "":
+		return Client{}, ErrDomainMissing
+	case req.Credential.ClientID == "" || req.Credential.ClientSecret == "":
+		return Client{}, ErrClientCredentialsMissing
+	}
+
+	auth := client.PasswordAuthentication(req.Credential.ClientID, req.Credential.ClientSecret, oidc.ScopeOpenID, client.ScopeZitadelAPI())
+
+	return newClient(ctx, req.Credential.Domain, auth)
+}
+
+// newClient constructs the Zitadel API client for the instance domain with the given token source
+func newClient(ctx context.Context, domain string, auth client.TokenSourceInitializer) (Client, error) {
 	host, opts := parseHost(domain)
 
 	api, err := client.New(
@@ -36,10 +54,10 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (*client.
 		client.WithAuth(auth),
 	)
 	if err != nil {
-		return nil, ErrClientBuildFailed
+		return Client{}, ErrClientBuildFailed
 	}
 
-	return api, nil
+	return Client{Client: api, Domain: domain}, nil
 }
 
 // parseHost normalizes the instance into a bare host plus connection options
@@ -63,48 +81,4 @@ func parseHost(instance string) (string, []zitadel.Option) {
 	}
 
 	return host, nil
-}
-
-// resolveAuth selects the auth mode and returns the domain and token source
-func resolveAuth(bindings types.CredentialBindings) (string, client.TokenSourceInitializer, error) {
-	if pat, ok, err := zitadelPATCredential.Resolve(bindings); err == nil && ok {
-		if pat.Domain == "" {
-			return "", nil, ErrDomainMissing
-		}
-
-		if pat.Token == "" {
-			return "", nil, ErrTokenMissing
-		}
-
-		return pat.Domain, client.PAT(pat.Token), nil
-	}
-
-	if oauth, ok, err := zitadelOAuthCredential.Resolve(bindings); err == nil && ok {
-		if oauth.Domain == "" {
-			return "", nil, ErrDomainMissing
-		}
-
-		if oauth.ClientID == "" || oauth.ClientSecret == "" {
-			return "", nil, ErrClientCredentialsMissing
-		}
-
-		auth := client.PasswordAuthentication(oauth.ClientID, oauth.ClientSecret, oidc.ScopeOpenID, client.ScopeZitadelAPI())
-
-		return oauth.Domain, auth, nil
-	}
-
-	return "", nil, ErrCredentialDecode
-}
-
-// resolveDomain extracts the instance domain from whichever credential is configured
-func resolveDomain(bindings types.CredentialBindings) (string, bool) {
-	if pat, ok, err := zitadelPATCredential.Resolve(bindings); err == nil && ok && pat.Domain != "" {
-		return pat.Domain, true
-	}
-
-	if oauth, ok, err := zitadelOAuthCredential.Resolve(bindings); err == nil && ok && oauth.Domain != "" {
-		return oauth.Domain, true
-	}
-
-	return "", false
 }

@@ -12,7 +12,7 @@ import (
 )
 
 // SendEmailOp is the operation ref for the generic send-email operation
-var SendEmailOp = types.OperationPayloadOf[SendEmailRequest]().Handles(emailClientRef, sendEmail).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
+var SendEmailOp = types.OperationPayloadOf[SendEmailRequest]().Handles(sendEmail).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
 
 // SendEmailRequest is the operation config for dispatching a single templated email
 type SendEmailRequest struct {

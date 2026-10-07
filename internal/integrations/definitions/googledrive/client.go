@@ -11,33 +11,24 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// Client builds Google Drive SDK clients for one installation
-type Client struct {
-	// cfg is the operator-level Google Drive configuration
-	cfg Config
-}
+// clientBuilder returns the Google Drive client builder bound to the operator config
+func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[googleDriveCred]) (DriveClient, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[googleDriveCred]) (DriveClient, error) {
+		cred := req.Credential
 
-// Build constructs the Google Drive SDK client for one installation
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (DriveClient, error) {
-	cred, _, err := driveCredential.Resolve(req.Credentials)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("Failed to resolve drive credentials")
+		if cred.AccessToken == "" {
+			return DriveClient{}, ErrOAuthTokenMissing
+		}
 
-		return DriveClient{}, ErrCredentialDecode
+		ts := providerkit.GoogleTokenSource(context.Background(), cfg.ClientID, cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+
+		svc, err := drive.NewService(ctx, option.WithTokenSource(ts))
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("Failed to init drive client with provided credentials")
+
+			return DriveClient{}, ErrDriveServiceBuildFailed
+		}
+
+		return DriveClient{Svc: svc}, nil
 	}
-
-	if cred.AccessToken == "" {
-		return DriveClient{}, ErrOAuthTokenMissing
-	}
-
-	ts := providerkit.GoogleTokenSource(context.Background(), c.cfg.ClientID, c.cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
-
-	svc, err := drive.NewService(ctx, option.WithTokenSource(ts))
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("Failed to init drive client with provided credentials")
-
-		return DriveClient{}, ErrDriveServiceBuildFailed
-	}
-
-	return DriveClient{Svc: svc}, nil
 }

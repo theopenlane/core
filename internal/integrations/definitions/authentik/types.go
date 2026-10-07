@@ -2,18 +2,15 @@ package authentik
 
 import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	authentikSDK "goauthentik.io/api/v3"
 )
 
 var (
 	// definitionID is the stable identifier for the Authentik integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AUTHENTIK000000000000001")
 	// installation is the typed installation metadata handle for the Authentik definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// authentikCredential is the typed credential slot for the Authentik API token
-	authentikCredential = types.CredentialRefOf[CredentialSchema]()
-	// authentikClient is the client ref for the Authentik API client
-	authentikClient = types.ClientRefOf[*authentikSDK.APIClient]()
+	installation = types.InstallationOf[InstallationMetadata]()
+	// authentikConnection is the typed connection handle for the Authentik API token
+	authentikConnection = types.ConnectionOf[CredentialSchema]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )

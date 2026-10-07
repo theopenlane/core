@@ -30,15 +30,9 @@ func (c *SecurityClient) scope() string {
 	return fmt.Sprintf(subscriptionScopeFormat, c.subscriptionID)
 }
 
-// Client builds Azure Security Center clients for one installation
-type Client struct{}
-
-// Build constructs an Azure Security Center client using client credentials
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*SecurityClient, error) {
-	cred, _, err := securityCenterCredential.Resolve(req.Credentials)
-	if err != nil {
-		return nil, ErrCredentialInvalid
-	}
+// buildClient constructs an Azure Security Center client using client credentials
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*SecurityClient, error) {
+	cred := req.Credential
 
 	switch {
 	case cred.TenantID == "":

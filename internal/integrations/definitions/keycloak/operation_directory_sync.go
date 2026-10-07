@@ -11,20 +11,15 @@ import (
 )
 
 // runDirectorySync collects Keycloak directory users, groups, and memberships
-func runDirectorySync(ctx context.Context, request types.OperationRequest, gc *gocloak.GoCloak, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
-	cred, err := resolveCredential(request.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	token, err := gc.LoginClient(ctx, cred.ClientID, cred.ClientSecret, cred.Realm)
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c Client, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
+	token, err := c.ClientToken(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error acquiring keycloak token")
 
 		return nil, ErrTokenAcquireFailed
 	}
 
-	return collectDirectory(ctx, gc, token.AccessToken, cred.Realm, cfg)
+	return collectDirectory(ctx, c.GoCloak, token.AccessToken, c.Realm, cfg)
 }
 
 // collectDirectory collects Keycloak directory users, groups, and memberships

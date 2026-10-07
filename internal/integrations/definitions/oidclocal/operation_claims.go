@@ -10,19 +10,10 @@ import (
 )
 
 // inspectClaims returns the stored OIDC claims for local inspection
-func inspectClaims(_ context.Context, req types.OperationRequest, _ ClaimsInspect) (json.RawMessage, error) {
-	cred, ok, err := oidcCredential.Resolve(req.Credentials)
-	if err != nil {
-		return nil, ErrCredentialDecode
-	}
-
-	if !ok {
+func inspectClaims(_ context.Context, _ types.OperationRequest, c Client, _ ClaimsInspect) (json.RawMessage, error) {
+	if len(c.Credential.Claims) == 0 {
 		return providerkit.EncodeResult(ClaimsInspect{Claims: map[string]any{}}, ErrResultEncode)
 	}
 
-	if len(cred.Claims) == 0 {
-		return providerkit.EncodeResult(ClaimsInspect{Claims: map[string]any{}}, ErrResultEncode)
-	}
-
-	return providerkit.EncodeResult(ClaimsInspect{Claims: maps.Clone(cred.Claims)}, ErrResultEncode)
+	return providerkit.EncodeResult(ClaimsInspect{Claims: maps.Clone(c.Credential.Claims)}, ErrResultEncode)
 }

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/notifications"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
@@ -320,7 +321,7 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 		return HealthAssessment{}, err
 	}
 
-	checkErr, err := r.verifyConnection(ctx, installation, def)
+	verified, checkErr, err := r.verifyConnection(ctx, installation, def)
 	if err != nil {
 		return HealthAssessment{}, err
 	}
@@ -337,8 +338,10 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 		}, nil
 	}
 
-	if err := r.RefreshInstallationMetadata(ctx, installation); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("health assessment: instance id refresh failed")
+	if len(def.ConnectionList()) > 0 {
+		if err := r.saveInstallationMetadata(privacy.DecisionContext(ctx, privacy.Allow), installation, def, verified.Connection, verified.Metadata); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("health assessment: installation metadata save failed")
+		}
 	}
 
 	if installation.Status == enums.IntegrationStatusErrored {
@@ -360,36 +363,37 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 	}, nil
 }
 
-// verifyConnection runs the persisted connection's health check under stored credentials; checkErr is the check's own failure, err a resolution failure
-func (r *Runtime) verifyConnection(ctx context.Context, installation *ent.Integration, def types.Definition) (checkErr, err error) {
-	if len(def.Connections) == 0 || def.HealthCheck == nil {
-		return nil, nil
+// connectionVerification is the active connection and the installation metadata its verification returned
+type connectionVerification struct {
+	// Connection is the connection the verification ran under
+	Connection types.Connection
+	// Metadata is the installation metadata the verification returned
+	Metadata types.IntegrationInstallationMetadata
+}
+
+// verifyConnection runs the persisted connection's verification under its stored credential; checkErr is the verification's own failure, err a resolution failure
+func (r *Runtime) verifyConnection(ctx context.Context, installation *ent.Integration, def types.Definition) (verified connectionVerification, checkErr error, err error) {
+	if len(def.ConnectionList()) == 0 {
+		return connectionVerification{}, nil, nil
 	}
 
 	connection, err := r.resolvePersistedConnection(def, installation)
 	if err != nil {
-		return nil, err
+		return connectionVerification{}, nil, err
 	}
 
-	if def.HealthCheck == nil {
-		return nil, nil
-	}
-
-	bindings, err := r.loadCredentials(ctx, installation, connection.CredentialRefs)
+	credential, found, err := r.keystore().LoadCredential(privacy.DecisionContext(ctx, privacy.Allow), installation, connection.Credential.Name)
 	if err != nil {
-		return nil, err
+		return connectionVerification{}, nil, err
 	}
 
-	checkErr := r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings)
-	if checkErr == nil {
-		return nil, nil
+	if !found {
+		return connectionVerification{Connection: connection}, keystore.ErrCredentialNotFound, nil
 	}
 
-	if markErr := r.MarkIntegrationUnhealthy(ctx, installation, checkErr.Error()); markErr != nil {
-		logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after failed health check")
-	}
+	metadata, checkErr := r.runConnectionHealthCheck(ctx, installation, def, connection, credential)
 
-	return r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings), nil
+	return connectionVerification{Connection: connection, Metadata: metadata}, checkErr, nil
 }
 
 // assessOperationHealth probes workload operations and records each outcome
@@ -427,43 +431,41 @@ func (r *Runtime) assessOperationHealth(ctx context.Context, installation *ent.I
 	return results
 }
 
-// runConnectionHealthCheck runs the definition health check against the connection's credentials
-func (r *Runtime) runConnectionHealthCheck(ctx context.Context, installation *ent.Integration, check *types.HealthCheckRegistration, bindings types.CredentialBindings) error {
-	var client any
+// runConnectionHealthCheck runs the connection's verification under its client and returns the installation metadata it derives
+func (r *Runtime) runConnectionHealthCheck(ctx context.Context, installation *ent.Integration, def types.Definition, connection types.Connection, credential types.CredentialSet) (types.IntegrationInstallationMetadata, error) {
+	build := connection.Clients[connection.Verify.ClientRef]
 
-	if check.ClientRef.Valid() {
-		registration, err := r.Registry().Client(installation.DefinitionID, check.ClientRef)
-		if err != nil {
-			return err
-		}
-
-		client, err = r.keystore().BuildClient(ctx, installation, registration, bindings, nil, false)
-		if err != nil {
-			return err
-		}
+	client, err := r.keystore().BuildClient(ctx, installation, connection.Credential.Name, connection.Verify.ClientRef, build, credential, false)
+	if err != nil {
+		return types.IntegrationInstallationMetadata{}, err
 	}
 
-	_, err := check.Handle(ctx, types.OperationRequest{
-		Integration: installation,
-		Credentials: bindings,
-		Client:      client,
-		DB:          r.DB(),
-		Services:    r,
+	metadata, err := connection.Verify.Handle(ctx, types.ConnectionInput{
+		Integration:  installation,
+		Credential:   credential,
+		TokenManager: r.DB().TokenManager,
+		Client:       client,
 	})
+	if err != nil {
+		return types.IntegrationInstallationMetadata{}, err
+	}
 
-	return err
+	if def.Installation != nil && def.Installation.Identifiable && metadata.Display.ExternalID == "" {
+		return types.IntegrationInstallationMetadata{}, ErrInstallationInstanceIDRequired
+	}
+
+	return metadata, nil
 }
 
 // runOperationProbe executes one operation's health probe under the operation's own client
 func (r *Runtime) runOperationProbe(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration) error {
-	client, credentials, _, err := r.resolveOperationClient(ctx, installation, operation, nil, nil, false)
+	client, err := r.resolveOperationClient(privacy.DecisionContext(ctx, privacy.Allow), installation, operation, false)
 	if err != nil {
 		return err
 	}
 
 	_, err = operation.HealthCheck(ctx, types.OperationRequest{
 		Integration: installation,
-		Credentials: credentials,
 		Client:      client,
 		DB:          r.DB(),
 		Services:    r,

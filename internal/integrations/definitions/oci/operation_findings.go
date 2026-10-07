@@ -16,18 +16,13 @@ import (
 const findingsPageSize = 100
 
 // runFindingsSync collects Cloud Guard problems and emits finding ingest payloads
-func runFindingsSync(ctx context.Context, req types.OperationRequest, c *cloudguard.CloudGuardClient, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
-	meta, err := resolveCredential(req.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	compartment := resolveCompartment(meta)
+func runFindingsSync(ctx context.Context, _ types.OperationRequest, c Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
+	compartment := c.Compartment()
 	if compartment == "" {
 		return nil, ErrCompartmentRequired
 	}
 
-	problems, err := listProblems(ctx, c, compartment)
+	problems, err := listProblems(ctx, c.CloudGuard, compartment)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("compartment_id", compartment).Bool("context_cancelled", ctx.Err() != nil).Msg("oci: cloud guard problem listing failed")
 
@@ -37,7 +32,7 @@ func runFindingsSync(ctx context.Context, req types.OperationRequest, c *cloudgu
 	envelopes := make([]types.MappingEnvelope, 0, len(problems))
 
 	for _, problem := range problems {
-		envelope, err := providerkit.MarshalEnvelope(compartment, problemPayload(ctx, c, problem, cfg.SkipProblemDetails), ErrPayloadEncode)
+		envelope, err := providerkit.MarshalEnvelope(compartment, problemPayload(ctx, c.CloudGuard, problem, cfg.SkipProblemDetails), ErrPayloadEncode)
 		if err != nil {
 			return nil, err
 		}

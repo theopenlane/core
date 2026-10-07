@@ -9,11 +9,9 @@ var (
 	// DefinitionID is the stable identifier for the Cloudflare integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
 	// installation is the typed installation metadata handle for the Cloudflare definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// cloudflareCredential is the typed credential slot for the Cloudflare API token
-	cloudflareCredential = types.CredentialRefOf[CredentialSchema]()
-	// cloudflareClient is the client ref for the Cloudflare API client used by this definition
-	cloudflareClient = types.ClientRefOf[*CloudflareClient]()
+	installation = types.InstallationOf[InstallationMetadata]()
+	// apiToken is the connection for the Cloudflare API token
+	apiToken = types.ConnectionOf[CredentialSchema]()
 )
 
 const (

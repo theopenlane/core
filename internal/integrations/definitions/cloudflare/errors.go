@@ -5,10 +5,6 @@ import "errors"
 var (
 	// ErrAPITokenMissing indicates the Cloudflare API token is missing from the credential
 	ErrAPITokenMissing = errors.New("cloudflare: api token missing")
-	// ErrCredentialInvalid indicates credential metadata could not be decoded
-	ErrCredentialInvalid = errors.New("cloudflare: credential invalid")
-	// ErrCredentialMetadataRequired indicates no credential metadata was provided
-	ErrCredentialMetadataRequired = errors.New("cloudflare: credential metadata required")
 	// ErrTokenVerificationFailed indicates the Cloudflare token verification failed
 	ErrTokenVerificationFailed = errors.New("cloudflare: token verification failed")
 	// ErrTokenNotActive indicates the Cloudflare token is not in an active state

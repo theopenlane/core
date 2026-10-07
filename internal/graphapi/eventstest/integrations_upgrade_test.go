@@ -83,10 +83,10 @@ const backfilledToken = "x"
 const suiteQueueName = "graphapi_integration_test"
 
 var (
-	numericTokenRef          = integrationtypes.NewCredentialRef[tokenCred](testint.TokenCredential.String())
-	straySlotRef             = integrationtypes.NewCredentialRef[straySlotCred]("straySlot")
-	partialServiceAccountRef = integrationtypes.NewCredentialRef[serviceAccountCred](testint.ServiceAccountCredential.String())
-	unreplacedRef            = integrationtypes.NewCredentialRef[unreplacedCred]("unreplaced")
+	numericTokenRef          = integrationtypes.NewConnection[tokenCred](testint.Token.Connection().Credential.Name)
+	straySlotRef             = integrationtypes.NewConnection[straySlotCred]("straySlot")
+	partialServiceAccountRef = integrationtypes.NewConnection[serviceAccountCred](testint.ServiceAccount.Connection().Credential.Name)
+	unreplacedRef            = integrationtypes.NewConnection[unreplacedCred]("unreplaced")
 
 	zoneInputRef   = integrationtypes.UserInputRefOf[zoneInput]()
 	regionInputRef = integrationtypes.UserInputRefOf[regionInput]().Upgraded(upgradeRegionInput)
@@ -128,22 +128,36 @@ func upgradeRegionInput(_ context.Context, _ integrationtypes.InstallationReques
 	return current, nil
 }
 
-// retiredSlot pairs a retired credential slot id with its schema
+// retiredClient is the client every retired connection provides
+type retiredClient struct{}
+
+// testMetadata is the installation metadata layout every retired definition shares with the current test definition
+type testMetadata struct{}
+
+// retiredSlot pairs a retired connection name with the connector declaring it
 type retiredSlot struct {
-	id     integrationtypes.CredentialSlotID
-	schema json.RawMessage
+	name      string
+	connector integrationtypes.Connector
 }
 
-// slotOf pairs a typed credential ref with the schema it reflects
-func slotOf[T any](ref integrationtypes.CredentialRef[T]) retiredSlot {
-	return retiredSlot{id: ref.ID(), schema: ref.Schema()}
+// slotOf pairs a typed connection ref with its connector providing a no-op client and verification
+func slotOf[T any](ref integrationtypes.ConnectionRef[T]) retiredSlot {
+	connector := ref.
+		Provides(func(context.Context, integrationtypes.ConnectionRequest[T]) (*retiredClient, error) {
+			return &retiredClient{}, nil
+		}).
+		Verified(func(context.Context, integrationtypes.ConnectionRequest[T], *retiredClient) (testMetadata, error) {
+			return testMetadata{}, nil
+		})
+
+	return retiredSlot{name: ref.Connection().Credential.Name, connector: connector}
 }
 
 // syncOperation returns a no-op operation registration for the ref, carrying whatever the ref replaces
 func syncOperation[Config any](op integrationtypes.OperationRef[Config], policy integrationtypes.ExecutionPolicy) integrationtypes.OperationRegistration {
 	return op.Policy(policy).HandlesRequest(func(context.Context, integrationtypes.OperationRequest, Config) (json.RawMessage, error) {
 		return nil, nil
-	}).Registration(testint.DefinitionID)
+	}).Registration()
 }
 
 // eventsWebhook returns a webhook registration accepting events, carrying whatever the ref replaces
@@ -153,7 +167,7 @@ func eventsWebhook(webhook integrationtypes.WebhookRef, events ...integrationtyp
 			return integrationtypes.WebhookReceivedEvent{Name: string(req.Payload), Payload: req.Payload}, nil
 		},
 		Events: lo.Map(events, func(event integrationtypes.WebhookEventRef[renameEvent], _ int) integrationtypes.WebhookEventRegistration {
-			return event.Registration(testint.DefinitionID, integrationtypes.WebhookEventRegistration{
+			return event.Registration(integrationtypes.WebhookEventRegistration{
 				Handle: func(context.Context, integrationtypes.WebhookHandleRequest) error { return nil },
 			})
 		}),
@@ -163,34 +177,24 @@ func eventsWebhook(webhook integrationtypes.WebhookRef, events ...integrationtyp
 // previousDefinition returns an earlier version of the shared test definition
 func previousDefinition(primary retiredSlot, extra ...retiredSlot) registry.Builder {
 	return func() (integrationtypes.Definition, error) {
-		def := integrationtypes.Definition{
+		return integrationtypes.Definition{
 			DefinitionSpec: integrationtypes.DefinitionSpec{
 				ID:          testint.DefinitionID.ID(),
 				DisplayName: "Test Integration",
 				Active:      true,
 			},
-			HealthCheck: integrationtypes.CredentialHealthCheck(func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) {
-				return json.RawMessage(`{"ok":true}`), nil
+			Installation: integrationtypes.InstallationOf[testMetadata]().Registration(),
+			Connections: lo.Map(append([]retiredSlot{primary}, extra...), func(slot retiredSlot, _ int) integrationtypes.Connector {
+				return slot.connector
 			}),
-		}
-
-		connection := integrationtypes.ConnectionRegistration{CredentialRef: primary.id}
-
-		for _, slot := range append([]retiredSlot{primary}, extra...) {
-			def.CredentialRegistrations = append(def.CredentialRegistrations, integrationtypes.CredentialRegistration{Ref: slot.id, Schema: slot.schema})
-			connection.CredentialRefs = append(connection.CredentialRefs, slot.id)
-		}
-
-		def.Connections = []integrationtypes.ConnectionRegistration{connection}
-
-		return def, nil
+		}, nil
 	}
 }
 
 // definitionOver returns the shared test definition with shape applied over the token slot
 func definitionOver(shape func(def *integrationtypes.Definition)) registry.Builder {
 	return func() (integrationtypes.Definition, error) {
-		def, err := previousDefinition(slotOf(testint.TokenCredential))()
+		def, err := previousDefinition(slotOf(testint.Token))()
 		if err != nil {
 			return integrationtypes.Definition{}, err
 		}
@@ -272,7 +276,7 @@ func seedRetiredLoop(t *testing.T, ctx context.Context, installation *ent.Integr
 }
 
 // installOn returns the installation of the single definition rt runs
-func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userInput json.RawMessage, operationConfig map[string]json.RawMessage, primary integrationtypes.CredentialSlotID, credential integrationtypes.CredentialSet) *ent.Integration {
+func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userInput json.RawMessage, operationConfig map[string]json.RawMessage, primary string, credential integrationtypes.CredentialSet) *ent.Integration {
 	t.Helper()
 
 	definitions := rt.Registry().Definitions()
@@ -286,13 +290,13 @@ func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userIn
 	installation, _, err := rt.EnsureInstallation(ctx, ownerID, "", def, userInput, operationConfig)
 	require.NoError(t, err)
 
-	require.NoError(t, rt.ReconcileCredential(ctx, installation, primary, credential, nil))
+	require.NoError(t, rt.ReconcileCredential(ctx, installation, primary, credential))
 
 	return reloadIntegration(t, ctx, installation.ID)
 }
 
 // installUnder returns the installation and version from an earlier, unversioned definition runtime, older than every versioned runtime
-func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, primary integrationtypes.CredentialSlotID, credentials map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet) (*ent.Integration, string) {
+func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, primary string, credentials map[string]integrationtypes.CredentialSet) (*ent.Integration, string) {
 	t.Helper()
 
 	reg := registry.New()
@@ -302,12 +306,15 @@ func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, p
 
 	installation := installOn(t, ctx, rt, nil, nil, primary, credentials[primary])
 
+	store, err := keystore.NewStore(suite.Client.DB)
+	require.NoError(t, err)
+
 	for slot, credential := range credentials {
 		if slot == primary {
 			continue
 		}
 
-		require.NoError(t, rt.ReconcileCredential(ctx, reloadIntegration(t, ctx, installation.ID), slot, credential, nil))
+		require.NoError(t, store.SaveCredential(ctx, reloadIntegration(t, ctx, installation.ID), slot, credential))
 	}
 
 	return reloadIntegration(t, ctx, installation.ID), rt.Registry().Version(testint.DefinitionID.ID())
@@ -339,8 +346,8 @@ func TestInstallationUpgrade(t *testing.T) {
 	require.NotEmpty(t, current)
 
 	t.Run("a slot retired by the current definition is upgraded inline on first use", func(t *testing.T) {
-		installation, previous := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyTokenCredential)), testint.LegacyTokenCredential.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			testint.LegacyTokenCredential.ID(): {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
+		installation, previous := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyToken)), testint.LegacyToken.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			testint.LegacyToken.Connection().Credential.Name: {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
 		})
 		require.Less(t, previous, current)
 		require.Equal(t, previous, installation.DefinitionVersion)
@@ -352,29 +359,29 @@ func TestInstallationUpgrade(t *testing.T) {
 		rows, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.TokenCredential.ID()].Data))
-		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyTokenCredential.ID()))
+		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
+		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name))
 
 		reloaded := reloadIntegration(t, ctx, installation.ID)
 		require.Equal(t, current, reloaded.DefinitionVersion)
 
 		state, err := def.ProviderState(reloaded.ProviderState)
 		require.NoError(t, err)
-		require.Equal(t, testint.TokenCredential.ID(), state.CredentialRef)
+		require.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
 
-		before := slotRowIDs(t, ctx, installation.ID, testint.TokenCredential.ID())
+		before := slotRowIDs(t, ctx, installation.ID, testint.Token.Connection().Credential.Name)
 
 		_, err = suite.IntegrationsRT.RunHealthAssessment(ctx, reloaded)
 		require.NoError(t, err)
-		require.Equal(t, before, slotRowIDs(t, ctx, installation.ID, testint.TokenCredential.ID()))
+		require.Equal(t, before, slotRowIDs(t, ctx, installation.ID, testint.Token.Connection().Credential.Name))
 	})
 
 	t.Run("a stored type the current schema rejects fails the upgrade and marks the installation errored", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		installation, previous := installUnder(t, subCtx, previousDefinition(slotOf(numericTokenRef)), numericTokenRef.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			numericTokenRef.ID(): {Data: json.RawMessage(`{"token":1}`)},
+		installation, previous := installUnder(t, subCtx, previousDefinition(slotOf(numericTokenRef)), numericTokenRef.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			numericTokenRef.Connection().Credential.Name: {Data: json.RawMessage(`{"token":1}`)},
 		})
 
 		_, err := suite.IntegrationsRT.RunHealthAssessment(subCtx, installation)
@@ -391,12 +398,12 @@ func TestInstallationUpgrade(t *testing.T) {
 
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
-		require.JSONEq(t, `{"token":1}`, string(rows[testint.TokenCredential.ID()].Data))
+		require.JSONEq(t, `{"token":1}`, string(rows[testint.Token.Connection().Credential.Name].Data))
 	})
 
 	t.Run("a backfilled slot is completed from the installation during the upgrade", func(t *testing.T) {
-		installation, previous := installUnder(t, ctx, previousDefinition(slotOf(partialServiceAccountRef)), partialServiceAccountRef.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			partialServiceAccountRef.ID(): {Data: json.RawMessage(`{"projectId":"p"}`)},
+		installation, previous := installUnder(t, ctx, previousDefinition(slotOf(partialServiceAccountRef)), partialServiceAccountRef.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			partialServiceAccountRef.Connection().Credential.Name: {Data: json.RawMessage(`{"projectId":"p"}`)},
 		})
 		require.NotEqual(t, current, previous)
 
@@ -407,7 +414,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		rows, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"projectId":"p","serviceAccountEmail":"`+installation.ID+`@backfilled.example.com"}`, string(rows[testint.ServiceAccountCredential.ID()].Data))
+		require.JSONEq(t, `{"projectId":"p","serviceAccountEmail":"`+installation.ID+`@backfilled.example.com"}`, string(rows[testint.ServiceAccount.Connection().Credential.Name].Data))
 		require.Equal(t, current, reloadIntegration(t, ctx, installation.ID).DefinitionVersion)
 	})
 
@@ -415,8 +422,8 @@ func TestInstallationUpgrade(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		installation, _ := installUnder(t, subCtx, previousDefinition(slotOf(numericTokenRef)), numericTokenRef.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			numericTokenRef.ID(): {Data: json.RawMessage(`{"token":1}`)},
+		installation, _ := installUnder(t, subCtx, previousDefinition(slotOf(numericTokenRef)), numericTokenRef.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			numericTokenRef.Connection().Credential.Name: {Data: json.RawMessage(`{"token":1}`)},
 		})
 
 		_, err := suite.IntegrationsRT.RunHealthAssessment(subCtx, installation)
@@ -427,7 +434,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 
 		cred := testint.TokenCredentialSet("fresh")
-		require.NoError(t, suite.IntegrationsRT.ReconcileCredential(subCtx, reloaded, testint.TokenCredential.ID(), cred, nil))
+		require.NoError(t, suite.IntegrationsRT.ReconcileCredential(subCtx, reloaded, testint.Token.Connection().Credential.Name, cred))
 
 		recovered := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusConnected, recovered.Status)
@@ -437,12 +444,12 @@ func TestInstallationUpgrade(t *testing.T) {
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"fresh"}`, string(rows[testint.TokenCredential.ID()].Data))
+		require.JSONEq(t, `{"token":"fresh"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
 	})
 
 	t.Run("disconnect succeeds when the persisted ref is a retired slot nothing replaces", func(t *testing.T) {
-		installation, _ := installUnder(t, ctx, previousDefinition(slotOf(unreplacedRef)), unreplacedRef.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			unreplacedRef.ID(): {Data: json.RawMessage(`{"key":"k"}`)},
+		installation, _ := installUnder(t, ctx, previousDefinition(slotOf(unreplacedRef)), unreplacedRef.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			unreplacedRef.Connection().Credential.Name: {Data: json.RawMessage(`{"key":"k"}`)},
 		})
 
 		_, err := suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
@@ -451,7 +458,7 @@ func TestInstallationUpgrade(t *testing.T) {
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
-		require.JSONEq(t, `{"key":"k"}`, string(rows[unreplacedRef.ID()].Data))
+		require.JSONEq(t, `{"key":"k"}`, string(rows[unreplacedRef.Connection().Credential.Name].Data))
 
 		_, err = suite.IntegrationsRT.Disconnect(ctx, reloaded)
 		require.NoError(t, err)
@@ -463,22 +470,22 @@ func TestInstallationUpgrade(t *testing.T) {
 	})
 
 	t.Run("a crash between the credential move and the ref repoint converges on rerun", func(t *testing.T) {
-		installation, _ := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyTokenCredential)), testint.LegacyTokenCredential.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			testint.LegacyTokenCredential.ID(): {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
+		installation, _ := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyToken)), testint.LegacyToken.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			testint.LegacyToken.Connection().Credential.Name: {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
 		})
 
 		stored, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
 		require.Len(t, stored, 1)
 
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, stored, map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			testint.TokenCredential.ID(): testint.TokenCredentialSet("legacy-token"),
+		require.NoError(t, store.ReplaceCredentials(ctx, installation, stored, map[string]integrationtypes.CredentialSet{
+			testint.Token.Connection().Credential.Name: testint.TokenCredentialSet("legacy-token"),
 		}))
-		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyTokenCredential.ID()))
+		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name))
 
 		state, err := def.ProviderState(installation.ProviderState)
 		require.NoError(t, err)
-		require.Equal(t, testint.LegacyTokenCredential.ID(), state.CredentialRef)
+		require.Equal(t, testint.LegacyToken.Connection().Credential.Name, state.CredentialRef)
 
 		assessment, err := suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
 		require.NoError(t, err)
@@ -489,17 +496,17 @@ func TestInstallationUpgrade(t *testing.T) {
 
 		state, err = def.ProviderState(reloaded.ProviderState)
 		require.NoError(t, err)
-		require.Equal(t, testint.TokenCredential.ID(), state.CredentialRef)
+		require.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.TokenCredential.ID()].Data))
+		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
 	})
 
 	t.Run("concurrent upgrades of one installation both succeed and converge", func(t *testing.T) {
-		installation, _ := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyTokenCredential)), testint.LegacyTokenCredential.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			testint.LegacyTokenCredential.ID(): {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
+		installation, _ := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyToken)), testint.LegacyToken.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			testint.LegacyToken.Connection().Credential.Name: {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
 		})
 
 		first := reloadIntegration(t, ctx, installation.ID)
@@ -522,21 +529,21 @@ func TestInstallationUpgrade(t *testing.T) {
 		rows, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.TokenCredential.ID()].Data))
-		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyTokenCredential.ID()))
+		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
+		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name))
 
 		reloaded := reloadIntegration(t, ctx, installation.ID)
 		require.Equal(t, current, reloaded.DefinitionVersion)
 
 		state, err := def.ProviderState(reloaded.ProviderState)
 		require.NoError(t, err)
-		require.Equal(t, testint.TokenCredential.ID(), state.CredentialRef)
+		require.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
 	})
 
 	t.Run("a slot the current definition no longer declares is left in place", func(t *testing.T) {
-		installation, _ := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyTokenCredential), slotOf(straySlotRef)), testint.LegacyTokenCredential.ID(), map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet{
-			testint.LegacyTokenCredential.ID(): {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
-			straySlotRef.ID():                  {Data: json.RawMessage(`{"value":"kept"}`)},
+		installation, _ := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyToken), slotOf(straySlotRef)), testint.LegacyToken.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
+			testint.LegacyToken.Connection().Credential.Name: {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
+			straySlotRef.Connection().Credential.Name:        {Data: json.RawMessage(`{"value":"kept"}`)},
 		})
 
 		stored, err := store.LoadAllCredentials(ctx, installation)
@@ -549,8 +556,8 @@ func TestInstallationUpgrade(t *testing.T) {
 		rows, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)
 		require.Len(t, rows, 2)
-		require.JSONEq(t, `{"value":"kept"}`, string(rows[straySlotRef.ID()].Data))
-		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.TokenCredential.ID()].Data))
+		require.JSONEq(t, `{"value":"kept"}`, string(rows[straySlotRef.Connection().Credential.Name].Data))
+		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
 		require.Equal(t, current, reloadIntegration(t, ctx, installation.ID).DefinitionVersion)
 	})
 
@@ -561,7 +568,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = zoneInputRef.Registration()
 		}))
-		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 		require.Equal(t, zoneInputRef.Name(), installation.UserInput.Layout)
 		require.JSONEq(t, `{"zone":"eu"}`, string(installation.UserInput.Data))
 
@@ -593,7 +600,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
 		}))
-		installation := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, nil, nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 
 		retired, err := previous.Registry().Operation(testint.DefinitionID.ID(), retiredSyncOp.Name())
 		require.NoError(t, err)
@@ -650,7 +657,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
 		}))
-		installation := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, nil, nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 
 		retiredFragment := reconcileLoopFragment(t, installation.ID, retiredSyncOp.Name())
 		currentFragment := reconcileLoopFragment(t, installation.ID, testint.RecurringOp.Name())
@@ -686,7 +693,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(retiredEventsWebhook, renameEventA)}
 		}))
-		installation := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, nil, nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 
 		rows := endpointRows(t, subCtx, installation.ID)
 		require.Len(t, rows, 1)
@@ -728,13 +735,13 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Equal(t, renamedEventsWebhook.Name(), dedupes[0].Name)
 
 		fresh := testint.TokenCredentialSet("fresh")
-		require.NoError(t, renamed.ReconcileCredential(subCtx, reloadIntegration(t, subCtx, installation.ID), testint.TokenCredential.ID(), fresh, nil))
+		require.NoError(t, renamed.ReconcileCredential(subCtx, reloadIntegration(t, subCtx, installation.ID), testint.Token.Connection().Credential.Name, fresh))
 
 		rows = endpointRows(t, subCtx, installation.ID)
 		require.Len(t, rows, 1)
 		require.Equal(t, endpointID, lo.FromPtr(rows[0].EndpointID))
 
-		untouched := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		untouched := installOn(t, subCtx, previous, nil, nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 		untouchedRows := endpointRows(t, subCtx, untouched.ID)
 		require.Len(t, untouchedRows, 1)
 		untouchedEndpoint := lo.FromPtr(untouchedRows[0].EndpointID)
@@ -742,7 +749,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		_, err = renamed.EnsureWebhook(subCtx, untouched, renamedEventsWebhook.Name(), "")
 		require.NoError(t, err)
 
-		require.NoError(t, renamed.ReconcileCredential(subCtx, untouched, testint.TokenCredential.ID(), fresh, nil))
+		require.NoError(t, renamed.ReconcileCredential(subCtx, untouched, testint.Token.Connection().Credential.Name, fresh))
 
 		untouchedRows = endpointRows(t, subCtx, untouched.ID)
 		require.Len(t, untouchedRows, 1)

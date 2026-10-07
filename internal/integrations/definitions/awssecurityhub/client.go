@@ -3,49 +3,47 @@ package awssecurityhub
 import (
 	"context"
 
-	awssdk "github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/configservice"
-	"github.com/aws/aws-sdk-go-v2/service/iam"
-	"github.com/aws/aws-sdk-go-v2/service/securityhub"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// SecurityHubClientBuilder builds AWS Security Hub clients for one installation
-type SecurityHubClientBuilder struct {
-	// cfg is the operator-level config holding Openlane's source AWS credentials
-	cfg Config
+// assumeRoleClient returns the builder of the AWS client under STS assume-role
+func assumeRoleClient(opCfg Config) func(context.Context, types.ConnectionRequest[AssumeRoleCredentialSchema]) (Client, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[AssumeRoleCredentialSchema]) (Client, error) {
+		cred := req.Credential
+
+		switch {
+		case cred.RoleARN == "":
+			return Client{}, ErrRoleARNMissing
+		case cred.HomeRegion == "":
+			return Client{}, ErrRegionMissing
+		}
+
+		cfg, err := buildAWSConfig(ctx, cred, opCfg)
+		if err != nil {
+			return Client{}, err
+		}
+
+		return Client{
+			Config: cfg,
+			Scope: CollectionScope{
+				AccountID:     arnAccountID(cred.RoleARN),
+				AccountScope:  cred.AccountScope,
+				AccountIDs:    cred.AccountIDs,
+				LinkedRegions: cred.LinkedRegions,
+			},
+		}, nil
+	}
 }
 
-// Build constructs the AWS Security Hub client using the shared AWS credential inputs
-func (b SecurityHubClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (*securityhub.Client, error) {
-	return buildAWSServiceClient(ctx, b.cfg, req, func(cfg awssdk.Config) *securityhub.Client {
-		return securityhub.NewFromConfig(cfg)
-	})
-}
+// staticClient builds the AWS client from static IAM credentials
+func staticClient(ctx context.Context, req types.ConnectionRequest[ServiceAccountCredentialSchema]) (Client, error) {
+	cfg, err := buildAWSConfigFromStaticCreds(ctx, req.Credential)
+	if err != nil {
+		return Client{}, err
+	}
 
-// ConfigServiceClientBuilder builds AWS Config clients for one installation
-type ConfigServiceClientBuilder struct {
-	// cfg is the operator-level config holding Openlane's source AWS credentials
-	cfg Config
-}
-
-// Build constructs the AWS Config client using the shared AWS credential inputs
-func (b ConfigServiceClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (*configservice.Client, error) {
-	return buildAWSServiceClient(ctx, b.cfg, req, func(cfg awssdk.Config) *configservice.Client {
-		return configservice.NewFromConfig(cfg)
-	})
-}
-
-// IAMClientBuilder builds AWS IAM clients for one installation
-type IAMClientBuilder struct {
-	// cfg is the operator-level config holding Openlane's source AWS credentials
-	cfg Config
-}
-
-// Build constructs the AWS IAM client using the shared AWS credential inputs
-func (b IAMClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (*iam.Client, error) {
-	return buildAWSServiceClient(ctx, b.cfg, req, func(cfg awssdk.Config) *iam.Client {
-		return iam.NewFromConfig(cfg)
-	})
+	return Client{
+		Config: cfg,
+		Scope:  CollectionScope{AccountScope: AccountScopeAll},
+	}, nil
 }
