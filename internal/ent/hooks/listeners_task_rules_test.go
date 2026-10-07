@@ -5,6 +5,7 @@ package hooks_test
 import (
 	"context"
 	"fmt"
+	"testing"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -14,9 +15,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 )
 
@@ -199,5 +203,40 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 		assert.NotEqual(t, "onboarding-framework-soc2", tk.SourceKey)
 		assert.NotEqual(t, "onboarding-framework-iso27001", tk.SourceKey)
 		assert.NotEqual(t, "onboarding-"+taskrules.RuleFrameworkGeneric, tk.SourceKey)
+	}
+}
+
+func TestTaskRuleNotificationTopicGate(t *testing.T) {
+	t.Parallel()
+
+	listener, ok := taskRuleListenerFor(generated.TypeNotification)
+	require.True(t, ok)
+
+	gate := listener.Definition().Gate
+
+	assert.True(t, gate(context.Background(), notificationCreatePayload(enums.NotificationTopicDomainScan)))
+	assert.False(t, gate(context.Background(), notificationCreatePayload(enums.NotificationTopicApproval)))
+	assert.False(t, gate(context.Background(), entityops.MutationPayload{MutationType: generated.TypeNotification, Operation: entityops.OpCreate, EntityID: "notification-1"}))
+}
+
+func taskRuleListenerFor(schemaName string) (entityops.MutationListener, bool) {
+	for _, registration := range hooks.TaskRuleListeners() {
+		listener, ok := registration.(entityops.MutationListener)
+		if ok && listener.Schema.Name == schemaName {
+			return listener, true
+		}
+	}
+
+	return entityops.MutationListener{}, false
+}
+
+func notificationCreatePayload(topic enums.NotificationTopic) entityops.MutationPayload {
+	return entityops.MutationPayload{
+		MutationType: generated.TypeNotification,
+		Operation:    entityops.OpCreate,
+		EntityID:     "notification-1",
+		ChangeSet: entityops.ChangeSet{
+			ProposedChanges: map[string]any{notification.FieldTopic: topic},
+		},
 	}
 }
