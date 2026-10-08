@@ -94,7 +94,7 @@ type TrustCenterSetting struct {
 	StatusPageURL *string `json:"status_page_url,omitempty"`
 	// allow trustcenter to be indexed on google
 	NoindexDefaultDomain bool `json:"noindex_default_domain,omitempty"`
-	// enable auto approval rules, this is different from requiring approvals
+	// enable auto approval rules provides configurable settings to skip manual approvals
 	EnableAutoApproval bool `json:"enable_auto_approval,omitempty"`
 	// rules for approving trust center NDA requests
 	AutoApprovalRules models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`

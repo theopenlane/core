@@ -9540,7 +9540,7 @@ type CreateTrustCenterSettingInput struct {
 	StatusPageURL *string `json:"statusPageURL,omitempty"`
 	// allow trustcenter to be indexed on google
 	NoindexDefaultDomain *bool `json:"noindexDefaultDomain,omitempty"`
-	// enable auto approval rules, this is different from requiring approvals
+	// enable auto approval rules provides configurable settings to skip manual approvals
 	EnableAutoApproval *bool `json:"enableAutoApproval,omitempty"`
 	// rules for approving trust center NDA requests
 	AutoApprovalRules  *models.TrustCenterNDARequestSetting `json:"autoApprovalRules,omitempty"`
@@ -34761,7 +34761,7 @@ type TrustCenterSetting struct {
 	StatusPageURL *string `json:"statusPageURL,omitempty"`
 	// allow trustcenter to be indexed on google
 	NoindexDefaultDomain *bool `json:"noindexDefaultDomain,omitempty"`
-	// enable auto approval rules, this is different from requiring approvals
+	// enable auto approval rules provides configurable settings to skip manual approvals
 	EnableAutoApproval *bool `json:"enableAutoApproval,omitempty"`
 	// rules for approving trust center NDA requests
 	AutoApprovalRules *models.TrustCenterNDARequestSetting `json:"autoApprovalRules,omitempty"`
@@ -41608,7 +41608,7 @@ type UpdateTrustCenterSettingInput struct {
 	// allow trustcenter to be indexed on google
 	NoindexDefaultDomain      *bool `json:"noindexDefaultDomain,omitempty"`
 	ClearNoindexDefaultDomain *bool `json:"clearNoindexDefaultDomain,omitempty"`
-	// enable auto approval rules, this is different from requiring approvals
+	// enable auto approval rules provides configurable settings to skip manual approvals
 	EnableAutoApproval      *bool `json:"enableAutoApproval,omitempty"`
 	ClearEnableAutoApproval *bool `json:"clearEnableAutoApproval,omitempty"`
 	// rules for approving trust center NDA requests

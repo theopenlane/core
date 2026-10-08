@@ -30448,7 +30448,7 @@ type TrustCenterSettingHistory implements Node {
   """
   noindexDefaultDomain: Boolean
   """
-  enable auto approval rules, this is different from requiring approvals
+  enable auto approval rules provides configurable settings to skip manual approvals
   """
   enableAutoApproval: Boolean
   """

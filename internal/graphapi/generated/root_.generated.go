@@ -72666,7 +72666,7 @@ input CreateTrustCenterSettingInput {
   """
   noindexDefaultDomain: Boolean
   """
-  enable auto approval rules, this is different from requiring approvals
+  enable auto approval rules provides configurable settings to skip manual approvals
   """
   enableAutoApproval: Boolean
   """
@@ -124315,7 +124315,7 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   """
   noindexDefaultDomain: Boolean
   """
-  enable auto approval rules, this is different from requiring approvals
+  enable auto approval rules provides configurable settings to skip manual approvals
   """
   enableAutoApproval: Boolean
   """
@@ -133489,7 +133489,7 @@ input UpdateTrustCenterSettingInput {
   noindexDefaultDomain: Boolean
   clearNoindexDefaultDomain: Boolean
   """
-  enable auto approval rules, this is different from requiring approvals
+  enable auto approval rules provides configurable settings to skip manual approvals
   """
   enableAutoApproval: Boolean
   clearEnableAutoApproval: Boolean
