@@ -892,7 +892,8 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	},
 	"AssessmentPolicy": {
 		SchemaName: "AssessmentPolicy",
-		Rules:      []CSVReferenceRule{},
+		Rules: []CSVReferenceRule{
+		},
 	},
 	"AssessmentResponse": {
 		SchemaName: "AssessmentResponse",
@@ -2298,7 +2299,7 @@ func (AssessmentPolicyCSVInput) CSVInputWrapper() {}
 // AssessmentPolicyCSVUpdateInput wraps UpdateAssessmentPolicyInput with CSV reference columns for bulk updates.
 type AssessmentPolicyCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID    string `csv:"ID"`
+	ID string `csv:"ID"`
 	Input generated.UpdateAssessmentPolicyInput
 }
 
