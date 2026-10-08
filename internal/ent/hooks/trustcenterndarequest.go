@@ -69,7 +69,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			existingRequest, err := m.Client().TrustCenterNDARequest.Query().
 				Where(
 					trustcenterndarequest.TrustCenterIDEQ(trustCenterID),
-					trustcenterndarequest.EmailEQ(email),
+					trustcenterndarequest.EmailEqualFold(email),
 				).
 				Only(queryCtx)
 			if err != nil && !generated.IsNotFound(err) {
@@ -81,7 +81,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 					return recordSignedNDARequest(ctx, queryCtx, m, existingRequest)
 				}
 
-				return handleExistingNDARequest(ctx, queryCtx, m.Client(), existingRequest)
+				return existingRequest, nil
 			}
 
 			tc, err := m.Client().TrustCenter.Query().
@@ -124,111 +124,13 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				return v, nil
 			}
 
-			if requiresApproval {
-				if err := createNDARequestNotification(ctx, request, tc.OwnerID); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
-				}
-
-				if err := sendNDAApprovalRequestEmails(ctx, m.Client(), request, tc); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
-				}
-
-				return v, nil
-			}
-
-			if err := sendSystemEmail(ctx, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
-				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
-				RequestID:     request.ID,
-				TrustCenterID: request.TrustCenterID,
-			}); err != nil {
-				return nil, err
-			}
-
 			return v, nil
 		})
 	}, ent.OpCreate)
 }
 
-func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.Client, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
-	switch existing.Status {
-	case enums.TrustCenterNDARequestStatusSigned:
-		if err := sendSystemEmail(ctx, emaildef.TCAuthOp.Name(), emaildef.TrustCenterAuthEmail{
-			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
-			RequestID:     existing.ID,
-			TrustCenterID: existing.TrustCenterID,
-		}); err != nil {
-			return nil, err
-		}
 
-		return existing, nil
-	case enums.TrustCenterNDARequestStatusApproved, enums.TrustCenterNDARequestStatusRequested:
-		if err := sendSystemEmail(ctx, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
-			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
-			RequestID:     existing.ID,
-			TrustCenterID: existing.TrustCenterID,
-		}); err != nil {
-			return nil, err
-		}
-
-		return existing, nil
-	case enums.TrustCenterNDARequestStatusNeedsApproval:
-		// if needs approval, recreate notification
-		tc, err := getTrustCenter(ctx, existing.TrustCenterID)
-		if err != nil {
-			return nil, err
-		}
-
-		if err := createNDARequestNotification(ctx, existing, tc.OwnerID); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
-		}
-
-		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
-		}
-
-		return existing, nil
-	case enums.TrustCenterNDARequestStatusDeclined:
-		// if previously declined, set to needs approval again to restart the process
-		if err := transactionFromContext(ctx).TrustCenterNDARequest.UpdateOne(existing).SetStatus(enums.TrustCenterNDARequestStatusNeedsApproval).
-			Exec(queryCtx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("email", existing.Email).Msg("failed to update NDA request status to needs approval")
-
-			return nil, err
-		}
-
-		tc, err := getTrustCenter(ctx, existing.TrustCenterID)
-		if err != nil {
-			return nil, err
-		}
-
-		if err := createNDARequestNotification(ctx, existing, tc.OwnerID); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
-		}
-
-		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
-		}
-	}
-
-	// otherwise do nothing invalid
-	return existing, nil
-}
-
-// getTrustCenter is a helper to get the trust center for an NDA request by ID
-func getTrustCenter(ctx context.Context, trustCenterID string) (*generated.TrustCenter, error) {
-	tc, err := transactionFromContext(ctx).TrustCenter.Query().
-		Where(trustcenter.IDEQ(trustCenterID)).
-		WithSetting().
-		Only(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to get trust center for existing NDA request")
-		return nil, err
-	}
-
-	return tc, nil
-}
-
-// HookTrustCenterNDARequestUpdate handles NDA request status updates - sends email when approved
+// HookTrustCenterNDARequestUpdate handles NDA request status updates
 func HookTrustCenterNDARequestUpdate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterNDARequestFunc(func(ctx context.Context, m *generated.TrustCenterNDARequestMutation) (generated.Value, error) {
@@ -296,25 +198,7 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				m.SetApprovedByUserID(userID)
 			}
 
-			v, err := next.Mutate(ctx, m)
-			if err != nil {
-				return nil, err
-			}
-
-			request, ok := v.(*generated.TrustCenterNDARequest)
-			if !ok {
-				return v, nil
-			}
-
-			if err := sendSystemEmail(ctx, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
-				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
-				RequestID:     request.ID,
-				TrustCenterID: request.TrustCenterID,
-			}); err != nil {
-				return nil, err
-			}
-
-			return v, nil
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete)
 }

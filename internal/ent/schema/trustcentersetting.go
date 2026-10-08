@@ -197,6 +197,19 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("allow trustcenter to be indexed on google").
 			Default(true).
 			Optional(),
+		field.Bool("enable_auto_approval").
+			Comment("enable auto approval rules, this is different from requiring approvals").
+			Optional(),
+		field.JSON("auto_approval_rules", models.TrustCenterNDARequestSetting{}).
+			Comment("rules for approving trust center NDA requests").
+			Default(models.TrustCenterNDARequestSetting{
+				WorkEmailOnly:                    true,
+				ApproveFromExistingRequestDomain: true,
+				ApproveIfContactExists:           true,
+				ManualApprovalOnFailure:          true,
+			}).
+			Optional().
+			Annotations(entgql.Skip(entgql.SkipWhereInput, entgql.SkipOrderField)),
 	}
 }
 

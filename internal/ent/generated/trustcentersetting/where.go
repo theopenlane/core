@@ -236,6 +236,11 @@ func NoindexDefaultDomain(v bool) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNoindexDefaultDomain, v))
 }
 
+// EnableAutoApproval applies equality check predicate on the "enable_auto_approval" field. It's identical to EnableAutoApprovalEQ.
+func EnableAutoApproval(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldEnableAutoApproval, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldCreatedAt, v))
@@ -2489,6 +2494,36 @@ func NoindexDefaultDomainIsNil() predicate.TrustCenterSetting {
 // NoindexDefaultDomainNotNil applies the NotNil predicate on the "noindex_default_domain" field.
 func NoindexDefaultDomainNotNil() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldNoindexDefaultDomain))
+}
+
+// EnableAutoApprovalEQ applies the EQ predicate on the "enable_auto_approval" field.
+func EnableAutoApprovalEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldEnableAutoApproval, v))
+}
+
+// EnableAutoApprovalNEQ applies the NEQ predicate on the "enable_auto_approval" field.
+func EnableAutoApprovalNEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldEnableAutoApproval, v))
+}
+
+// EnableAutoApprovalIsNil applies the IsNil predicate on the "enable_auto_approval" field.
+func EnableAutoApprovalIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldEnableAutoApproval))
+}
+
+// EnableAutoApprovalNotNil applies the NotNil predicate on the "enable_auto_approval" field.
+func EnableAutoApprovalNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldEnableAutoApproval))
+}
+
+// AutoApprovalRulesIsNil applies the IsNil predicate on the "auto_approval_rules" field.
+func AutoApprovalRulesIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldAutoApprovalRules))
+}
+
+// AutoApprovalRulesNotNil applies the NotNil predicate on the "auto_approval_rules" field.
+func AutoApprovalRulesNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldAutoApprovalRules))
 }
 
 // HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.

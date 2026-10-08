@@ -23491,6 +23491,14 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNoindexDefaultDomain(noindexDefaultDomain)
 	}
 
+	if enableAutoApproval, exists := m.EnableAutoApproval(); exists {
+		create = create.SetEnableAutoApproval(enableAutoApproval)
+	}
+
+	if autoApprovalRules, exists := m.AutoApprovalRules(); exists {
+		create = create.SetAutoApprovalRules(autoApprovalRules)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -23741,6 +23749,18 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain)
 		}
 
+		if enableAutoApproval, exists := m.EnableAutoApproval(); exists {
+			create = create.SetEnableAutoApproval(enableAutoApproval)
+		} else {
+			create = create.SetEnableAutoApproval(trustcentersetting.EnableAutoApproval)
+		}
+
+		if autoApprovalRules, exists := m.AutoApprovalRules(); exists {
+			create = create.SetAutoApprovalRules(autoApprovalRules)
+		} else {
+			create = create.SetAutoApprovalRules(trustcentersetting.AutoApprovalRules)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -23815,6 +23835,8 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
 			SetNillableStatusPageURL(trustcentersetting.StatusPageURL).
 			SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain).
+			SetEnableAutoApproval(trustcentersetting.EnableAutoApproval).
+			SetAutoApprovalRules(trustcentersetting.AutoApprovalRules).
 			Save(ctx)
 		if err != nil {
 			return err

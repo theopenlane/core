@@ -16307,6 +16307,14 @@ input CreateTrustCenterSettingInput {
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules, this is different from requiring approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -67510,6 +67518,7 @@ enum TrustCenterNDARequestTrustCenterNDARequestAccessLevel @goModel(model: "gith
 TrustCenterNDARequestTrustCenterNDARequestStatus is enum for the field status
 """
 enum TrustCenterNDARequestTrustCenterNDARequestStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestStatus") {
+  PENDING_APPROVAL
   REQUESTED
   NEEDS_APPROVAL
   APPROVED
@@ -67939,6 +67948,14 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules, this is different from requiring approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -68506,6 +68523,13 @@ input TrustCenterSettingWhereInput {
   noindexDefaultDomainNEQ: Boolean
   noindexDefaultDomainIsNil: Boolean
   noindexDefaultDomainNotNil: Boolean
+  """
+  enable_auto_approval field predicates
+  """
+  enableAutoApproval: Boolean
+  enableAutoApprovalNEQ: Boolean
+  enableAutoApprovalIsNil: Boolean
+  enableAutoApprovalNotNil: Boolean
   """
   blocked_groups edge predicates
   """
@@ -77098,6 +77122,16 @@ input UpdateTrustCenterSettingInput {
   """
   noindexDefaultDomain: Boolean
   clearNoindexDefaultDomain: Boolean
+  """
+  enable auto approval rules, this is different from requiring approvals
+  """
+  enableAutoApproval: Boolean
+  clearEnableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
+  clearAutoApprovalRules: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean

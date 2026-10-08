@@ -139866,6 +139866,8 @@ type TrustCenterSettingHistoryMutation struct {
 	nda_approver_group_id                     *string
 	status_page_url                           *string
 	noindex_default_domain                    *bool
+	enable_auto_approval                      *bool
+	auto_approval_rules                       *models.TrustCenterNDARequestSetting
 	clearedFields                             map[string]struct{}
 	done                                      bool
 	oldValue                                  func(context.Context) (*TrustCenterSettingHistory, error)
@@ -141861,6 +141863,104 @@ func (m *TrustCenterSettingHistoryMutation) ResetNoindexDefaultDomain() {
 	delete(m.clearedFields, trustcentersettinghistory.FieldNoindexDefaultDomain)
 }
 
+// SetEnableAutoApproval sets the "enable_auto_approval" field.
+func (m *TrustCenterSettingHistoryMutation) SetEnableAutoApproval(b bool) {
+	m.enable_auto_approval = &b
+}
+
+// EnableAutoApproval returns the value of the "enable_auto_approval" field in the mutation.
+func (m *TrustCenterSettingHistoryMutation) EnableAutoApproval() (r bool, exists bool) {
+	v := m.enable_auto_approval
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEnableAutoApproval returns the old "enable_auto_approval" field's value of the TrustCenterSettingHistory entity.
+// If the TrustCenterSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingHistoryMutation) OldEnableAutoApproval(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEnableAutoApproval is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEnableAutoApproval requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEnableAutoApproval: %w", err)
+	}
+	return oldValue.EnableAutoApproval, nil
+}
+
+// ClearEnableAutoApproval clears the value of the "enable_auto_approval" field.
+func (m *TrustCenterSettingHistoryMutation) ClearEnableAutoApproval() {
+	m.enable_auto_approval = nil
+	m.clearedFields[trustcentersettinghistory.FieldEnableAutoApproval] = struct{}{}
+}
+
+// EnableAutoApprovalCleared returns if the "enable_auto_approval" field was cleared in this mutation.
+func (m *TrustCenterSettingHistoryMutation) EnableAutoApprovalCleared() bool {
+	_, ok := m.clearedFields[trustcentersettinghistory.FieldEnableAutoApproval]
+	return ok
+}
+
+// ResetEnableAutoApproval resets all changes to the "enable_auto_approval" field.
+func (m *TrustCenterSettingHistoryMutation) ResetEnableAutoApproval() {
+	m.enable_auto_approval = nil
+	delete(m.clearedFields, trustcentersettinghistory.FieldEnableAutoApproval)
+}
+
+// SetAutoApprovalRules sets the "auto_approval_rules" field.
+func (m *TrustCenterSettingHistoryMutation) SetAutoApprovalRules(mcnrs models.TrustCenterNDARequestSetting) {
+	m.auto_approval_rules = &mcnrs
+}
+
+// AutoApprovalRules returns the value of the "auto_approval_rules" field in the mutation.
+func (m *TrustCenterSettingHistoryMutation) AutoApprovalRules() (r models.TrustCenterNDARequestSetting, exists bool) {
+	v := m.auto_approval_rules
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAutoApprovalRules returns the old "auto_approval_rules" field's value of the TrustCenterSettingHistory entity.
+// If the TrustCenterSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingHistoryMutation) OldAutoApprovalRules(ctx context.Context) (v models.TrustCenterNDARequestSetting, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAutoApprovalRules is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAutoApprovalRules requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAutoApprovalRules: %w", err)
+	}
+	return oldValue.AutoApprovalRules, nil
+}
+
+// ClearAutoApprovalRules clears the value of the "auto_approval_rules" field.
+func (m *TrustCenterSettingHistoryMutation) ClearAutoApprovalRules() {
+	m.auto_approval_rules = nil
+	m.clearedFields[trustcentersettinghistory.FieldAutoApprovalRules] = struct{}{}
+}
+
+// AutoApprovalRulesCleared returns if the "auto_approval_rules" field was cleared in this mutation.
+func (m *TrustCenterSettingHistoryMutation) AutoApprovalRulesCleared() bool {
+	_, ok := m.clearedFields[trustcentersettinghistory.FieldAutoApprovalRules]
+	return ok
+}
+
+// ResetAutoApprovalRules resets all changes to the "auto_approval_rules" field.
+func (m *TrustCenterSettingHistoryMutation) ResetAutoApprovalRules() {
+	m.auto_approval_rules = nil
+	delete(m.clearedFields, trustcentersettinghistory.FieldAutoApprovalRules)
+}
+
 // Where appends a list predicates to the TrustCenterSettingHistoryMutation builder.
 func (m *TrustCenterSettingHistoryMutation) Where(ps ...predicate.TrustCenterSettingHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -141895,7 +141995,7 @@ func (m *TrustCenterSettingHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterSettingHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 39)
+	fields := make([]string, 0, 41)
 	if m.history_time != nil {
 		fields = append(fields, trustcentersettinghistory.FieldHistoryTime)
 	}
@@ -142013,6 +142113,12 @@ func (m *TrustCenterSettingHistoryMutation) Fields() []string {
 	if m.noindex_default_domain != nil {
 		fields = append(fields, trustcentersettinghistory.FieldNoindexDefaultDomain)
 	}
+	if m.enable_auto_approval != nil {
+		fields = append(fields, trustcentersettinghistory.FieldEnableAutoApproval)
+	}
+	if m.auto_approval_rules != nil {
+		fields = append(fields, trustcentersettinghistory.FieldAutoApprovalRules)
+	}
 	return fields
 }
 
@@ -142099,6 +142205,10 @@ func (m *TrustCenterSettingHistoryMutation) Field(name string) (ent.Value, bool)
 		return m.StatusPageURL()
 	case trustcentersettinghistory.FieldNoindexDefaultDomain:
 		return m.NoindexDefaultDomain()
+	case trustcentersettinghistory.FieldEnableAutoApproval:
+		return m.EnableAutoApproval()
+	case trustcentersettinghistory.FieldAutoApprovalRules:
+		return m.AutoApprovalRules()
 	}
 	return nil, false
 }
@@ -142186,6 +142296,10 @@ func (m *TrustCenterSettingHistoryMutation) OldField(ctx context.Context, name s
 		return m.OldStatusPageURL(ctx)
 	case trustcentersettinghistory.FieldNoindexDefaultDomain:
 		return m.OldNoindexDefaultDomain(ctx)
+	case trustcentersettinghistory.FieldEnableAutoApproval:
+		return m.OldEnableAutoApproval(ctx)
+	case trustcentersettinghistory.FieldAutoApprovalRules:
+		return m.OldAutoApprovalRules(ctx)
 	}
 	return nil, fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)
 }
@@ -142468,6 +142582,20 @@ func (m *TrustCenterSettingHistoryMutation) SetField(name string, value ent.Valu
 		}
 		m.SetNoindexDefaultDomain(v)
 		return nil
+	case trustcentersettinghistory.FieldEnableAutoApproval:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEnableAutoApproval(v)
+		return nil
+	case trustcentersettinghistory.FieldAutoApprovalRules:
+		v, ok := value.(models.TrustCenterNDARequestSetting)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAutoApprovalRules(v)
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)
 }
@@ -142609,6 +142737,12 @@ func (m *TrustCenterSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcentersettinghistory.FieldNoindexDefaultDomain) {
 		fields = append(fields, trustcentersettinghistory.FieldNoindexDefaultDomain)
 	}
+	if m.FieldCleared(trustcentersettinghistory.FieldEnableAutoApproval) {
+		fields = append(fields, trustcentersettinghistory.FieldEnableAutoApproval)
+	}
+	if m.FieldCleared(trustcentersettinghistory.FieldAutoApprovalRules) {
+		fields = append(fields, trustcentersettinghistory.FieldAutoApprovalRules)
+	}
 	return fields
 }
 
@@ -142734,6 +142868,12 @@ func (m *TrustCenterSettingHistoryMutation) ClearField(name string) error {
 	case trustcentersettinghistory.FieldNoindexDefaultDomain:
 		m.ClearNoindexDefaultDomain()
 		return nil
+	case trustcentersettinghistory.FieldEnableAutoApproval:
+		m.ClearEnableAutoApproval()
+		return nil
+	case trustcentersettinghistory.FieldAutoApprovalRules:
+		m.ClearAutoApprovalRules()
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory nullable field %s", name)
 }
@@ -142858,6 +142998,12 @@ func (m *TrustCenterSettingHistoryMutation) ResetField(name string) error {
 		return nil
 	case trustcentersettinghistory.FieldNoindexDefaultDomain:
 		m.ResetNoindexDefaultDomain()
+		return nil
+	case trustcentersettinghistory.FieldEnableAutoApproval:
+		m.ResetEnableAutoApproval()
+		return nil
+	case trustcentersettinghistory.FieldAutoApprovalRules:
+		m.ResetAutoApprovalRules()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)

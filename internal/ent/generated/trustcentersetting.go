@@ -3,6 +3,7 @@
 package generated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
@@ -92,6 +94,10 @@ type TrustCenterSetting struct {
 	StatusPageURL *string `json:"status_page_url,omitempty"`
 	// allow trustcenter to be indexed on google
 	NoindexDefaultDomain bool `json:"noindex_default_domain,omitempty"`
+	// enable auto approval rules, this is different from requiring approvals
+	EnableAutoApproval bool `json:"enable_auto_approval,omitempty"`
+	// rules for approving trust center NDA requests
+	AutoApprovalRules models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -189,7 +195,9 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldAllowSubscribers, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, trustcentersetting.FieldNoindexDefaultDomain:
+		case trustcentersetting.FieldAutoApprovalRules:
+			values[i] = new([]byte)
+		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldAllowSubscribers, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, trustcentersetting.FieldNoindexDefaultDomain, trustcentersetting.FieldEnableAutoApproval:
 			values[i] = new(sql.NullBool)
 		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldUpdatedByImpersonator, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldCompanyDescription, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldHeroImageLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact, trustcentersetting.FieldNdaApproverGroupID, trustcentersetting.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
@@ -443,6 +451,20 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.NoindexDefaultDomain = value.Bool
 			}
+		case trustcentersetting.FieldEnableAutoApproval:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field enable_auto_approval", values[i])
+			} else if value.Valid {
+				_m.EnableAutoApproval = value.Bool
+			}
+		case trustcentersetting.FieldAutoApprovalRules:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field auto_approval_rules", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.AutoApprovalRules); err != nil {
+					return fmt.Errorf("unmarshal field auto_approval_rules: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -638,6 +660,12 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("noindex_default_domain=")
 	builder.WriteString(fmt.Sprintf("%v", _m.NoindexDefaultDomain))
+	builder.WriteString(", ")
+	builder.WriteString("enable_auto_approval=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EnableAutoApproval))
+	builder.WriteString(", ")
+	builder.WriteString("auto_approval_rules=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AutoApprovalRules))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -182,6 +182,9 @@ models:
   Map:
     model:
       - github.com/99designs/gqlgen/graphql.Map
+  TrustCenterNDARequestSetting:
+    model:
+      - github.com/theopenlane/core/common/models.TrustCenterNDARequestSetting
   VendorScoringQuestionsConfig:
     model:
       - github.com/theopenlane/core/common/models.VendorScoringQuestionsConfig

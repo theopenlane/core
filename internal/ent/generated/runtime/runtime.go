@@ -8031,6 +8031,10 @@ func init() {
 	trustcentersettingDescNoindexDefaultDomain := trustcentersettingFields[28].Descriptor()
 	// trustcentersetting.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
 	trustcentersetting.DefaultNoindexDefaultDomain = trustcentersettingDescNoindexDefaultDomain.Default.(bool)
+	// trustcentersettingDescAutoApprovalRules is the schema descriptor for auto_approval_rules field.
+	trustcentersettingDescAutoApprovalRules := trustcentersettingFields[30].Descriptor()
+	// trustcentersetting.DefaultAutoApprovalRules holds the default value on creation for the auto_approval_rules field.
+	trustcentersetting.DefaultAutoApprovalRules = trustcentersettingDescAutoApprovalRules.Default.(models.TrustCenterNDARequestSetting)
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields4[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.

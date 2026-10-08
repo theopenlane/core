@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 )
 
 const (
@@ -90,6 +91,10 @@ const (
 	FieldStatusPageURL = "status_page_url"
 	// FieldNoindexDefaultDomain holds the string denoting the noindex_default_domain field in the database.
 	FieldNoindexDefaultDomain = "noindex_default_domain"
+	// FieldEnableAutoApproval holds the string denoting the enable_auto_approval field in the database.
+	FieldEnableAutoApproval = "enable_auto_approval"
+	// FieldAutoApprovalRules holds the string denoting the auto_approval_rules field in the database.
+	FieldAutoApprovalRules = "auto_approval_rules"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -187,6 +192,8 @@ var Columns = []string{
 	FieldNdaApproverGroupID,
 	FieldStatusPageURL,
 	FieldNoindexDefaultDomain,
+	FieldEnableAutoApproval,
+	FieldAutoApprovalRules,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -254,6 +261,8 @@ var (
 	StatusPageURLValidator func(string) error
 	// DefaultNoindexDefaultDomain holds the default value on creation for the "noindex_default_domain" field.
 	DefaultNoindexDefaultDomain bool
+	// DefaultAutoApprovalRules holds the default value on creation for the "auto_approval_rules" field.
+	DefaultAutoApprovalRules models.TrustCenterNDARequestSetting
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -468,6 +477,11 @@ func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
 // ByNoindexDefaultDomain orders the results by the noindex_default_domain field.
 func ByNoindexDefaultDomain(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNoindexDefaultDomain, opts...).ToFunc()
+}
+
+// ByEnableAutoApproval orders the results by the enable_auto_approval field.
+func ByEnableAutoApproval(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnableAutoApproval, opts...).ToFunc()
 }
 
 // ByBlockedGroupsCount orders the results by blocked_groups count.

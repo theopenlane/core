@@ -140471,12 +140471,14 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting_HeroImageFile) GetPresigne
 type GetTrustCenterSettingByID_TrustCenterSetting struct {
 	AccentColor                           *string                                                     "json:\"accentColor,omitempty\" graphql:\"accentColor\""
 	AllowSubscribers                      *bool                                                       "json:\"allowSubscribers,omitempty\" graphql:\"allowSubscribers\""
+	AutoApprovalRules                     *models.TrustCenterNDARequestSetting                        "json:\"autoApprovalRules,omitempty\" graphql:\"autoApprovalRules\""
 	BackgroundColor                       *string                                                     "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
 	CompanyDescription                    *string                                                     "json:\"companyDescription,omitempty\" graphql:\"companyDescription\""
 	CompanyDomain                         *string                                                     "json:\"companyDomain,omitempty\" graphql:\"companyDomain\""
 	CompanyName                           *string                                                     "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt                             *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                             *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EnableAutoApproval                    *bool                                                       "json:\"enableAutoApproval,omitempty\" graphql:\"enableAutoApproval\""
 	Environment                           *enums.TrustCenterEnvironment                               "json:\"environment,omitempty\" graphql:\"environment\""
 	FaviconFile                           *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile   "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
 	FaviconLocalFileID                    *string                                                     "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
@@ -140521,6 +140523,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetAllowSubscribers() *bo
 	}
 	return t.AllowSubscribers
 }
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetAutoApprovalRules() *models.TrustCenterNDARequestSetting {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.AutoApprovalRules
+}
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetBackgroundColor() *string {
 	if t == nil {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
@@ -140556,6 +140564,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedBy() *string {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetEnableAutoApproval() *bool {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.EnableAutoApproval
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetEnvironment() *enums.TrustCenterEnvironment {
 	if t == nil {
@@ -210103,12 +210117,14 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 	trustCenterSetting(id: $trustCenterSettingId) {
 		accentColor
 		allowSubscribers
+		autoApprovalRules
 		backgroundColor
 		companyDescription
 		companyDomain
 		companyName
 		createdAt
 		createdBy
+		enableAutoApproval
 		environment
 		faviconLocalFileID
 		faviconRemoteURL

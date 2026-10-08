@@ -3365,6 +3365,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
 			trustcentersetting.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
 			trustcentersetting.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersetting.FieldNoindexDefaultDomain},
+			trustcentersetting.FieldEnableAutoApproval:                    {Type: field.TypeBool, Column: trustcentersetting.FieldEnableAutoApproval},
+			trustcentersetting.FieldAutoApprovalRules:                     {Type: field.TypeJSON, Column: trustcentersetting.FieldAutoApprovalRules},
 		},
 	}
 	graph.Nodes[85] = &sqlgraph.Node{
@@ -48925,6 +48927,16 @@ func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
 // WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
 func (f *TrustCenterSettingFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldNoindexDefaultDomain))
+}
+
+// WhereEnableAutoApproval applies the entql bool predicate on the enable_auto_approval field.
+func (f *TrustCenterSettingFilter) WhereEnableAutoApproval(p entql.BoolP) {
+	f.Where(p.Field(trustcentersetting.FieldEnableAutoApproval))
+}
+
+// WhereAutoApprovalRules applies the entql json.RawMessage predicate on the auto_approval_rules field.
+func (f *TrustCenterSettingFilter) WhereAutoApprovalRules(p entql.BytesP) {
+	f.Where(p.Field(trustcentersetting.FieldAutoApprovalRules))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -562,6 +563,34 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableNoindexDefaultDomain(v *bo
 	return _c
 }
 
+// SetEnableAutoApproval sets the "enable_auto_approval" field.
+func (_c *TrustCenterSettingHistoryCreate) SetEnableAutoApproval(v bool) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetEnableAutoApproval(v)
+	return _c
+}
+
+// SetNillableEnableAutoApproval sets the "enable_auto_approval" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableEnableAutoApproval(v *bool) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetEnableAutoApproval(*v)
+	}
+	return _c
+}
+
+// SetAutoApprovalRules sets the "auto_approval_rules" field.
+func (_c *TrustCenterSettingHistoryCreate) SetAutoApprovalRules(v models.TrustCenterNDARequestSetting) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetAutoApprovalRules(v)
+	return _c
+}
+
+// SetNillableAutoApprovalRules sets the "auto_approval_rules" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableAutoApprovalRules(v *models.TrustCenterNDARequestSetting) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetAutoApprovalRules(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingHistoryCreate) SetID(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -661,6 +690,10 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.NoindexDefaultDomain(); !ok {
 		v := trustcentersettinghistory.DefaultNoindexDefaultDomain
 		_c.mutation.SetNoindexDefaultDomain(v)
+	}
+	if _, ok := _c.mutation.AutoApprovalRules(); !ok {
+		v := trustcentersettinghistory.DefaultAutoApprovalRules
+		_c.mutation.SetAutoApprovalRules(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersettinghistory.DefaultID == nil {
@@ -885,6 +918,14 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.NoindexDefaultDomain(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNoindexDefaultDomain, field.TypeBool, value)
 		_node.NoindexDefaultDomain = value
+	}
+	if value, ok := _c.mutation.EnableAutoApproval(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldEnableAutoApproval, field.TypeBool, value)
+		_node.EnableAutoApproval = value
+	}
+	if value, ok := _c.mutation.AutoApprovalRules(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldAutoApprovalRules, field.TypeJSON, value)
+		_node.AutoApprovalRules = value
 	}
 	return _node, _spec
 }

@@ -2585,6 +2585,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldNdaApproverGroupID},
 			trustcentersettinghistory.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
 			trustcentersettinghistory.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNoindexDefaultDomain},
+			trustcentersettinghistory.FieldEnableAutoApproval:                    {Type: field.TypeBool, Column: trustcentersettinghistory.FieldEnableAutoApproval},
+			trustcentersettinghistory.FieldAutoApprovalRules:                     {Type: field.TypeJSON, Column: trustcentersettinghistory.FieldAutoApprovalRules},
 		},
 	}
 	graph.Nodes[57] = &sqlgraph.Node{
@@ -14113,6 +14115,16 @@ func (f *TrustCenterSettingHistoryFilter) WhereStatusPageURL(p entql.StringP) {
 // WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
 func (f *TrustCenterSettingHistoryFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldNoindexDefaultDomain))
+}
+
+// WhereEnableAutoApproval applies the entql bool predicate on the enable_auto_approval field.
+func (f *TrustCenterSettingHistoryFilter) WhereEnableAutoApproval(p entql.BoolP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldEnableAutoApproval))
+}
+
+// WhereAutoApprovalRules applies the entql json.RawMessage predicate on the auto_approval_rules field.
+func (f *TrustCenterSettingHistoryFilter) WhereAutoApprovalRules(p entql.BytesP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldAutoApprovalRules))
 }
 
 // addPredicate implements the predicateAdder interface.

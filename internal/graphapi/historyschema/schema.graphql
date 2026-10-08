@@ -30168,6 +30168,7 @@ enum TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel @goModel(model
 TrustCenterNDARequestHistoryTrustCenterNDARequestStatus is enum for the field status
 """
 enum TrustCenterNDARequestHistoryTrustCenterNDARequestStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestStatus") {
+	PENDING_APPROVAL
 	REQUESTED
 	NEEDS_APPROVAL
 	APPROVED
@@ -30441,6 +30442,7 @@ input TrustCenterNDARequestHistoryWhereInput {
 	fileIDEqualFold: String
 	fileIDContainsFold: String
 }
+scalar TrustCenterNDARequestSetting
 type TrustCenterSettingHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -30570,6 +30572,14 @@ type TrustCenterSettingHistory implements Node {
 	allow trustcenter to be indexed on google
 	"""
 	noindexDefaultDomain: Boolean
+	"""
+	enable auto approval rules, this is different from requiring approvals
+	"""
+	enableAutoApproval: Boolean
+	"""
+	rules for approving trust center NDA requests
+	"""
+	autoApprovalRules: TrustCenterNDARequestSetting
 }
 """
 A connection to a list of items.
@@ -31109,6 +31119,13 @@ input TrustCenterSettingHistoryWhereInput {
 	noindexDefaultDomainNEQ: Boolean
 	noindexDefaultDomainIsNil: Boolean
 	noindexDefaultDomainNotNil: Boolean
+	"""
+	enable_auto_approval field predicates
+	"""
+	enableAutoApproval: Boolean
+	enableAutoApprovalNEQ: Boolean
+	enableAutoApprovalIsNil: Boolean
+	enableAutoApprovalNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
 	id: ID!

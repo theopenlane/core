@@ -8187,7 +8187,7 @@ var (
 		{Name: "company_name", Type: field.TypeString, Nullable: true},
 		{Name: "reason", Type: field.TypeString, Nullable: true},
 		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING_APPROVAL", "REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
 		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
@@ -8284,6 +8284,8 @@ var (
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "enable_auto_approval", Type: field.TypeBool, Nullable: true},
+		{Name: "auto_approval_rules", Type: field.TypeJSON, Nullable: true},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "hero_image_local_file_id", Type: field.TypeString, Nullable: true},
@@ -8297,25 +8299,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_files_logo_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[33]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_center_settings_files_favicon_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[34]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_center_settings_files_hero_image_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[35]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[36]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_files_hero_image_file",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[37]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[38]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8324,22 +8326,22 @@ var (
 			{
 				Name:    "trust_center_setting_logo_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[33]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
 			},
 			{
 				Name:    "trust_center_setting_favicon_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[34]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[36]},
 			},
 			{
 				Name:    "trust_center_setting_hero_image_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[37]},
 			},
 			{
 				Name:    "trust_center_setting_nda_approver_group_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[36]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[38]},
 			},
 			{
 				Name:    "trustcentersetting_trust_center_id_environment",
