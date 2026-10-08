@@ -65,6 +65,7 @@ func (Entity) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 				entx.IntegrationMappingField(),
+				entx.FieldSourceManaged(),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -74,6 +75,7 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("display_name"),
+				entx.FieldSourceManaged(),
 			),
 		field.String("description").
 			Comment("An optional description of the entity").
@@ -81,16 +83,21 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entx.IntegrationMappingField(),
+				entx.FieldSourceManaged(),
 			),
 		field.Strings("domains").
 			Comment("domains associated with the entity").
 			Validate(validator.ValidateDomains()).
+			Annotations(
+				entx.FieldSourceManaged(),
+			).
 			Optional(),
 		field.Strings("aliases").
 			Comment("common matching names that should match with the entity").
 			Annotations(
 				entx.FieldSearchable(),
 				entx.IntegrationMappingField(),
+				entx.FieldSourceManaged(),
 			).
 			Optional(),
 		field.String("entity_type_id").
@@ -217,15 +224,22 @@ func (Entity) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("status_page_url"),
+				entx.FieldSourceManaged(),
 			),
 		field.Strings("provided_services").
 			Comment("services provided by the entity").
 			Optional().
+			Annotations(
+				entx.FieldSourceManaged(),
+			).
 			Default([]string{}),
 		field.Strings("links").
 			Comment("external links associated with the entity").
 			Validate(validator.ValidateURLs()).
 			Optional().
+			Annotations(
+				entx.FieldSourceManaged(),
+			).
 			Default([]string{}),
 		field.String("risk_rating").
 			Comment("the risk rating label for the entity").
@@ -290,6 +304,9 @@ func (Entity) Fields() []ent.Field {
 			MaxLen(urlMaxLen).
 			Validate(validator.ValidateURL()).
 			Optional().
+			Annotations(
+				entx.FieldSourceManaged(),
+			).
 			Nillable(),
 		field.String("logo_file_id").
 			Comment("The logo file id for the entity").
@@ -329,7 +346,7 @@ func (e Entity) Mixin() []ent.Mixin {
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			newResponsibilityMixin(e, withInternalOwner(), withReviewedBy(), withLastReviewedAt(), withReviewedByOrderField()),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.WithCatalog(Entity.Type)),
 			newCustomEnumMixin(e, withEnumFieldName("relationship_state")),
 			newCustomEnumMixin(e, withEnumFieldName("security_questionnaire_status")),
 			newCustomEnumMixin(e, withEnumFieldName("source_type")),
@@ -459,7 +476,7 @@ func (e Entity) Annotations() []schema.Annotation {
 		entx.NewExportable(),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			Exclude("entity_type_id", "linked_asset_ids"),
+			Exclude("entity_type_id", "linked_asset_ids", "catalog_entity_id"),
 	}
 }
 

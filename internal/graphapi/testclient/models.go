@@ -7121,6 +7121,8 @@ type CreateEntityInput struct {
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// whether this system-owned row is published for organizations to adopt
+	ExternallyVisible *bool `json:"externallyVisible,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName *string `json:"entityRelationshipStateName,omitempty"`
 	// the security_questionnaire_status of the entity
@@ -13228,6 +13230,12 @@ type Entity struct {
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// the system-owned catalogue entity this entity was adopted from
+	CatalogEntityID *string `json:"catalogEntityID,omitempty"`
+	// whether this system-owned row is published for organizations to adopt
+	ExternallyVisible *bool `json:"externallyVisible,omitempty"`
+	// the lookup key of the catalogue entity this entity was adopted from
+	CatalogEntityKey *string `json:"catalogEntityKey,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName *string `json:"entityRelationshipStateName,omitempty"`
 	// the relationship_state of the entity
@@ -13321,17 +13329,20 @@ type Entity struct {
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID *string `json:"externalID,omitempty"`
 	// time when this entity was last observed by the source integration
-	ObservedAt                        *models.DateTime              `json:"observedAt,omitempty"`
-	IntegrationRuns                   *IntegrationRunConnection     `json:"integrationRuns"`
-	Owner                             *Organization                 `json:"owner,omitempty"`
-	BlockedGroups                     *GroupConnection              `json:"blockedGroups"`
-	Editors                           *GroupConnection              `json:"editors"`
-	InternalOwnerUser                 *User                         `json:"internalOwnerUser,omitempty"`
-	InternalOwnerGroup                *Group                        `json:"internalOwnerGroup,omitempty"`
-	InternalOwnerIdentityHolder       *IdentityHolder               `json:"internalOwnerIdentityHolder,omitempty"`
-	ReviewedByUser                    *User                         `json:"reviewedByUser,omitempty"`
-	ReviewedByGroup                   *Group                        `json:"reviewedByGroup,omitempty"`
-	ReviewedByIdentityHolder          *IdentityHolder               `json:"reviewedByIdentityHolder,omitempty"`
+	ObservedAt                  *models.DateTime          `json:"observedAt,omitempty"`
+	IntegrationRuns             *IntegrationRunConnection `json:"integrationRuns"`
+	Owner                       *Organization             `json:"owner,omitempty"`
+	BlockedGroups               *GroupConnection          `json:"blockedGroups"`
+	Editors                     *GroupConnection          `json:"editors"`
+	InternalOwnerUser           *User                     `json:"internalOwnerUser,omitempty"`
+	InternalOwnerGroup          *Group                    `json:"internalOwnerGroup,omitempty"`
+	InternalOwnerIdentityHolder *IdentityHolder           `json:"internalOwnerIdentityHolder,omitempty"`
+	ReviewedByUser              *User                     `json:"reviewedByUser,omitempty"`
+	ReviewedByGroup             *Group                    `json:"reviewedByGroup,omitempty"`
+	ReviewedByIdentityHolder    *IdentityHolder           `json:"reviewedByIdentityHolder,omitempty"`
+	// the system-owned catalogue entity this entity was adopted from
+	CatalogEntity                     *Entity                       `json:"catalogEntity,omitempty"`
+	AdoptedEntities                   *EntityConnection             `json:"adoptedEntities"`
 	EntityRelationshipState           *CustomTypeEnum               `json:"entityRelationshipState,omitempty"`
 	EntitySecurityQuestionnaireStatus *CustomTypeEnum               `json:"entitySecurityQuestionnaireStatus,omitempty"`
 	EntitySourceType                  *CustomTypeEnum               `json:"entitySourceType,omitempty"`
@@ -13934,6 +13945,35 @@ type EntityWhereInput struct {
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// catalog_entity_id field predicates
+	CatalogEntityID             *string  `json:"catalogEntityID,omitempty"`
+	CatalogEntityIdneq          *string  `json:"catalogEntityIDNEQ,omitempty"`
+	CatalogEntityIDIn           []string `json:"catalogEntityIDIn,omitempty"`
+	CatalogEntityIDNotIn        []string `json:"catalogEntityIDNotIn,omitempty"`
+	CatalogEntityIDContains     *string  `json:"catalogEntityIDContains,omitempty"`
+	CatalogEntityIDHasPrefix    *string  `json:"catalogEntityIDHasPrefix,omitempty"`
+	CatalogEntityIDHasSuffix    *string  `json:"catalogEntityIDHasSuffix,omitempty"`
+	CatalogEntityIDIsNil        *bool    `json:"catalogEntityIDIsNil,omitempty"`
+	CatalogEntityIDNotNil       *bool    `json:"catalogEntityIDNotNil,omitempty"`
+	CatalogEntityIDEqualFold    *string  `json:"catalogEntityIDEqualFold,omitempty"`
+	CatalogEntityIDContainsFold *string  `json:"catalogEntityIDContainsFold,omitempty"`
+	// externally_visible field predicates
+	ExternallyVisible       *bool `json:"externallyVisible,omitempty"`
+	ExternallyVisibleNeq    *bool `json:"externallyVisibleNEQ,omitempty"`
+	ExternallyVisibleIsNil  *bool `json:"externallyVisibleIsNil,omitempty"`
+	ExternallyVisibleNotNil *bool `json:"externallyVisibleNotNil,omitempty"`
+	// catalog_entity_key field predicates
+	CatalogEntityKey             *string  `json:"catalogEntityKey,omitempty"`
+	CatalogEntityKeyNeq          *string  `json:"catalogEntityKeyNEQ,omitempty"`
+	CatalogEntityKeyIn           []string `json:"catalogEntityKeyIn,omitempty"`
+	CatalogEntityKeyNotIn        []string `json:"catalogEntityKeyNotIn,omitempty"`
+	CatalogEntityKeyContains     *string  `json:"catalogEntityKeyContains,omitempty"`
+	CatalogEntityKeyHasPrefix    *string  `json:"catalogEntityKeyHasPrefix,omitempty"`
+	CatalogEntityKeyHasSuffix    *string  `json:"catalogEntityKeyHasSuffix,omitempty"`
+	CatalogEntityKeyIsNil        *bool    `json:"catalogEntityKeyIsNil,omitempty"`
+	CatalogEntityKeyNotNil       *bool    `json:"catalogEntityKeyNotNil,omitempty"`
+	CatalogEntityKeyEqualFold    *string  `json:"catalogEntityKeyEqualFold,omitempty"`
+	CatalogEntityKeyContainsFold *string  `json:"catalogEntityKeyContainsFold,omitempty"`
 	// entity_relationship_state_name field predicates
 	EntityRelationshipStateName             *string  `json:"entityRelationshipStateName,omitempty"`
 	EntityRelationshipStateNameNeq          *string  `json:"entityRelationshipStateNameNEQ,omitempty"`
@@ -14365,6 +14405,12 @@ type EntityWhereInput struct {
 	// reviewed_by_identity_holder edge predicates
 	HasReviewedByIdentityHolder     *bool                       `json:"hasReviewedByIdentityHolder,omitempty"`
 	HasReviewedByIdentityHolderWith []*IdentityHolderWhereInput `json:"hasReviewedByIdentityHolderWith,omitempty"`
+	// catalog_entity edge predicates
+	HasCatalogEntity     *bool               `json:"hasCatalogEntity,omitempty"`
+	HasCatalogEntityWith []*EntityWhereInput `json:"hasCatalogEntityWith,omitempty"`
+	// adopted_entities edge predicates
+	HasAdoptedEntities     *bool               `json:"hasAdoptedEntities,omitempty"`
+	HasAdoptedEntitiesWith []*EntityWhereInput `json:"hasAdoptedEntitiesWith,omitempty"`
 	// entity_relationship_state edge predicates
 	HasEntityRelationshipState     *bool                       `json:"hasEntityRelationshipState,omitempty"`
 	HasEntityRelationshipStateWith []*CustomTypeEnumWhereInput `json:"hasEntityRelationshipStateWith,omitempty"`
@@ -37470,6 +37516,9 @@ type UpdateEntityInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// whether this system-owned row is published for organizations to adopt
+	ExternallyVisible      *bool `json:"externallyVisible,omitempty"`
+	ClearExternallyVisible *bool `json:"clearExternallyVisible,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName      *string `json:"entityRelationshipStateName,omitempty"`
 	ClearEntityRelationshipStateName *bool   `json:"clearEntityRelationshipStateName,omitempty"`

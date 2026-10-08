@@ -3664,6 +3664,21 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldSystemInternalID)
 				fieldSeen[entityhistory.FieldSystemInternalID] = struct{}{}
 			}
+		case "catalogEntityID":
+			if _, ok := fieldSeen[entityhistory.FieldCatalogEntityID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldCatalogEntityID)
+				fieldSeen[entityhistory.FieldCatalogEntityID] = struct{}{}
+			}
+		case "externallyVisible":
+			if _, ok := fieldSeen[entityhistory.FieldExternallyVisible]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldExternallyVisible)
+				fieldSeen[entityhistory.FieldExternallyVisible] = struct{}{}
+			}
+		case "catalogEntityKey":
+			if _, ok := fieldSeen[entityhistory.FieldCatalogEntityKey]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldCatalogEntityKey)
+				fieldSeen[entityhistory.FieldCatalogEntityKey] = struct{}{}
+			}
 		case "entityRelationshipStateName":
 			if _, ok := fieldSeen[entityhistory.FieldEntityRelationshipStateName]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldEntityRelationshipStateName)

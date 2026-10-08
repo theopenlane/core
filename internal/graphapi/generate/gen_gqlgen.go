@@ -16,6 +16,8 @@ import (
 const (
 	// graphapiGenDir is the directory where the configuration file for gqlgen is located
 	graphapiGenDir = "internal/graphapi/generate/"
+	// graphapiSchemaDir is the directory holding the graphql schema files
+	graphapiSchemaDir = "internal/graphapi/schema"
 	// csvDir is the directory where the CSV files will be stored for example bulk operations
 	csvDir = "internal/httpserve/handlers/csv"
 	// csvJsonFile is the file that contains the mapping of CSV fields to entity fields
@@ -31,7 +33,7 @@ const (
 var (
 	// changes to these paths should trigger full schema generation
 	mainInputPaths = []string{
-		"internal/graphapi/schema",
+		graphapiSchemaDir,
 		"internal/ent/generated",
 		"common/enums/",
 		graphapiGenDir,
@@ -56,6 +58,30 @@ func main() {
 }
 
 func gqlGenerate() {
+	modelImport := "github.com/theopenlane/core/v2/internal/graphapi/model"
+	entPackage := "github.com/theopenlane/core/v2/internal/ent/generated"
+	csvGeneratedPackage := "github.com/theopenlane/core/v2/internal/ent/csvgenerated"
+	rulePackage := "github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	entityOpsPackage := "github.com/theopenlane/core/v2/internal/ent/entityops"
+	jsonxPackage := "github.com/theopenlane/core/v2/pkg/jsonx"
+
+	resolverPlugin := resolvergen.NewWithOptions(
+		resolvergen.WithEntGeneratedPackage(entPackage),
+		resolvergen.WithArchivableSchemas([]string{schema.Program{}.Name()}),
+		resolvergen.WithCatalogSchemas([]string{schema.Entity{}.Name()}),
+		resolvergen.WithGraphQLImport(graphqlImport),
+		resolvergen.WithCSVGeneratedPackage(csvGeneratedPackage),
+		resolvergen.WithRulePackage(rulePackage),
+		resolvergen.WithEntityOpsPackage(entityOpsPackage),
+		resolvergen.WithJSONXPackage(jsonxPackage),
+		resolvergen.WithForceRegenerateBulkResolvers(false),
+	)
+
+	// write the catalog SDL before the checksum check so it is part of the schema inputs
+	if err := resolverPlugin.WriteCatalogSchema(graphapiSchemaDir); err != nil {
+		log.Fatal().Err(err).Msg("failed to write catalog schema")
+	}
+
 	// check if there were schema changes before running full codegen
 	hasChanges, err := genhelpers.HasSchemaChanges(schemaChecksumFile, mainInputPaths...)
 	if err != nil {
@@ -73,19 +99,8 @@ func gqlGenerate() {
 		log.Fatal().Err(err).Msg("failed to load config")
 	}
 
-	modelImport := "github.com/theopenlane/core/v2/internal/graphapi/model"
-	entPackage := "github.com/theopenlane/core/v2/internal/ent/generated"
-	csvGeneratedPackage := "github.com/theopenlane/core/v2/internal/ent/csvgenerated"
-	rulePackage := "github.com/theopenlane/core/v2/internal/ent/privacy/rule"
-
 	if err := api.Generate(cfg,
-		api.ReplacePlugin(resolvergen.NewWithOptions(
-			resolvergen.WithEntGeneratedPackage(entPackage),
-			resolvergen.WithArchivableSchemas([]string{schema.Program{}.Name()}),
-			resolvergen.WithGraphQLImport(graphqlImport),
-			resolvergen.WithCSVGeneratedPackage(csvGeneratedPackage),
-			resolvergen.WithForceRegenerateBulkResolvers(false),
-		)), // replace the resolvergen plugin
+		api.ReplacePlugin(resolverPlugin), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithSchemaPath("./internal/ent/schema"),
 			bulkgen.WithModelPackage(modelImport),

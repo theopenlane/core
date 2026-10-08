@@ -2438,6 +2438,10 @@ func init() {
 	entityDescSystemOwned := entityMixinFields11[0].Descriptor()
 	// entity.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entity.DefaultSystemOwned = entityDescSystemOwned.Default.(bool)
+	// entityDescExternallyVisible is the schema descriptor for externally_visible field.
+	entityDescExternallyVisible := entityMixinFields11[4].Descriptor()
+	// entity.DefaultExternallyVisible holds the default value on creation for the externally_visible field.
+	entity.DefaultExternallyVisible = entityDescExternallyVisible.Default.(bool)
 	// entityDescName is the schema descriptor for name field.
 	entityDescName := entityFields[0].Descriptor()
 	// entity.NameValidator is a validator for the "name" field. It is called by the builders before save.

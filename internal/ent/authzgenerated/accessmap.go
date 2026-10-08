@@ -1330,6 +1330,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "catalog_entity": {
+	ObjectType:          "entity",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "adopted_entities": {
+	ObjectType:          "entity",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 }, "entity_relationship_state": {
 	ObjectType:          "custom_type_enum",
 	SkipEditCheck:       true,

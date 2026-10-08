@@ -78,6 +78,12 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldCatalogEntityID holds the string denoting the catalog_entity_id field in the database.
+	FieldCatalogEntityID = "catalog_entity_id"
+	// FieldExternallyVisible holds the string denoting the externally_visible field in the database.
+	FieldExternallyVisible = "externally_visible"
+	// FieldCatalogEntityKey holds the string denoting the catalog_entity_key field in the database.
+	FieldCatalogEntityKey = "catalog_entity_key"
 	// FieldEntityRelationshipStateName holds the string denoting the entity_relationship_state_name field in the database.
 	FieldEntityRelationshipStateName = "entity_relationship_state_name"
 	// FieldEntityRelationshipStateID holds the string denoting the entity_relationship_state_id field in the database.
@@ -208,6 +214,9 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldCatalogEntityID,
+	FieldExternallyVisible,
+	FieldCatalogEntityKey,
 	FieldEntityRelationshipStateName,
 	FieldEntityRelationshipStateID,
 	FieldEntitySecurityQuestionnaireStatusName,
@@ -286,6 +295,8 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultExternallyVisible holds the default value on creation for the "externally_visible" field.
+	DefaultExternallyVisible bool
 	// DefaultApprovedForUse holds the default value on creation for the "approved_for_use" field.
 	DefaultApprovedForUse bool
 	// DefaultLinkedAssetIds holds the default value on creation for the "linked_asset_ids" field.
@@ -502,6 +513,21 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByCatalogEntityID orders the results by the catalog_entity_id field.
+func ByCatalogEntityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCatalogEntityID, opts...).ToFunc()
+}
+
+// ByExternallyVisible orders the results by the externally_visible field.
+func ByExternallyVisible(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternallyVisible, opts...).ToFunc()
+}
+
+// ByCatalogEntityKey orders the results by the catalog_entity_key field.
+func ByCatalogEntityKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCatalogEntityKey, opts...).ToFunc()
 }
 
 // ByEntityRelationshipStateName orders the results by the entity_relationship_state_name field.

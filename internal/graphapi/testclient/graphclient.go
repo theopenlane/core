@@ -43905,6 +43905,8 @@ type GetEntityByID_Entity struct {
 	ApprovedForUse                        *bool                            "json:\"approvedForUse,omitempty\" graphql:\"approvedForUse\""
 	AutoRenews                            *bool                            "json:\"autoRenews,omitempty\" graphql:\"autoRenews\""
 	BillingModel                          *string                          "json:\"billingModel,omitempty\" graphql:\"billingModel\""
+	CatalogEntityID                       *string                          "json:\"catalogEntityID,omitempty\" graphql:\"catalogEntityID\""
+	CatalogEntityKey                      *string                          "json:\"catalogEntityKey,omitempty\" graphql:\"catalogEntityKey\""
 	Contacts                              GetEntityByID_Entity_Contacts    "json:\"contacts\" graphql:\"contacts\""
 	ContractEndDate                       *models.DateTime                 "json:\"contractEndDate,omitempty\" graphql:\"contractEndDate\""
 	ContractRenewalAt                     *models.DateTime                 "json:\"contractRenewalAt,omitempty\" graphql:\"contractRenewalAt\""
@@ -43925,6 +43927,7 @@ type GetEntityByID_Entity struct {
 	EnvironmentID                         *string                          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName                       *string                          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID                            *string                          "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ExternallyVisible                     *bool                            "json:\"externallyVisible,omitempty\" graphql:\"externallyVisible\""
 	Files                                 GetEntityByID_Entity_Files       "json:\"files\" graphql:\"files\""
 	HasSoc2                               *bool                            "json:\"hasSoc2,omitempty\" graphql:\"hasSoc2\""
 	ID                                    string                           "json:\"id\" graphql:\"id\""
@@ -44008,6 +44011,18 @@ func (t *GetEntityByID_Entity) GetBillingModel() *string {
 		t = &GetEntityByID_Entity{}
 	}
 	return t.BillingModel
+}
+func (t *GetEntityByID_Entity) GetCatalogEntityID() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.CatalogEntityID
+}
+func (t *GetEntityByID_Entity) GetCatalogEntityKey() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.CatalogEntityKey
 }
 func (t *GetEntityByID_Entity) GetContacts() *GetEntityByID_Entity_Contacts {
 	if t == nil {
@@ -44128,6 +44143,12 @@ func (t *GetEntityByID_Entity) GetExternalID() *string {
 		t = &GetEntityByID_Entity{}
 	}
 	return t.ExternalID
+}
+func (t *GetEntityByID_Entity) GetExternallyVisible() *bool {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.ExternallyVisible
 }
 func (t *GetEntityByID_Entity) GetFiles() *GetEntityByID_Entity_Files {
 	if t == nil {
@@ -185760,6 +185781,8 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		approvedForUse
 		autoRenews
 		billingModel
+		catalogEntityID
+		catalogEntityKey
 		contractEndDate
 		contractRenewalAt
 		contractStartDate
@@ -185778,6 +185801,7 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		environmentID
 		environmentName
 		externalID
+		externallyVisible
 		hasSoc2
 		id
 		integrationRunID
