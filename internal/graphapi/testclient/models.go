@@ -13230,11 +13230,11 @@ type Entity struct {
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
-	// the system-owned catalogue entity this entity was adopted from
+	// the system-owned catalog entity this entity was adopted from
 	CatalogEntityID *string `json:"catalogEntityID,omitempty"`
 	// whether this system-owned row is published for organizations to adopt
 	ExternallyVisible *bool `json:"externallyVisible,omitempty"`
-	// the lookup key of the catalogue entity this entity was adopted from
+	// the lookup key of the catalog entity this entity was adopted from
 	CatalogEntityKey *string `json:"catalogEntityKey,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName *string `json:"entityRelationshipStateName,omitempty"`
@@ -13340,7 +13340,7 @@ type Entity struct {
 	ReviewedByUser              *User                     `json:"reviewedByUser,omitempty"`
 	ReviewedByGroup             *Group                    `json:"reviewedByGroup,omitempty"`
 	ReviewedByIdentityHolder    *IdentityHolder           `json:"reviewedByIdentityHolder,omitempty"`
-	// the system-owned catalogue entity this entity was adopted from
+	// the system-owned catalog entity this entity was adopted from
 	CatalogEntity                     *Entity                       `json:"catalogEntity,omitempty"`
 	AdoptedEntities                   *EntityConnection             `json:"adoptedEntities"`
 	EntityRelationshipState           *CustomTypeEnum               `json:"entityRelationshipState,omitempty"`
