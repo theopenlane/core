@@ -29,8 +29,8 @@ type UserInput struct {
 type VulnerabilitySync struct {
 	// EnableLicenseFindings opts in to OSS license compliance issues, which are not collected by default
 	EnableLicenseFindings bool `json:"enableLicenseFindings,omitempty" jsonschema:"title=Enable License Compliance Findings,description=Also collect FOSSA OSS license policy issues as findings. Security vulnerabilities are always collected."`
-	// IncludeIgnored collects issues that have been dismissed in FOSSA in addition to active ones
-	IncludeIgnored bool `json:"includeIgnored,omitempty" jsonschema:"title=Include Ignored Issues,description=Include issues that have been dismissed in FOSSA. By default only active issues are collected."`
+	// IncludeIgnored imports issues already dismissed in FOSSA on the initial import only; later syncs always fetch every status
+	IncludeIgnored bool `json:"includeIgnored,omitempty" jsonschema:"title=Include Ignored Issues,description=Include issues already dismissed in FOSSA when the integration is first connected. Later syncs always pick up dismissals so issues closed in FOSSA are closed here too."`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.severity == 'critical' || payload.severity == 'high'"`
 }
