@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -26,6 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 )
 
 // NoteUpdate is the builder for updating Note entities.
@@ -433,6 +435,44 @@ func (_u *NoteUpdate) SetReview(v *Review) *NoteUpdate {
 	return _u.SetReviewID(v.ID)
 }
 
+// SetVulnerabilityID sets the "vulnerability" edge to the Vulnerability entity by ID.
+func (_u *NoteUpdate) SetVulnerabilityID(id string) *NoteUpdate {
+	_u.mutation.SetVulnerabilityID(id)
+	return _u
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability" edge to the Vulnerability entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableVulnerabilityID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetVulnerabilityID(*id)
+	}
+	return _u
+}
+
+// SetVulnerability sets the "vulnerability" edge to the Vulnerability entity.
+func (_u *NoteUpdate) SetVulnerability(v *Vulnerability) *NoteUpdate {
+	return _u.SetVulnerabilityID(v.ID)
+}
+
+// SetFindingID sets the "finding" edge to the Finding entity by ID.
+func (_u *NoteUpdate) SetFindingID(id string) *NoteUpdate {
+	_u.mutation.SetFindingID(id)
+	return _u
+}
+
+// SetNillableFindingID sets the "finding" edge to the Finding entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableFindingID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetFindingID(*id)
+	}
+	return _u
+}
+
+// SetFinding sets the "finding" edge to the Finding entity.
+func (_u *NoteUpdate) SetFinding(v *Finding) *NoteUpdate {
+	return _u.SetFindingID(v.ID)
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
 func (_u *NoteUpdate) SetEvidenceID(id string) *NoteUpdate {
 	_u.mutation.SetEvidenceID(id)
@@ -536,6 +576,18 @@ func (_u *NoteUpdate) ClearInternalPolicy() *NoteUpdate {
 // ClearReview clears the "review" edge to the Review entity.
 func (_u *NoteUpdate) ClearReview() *NoteUpdate {
 	_u.mutation.ClearReview()
+	return _u
+}
+
+// ClearVulnerability clears the "vulnerability" edge to the Vulnerability entity.
+func (_u *NoteUpdate) ClearVulnerability() *NoteUpdate {
+	_u.mutation.ClearVulnerability()
+	return _u
+}
+
+// ClearFinding clears the "finding" edge to the Finding entity.
+func (_u *NoteUpdate) ClearFinding() *NoteUpdate {
+	_u.mutation.ClearFinding()
 	return _u
 }
 
@@ -942,6 +994,64 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.VulnerabilityTable,
+			Columns: []string{note.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.VulnerabilityTable,
+			Columns: []string{note.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.FindingTable,
+			Columns: []string{note.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.FindingTable,
+			Columns: []string{note.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1539,6 +1649,44 @@ func (_u *NoteUpdateOne) SetReview(v *Review) *NoteUpdateOne {
 	return _u.SetReviewID(v.ID)
 }
 
+// SetVulnerabilityID sets the "vulnerability" edge to the Vulnerability entity by ID.
+func (_u *NoteUpdateOne) SetVulnerabilityID(id string) *NoteUpdateOne {
+	_u.mutation.SetVulnerabilityID(id)
+	return _u
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability" edge to the Vulnerability entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableVulnerabilityID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetVulnerabilityID(*id)
+	}
+	return _u
+}
+
+// SetVulnerability sets the "vulnerability" edge to the Vulnerability entity.
+func (_u *NoteUpdateOne) SetVulnerability(v *Vulnerability) *NoteUpdateOne {
+	return _u.SetVulnerabilityID(v.ID)
+}
+
+// SetFindingID sets the "finding" edge to the Finding entity by ID.
+func (_u *NoteUpdateOne) SetFindingID(id string) *NoteUpdateOne {
+	_u.mutation.SetFindingID(id)
+	return _u
+}
+
+// SetNillableFindingID sets the "finding" edge to the Finding entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableFindingID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetFindingID(*id)
+	}
+	return _u
+}
+
+// SetFinding sets the "finding" edge to the Finding entity.
+func (_u *NoteUpdateOne) SetFinding(v *Finding) *NoteUpdateOne {
+	return _u.SetFindingID(v.ID)
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
 func (_u *NoteUpdateOne) SetEvidenceID(id string) *NoteUpdateOne {
 	_u.mutation.SetEvidenceID(id)
@@ -1642,6 +1790,18 @@ func (_u *NoteUpdateOne) ClearInternalPolicy() *NoteUpdateOne {
 // ClearReview clears the "review" edge to the Review entity.
 func (_u *NoteUpdateOne) ClearReview() *NoteUpdateOne {
 	_u.mutation.ClearReview()
+	return _u
+}
+
+// ClearVulnerability clears the "vulnerability" edge to the Vulnerability entity.
+func (_u *NoteUpdateOne) ClearVulnerability() *NoteUpdateOne {
+	_u.mutation.ClearVulnerability()
+	return _u
+}
+
+// ClearFinding clears the "finding" edge to the Finding entity.
+func (_u *NoteUpdateOne) ClearFinding() *NoteUpdateOne {
+	_u.mutation.ClearFinding()
 	return _u
 }
 
@@ -2078,6 +2238,64 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.VulnerabilityTable,
+			Columns: []string{note.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.VulnerabilityTable,
+			Columns: []string{note.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.FindingTable,
+			Columns: []string{note.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.FindingTable,
+			Columns: []string{note.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

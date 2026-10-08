@@ -16797,6 +16797,38 @@ func (c *NoteClient) QueryReview(_m *Note) *ReviewQuery {
 	return query
 }
 
+// QueryVulnerability queries the vulnerability edge of a Note.
+func (c *NoteClient) QueryVulnerability(_m *Note) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.VulnerabilityTable, note.VulnerabilityColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFinding queries the finding edge of a Note.
+func (c *NoteClient) QueryFinding(_m *Note) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.FindingTable, note.FindingColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvidence queries the evidence edge of a Note.
 func (c *NoteClient) QueryEvidence(_m *Note) *EvidenceQuery {
 	query := (&EvidenceClient{config: c.config}).Query()

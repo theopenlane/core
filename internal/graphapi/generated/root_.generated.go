@@ -65,6 +65,7 @@ type ResolverRoot interface {
 	UpdateDiscussionInput() UpdateDiscussionInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateEvidenceInput() UpdateEvidenceInputResolver
+	UpdateFindingInput() UpdateFindingInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
 	UpdateInternalPolicyInput() UpdateInternalPolicyInputResolver
 	UpdateOrganizationInput() UpdateOrganizationInputResolver
@@ -78,6 +79,7 @@ type ResolverRoot interface {
 	UpdateTaskInput() UpdateTaskInputResolver
 	UpdateTrustCenterFAQInput() UpdateTrustCenterFAQInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
+	UpdateVulnerabilityInput() UpdateVulnerabilityInputResolver
 }
 
 type DirectiveRoot struct {
@@ -4029,6 +4031,7 @@ type ComplexityRoot struct {
 		UpdateEvidenceComment                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateExport                         func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload, exportFilesMetadata []*model.FileMetadataInput) int
 		UpdateFinding                        func(childComplexity int, id string, input generated.UpdateFindingInput) int
+		UpdateFindingComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateFindingControl                 func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
 		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
@@ -4089,6 +4092,7 @@ type ComplexityRoot struct {
 		UpdateVendorRiskScore                func(childComplexity int, id string, input generated.UpdateVendorRiskScoreInput) int
 		UpdateVendorScoringConfig            func(childComplexity int, id string, input generated.UpdateVendorScoringConfigInput) int
 		UpdateVulnerability                  func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
+		UpdateVulnerabilityComment           func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateWorkflowDefinition             func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
 		UpdateWorkflowProposalChanges        func(childComplexity int, input model.UpdateWorkflowProposalChangesInput) int
 		ValidateCustomDomain                 func(childComplexity int, id string) int
@@ -4170,6 +4174,7 @@ type ComplexityRoot struct {
 		DisplayID             func(childComplexity int) int
 		Evidence              func(childComplexity int) int
 		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Finding               func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		InternalPolicy        func(childComplexity int) int
 		IsEdited              func(childComplexity int) int
@@ -4192,6 +4197,7 @@ type ComplexityRoot struct {
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 		UpdatedByImpersonator func(childComplexity int) int
+		Vulnerability         func(childComplexity int) int
 	}
 
 	NoteConnection struct {
@@ -30135,6 +30141,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateFinding(childComplexity, args["id"].(string), args["input"].(generated.UpdateFindingInput)), true
+	case "Mutation.updateFindingComment":
+		if e.ComplexityRoot.Mutation.UpdateFindingComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateFindingComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateFindingComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload), args["noteFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateFindingControl":
 		if e.ComplexityRoot.Mutation.UpdateFindingControl == nil {
 			break
@@ -30795,6 +30812,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateVulnerability(childComplexity, args["id"].(string), args["input"].(generated.UpdateVulnerabilityInput)), true
+	case "Mutation.updateVulnerabilityComment":
+		if e.ComplexityRoot.Mutation.UpdateVulnerabilityComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateVulnerabilityComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateVulnerabilityComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload), args["noteFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateWorkflowDefinition":
 		if e.ComplexityRoot.Mutation.UpdateWorkflowDefinition == nil {
 			break
@@ -31171,6 +31199,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Note.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+	case "Note.finding":
+		if e.ComplexityRoot.Note.Finding == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Note.Finding(childComplexity), true
 	case "Note.id":
 		if e.ComplexityRoot.Note.ID == nil {
 			break
@@ -31308,6 +31342,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Note.UpdatedByImpersonator(childComplexity), true
+	case "Note.vulnerability":
+		if e.ComplexityRoot.Note.Vulnerability == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Note.Vulnerability(childComplexity), true
 
 	case "NoteConnection.edges":
 		if e.ComplexityRoot.NoteConnection.Edges == nil {
@@ -70281,6 +70321,8 @@ input CreateNoteInput {
   riskID: ID
   internalPolicyID: ID
   reviewID: ID
+  vulnerabilityID: ID
+  findingID: ID
   evidenceID: ID
   trustCenterID: ID
   discussionID: ID
@@ -95956,6 +95998,8 @@ type Note implements Node {
   risk: Risk
   internalPolicy: InternalPolicy
   review: Review
+  vulnerability: Vulnerability
+  finding: Finding
   evidence: Evidence
   trustCenter: TrustCenter
   discussion: Discussion
@@ -96307,6 +96351,16 @@ input NoteWhereInput {
   """
   hasReview: Boolean
   hasReviewWith: [ReviewWhereInput!]
+  """
+  vulnerability edge predicates
+  """
+  hasVulnerability: Boolean
+  hasVulnerabilityWith: [VulnerabilityWhereInput!]
+  """
+  finding edge predicates
+  """
+  hasFinding: Boolean
+  hasFindingWith: [FindingWhereInput!]
   """
   evidence edge predicates
   """
@@ -130039,6 +130093,10 @@ input UpdateNoteInput {
   clearInternalPolicy: Boolean
   reviewID: ID
   clearReview: Boolean
+  vulnerabilityID: ID
+  clearVulnerability: Boolean
+  findingID: ID
+  clearFinding: Boolean
   evidenceID: ID
   clearEvidence: Boolean
   trustCenterID: ID
@@ -145514,6 +145572,16 @@ extend input UpdateReviewInput {
     deleteComment: ID
 }
 
+extend input UpdateVulnerabilityInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateFindingInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend input CreateTrustCenterFAQInput {
     createNote: CreateNoteInput
 }
@@ -145715,6 +145783,42 @@ extend type Mutation{
         noteFiles: [Upload!]
         noteFilesMetadata: [FileMetadataInput!]
     ): ReviewUpdatePayload!
+    """
+    Update an existing vulnerability comment
+    """
+    updateVulnerabilityComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
+    ): VulnerabilityUpdatePayload!
+    """
+    Update an existing finding comment
+    """
+    updateFindingComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
+    ): FindingUpdatePayload!
     """
     Delete an existing note
     """
@@ -161182,6 +161286,10 @@ func (ec *executionContext) childFields_Note(ctx context.Context, field graphql.
 		return ec.fieldContext_Note_internalPolicy(ctx, field)
 	case "review":
 		return ec.fieldContext_Note_review(ctx, field)
+	case "vulnerability":
+		return ec.fieldContext_Note_vulnerability(ctx, field)
+	case "finding":
+		return ec.fieldContext_Note_finding(ctx, field)
 	case "evidence":
 		return ec.fieldContext_Note_evidence(ctx, field)
 	case "trustCenter":

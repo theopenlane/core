@@ -55310,6 +55310,14 @@ type NoteWhereInput struct {
 	HasReview     *bool               `json:"hasReview,omitempty"`
 	HasReviewWith []*ReviewWhereInput `json:"hasReviewWith,omitempty"`
 
+	// "vulnerability" edge predicates.
+	HasVulnerability     *bool                      `json:"hasVulnerability,omitempty"`
+	HasVulnerabilityWith []*VulnerabilityWhereInput `json:"hasVulnerabilityWith,omitempty"`
+
+	// "finding" edge predicates.
+	HasFinding     *bool                `json:"hasFinding,omitempty"`
+	HasFindingWith []*FindingWhereInput `json:"hasFindingWith,omitempty"`
+
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -55971,6 +55979,44 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, note.HasReviewWith(with...))
+	}
+	if i.HasVulnerability != nil {
+		p := note.HasVulnerability()
+		if !*i.HasVulnerability {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasVulnerabilityWith) > 0 {
+		with := make([]predicate.Vulnerability, 0, len(i.HasVulnerabilityWith))
+		with = append(with, vulnerability.DeletedAtIsNil())
+		for _, w := range i.HasVulnerabilityWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasVulnerabilityWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasVulnerabilityWith(with...))
+	}
+	if i.HasFinding != nil {
+		p := note.HasFinding()
+		if !*i.HasFinding {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFindingWith) > 0 {
+		with := make([]predicate.Finding, 0, len(i.HasFindingWith))
+		with = append(with, finding.DeletedAtIsNil())
+		for _, w := range i.HasFindingWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFindingWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasFindingWith(with...))
 	}
 	if i.HasEvidence != nil {
 		p := note.HasEvidence()

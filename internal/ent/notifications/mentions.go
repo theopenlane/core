@@ -1,6 +1,7 @@
 package notifications
 
 import (
+	"cmp"
 	"context"
 	"fmt"
 
@@ -10,7 +11,9 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -55,6 +58,12 @@ func handleNoteMutation(inv entityops.Invocation, payload entityops.MutationPayl
 		WithRisk().
 		WithInternalPolicy().
 		WithEvidence().
+		WithVulnerability(func(q *generated.VulnerabilityQuery) {
+			q.Select(vulnerability.FieldDisplayName, vulnerability.FieldCveID, vulnerability.FieldDisplayID)
+		}).
+		WithFinding(func(q *generated.FindingQuery) {
+			q.Select(finding.FieldDisplayName, finding.FieldDisplayID)
+		}).
 		Only(inv.Context)
 	switch {
 	case generated.IsNotFound(err):
@@ -116,6 +125,10 @@ func noteParent(noteEntity *generated.Note) (string, string, string) {
 		return generated.TypeInternalPolicy, edges.InternalPolicy.ID, edges.InternalPolicy.Name
 	case edges.Evidence != nil:
 		return generated.TypeEvidence, edges.Evidence.ID, edges.Evidence.Name
+	case edges.Vulnerability != nil:
+		return generated.TypeVulnerability, edges.Vulnerability.ID, cmp.Or(edges.Vulnerability.DisplayName, edges.Vulnerability.CveID, edges.Vulnerability.DisplayID)
+	case edges.Finding != nil:
+		return generated.TypeFinding, edges.Finding.ID, cmp.Or(edges.Finding.DisplayName, edges.Finding.DisplayID)
 	default:
 		return generated.TypeNote, noteEntity.ID, "Comment"
 	}

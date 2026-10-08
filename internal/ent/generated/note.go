@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -22,6 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 )
 
 // Note is the model entity for the Note schema.
@@ -102,6 +104,10 @@ type NoteEdges struct {
 	InternalPolicy *InternalPolicy `json:"internal_policy,omitempty"`
 	// Review holds the value of the review edge.
 	Review *Review `json:"review,omitempty"`
+	// Vulnerability holds the value of the vulnerability edge.
+	Vulnerability *Vulnerability `json:"vulnerability,omitempty"`
+	// Finding holds the value of the finding edge.
+	Finding *Finding `json:"finding,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence *Evidence `json:"evidence,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
@@ -114,9 +120,9 @@ type NoteEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [15]map[string]int
 
 	namedTrustCenterFaqs map[string][]*TrustCenterFAQ
 	namedFiles           map[string][]*File
@@ -210,12 +216,34 @@ func (e NoteEdges) ReviewOrErr() (*Review, error) {
 	return nil, &NotLoadedError{edge: "review"}
 }
 
+// VulnerabilityOrErr returns the Vulnerability value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) VulnerabilityOrErr() (*Vulnerability, error) {
+	if e.Vulnerability != nil {
+		return e.Vulnerability, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: vulnerability.Label}
+	}
+	return nil, &NotLoadedError{edge: "vulnerability"}
+}
+
+// FindingOrErr returns the Finding value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) FindingOrErr() (*Finding, error) {
+	if e.Finding != nil {
+		return e.Finding, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: finding.Label}
+	}
+	return nil, &NotLoadedError{edge: "finding"}
+}
+
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e NoteEdges) EvidenceOrErr() (*Evidence, error) {
 	if e.Evidence != nil {
 		return e.Evidence, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: evidence.Label}
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -226,7 +254,7 @@ func (e NoteEdges) EvidenceOrErr() (*Evidence, error) {
 func (e NoteEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -237,7 +265,7 @@ func (e NoteEdges) TrustCenterOrErr() (*TrustCenter, error) {
 func (e NoteEdges) DiscussionOrErr() (*Discussion, error) {
 	if e.Discussion != nil {
 		return e.Discussion, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: discussion.Label}
 	}
 	return nil, &NotLoadedError{edge: "discussion"}
@@ -246,7 +274,7 @@ func (e NoteEdges) DiscussionOrErr() (*Discussion, error) {
 // TrustCenterFaqsOrErr returns the TrustCenterFaqs value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) TrustCenterFaqsOrErr() ([]*TrustCenterFAQ, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.TrustCenterFaqs, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_faqs"}
@@ -255,7 +283,7 @@ func (e NoteEdges) TrustCenterFaqsOrErr() ([]*TrustCenterFAQ, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -576,6 +604,16 @@ func (_m *Note) QueryInternalPolicy() *InternalPolicyQuery {
 // QueryReview queries the "review" edge of the Note entity.
 func (_m *Note) QueryReview() *ReviewQuery {
 	return NewNoteClient(_m.config).QueryReview(_m)
+}
+
+// QueryVulnerability queries the "vulnerability" edge of the Note entity.
+func (_m *Note) QueryVulnerability() *VulnerabilityQuery {
+	return NewNoteClient(_m.config).QueryVulnerability(_m)
+}
+
+// QueryFinding queries the "finding" edge of the Note entity.
+func (_m *Note) QueryFinding() *FindingQuery {
+	return NewNoteClient(_m.config).QueryFinding(_m)
 }
 
 // QueryEvidence queries the "evidence" edge of the Note entity.

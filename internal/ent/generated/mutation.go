@@ -141840,6 +141840,10 @@ type NoteMutation struct {
 	clearedinternal_policy   bool
 	review                   *string
 	clearedreview            bool
+	vulnerability            *string
+	clearedvulnerability     bool
+	finding                  *string
+	clearedfinding           bool
 	evidence                 *string
 	clearedevidence          bool
 	trust_center             *string
@@ -143120,6 +143124,84 @@ func (m *NoteMutation) ResetReview() {
 	m.clearedreview = false
 }
 
+// SetVulnerabilityID sets the "vulnerability" edge to the Vulnerability entity by id.
+func (m *NoteMutation) SetVulnerabilityID(id string) {
+	m.vulnerability = &id
+}
+
+// ClearVulnerability clears the "vulnerability" edge to the Vulnerability entity.
+func (m *NoteMutation) ClearVulnerability() {
+	m.clearedvulnerability = true
+}
+
+// VulnerabilityCleared reports if the "vulnerability" edge to the Vulnerability entity was cleared.
+func (m *NoteMutation) VulnerabilityCleared() bool {
+	return m.clearedvulnerability
+}
+
+// VulnerabilityID returns the "vulnerability" edge ID in the mutation.
+func (m *NoteMutation) VulnerabilityID() (id string, exists bool) {
+	if m.vulnerability != nil {
+		return *m.vulnerability, true
+	}
+	return
+}
+
+// VulnerabilityIDs returns the "vulnerability" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// VulnerabilityID instead. It exists only for internal usage by the builders.
+func (m *NoteMutation) VulnerabilityIDs() (ids []string) {
+	if id := m.vulnerability; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetVulnerability resets all changes to the "vulnerability" edge.
+func (m *NoteMutation) ResetVulnerability() {
+	m.vulnerability = nil
+	m.clearedvulnerability = false
+}
+
+// SetFindingID sets the "finding" edge to the Finding entity by id.
+func (m *NoteMutation) SetFindingID(id string) {
+	m.finding = &id
+}
+
+// ClearFinding clears the "finding" edge to the Finding entity.
+func (m *NoteMutation) ClearFinding() {
+	m.clearedfinding = true
+}
+
+// FindingCleared reports if the "finding" edge to the Finding entity was cleared.
+func (m *NoteMutation) FindingCleared() bool {
+	return m.clearedfinding
+}
+
+// FindingID returns the "finding" edge ID in the mutation.
+func (m *NoteMutation) FindingID() (id string, exists bool) {
+	if m.finding != nil {
+		return *m.finding, true
+	}
+	return
+}
+
+// FindingIDs returns the "finding" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FindingID instead. It exists only for internal usage by the builders.
+func (m *NoteMutation) FindingIDs() (ids []string) {
+	if id := m.finding; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFinding resets all changes to the "finding" edge.
+func (m *NoteMutation) ResetFinding() {
+	m.finding = nil
+	m.clearedfinding = false
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by id.
 func (m *NoteMutation) SetEvidenceID(id string) {
 	m.evidence = &id
@@ -143836,7 +143918,7 @@ func (m *NoteMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NoteMutation) AddedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 15)
 	if m.owner != nil {
 		edges = append(edges, note.EdgeOwner)
 	}
@@ -143860,6 +143942,12 @@ func (m *NoteMutation) AddedEdges() []string {
 	}
 	if m.review != nil {
 		edges = append(edges, note.EdgeReview)
+	}
+	if m.vulnerability != nil {
+		edges = append(edges, note.EdgeVulnerability)
+	}
+	if m.finding != nil {
+		edges = append(edges, note.EdgeFinding)
 	}
 	if m.evidence != nil {
 		edges = append(edges, note.EdgeEvidence)
@@ -143915,6 +144003,14 @@ func (m *NoteMutation) AddedIDs(name string) []ent.Value {
 		if id := m.review; id != nil {
 			return []ent.Value{*id}
 		}
+	case note.EdgeVulnerability:
+		if id := m.vulnerability; id != nil {
+			return []ent.Value{*id}
+		}
+	case note.EdgeFinding:
+		if id := m.finding; id != nil {
+			return []ent.Value{*id}
+		}
 	case note.EdgeEvidence:
 		if id := m.evidence; id != nil {
 			return []ent.Value{*id}
@@ -143945,7 +144041,7 @@ func (m *NoteMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NoteMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 15)
 	if m.removedtrust_center_faqs != nil {
 		edges = append(edges, note.EdgeTrustCenterFaqs)
 	}
@@ -143977,7 +144073,7 @@ func (m *NoteMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NoteMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 15)
 	if m.clearedowner {
 		edges = append(edges, note.EdgeOwner)
 	}
@@ -144001,6 +144097,12 @@ func (m *NoteMutation) ClearedEdges() []string {
 	}
 	if m.clearedreview {
 		edges = append(edges, note.EdgeReview)
+	}
+	if m.clearedvulnerability {
+		edges = append(edges, note.EdgeVulnerability)
+	}
+	if m.clearedfinding {
+		edges = append(edges, note.EdgeFinding)
 	}
 	if m.clearedevidence {
 		edges = append(edges, note.EdgeEvidence)
@@ -144040,6 +144142,10 @@ func (m *NoteMutation) EdgeCleared(name string) bool {
 		return m.clearedinternal_policy
 	case note.EdgeReview:
 		return m.clearedreview
+	case note.EdgeVulnerability:
+		return m.clearedvulnerability
+	case note.EdgeFinding:
+		return m.clearedfinding
 	case note.EdgeEvidence:
 		return m.clearedevidence
 	case note.EdgeTrustCenter:
@@ -144082,6 +144188,12 @@ func (m *NoteMutation) ClearEdge(name string) error {
 	case note.EdgeReview:
 		m.ClearReview()
 		return nil
+	case note.EdgeVulnerability:
+		m.ClearVulnerability()
+		return nil
+	case note.EdgeFinding:
+		m.ClearFinding()
+		return nil
 	case note.EdgeEvidence:
 		m.ClearEvidence()
 		return nil
@@ -144122,6 +144234,12 @@ func (m *NoteMutation) ResetEdge(name string) error {
 		return nil
 	case note.EdgeReview:
 		m.ResetReview()
+		return nil
+	case note.EdgeVulnerability:
+		m.ResetVulnerability()
+		return nil
+	case note.EdgeFinding:
+		m.ResetFinding()
 		return nil
 	case note.EdgeEvidence:
 		m.ResetEvidence()
