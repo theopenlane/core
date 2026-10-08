@@ -11,7 +11,7 @@ var (
 	ErrDomainMissing = errors.New("zitadel: domain missing")
 	// ErrClientBuildFailed indicates the Zitadel API client could not be constructed
 	ErrClientBuildFailed = errors.New("zitadel: client build failed")
-	// ErrHealthCheckFailed indicates the health check request failed
+	// ErrHealthCheckFailed indicates the connection verification request failed
 	ErrHealthCheckFailed = errors.New("zitadel: health check failed")
 	// ErrInstanceFetchFailed indicates the instance lookup request failed
 	ErrInstanceFetchFailed = errors.New("zitadel: instance fetch failed")

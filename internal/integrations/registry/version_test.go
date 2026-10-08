@@ -174,10 +174,7 @@ func TestDefinitionSurface(t *testing.T) {
 
 	unfinalized := minimalDefinition("minimal-def")
 
-	minimal, err := finalizeDefinition(unfinalized)
-	if err != nil {
-		t.Fatalf("finalize: %v", err)
-	}
+	minimal := finalizeDefinition(unfinalized)
 
 	encoded, err := json.Marshal(DefinitionSurface(minimal))
 	if err != nil {

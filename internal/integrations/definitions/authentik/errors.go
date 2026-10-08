@@ -7,7 +7,7 @@ var (
 	ErrAPITokenMissing = errors.New("authentik: api token missing")
 	// ErrBaseURLMissing indicates the Authentik base URL is missing from the credential
 	ErrBaseURLMissing = errors.New("authentik: base url missing")
-	// ErrHealthCheckFailed indicates the health check request failed
+	// ErrHealthCheckFailed indicates the connection verification request failed
 	ErrHealthCheckFailed = errors.New("authentik: health check failed")
 	// ErrBrandFetchFailed indicates the default brand lookup request failed
 	ErrBrandFetchFailed = errors.New("authentik: brand fetch failed")

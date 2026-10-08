@@ -7,16 +7,16 @@ import (
 	"github.com/samber/lo"
 )
 
-// unreplaced returns retired names not carried or replaced by next
-func unreplaced[T any](old []string, next []T, name func(T) string, replaces func(T) []string) []string {
+// unreplaced returns the names of old not carried or replaced by next
+func unreplaced[T any](old, next []T, name func(T) string, replaces func(T) []string) []string {
 	carried := lo.FlatMap(next, func(entry T, _ int) []string {
 		return append([]string{name(entry)}, replaces(entry)...)
 	})
 
-	return lo.Without(old, carried...)
+	return lo.Without(lo.Map(old, func(entry T, _ int) string { return name(entry) }), carried...)
 }
 
-// GateSurfaceChange refuses dropping a slot, operation, or webhook of the committed surface without a replacement
+// GateSurfaceChange refuses dropping a connection, operation, or webhook of the committed surface without a replacement
 func GateSurfaceChange(old, next Surface) error {
 	var refused []string
 
@@ -26,17 +26,16 @@ func GateSurfaceChange(old, next Surface) error {
 		}
 	}
 
-	credentialRef := func(credential SurfaceCredential) string { return credential.Ref }
-	operationName := func(operation SurfaceOperation) string { return operation.Name }
-	webhookName := func(webhook SurfaceWebhook) string { return webhook.Name }
-
-	refuse("credential", unreplaced(lo.Map(old.Credentials, func(credential SurfaceCredential, _ int) string { return credentialRef(credential) }), next.Credentials, credentialRef,
+	refuse("credential", unreplaced(old.Credentials, next.Credentials,
+		func(credential SurfaceCredential) string { return credential.Ref },
 		func(credential SurfaceCredential) []string { return credential.Replaces }))
 
-	refuse("operation", unreplaced(lo.Map(old.Operations, func(operation SurfaceOperation, _ int) string { return operationName(operation) }), next.Operations, operationName,
+	refuse("operation", unreplaced(old.Operations, next.Operations,
+		func(operation SurfaceOperation) string { return operation.Name },
 		func(operation SurfaceOperation) []string { return operation.Replaces }))
 
-	refuse("webhook", unreplaced(lo.Map(old.Webhooks, func(webhook SurfaceWebhook, _ int) string { return webhookName(webhook) }), next.Webhooks, webhookName,
+	refuse("webhook", unreplaced(old.Webhooks, next.Webhooks,
+		func(webhook SurfaceWebhook) string { return webhook.Name },
 		func(webhook SurfaceWebhook) []string { return webhook.Replaces }))
 
 	if len(refused) == 0 {

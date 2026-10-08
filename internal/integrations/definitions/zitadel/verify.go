@@ -20,7 +20,7 @@ func verify[T any](ctx context.Context, _ types.ConnectionRequest[T], c Client) 
 		},
 	})
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error listing users for health check")
+		logx.FromContext(ctx).Error().Err(err).Msg("error listing users for connection verification")
 		return InstallationMetadata{}, ErrHealthCheckFailed
 	}
 

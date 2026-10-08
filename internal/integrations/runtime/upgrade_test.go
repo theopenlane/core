@@ -15,6 +15,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
+// errUpgradeHookCalled indicates an upgrade hook ran on an absent stored document
+var errUpgradeHookCalled = errors.New("upgrade hook called on absent document")
+
 // upgradeCredential is the credential type with a required non-empty token and a defaulted region
 type upgradeCredential struct {
 	// Token is the required non-empty token
@@ -117,7 +120,7 @@ func TestConformDocuments(t *testing.T) {
 	installationLayout := installationDef.Installation.Name
 
 	hooked := types.UserInputRefOf[upgradeUserInput]().Upgraded(func(context.Context, types.InstallationRequest, string, json.RawMessage) (upgradeUserInput, error) {
-		return upgradeUserInput{}, ErrUpgradeHookCalled
+		return upgradeUserInput{}, errUpgradeHookCalled
 	})
 	hookedDef := types.Definition{UserInput: hooked.Registration()}
 
@@ -381,10 +384,10 @@ func TestConformStored(t *testing.T) {
 			name:   "a present empty document still passes through the upgrade hook",
 			schema: jsonx.SchemaFrom[retiredCredential](),
 			upgrade: func(context.Context, types.InstallationRequest, string, json.RawMessage) (json.RawMessage, error) {
-				return nil, ErrUpgradeHookCalled
+				return nil, errUpgradeHookCalled
 			},
 			sentinel: ErrCredentialInvalid,
-			wantErr:  ErrUpgradeHookCalled,
+			wantErr:  errUpgradeHookCalled,
 		},
 	}
 

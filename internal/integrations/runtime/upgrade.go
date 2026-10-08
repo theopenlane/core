@@ -56,10 +56,7 @@ func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.In
 	return nil
 }
 
-// upgradeInstallation conforms every stored document onto its current name, failing the whole upgrade when any document does not conform,
-// cancels loops queued under retired operation names, persists the documents, renamed runs, and webhook rows with the definition version in
-// one transaction, and resets the reconcile loops when an operation was renamed; the transaction first claims the version so a concurrent
-// upgrade that already stamped it leaves the installation to that upgrade and reloads it
+// upgradeInstallation conforms every stored document onto its current name, failing the whole upgrade when any document does not conform, cancels loops queued under retired operation names, and persists the documents, renamed runs, and webhook rows with the definition version in one transaction that first claims the version so a concurrent upgrade that already stamped it leaves the installation to that upgrade and reloads it
 func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -276,18 +273,10 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 	r.keystore().InvalidateClients(installation.ID)
 
-	if lo.SomeBy(def.Operations, func(operation types.OperationRegistration) bool { return len(operation.Replaces) > 0 }) {
-		if err := r.ResetReconcileLoops(ctx, installation); err != nil {
-			return fmt.Errorf("reset reconcile loops: %w", err)
-		}
-	}
-
 	return nil
 }
 
-// legacyDocuments returns the installation's user input and operation input, seeding each document not yet stored from main's client config
-// on an installation main created, which carries no definition version: user input from the whole document, each stored-input operation from
-// the section under its camelCase name, else the whole document
+// legacyDocuments returns the installation's user input and operation input, seeding each document not yet stored from main's client config on an installation main created, which carries no definition version: user input from the whole document, each stored-input operation from the section under its camelCase name, else the whole document
 //
 // TODO: remove with the integration config column once every installation has been upgraded off main's client config
 func legacyDocuments(installation *ent.Integration, def types.Definition) (types.IntegrationUserInput, types.IntegrationOperationConfig) {
@@ -408,7 +397,7 @@ func conformUserInput(ctx context.Context, req types.InstallationRequest, def ty
 // credentialKind projects stored credential slots onto the definition's connections
 func credentialKind(def types.Definition) documentKind {
 	return documentKind{
-		label:    "slot",
+		label:    "connection",
 		sentinel: ErrCredentialInvalid,
 		resolve: func(name string) (types.InputRegistration, bool, bool) {
 			connection, replaced, ok := def.ResolveConnection(name)
@@ -464,8 +453,7 @@ func operationInputKind(def types.Definition) documentKind {
 	}
 }
 
-// conformDocuments conforms every stored document onto its current name, dropping a retired document whose replacement is already stored,
-// and returns every document's conformance failure joined in name order
+// conformDocuments conforms every stored document onto its current name, dropping a retired document whose replacement is already stored, and returns every document's conformance failure joined in name order
 func conformDocuments(ctx context.Context, req types.InstallationRequest, kind documentKind, stored map[string]json.RawMessage) (map[string]json.RawMessage, error) {
 	next := maps.Clone(stored)
 

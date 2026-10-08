@@ -1,6 +1,6 @@
 # Integration definition stub templates
 
-Most of our integrations follow a pretty standard structure in terms of the builder, client, type registration, health check, etc., and to avoid creating all of those from scratch every time, this can be used to create a basic scaffold
+Most of our integrations follow a pretty standard structure in terms of the builder, client, connection, verification, etc., and to avoid creating all of those from scratch every time, this can be used to create a basic scaffold
 
 ```sh
 task generate:integration -- oci "Oracle Cloud Infrastructure"

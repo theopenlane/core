@@ -12,12 +12,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// channelMetadata is the default channel read from the installation's metadata map
-type channelMetadata struct {
-	// DefaultChannel is the channel id used for system messages when no explicit channel is specified
-	DefaultChannel string `json:"defaultChannel,omitempty"`
-}
-
 // oauthClient builds the SlackClient from the stored OAuth credential
 func oauthClient(_ context.Context, req types.ConnectionRequest[slackCred]) (*SlackClient, error) {
 	if req.Credential.AccessToken == "" {
@@ -38,16 +32,9 @@ func botTokenClient(_ context.Context, req types.ConnectionRequest[slackBotToken
 
 // newSlackClient constructs the unified SlackClient for one customer installation
 func newSlackClient(token string, integration *generated.Integration) (*SlackClient, error) {
-	var metadata channelMetadata
-	if integration != nil && len(integration.Metadata) > 0 {
-		raw, err := jsonx.ToRawMessage(integration.Metadata)
-		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
-		}
-
-		if err := jsonx.UnmarshalIfPresent(raw, &metadata); err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
-		}
+	var metadata InstallationMetadata
+	if err := jsonx.UnmarshalIfPresent(integration.InstallationMetadata.Attributes, &metadata); err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 	}
 
 	return &SlackClient{

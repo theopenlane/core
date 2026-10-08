@@ -56,6 +56,8 @@ type slackCred struct {
 	RefreshToken string `json:"refreshToken,omitempty"`
 	// Expiry is the token expiration time
 	Expiry *time.Time `json:"expiry,omitempty"`
+	// DefaultChannel is the channel chosen during app install, carried on the incoming webhook of the token response
+	DefaultChannel string `json:"defaultChannel,omitempty"`
 }
 
 // slackBotTokenCred holds a user-provisioned bot token for a Slack installation
@@ -68,6 +70,8 @@ type slackBotTokenCred struct {
 type UserInput struct {
 	// DefaultMessaging marks this installation as the preferred workspace for messaging
 	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
+	// DefaultChannel is the Slack channel id used as the default delivery target for system messages when app install did not choose one
+	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel,description=Slack channel id used as the default delivery target for system notifications"`
 }
 
 // DirectorySync is the Slack directory account sync operation configuration
@@ -81,6 +85,8 @@ type InstallationMetadata struct {
 	TeamID string `json:"teamId,omitempty" jsonschema:"title=Team ID"`
 	// TeamName is the Slack workspace display name
 	TeamName string `json:"teamName,omitempty" jsonschema:"title=Team Name"`
+	// DefaultChannel is the Slack channel id used for system messages when no explicit channel is specified
+	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable

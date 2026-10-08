@@ -71,10 +71,6 @@ func TestOperationSettingsFrom(t *testing.T) {
 	if !slices.Equal(keys, []string{"disable", "filterExpr"}) {
 		t.Fatalf("settings schema keys = %v", keys)
 	}
-
-	if got := len(OperationSettingsSchema()); got == 0 {
-		t.Fatal("expected the settings schema reflected")
-	}
 }
 
 // TestDefinitionResolveOperation verifies exact names resolve directly and retired names resolve through their replacement

@@ -73,7 +73,8 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 	var scanRecord *generated.Scan
 	var err error
 
-	if cfg.ScanID != "" {
+	switch {
+	case cfg.ScanID != "":
 		scanRecord, err = request.DB.Scan.Query().Where(
 			scan.ID(cfg.ScanID),
 			scan.OwnerID(organizationID),
@@ -91,9 +92,7 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 				ScanID:  scanRecord.ID,
 			}, ErrResultEncode)
 		}
-
-	} else {
-
+	default:
 		scanRecord, err = request.DB.Scan.Query().
 			Where(
 				scan.OwnerID(organizationID),
@@ -108,7 +107,8 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 		}
 	}
 
-	if scanRecord == nil {
+	switch {
+	case scanRecord == nil:
 		metadata := map[string]any{"forceRefresh": cfg.ForceRefresh}
 		if cfg.BrandDesignOnly {
 			metadata[DomainScanBrandDesignOnlyMetadataKey] = true
@@ -135,7 +135,7 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 		if err != nil {
 			return nil, err
 		}
-	} else if groupID != "" {
+	case groupID != "":
 		metadata := map[string]any{DomainScanGroupMetadataKey: groupID}
 		metadata[DomainScanApplyBrandDesignToPreviewMetadataKey] = cfg.ApplyBrandDesignToPreview
 		metadata[DomainScanApplyBrandDesignToLiveMetadataKey] = cfg.ApplyBrandDesignToLive

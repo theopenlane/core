@@ -11,8 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// OperationSettings holds the uniform per-installation settings every stored operation input carries; a
-// stored-input config type embeds it so the settings reflect into the operation's schema beside its own fields
+// OperationSettings holds the uniform per-installation settings every stored operation input carries; a stored-input config type embeds it so the settings reflect into the operation's schema beside its own fields
 type OperationSettings struct {
 	// Disable switches the operation off for the installation
 	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable this operation for the installation"`
@@ -26,14 +25,6 @@ func (OperationSettings) operationSettings() {}
 // OperationInput is satisfied by any config type that embeds OperationSettings, which every stored-input operation requires
 type OperationInput interface {
 	operationSettings()
-}
-
-// operationSettingsSchema is the reflected schema of the uniform operation settings
-var operationSettingsSchema = jsonx.SchemaFrom[OperationSettings]()
-
-// OperationSettingsSchema returns a copy of the reflected uniform operation settings schema
-func OperationSettingsSchema() json.RawMessage {
-	return jsonx.CloneRawMessage(operationSettingsSchema)
 }
 
 // OperationSettingsFrom decodes the uniform settings from a stored operation input document
@@ -131,6 +122,8 @@ type OperationRegistration struct {
 	Topic gala.TopicName `json:"topic"`
 	// ClientRef identifies which registered client the operation uses
 	ClientRef string `json:"-"`
+	// ClientConflict names a second client a handler bound when ClientRef was already set; registration rejects it
+	ClientConflict string `json:"-"`
 	// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces
 	CustomerSelectable *bool `json:"customerSelectable,omitempty"`
 	// Internal marks the operation as reachable only through its own listener or saga machinery

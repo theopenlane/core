@@ -72,7 +72,7 @@ type OperatorConfigRegistration struct {
 	Schema json.RawMessage `json:"schema,omitempty"`
 }
 
-// UpgradeFunc reshapes a stored document from the layout, slot, or operation name it was persisted under into the current layout
+// UpgradeFunc reshapes a stored document from the layout, connection, or operation name it was persisted under into the current layout
 type UpgradeFunc func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error)
 
 // ValidateFunc checks a payload that already satisfies its schema for constraints the schema cannot express

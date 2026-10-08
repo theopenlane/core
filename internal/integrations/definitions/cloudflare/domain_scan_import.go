@@ -190,7 +190,6 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 }
 
 func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, brandDesign domainscan.BrandDesignProfile) (bool, error) {
-
 	envs := []enums.TrustCenterEnvironment{}
 
 	if brandDesign.ApplyToPreviewTrustcenter {

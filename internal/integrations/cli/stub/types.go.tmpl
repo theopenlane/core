@@ -8,16 +8,14 @@ var (
 	// definitionID is the stable identifier for the {{ display }} integration definition
 	definitionID = types.NewDefinitionRef("{{ defid }}")
 	// installation is the typed installation metadata handle for the {{ display }} definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// {{ name }}Credential is the credential ref for {{ display }} credentials
-	{{ name }}Credential = types.CredentialRefOf[CredentialSchema]()
-	// {{ name }}Client is the client ref for the {{ display }} client used by this definition
-	{{ name }}Client = types.ClientRefOf[*APIClient]()
+	installation = types.InstallationOf[InstallationMetadata]()
+	// {{ name }}Connection is the typed connection handle for the {{ display }} API token
+	{{ name }}Connection = types.ConnectionOf[CredentialSchema]()
 )
 
 // APIClient is the client handed to {{ display }} operations; swap this for the provider SDK client type
 type APIClient struct {
-	// Credential is the resolved credential this client was built from
+	// Credential is the credential this client was built from
 	Credential CredentialSchema
 }
 

@@ -75,9 +75,9 @@ const (
 )
 
 const (
-	// FailProjectID is the project id value that fails the health check
+	// FailProjectID is the project id value that fails connection verification
 	FailProjectID = "fail-project"
-	// FailToken is the token value that fails the health check
+	// FailToken is the token value that fails connection verification
 	FailToken = "fail"
 )
 

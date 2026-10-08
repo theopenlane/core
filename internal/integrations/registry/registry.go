@@ -39,7 +39,7 @@ type Registry struct {
 type Surface struct {
 	// ID is the canonical definition identifier
 	ID string `json:"id"`
-	// Credentials lists every credential slot with its stored schema, sorted by ref
+	// Credentials lists every connection credential with its stored schema, sorted by ref
 	Credentials []SurfaceCredential `json:"credentials"`
 	// UserInput is the stored user input schema when the definition declares a typed user input
 	UserInput *SurfaceSchema `json:"userInput,omitempty"`
@@ -71,13 +71,13 @@ type SurfaceSchema struct {
 	Upgrade bool `json:"upgrade,omitempty"`
 }
 
-// SurfaceCredential is one credential slot, the schema of what it stores, and the retired slots it takes over
+// SurfaceCredential is one connection credential, the schema of what it stores, and the retired connections it takes over
 type SurfaceCredential struct {
-	// Ref is the stable credential slot name
+	// Ref is the stable connection name
 	Ref string `json:"ref"`
 	// SurfaceSchema is the stored credential schema with its upgrade declaration
 	SurfaceSchema
-	// Replaces lists the retired slot names whose stored payloads move onto this slot, sorted
+	// Replaces lists the retired connection names whose stored payloads move onto this connection, sorted
 	Replaces []string `json:"replaces,omitempty"`
 }
 
@@ -203,12 +203,7 @@ func New(opts ...Option) *Registry {
 
 // Register adds one definition to the registry
 func (r *Registry) Register(def types.Definition) error {
-	def, err := finalizeDefinition(def)
-	if err != nil {
-		return err
-	}
-
-	def = stampTopics(def)
+	def = stampTopics(finalizeDefinition(def))
 
 	if err := r.validateDefinition(def); err != nil {
 		return err
@@ -616,6 +611,8 @@ func indexOperations(definitionID string, operations []types.OperationRegistrati
 			return nil, ErrIngestContractsRequired
 		case operation.Policy.Snapshot && operation.IngestHandle == nil:
 			return nil, ErrIngestSnapshotRequiresIngestHandle
+		case operation.ClientConflict != "":
+			return nil, fmt.Errorf("%w: definition %s operation %s clients %s and %s", ErrOperationClientConflict, definitionID, operation.Name, operation.ClientRef, operation.ClientConflict)
 		case operation.ClientRef == "":
 			continue
 		case len(connections) == 0 && def.RuntimeIntegration == nil:

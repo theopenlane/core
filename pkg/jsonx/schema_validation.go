@@ -55,19 +55,7 @@ func Validate(schema, payload json.RawMessage) error {
 	return &SchemaError{Issues: ValidationErrorStrings(result)}
 }
 
-// ValidateAs validates a payload against the schema reflected from T and decodes it
-func ValidateAs[T any](payload json.RawMessage) (T, error) {
-	if err := Validate(SchemaFrom[T](), payload); err != nil {
-		var zero T
-
-		return zero, err
-	}
-
-	return Decode[T](payload)
-}
-
-// ValidateSchema validates a JSON document against a JSON schema and returns
-// the raw gojsonschema result for caller-specific error handling.
+// ValidateSchema validates a JSON document against a JSON schema and returns the raw gojsonschema result for caller-specific error handling.
 func ValidateSchema(schema any, document any) (*gojsonschema.Result, error) {
 	return gojsonschema.Validate(toJSONLoader(schema), toJSONLoader(document))
 }

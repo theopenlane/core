@@ -453,8 +453,10 @@ func TestInstallationUpgrade(t *testing.T) {
 		})
 
 		_, err := suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
+		require.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
+
 		reloaded := reloadIntegration(t, ctx, installation.ID)
-		require.True(t, err != nil || reloaded.Status == enums.IntegrationStatusErrored)
+		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
 		require.NoError(t, err)

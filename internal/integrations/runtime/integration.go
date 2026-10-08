@@ -70,8 +70,7 @@ func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLook
 	return record, nil
 }
 
-// resolveCurrentIntegration resolves the integration an in-flight job processes, snoozing the job for a binary that has the version when a
-// newer binary already stamped the installation, else upgrading it to the current definition version before anything reads it
+// resolveCurrentIntegration resolves the integration an in-flight job processes, snoozing the job for a binary that has the version when a newer binary already stamped the installation, else upgrading it to the current definition version before anything reads it
 func (r *Runtime) resolveCurrentIntegration(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error) {
 	installation, err := r.ResolveIntegration(ctx, lookup)
 	if err != nil {
@@ -116,8 +115,7 @@ func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, own
 	return preferred.ID, nil
 }
 
-// EnsureInstallation creates the installation, or resolves the one integrationID names, writing the submitted user input and operation config in one statement;
-// a new installation of a definition without connections is identified by its own id, and one without credentials is created connected
+// EnsureInstallation creates the installation, or resolves the one integrationID names, writing the submitted user input and operation config in one statement; a new installation of a definition without connections is identified by its own id, and one without credentials is created connected
 func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID string, def types.Definition, userInput json.RawMessage, operationConfig map[string]json.RawMessage) (*ent.Integration, bool, error) {
 	var current *ent.Integration
 
@@ -185,14 +183,13 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 	return record, true, nil
 }
 
-// updateInstallationInput upgrades an existing installation to the current definition version with the submitted documents replacing what they replace,
-// writes the submitted documents in one statement, and recovers an errored installation whose connection passes its health check once they are stored
+// updateInstallationInput upgrades an existing installation to the current definition version with the submitted documents replacing what they replace, writes the submitted documents in one statement, and recovers an errored installation whose connection passes its health check once they are stored
 func (r *Runtime) updateInstallationInput(ctx context.Context, installation *ent.Integration, def types.Definition, nextInput types.IntegrationUserInput, nextConfig types.IntegrationOperationConfig, userInput json.RawMessage, operationConfig map[string]json.RawMessage) (*ent.Integration, bool, error) {
 	wasErrored := installation.Status == enums.IntegrationStatusErrored
 
 	installation.UserInput, installation.OperationConfig = nextInput, nextConfig
 
-	if err := r.ensureCurrentVersion(ctx, installation); err != nil {
+	if err := r.ensureCurrentVersion(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), installation); err != nil {
 		return nil, false, err
 	}
 

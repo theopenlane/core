@@ -8,6 +8,5 @@ import (
 
 // runAssetSync collects AWS assets
 func runAssetSync(_ context.Context, _ types.OperationRequest, _ Client, _ AssetSync) ([]types.IngestPayloadSet, error) {
-
 	return nil, nil
 }

@@ -7,13 +7,13 @@ import (
 )
 
 // verify validates the email client is configured with a working sender and reports its delivery configuration
-func verify(_ context.Context, _ types.ConnectionRequest[Credential], c *Client) (InstallationMetadata, error) {
+func verify(_ context.Context, req types.ConnectionRequest[Credential], c *Client) (InstallationMetadata, error) {
 	if c.Sender == nil {
 		return InstallationMetadata{}, ErrSenderNotConfigured
 	}
 
 	return InstallationMetadata{
-		Provider:  c.Config.Provider,
+		Provider:  req.Credential.Provider,
 		FromEmail: c.Config.FromEmail,
 	}, nil
 }

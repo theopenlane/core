@@ -10,7 +10,7 @@ import (
 type InstallationRequest struct {
 	// Integration is the target installation record
 	Integration *generated.Integration
-	// Credentials lists every stored credential bundle by slot name
+	// Credentials lists every stored credential bundle by connection name
 	Credentials map[string]CredentialSet
 	// UserInput is the stored installation-scoped user input document
 	UserInput json.RawMessage

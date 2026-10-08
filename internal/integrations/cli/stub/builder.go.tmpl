@@ -18,29 +18,14 @@ func Builder() registry.Builder {
 			Tags:         []string{"assets"},
 			Active:       false,
 			Visible:      true,
-			HealthCheck:  {{ name }}Client.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				{{ name }}Credential.Registration(types.CredentialRegistration{
-					Name:        "{{ display }} Credential",
-					Description: "API token used to access {{ display }}.",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: {{ name }}Credential.ID(),
-					Name:          "{{ display }} API Token",
-					Description:   "Configure {{ display }} access using an API token scoped to your account.",
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: {{ name }}Credential.ID(),
-						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your {{ display }} account.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				{{ name }}Client.Registration(Client{}.Build, types.ClientRegistration{
-					Description: "{{ display }} API client",
-				}),
+			Connections: []types.Connector{
+				{{ name }}Connection.
+					Name("{{ display }} API Token").
+					Description("Configure {{ display }} access using an API token scoped to your account.").
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your {{ display }} account.", nil),
 			},
 		}, nil
 	})

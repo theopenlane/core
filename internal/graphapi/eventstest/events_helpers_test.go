@@ -57,8 +57,7 @@ func harnessReconcileOperation(t *testing.T, mode string) string {
 	return ""
 }
 
-// newHarnessInstallation installs the test integration in the given mode through the prod
-// connect flow; the unresolvable mode stores a non-token credential so the client cannot build
+// newHarnessInstallation installs the test integration in the given mode through the connect flow; the unresolvable mode then deletes the stored credential so the client cannot build
 func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*ent.Integration, string) {
 	t.Helper()
 

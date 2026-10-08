@@ -337,6 +337,20 @@ func clientName[C any]() string {
 	return clientType.String()
 }
 
+// bindClient binds client type C to an operation, keeping the first bound client and recording a differing one as the conflict
+func bindClient[C any](bound, conflict string) (string, string) {
+	name := clientName[C]()
+
+	switch {
+	case bound == "":
+		return name, conflict
+	case bound != name:
+		return bound, name
+	}
+
+	return bound, conflict
+}
+
 // castClient type-asserts a built client instance to the typed client value
 func castClient[C any](client any) (C, error) {
 	typed, ok := client.(C)
@@ -361,6 +375,8 @@ type OperationRef[Config any] struct {
 	description string
 	// client is the name of the client the operation runs against, empty when the operation has none
 	client string
+	// clientConflict names a second client a handler bound after client was set
+	clientConflict string
 	// healthCheck probes the operation's prerequisites under its client
 	healthCheck OperationHandler
 	// handle executes the operation when it does not produce ingest payloads
@@ -393,26 +409,22 @@ type OperationRef[Config any] struct {
 	stored bool
 }
 
-// NewOperationRef creates a stored-input operation handle with the given name; Config embeds OperationSettings and
-// its reflected schema is the per-installation input document stored under the operation name
+// NewOperationRef creates a stored-input operation handle with the given name; Config embeds OperationSettings and its reflected schema is the per-installation input document stored under the operation name
 func NewOperationRef[Config OperationInput](name string) OperationRef[Config] {
 	return OperationRef[Config]{input: reflectedInput[Config](name), stored: true}
 }
 
-// OperationRefOf creates a stored-input operation handle named after the reflected schema of Config; Config embeds
-// OperationSettings and its reflected schema is the per-installation input document stored under the operation name
+// OperationRefOf creates a stored-input operation handle named after the reflected schema of Config; Config embeds OperationSettings and its reflected schema is the per-installation input document stored under the operation name
 func OperationRefOf[Config OperationInput]() OperationRef[Config] {
 	return OperationRef[Config]{input: reflectedInput[Config](""), stored: true}
 }
 
-// NewOperationPayload creates a payload operation handle with the given name; Config is the payload a caller
-// supplies on each dispatch, nothing is stored per installation, and Upgraded and Validated are ignored
+// NewOperationPayload creates a payload operation handle with the given name; Config is the payload a caller supplies on each dispatch, nothing is stored per installation, and Upgraded and Validated are ignored
 func NewOperationPayload[Config any](name string) OperationRef[Config] {
 	return OperationRef[Config]{input: reflectedInput[Config](name)}
 }
 
-// OperationPayloadOf creates a payload operation handle named after the reflected schema of Config; Config is the
-// payload a caller supplies on each dispatch, nothing is stored per installation, and Upgraded and Validated are ignored
+// OperationPayloadOf creates a payload operation handle named after the reflected schema of Config; Config is the payload a caller supplies on each dispatch, nothing is stored per installation, and Upgraded and Validated are ignored
 func OperationPayloadOf[Config any]() OperationRef[Config] {
 	return OperationRef[Config]{input: reflectedInput[Config]("")}
 }
@@ -452,7 +464,7 @@ func (r OperationRef[Config]) Description(description string) OperationRef[Confi
 
 // HealthCheck binds fn as the probe of the operation's prerequisites, run under the client C
 func (r OperationRef[Config]) HealthCheck[C any](fn func(context.Context, OperationRequest, C) error) OperationRef[Config] {
-	r.client = clientName[C]()
+	r.client, r.clientConflict = bindClient[C](r.client, r.clientConflict)
 	r.healthCheck = func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
 		typed, err := castClient[C](request.Client)
 		if err != nil {
@@ -467,7 +479,7 @@ func (r OperationRef[Config]) HealthCheck[C any](fn func(context.Context, Operat
 
 // Ingests binds fn as the ingest handler, run against client C with the decoded config
 func (r OperationRef[Config]) Ingests[C any](fn func(context.Context, OperationRequest, C, Config) ([]IngestPayloadSet, error)) OperationRef[Config] {
-	r.client = clientName[C]()
+	r.client, r.clientConflict = bindClient[C](r.client, r.clientConflict)
 	r.ingest = func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error) {
 		typed, err := castClient[C](request.Client)
 		if err != nil {
@@ -487,7 +499,7 @@ func (r OperationRef[Config]) Ingests[C any](fn func(context.Context, OperationR
 
 // Handles binds fn as the handler, run against client C with the decoded config
 func (r OperationRef[Config]) Handles[C any](fn func(context.Context, OperationRequest, C, Config) (json.RawMessage, error)) OperationRef[Config] {
-	r.client = clientName[C]()
+	r.client, r.clientConflict = bindClient[C](r.client, r.clientConflict)
 	r.handle = func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
 		typed, err := castClient[C](request.Client)
 		if err != nil {
@@ -638,6 +650,7 @@ func (r OperationRef[Config]) Registration() OperationRegistration {
 		Description:           r.description,
 		RequiredPermissions:   slices.Clone(r.permissions),
 		ClientRef:             r.client,
+		ClientConflict:        r.clientConflict,
 		CustomerSelectable:    r.customerSelectable,
 		Internal:              r.internal,
 		RequiresPaymentMethod: r.requiresPaymentMethod,

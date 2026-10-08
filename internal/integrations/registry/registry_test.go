@@ -523,6 +523,21 @@ func TestIndexOperationsConnectionClientNotProvided(t *testing.T) {
 	}
 }
 
+// TestIndexOperationsClientConflict verifies an operation whose handlers bound different clients is rejected
+func TestIndexOperationsClientConflict(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := minimalDefinition("def_client_conflict")
+	def.Operations[0].ClientConflict = "other"
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrOperationClientConflict) {
+		t.Fatalf("expected ErrOperationClientConflict, got %v", err)
+	}
+}
+
 // TestIndexOperationsClientRefWithRuntimeIntegration verifies a runtime integration serves an operation naming a client without connections
 func TestIndexOperationsClientRefWithRuntimeIntegration(t *testing.T) {
 	t.Parallel()

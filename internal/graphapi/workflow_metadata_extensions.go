@@ -50,7 +50,7 @@ type integrationInstallationEntry struct {
 	Name string `json:"name"`
 }
 
-// integrationCredentialEntry captures workflow metadata for one provider credential slot
+// integrationCredentialEntry captures workflow metadata for one provider connection credential
 type integrationCredentialEntry struct {
 	Ref         string          `json:"ref"`
 	Name        string          `json:"name,omitempty"`

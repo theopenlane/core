@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-
-	"github.com/wundergraph/astjson"
 )
 
 // Decode unmarshals a json.RawMessage into a typed value
@@ -147,37 +145,6 @@ func DecodeAnyOrNil(raw json.RawMessage) any {
 	out, _ := Decode[any](raw)
 
 	return out
-}
-
-// DeepMerge returns patch deep-merged into base and whether it changed
-func DeepMerge(base, patch json.RawMessage) (json.RawMessage, bool, error) {
-	if len(patch) == 0 {
-		return base, false, nil
-	}
-
-	b, err := astjson.ParseBytes(patch)
-	if err != nil {
-		return nil, false, err
-	}
-
-	var a *astjson.Value
-	if len(base) > 0 {
-		if a, err = astjson.ParseBytes(base); err != nil {
-			return nil, false, err
-		}
-	}
-
-	merged, _, err := astjson.MergeValues(nil, a, b)
-	if err != nil {
-		return nil, false, err
-	}
-
-	out := json.RawMessage(merged.MarshalTo(nil))
-	if bytes.Equal(base, out) {
-		return base, false, nil
-	}
-
-	return out, true, nil
 }
 
 // MergeObjectMap shallow-merges a raw JSON object with the supplied top-level patch map

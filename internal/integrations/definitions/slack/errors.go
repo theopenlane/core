@@ -25,6 +25,8 @@ var (
 	ErrCredentialEncode = errors.New("slack: credential encode failed")
 	// ErrInstallationMetadataDecode indicates installation metadata could not be decoded
 	ErrInstallationMetadataDecode = errors.New("slack: installation metadata decode failed")
+	// ErrUserInputDecode indicates the stored user input could not be decoded
+	ErrUserInputDecode = errors.New("slack: user input decode failed")
 	// ErrTeamIDMissing indicates the Slack team ID is missing
 	ErrTeamIDMissing = errors.New("slack: installation id missing")
 	// ErrInstallationMetadataEncode indicates installation metadata could not be encoded

@@ -6,34 +6,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Client builds {{ display }} clients for one installation
-type Client struct{}
-
-// Build constructs the {{ display }} client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*APIClient, error) {
-	cred, err := resolveCredential(req.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if cred.APIToken == "" {
+// buildClient constructs the {{ display }} client for one installation
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*APIClient, error) {
+	if req.Credential.APIToken == "" {
 		return nil, ErrAPITokenMissing
 	}
 
-	// swap the placeholder for the provider SDK constructor, e.g. sdk.NewClient(cred.APIToken)
-	return &APIClient{Credential: cred}, nil
-}
-
-// resolveCredential decodes {{ display }} credential metadata from the credential bindings
-func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
-	cred, ok, err := {{ name }}Credential.Resolve(bindings)
-	if err != nil {
-		return CredentialSchema{}, ErrMetadataDecode
-	}
-
-	if !ok {
-		return CredentialSchema{}, ErrCredentialMetadataRequired
-	}
-
-	return cred, nil
+	// swap the placeholder for the provider SDK constructor, e.g. sdk.NewClient(req.Credential.APIToken)
+	return &APIClient{Credential: req.Credential}, nil
 }

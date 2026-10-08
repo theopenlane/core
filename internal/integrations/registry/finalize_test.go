@@ -73,10 +73,7 @@ func TestFinalizeKeepsEmbeddedOperationInputSchema(t *testing.T) {
 
 	def := operationDefinition(finalizeOperation[finalizeConfig](), finalizeOperation[finalizeEmptyConfig]())
 
-	finalized, err := finalizeDefinition(def)
-	if err != nil {
-		t.Fatalf("finalizeDefinition() error = %v", err)
-	}
+	finalized := finalizeDefinition(def)
 
 	configured := finalized.Operations[0]
 
@@ -138,10 +135,7 @@ func TestFinalizeValidatesOperationFilterExpr(t *testing.T) {
 		}).
 		Registration()
 
-	finalized, err := finalizeDefinition(operationDefinition(limited, finalizeOperation[finalizeEmptyConfig]()))
-	if err != nil {
-		t.Fatalf("finalizeDefinition() error = %v", err)
-	}
+	finalized := finalizeDefinition(operationDefinition(limited, finalizeOperation[finalizeEmptyConfig]()))
 
 	tests := []struct {
 		name      string
@@ -184,10 +178,7 @@ func TestFinalizeLeavesOperationsWithoutInput(t *testing.T) {
 
 	def := operationDefinition(integrationtypes.OperationRegistration{Name: "literal", Handle: newTestHandler()}, payload)
 
-	finalized, err := finalizeDefinition(def)
-	if err != nil {
-		t.Fatalf("finalizeDefinition() error = %v", err)
-	}
+	finalized := finalizeDefinition(def)
 
 	for _, operation := range finalized.Operations {
 		if operation.Stored || operation.Input.Validate != nil {

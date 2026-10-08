@@ -6,11 +6,6 @@ import (
 	"testing"
 )
 
-// validateTestInput is the type the ValidateAs tests reflect
-type validateTestInput struct {
-	Name string `json:"name" jsonschema:"required"`
-}
-
 func TestValidate(t *testing.T) {
 	t.Parallel()
 
@@ -71,22 +66,5 @@ func TestSchemaErrorJoinsIssues(t *testing.T) {
 
 	if err.Error() != schemaErr.Issues[0]+"; "+schemaErr.Issues[1] {
 		t.Fatalf("Error() = %q, want the issues joined", err.Error())
-	}
-}
-
-func TestValidateAs(t *testing.T) {
-	t.Parallel()
-
-	got, err := ValidateAs[validateTestInput](json.RawMessage(`{"name":"alice"}`))
-	if err != nil {
-		t.Fatalf("ValidateAs() error = %v", err)
-	}
-
-	if got.Name != "alice" {
-		t.Fatalf("ValidateAs() = %+v, want name alice", got)
-	}
-
-	if _, err := ValidateAs[validateTestInput](json.RawMessage(`{}`)); !errors.Is(err, ErrSchemaInvalid) {
-		t.Fatalf("ValidateAs() error = %v, want %v", err, ErrSchemaInvalid)
 	}
 }

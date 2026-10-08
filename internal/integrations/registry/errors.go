@@ -19,6 +19,8 @@ var (
 	ErrConnectionVerifyClientNotProvided = errors.New("integrations/registry: connection does not provide its verification client")
 	// ErrConnectionClientNotProvided indicates a connection does not provide a client an operation uses
 	ErrConnectionClientNotProvided = errors.New("integrations/registry: connection does not provide a client an operation uses")
+	// ErrOperationClientConflict indicates an operation's handlers bind more than one client type
+	ErrOperationClientConflict = errors.New("integrations/registry: operation handlers bind different clients")
 	// ErrInstallationRequired indicates a definition with connections declares no installation metadata layout
 	ErrInstallationRequired = errors.New("integrations/registry: installation metadata layout required when the definition declares connections")
 	// ErrInstallationSchemaMismatch indicates a connection's verification returns a layout other than the definition's
@@ -41,7 +43,7 @@ var (
 	ErrWebhookNotFound = errors.New("integrations/registry: webhook not found")
 	// ErrOperatorConfigSchemaRequired indicates a definition has an operator config with no schema
 	ErrOperatorConfigSchemaRequired = errors.New("integrations/registry: operator config schema required")
-	// ErrCredentialSchemaRequired indicates a credential registration's slot reflects no schema
+	// ErrCredentialSchemaRequired indicates a connection's credential reflects no schema
 	ErrCredentialSchemaRequired = errors.New("integrations/registry: credential schema required")
 	// ErrUserInputSchemaRequired indicates a definition has a user input block with no schema
 	ErrUserInputSchemaRequired = errors.New("integrations/registry: user input schema required")
@@ -63,8 +65,8 @@ var (
 	ErrLinkSourceFieldInvalid = errors.New("integrations/registry: link source field is not a mapped input key of the required shape")
 	// ErrOperationFilterExprInvalid indicates a stored operation input carries a filter expression that does not compile
 	ErrOperationFilterExprInvalid = errors.New("integrations/registry: operation filter expression invalid")
-	// ErrDestructiveSurfaceChange indicates a removed slot, operation, or webhook has no replacement
-	ErrDestructiveSurfaceChange = errors.New("integrations/registry: removed credential slot, operation, or webhook has no replacing registration")
+	// ErrDestructiveSurfaceChange indicates a removed connection, operation, or webhook has no replacement
+	ErrDestructiveSurfaceChange = errors.New("integrations/registry: removed connection, operation, or webhook has no replacing registration")
 	// ErrSnapshotStale indicates a definition's surface does not match its committed snapshot; run task config:generate
 	ErrSnapshotStale = errors.New("integrations/registry: definition surface does not match its committed snapshot")
 )

@@ -115,7 +115,7 @@ type ConfigureIntegrationRequest struct {
 	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GCPSCC00000000000000001"`
 	// IntegrationID is the optional existing installation to update credentials on; when omitted we create a new integration.
 	IntegrationID string `json:"integrationId,omitempty"`
-	// CredentialRef selects which credential slot is being configured.
+	// CredentialRef selects which connection is being configured.
 	CredentialRef string `json:"credentialRef"`
 	// Body holds the provider-specific credential fields as a raw JSON object.
 	Body json.RawMessage `json:"body"`
@@ -221,7 +221,7 @@ type IntegrationAuthStartRequest struct {
 	DefinitionID string `json:"definitionId" description:"Integration definition ID" example:"def_01K0SLACK000000000000000001"`
 	// IntegrationID is the existing installation to start the auth flow for; when omitted a new installation is created.
 	IntegrationID string `json:"integrationId,omitempty"`
-	// CredentialRef selects which credential-schema-defined connection is being activated.
+	// CredentialRef selects which connection is being activated.
 	CredentialRef string `json:"credentialRef"`
 	// UserInput holds optional installation-scoped provider configuration.
 	UserInput json.RawMessage `json:"userInput,omitempty"`

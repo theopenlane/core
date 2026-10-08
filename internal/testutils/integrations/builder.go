@@ -33,13 +33,13 @@ func Builder() registry.Builder {
 					Disconnects("Remove the persisted OAuth credential and disconnect this installation.", nil),
 				Token.
 					Name("Test Token").
-					Description("Connect with an API token validated by the health check.").
+					Description("Connect with an API token validated by connection verification.").
 					Provides(tokenClient(func(c tokenCred) string { return c.Token })).
 					Verified(verifyAny[tokenCred]).
 					Disconnects("Remove the persisted token credential and disconnect this installation.", nil),
 				ServiceAccount.
 					Name("Test Service Account").
-					Description("Connect with a service account validated by the health check.").
+					Description("Connect with a service account validated by connection verification.").
 					Provides(tokenClient(func(serviceAccountCred) string { return "service-account" })).
 					Verified(verifyAny[serviceAccountCred]).
 					Disconnects("Remove the persisted service account credential and disconnect this installation.", nil),

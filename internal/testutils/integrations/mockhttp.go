@@ -235,8 +235,6 @@ func (m *MockHTTPServer) handle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	switch r.URL.Path {
-	case "/health":
-		w.WriteHeader(http.StatusOK)
 	case "/instance":
 		_ = json.NewEncoder(w).Encode(MockHTTPInstallationMetadata{InstanceID: instanceID})
 	case "/directory":

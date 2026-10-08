@@ -11,10 +11,10 @@ import (
 )
 
 // finalizeDefinition wraps stored-input validation
-func finalizeDefinition(def types.Definition) (types.Definition, error) {
+func finalizeDefinition(def types.Definition) types.Definition {
 	def.Operations = finalizeOperations(def)
 
-	return def, nil
+	return def
 }
 
 // finalizeOperations wraps each stored-input operation's validation with the uniform filter expression check

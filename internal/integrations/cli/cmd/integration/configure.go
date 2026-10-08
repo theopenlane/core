@@ -41,7 +41,7 @@ func init() {
 
 	configureCmd.Flags().StringP("definition-id", "d", "", "integration definition ID (required)")
 	configureCmd.Flags().String("integration-id", "", "existing integration ID to update; omit to create a new installation")
-	configureCmd.Flags().String("credential-ref", "", "credential slot identifier for this configuration")
+	configureCmd.Flags().String("credential-ref", "", "connection name the credential is stored under")
 	configureCmd.Flags().String("body", "", "provider-specific credential fields as JSON (or @file.json)")
 	configureCmd.Flags().String("user-input", "", "optional installation-scoped configuration as JSON (or @file.json)")
 	configureCmd.Flags().String("operation-config", "", "optional per-operation input as a JSON object keyed by operation name (or @file.json)")

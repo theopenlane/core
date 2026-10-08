@@ -2,6 +2,7 @@ package serveropts
 
 import (
 	"context"
+	"errors"
 
 	"github.com/rs/zerolog/log"
 
@@ -99,7 +100,7 @@ func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) error {
 	}
 
 	if err := rt.UpgradeInstallations(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade one or more installations to the current definition version")
+		return errors.Join(err, rt.Gala().ResumeQueues(ctx, integrationQueues...))
 	}
 
 	if err := rt.SeedReconcileJobs(ctx); err != nil {

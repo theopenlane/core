@@ -167,7 +167,7 @@ func (r *Runtime) ReconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	if err := r.ensureCurrentVersion(ctx, installation); err != nil {
+	if err := r.ensureCurrentVersion(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), installation); err != nil {
 		return err
 	}
 

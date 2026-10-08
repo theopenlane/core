@@ -34,8 +34,7 @@ func main() {
 	}
 }
 
-// generateIntegrationSchemas writes one surface snapshot per registered definition, keeping the committed version while the surface hash is unchanged and minting a new one otherwise,
-// and refusing a removed slot, operation, webhook, or webhook event that no registration declares it replaces
+// generateIntegrationSchemas writes one surface snapshot per registered definition, keeping the committed version while the surface hash is unchanged and minting a new one otherwise, and refusing a removed connection, operation, or webhook that no registration declares it replaces
 func generateIntegrationSchemas(dir string) error {
 	reg := registry.New()
 	if err := reg.RegisterAll(catalog.Builders(catalog.Config{}, "", false)...); err != nil {

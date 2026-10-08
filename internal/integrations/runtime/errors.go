@@ -37,8 +37,4 @@ var (
 	ErrInstallationVersionAhead = errors.New("integrations/runtime: installation definition version is ahead of this binary")
 	// ErrInstallationUpgradeFailed indicates the installation couldn't reach the current version
 	ErrInstallationUpgradeFailed = errors.New("integrations/runtime: installation upgrade failed")
-	// ErrUpgradeHookCalled indicates an upgrade hook ran on an absent stored document
-	ErrUpgradeHookCalled = errors.New("integrations/runtime: upgrade hook called on absent document")
-	// ErrTestCycle is the provider failure used by cycle classification tests
-	ErrTestCycle = errors.New("integrations/runtime: provider request failed")
 )

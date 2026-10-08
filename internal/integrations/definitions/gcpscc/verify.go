@@ -20,7 +20,7 @@ type serviceAccountIdentity struct {
 
 // verifyWorkloadIdentity probes SCC through the workload identity client and derives the installation metadata
 func verifyWorkloadIdentity(ctx context.Context, req types.ConnectionRequest[WorkloadIdentityCredentialSchema], c Client) (InstallationMetadata, error) {
-	if _, err := probeSources(ctx, c); err != nil {
+	if err := probeSources(ctx, c); err != nil {
 		return InstallationMetadata{}, err
 	}
 
@@ -36,7 +36,7 @@ func verifyWorkloadIdentity(ctx context.Context, req types.ConnectionRequest[Wor
 
 // verifyServiceAccount probes SCC through the service account client and derives the installation metadata
 func verifyServiceAccount(ctx context.Context, req types.ConnectionRequest[CredentialSchema], c Client) (InstallationMetadata, error) {
-	if _, err := probeSources(ctx, c); err != nil {
+	if err := probeSources(ctx, c); err != nil {
 		return InstallationMetadata{}, err
 	}
 
@@ -50,12 +50,12 @@ func verifyServiceAccount(ctx context.Context, req types.ConnectionRequest[Crede
 	}, nil
 }
 
-// probeSources lists one source under each parent of the client's scope and returns the parents
-func probeSources(ctx context.Context, c Client) ([]string, error) {
+// probeSources lists one source under each parent of the client's scope
+func probeSources(ctx context.Context, c Client) error {
 	parents, err := resolveParents(c.Scope)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error attempting to resolve parents")
-		return nil, err
+		return err
 	}
 
 	for _, parent := range parents {
@@ -72,11 +72,11 @@ func probeSources(ctx context.Context, c Client) ([]string, error) {
 
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: failed to list sources")
-			return nil, ErrListSourcesFailed
+			return ErrListSourcesFailed
 		}
 	}
 
-	return parents, nil
+	return nil
 }
 
 // keyClientEmail returns the client_email of a service account key

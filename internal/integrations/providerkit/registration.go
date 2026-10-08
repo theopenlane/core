@@ -15,16 +15,14 @@ import (
 // matchAllFilterExpr is the filter expression admitting every envelope to its mapping
 const matchAllFilterExpr = "true"
 
-// DirectorySync is the stored config of a directory sync operation that can skip groups and memberships;
-// a directory without group sync declares its own DirectorySync embedding only types.OperationSettings
+// DirectorySync is the stored config of a directory sync operation that can skip groups and memberships; a directory without group sync declares its own DirectorySync embedding only types.OperationSettings
 type DirectorySync struct {
 	types.OperationSettings
 	// DisableGroupSync skips collecting groups and memberships, syncing only users
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users and skip group and membership sync"`
 }
 
-// UpgradeFromSection returns an upgrade decoding T from the object stored under key when present, else from the stored document;
-// it reads main's client config section for an operation whose main key differs from its camelCase name
+// UpgradeFromSection returns an upgrade decoding T from the object stored under key when present, else from the stored document; it reads main's client config section for an operation whose main key differs from its camelCase name
 //
 // TODO: remove with the integration config column once every installation has been upgraded off main's client config
 func UpgradeFromSection[T any](key string) func(context.Context, types.InstallationRequest, string, json.RawMessage) (T, error) {

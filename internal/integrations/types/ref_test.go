@@ -727,3 +727,32 @@ func TestOperationRefValidatedIgnoresSettingsKeys(t *testing.T) {
 		t.Fatal("expected no validation projected on a plain operation")
 	}
 }
+
+// refTestClientA is one client type the client conflict test binds
+type refTestClientA struct{}
+
+// refTestClientB is the other client type the client conflict test binds
+type refTestClientB struct{}
+
+// TestOperationRefClientConflict verifies handlers binding different client types keep the first client and record the second as the conflict
+func TestOperationRefClientConflict(t *testing.T) {
+	t.Parallel()
+
+	consistent := OperationRefOf[refTestConfig]().
+		HealthCheck(func(context.Context, OperationRequest, *refTestClientA) error { return nil }).
+		Ingests(func(context.Context, OperationRequest, *refTestClientA, refTestConfig) ([]IngestPayloadSet, error) { return nil, nil }).
+		Registration()
+
+	if consistent.ClientRef != clientName[*refTestClientA]() || consistent.ClientConflict != "" {
+		t.Fatalf("expected one client bound with no conflict, got ref %q conflict %q", consistent.ClientRef, consistent.ClientConflict)
+	}
+
+	mixed := OperationRefOf[refTestConfig]().
+		HealthCheck(func(context.Context, OperationRequest, *refTestClientA) error { return nil }).
+		Ingests(func(context.Context, OperationRequest, *refTestClientB, refTestConfig) ([]IngestPayloadSet, error) { return nil, nil }).
+		Registration()
+
+	if mixed.ClientRef != clientName[*refTestClientA]() || mixed.ClientConflict != clientName[*refTestClientB]() {
+		t.Fatalf("expected the first client kept and the second recorded as the conflict, got ref %q conflict %q", mixed.ClientRef, mixed.ClientConflict)
+	}
+}

@@ -43,9 +43,10 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 						},
 						Material: func(material auth.OAuthMaterial) (slackCred, error) {
 							return slackCred{
-								AccessToken:  material.AccessToken,
-								RefreshToken: material.RefreshToken,
-								Expiry:       material.Expiry,
+								AccessToken:    material.AccessToken,
+								RefreshToken:   material.RefreshToken,
+								Expiry:         material.Expiry,
+								DefaultChannel: installChannel(material),
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,
@@ -98,7 +99,9 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 	})
 }
 
+// scopes are the bot scopes both install methods need; incoming-webhook makes Slack offer the default channel picker during app install
 var scopes = []string{
+	"incoming-webhook",
 	"chat:write",
 	"chat:write.public",
 	"chat:write.customize",
