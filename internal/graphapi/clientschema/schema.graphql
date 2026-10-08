@@ -15544,6 +15544,8 @@ input CreateNoteInput {
 	riskID: ID
 	internalPolicyID: ID
 	reviewID: ID
+	vulnerabilityID: ID
+	findingID: ID
 	evidenceID: ID
 	trustCenterID: ID
 	discussionID: ID
@@ -46153,6 +46155,44 @@ type Mutation {
 		noteFiles: [Upload!]
 	noteFilesMetadata: [FileMetadataInput!]): ReviewUpdatePayload!
 	"""
+	Update an existing vulnerability comment
+	"""
+	updateVulnerabilityComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	noteFilesMetadata: [FileMetadataInput!]): VulnerabilityUpdatePayload!
+	"""
+	Update an existing finding comment
+	"""
+	updateFindingComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	noteFilesMetadata: [FileMetadataInput!]): FindingUpdatePayload!
+	"""
 	Delete an existing note
 	"""
 	deleteNote(
@@ -49860,6 +49900,8 @@ type Note implements Node {
 	risk: Risk
 	internalPolicy: InternalPolicy
 	review: Review
+	vulnerability: Vulnerability
+	finding: Finding
 	evidence: Evidence
 	trustCenter: TrustCenter
 	discussion: Discussion
@@ -50220,6 +50262,16 @@ input NoteWhereInput {
 	"""
 	hasReview: Boolean
 	hasReviewWith: [ReviewWhereInput!]
+	"""
+	vulnerability edge predicates
+	"""
+	hasVulnerability: Boolean
+	hasVulnerabilityWith: [VulnerabilityWhereInput!]
+	"""
+	finding edge predicates
+	"""
+	hasFinding: Boolean
+	hasFindingWith: [FindingWhereInput!]
 	"""
 	evidence edge predicates
 	"""
@@ -87742,6 +87794,8 @@ input UpdateFindingInput {
 	addCheckResultIDs: [ID!]
 	removeCheckResultIDs: [ID!]
 	clearCheckResults: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -88692,6 +88746,10 @@ input UpdateNoteInput {
 	clearInternalPolicy: Boolean
 	reviewID: ID
 	clearReview: Boolean
+	vulnerabilityID: ID
+	clearVulnerability: Boolean
+	findingID: ID
+	clearFinding: Boolean
 	evidenceID: ID
 	clearEvidence: Boolean
 	trustCenterID: ID
@@ -92850,6 +92908,8 @@ input UpdateVulnerabilityInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateWorkflowDefinitionInput is used for update WorkflowDefinition object.

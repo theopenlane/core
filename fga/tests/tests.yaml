@@ -1390,6 +1390,42 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+      - user: user:ulid-vuln-viewer # viewer of the vulnerability can view its comments but not change them
+        object: note:note-2
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-finding-viewer # no access to the vulnerability, so no access to its comments
+        object: note:note-2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-admin # comment author has full access
+        object: note:note-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-finding-viewer # viewer of the finding can view its comments but not change them
+        object: note:note-3
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-vuln-viewer # no access to the finding, so no access to its comments
+        object: note:note-3
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-admin # comment author has full access
+        object: note:note-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: controls and subcontrols
     description: control access is granted via groups and the parent program, subcontrols inherit permissions from their parent control
     tuple_file: tuples/controls.yaml

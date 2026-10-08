@@ -13946,6 +13946,8 @@ input CreateNoteInput {
   riskID: ID
   internalPolicyID: ID
   reviewID: ID
+  vulnerabilityID: ID
+  findingID: ID
   evidenceID: ID
   trustCenterID: ID
   discussionID: ID
@@ -39621,6 +39623,8 @@ type Note implements Node {
   risk: Risk
   internalPolicy: InternalPolicy
   review: Review
+  vulnerability: Vulnerability
+  finding: Finding
   evidence: Evidence
   trustCenter: TrustCenter
   discussion: Discussion
@@ -39972,6 +39976,16 @@ input NoteWhereInput {
   """
   hasReview: Boolean
   hasReviewWith: [ReviewWhereInput!]
+  """
+  vulnerability edge predicates
+  """
+  hasVulnerability: Boolean
+  hasVulnerabilityWith: [VulnerabilityWhereInput!]
+  """
+  finding edge predicates
+  """
+  hasFinding: Boolean
+  hasFindingWith: [FindingWhereInput!]
   """
   evidence edge predicates
   """
@@ -73704,6 +73718,10 @@ input UpdateNoteInput {
   clearInternalPolicy: Boolean
   reviewID: ID
   clearReview: Boolean
+  vulnerabilityID: ID
+  clearVulnerability: Boolean
+  findingID: ID
+  clearFinding: Boolean
   evidenceID: ID
   clearEvidence: Boolean
   trustCenterID: ID

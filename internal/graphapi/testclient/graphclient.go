@@ -274,6 +274,7 @@ type TestGraphClient interface {
 	UpdateBulkCSVFinding(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVFinding, error)
 	UpdateBulkFinding(ctx context.Context, ids []string, input UpdateFindingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkFinding, error)
 	UpdateFinding(ctx context.Context, updateFindingID string, input UpdateFindingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateFinding, error)
+	UpdateFindingComment(ctx context.Context, updateFindingCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateFindingComment, error)
 	CreateBulkCSVFindingControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVFindingControl, error)
 	CreateBulkFindingControl(ctx context.Context, input []*CreateFindingControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkFindingControl, error)
 	CreateFindingControl(ctx context.Context, input CreateFindingControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateFindingControl, error)
@@ -712,6 +713,7 @@ type TestGraphClient interface {
 	UpdateBulkCSVVulnerability(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVVulnerability, error)
 	UpdateBulkVulnerability(ctx context.Context, ids []string, input UpdateVulnerabilityInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkVulnerability, error)
 	UpdateVulnerability(ctx context.Context, updateVulnerabilityID string, input UpdateVulnerabilityInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVulnerability, error)
+	UpdateVulnerabilityComment(ctx context.Context, updateVulnerabilityCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateVulnerabilityComment, error)
 	DeleteWebauthn(ctx context.Context, deleteWebauthnID string, interceptors ...clientv2.RequestInterceptor) (*DeleteWebauthn, error)
 	GetAllWebauthns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllWebauthns, error)
 	ApproveWorkflowAssignment(ctx context.Context, id string, interceptors ...clientv2.RequestInterceptor) (*ApproveWorkflowAssignment, error)
@@ -56407,6 +56409,178 @@ type UpdateFinding_UpdateFinding struct {
 func (t *UpdateFinding_UpdateFinding) GetFinding() *UpdateFinding_UpdateFinding_Finding {
 	if t == nil {
 		t = &UpdateFinding_UpdateFinding{}
+	}
+	return &t.Finding
+}
+
+type UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges struct {
+	Node *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges) GetNode() *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files struct {
+	Edges []*UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files) GetEdges() []*UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
+type UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node struct {
+	CreatedAt *time.Time                                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                                                                      "json:\"displayID\" graphql:\"displayID\""
+	Files     UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID        string                                                                      "json:\"id\" graphql:\"id\""
+	Text      string                                                                      "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time                                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node) GetFiles() *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node_Files {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node{}
+	}
+	return &t.Files
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node) GetText() string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node{}
+	}
+	return t.Text
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges struct {
+	Node *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges) GetNode() *UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges_Node {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateFindingComment_UpdateFindingComment_Finding_Comments struct {
+	Edges []*UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateFindingComment_UpdateFindingComment_Finding_Comments) GetEdges() []*UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding_Comments{}
+	}
+	return t.Edges
+}
+
+type UpdateFindingComment_UpdateFindingComment_Finding struct {
+	Comments  UpdateFindingComment_UpdateFindingComment_Finding_Comments "json:\"comments\" graphql:\"comments\""
+	DisplayID string                                                     "json:\"displayID\" graphql:\"displayID\""
+	ID        string                                                     "json:\"id\" graphql:\"id\""
+}
+
+func (t *UpdateFindingComment_UpdateFindingComment_Finding) GetComments() *UpdateFindingComment_UpdateFindingComment_Finding_Comments {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding{}
+	}
+	return &t.Comments
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateFindingComment_UpdateFindingComment_Finding) GetID() string {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment_Finding{}
+	}
+	return t.ID
+}
+
+type UpdateFindingComment_UpdateFindingComment struct {
+	Finding UpdateFindingComment_UpdateFindingComment_Finding "json:\"finding\" graphql:\"finding\""
+}
+
+func (t *UpdateFindingComment_UpdateFindingComment) GetFinding() *UpdateFindingComment_UpdateFindingComment_Finding {
+	if t == nil {
+		t = &UpdateFindingComment_UpdateFindingComment{}
 	}
 	return &t.Finding
 }
@@ -153198,6 +153372,178 @@ func (t *UpdateVulnerability_UpdateVulnerability) GetVulnerability() *UpdateVuln
 	return &t.Vulnerability
 }
 
+type UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges struct {
+	Node *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges) GetNode() *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files struct {
+	Edges []*UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files) GetEdges() []*UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
+type UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node struct {
+	CreatedAt *time.Time                                                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                                                                                        "json:\"displayID\" graphql:\"displayID\""
+	Files     UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID        string                                                                                        "json:\"id\" graphql:\"id\""
+	Text      string                                                                                        "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time                                                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node) GetFiles() *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node_Files {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node{}
+	}
+	return &t.Files
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node) GetText() string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node{}
+	}
+	return t.Text
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges struct {
+	Node *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges) GetNode() *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges_Node {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments struct {
+	Edges []*UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments) GetEdges() []*UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments{}
+	}
+	return t.Edges
+}
+
+type UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability struct {
+	Comments  UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments "json:\"comments\" graphql:\"comments\""
+	DisplayID string                                                                       "json:\"displayID\" graphql:\"displayID\""
+	ID        string                                                                       "json:\"id\" graphql:\"id\""
+}
+
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability) GetComments() *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability{}
+	}
+	return &t.Comments
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability) GetID() string {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability{}
+	}
+	return t.ID
+}
+
+type UpdateVulnerabilityComment_UpdateVulnerabilityComment struct {
+	Vulnerability UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability "json:\"vulnerability\" graphql:\"vulnerability\""
+}
+
+func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment) GetVulnerability() *UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability {
+	if t == nil {
+		t = &UpdateVulnerabilityComment_UpdateVulnerabilityComment{}
+	}
+	return &t.Vulnerability
+}
+
 type DeleteWebauthn_DeleteWebauthn struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -169025,6 +169371,17 @@ func (t *UpdateFinding) GetUpdateFinding() *UpdateFinding_UpdateFinding {
 	return &t.UpdateFinding
 }
 
+type UpdateFindingComment struct {
+	UpdateFindingComment UpdateFindingComment_UpdateFindingComment "json:\"updateFindingComment\" graphql:\"updateFindingComment\""
+}
+
+func (t *UpdateFindingComment) GetUpdateFindingComment() *UpdateFindingComment_UpdateFindingComment {
+	if t == nil {
+		t = &UpdateFindingComment{}
+	}
+	return &t.UpdateFindingComment
+}
+
 type CreateBulkCSVFindingControl struct {
 	CreateBulkCSVFindingControl CreateBulkCSVFindingControl_CreateBulkCSVFindingControl "json:\"createBulkCSVFindingControl\" graphql:\"createBulkCSVFindingControl\""
 }
@@ -173848,6 +174205,17 @@ func (t *UpdateVulnerability) GetUpdateVulnerability() *UpdateVulnerability_Upda
 		t = &UpdateVulnerability{}
 	}
 	return &t.UpdateVulnerability
+}
+
+type UpdateVulnerabilityComment struct {
+	UpdateVulnerabilityComment UpdateVulnerabilityComment_UpdateVulnerabilityComment "json:\"updateVulnerabilityComment\" graphql:\"updateVulnerabilityComment\""
+}
+
+func (t *UpdateVulnerabilityComment) GetUpdateVulnerabilityComment() *UpdateVulnerabilityComment_UpdateVulnerabilityComment {
+	if t == nil {
+		t = &UpdateVulnerabilityComment{}
+	}
+	return &t.UpdateVulnerabilityComment
 }
 
 type DeleteWebauthn struct {
@@ -188770,6 +189138,58 @@ func (c *Client) UpdateFinding(ctx context.Context, updateFindingID string, inpu
 
 	var res UpdateFinding
 	if err := c.Client.Post(ctx, "UpdateFinding", UpdateFindingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateFindingCommentDocument = `mutation UpdateFindingComment ($updateFindingCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+	updateFindingComment(id: $updateFindingCommentId, input: $input, noteFiles: $noteFiles) {
+		finding {
+			displayID
+			id
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+						files {
+							edges {
+								node {
+									id
+									storagePath
+									storageScheme
+									storageVolume
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateFindingComment(ctx context.Context, updateFindingCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateFindingComment, error) {
+	vars := map[string]any{
+		"updateFindingCommentId": updateFindingCommentID,
+		"input":                  input,
+		"noteFiles":              noteFiles,
+	}
+
+	var res UpdateFindingComment
+	if err := c.Client.Post(ctx, "UpdateFindingComment", UpdateFindingCommentDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -213413,6 +213833,58 @@ func (c *Client) UpdateVulnerability(ctx context.Context, updateVulnerabilityID 
 	return &res, nil
 }
 
+const UpdateVulnerabilityCommentDocument = `mutation UpdateVulnerabilityComment ($updateVulnerabilityCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+	updateVulnerabilityComment(id: $updateVulnerabilityCommentId, input: $input, noteFiles: $noteFiles) {
+		vulnerability {
+			displayID
+			id
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+						files {
+							edges {
+								node {
+									id
+									storagePath
+									storageScheme
+									storageVolume
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateVulnerabilityComment(ctx context.Context, updateVulnerabilityCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateVulnerabilityComment, error) {
+	vars := map[string]any{
+		"updateVulnerabilityCommentId": updateVulnerabilityCommentID,
+		"input":                        input,
+		"noteFiles":                    noteFiles,
+	}
+
+	var res UpdateVulnerabilityComment
+	if err := c.Client.Post(ctx, "UpdateVulnerabilityComment", UpdateVulnerabilityCommentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteWebauthnDocument = `mutation DeleteWebauthn ($deleteWebauthnId: ID!) {
 	deleteWebauthn(id: $deleteWebauthnId) {
 		deletedID
@@ -217109,6 +217581,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateBulkCSVFindingDocument:                  "UpdateBulkCSVFinding",
 	UpdateBulkFindingDocument:                     "UpdateBulkFinding",
 	UpdateFindingDocument:                         "UpdateFinding",
+	UpdateFindingCommentDocument:                  "UpdateFindingComment",
 	CreateBulkCSVFindingControlDocument:           "CreateBulkCSVFindingControl",
 	CreateBulkFindingControlDocument:              "CreateBulkFindingControl",
 	CreateFindingControlDocument:                  "CreateFindingControl",
@@ -217547,6 +218020,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateBulkCSVVulnerabilityDocument:            "UpdateBulkCSVVulnerability",
 	UpdateBulkVulnerabilityDocument:               "UpdateBulkVulnerability",
 	UpdateVulnerabilityDocument:                   "UpdateVulnerability",
+	UpdateVulnerabilityCommentDocument:            "UpdateVulnerabilityComment",
 	DeleteWebauthnDocument:                        "DeleteWebauthn",
 	GetAllWebauthnsDocument:                       "GetAllWebauthns",
 	ApproveWorkflowAssignmentDocument:             "ApproveWorkflowAssignment",

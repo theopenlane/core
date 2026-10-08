@@ -9468,6 +9468,22 @@ func (_m *Note) Review(ctx context.Context) (*Review, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Note) Vulnerability(ctx context.Context) (*Vulnerability, error) {
+	result, err := _m.Edges.VulnerabilityOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryVulnerability().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *Note) Finding(ctx context.Context) (*Finding, error) {
+	result, err := _m.Edges.FindingOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryFinding().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Note) Evidence(ctx context.Context) (*Evidence, error) {
 	result, err := _m.Edges.EvidenceOrErr()
 	if IsNotLoaded(err) {
@@ -9500,7 +9516,7 @@ func (_m *Note) TrustCenterFaqs(
 		WithTrustCenterFAQFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[11][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[13][alias]
 	if nodes, err := _m.NamedTrustCenterFaqs(alias); err == nil || hasTotalCount {
 		pager, err := newTrustCenterFAQPager(opts, last != nil)
 		if err != nil {
@@ -9521,7 +9537,7 @@ func (_m *Note) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[12][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[14][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {

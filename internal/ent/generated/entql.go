@@ -10855,6 +10855,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Review",
 	)
 	graph.MustAddE(
+		"vulnerability",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.VulnerabilityTable,
+			Columns: []string{note.VulnerabilityColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"finding",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.FindingTable,
+			Columns: []string{note.FindingColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"Finding",
+	)
+	graph.MustAddE(
 		"evidence",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -35243,6 +35267,34 @@ func (f *NoteFilter) WhereHasReview() {
 // WhereHasReviewWith applies a predicate to check if query has an edge review with a given conditions (other predicates).
 func (f *NoteFilter) WhereHasReviewWith(preds ...predicate.Review) {
 	f.Where(entql.HasEdgeWith("review", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerability applies a predicate to check if query has an edge vulnerability.
+func (f *NoteFilter) WhereHasVulnerability() {
+	f.Where(entql.HasEdge("vulnerability"))
+}
+
+// WhereHasVulnerabilityWith applies a predicate to check if query has an edge vulnerability with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasVulnerabilityWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerability", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFinding applies a predicate to check if query has an edge finding.
+func (f *NoteFilter) WhereHasFinding() {
+	f.Where(entql.HasEdge("finding"))
+}
+
+// WhereHasFindingWith applies a predicate to check if query has an edge finding with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasFindingWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("finding", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

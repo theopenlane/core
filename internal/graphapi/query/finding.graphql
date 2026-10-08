@@ -743,3 +743,34 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 		}
 	}
 }
+mutation UpdateFindingComment ($updateFindingCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+	updateFindingComment(id: $updateFindingCommentId, input: $input, noteFiles: $noteFiles) {
+		finding {
+			displayID
+			id
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+						files {
+							edges {
+								node {
+									id
+									storagePath
+									storageScheme
+									storageVolume
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
