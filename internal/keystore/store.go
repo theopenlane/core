@@ -64,7 +64,7 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 		return types.CredentialSet{}, false, ErrCredentialNotFound
 	}
 
-	record, ok, err := s.activeCredentialRecord(auth.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, credentialRef)
+	record, ok, err := s.activeCredentialRecord(auth.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, name)
 	if err != nil {
 		return types.CredentialSet{}, false, err
 	}
@@ -77,7 +77,7 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 
 // LoadAllCredentials resolves every persisted credential for one installation record keyed by secret name
 func (s *Store) LoadAllCredentials(ctx context.Context, installation *ent.Integration) (map[string]types.CredentialSet, error) {
-	records, err := s.activeCredentialRecords(integrationSystemContext(ctx), installation.ID, nil)
+	records, err := s.activeCredentialRecords(auth.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 		return ErrCredentialNotFound
 	}
 
-	existing, ok, err := s.activeCredentialRecord(ctx, installation.ID, credentialRef)
+	existing, ok, err := s.activeCredentialRecord(ctx, installation.ID, name)
 	if err != nil {
 		return err
 	}
@@ -125,27 +125,6 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 	return nil
 }
 
-// SaveInstallationCredential loads the installation record by ID and upserts the credential of the named connection
-func (s *Store) SaveInstallationCredential(ctx context.Context, integrationID string, name string, credential types.CredentialSet) error {
-	if integrationID == "" {
-		return ErrInstallationIDRequired
-	}
-	if name == "" {
-		return ErrCredentialNotFound
-	}
-
-	installation, err := s.db.Integration.Get(ctx, integrationID)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return ErrCredentialNotFound
-		}
-
-		return err
-	}
-
-	return s.SaveCredential(ctx, installation, name, credential)
-}
-
 // DeleteCredential removes all credentials for one installation by identifier
 func (s *Store) DeleteCredential(ctx context.Context, integrationID string) error {
 	if integrationID == "" {
@@ -166,7 +145,6 @@ func (s *Store) DeleteCredential(ctx context.Context, integrationID string) erro
 
 // ReplaceCredentials reconciles installation credentials keyed by secret name from previous to next
 func (s *Store) ReplaceCredentials(ctx context.Context, installation *ent.Integration, previous, next map[string]types.CredentialSet) error {
-
 	for slot, credential := range next {
 		existing, tracked := previous[slot]
 

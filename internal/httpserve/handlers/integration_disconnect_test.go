@@ -116,7 +116,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegration() {
 				installation, err := suite.db.Integration.Get(memberOrgOwner.UserCtx, tc.integrationID)
 				require.NoError(t, err)
 
-				credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(memberOrgOwner.UserCtx, installation, githubTestCredentialRef)
+				credential, ok, err := suite.keystore.LoadCredential(memberOrgOwner.UserCtx, installation, githubTestCredentialRef)
 				require.NoError(t, err)
 				require.True(t, ok)
 				assert.Contains(t, string(credential.Data), "secret")

@@ -38,20 +38,8 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 
-	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(systemCtx, caller.OrganizationID, payload.IntegrationID, def, payload.UserInput, payload.OperationConfig)
+	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.IntegrationID, def, payload.UserInput, payload.OperationConfig)
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("failed to resolve installation")
-
-		return h.BadRequest(ctx, ErrIntegrationNotFound)
-	}
-
-	var credential *types.CredentialSet
-
-	if payload.HasCredentialBody() {
-		credential = &types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}
-	}
-
-	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
 		// do not log payload, it can contain secrets
 		logx.FromContext(requestCtx).Error().Err(err).Msg("failed to ensure installation")
 
@@ -59,7 +47,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	}
 
 	if payload.HasCredentialBody() {
-		if err := h.IntegrationsRuntime.ReconcileCredential(systemCtx, installationRec, payload.CredentialRef, types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}); err != nil {
+		if err := h.IntegrationsRuntime.ReconcileCredential(requestCtx, installationRec, payload.CredentialRef, types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Msg("credential reconcile failed")
 
 			return h.BadRequest(ctx, err)
@@ -101,7 +89,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	// operation that was just re-enabled needs a new job seeded - this is a no-op
 	// when all jobs are already active
 	if lo.Contains(enums.IntegrationOperationalStatuses, installationRec.Status) {
-		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(requestCtx, installationRec); err != nil {
+		if err := h.IntegrationsRuntime.ResetReconcileLoops(requestCtx, installationRec); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to seed missing reconcile jobs after config update")
 		}
 	}

@@ -88,14 +88,35 @@ type WebhookTestHealthCheck struct{}
 // webhookTestAlertEnvelope is the payload type for the test webhook events
 type webhookTestAlertEnvelope struct{}
 
+// webhookTestCredential is the credential type stored by the webhook test definition
+type webhookTestCredential struct {
+	// Token is the stored token
+	Token string `json:"token"`
+}
+
+// webhookTestClient is the client the webhook test connection provides
+type webhookTestClient struct{}
+
+// webhookTestInstallation is the installation metadata layout of the webhook test definition
+type webhookTestInstallation struct{}
+
 var (
-	webhookTestCredentialRef                         = types.NewCredentialSlotID("webhook_test")
-	webhookHealthSchema, webhookHealthCheckOperation = providerkit.OperationSchema[WebhookTestHealthCheck]()
-	webhookAlertCreatedEvent                         = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
+	webhookTestCredentialRef    = types.ConnectionOf[webhookTestCredential]().Connection().Credential.Name
+	webhookHealthCheckOperation = types.OperationPayloadOf[WebhookTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
+	webhookAlertCreatedEvent    = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
 )
 
 func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		connection := types.ConnectionOf[webhookTestCredential]().
+			Name("Webhook Test Connection").
+			Provides(func(context.Context, types.ConnectionRequest[webhookTestCredential]) (*webhookTestClient, error) {
+				return &webhookTestClient{}, nil
+			}).
+			Verified(func(context.Context, types.ConnectionRequest[webhookTestCredential], *webhookTestClient) (webhookTestInstallation, error) {
+				return webhookTestInstallation{}, nil
+			})
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -103,20 +124,8 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:    webhookTestCredentialRef,
-					Name:   "Webhook Test Credential",
-					Schema: json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  webhookTestCredentialRef,
-					Name:           "Webhook Test Connection",
-					CredentialRefs: []types.CredentialSlotID{webhookTestCredentialRef},
-				},
-			},
+			Installation: types.InstallationOf[webhookTestInstallation]().Registration(),
+			Connections:  []types.Connector{connection},
 			Webhooks: []types.WebhookRegistration{
 				{
 					Name: "inbound.events",
@@ -140,27 +149,18 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 						}, nil
 					},
 					Events: []types.WebhookEventRegistration{
-						{
-							Name:  webhookAlertCreatedEvent.Name(),
-							Topic: types.NewDefinitionRef(definitionID).WebhookEventTopic(webhookAlertCreatedEvent.Name()),
+						webhookAlertCreatedEvent.Registration(types.WebhookEventRegistration{
 							Handle: func(context.Context, types.WebhookHandleRequest) error {
 								return nil
 							},
-						},
+						}),
 					},
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         webhookHealthCheckOperation.Name(),
-					Description:  "Health check",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(webhookHealthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: webhookHealthSchema,
-					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-						return json.RawMessage(`{"ok":true}`), nil
-					},
-				},
+				webhookHealthCheckOperation.Description("Health check").HandlesRequest(func(context.Context, types.OperationRequest, WebhookTestHealthCheck) (json.RawMessage, error) {
+					return json.RawMessage(`{"ok":true}`), nil
+				}).Registration(),
 			},
 		}, nil
 	})
@@ -180,19 +180,41 @@ type OperationTestRepoSync struct{}
 
 // OperationTestValidated is the config type for the test validated operation
 type OperationTestValidated struct {
+	types.OperationSettings
 	// Target is the required target field
 	Target string `json:"target" jsonschema:"required"`
 }
 
+// operationTestCredential is the credential type stored by the operation test definition
+type operationTestCredential struct {
+	// Token is the stored token
+	Token string `json:"token"`
+}
+
+// operationTestClient is the client the operation test connection provides
+type operationTestClient struct{}
+
+// operationTestInstallation is the installation metadata layout of the operation test definition
+type operationTestInstallation struct{}
+
 var (
-	operationTestCredentialRef                      = types.NewCredentialSlotID("op_test")
-	opTestHealthSchema, opTestHealthCheckOperation  = providerkit.OperationSchema[OperationTestHealthCheck]()
-	opTestRepoSyncSchema, opTestRepoSyncOperation   = providerkit.OperationSchema[OperationTestRepoSync]()
-	opTestValidatedSchema, opTestValidatedOperation = providerkit.OperationSchema[OperationTestValidated]()
+	operationTestCredentialRef = types.ConnectionOf[operationTestCredential]().Connection().Credential.Name
+	opTestHealthCheckOperation = types.OperationPayloadOf[OperationTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
+	opTestRepoSyncOperation    = types.OperationPayloadOf[OperationTestRepoSync]()
+	opTestValidatedOperation   = types.OperationRefOf[OperationTestValidated]().Policy(types.ExecutionPolicy{Inline: true})
 )
 
 func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		connection := types.ConnectionOf[operationTestCredential]().
+			Name("Op Test Connection").
+			Provides(func(context.Context, types.ConnectionRequest[operationTestCredential]) (*operationTestClient, error) {
+				return &operationTestClient{}, nil
+			}).
+			Verified(func(context.Context, types.ConnectionRequest[operationTestCredential], *operationTestClient) (operationTestInstallation, error) {
+				return operationTestInstallation{}, nil
+			})
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -200,51 +222,18 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				Active:      true,
 				Visible:     true,
 			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:    operationTestCredentialRef,
-					Name:   "Op Test Credential",
-					Schema: json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  operationTestCredentialRef,
-					Name:           "Op Test Connection",
-					CredentialRefs: []types.CredentialSlotID{operationTestCredentialRef},
-				},
-			},
+			Installation: types.InstallationOf[operationTestInstallation]().Registration(),
+			Connections:  []types.Connector{connection},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         opTestHealthCheckOperation.Name(),
-					Description:  "Validate the test credential",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestHealthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: opTestHealthSchema,
-					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-						return json.RawMessage(`{"ok":true}`), nil
-					},
-				},
-				{
-					Name:         opTestRepoSyncOperation.Name(),
-					Description:  "Sync repositories",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestRepoSyncOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: inlineNonHealth},
-					ConfigSchema: opTestRepoSyncSchema,
-					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-						return json.RawMessage(`{"synced":true}`), nil
-					},
-				},
-				{
-					Name:         opTestValidatedOperation.Name(),
-					Description:  "Operation with config schema",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestValidatedOperation.Name()),
-					ConfigSchema: opTestValidatedSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-						return json.RawMessage(`{"validated":true}`), nil
-					},
-				},
+				opTestHealthCheckOperation.Description("Validate the test credential").HandlesRequest(func(context.Context, types.OperationRequest, OperationTestHealthCheck) (json.RawMessage, error) {
+					return json.RawMessage(`{"ok":true}`), nil
+				}).Registration(),
+				opTestRepoSyncOperation.Policy(types.ExecutionPolicy{Inline: inlineNonHealth}).Description("Sync repositories").HandlesRequest(func(context.Context, types.OperationRequest, OperationTestRepoSync) (json.RawMessage, error) {
+					return json.RawMessage(`{"synced":true}`), nil
+				}).Registration(),
+				opTestValidatedOperation.Description("Operation with config schema").HandlesRequest(func(context.Context, types.OperationRequest, OperationTestValidated) (json.RawMessage, error) {
+					return json.RawMessage(`{"validated":true}`), nil
+				}).Registration(),
 			},
 		}, nil
 	})
@@ -257,13 +246,46 @@ const (
 	configTestVendorFamily         = "configtestvendor"
 	configTestProbeProviderID      = "def_01K0TESTCFG00000000000004"
 	configTestProbeFailProviderID  = "def_01K0TESTCFG00000000000005"
-	configTestProbeOperation       = "ConfigTestProbe"
-	configTestUnprobedOperation    = "ConfigTestUnprobed"
 )
 
 var errConfigTestProbeFailed = errors.New("probe prerequisites missing")
 
-var configTestCredentialRef = types.NewCredentialSlotID("config_test")
+// configTestCredential is the credential type stored by the config test definition
+type configTestCredential struct {
+	// ProjectID is the required project identifier
+	ProjectID string `json:"projectId" jsonschema:"required"`
+	// ServiceAccountEmail is the required service account email
+	ServiceAccountEmail string `json:"serviceAccountEmail" jsonschema:"required"`
+}
+
+// configTestUserInput is the installation-scoped user input layout stored by the config test definitions
+type configTestUserInput struct {
+	// FilterExpr is a free-form filter expression
+	FilterExpr string `json:"filterExpr,omitempty"`
+}
+
+// configTestClient is the client the config test connection provides
+type configTestClient struct{}
+
+// configTestInstallation is the installation metadata layout of the config test definition
+type configTestInstallation struct {
+	// ProjectID is the verified project identifier
+	ProjectID string `json:"projectId,omitempty"`
+}
+
+// ConfigTestProbe is the payload type of the config test operation that carries a health probe
+type ConfigTestProbe struct{}
+
+// ConfigTestUnprobed is the payload type of the config test operation without a health probe
+type ConfigTestUnprobed struct{}
+
+var (
+	configTestCredentialRef  = types.ConnectionOf[configTestCredential]().Connection().Credential.Name
+	configTestUserInputRef   = types.UserInputRefOf[configTestUserInput]()
+	configTestProbeOp        = types.OperationPayloadOf[ConfigTestProbe]()
+	configTestUnprobedOp     = types.OperationPayloadOf[ConfigTestUnprobed]()
+	configTestProbeOperation = configTestProbeOp.Name()
+)
 
 func configTestProbeDefinitionBuilder(definitionID string, probeErr error) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
@@ -273,23 +295,19 @@ func configTestProbeDefinitionBuilder(definitionID string, probeErr error) regis
 		}
 
 		def.Operations = append(def.Operations,
-			types.OperationRegistration{
-				Name:  configTestProbeOperation,
-				Topic: types.NewDefinitionRef(definitionID).OperationTopic(configTestProbeOperation),
-				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+			configTestProbeOp.
+				HealthCheck(func(context.Context, types.OperationRequest, *configTestClient) error {
+					return probeErr
+				}).
+				HandlesRequest(func(context.Context, types.OperationRequest, ConfigTestProbe) (json.RawMessage, error) {
 					return json.RawMessage(`{}`), nil
-				},
-				HealthCheck: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-					return nil, probeErr
-				},
-			},
-			types.OperationRegistration{
-				Name:  configTestUnprobedOperation,
-				Topic: types.NewDefinitionRef(definitionID).OperationTopic(configTestUnprobedOperation),
-				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+				}).
+				Registration(),
+			configTestUnprobedOp.
+				HandlesRequest(func(context.Context, types.OperationRequest, ConfigTestUnprobed) (json.RawMessage, error) {
 					return json.RawMessage(`{}`), nil
-				},
-			},
+				}).
+				Registration(),
 		)
 
 		return def, nil
@@ -311,13 +329,20 @@ func configTestFamilyDefinitionBuilder(definitionID, family string) registry.Bui
 
 func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
-		healthHandler := func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-			if failHealth {
-				return nil, errors.New("health failed")
-			}
+		connection := types.ConnectionOf[configTestCredential]().
+			Name("Config Test Connection").
+			Description("Connect the config test definition using the configured credential payload.").
+			Disconnects("Remove the persisted config test credential and disconnect this installation.", nil).
+			Provides(func(context.Context, types.ConnectionRequest[configTestCredential]) (*configTestClient, error) {
+				return &configTestClient{}, nil
+			}).
+			Verified(func(_ context.Context, request types.ConnectionRequest[configTestCredential], _ *configTestClient) (configTestInstallation, error) {
+				if failHealth {
+					return configTestInstallation{}, errors.New("health failed")
+				}
 
-			return json.RawMessage(`{"ok":true}`), nil
-		}
+				return configTestInstallation{ProjectID: request.Credential.ProjectID}, nil
+			})
 
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -326,30 +351,9 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 				Active:      true,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         configTestCredentialRef,
-					Name:        "Config Test Credential",
-					Description: "Credential slot used by the config test definition.",
-					Schema:      json.RawMessage(`{"type":"object","required":["projectId","serviceAccountEmail"],"properties":{"projectId":{"type":"string"},"serviceAccountEmail":{"type":"string"}}}`),
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  configTestCredentialRef,
-					Name:           "Config Test Connection",
-					Description:    "Connect the config test definition using the configured credential payload.",
-					CredentialRefs: []types.CredentialSlotID{configTestCredentialRef},
-					HealthCheck:    &types.HealthCheckRegistration{Handle: healthHandler},
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: configTestCredentialRef,
-						Description:   "Remove the persisted config test credential and disconnect this installation.",
-					},
-				},
-			},
+			UserInput:    configTestUserInputRef.Registration(),
+			Installation: types.InstallationOf[configTestInstallation]().Registration(),
+			Connections:  []types.Connector{connection},
 		}, nil
 	})
 }
@@ -363,9 +367,7 @@ func userInputOnlyTestDefinitionBuilder(definitionID string) registry.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
-			},
+			UserInput: configTestUserInputRef.Registration(),
 		}, nil
 	})
 }

@@ -75,7 +75,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_UndeclaredOperationConfig() {
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
-	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	requestCtx := auth.WithInternalOperationContext(echocontext.NewTestEchoContext().Request().Context())
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{

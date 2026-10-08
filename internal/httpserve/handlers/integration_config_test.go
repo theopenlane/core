@@ -83,7 +83,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRequiresOrgEdit()
 		t.Run(tc.name, func(t *testing.T) {
 			rec := sendIntegrationConfigRequest(t, suite, auth.NewTestContextWithOrgID(tc.userID, owner.OrganizationID), configTestProviderID, handlers.ConfigureIntegrationRequest{
 				DefinitionID:  configTestProviderID,
-				CredentialRef: configTestCredentialRef.String(),
+				CredentialRef: configTestCredentialRef,
 				Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 			})
 
@@ -112,13 +112,13 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRequiresOrgEdit()
 		rec := sendIntegrationConfigRequest(t, suite, auth.NewTestContextWithOrgID(member.ID, owner.OrganizationID), configTestProviderID, handlers.ConfigureIntegrationRequest{
 			DefinitionID:  configTestProviderID,
 			IntegrationID: installation.ID,
-			CredentialRef: configTestCredentialRef.String(),
+			CredentialRef: configTestCredentialRef,
 			Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "member-project", "serviceAccountEmail": "member@example.iam.gserviceaccount.com"})),
 		})
 
 		assert.NotEqual(t, http.StatusOK, rec.Code)
 
-		credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(owner.UserCtx, installation, configTestCredentialRef)
+		credential, ok, err := suite.keystore.LoadCredential(owner.UserCtx, installation, configTestCredentialRef)
 		require.NoError(t, err)
 		require.True(t, ok)
 		assert.Contains(t, string(credential.Data), "sample-project")
@@ -142,7 +142,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderLinksExistingVend
 
 	rec := sendIntegrationConfigRequest(t, suite, auth.NewTestContextWithOrgID(owner.ID, owner.OrganizationID), configTestVendorProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestVendorProviderID,
-		CredentialRef: configTestCredentialRef.String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "vendor-project", "serviceAccountEmail": "vendor@example.iam.gserviceaccount.com"})),
 	})
 
@@ -231,7 +231,7 @@ func (suite *HandlerTestSuite) configureIntegrationAsUser(t *testing.T, user tes
 
 	rec := sendIntegrationConfigRequest(t, suite, auth.NewTestContextWithOrgID(user.ID, user.OrganizationID), definitionID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  definitionID,
-		CredentialRef: configTestCredentialRef.String(),
+		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "health-project", "serviceAccountEmail": "health@example.iam.gserviceaccount.com"})),
 	})
 	require.Equal(t, http.StatusOK, rec.Code)

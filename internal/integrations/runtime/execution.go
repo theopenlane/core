@@ -573,70 +573,9 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 
 	logx.FromContext(ctx).Debug().Int("count", len(installations)).Msg("installations found to check for reconciliation")
 
-	for _, inst := range installations {
-		if err := r.seedReconcileJobsForInstallation(systemCtx, inst); err != nil {
-			errs = append(errs, err)
-		}
-	}
-
-	return errors.Join(errs...)
-}
-
-// SeedReconcileJobsForInstallation checks every reconcilable operation on the given installation and emits a ReconcileEnvelope for any that do not have an active River job
-func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
-	return r.seedReconcileJobsForInstallation(ctx, inst)
-}
-
-// seedReconcileJobsForInstallation is the shared implementation used by both SeedReconcileJobs and SeedReconcileJobsForInstallation
-func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
-	if !lo.Contains(enums.IntegrationOperationalStatuses, inst.Status) {
-		return nil
-	}
-
-	ctx = intobvs.WithInstallation(ctx, inst)
-
-	active, err := r.isOrgSubscriptionActive(ctx, inst.OwnerID)
-	if err != nil {
-		return err
-	}
-
-	if !active {
-		logx.FromContext(ctx).Info().Msg("owner subscription is not active, skipping reconcile seed")
-
-		return nil
-	}
-
-	def, ok := r.Registry().Definition(inst.DefinitionID)
-	if !ok {
-		return nil
-	}
-
-	var errs []error
-
-	unhealthy := inst.Health.UnhealthyOperations
-
-	for _, op := range def.Operations {
-		if !op.Policy.Reconcile {
-			continue
-		}
-
-		if op.DisabledFor(inst.Config.ClientConfig) {
-			continue
-		}
-
-		if _, failing := unhealthy[op.Name]; failing {
-			continue
-		}
-
-		opCtx := intobvs.WithOperation(ctx, op.Name)
-
-		if err := r.emitReconcileLoop(opCtx, inst, op.Name); err != nil {
-			logx.FromContext(opCtx).Error().Err(err).Msg("failed to seed reconcile job")
-			errs = append(errs, err)
-		}
-	}
-
-	return errors.Join(errs...)
+	return errors.Join(lo.Map(installations, func(inst *ent.Integration, _ int) error {
+		return r.ResetReconcileLoops(systemCtx, inst)
+	})...)
 }
 
 // isOrgSubscriptionActive reports whether the org's subscription permits recurring operations

@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/workflows"
@@ -133,11 +132,9 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	health.UnhealthyOperations = retiredHealth(installation.Health.UnhealthyOperations, def)
 	version := r.Registry().Version(def.ID)
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	for _, operation := range def.Operations {
 		for _, old := range operation.Replaces {
-			purged, err := r.purgeReconcileLoop(systemCtx, installation.ID, old)
+			purged, err := r.purgeReconcileLoop(ctx, installation.ID, old)
 			if err != nil {
 				return fmt.Errorf("purge retired loops: %w", err)
 			}
@@ -148,7 +145,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		}
 	}
 
-	claimed, err := workflows.WithTx(systemCtx, r.DB(), nil, func(ctx context.Context, tx *ent.Tx) (bool, error) {
+	claimed, err := workflows.WithTx(ctx, r.DB(), nil, func(ctx context.Context, tx *ent.Tx) (bool, error) {
 		stamped, err := tx.Integration.Update().
 			Where(integration.ID(installation.ID), integration.Or(integration.DefinitionVersionIsNil(), integration.DefinitionVersionLT(version))).
 			SetDefinitionVersion(version).
@@ -259,7 +256,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	}
 
 	if !claimed {
-		current, err := r.DB().Integration.Get(systemCtx, installation.ID)
+		current, err := r.DB().Integration.Get(ctx, installation.ID)
 		if err != nil {
 			return err
 		}

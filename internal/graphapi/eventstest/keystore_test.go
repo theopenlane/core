@@ -31,7 +31,7 @@ func slotRowIDs(t *testing.T, ctx context.Context, integrationID string, slot st
 
 func TestKeystoreCredentialSlots(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(org.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
 	store, err := keystore.NewStore(suite.Client.DB)
 	require.NoError(t, err)

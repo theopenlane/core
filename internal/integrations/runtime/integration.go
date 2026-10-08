@@ -226,7 +226,7 @@ func (r *Runtime) updateInstallationInput(ctx context.Context, installation *ent
 	}
 
 	if len(def.ConnectionList()) > 0 {
-		if err := r.saveInstallationMetadata(privacy.DecisionContext(ctx, privacy.Allow), updated, def, verified.Connection, verified.Metadata); err != nil {
+		if err := r.saveInstallationMetadata(ctx, updated, def, verified.Connection, verified.Metadata); err != nil {
 			return nil, false, err
 		}
 	}

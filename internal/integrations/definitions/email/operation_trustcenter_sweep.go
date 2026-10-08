@@ -37,16 +37,14 @@ type TrustCenterNotificationSweep struct{}
 // TrustCenterNotificationOp is the operation ref for the global trust center notification sweep, which runs without a client
 var TrustCenterNotificationOp = types.OperationPayloadOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
 
-// Handle adapts the trust center notification sweep to the generic operation registration boundary
-func (t TrustCenterNotificationSweep) Handle() types.OperationHandler {
-	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-		processed, err := t.Run(ctx, req)
-		if err != nil {
-			return nil, err
-		}
-
-		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
+// runTrustCenterNotificationSweep runs one trust center notification sweep cycle and encodes the processed count
+func runTrustCenterNotificationSweep(ctx context.Context, req types.OperationRequest, sweep TrustCenterNotificationSweep) (json.RawMessage, error) {
+	processed, err := sweep.Run(ctx, req)
+	if err != nil {
+		return nil, err
 	}
+
+	return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
 }
 
 // Run executes one trust center notification sweep, returning the number of notifications dispatched; per-item failures log and continue while the joined error feeds the backoff

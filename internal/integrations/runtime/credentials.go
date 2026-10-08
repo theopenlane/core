@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
@@ -134,16 +133,14 @@ func (r *Runtime) ReconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	if stored, ok := records[connection.Credential.Name]; ok {
 		refreshed, refreshErr := r.runConnectionHealthCheck(ctx, installation, def, connection, stored)
 
 		switch {
 		case refreshErr != nil:
-			logx.FromContext(systemCtx).Debug().Err(refreshErr).Msg("reconcile: identity refresh under the stored credential failed; comparing against stored id")
+			logx.FromContext(ctx).Debug().Err(refreshErr).Msg("reconcile: identity refresh under the stored credential failed; comparing against stored id")
 		default:
-			if err := r.saveInstallationMetadata(systemCtx, installation, def, connection, refreshed); err != nil {
+			if err := r.saveInstallationMetadata(ctx, installation, def, connection, refreshed); err != nil {
 				return err
 			}
 		}
@@ -158,15 +155,15 @@ func (r *Runtime) ReconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	if err := r.keystore().SaveCredential(systemCtx, installation, connection.Credential.Name, credential); err != nil {
+	if err := r.keystore().SaveCredential(ctx, installation, connection.Credential.Name, credential); err != nil {
 		return err
 	}
 
-	if err := r.persistConnectionState(systemCtx, installation, def, connection.Credential.Name); err != nil {
+	if err := r.persistConnectionState(ctx, installation, def, connection.Credential.Name); err != nil {
 		return err
 	}
 
-	if err := r.saveInstallationMetadata(systemCtx, installation, def, connection, metadata); err != nil {
+	if err := r.saveInstallationMetadata(ctx, installation, def, connection, metadata); err != nil {
 		return err
 	}
 

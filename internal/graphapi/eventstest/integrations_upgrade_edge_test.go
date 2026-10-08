@@ -77,7 +77,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 
 	t.Run("an auth-managed slot is conformed against the auth flow schema on upgrade", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
 
 		installation, previous := installUnder(t, subCtx, previousOAuthDefinition[oauthTokenCredV1](t, def), testint.OAuth.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
 			testint.OAuth.Connection().Credential.Name: {Data: json.RawMessage(`{"access_token":"legacy-oauth-token","legacy":"drop-me"}`)},
@@ -109,7 +109,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 
 	t.Run("a user input the current schema rejects with no conversion fails the upgrade and marks the installation errored", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = zoneInputRef.Registration()
@@ -140,7 +140,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 
 	t.Run("corrected user input supplied to reconcile repairs a stranded installation in place and completes the upgrade", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = zoneInputRef.Registration()
@@ -178,7 +178,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 
 	t.Run("operation config supplied to reconcile still upgrades every other stored document and completes the upgrade", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = zoneInputRef.Registration()
