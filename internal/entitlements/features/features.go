@@ -8,6 +8,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"APIToken":                   {models.CatalogBaseModule},
 	"Assessment":                 {models.CatalogComplianceModule},
 	"AssessmentResponse":         {models.CatalogComplianceModule},
+	"AssessmentPolicy":           {models.CatalogComplianceModule},
 	"Asset":                      {models.CatalogEntityManagementModule, models.CatalogComplianceModule, models.CatalogRegistryModule},
 	"Campaign":                   {models.CatalogComplianceModule, models.CatalogTrustCenterModule},
 	"CampaignTarget":             {models.CatalogComplianceModule, models.CatalogTrustCenterModule},

@@ -1,0 +1,174 @@
+extend type Query {
+    """
+    Look up assessmentPolicy by ID
+    """
+     assessmentPolicy(
+        """
+        ID of the assessmentPolicy
+        """
+        id: ID!
+    ):  AssessmentPolicy!
+}
+
+extend type Mutation{
+    """
+    Create a new assessmentPolicy
+    """
+    createAssessmentPolicy(
+        """
+        values of the assessmentPolicy
+        """
+        input: CreateAssessmentPolicyInput!
+    ): AssessmentPolicyCreatePayload!
+    """
+    Create multiple new assessmentPolicys
+    """
+    createBulkAssessmentPolicy(
+        """
+        values of the assessmentPolicy
+        """
+        input: [CreateAssessmentPolicyInput!]
+    ): AssessmentPolicyBulkCreatePayload!
+    """
+    Create multiple new assessmentPolicys via file upload
+    """
+    createBulkCSVAssessmentPolicy(
+        """
+        csv file containing values of the assessmentPolicy
+        """
+        input: Upload!
+    ): AssessmentPolicyBulkCreatePayload!
+    """
+    Update multiple existing assessmentPolicys
+    """
+    updateBulkAssessmentPolicy(
+        """
+        IDs of the assessmentPolicys to update
+        """
+        ids: [ID!]!
+        """
+        values to update the assessmentPolicys with
+        """
+        input: UpdateAssessmentPolicyInput!
+    ): AssessmentPolicyBulkUpdatePayload!
+    """
+    Update multiple existing assessmentPolicys via file upload
+    """
+    updateBulkCSVAssessmentPolicy(
+        """
+        csv file containing values of the assessmentPolicy, must include ID column
+        """
+        input: Upload!
+    ): AssessmentPolicyBulkUpdatePayload!
+    """
+    Update an existing assessmentPolicy
+    """
+    updateAssessmentPolicy(
+        """
+        ID of the assessmentPolicy
+        """
+        id: ID!
+        """
+        New values for the assessmentPolicy
+        """
+        input: UpdateAssessmentPolicyInput!
+    ): AssessmentPolicyUpdatePayload!
+    """
+    Delete an existing assessmentPolicy
+    """
+    deleteAssessmentPolicy(
+        """
+        ID of the assessmentPolicy
+        """
+        id: ID!
+    ): AssessmentPolicyDeletePayload!
+    """
+    Delete multiple assessmentPolicys
+    """
+    deleteBulkAssessmentPolicy(
+        """
+        IDs of the assessmentPolicys to delete
+        """
+        ids: [ID!]!
+    ): AssessmentPolicyBulkDeletePayload!
+}
+
+"""
+Return response for createAssessmentPolicy mutation
+"""
+type AssessmentPolicyCreatePayload {
+    """
+    Created assessmentPolicy
+    """
+    assessmentPolicy: AssessmentPolicy!
+}
+
+"""
+Return response for updateAssessmentPolicy mutation
+"""
+type AssessmentPolicyUpdatePayload {
+    """
+    Updated assessmentPolicy
+    """
+    assessmentPolicy: AssessmentPolicy!
+}
+
+"""
+Return response for deleteAssessmentPolicy mutation
+"""
+type AssessmentPolicyDeletePayload {
+    """
+    Deleted assessmentPolicy ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkCreatePayload {
+    """
+    Created assessmentPolicys
+    """
+    assessmentPolicies: [AssessmentPolicy!]
+}
+
+"""
+Return response for updateBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkUpdatePayload {
+    """
+    Updated assessmentPolicys
+    """
+    assessmentPolicies: [AssessmentPolicy!]
+    """
+    IDs of the updated assessmentPolicys
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for deleteBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkDeletePayload {
+    """
+    Deleted assessmentPolicy IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of assessmentPolicies that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}

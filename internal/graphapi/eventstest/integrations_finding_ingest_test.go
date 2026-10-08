@@ -20,12 +20,12 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 const findingIngestTestOperation = "finding.ingest"
@@ -90,7 +90,7 @@ func findingByExternalID(ctx context.Context, t *testing.T, externalID string) *
 
 // TestFindingVolatileOnlyReingestNoop verifies a Volatile-only field difference never writes on its own but rides along on a material change
 func TestFindingVolatileOnlyReingestNoop(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	var findingCreates, findingUpdates atomic.Int64
 
@@ -176,7 +176,7 @@ func TestFindingVolatileOnlyReingestNoop(t *testing.T) {
 
 // TestFindingForeignDefinitionReadOnly verifies a Finding claimed by one definition is read-only for a payload from a different definition
 func TestFindingForeignDefinitionReadOnly(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	installationA, err := suite.Client.DB.Integration.Create().
 		SetName("Finding Foreign Def A").
@@ -232,7 +232,7 @@ func TestFindingForeignDefinitionReadOnly(t *testing.T) {
 // TestFindingClaimUnclaimedRowTakenOverInOneWrite verifies a finding ingest payload takes over a row
 // that carries no recorded source definition, in the same write that applies its other field changes
 func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("Finding Claim Unclaimed Test").
@@ -245,7 +245,7 @@ func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 	unclaimed, err := suite.Client.DB.Finding.Create().
 		SetExternalID("find-claim-unclaimed-1").
 		SetDisplayName("Pre-existing Finding").
-		Save(privacy.DecisionContext(ctx, privacy.Allow))
+		Save(auth.WithInternalOperationContext(ctx))
 	th.RequireNoError(t, err)
 
 	t.Cleanup(func() {
@@ -270,7 +270,7 @@ func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 // TestFindingClaimActiveOtherInstallationReadOnly verifies a finding managed by another
 // still-active installation of the same definition is skipped untouched, pointer and data alike
 func TestFindingClaimActiveOtherInstallationReadOnly(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const sharedDefinitionID = "def_findclaimactive"
 
@@ -322,7 +322,7 @@ func TestFindingClaimActiveOtherInstallationReadOnly(t *testing.T) {
 // TestFindingClaimGoneOtherInstallationRepoints verifies a finding whose managing installation no
 // longer exists is repointed to the new installation in the same update as any other field change
 func TestFindingClaimGoneOtherInstallationRepoints(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const sharedDefinitionID = "def_findclaimgone"
 
@@ -373,7 +373,7 @@ func TestFindingClaimGoneOtherInstallationRepoints(t *testing.T) {
 
 // TestFindingStatusCasingFoldUnchanged verifies a provider casing that folds to the stored canonical value is unchanged
 func TestFindingStatusCasingFoldUnchanged(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	var findingUpdates atomic.Int64
 

@@ -42,7 +42,7 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string) ent.Hook {
 			if ownerRelation != fgax.ParentRelation {
 				// add user permissions to the object on creation
 				objCaller, ok := auth.CallerFromContext(ctx)
-				if !ok || objCaller == nil {
+				if !ok {
 					return nil, auth.ErrNoAuthUser
 				}
 

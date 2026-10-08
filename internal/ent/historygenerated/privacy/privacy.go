@@ -161,6 +161,30 @@ func (f AssessmentHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m h
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.AssessmentHistoryMutation", m)
 }
 
+// The AssessmentPolicyHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type AssessmentPolicyHistoryQueryRuleFunc func(context.Context, *historygenerated.AssessmentPolicyHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f AssessmentPolicyHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.AssessmentPolicyHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.AssessmentPolicyHistoryQuery", q)
+}
+
+// The AssessmentPolicyHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type AssessmentPolicyHistoryMutationRuleFunc func(context.Context, *historygenerated.AssessmentPolicyHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f AssessmentPolicyHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.AssessmentPolicyHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.AssessmentPolicyHistoryMutation", m)
+}
+
 // The AssessmentResponseHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type AssessmentResponseHistoryQueryRuleFunc func(context.Context, *historygenerated.AssessmentResponseHistoryQuery) error
@@ -1736,6 +1760,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.AssessmentHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.AssessmentPolicyHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.AssessmentResponseHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.AssetHistoryQuery:
@@ -1874,6 +1900,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.ActionPlanHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.AssessmentHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.AssessmentPolicyHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.AssessmentResponseHistoryMutation:
 		return m.Filter(), nil

@@ -88,13 +88,17 @@ type AssessmentEdges struct {
 	AssessmentResponses []*AssessmentResponse `json:"assessment_responses,omitempty"`
 	// Campaigns holds the value of the campaigns edge.
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
+	// PolicyAttestations holds the value of the policy_attestations edge.
+	PolicyAttestations []*AssessmentPolicy `json:"policy_attestations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [12]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -103,7 +107,9 @@ type AssessmentEdges struct {
 	namedIdentityHolders     map[string][]*IdentityHolder
 	namedAssessmentResponses map[string][]*AssessmentResponse
 	namedCampaigns           map[string][]*Campaign
+	namedInternalPolicies    map[string][]*InternalPolicy
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
+	namedPolicyAttestations  map[string][]*AssessmentPolicy
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -191,13 +197,31 @@ func (e AssessmentEdges) CampaignsOrErr() ([]*Campaign, error) {
 	return nil, &NotLoadedError{edge: "campaigns"}
 }
 
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[9] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssessmentEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
+// PolicyAttestationsOrErr returns the PolicyAttestations value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) PolicyAttestationsOrErr() ([]*AssessmentPolicy, error) {
+	if e.loadedTypes[11] {
+		return e.PolicyAttestations, nil
+	}
+	return nil, &NotLoadedError{edge: "policy_attestations"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -417,9 +441,19 @@ func (_m *Assessment) QueryCampaigns() *CampaignQuery {
 	return NewAssessmentClient(_m.config).QueryCampaigns(_m)
 }
 
+// QueryInternalPolicies queries the "internal_policies" edge of the Assessment entity.
+func (_m *Assessment) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewAssessmentClient(_m.config).QueryInternalPolicies(_m)
+}
+
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Assessment entity.
 func (_m *Assessment) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewAssessmentClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
+// QueryPolicyAttestations queries the "policy_attestations" edge of the Assessment entity.
+func (_m *Assessment) QueryPolicyAttestations() *AssessmentPolicyQuery {
+	return NewAssessmentClient(_m.config).QueryPolicyAttestations(_m)
 }
 
 // Update returns a builder for updating this Assessment.
@@ -679,6 +713,30 @@ func (_m *Assessment) appendNamedCampaigns(name string, edges ...*Campaign) {
 	}
 }
 
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Assessment) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Assessment) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
+	}
+}
+
 // NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *Assessment) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
@@ -700,6 +758,30 @@ func (_m *Assessment) appendNamedWorkflowObjectRefs(name string, edges ...*Workf
 		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
 	} else {
 		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
+	}
+}
+
+// NamedPolicyAttestations returns the PolicyAttestations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Assessment) NamedPolicyAttestations(name string) ([]*AssessmentPolicy, error) {
+	if _m.Edges.namedPolicyAttestations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPolicyAttestations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Assessment) appendNamedPolicyAttestations(name string, edges ...*AssessmentPolicy) {
+	if _m.Edges.namedPolicyAttestations == nil {
+		_m.Edges.namedPolicyAttestations = make(map[string][]*AssessmentPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPolicyAttestations[name] = []*AssessmentPolicy{}
+	} else {
+		_m.Edges.namedPolicyAttestations[name] = append(_m.Edges.namedPolicyAttestations[name], edges...)
 	}
 }
 

@@ -105,6 +105,8 @@ func AllowIfTokenHasMutationScope() privacy.MutationRuleFunc {
 // CheckSubjectScope enforces that the authorized subject has the required scope for the given object type, relation, and operation.
 // Returns privacy.Skip if the rule should be skipped (no scoped relation), privacy.Allow if access is granted, or an error if denied
 func CheckSubjectScope(ctx context.Context, objectType string, relation string, op *ent.Op) error {
+	ctx = logx.WithFields(ctx, map[string]any{"scope": relation, "object_type": objectType})
+
 	// allow api token access to api tokens
 	if auth.IsAPITokenAuthentication(ctx) && objectType == generated.TypeAPIToken {
 		return privacy.Allow
@@ -121,32 +123,8 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 		return privacy.Skip
 	}
 
-	// org-scoped support sessions hold every scope for their organization, equivalent to a fully scoped
-	// token; Deletion is allowed for objects asides the organization one which is immediately denied here
-	// rather than falling through to an FGA check it could never satisfy
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" &&
-		caller.Has(auth.CapOrgSupport) {
-
-		// support user should be able to perform delete objects asides the actual organization
-		switch strings.HasPrefix(scopedRelation, CanDeletePrefix) {
-		case false:
-			return privacy.Allow
-
-		case true:
-			if objectType != generated.TypeOrganization {
-				return privacy.Allow
-			}
-
-			// go into the default case if this is an organization to be deleted
-			fallthrough
-		default:
-
-			logx.FromContext(ctx).Info().Str("scope", scopedRelation).Str("user_id", caller.SubjectID).
-				Msg("support attempting to perform action thats not allowed")
-
-			return ErrRequiredScopeNotSet
-
-		}
+	if auth.HasInContextCaller(ctx, auth.CapOrgSupport) {
+		return supportUserAccess(ctx, scopedRelation, objectType)
 	}
 
 	scopeSet, err := fgamodel.DefaultServiceScopeSet()
@@ -159,7 +137,7 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return privacy.Skip
 	}
 
@@ -189,10 +167,32 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 	}
 
 	if auth.IsAPITokenAuthentication(ctx) {
-		logx.FromContext(ctx).Info().Str("scope", scopedRelation).Str("token_id", caller.SubjectID).Msg("token does not have required scope to make request")
+		logx.FromContext(ctx).Info().Str("token_id", caller.SubjectID).Msg("token does not have required scope to make request")
 
 		return ErrRequiredScopeNotSet
 	}
 
 	return privacy.Skip
+}
+
+// supportUserAccess checks scopes for the support user and allows access based on specific scopes, denying all organization delete
+func supportUserAccess(ctx context.Context, scopedRelation string, objectType string) error {
+	// support user should be able to perform delete objects asides the actual organization
+	switch strings.HasPrefix(scopedRelation, CanDeletePrefix) {
+	case false:
+		return privacy.Allow
+
+	case true:
+		if objectType != generated.TypeOrganization {
+			return privacy.Allow
+		}
+
+		// go into the default case if this is an organization to be deleted
+		fallthrough
+	default:
+		logx.FromContext(ctx).Info().Msg("support attempting to perform action thats not allowed")
+
+		return ErrRequiredScopeNotSet
+
+	}
 }

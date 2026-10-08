@@ -35,6 +35,18 @@ func (f AssessmentHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.AssessmentHistoryMutation", m)
 }
 
+// The AssessmentPolicyHistoryFunc type is an adapter to allow the use of ordinary
+// function as AssessmentPolicyHistory mutator.
+type AssessmentPolicyHistoryFunc func(context.Context, *historygenerated.AssessmentPolicyHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AssessmentPolicyHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.AssessmentPolicyHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.AssessmentPolicyHistoryMutation", m)
+}
+
 // The AssessmentResponseHistoryFunc type is an adapter to allow the use of ordinary
 // function as AssessmentResponseHistory mutator.
 type AssessmentResponseHistoryFunc func(context.Context, *historygenerated.AssessmentResponseHistoryMutation) (historygenerated.Value, error)

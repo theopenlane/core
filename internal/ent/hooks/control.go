@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -64,7 +63,7 @@ func HookControlReferenceFramework() ent.Hook {
 
 				// allow the subcontrol mutation to run
 				// if a user can edit the control, they can edit the subcontrols
-				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+				internalCtx := auth.WithInternalOperationContext(ctx)
 
 				mut := m.Client().Subcontrol.Update().
 					Where(subcontrol.ControlID(id))
@@ -77,7 +76,7 @@ func HookControlReferenceFramework() ent.Hook {
 					mut.SetReferenceFrameworkRevision(revision)
 				}
 				// set the reference framework on all subcontrols as well
-				if err := mut.Exec(allowCtx); err != nil {
+				if err := mut.Exec(internalCtx); err != nil {
 					return nil, err
 				}
 			}

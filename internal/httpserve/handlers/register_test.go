@@ -18,7 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
@@ -32,6 +32,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 
 	// Register test handler
 	suite.registerTestHandler("POST", "register", suite.h.RegisterHandler)
+	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 
 	var bonkers = "b!a!n!a!n!a!s!"
 
@@ -46,6 +47,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 		expectedErrorCode  rout.ErrorCode
 		expectedStatus     int
 		invitationType     string
+		verifyEmail        bool
 	}{
 		{
 			name:           "happy path",
@@ -78,6 +80,16 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			password:       bonkers,
 			emailExpected:  true,
 			expectedStatus: http.StatusCreated,
+		},
+		{
+			name:           "happy path, mixed case email can be verified",
+			email:          "Mixed.Case@TheOpenlane.io",
+			firstName:      "Princess",
+			lastName:       "Fiona",
+			password:       bonkers,
+			emailExpected:  true,
+			expectedStatus: http.StatusCreated,
+			verifyEmail:    true,
 		},
 		{
 			name:               "invalid email",
@@ -172,7 +184,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			email := tc.email
 			if tc.expectedErrorCode == handlers.UserExistsErrCode {
 				email = ulids.New().String() + "@theopenlane.io"
-				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 				exists, err := suite.db.User.Query().Where(user.Email(email)).Exist(ctx)
 				require.NoError(t, err)
 				if !exists {
@@ -187,7 +199,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			var inviteToken *string
 
 			if tc.invitationType == "invitation" {
-				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 				invite := suite.db.Invite.Create().
 					SetRecipient(email).
 					SetRole(enums.RoleMember).
@@ -195,7 +207,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				inviteToken = &invite.Token
 			} else if tc.invitationType == "invalid_invitation" {
 
-				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 				_ = suite.db.Invite.Create().
 					SetRecipient(email).
 					SetRole(enums.RoleMember).
@@ -205,7 +217,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				invalidToken := "invalid-token-123"
 				inviteToken = &invalidToken
 			} else if tc.invitationType == "email_mismatch_invitation" {
-				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 				invite := suite.db.Invite.Create().
 					SetRecipient("correctemail@theopenlane.io").
 					SetRole(enums.RoleMember).
@@ -249,7 +261,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			assert.Equal(t, tc.expectedErrorCode, out.ErrorCode)
 
 			if tc.expectedStatus == http.StatusCreated {
-				assert.Equal(t, out.Email, email)
+				assert.Equal(t, out.Email, strings.ToLower(email))
 				assert.NotEmpty(t, out.Message)
 				assert.NotEmpty(t, out.ID)
 
@@ -257,8 +269,8 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				ctx := auth.NewTestContextWithValidUser(out.ID)
 
 				// we haven't set the user's default org yet in the context
-				// so allow the request to go through
-				ctx = privacy.DecisionContext(ctx, privacy.Allow)
+				// so run the lookup as an internal operation
+				ctx = auth.WithInternalOperationContext(ctx)
 
 				// get the user and make sure things were created as expected
 				u, err := suite.db.UserSetting.Query().Where(usersetting.UserID(out.ID)).WithDefaultOrg().Only(ctx)
@@ -334,10 +346,30 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 					// regular registration — verification email
 					require.NotEmpty(t, msgs)
 					assert.Contains(t, msgs[0].Subject, "Please verify your email address")
-					assert.Equal(t, []string{tc.email}, msgs[0].To)
+					assert.Equal(t, []string{strings.ToLower(tc.email)}, msgs[0].To)
 				}
 			} else {
 				assert.Empty(t, msgs)
+			}
+
+			if tc.verifyEmail {
+				ctx := auth.WithInternalOperationContext(auth.NewTestContextWithValidUser(out.ID))
+
+				evToken, err := suite.db.EmailVerificationToken.Query().Where(emailverificationtoken.OwnerID(out.ID)).Only(ctx)
+				require.NoError(t, err)
+				assert.Equal(t, strings.ToLower(email), evToken.Email)
+
+				verifyReq := httptest.NewRequest(http.MethodGet, "/verify?token="+evToken.Token, nil)
+				verifyRecorder := httptest.NewRecorder()
+
+				suite.e.ServeHTTP(verifyRecorder, verifyReq)
+
+				var verifyOut *models.VerifyResponse
+				require.NoError(t, json.NewDecoder(verifyRecorder.Body).Decode(&verifyOut))
+
+				assert.Equal(t, http.StatusOK, verifyRecorder.Code)
+				assert.True(t, verifyOut.Success)
+				assert.Equal(t, strings.ToLower(email), verifyOut.Email)
 			}
 		})
 	}

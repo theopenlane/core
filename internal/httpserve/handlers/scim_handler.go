@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers/scim"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
@@ -33,9 +32,8 @@ func (h *Handler) SCIMHandler(scimHandler http.Handler, routePrefix string) echo
 			return echo.NewHTTPError(http.StatusUnauthorized, "missing bearer token")
 		}
 
-		// Bypass privacy rules for webhook-style resolution
-		ctx = privacy.DecisionContext(ctx, privacy.Allow)
-		ctx = auth.WithCaller(ctx, auth.NewWebhookCaller(""))
+		// the owning org is not known until the endpoint resolves, so the lookup is a cross-org internal read
+		ctx = auth.WithInternalReadCrossOrgContext(ctx)
 
 		rt := h.IntegrationsRuntime
 		webhook, err := rt.ResolveWebhookByEndpoint(ctx, endpointID)
@@ -61,7 +59,7 @@ func (h *Handler) SCIMHandler(scimHandler http.Handler, routePrefix string) echo
 		}
 
 		// Narrow caller to the installation owner's org
-		ctx = auth.WithCaller(ctx, auth.NewWebhookCaller(installation.OwnerID))
+		ctx = auth.WithOrgInternalCaller(ctx, installation.OwnerID)
 
 		ctx = scim.WithRequest(ctx, &scim.Request{
 			Installation: installation,

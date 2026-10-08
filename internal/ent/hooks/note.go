@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/iam/auth"
 )
 
 // HookNoteFiles runs on note mutations to check for uploaded files
@@ -75,9 +75,9 @@ func HookDeleteDiscussion() ent.Hook {
 				return v, nil
 			}
 
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalOperationContext(ctx)
 
-			if err := m.Client().Discussion.DeleteOneID(discussionID).Exec(allowCtx); err != nil {
+			if err := m.Client().Discussion.DeleteOneID(discussionID).Exec(internalCtx); err != nil {
 				return v, err
 			}
 

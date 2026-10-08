@@ -76,7 +76,7 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 	}).MustNew(ctx, t)
 
 	policy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
-	dbCtx := th.SetContext(ctx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(ctx, suite.Client.DB)
 	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(policy.ID).AddControlIDs(primaryControlID).Exec(dbCtx))
 
 	// forward: primary → secondary
@@ -501,7 +501,7 @@ func TestControlReportRelatedControlsScoping(t *testing.T) {
 	transitivePolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
 	targetPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
 
-	dbCtx := th.SetContext(ctx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(ctx, suite.Client.DB)
 	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(siblingPolicy.ID).AddControlIDs(sibB.ID).Exec(dbCtx))
 	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(transitivePolicy.ID).AddControlIDs(hop2.ID).Exec(dbCtx))
 	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(targetPolicy.ID).AddControlIDs(target.ID).Exec(dbCtx))
@@ -573,7 +573,7 @@ func TestControlReportInheritedRelatedControls(t *testing.T) {
 	// the inherited target carries a policy; it should surface on the parent's linkedPolicies
 	// because inheritance runs before the policy aggregation
 	inheritedPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
-	dbCtx := th.SetContext(ctx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(ctx, suite.Client.DB)
 	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(inheritedPolicy.ID).AddControlIDs(inheritedTarget.ID).Exec(dbCtx))
 
 	resp, err := suite.Client.API.GetAllControlReports(ctx)

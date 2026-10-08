@@ -1313,6 +1313,29 @@ func HasCampaignsWith(preds ...predicate.Campaign) predicate.Assessment {
 	})
 }
 
+// HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
+func HasInternalPolicies() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPoliciesWith applies the HasEdge predicate on the "internal_policies" edge with a given conditions (other predicates).
+func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newInternalPoliciesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
 func HasWorkflowObjectRefs() predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {
@@ -1328,6 +1351,29 @@ func HasWorkflowObjectRefs() predicate.Assessment {
 func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {
 		step := newWorkflowObjectRefsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPolicyAttestations applies the HasEdge predicate on the "policy_attestations" edge.
+func HasPolicyAttestations() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, PolicyAttestationsTable, PolicyAttestationsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPolicyAttestationsWith applies the HasEdge predicate on the "policy_attestations" edge with a given conditions (other predicates).
+func HasPolicyAttestationsWith(preds ...predicate.AssessmentPolicy) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newPolicyAttestationsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

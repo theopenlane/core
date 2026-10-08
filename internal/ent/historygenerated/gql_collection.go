@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
@@ -611,6 +612,150 @@ func newAssessmentHistoryPaginateArgs(rv map[string]any) *assessmenthistoryPagin
 	}
 	if v, ok := rv[whereField].(*AssessmentHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithAssessmentHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *AssessmentPolicyHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*AssessmentPolicyHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *AssessmentPolicyHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(assessmentpolicyhistory.Columns))
+		selectedFields = []string{assessmentpolicyhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldHistoryTime)
+				fieldSeen[assessmentpolicyhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldRef)
+				fieldSeen[assessmentpolicyhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldOperation)
+				fieldSeen[assessmentpolicyhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldCreatedAt)
+				fieldSeen[assessmentpolicyhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldUpdatedAt)
+				fieldSeen[assessmentpolicyhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldCreatedBy)
+				fieldSeen[assessmentpolicyhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldUpdatedBy)
+				fieldSeen[assessmentpolicyhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldUpdatedByImpersonator)
+				fieldSeen[assessmentpolicyhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldOwnerID)
+				fieldSeen[assessmentpolicyhistory.FieldOwnerID] = struct{}{}
+			}
+		case "assessmentID":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldAssessmentID]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldAssessmentID)
+				fieldSeen[assessmentpolicyhistory.FieldAssessmentID] = struct{}{}
+			}
+		case "internalPolicyID":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldInternalPolicyID]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldInternalPolicyID)
+				fieldSeen[assessmentpolicyhistory.FieldInternalPolicyID] = struct{}{}
+			}
+		case "policyRevision":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldPolicyRevision]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldPolicyRevision)
+				fieldSeen[assessmentpolicyhistory.FieldPolicyRevision] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type assessmentpolicyhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []AssessmentPolicyHistoryPaginateOption
+}
+
+func newAssessmentPolicyHistoryPaginateArgs(rv map[string]any) *assessmentpolicyhistoryPaginateArgs {
+	args := &assessmentpolicyhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &AssessmentPolicyHistoryOrder{Field: &AssessmentPolicyHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithAssessmentPolicyHistoryOrder(order))
+			}
+		case *AssessmentPolicyHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithAssessmentPolicyHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*AssessmentPolicyHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithAssessmentPolicyHistoryFilter(v.Filter))
 	}
 	return args
 }

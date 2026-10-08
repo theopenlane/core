@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -34,7 +33,6 @@ type CampaignDispatchResult struct {
 // loadEmailTemplate resolves an active email template by ID for the given owner, eager-loading
 // the Files edge so static attachments can be included in the dispatched message
 func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID string, emailTemplateID string) (*generated.EmailTemplate, error) {
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	record, err := client.EmailTemplate.Query().
 		Where(
@@ -48,7 +46,7 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 				file.FieldProvidedFileExtension,
 				file.FieldDetectedMimeType,
 				file.FieldFileContents)
-		}).Only(systemCtx)
+		}).Only(ctx)
 	if generated.IsNotFound(err) {
 		return nil, ErrEmailTemplateNotFound
 	}
@@ -69,7 +67,7 @@ func markCampaignTargetSent(ctx context.Context, db *generated.Client, targetID 
 	if err := db.CampaignTarget.UpdateOneID(targetID).
 		SetSentAt(now).
 		SetStatus(enums.AssessmentResponseStatusSent).
-		Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
+		Exec(ctx); err != nil {
 		return fmt.Errorf("mark sent: %w", err)
 	}
 
@@ -88,11 +86,9 @@ func completeCampaignWhenAllSent(ctx context.Context, db *generated.Client, camp
 		return nil
 	}
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	total, err := db.CampaignTarget.Query().
 		Where(campaigntarget.CampaignIDEQ(camp.ID)).
-		Count(systemCtx)
+		Count(ctx)
 	if err != nil {
 		return err
 	}
@@ -106,7 +102,7 @@ func completeCampaignWhenAllSent(ctx context.Context, db *generated.Client, camp
 			campaigntarget.CampaignIDEQ(camp.ID),
 			campaigntarget.SentAtIsNil(),
 		).
-		Count(systemCtx)
+		Count(ctx)
 	if err != nil {
 		return err
 	}
@@ -123,7 +119,7 @@ func completeCampaignWhenAllSent(ctx context.Context, db *generated.Client, camp
 		update.SetCompletedAt(models.DateTime(time.Now()))
 	}
 
-	return update.Exec(systemCtx)
+	return update.Exec(ctx)
 }
 
 // createAssessmentResponseForRecipient creates a new assessment response record for the campaign and recipient email

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 const defaultMaxEmitAttempts = 3
@@ -80,7 +81,7 @@ func New(client *generated.Client, runtime *gala.Gala, opts ...Option) (*Reconci
 func (r *Reconciler) ReconcileEmitFailures(ctx context.Context) (EmitReconcileResult, error) {
 	var result EmitReconcileResult
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	events, err := r.client.WorkflowEvent.Query().
 		Where(workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed)).

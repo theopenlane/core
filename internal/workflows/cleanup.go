@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // FindOrphanWorkflowInstanceIDs returns workflow instance IDs whose definitions are missing or soft-deleted.
@@ -22,7 +23,7 @@ func FindOrphanWorkflowInstanceIDs(ctx context.Context, client *generated.Client
 		return nil, ErrNilClient
 	}
 
-	allowCtx := AllowContext(ctx)
+	readCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	query := client.WorkflowInstance.Query().
 		Where(
@@ -34,7 +35,7 @@ func FindOrphanWorkflowInstanceIDs(ctx context.Context, client *generated.Client
 		query = query.Where(workflowinstance.OwnerIDEQ(ownerID))
 	}
 
-	return query.Select(workflowinstance.FieldID).Strings(allowCtx)
+	return query.Select(workflowinstance.FieldID).Strings(readCtx)
 }
 
 // DeleteWorkflowInstanceChildren removes workflow instance children such as assignments, targets, proposals, object refs, and events.
@@ -46,7 +47,7 @@ func DeleteWorkflowInstanceChildren(ctx context.Context, client *generated.Clien
 		return nil
 	}
 
-	allowCtx := AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	assignmentIDs, err := client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDIn(instanceIDs...)).
@@ -142,7 +143,7 @@ func DeleteWorkflowInstancesCascade(ctx context.Context, client *generated.Clien
 		return nil
 	}
 
-	allowCtx := AllowContext(ctx)
+	allowCtx := auth.WithInternalCrossOrgContext(ctx)
 
 	if _, err := client.WorkflowInstance.Delete().
 		Where(workflowinstance.IDIn(instanceIDs...)).

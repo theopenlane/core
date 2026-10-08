@@ -46,7 +46,6 @@ func OrganizationAvatarListeners(opts ...OrganizationAvatarListenerOption) []gal
 	return []gala.Registration{entityops.MutationListener{
 		Schema:     entityops.SchemaOrganization,
 		Operations: []string{entityops.OpCreate},
-		Caller:     internalOperationBypassCaller,
 		Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
 			return handleOrganizationAvatarCreated(inv, payload, config.requester)
 		},

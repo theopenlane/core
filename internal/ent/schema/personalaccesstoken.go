@@ -190,8 +190,7 @@ func (p PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.RequirePaymentMethod(),
-			rule.AllowIfContextAllowRule(),
-			rule.AllowMutationAfterApplyingOwnerFilter(),
+			rule.AllowMutationAfterApplyingUserOwnerFilter(),
 			privacy.AlwaysAllowRule(),
 		},
 	}

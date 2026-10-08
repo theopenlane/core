@@ -23,14 +23,15 @@ func SubscriberLinkListeners() []gala.Registration {
 		entityops.MutationListener{
 			Schema:     entityops.SchemaSubscriber,
 			Operations: []string{entityops.OpCreate},
-			Caller: func(*auth.Caller, entityops.MutationPayload) *auth.Caller {
-				return &auth.Caller{
-					Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-				}
-			},
-			Handle: handleSubscriberCreatedLink,
+			Caller:     subscriberLinkCaller,
+			Handle:     handleSubscriberCreatedLink,
 		},
 	}
+}
+
+// subscriberLinkCaller scopes the listener to the organization of the caller that created the subscriber
+func subscriberLinkCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+	return auth.NewOrgInternalCaller(restored.OrganizationID)
 }
 
 // handleSubscriberCreatedLink links a subscriber to the owning organization's contact

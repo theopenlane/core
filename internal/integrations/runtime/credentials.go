@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -277,14 +276,12 @@ func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation 
 		return err
 	}
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	if state.CredentialRef == (types.CredentialSlotID{}) {
 		if len(def.Connections) > 0 {
 			return nil
 		}
 
-		return r.saveInstallationMetadata(systemCtx, installation, selfInstanceMetadata(installation))
+		return r.saveInstallationMetadata(ctx, installation, selfInstanceMetadata(installation))
 	}
 
 	connection, err := def.ConnectionRegistration(state.CredentialRef)
@@ -292,19 +289,19 @@ func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation 
 		return err
 	}
 
-	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
+	bindings, err := r.loadCredentials(ctx, installation, connection.CredentialRefs)
 	if err != nil {
 		return err
 	}
 
-	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, nil)
+	metadata, err := resolveConnectionIdentity(ctx, installation, connection, bindings, nil)
 	if err != nil {
 		return err
 	}
 
 	metadata.Display.CredentialRef = state.CredentialRef.String()
 
-	return r.saveInstallationMetadata(systemCtx, installation, metadata)
+	return r.saveInstallationMetadata(ctx, installation, metadata)
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
@@ -338,36 +335,34 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		}
 	}
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	if err := r.RefreshInstallationMetadata(systemCtx, installation); err != nil {
-		logx.FromContext(systemCtx).Debug().Err(err).Msg("reconcile: instance id refresh before match check failed; comparing against stored id")
+	if err := r.RefreshInstallationMetadata(ctx, installation); err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Msg("reconcile: instance id refresh before match check failed; comparing against stored id")
 	}
 
-	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, installationInput)
+	metadata, err := resolveConnectionIdentity(ctx, installation, connection, bindings, installationInput)
 	if err != nil {
 		return err
 	}
 
-	if err := checkInstallationInstanceMatch(systemCtx, installation, metadata); err != nil {
+	if err := checkInstallationInstanceMatch(ctx, installation, metadata); err != nil {
 		return err
 	}
 
 	metadata.Display.CredentialRef = credentialRef.String()
 
-	if err := r.keystore().SaveCredential(systemCtx, installation, registration.Ref, credential); err != nil {
+	if err := r.keystore().SaveCredential(ctx, installation, registration.Ref, credential); err != nil {
 		return err
 	}
 
-	if err := r.persistConnectionState(systemCtx, installation, def, connection.CredentialRef); err != nil {
+	if err := r.persistConnectionState(ctx, installation, def, connection.CredentialRef); err != nil {
 		return err
 	}
 
-	if err := r.saveInstallationMetadata(systemCtx, installation, metadata); err != nil {
+	if err := r.saveInstallationMetadata(ctx, installation, metadata); err != nil {
 		return err
 	}
 
-	return r.activateReconciledInstallation(systemCtx, installation, def)
+	return r.activateReconciledInstallation(ctx, installation, def)
 }
 
 // activateReconciledInstallation records the reconciled credential on the installation and runs first-connection setup

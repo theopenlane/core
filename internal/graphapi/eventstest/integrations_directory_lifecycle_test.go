@@ -20,7 +20,7 @@ import (
 
 // TestDirectoryIntegrationDeleteThenReinstallRelinks verifies a same-tenant reinstall converges onto surviving rows instead of duplicating them
 func TestDirectoryIntegrationDeleteThenReinstallRelinks(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "delreinstall"
 	const tenant = "tenant-" + prefix
@@ -128,7 +128,7 @@ func TestDirectoryIntegrationDeleteThenReinstallRelinks(t *testing.T) {
 
 // TestDirectoryDifferentDefinitionSameTenantIsReadOnly pins the intent that a sync run must be read-only for another definition's installation on the same tenant
 func TestDirectoryDifferentDefinitionSameTenantIsReadOnly(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "diffdefsametenant"
 	const tenant = "tenant-" + prefix
@@ -192,7 +192,7 @@ func TestDirectoryDifferentDefinitionSameTenantIsReadOnly(t *testing.T) {
 
 // TestDirectoryDifferentDefinitionDifferentTenantIsolated verifies two installations on distinct source_instance_id tenants never see each other's directory rows
 func TestDirectoryDifferentDefinitionDifferentTenantIsolated(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefixA = "isotena"
 	const prefixC = "isotenc"
@@ -262,7 +262,7 @@ func TestDirectoryDifferentDefinitionDifferentTenantIsolated(t *testing.T) {
 
 // TestDirectoryMembershipRemovalInference walks one installation through the full membership removal-inference lifecycle
 func TestDirectoryMembershipRemovalInference(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "removalinference"
 	const tenant = "tenant-" + prefix
@@ -380,7 +380,7 @@ func TestDirectoryMembershipRemovalInference(t *testing.T) {
 // absent from a complete snapshot is removal-inferred the same as every other ingest schema, and
 // resurrected in place — the same row, not a new one — once it reappears in a later complete snapshot
 func TestDirectoryAccountDisappearanceIsRemovalResurrectedOnReAppearance(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "acctdisappear"
 	const tenant = "tenant-" + prefix

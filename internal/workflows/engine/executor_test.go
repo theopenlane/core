@@ -19,6 +19,7 @@ import (
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/iam/auth"
 )
 
 // TestWorkflowEngineExecute verifies basic workflow engine initialization and action execution
@@ -499,8 +500,7 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Use AllowContext for workflow operations that need privacy bypass
-	bypassCtx := workflows.AllowContext(userCtx)
+	bypassCtx := auth.WithInternalCrossOrgContext(userCtx)
 
 	obj := &workflows.Object{
 		ID:   control.ID,

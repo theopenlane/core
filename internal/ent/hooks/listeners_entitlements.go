@@ -29,8 +29,8 @@ func EntitlementListeners() []gala.Registration {
 		entityops.MutationListener{
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpCreate},
-			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return auth.NewWebhookCaller("")
+			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {
+				return auth.NewOrgInternalCaller(payload.EntityID)
 			},
 			Handle: entityops.RequireDep(handleOrganizationCreatedGala),
 		},
@@ -39,8 +39,8 @@ func EntitlementListeners() []gala.Registration {
 			Priority:   listenerPriorityFirst,
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpSoftDelete, entityops.OpDelete, entityops.OpDeleteOne},
-			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return auth.NewWebhookCaller("")
+			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {
+				return auth.NewOrgInternalCaller(payload.EntityID)
 			},
 			ContextKeys: []func(context.Context) context.Context{entx.SkipSoftDelete},
 			Handle:      entityops.RequireDep(handleOrganizationDeleteGala),
@@ -53,8 +53,8 @@ func EntitlementListeners() []gala.Registration {
 				organizationsetting.FieldBillingPhone,
 				organizationsetting.FieldBillingAddress,
 			},
-			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return auth.NewWebhookCaller("")
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation)
 			},
 			Handle: entityops.RequireDep(handleOrganizationSettingsUpdateOneGala),
 		},

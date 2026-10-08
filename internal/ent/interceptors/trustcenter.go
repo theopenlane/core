@@ -108,18 +108,18 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return auth.ErrNoAuthUser
 	}
 
 	// system admins and trusted internal callers that bypass org scoping (e.g. scheduled pollers
 	// sweeping every organization) read trust center children across all organizations
-	if caller.Has(auth.CapSystemAdmin) || caller.Has(auth.CapBypassOrgFilter) {
+	if auth.HasCrossOrgCapabilities(ctx) {
 		return nil
 	}
 
 	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
-		return applyAnonTrustCenterFilter(ctx, q, tcID, allowAnonAccess)
+		return applyAnonTrustCenterFilter(q, tcID, allowAnonAccess)
 	}
 
 	// deny all trust center requests that did not have a trust center key
@@ -150,9 +150,8 @@ func isMutationRequest(ctx context.Context) bool {
 
 // applyAnonTrustCenterFilter scopes the query to the active trust center key, denying resources
 // that do not permit anonymous access
-func applyAnonTrustCenterFilter(ctx context.Context, q intercept.Query, tcID string, allowAnonAccess bool) error {
-	_, allowRequest := privacy.DecisionFromContext(ctx)
-	if !allowAnonAccess && !allowRequest {
+func applyAnonTrustCenterFilter(q intercept.Query, tcID string, allowAnonAccess bool) error {
+	if !allowAnonAccess {
 		return privacy.Denyf("anonymous trust center access not allowed for this resource: %s", q.Type())
 	}
 

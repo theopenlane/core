@@ -66,7 +66,7 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 	}
 
 	proxyCaller, proxyOk := auth.CallerFromContext(ctx)
-	if !proxyOk || proxyCaller == nil {
+	if !proxyOk {
 		return "", ErrCallerRequired
 	}
 

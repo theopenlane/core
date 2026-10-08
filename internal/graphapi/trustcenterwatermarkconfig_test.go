@@ -8,12 +8,12 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -25,10 +25,10 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 
 	// delete the auto created watermark config for the trust center
 	// so we can test creating a new one
-	allowCtx := privacy.DecisionContext(tcOrg.Owner.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(tcOrg.Owner.UserCtx)
 	trustCenterWatermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
-		Only(allowCtx)
+		Only(internalCtx)
 
 	assert.NilError(t, err)
 	(&th.Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{Client: suite.Client.DB.TrustCenterWatermarkConfig, ID: trustCenterWatermarkConfig.ID}).MustDelete(tcOrg.Owner.UserCtx, t)
@@ -163,10 +163,10 @@ func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
 
-	allowCtx := privacy.DecisionContext(tcOrg.Owner.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(tcOrg.Owner.UserCtx)
 	watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
-		Only(allowCtx)
+		Only(internalCtx)
 
 	assert.NilError(t, err)
 
@@ -251,10 +251,10 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
 
-	allowCtx := privacy.DecisionContext(tcOrg.Owner.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(tcOrg.Owner.UserCtx)
 	watermarkConfig, err := suite.Client.DB.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
-		Only(allowCtx)
+		Only(internalCtx)
 
 	assert.NilError(t, err)
 

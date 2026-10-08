@@ -57,7 +57,7 @@ func ingestDirectorySnapshot(ctx context.Context, t *testing.T, integration *ent
 }
 
 func TestDirectorySyncInstanceScopedCorrelation(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	first, err := suite.Client.DB.Integration.Create().
 		SetName("Instance Correlation Test").

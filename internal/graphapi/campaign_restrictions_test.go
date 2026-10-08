@@ -128,7 +128,7 @@ func TestCampaignTargetLimit(t *testing.T) {
 // TestCampaignDispatchStatusRestrictions verifies that campaigns in terminal
 // states (Completed, Canceled) cannot be dispatched
 func TestCampaignDispatchStatusRestrictions(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate := suite.Client.DB.EmailTemplate.Create().
 		SetName("Status Restriction Test Template").
@@ -232,7 +232,7 @@ func TestCampaignDispatchStatusRestrictions(t *testing.T) {
 // TestCampaignDispatchMissingTemplate verifies that a branded campaign without
 // an email template returns an error
 func TestCampaignDispatchMissingTemplate(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	campaignObj := suite.Client.DB.Campaign.Create().
 		SetName("Missing Template Campaign").
@@ -289,7 +289,7 @@ func TestCampaignDispatchMissingTemplate(t *testing.T) {
 // TestCampaignDispatchResendBehavior verifies that resend=true re-sends to
 // previously sent targets and resend=false skips them
 func TestCampaignDispatchResendBehavior(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate := suite.Client.DB.EmailTemplate.Create().
 		SetName("Resend Behavior Test Template").
@@ -416,7 +416,7 @@ func TestCampaignDispatchResendBehavior(t *testing.T) {
 // TestCampaignDispatchCompletedTargetsAlwaysSkipped verifies that completed
 // targets are never re-dispatched, even with resend=true
 func TestCampaignDispatchCompletedTargetsAlwaysSkipped(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate := suite.Client.DB.EmailTemplate.Create().
 		SetName("Completed Skip Test Template").

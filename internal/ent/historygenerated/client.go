@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
@@ -100,6 +101,8 @@ type Client struct {
 	ActionPlanHistory *ActionPlanHistoryClient
 	// AssessmentHistory is the client for interacting with the AssessmentHistory builders.
 	AssessmentHistory *AssessmentHistoryClient
+	// AssessmentPolicyHistory is the client for interacting with the AssessmentPolicyHistory builders.
+	AssessmentPolicyHistory *AssessmentPolicyHistoryClient
 	// AssessmentResponseHistory is the client for interacting with the AssessmentResponseHistory builders.
 	AssessmentResponseHistory *AssessmentResponseHistoryClient
 	// AssetHistory is the client for interacting with the AssetHistory builders.
@@ -247,6 +250,7 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.ActionPlanHistory = NewActionPlanHistoryClient(c.config)
 	c.AssessmentHistory = NewAssessmentHistoryClient(c.config)
+	c.AssessmentPolicyHistory = NewAssessmentPolicyHistoryClient(c.config)
 	c.AssessmentResponseHistory = NewAssessmentResponseHistoryClient(c.config)
 	c.AssetHistory = NewAssetHistoryClient(c.config)
 	c.CampaignHistory = NewCampaignHistoryClient(c.config)
@@ -423,6 +427,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		config:                            cfg,
 		ActionPlanHistory:                 NewActionPlanHistoryClient(cfg),
 		AssessmentHistory:                 NewAssessmentHistoryClient(cfg),
+		AssessmentPolicyHistory:           NewAssessmentPolicyHistoryClient(cfg),
 		AssessmentResponseHistory:         NewAssessmentResponseHistoryClient(cfg),
 		AssetHistory:                      NewAssetHistoryClient(cfg),
 		CampaignHistory:                   NewCampaignHistoryClient(cfg),
@@ -508,6 +513,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		config:                            cfg,
 		ActionPlanHistory:                 NewActionPlanHistoryClient(cfg),
 		AssessmentHistory:                 NewAssessmentHistoryClient(cfg),
+		AssessmentPolicyHistory:           NewAssessmentPolicyHistoryClient(cfg),
 		AssessmentResponseHistory:         NewAssessmentResponseHistoryClient(cfg),
 		AssetHistory:                      NewAssetHistoryClient(cfg),
 		CampaignHistory:                   NewCampaignHistoryClient(cfg),
@@ -601,9 +607,10 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.ActionPlanHistory, c.AssessmentHistory, c.AssessmentResponseHistory,
-		c.AssetHistory, c.CampaignHistory, c.CampaignTargetHistory, c.ContactHistory,
-		c.ControlHistory, c.ControlImplementationHistory, c.ControlObjectiveHistory,
+		c.ActionPlanHistory, c.AssessmentHistory, c.AssessmentPolicyHistory,
+		c.AssessmentResponseHistory, c.AssetHistory, c.CampaignHistory,
+		c.CampaignTargetHistory, c.ContactHistory, c.ControlHistory,
+		c.ControlImplementationHistory, c.ControlObjectiveHistory,
 		c.CustomDomainHistory, c.DiscussionHistory, c.DocumentDataHistory,
 		c.EmailTemplateHistory, c.EntityHistory, c.EntityTypeHistory,
 		c.EvidenceHistory, c.FileHistory, c.FindingControlHistory, c.FindingHistory,
@@ -633,9 +640,10 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.ActionPlanHistory, c.AssessmentHistory, c.AssessmentResponseHistory,
-		c.AssetHistory, c.CampaignHistory, c.CampaignTargetHistory, c.ContactHistory,
-		c.ControlHistory, c.ControlImplementationHistory, c.ControlObjectiveHistory,
+		c.ActionPlanHistory, c.AssessmentHistory, c.AssessmentPolicyHistory,
+		c.AssessmentResponseHistory, c.AssetHistory, c.CampaignHistory,
+		c.CampaignTargetHistory, c.ContactHistory, c.ControlHistory,
+		c.ControlImplementationHistory, c.ControlObjectiveHistory,
 		c.CustomDomainHistory, c.DiscussionHistory, c.DocumentDataHistory,
 		c.EmailTemplateHistory, c.EntityHistory, c.EntityTypeHistory,
 		c.EvidenceHistory, c.FileHistory, c.FindingControlHistory, c.FindingHistory,
@@ -720,6 +728,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ActionPlanHistory.mutate(ctx, m)
 	case *AssessmentHistoryMutation:
 		return c.AssessmentHistory.mutate(ctx, m)
+	case *AssessmentPolicyHistoryMutation:
+		return c.AssessmentPolicyHistory.mutate(ctx, m)
 	case *AssessmentResponseHistoryMutation:
 		return c.AssessmentResponseHistory.mutate(ctx, m)
 	case *AssetHistoryMutation:
@@ -1120,6 +1130,141 @@ func (c *AssessmentHistoryClient) mutate(ctx context.Context, m *AssessmentHisto
 		return (&AssessmentHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("historygenerated: unknown AssessmentHistory mutation op: %q", m.Op())
+	}
+}
+
+// AssessmentPolicyHistoryClient is a client for the AssessmentPolicyHistory schema.
+type AssessmentPolicyHistoryClient struct {
+	config
+}
+
+// NewAssessmentPolicyHistoryClient returns a client for the AssessmentPolicyHistory from the given config.
+func NewAssessmentPolicyHistoryClient(c config) *AssessmentPolicyHistoryClient {
+	return &AssessmentPolicyHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assessmentpolicyhistory.Hooks(f(g(h())))`.
+func (c *AssessmentPolicyHistoryClient) Use(hooks ...Hook) {
+	c.hooks.AssessmentPolicyHistory = append(c.hooks.AssessmentPolicyHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assessmentpolicyhistory.Intercept(f(g(h())))`.
+func (c *AssessmentPolicyHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AssessmentPolicyHistory = append(c.inters.AssessmentPolicyHistory, interceptors...)
+}
+
+// Create returns a builder for creating a AssessmentPolicyHistory entity.
+func (c *AssessmentPolicyHistoryClient) Create() *AssessmentPolicyHistoryCreate {
+	mutation := newAssessmentPolicyHistoryMutation(c.config, OpCreate)
+	return &AssessmentPolicyHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AssessmentPolicyHistory entities.
+func (c *AssessmentPolicyHistoryClient) CreateBulk(builders ...*AssessmentPolicyHistoryCreate) *AssessmentPolicyHistoryCreateBulk {
+	return &AssessmentPolicyHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssessmentPolicyHistoryClient) MapCreateBulk(slice any, setFunc func(*AssessmentPolicyHistoryCreate, int)) *AssessmentPolicyHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssessmentPolicyHistoryCreateBulk{err: fmt.Errorf("calling to AssessmentPolicyHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssessmentPolicyHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssessmentPolicyHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AssessmentPolicyHistory.
+func (c *AssessmentPolicyHistoryClient) Update() *AssessmentPolicyHistoryUpdate {
+	mutation := newAssessmentPolicyHistoryMutation(c.config, OpUpdate)
+	return &AssessmentPolicyHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssessmentPolicyHistoryClient) UpdateOne(_m *AssessmentPolicyHistory) *AssessmentPolicyHistoryUpdateOne {
+	mutation := newAssessmentPolicyHistoryMutation(c.config, OpUpdateOne, withAssessmentPolicyHistory(_m))
+	return &AssessmentPolicyHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssessmentPolicyHistoryClient) UpdateOneID(id string) *AssessmentPolicyHistoryUpdateOne {
+	mutation := newAssessmentPolicyHistoryMutation(c.config, OpUpdateOne, withAssessmentPolicyHistoryID(id))
+	return &AssessmentPolicyHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AssessmentPolicyHistory.
+func (c *AssessmentPolicyHistoryClient) Delete() *AssessmentPolicyHistoryDelete {
+	mutation := newAssessmentPolicyHistoryMutation(c.config, OpDelete)
+	return &AssessmentPolicyHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssessmentPolicyHistoryClient) DeleteOne(_m *AssessmentPolicyHistory) *AssessmentPolicyHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssessmentPolicyHistoryClient) DeleteOneID(id string) *AssessmentPolicyHistoryDeleteOne {
+	builder := c.Delete().Where(assessmentpolicyhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssessmentPolicyHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for AssessmentPolicyHistory.
+func (c *AssessmentPolicyHistoryClient) Query() *AssessmentPolicyHistoryQuery {
+	return &AssessmentPolicyHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssessmentPolicyHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AssessmentPolicyHistory entity by its id.
+func (c *AssessmentPolicyHistoryClient) Get(ctx context.Context, id string) (*AssessmentPolicyHistory, error) {
+	return c.Query().Where(assessmentpolicyhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssessmentPolicyHistoryClient) GetX(ctx context.Context, id string) *AssessmentPolicyHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AssessmentPolicyHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.AssessmentPolicyHistory
+	return append(hooks[:len(hooks):len(hooks)], assessmentpolicyhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssessmentPolicyHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.AssessmentPolicyHistory
+	return append(inters[:len(inters):len(inters)], assessmentpolicyhistory.Interceptors[:]...)
+}
+
+func (c *AssessmentPolicyHistoryClient) mutate(ctx context.Context, m *AssessmentPolicyHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssessmentPolicyHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssessmentPolicyHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssessmentPolicyHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssessmentPolicyHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown AssessmentPolicyHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -9766,8 +9911,9 @@ func (c *WorkflowDefinitionHistoryClient) mutate(ctx context.Context, m *Workflo
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		ActionPlanHistory, AssessmentHistory, AssessmentResponseHistory, AssetHistory,
-		CampaignHistory, CampaignTargetHistory, ContactHistory, ControlHistory,
+		ActionPlanHistory, AssessmentHistory, AssessmentPolicyHistory,
+		AssessmentResponseHistory, AssetHistory, CampaignHistory,
+		CampaignTargetHistory, ContactHistory, ControlHistory,
 		ControlImplementationHistory, ControlObjectiveHistory, CustomDomainHistory,
 		DiscussionHistory, DocumentDataHistory, EmailTemplateHistory, EntityHistory,
 		EntityTypeHistory, EvidenceHistory, FileHistory, FindingControlHistory,
@@ -9788,8 +9934,9 @@ type (
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory []ent.Hook
 	}
 	inters struct {
-		ActionPlanHistory, AssessmentHistory, AssessmentResponseHistory, AssetHistory,
-		CampaignHistory, CampaignTargetHistory, ContactHistory, ControlHistory,
+		ActionPlanHistory, AssessmentHistory, AssessmentPolicyHistory,
+		AssessmentResponseHistory, AssetHistory, CampaignHistory,
+		CampaignTargetHistory, ContactHistory, ControlHistory,
 		ControlImplementationHistory, ControlObjectiveHistory, CustomDomainHistory,
 		DiscussionHistory, DocumentDataHistory, EmailTemplateHistory, EntityHistory,
 		EntityTypeHistory, EvidenceHistory, FileHistory, FindingControlHistory,

@@ -31,11 +31,9 @@ func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input g
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
 	}
 
-	ownerID := ""
-	if input.OwnerID != nil {
-		ownerID = *input.OwnerID
-	} else if wdCaller, ok := auth.CallerFromContext(ctx); ok && wdCaller != nil {
-		ownerID = wdCaller.OrganizationID
+	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return nil, auth.ErrNoAuthUser
 	}
 
 	active := true

@@ -16,6 +16,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func uniqueSubscriberEmail(prefix string) string {
@@ -23,9 +24,9 @@ func uniqueSubscriberEmail(prefix string) string {
 }
 
 func TestSubscriberLinkListener(t *testing.T) {
-	org := suite.SeedFreshMinimalOrgUsers(t, false)
+	org := th.CreateFreshOrgWithTrustCenter(t)
 	ownerCtx := org.Owner.UserCtx
-	allowCtx := th.SetContext(ownerCtx, suite.Client.DB)
+	internalCtx := th.SetInternalContext(ownerCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.SubscriberLinkListeners())
 	assert.NilError(t, err)
@@ -34,7 +35,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 	reload := func(t *testing.T, id string) *ent.Subscriber {
 		t.Helper()
 
-		sub, err := suite.Client.DB.Subscriber.Get(allowCtx, id)
+		sub, err := suite.Client.DB.Subscriber.Get(internalCtx, id)
 		assert.NilError(t, err)
 
 		return sub
@@ -79,6 +80,25 @@ func TestSubscriberLinkListener(t *testing.T) {
 			s := reload(t, sub.ID)
 			return s.ContactID == linked.ID && s.UserID == org.Admin.ID
 		}, "subscriber should link to both the contact and the org member")
+	})
+
+	t.Run("links matching contact for anonymous trust center subscriber", func(t *testing.T) {
+		email := uniqueSubscriberEmail("trust-center")
+		linked := (&th.ContactBuilder{Client: suite.Client, Email: email}).MustNew(ownerCtx, t)
+
+		anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(org.TrustCenter.ID, org.TrustCenter.OwnerID, email)
+
+		resp, err := suite.Client.API.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
+			Email:         email,
+			TrustCenterID: &org.TrustCenter.ID,
+		})
+		assert.NilError(t, err)
+
+		waitForGala(t, setup.Runtime)
+
+		waitForCondition(t, func() bool {
+			return reload(t, resp.CreateSubscriber.Subscriber.ID).ContactID == linked.ID
+		}, "anonymous trust center subscriber should link to the matching contact")
 	})
 
 	t.Run("no match and cross org contact stay unlinked", func(t *testing.T) {

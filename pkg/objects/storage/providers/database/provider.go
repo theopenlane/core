@@ -9,10 +9,10 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
+	"github.com/theopenlane/iam/auth"
 )
 
 const (
@@ -42,10 +42,10 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		return nil, err
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 	if err := client.File.UpdateOneID(fileID).
 		SetFileContents(data).
-		Exec(allowCtx); err != nil {
+		Exec(internalCtx); err != nil {
 		return nil, err
 	}
 
@@ -120,10 +120,10 @@ func (p *Provider) Delete(ctx context.Context, fileRef *storagetypes.File, _ *st
 		return ErrMissingFileIdentifier
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 	if err := client.File.UpdateOneID(fileID).
 		ClearFileContents().
-		Exec(allowCtx); err != nil {
+		Exec(internalCtx); err != nil {
 		return err
 	}
 

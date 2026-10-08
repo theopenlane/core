@@ -15,7 +15,7 @@ import (
 )
 
 // backfillBypassCaps are the capabilities backfill routines run with
-const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
+const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapSystemSweep | auth.CapInternalOperation | auth.CapBypassManagedGroup
 
 // backfillRoutineTopicName is the topic suffix and key namespace for backfill routines
 const backfillRoutineTopicName = "startup.backfill.routine"

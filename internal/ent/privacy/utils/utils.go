@@ -77,17 +77,25 @@ type MutationClient interface {
 	Client() *generated.Client
 }
 
+// EntClientFromContext returns the ent client from the context, falling back to the REST transaction client
+func EntClientFromContext(ctx context.Context) *generated.Client {
+	if client := generated.FromContext(ctx); client != nil {
+		return client
+	}
+
+	if tx := transaction.FromContext(ctx); tx != nil {
+		return tx.Client()
+	}
+
+	return nil
+}
+
 // AuthzClientFromContext returns the authz client from the context if it exists
 // this is useful when you need to get the client from the context directly
 func AuthzClientFromContext(ctx context.Context) *fgax.Client {
-	client := generated.FromContext(ctx)
+	client := EntClientFromContext(ctx)
 	if client != nil {
 		return &client.Authz
-	}
-
-	tx := transaction.FromContext(ctx)
-	if tx != nil {
-		return &tx.Authz
 	}
 
 	histClient := historygenerated.FromContext(ctx)

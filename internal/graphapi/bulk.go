@@ -539,6 +539,225 @@ func (r *mutationResolver) bulkDeleteAssessment(ctx context.Context, ids []strin
 	}, nil
 }
 
+// bulkCreateAssessmentPolicy uses the CreateBulk function to create multiple AssessmentPolicy entities
+func (r *mutationResolver) bulkCreateAssessmentPolicy(ctx context.Context, input []*generated.CreateAssessmentPolicyInput) (*model.AssessmentPolicyBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.AssessmentPolicyCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.AssessmentPolicy.Create().SetInput(*data)
+	}
+
+	res, err := c.AssessmentPolicy.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "assessmentpolicy"})
+	}
+
+	// return response
+	return &model.AssessmentPolicyBulkCreatePayload{
+		AssessmentPolicies: res,
+	}, nil
+}
+
+// bulkUpdateAssessmentPolicy updates multiple AssessmentPolicy entities
+func (r *mutationResolver) bulkUpdateAssessmentPolicy(ctx context.Context, ids []string, input generated.UpdateAssessmentPolicyInput) (*model.AssessmentPolicyBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "assessment_policy", fgax.CanEdit)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.AssessmentPolicyBulkUpdatePayload{
+			AssessmentPolicies: []*generated.AssessmentPolicy{},
+			UpdatedIDs:         []string{},
+			NotUpdatedIDs:      originalIDs,
+			Error:              &err,
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.AssessmentPolicy, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each assessmentpolicy individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for assessmentpolicy")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.AssessmentPolicy.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("assessmentpolicy_id", id).Msg("failed to get assessmentpolicy in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("assessmentpolicy_id", id).Msg("failed to update assessmentpolicy in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.AssessmentPolicyBulkUpdatePayload{
+		AssessmentPolicies: results,
+		UpdatedIDs:         updatedIDs,
+		NotUpdatedIDs:      notUpdatedIDs,
+		Error:              err,
+	}, nil
+}
+
+// bulkUpdateCSVAssessmentPolicy updates multiple AssessmentPolicy entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVAssessmentPolicy(ctx context.Context, inputs []*csvgenerated.AssessmentPolicyCSVUpdateInput) (*model.AssessmentPolicyBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.AssessmentPolicy, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each assessmentpolicy individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for assessmentpolicy")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.AssessmentPolicy.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("assessmentpolicy_id", input.ID).Msg("failed to get assessmentpolicy in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("assessmentpolicy_id", input.ID).Msg("failed to update assessmentpolicy in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "assessmentpolicy"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.AssessmentPolicyBulkUpdatePayload{
+		AssessmentPolicies: results,
+		UpdatedIDs:         updatedIDs,
+	}, nil
+}
+
+// bulkDeleteAssessmentPolicy deletes multiple AssessmentPolicy entities by their IDs
+func (r *mutationResolver) bulkDeleteAssessmentPolicy(ctx context.Context, ids []string) (*model.AssessmentPolicyBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "assessment_policy", fgax.CanDelete)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.AssessmentPolicyBulkDeletePayload{
+			DeletedIDs:    []string{},
+			NotDeletedIDs: originalIDs,
+			Error:         &err,
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each assessmentpolicy individually to ensure proper cleanup
+			if err := r.db.AssessmentPolicy.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("assessmentpolicy_id", id).Msg("failed to delete assessmentpolicy in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.AssessmentPolicyEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("assessmentpolicy_id", id).Msg("failed to cleanup assessmentpolicy edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some assessmentpolicy deletions failed")
+	}
+
+	deleted := make(map[string]struct{}, len(deletedIDs))
+	for _, id := range deletedIDs {
+		deleted[id] = struct{}{}
+	}
+
+	notDeletedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := deleted[id]; !ok {
+			notDeletedIDs = append(notDeletedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notDeletedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.AssessmentPolicyBulkDeletePayload{
+		DeletedIDs:    deletedIDs,
+		NotDeletedIDs: notDeletedIDs,
+		Error:         err,
+	}, nil
+}
+
 // bulkCreateAsset uses the CreateBulk function to create multiple Asset entities
 func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generated.CreateAssetInput) (*model.AssetBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

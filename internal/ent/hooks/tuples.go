@@ -7,12 +7,12 @@ import (
 
 	"entgo.io/ent"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -109,7 +109,7 @@ func skipDeleteHook(ctx context.Context, m utils.GenericMutation) bool {
 	}
 
 	// skip if internal request
-	if rule.IsInternalRequest(ctx) {
+	if auth.IsInternalRequest(ctx) {
 		return true
 	}
 

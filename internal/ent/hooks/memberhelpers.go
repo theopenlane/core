@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 	"slices"
 	"strings"
 
@@ -11,7 +12,6 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
@@ -34,7 +34,7 @@ func HookMembershipSelf(table string) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			// bypass privacy check if the context allows it
-			if _, allow := privacy.DecisionFromContext(ctx); allow {
+			if auth.IsInternalRequest(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
@@ -45,7 +45,7 @@ func HookMembershipSelf(table string) ent.Hook {
 
 			// check if group member is the authenticated user
 			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil {
+			if !ok {
 				return nil, auth.ErrNoAuthUser
 			}
 
@@ -123,10 +123,19 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		return nil
 	}
 
-	query := "SELECT user_id FROM " + table + " WHERE id in ($1)"
+	// one placeholder per id so every membership in a bulk mutation is checked
+	placeholders := make([]string, len(memberIDs))
+	args := make([]any, len(memberIDs))
+
+	for i, id := range memberIDs {
+		placeholders[i] = fmt.Sprintf("$%d", i+1)
+		args[i] = id
+	}
+
+	query := "SELECT user_id FROM " + table + " WHERE id IN (" + strings.Join(placeholders, ",") + ")"
 
 	var rows sql.Rows
-	if err := generated.FromContext(ctx).Driver().Query(ctx, query, []any{strings.Join(memberIDs, ",")}, &rows); err != nil {
+	if err := m.Client().Driver().Query(ctx, query, args, &rows); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to get user ID from membership")
 
 		return err
@@ -134,7 +143,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 
 	defer rows.Close()
 
-	if rows.Next() {
+	for rows.Next() {
 		var userID string
 
 		if err := rows.Scan(&userID); err != nil {
@@ -150,7 +159,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		}
 	}
 
-	return nil
+	return rows.Err()
 }
 
 func checkMutation(ctx context.Context) bool {

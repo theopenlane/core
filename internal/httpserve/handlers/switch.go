@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/iam/sessions"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -23,7 +22,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil {
+	if !ok {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
@@ -44,8 +43,8 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 	// check if SSO is enforced for the target organization, then apply owner, per-user, and per-domain
 	// exemptions to decide whether this user must be redirected through the SSO login flow.
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID, user.ID)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
+	status, err := h.fetchSSOStatus(internalCtx, in.TargetOrganizationID, user.ID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resolve sso enforcement for organization switch")
 		return h.InternalServerError(ctx, ErrProcessingRequest)

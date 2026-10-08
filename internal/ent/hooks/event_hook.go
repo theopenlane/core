@@ -11,11 +11,11 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // EmitGalaEventHook returns a hook that emits Gala mutation envelopes after mutations.
@@ -192,7 +192,7 @@ func snapshotMutation(ctx context.Context, mutation ent.Mutation, runtimes []*ga
 		return ids, nil, nil
 	}
 
-	lookupCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	lookupCtx := auth.WithInternalReadContext(ctx)
 	oldValues := make(map[string]map[string]any, len(ids))
 
 	for _, id := range ids {

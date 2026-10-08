@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // Handle adapts the organization deletion sweep to the generic operation registration boundary;
@@ -44,7 +45,7 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 		o.MaxDeletesPerRun = DefaultOrganizationDeleteMaxPerRun
 	}
 
-	systemCtx := systemSweepContext(ctx)
+	systemCtx := auth.WithSystemSweepContext(ctx)
 
 	if err := clearRecoveredOrganizationDeletions(systemCtx, req); err != nil {
 		return 0, err

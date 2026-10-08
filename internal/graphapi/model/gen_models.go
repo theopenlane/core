@@ -140,6 +140,60 @@ type AssessmentDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// AssessmentPoliciesInput is used to attach internal policies to an assessment
+// along with the assessment creation
+type AssessmentPoliciesInput struct {
+	InternalPolicyID string `json:"internalPolicyID"`
+	// the revision of the internal policy, defaults to the current revision of the policy
+	PolicyRevision *string `json:"policyRevision,omitempty"`
+}
+
+// Return response for createBulkAssessmentPolicy mutation
+type AssessmentPolicyBulkCreatePayload struct {
+	// Created assessmentPolicys
+	AssessmentPolicies []*generated.AssessmentPolicy `json:"assessmentPolicies,omitempty"`
+}
+
+// Return response for deleteBulkAssessmentPolicy mutation
+type AssessmentPolicyBulkDeletePayload struct {
+	// Deleted assessmentPolicy IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of assessmentPolicies that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkAssessmentPolicy mutation
+type AssessmentPolicyBulkUpdatePayload struct {
+	// Updated assessmentPolicys
+	AssessmentPolicies []*generated.AssessmentPolicy `json:"assessmentPolicies,omitempty"`
+	// IDs of the updated assessmentPolicys
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
+}
+
+// Return response for createAssessmentPolicy mutation
+type AssessmentPolicyCreatePayload struct {
+	// Created assessmentPolicy
+	AssessmentPolicy *generated.AssessmentPolicy `json:"assessmentPolicy"`
+}
+
+// Return response for deleteAssessmentPolicy mutation
+type AssessmentPolicyDeletePayload struct {
+	// Deleted assessmentPolicy ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateAssessmentPolicy mutation
+type AssessmentPolicyUpdatePayload struct {
+	// Updated assessmentPolicy
+	AssessmentPolicy *generated.AssessmentPolicy `json:"assessmentPolicy"`
+}
+
 // Return response for createAssessmentResponse mutation
 type AssessmentResponseCreatePayload struct {
 	// Created assessmentResponse

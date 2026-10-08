@@ -280,6 +280,8 @@ func (t TrustCenter) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
+		entx.ConsoleRoute(
+			entx.WithConsoleBase("trust-center")),
 	}
 }
 

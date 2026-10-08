@@ -165,7 +165,6 @@ func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.RequirePaymentMethod(),
-			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

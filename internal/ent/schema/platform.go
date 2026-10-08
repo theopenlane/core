@@ -308,11 +308,17 @@ func (s Platform) Edges() []ent.Edge {
 			fromSchema: s,
 			name:       "applicable_frameworks",
 			t:          Standard.Type,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Standard{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
 			name:       "generated_scans",
 			t:          Scan.Type,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Scan{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: s,

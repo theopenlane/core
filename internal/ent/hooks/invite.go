@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -103,9 +103,10 @@ func HookInvite() ent.Hook {
 			}
 
 			// check if the recipient already has an account so the invite link can route accordingly
+			// the recipient is not yet visible to the inviter, the lookup is pinned to the invite email
 			recipientExists, err := m.Client().User.Query().
 				Where(user.EmailEqualFold(emailAddress)).
-				Exist(privacy.DecisionContext(ctx, privacy.Allow))
+				Exist(auth.WithInternalReadContext(ctx))
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error checking recipient account existence")
 
@@ -220,9 +221,9 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			// bypass interceptors that filters results
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalOperationContext(ctx)
 
-			inviteResp, err := m.Client().Invite.Query().WithGroups().Where(invite.ID(id)).Only(allowCtx)
+			inviteResp, err := m.Client().Invite.Query().WithGroups().Where(invite.ID(id)).Only(internalCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -265,7 +266,7 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			// add user to the inviting org, allow the context to bypass privacy checks
-			if err := memberCreate.Exec(allowCtx); err != nil {
+			if err := memberCreate.Exec(internalCtx); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to add user to organization")
 
 				return nil, err
@@ -280,7 +281,7 @@ func HookInviteAccepted() ent.Hook {
 						orgmembership.RoleEQ(enums.RoleOwner),
 						orgmembership.UserIDNEQ(userID), // exclude the new owner who was just added
 					).
-					All(allowCtx)
+					All(internalCtx)
 				if err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("unable to query current organization owners")
 					return nil, err
@@ -296,7 +297,8 @@ func HookInviteAccepted() ent.Hook {
 							ClearSSOExemptReason()
 					}
 
-					if err := updateOldOwner.Exec(allowCtx); err != nil {
+					// the ownership transfer marker lets the owner demotion past the hook that blocks direct owner changes
+					if err := updateOldOwner.Exec(contextx.WithOwnershipTransfer(internalCtx)); err != nil {
 						logx.FromContext(ctx).Error().Err(err).Str("user_id", currentOwner.UserID).Msg("unable to set current owner to super admin")
 						return nil, err
 					}
@@ -312,7 +314,7 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			// add user to the group, allow the context to bypass privacy checks
-			if err := m.Client().GroupMembership.CreateBulk(builders...).Exec(allowCtx); err != nil {
+			if err := m.Client().GroupMembership.CreateBulk(builders...).Exec(internalCtx); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to add user to group")
 
 				return nil, err
@@ -333,8 +335,9 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			if err := sendSystemEmail(ctx, emaildef.InviteJoinedOp.Name(), emaildef.InviteJoinedRequest{
-				RecipientInfo: emaildef.RecipientInfo{Email: recipient},
-				OrgName:       org.DisplayName,
+				Email:   recipient,
+				OrgName: org.DisplayName,
+				OrgID:   ownerID,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
 
@@ -384,11 +387,11 @@ func checkUserAlreadyMember(ctx context.Context, m *generated.InviteMutation, em
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	user, err := m.Client().User.Query().
 		Where(user.Email(email)).
-		Only(allowCtx)
+		Only(internalCtx)
 	if generated.IsNotFound(err) {
 		return nil
 	}
@@ -400,7 +403,7 @@ func checkUserAlreadyMember(ctx context.Context, m *generated.InviteMutation, em
 	_, err = m.Client().OrgMembership.Query().
 		Where(orgmembership.UserID(user.ID)).
 		Where(orgmembership.OrganizationID(orgID)).
-		Only(allowCtx)
+		Only(internalCtx)
 	if generated.IsNotFound(err) {
 		return nil
 	}

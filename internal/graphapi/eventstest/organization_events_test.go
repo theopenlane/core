@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
@@ -40,14 +39,14 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 	// a task gives us an org owned record that tracks history
 	task1 := (&th.TaskBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 
-	allowCtx := th.SetContext(reqCtx, suite.Client.DB)
+	internalCtx := th.SetInternalContext(reqCtx, suite.Client.DB)
 
 	// the trust center is org owned, but the setting created alongside it is not, it only points at
 	// the trust center. The cascade has to recurse through the trust center to reach it
 	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 
 	trustCenterSetting, err := suite.Client.DB.TrustCenterSetting.Query().
-		Where(trustcentersetting.TrustCenterID(trustCenter.ID)).First(allowCtx)
+		Where(trustcentersetting.TrustCenterID(trustCenter.ID)).First(internalCtx)
 	assert.NilError(t, err)
 
 	// the storage path is what the file hook hands to the object storage provider on delete
@@ -60,11 +59,11 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 		SetStoragePath(storageKey).
 		SetURI("file:///tmp/cascade-test.txt").
 		AddOrganizationIDs(org.ID).
-		Save(allowCtx)
+		Save(internalCtx)
 	assert.NilError(t, err)
 
 	// the history rows have to exist up front, otherwise asserting they are gone proves nothing
-	assertHistoryExists(t, allowCtx, task1.ID, file1.ID, true)
+	assertHistoryExists(t, internalCtx, task1.ID, file1.ID, true)
 
 	// delete org
 	resp, err := suite.Client.API.DeleteOrganization(reqCtx, org.ID)
@@ -92,14 +91,14 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 
 	waitForCondition(t, func() bool {
 		// make sure the custom domain(s) no longer exists
-		ctx := privacy.DecisionContext(reqCtx, privacy.Allow)
+		ctx := auth.WithInternalOperationContext(reqCtx)
 		_, err := suite.Client.DB.CustomDomain.Get(ctx, customDomain.ID)
 		return generated.IsNotFound(err)
 	}, "custom domain should be deleted by async edge cleanup")
 
 	// skipping soft delete makes soft deleted rows visible, so the assertions below fail if the
 	// cascade only marked the records deleted instead of removing them
-	purgedCtx := entx.SkipSoftDelete(privacy.DecisionContext(reqCtx, privacy.Allow))
+	purgedCtx := entx.SkipSoftDelete(auth.WithInternalOperationContext(reqCtx))
 
 	// the organization row is removed last, once everything it owned is gone, so its absence is
 	// what tells us the whole cascade finished. Waiting for the queue to go idle is not enough on

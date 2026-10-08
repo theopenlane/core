@@ -278,9 +278,7 @@ const skipper = `
         return true
     }
 
-    caller, _ := auth.CallerFromContext(ctx)
-
-    return caller.HasInLineage(auth.CapBypassAuditLog)
+    return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 `
 
 // getHistoryExtension generates the history schemas and returns the history extension to be used in the ent codegen

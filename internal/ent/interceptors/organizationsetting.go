@@ -10,20 +10,17 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // InterceptorOrganizationSetting is middleware to change the org setting query
 func InterceptorOrganizationSetting() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		if auth.IsSystemAdminFromContext(ctx) {
+		// system admins and trusted callers that bypass org scoping (e.g. scheduled sweeps) read every organization's settings
+		if auth.HasCrossOrgCapabilities(ctx) {
 			return nil
 		}
 
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
-			return nil
-		}
 		// Organization list queries should not be filtered by organization id
 		// Same with OrganizationSetting queries with the Only operation
 		ctxQuery := ent.QueryFromContext(ctx)
@@ -31,13 +28,11 @@ func InterceptorOrganizationSetting() ent.Interceptor {
 			return nil
 		}
 
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+		if err != nil {
 			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing organization settings")
 			return auth.ErrNoAuthUser
 		}
-
-		orgIDs := caller.OrgIDs()
 
 		// sets the organization id on the query for the current organization
 		q.WhereP(organizationsetting.OrganizationIDIn(orgIDs...))

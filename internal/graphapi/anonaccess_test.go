@@ -3,12 +3,14 @@ package graphapi_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -189,6 +191,163 @@ func TestSubscriberAnonymousTrustCenterAccess(t *testing.T) {
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
+func TestSubscriberAnonymousTrustCenterOnlyAcceptsEmail(t *testing.T) {
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.TrustCenter
+
+	subscriberEmail := gofakeit.Email()
+	anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, subscriberEmail)
+
+	resp, err := suite.Client.API.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
+		Email:         subscriberEmail,
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
+	assert.Check(t, resp.CreateSubscriber.Subscriber.Email == subscriberEmail)
+	assert.Check(t, !resp.CreateSubscriber.Subscriber.Active)
+
+	testCases := []struct {
+		name  string
+		input testclient.CreateSubscriberInput
+	}{
+		{name: "verified email", input: testclient.CreateSubscriberInput{VerifiedEmail: lo.ToPtr(true)}},
+		{name: "verified phone", input: testclient.CreateSubscriberInput{VerifiedPhone: lo.ToPtr(true)}},
+		{name: "phone number", input: testclient.CreateSubscriberInput{PhoneNumber: lo.ToPtr("+12025550123")}},
+		{name: "tags", input: testclient.CreateSubscriberInput{Tags: []string{"injected"}}},
+		{name: "user", input: testclient.CreateSubscriberInput{UserID: &th.SharedTestUser1.ID}},
+		{name: "owner", input: testclient.CreateSubscriberInput{OwnerID: &th.SharedTestUser1.OrganizationID}},
+	}
+
+	for _, tc := range testCases {
+		t.Run("anon TC user cannot set "+tc.name, func(t *testing.T) {
+			tc.input.Email = gofakeit.Email()
+			tc.input.TrustCenterID = &trustCenter.ID
+
+			_, err := suite.Client.API.CreateSubscriber(anonCtx, tc.input)
+			assert.ErrorContains(t, err, "not authorized")
+		})
+	}
+
+	t.Run("anon TC user cannot bulk create subscribers", func(t *testing.T) {
+		_, err := suite.Client.API.CreateBulkSubscriber(anonCtx, []*testclient.CreateSubscriberInput{
+			{Email: gofakeit.Email(), TrustCenterID: &trustCenter.ID},
+		})
+		assert.ErrorContains(t, err, "not authorized")
+	})
+
+	t.Run("anon TC user cannot bulk create subscribers from csv", func(t *testing.T) {
+		_, err := suite.Client.API.CreateBulkCSVSubscriber(anonCtx, *th.UploadFile(t, "testdata/uploads/emails.csv"))
+		assert.ErrorContains(t, err, "not authorized")
+	})
+
+	t.Run("anon TC user cannot delete subscribers", func(t *testing.T) {
+		_, err := suite.Client.API.DeleteSubscriber(anonCtx, subscriberEmail, &trustCenter.OwnerID)
+		assert.ErrorContains(t, err, "not authorized")
+	})
+
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+}
+
+func TestTrustCenterNDARequestAnonymousAllowedFields(t *testing.T) {
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
+
+	anonEmail := gofakeit.Email()
+	anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, anonEmail)
+
+	resp, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         anonEmail,
+		CompanyName:   lo.ToPtr(gofakeit.Company()),
+		Reason:        lo.ToPtr("audit"),
+		TrustCenterID: &trustCenter.ID,
+		AccessLevel:   lo.ToPtr(enums.TrustCenterNDARequestAccessLevelLimited),
+	})
+	assert.NilError(t, err)
+
+	req := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
+	assert.Check(t, req.AccessLevel != nil && *req.AccessLevel == enums.TrustCenterNDARequestAccessLevelLimited)
+
+	t.Run("anon TC user gets the trust center from the JWT when omitted", func(t *testing.T) {
+		omittedEmail := gofakeit.Email()
+		omittedCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, omittedEmail)
+
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(omittedCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName: gofakeit.FirstName(),
+			LastName:  gofakeit.LastName(),
+			Email:     omittedEmail,
+		})
+		assert.NilError(t, err)
+		assert.Check(t, lo.FromPtr(resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.TrustCenterID) == trustCenter.ID)
+	})
+
+	t.Run("anon TC user cannot use another trust center", func(t *testing.T) {
+		_, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         gofakeit.Email(),
+			TrustCenterID: lo.ToPtr(ulids.New().String()),
+		})
+		assert.ErrorContains(t, err, "not authorized")
+	})
+
+	now := models.DateTime(time.Now())
+
+	testCases := []struct {
+		name  string
+		input testclient.CreateTrustCenterNDARequestInput
+	}{
+		{name: "status", input: testclient.CreateTrustCenterNDARequestInput{Status: lo.ToPtr(enums.TrustCenterNDARequestStatusRequested)}},
+		{name: "approved at", input: testclient.CreateTrustCenterNDARequestInput{ApprovedAt: &now}},
+		{name: "signed at", input: testclient.CreateTrustCenterNDARequestInput{SignedAt: &now}},
+		{name: "approved by user", input: testclient.CreateTrustCenterNDARequestInput{ApprovedByUserID: &tcOrg.Owner.ID}},
+		{name: "tags", input: testclient.CreateTrustCenterNDARequestInput{Tags: []string{"injected"}}},
+	}
+
+	for _, tc := range testCases {
+		t.Run("anon TC user cannot set "+tc.name, func(t *testing.T) {
+			tc.input.FirstName = gofakeit.FirstName()
+			tc.input.LastName = gofakeit.LastName()
+			tc.input.Email = gofakeit.Email()
+			tc.input.TrustCenterID = &trustCenter.ID
+
+			_, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, tc.input)
+			assert.ErrorContains(t, err, "not authorized")
+		})
+	}
+
+	t.Run("anon TC user cannot bulk create NDA requests", func(t *testing.T) {
+		_, err := suite.Client.API.CreateBulkTrustCenterNDARequest(anonCtx, []*testclient.CreateTrustCenterNDARequestInput{
+			{FirstName: gofakeit.FirstName(), LastName: gofakeit.LastName(), Email: gofakeit.Email(), TrustCenterID: &trustCenter.ID},
+		})
+		assert.ErrorContains(t, err, "not authorized")
+	})
+
+	t.Run("anon TC user cannot bulk create NDA requests from csv", func(t *testing.T) {
+		_, err := suite.Client.API.CreateBulkCSVTrustCenterNDARequest(anonCtx, *th.UploadFile(t, "testdata/uploads/emails.csv"))
+		assert.ErrorContains(t, err, "not authorized")
+	})
+
+	t.Run("anon TC user cannot bulk delete NDA requests", func(t *testing.T) {
+		_, err := suite.Client.API.DeleteBulkTrustCenterNDARequest(anonCtx, []string{req.ID})
+		assert.ErrorContains(t, err, "not authorized")
+
+		_, err = suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, req.ID)
+		assert.NilError(t, err)
+	})
+
+	t.Run("anon TC user cannot delete NDA requests", func(t *testing.T) {
+		_, err := suite.Client.API.DeleteTrustCenterNDARequest(anonCtx, req.ID)
+		assert.ErrorContains(t, err, "not authorized")
+
+		_, err = suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, req.ID)
+		assert.NilError(t, err)
+	})
+
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+}
+
 func TestTrustCenterNDARequestAnonymousDataIsolation(t *testing.T) {
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
@@ -272,8 +431,8 @@ func TestControlAnonymousTrustCenterAccess(t *testing.T) {
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t)
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t)
 
-	org1DBCtx := th.SetContext(tcOrg1.Owner.UserCtx, suite.Client.DB)
-	org2DBCtx := th.SetContext(tcOrg2.Owner.UserCtx, suite.Client.DB)
+	org1DBCtx := th.SetInternalContext(tcOrg1.Owner.UserCtx, suite.Client.DB)
+	org2DBCtx := th.SetInternalContext(tcOrg2.Owner.UserCtx, suite.Client.DB)
 
 	// public TC control for org1
 	tcControl1, err := suite.Client.DB.Control.Create().

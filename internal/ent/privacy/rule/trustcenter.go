@@ -28,7 +28,7 @@ func AllowIfTrustCenterEditor() privacy.MutationRule {
 			return privacy.Skipf("trust center ID not found in mutation")
 		}
 
-		return checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID, m.Op())
+		return checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID)
 	})
 }
 
@@ -98,20 +98,15 @@ func getTrustCenterIDFromMutation(ctx context.Context, m ent.Mutation) string {
 }
 
 // checkTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.
-func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID string, op ent.Op) error {
+func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID string) error {
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.IsAnonymous() {
+	if !ok || caller.IsAnonymous() {
 		return auth.ErrNoAuthUser
 	}
 
-	// org-scoped support sessions bypass the FGA relation check, but never for delete (matching
-	// CheckSubjectScope's rule that support cannot remove organizations or their objects), and only
+	// org-scoped support sessions bypass the FGA relation check, only
 	// for the trust center owned by the org the session is scoped to
 	if caller.Has(auth.CapOrgSupport) {
-		if op.Is(ent.OpDelete | ent.OpDeleteOne) {
-			return privacy.Skipf("support sessions cannot delete trust center resources")
-		}
-
 		return checkTrustCenterSupportAccess(ctx, caller, trustCenterID)
 	}
 
@@ -140,9 +135,7 @@ func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID 
 // when the trust center actually belongs to the org the session is scoped to; without this check a
 // support session for one org could edit another org's trust center just by holding CapOrgSupport
 func checkTrustCenterSupportAccess(ctx context.Context, caller *auth.Caller, trustCenterID string) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	tc, err := generated.FromContext(ctx).TrustCenter.Get(allowCtx, trustCenterID)
+	tc, err := generated.FromContext(ctx).TrustCenter.Get(ctx, trustCenterID)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return privacy.Skipf("trust center not found")
@@ -154,7 +147,7 @@ func checkTrustCenterSupportAccess(ctx context.Context, caller *auth.Caller, tru
 	if tc.OwnerID != caller.OrganizationID {
 		logx.FromContext(ctx).Info().Str("trust_center_id", trustCenterID).Str("user_id", caller.SubjectID).Msg("support attempting to access trust center outside scoped org")
 
-		return privacy.Skipf("support session not scoped to this trust center's organization")
+		return privacy.Denyf("support session not scoped to this trust center's organization")
 	}
 
 	return privacy.Allow

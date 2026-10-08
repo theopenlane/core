@@ -17,13 +17,9 @@ import (
 
 func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 	referer := ctx.Request().Referer()
-
-	// 1. create the auth allowContext with a bootstrap trust center caller
 	reqCtx := ctx.Request().Context()
-	// Allow database queries for trust center lookup without authentication
-	allowCtx := auth.WithCaller(reqCtx, auth.NewTrustCenterBootstrapCaller("").WithCapabilities(auth.CapBypassOrgFilter))
 
-	// 2. parse the URL out of the `in`
+	// validate the request
 	if referer == "" {
 		return h.BadRequest(ctx, ErrMissingReferer)
 	}
@@ -46,11 +42,13 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
+	// setup allow context to run queries on behalf of the anon user
+	allowCtx := auth.WithCaller(reqCtx, auth.NewAnonBootstrapCallerOrgBypass())
+
 	var trustCenter *generated.TrustCenter
 
-	// 3. check if the URL is the "default trust center domain"
 	if normalizedHost == normalizedDefaultDomain {
-		// 4. if we have the default trust center domain, then we require the PATH of the url to be the "slug"
+		// if we have the default trust center domain, then we require the PATH of the url to be the "slug"
 		pathSegments := strings.Split(strings.Trim(parsedURL.Path, "/"), "/")
 		if len(pathSegments) == 0 || pathSegments[0] == "" {
 			return h.BadRequest(ctx, ErrMissingSlugInPath)
@@ -58,7 +56,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 
 		slug := pathSegments[0]
 
-		// 4a. query the database for trust centers with the slug and the default hostname
+		//  query the database for trust centers with the slug and the default hostname
 		trustCenter, err = h.DBClient.TrustCenter.Query().
 			Where(trustcenter.SlugEQ(slug)).
 			Only(allowCtx)
@@ -72,8 +70,8 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	} else {
-		// 5. if not default trust center, all we care about is the hostname.
-		// 5a. query the database for trust centers with the hostname
+		// if not default trust center, all we care about is the hostname.
+		// query the database for trust centers with the hostname
 		domainPredicate := customdomain.Or(
 			customdomain.CnameRecordEqualFold(normalizedHost),
 			customdomain.CnameRecordEqualFold(normalizedHost+"."),

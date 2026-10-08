@@ -165,13 +165,12 @@ func buildObjectURI(file *storagetypes.File, entFile *ent.File) string {
 // validateTokenAuthorization checks if the token's user ID matches the authenticated user in the request context
 func validateTokenAuthorization(requestCtx context.Context, downloadToken *tokens.DownloadToken) error {
 	if !ulids.IsZero(downloadToken.UserID) {
-		caller, ok := auth.CallerFromContext(requestCtx)
-		if !ok || caller == nil {
+		subjectID, err := auth.GetSubjectIDFromContext(requestCtx)
+		if err != nil {
 			return ErrUnauthorized
 		}
 
-		userULID, err := ulid.Parse(caller.SubjectID)
-		if err != nil || userULID != downloadToken.UserID {
+		if subjectID != downloadToken.UserID.String() {
 			return ErrUnauthorized
 		}
 	}

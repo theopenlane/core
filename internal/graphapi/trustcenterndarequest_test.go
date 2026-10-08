@@ -511,14 +511,15 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 		assert.Check(t, docResp.TrustCenterDoc.OriginalFile != nil)
 	})
 
-	rejectedAnonStatuses := []enums.TrustCenterNDARequestStatus{
+	anonStatuses := []enums.TrustCenterNDARequestStatus{
+		enums.TrustCenterNDARequestStatusRequested,
 		enums.TrustCenterNDARequestStatusSigned,
 		enums.TrustCenterNDARequestStatusApproved,
 		enums.TrustCenterNDARequestStatusNeedsApproval,
 		enums.TrustCenterNDARequestStatusDeclined,
 	}
 
-	for _, status := range rejectedAnonStatuses {
+	for _, status := range anonStatuses {
 		t.Run("anonymous caller cannot set status "+status.String(), func(t *testing.T) {
 			anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
 
@@ -529,11 +530,11 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 				TrustCenterID: &trustCenter.ID,
 				Status:        lo.ToPtr(status),
 			})
-			assert.ErrorContains(t, err, "status not allowed to be set")
+			assert.ErrorContains(t, err, "not authorized")
 		})
 	}
 
-	t.Run("anonymous caller can set the default requested status", func(t *testing.T) {
+	t.Run("anonymous caller gets the default requested status", func(t *testing.T) {
 		anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
 
 		resp, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
@@ -541,7 +542,6 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 			LastName:      gofakeit.LastName(),
 			Email:         gofakeit.Email(),
 			TrustCenterID: &trustCenter.ID,
-			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusRequested),
 		})
 		assert.NilError(t, err)
 

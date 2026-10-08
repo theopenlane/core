@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -1308,7 +1307,7 @@ func TestManagedGroupMembership_AdminGroup(t *testing.T) {
 	t.Parallel()
 
 	users := suite.SeedFreshOrgUsers(t)
-	ctx := privacy.DecisionContext(users.Owner.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(users.Owner.UserCtx)
 
 	groupID, err := suite.Client.DB.Group.Query().
 		Where(

@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/export"
@@ -63,10 +64,29 @@ func Listeners() []gala.Registration {
 
 	return append(regs,
 		entityops.MutationListener{
-			Concern: entityops.MutationConcernNotification,
-			Schema:  entityops.SchemaTask,
-			Fields:  []string{task.FieldAssigneeID},
-			Caller:  notificationCaller,
+			Concern:    entityops.MutationConcernNotification,
+			Schema:     entityops.SchemaTask,
+			Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
+			Fields:     []string{task.FieldAssigneeID},
+			// only trigger notification if assignee changes
+			Match: []entityops.FieldMatch{
+				{
+					Field:  task.FieldAssigneeID,
+					In:     []string{""},
+					Negate: true,
+				},
+			},
+			RowMatch: []entityops.FieldMatch{
+				{
+					Field: task.FieldStatus,
+					In: []string{
+						string(enums.TaskStatusOpen),
+						string(enums.TaskStatusInProgress),
+						string(enums.TaskStatusInReview),
+					},
+				},
+			},
+			Caller: notificationCaller,
 			Notify: &entityops.NotifySpec{
 				Recipients: entityops.RecipientsFromField(task.FieldAssigneeID),
 				Content: entityops.NotificationContent{

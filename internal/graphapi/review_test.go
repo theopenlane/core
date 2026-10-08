@@ -39,7 +39,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 			expectFields: true,
 			setup: func(t *testing.T) ([]string, []string) {
 				entity := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-				ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+				ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 				err := suite.Client.DB.Entity.UpdateOneID(entity.ID).
 					SetReviewFrequency(frequency).
 					Exec(ctx)
@@ -313,7 +313,7 @@ func TestCreateReview(t *testing.T) {
 			}
 
 			if len(tc.reviewInput.ProgramIDs) > 0 {
-				ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+				ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 				entReview, err := suite.Client.DB.Review.Get(ctx, review.ID)
 				assert.NilError(t, err)
 
@@ -335,7 +335,7 @@ func TestCreateReview(t *testing.T) {
 			}
 
 			if len(tc.reviewInput.ControlIDs) > 0 {
-				ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+				ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 				entReview, err := suite.Client.DB.Review.Get(ctx, review.ID)
 				assert.NilError(t, err)
 

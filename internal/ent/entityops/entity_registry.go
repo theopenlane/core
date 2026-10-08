@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -221,6 +222,9 @@ type Schema struct {
 	// Fields is the unified field catalog for this schema, consumed by the workflow builder and the
 	// integration cross-link config; workflow-eligible and match-key views are filtered from it
 	Fields []FieldDescriptor
+	// AnonymousInputFields are the graphql input field names anonymous callers may set in create and update mutations,
+	// declared via entx.AnonymousField; empty when anonymous callers may not set any field
+	AnonymousInputFields []string
 	// Edges lists every edge to an entityops schema (and workflow group edges) for this schema
 	Edges []EdgeDescriptor
 	// TaskRules are schema-level (unconditional) suggested-task rules declared via entx.SchemaTaskRule
@@ -1651,6 +1655,29 @@ var (
 
 			return nil
 		},
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "assessment", Operation: refOpQuery}
+
+			entities, err := client.Assessment.Query().
+				Where(ownerScopeAssessment(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "assessment", Operation: refOpLoad, EntityID: entityID}
 
@@ -1673,6 +1700,53 @@ var (
 			}
 
 			return entity, nil
+		},
+	}
+	SchemaAssessmentPolicy = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "AssessmentPolicy",
+			Snake: "assessment_policy",
+			Lower: "assessmentpolicy",
+		},
+		ProjectionType: reflect.TypeFor[AssessmentPolicyProjection](),
+		OwnerField:     assessmentpolicy.FieldOwnerID,
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "assessment_policy", Operation: refOpQuery}
+
+			entities, err := client.AssessmentPolicy.Query().
+				Where(assessmentpolicy.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "assessment_policy", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.AssessmentPolicy.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
 		},
 	}
 	SchemaAssessmentResponse = &Schema{
@@ -4869,8 +4943,9 @@ var (
 			Snake: "subscriber",
 			Lower: "subscriber",
 		},
-		ProjectionType: reflect.TypeFor[SubscriberProjection](),
-		OwnerField:     subscriber.FieldOwnerID,
+		ProjectionType:       reflect.TypeFor[SubscriberProjection](),
+		AnonymousInputFields: []string{"trustCenterID", "email"},
+		OwnerField:           subscriber.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "subscriber", Operation: refOpQuery}
 
@@ -5105,7 +5180,8 @@ var (
 			Snake: "trust_center",
 			Lower: "trustcenter",
 		},
-		OwnerField: trustcenter.FieldOwnerID,
+		ConsoleRoute: &ConsoleRoute{Base: "trust-center"},
+		OwnerField:   trustcenter.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center", Operation: refOpLoad, EntityID: entityID}
 
@@ -5216,7 +5292,8 @@ var (
 			Snake: "trust_center_nda_request",
 			Lower: "trustcenterndarequest",
 		},
-		ConsoleRoute: &ConsoleRoute{Base: "trust-center/NDAs"},
+		AnonymousInputFields: []string{"trustCenterID", "firstName", "lastName", "email", "companyName", "reason", "accessLevel"},
+		ConsoleRoute:         &ConsoleRoute{Base: "trust-center/NDAs"},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_nda_request", Operation: refOpLoad, EntityID: entityID}
 
@@ -5829,6 +5906,17 @@ func init() {
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
+	}
+	SchemaAssessmentPolicy.Fields = []FieldDescriptor{
+		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "internal_policy_id", Label: "InternalPolicyID", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "policy_revision", Label: "PolicyRevision", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaAssessmentResponse.Fields = []FieldDescriptor{
 		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true},
@@ -8669,6 +8757,39 @@ func init() {
 			AddField:    "add_identity_holder_ids",
 		},
 		{
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internal_policy_ids",
+			Through:     true,
+			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.AssessmentPolicy.Query().
+					Where(assessmentpolicy.AssessmentID(sourceID), assessmentpolicy.InternalPolicyIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.InternalPolicyID] = struct{}{}
+				}
+
+				for _, targetID := range targetIDs {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.AssessmentPolicy.Create().SetAssessmentID(sourceID).SetInternalPolicyID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
+						return err
+					}
+				}
+
+				return nil
+			},
+		},
+		{
 			Name:        "owner",
 			Label:       "Owner",
 			Target:      SchemaOrganization,
@@ -8684,6 +8805,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+		},
+		{
+			Name:        "policy_attestations",
+			Label:       "PolicyAttestations",
+			Target:      SchemaAssessmentPolicy,
+			TargetType:  "AssessmentPolicy",
+			CreateField: "policy_attestation_ids",
+			AddField:    "add_policy_attestation_ids",
 		},
 		{
 			Name:        "template",
@@ -8709,6 +8838,35 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+		},
+	}
+	SchemaAssessmentPolicy.Edges = []EdgeDescriptor{
+		{
+			Name:        "assessment",
+			Label:       "Assessment",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			Unique:      true,
+			CreateField: "assessment_id",
+			Field:       "assessment_id",
+		},
+		{
+			Name:        "internal_policy",
+			Label:       "InternalPolicy",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			Unique:      true,
+			CreateField: "internal_policy_id",
+			Field:       "internal_policy_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 	}
 	SchemaAssessmentResponse.Edges = []EdgeDescriptor{
@@ -12971,6 +13129,39 @@ func init() {
 			WorkflowEligible: true,
 		},
 		{
+			Name:        "assessments",
+			Label:       "Assessments",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			CreateField: "assessment_ids",
+			Through:     true,
+			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.AssessmentPolicy.Query().
+					Where(assessmentpolicy.InternalPolicyID(sourceID), assessmentpolicy.AssessmentIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.AssessmentID] = struct{}{}
+				}
+
+				for _, targetID := range targetIDs {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.AssessmentPolicy.Create().SetInternalPolicyID(sourceID).SetAssessmentID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
+						return err
+					}
+				}
+
+				return nil
+			},
+		},
+		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
@@ -13122,6 +13313,14 @@ func init() {
 			Unique:      true,
 			CreateField: "owner_id",
 			Field:       "owner_id",
+		},
+		{
+			Name:        "policy_attestations",
+			Label:       "PolicyAttestations",
+			Target:      SchemaAssessmentPolicy,
+			TargetType:  "AssessmentPolicy",
+			CreateField: "policy_attestation_ids",
+			AddField:    "add_policy_attestation_ids",
 		},
 		{
 			Name:        "procedures",
@@ -13795,6 +13994,22 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "assessment_creator_ids",
 			AddField:    "add_assessment_creator_ids",
+		},
+		{
+			Name:        "assessment_policies",
+			Label:       "AssessmentPolicies",
+			Target:      SchemaAssessmentPolicy,
+			TargetType:  "AssessmentPolicy",
+			CreateField: "assessment_policy_ids",
+			AddField:    "add_assessment_policy_ids",
+		},
+		{
+			Name:        "assessment_policy_creators",
+			Label:       "AssessmentPolicyCreators",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "assessment_policy_creator_ids",
+			AddField:    "add_assessment_policy_creator_ids",
 		},
 		{
 			Name:        "assessment_responses",
@@ -19487,6 +19702,62 @@ func init() {
 
 		return results, nil
 	}
+	SchemaAssessment.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "assessment", Operation: refOpQuery}
+
+		if !SchemaAssessment.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "assessment"))
+		}
+
+		entities, err := client.Assessment.Query().
+			Where(ownerScopeAssessment(orgID)).
+			Where(predicate.Assessment(matchKeyIn(SchemaAssessment, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaAssessmentPolicy.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "assessment_policy", Operation: refOpQuery}
+
+		if !SchemaAssessmentPolicy.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "assessment_policy"))
+		}
+
+		entities, err := client.AssessmentPolicy.Query().
+			Where(assessmentpolicy.OwnerID(orgID)).
+			Where(predicate.AssessmentPolicy(matchKeyIn(SchemaAssessmentPolicy, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
 	SchemaAssessmentResponse.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "assessment_response", Operation: refOpQuery}
 
@@ -22817,6 +23088,15 @@ func ownerScopeActionPlan(ownerID string) predicate.ActionPlan {
 	return actionplan.OwnerID(ownerID)
 }
 
+// ownerScopeAssessment scopes a assessment query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeAssessment(ownerID string) predicate.Assessment {
+	if ownerID == "" {
+		return assessment.SystemOwned(true)
+	}
+
+	return assessment.OwnerID(ownerID)
+}
+
 // ownerScopeAsset scopes a asset query to one organization, or to system-owned rows when ownerID is empty
 func ownerScopeAsset(ownerID string) predicate.Asset {
 	if ownerID == "" {
@@ -23049,6 +23329,7 @@ var allSchemas = []*Schema{
 	SchemaAPIToken,
 	SchemaActionPlan,
 	SchemaAssessment,
+	SchemaAssessmentPolicy,
 	SchemaAssessmentResponse,
 	SchemaAsset,
 	SchemaCampaign,

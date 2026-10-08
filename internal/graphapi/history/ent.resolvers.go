@@ -99,6 +99,38 @@ func (r *queryResolver) AssessmentHistories(ctx context.Context, after *entgql.C
 	return res, err
 }
 
+// AssessmentPolicyHistories is the resolver for the assessmentPolicyHistories field.
+func (r *queryResolver) AssessmentPolicyHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentPolicyHistoryOrder, where *historygenerated.AssessmentPolicyHistoryWhereInput) (*historygenerated.AssessmentPolicyHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.AssessmentPolicyHistoryOrder{
+			Field:     historygenerated.AssessmentPolicyHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AssessmentPolicyHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "assessmentpolicyhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithAssessmentPolicyHistoryOrder(orderBy),
+		historygenerated.WithAssessmentPolicyHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "assessmentpolicyhistory"})
+	}
+
+	return res, err
+}
+
 // AssessmentResponseHistories is the resolver for the assessmentResponseHistories field.
 func (r *queryResolver) AssessmentResponseHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentResponseHistoryOrder, where *historygenerated.AssessmentResponseHistoryWhereInput) (*historygenerated.AssessmentResponseHistoryConnection, error) {
 	// set page limit if nothing was set

@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
@@ -93,6 +94,11 @@ var assessmenthistoryImplementors = []string{"AssessmentHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*AssessmentHistory) IsNode() {}
+
+var assessmentpolicyhistoryImplementors = []string{"AssessmentPolicyHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AssessmentPolicyHistory) IsNode() {}
 
 var assessmentresponsehistoryImplementors = []string{"AssessmentResponseHistory", "Node"}
 
@@ -486,6 +492,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(assessmenthistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assessmenthistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case assessmentpolicyhistory.Table:
+		query := c.AssessmentPolicyHistory.Query().
+			Where(assessmentpolicyhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assessmentpolicyhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1159,6 +1174,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.AssessmentHistory.Query().
 			Where(assessmenthistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, assessmenthistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case assessmentpolicyhistory.Table:
+		query := c.AssessmentPolicyHistory.Query().
+			Where(assessmentpolicyhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, assessmentpolicyhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

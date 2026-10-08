@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
@@ -156,7 +155,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 
 			slaCount, err := suite.Client.DB.SLADefinition.Query().
 				Where(sladefinition.OwnerID(*resp.CreateOnboarding.Onboarding.OrganizationID)).
-				Count(privacy.DecisionContext(tc.ctx, privacy.Allow))
+				Count(auth.WithInternalOperationContext(tc.ctx))
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal(4, slaCount))
 
@@ -167,7 +166,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			programs, err := suite.Client.DB.Program.Query().
 				Where(program.OwnerID(orgID)).
 				WithControls().
-				All(th.SetContext(tc.ctx, suite.Client.DB))
+				All(th.SetInternalContext(tc.ctx, suite.Client.DB))
 			assert.NilError(t, err)
 			assert.Assert(t, is.Len(programs, tc.expectedPrograms))
 

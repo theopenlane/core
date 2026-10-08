@@ -8,9 +8,7 @@ type WebauthnCreationContextKey struct {
 }
 
 func NewContextWithWebauthnCreationContextKey(parent context.Context) context.Context {
-	ctx := webauthnCreationContextKey.Set(parent, &WebauthnCreationContextKey{})
-
-	return withTokenContextBypassCaller(ctx)
+	return webauthnCreationContextKey.Set(parent, &WebauthnCreationContextKey{})
 }
 
 func WebauthnCreationContextKeyFromContext(ctx context.Context) *WebauthnCreationContextKey {

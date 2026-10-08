@@ -631,9 +631,7 @@ func TestDeleteSubscriber(t *testing.T) {
 	(&th.Cleanup[*generated.SubscriberDeleteOne]{Client: suite.Client.DB.Subscriber, ID: subscriberOtherOrg.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 }
 
-
 func TestMutationCreateSubscriber_Active(t *testing.T) {
-
 	email := gofakeit.Email()
 	email2 := gofakeit.Email()
 
@@ -682,7 +680,7 @@ func TestMutationCreateSubscriber_Active(t *testing.T) {
 			resp, err := tc.client.CreateSubscriber(tc.ctx, tc.request)
 
 			if tc.wantErr {
-				assert.Check(t, err != nil)
+				assert.Assert(t, is.Nil(resp))
 				return
 			}
 

@@ -22,17 +22,15 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	tfaCaller, tfaOk := auth.CallerFromContext(reqCtx)
-	if !tfaOk || tfaCaller == nil || tfaCaller.SubjectID == "" {
+	subjectID, err := auth.GetSubjectIDFromContext(reqCtx)
+	if err != nil {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
-	userID := tfaCaller.SubjectID
-
 	// get user from database by subject
-	user, err := h.getUserTFASettings(reqCtx, userID)
+	user, err := h.getUserTFASettings(reqCtx, subjectID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user")
 
@@ -69,7 +67,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 	}
 
 	totpUser := totp.User{
-		ID:            userID,
+		ID:            subjectID,
 		TFASecret:     *tfasetting.TfaSecret,
 		IsTOTPAllowed: tfasetting.TotpAllowed,
 		Email:         sql.NullString{String: user.Email, Valid: true},

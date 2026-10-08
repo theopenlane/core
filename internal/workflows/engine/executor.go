@@ -90,8 +90,8 @@ type gatedActionConfig struct {
 
 // resolveTargetUsers resolves target user IDs and logs warnings if no users are found
 func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkflows.TargetConfig, obj *wfworkflows.Object, actionType string, actionKey string) ([]string, error) {
-	allowCtx := wfworkflows.AllowContext(ctx)
-	userIDs, err := e.ResolveTargets(allowCtx, target, obj)
+	readCtx := auth.WithInternalReadContext(ctx)
+	userIDs, err := e.ResolveTargets(readCtx, target, obj)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 
 // executeGatedAction creates workflow assignments for approval and review actions
 func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object, cfg gatedActionConfig) error {
-	allowCtx := wfworkflows.AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	if len(cfg.Targets) == 0 {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, action.Type, observability.ActionFields(action.Key, nil), nil)
@@ -122,12 +122,12 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 
 	ownerID := instance.OwnerID
 	if ownerID == "" {
-		caller, callerOk := auth.CallerFromContext(ctx)
-		if !callerOk || caller == nil || caller.OrganizationID == "" {
+		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+		if err != nil {
 			return auth.ErrNoAuthUser
 		}
 
-		ownerID = caller.OrganizationID
+		ownerID = orgID
 	}
 
 	actionIndex := actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key)
@@ -410,7 +410,7 @@ func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, obj 
 				builder.SetTopic(enums.NotificationTopic(topic))
 			}
 
-			if err := builder.Exec(wfworkflows.AllowContext(ctx)); err != nil {
+			if err := builder.Exec(auth.WithInternalOperationContext(ctx)); err != nil {
 				return nil, fmt.Errorf("%w: %w", ErrNotificationCreationFailed, err)
 			}
 		}
@@ -449,14 +449,14 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 	_, basePayload := wfworkflows.BuildWorkflowActionContext(instance, obj, action.Key)
 
 	// Resolve user IDs to display names for human-readable webhook payloads
-	allowCtx := wfworkflows.AllowContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 	// Get initiator from the object that triggered the workflow (not the service that created the instance)
 	initiatorID := wfworkflows.GetObjectUpdatedBy(obj)
 	if initiatorID == "" {
 		initiatorID = instance.CreatedBy
 	}
-	initiatorName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, initiatorID)
-	approverName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, instance.UpdatedBy)
+	initiatorName := wfworkflows.ResolveUserDisplayName(readCtx, e.client, initiatorID)
+	approverName := wfworkflows.ResolveUserDisplayName(readCtx, e.client, instance.UpdatedBy)
 
 	basePayload["approved_by"] = approverName
 	basePayload["initiator"] = initiatorName
@@ -464,7 +464,7 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 
 	// Enrich with object-specific details from canonical schema annotations.
 	// This adds fields like ref_code, title, name, status based on schema annotations.
-	if err := wfworkflows.EnrichWorkflowPayload(allowCtx, e.client, obj.Type, obj.ID, basePayload); err != nil {
+	if err := wfworkflows.EnrichWorkflowPayload(readCtx, e.client, obj.Type, obj.ID, basePayload); err != nil {
 		return fmt.Errorf("%w: %w", ErrFailedToEnrichWebhookPayload, err)
 	}
 

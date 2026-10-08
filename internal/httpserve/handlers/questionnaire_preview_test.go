@@ -16,7 +16,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
@@ -25,7 +24,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
 	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(ec)
 
 	jsonConfig := map[string]any{
 		"title": "Preview vs Real Template",
@@ -53,14 +52,14 @@ func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
 	testEmail := "preview-vs-real@example.com"
 
 	anonUser := auth.NewQuestionnaireCaller(testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", assessment.ID), "", testEmail)
-	questionnaireCtx := auth.WithCaller(ctx, anonUser)
+	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, anonUser))
 	questionnaireCtx = auth.ActiveAssessmentIDKey.Set(questionnaireCtx, assessment.ID)
 
-	allowCtx := auth.WithCaller(ctx, anonUser)
-	allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessment.ID)
+	internalCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, anonUser))
+	internalCtx = auth.ActiveAssessmentIDKey.Set(internalCtx, assessment.ID)
 
-	realResponse := suite.createResponseWithData(questionnaireCtx, allowCtx, assessment.ID, testEmail, template.ID, false, "real answer")
-	testResponse := suite.createResponseWithData(questionnaireCtx, allowCtx, assessment.ID, testEmail, template.ID, true, "test answer")
+	realResponse := suite.createResponseWithData(questionnaireCtx, internalCtx, assessment.ID, testEmail, template.ID, false, "real answer")
+	testResponse := suite.createResponseWithData(questionnaireCtx, internalCtx, assessment.ID, testEmail, template.ID, true, "test answer")
 
 	testCases := []struct {
 		name     string
@@ -111,7 +110,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
 }
 
 // createResponseWithData creates an assessment response (test or real) and attaches document data
-func (suite *HandlerTestSuite) createResponseWithData(createCtx, allowCtx context.Context, assessmentID, email, templateID string, isTest bool, marker string) string {
+func (suite *HandlerTestSuite) createResponseWithData(createCtx, internalCtx context.Context, assessmentID, email, templateID string, isTest bool, marker string) string {
 	t := suite.T()
 
 	create := suite.db.AssessmentResponse.Create().
@@ -130,12 +129,12 @@ func (suite *HandlerTestSuite) createResponseWithData(createCtx, allowCtx contex
 		SetTemplateID(templateID).
 		SetOwnerID(testUser1.OrganizationID).
 		SetData(map[string]any{"q1": marker}).
-		Save(allowCtx)
+		Save(internalCtx)
 	assert.NilError(t, err)
 
 	_, err = suite.db.AssessmentResponse.UpdateOneID(response.ID).
 		SetDocumentDataID(documentData.ID).
-		Save(allowCtx)
+		Save(internalCtx)
 	assert.NilError(t, err)
 
 	return response.ID

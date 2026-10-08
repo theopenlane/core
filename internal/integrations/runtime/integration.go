@@ -9,7 +9,6 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -99,9 +98,8 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 
 	if len(vendorIDs) > 0 {
 		// update the integration edges
-		ctxAllow := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := r.DB().Entity.Update().Where(entity.IDIn(vendorIDs...)).AddIntegrationIDs(
-			integrationID).Exec(ctxAllow); err != nil {
+			integrationID).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Info().Err(err).Msg("error update vendor edges to integration")
 		}
 

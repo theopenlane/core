@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 // HookWorkflowAssignmentDecisionAuth ensures only assignment targets can approve/reject.
@@ -24,11 +23,7 @@ func HookWorkflowAssignmentDecisionAuth() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if rule.IsInternalRequest(ctx) {
-				return next.Mutate(ctx, m)
-			}
-
-			if _, allow := privacy.DecisionFromContext(ctx); allow {
+			if auth.IsInternalRequest(ctx) {
 				return next.Mutate(ctx, m)
 			}
 

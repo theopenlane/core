@@ -248,7 +248,6 @@ func (c Control) Policy() ent.Policy {
 			// when an admin deletes a standard, we updated
 			// controls to unlink the standard that might belong to an organization
 			rule.AllowMutationIfSystemAdmin(),
-			rule.AllowIfContextAllowRule(),
 			policy.CanCreateObjectsUnderParents([]string{
 				Program{}.PluralName(),
 			}),

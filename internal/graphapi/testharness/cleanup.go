@@ -16,13 +16,13 @@ import (
 func CleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {
 	t.Helper()
 
-	caller, _ := auth.CallerFromContext(ctx)
-	if caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		FailNow(t)
 	}
 
-	ctx = entityops.WithEmissionVetoed(SetContext(ctx, Suite.Client.DB))
+	ctx = entityops.WithEmissionVetoed(SetInternalContext(ctx, Suite.Client.DB))
 
-	err := Suite.Client.DB.Organization.DeleteOneID(caller.OrganizationID).Exec(ctx)
+	err = Suite.Client.DB.Organization.DeleteOneID(orgID).Exec(ctx)
 	RequireNoError(t, err)
 }

@@ -10,11 +10,11 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // RecurringCampaignSweep configures one recurring campaign sweep cycle
@@ -38,7 +38,7 @@ func (r RecurringCampaignSweep) Handle() types.OperationHandler {
 func (RecurringCampaignSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
 	db := req.DB
 	now := time.Now()
-	systemCtx := systemSweepContext(ctx)
+	systemCtx := auth.WithSystemSweepContext(ctx)
 
 	campaigns, err := db.Campaign.Query().
 		Where(dueCampaignPredicates(now)...).
@@ -150,7 +150,7 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		update.SetNextRunAt(models.DateTime(nextRun))
 	}
 
-	if err := update.Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
+	if err := update.Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed updating recurring campaign schedule")
 
 		return err

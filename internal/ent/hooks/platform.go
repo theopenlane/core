@@ -8,9 +8,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/iam/auth"
 )
 
 var platformFileKeys = []string{"architectureDiagrams", "dataFlowDiagrams", "trustBoundaryDiagrams"}
@@ -26,7 +26,7 @@ func HookPlatformFiles() ent.Hook {
 
 			// permissions to the files are not added until after the mutation is processed
 			// allow the category to be updated
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalOperationContext(ctx)
 			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
 				var err error
@@ -49,7 +49,7 @@ func HookPlatformFiles() ent.Hook {
 
 						err := m.Client().File.Update().
 							Where(file.IDIn(archFiles...)).
-							Exec(allowCtx)
+							Exec(internalCtx)
 
 						if err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for architecture diagram files")
@@ -66,7 +66,7 @@ func HookPlatformFiles() ent.Hook {
 
 						err := m.Client().File.Update().
 							Where(file.IDIn(dataFlowFiles...)).
-							Exec(allowCtx)
+							Exec(internalCtx)
 						if err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for data flow diagram files")
 							return nil, err
@@ -82,7 +82,7 @@ func HookPlatformFiles() ent.Hook {
 
 						err := m.Client().File.Update().
 							Where(file.IDIn(trustBoundaryFiles...)).
-							Exec(allowCtx)
+							Exec(internalCtx)
 						if err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for trust boundary diagram files")
 							return nil, err

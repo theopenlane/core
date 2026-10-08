@@ -30,7 +30,6 @@ import (
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/entdb"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -38,6 +37,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/httpserve/route"
 	"github.com/theopenlane/core/v2/internal/httpserve/server"
+	"github.com/theopenlane/iam/auth"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
@@ -229,7 +229,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		PreviewZoneID: previewMappableDomainZoneIDTest,
 	})
 
-	previewDomainCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	previewDomainCtx := auth.WithInternalOperationContext(context.Background())
 	_, err = suite.galaDB.MappableDomain.Create().
 		SetName(cnameTargetTest).
 		SetZoneID(previewMappableDomainZoneIDTest).
@@ -254,6 +254,9 @@ func (suite *HandlerTestSuite) SetupSuite() {
 			configTestDefinitionBuilder(configTestProviderID, false),
 			configTestDefinitionBuilder(configTestFailHealthProviderID, true),
 			configTestDefinitionBuilder("def_01K0TESTOTH00000000000001", false),
+			configTestFamilyDefinitionBuilder(configTestVendorProviderID, configTestVendorFamily),
+			configTestProbeDefinitionBuilder(configTestProbeProviderID, nil),
+			configTestProbeDefinitionBuilder(configTestProbeFailProviderID, errConfigTestProbeFailed),
 			definitionscim.Builder(),
 			webhookTestDefinitionBuilder(webhookTestDefinitionID),
 			githubTestDefinitionBuilder(disconnectTestDefinitionID),

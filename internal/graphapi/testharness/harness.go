@@ -42,6 +42,7 @@ import (
 	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/httpserve/config"
+	cloudflaredef "github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	systemdef "github.com/theopenlane/core/v2/internal/integrations/definitions/system"
@@ -93,6 +94,7 @@ type GraphTestSuite struct {
 	IntegrationsRT     *intruntime.Runtime
 	WorkflowEngine     *engine.WorkflowEngine
 	SlackMock          *slackdef.MockSlackRuntime
+	CloudflareMock     *cloudflaredef.MockCloudflareRuntime
 }
 
 // Client contains all the clients the test need to interact with
@@ -324,6 +326,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	RequireNoError(t, err)
 
 	suite.SlackMock = slackdef.NewMockSlackRuntime()
+	suite.CloudflareMock = cloudflaredef.NewMockCloudflareRuntime()
 
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,
@@ -333,6 +336,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 			suite.SlackMock.Builder(),
+			suite.CloudflareMock.Builder(),
 			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
 			testint.Builder(),
 			testint.MockHTTPBuilder(),
@@ -366,6 +370,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	if suite.SlackMock != nil {
 		suite.SlackMock.Close()
+	}
+
+	if suite.CloudflareMock != nil {
+		suite.CloudflareMock.Close()
 	}
 
 	if suite.GalaRuntime != nil {

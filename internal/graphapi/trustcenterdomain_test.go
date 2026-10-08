@@ -46,7 +46,7 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal("trust.example.com", resp.CreateTrustCenterDomain.CustomDomain.CnameRecord))
-		previewMappableDomain, err := suite.Client.DB.MappableDomain.Get(th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB), resp.CreateTrustCenterDomain.CustomDomain.MappableDomainID)
+		previewMappableDomain, err := suite.Client.DB.MappableDomain.Get(th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB), resp.CreateTrustCenterDomain.CustomDomain.MappableDomainID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(testutils.TrustCenterCnameTarget, previewMappableDomain.Name))
 		assert.Check(t, is.Equal(mappableDomain.ID, previewMappableDomain.ID))
@@ -131,7 +131,7 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 		existingDomain := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain.ID}).MustNew(testUserDomainExists.UserCtx, t)
 
 		// Update trust center to have the custom domain using proper context
-		ctx := th.SetContext(testUserDomainExists.UserCtx, suite.Client.DB)
+		ctx := th.SetInternalContext(testUserDomainExists.UserCtx, suite.Client.DB)
 		_, err := suite.Client.DB.TrustCenter.UpdateOneID(trustCenter4.ID).SetCustomDomainID(existingDomain.ID).Save(ctx)
 		assert.NilError(t, err)
 

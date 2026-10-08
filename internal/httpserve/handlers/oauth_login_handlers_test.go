@@ -14,8 +14,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -29,7 +29,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	baseCtx := privacy.DecisionContext(ec, privacy.Allow)
+	baseCtx := auth.WithInternalOperationContext(ec)
 	baseCtx = ent.NewContext(baseCtx, suite.db)
 
 	// Seed an existing user for tests that require update paths.

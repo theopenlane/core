@@ -16,7 +16,6 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -557,9 +556,7 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 		return nil
 	}
 
-	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
+	systemCtx := auth.WithSystemSweepContext(ctx)
 
 	installations, err := r.DB().Integration.Query().
 		Where(
@@ -587,7 +584,7 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 // SeedReconcileJobsForInstallation checks every reconcilable operation on the given
 // installation and emits a ReconcileEnvelope for any that do not have an active River job
 func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
-	return r.seedReconcileJobsForInstallation(privacy.DecisionContext(ctx, privacy.Allow), inst)
+	return r.seedReconcileJobsForInstallation(ctx, inst)
 }
 
 // seedReconcileJobsForInstallation is the shared implementation used by both
@@ -663,7 +660,7 @@ func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bo
 			),
 			orgsubscription.StripeSubscriptionStatusNEQ(string(stripe.SubscriptionStatusCanceled)),
 		).
-		Exist(privacy.DecisionContext(ctx, privacy.Allow))
+		Exist(ctx)
 }
 
 // reconcilableDefinitionIDs returns the IDs of all registered definitions that

@@ -29,7 +29,7 @@ func TestWorkflowGraphQLUserApproval(t *testing.T) {
 	// Add approver to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
 
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine := ensureWorkflowEngine(t)
 
@@ -192,7 +192,7 @@ func TestWorkflowGraphQLUpdateControlRespectsPermissions(t *testing.T) {
 
 	ensureWorkflowEngine(t)
 
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	required := true
 	params := workflows.ApprovalActionParams{
@@ -241,7 +241,7 @@ func TestWorkflowGraphQLUpdateControlRespectsPermissions(t *testing.T) {
 	})
 	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 
-	dbCtx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 	reloaded, err := suite.Client.DB.Control.Get(dbCtx, control.ID)
 	assert.NilError(t, err)
 	assert.Check(t, reloaded.Description == "")
@@ -260,7 +260,7 @@ func TestWorkflowGraphQLGroupApproval(t *testing.T) {
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver2, enums.RoleAdmin, initiator.OrganizationID)
 
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	// Create a group with both approvers
 	group, err := suite.Client.DB.Group.Create().
@@ -437,7 +437,7 @@ func TestWorkflowGraphQLMultiStepApproval(t *testing.T) {
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver2, enums.RoleAdmin, initiator.OrganizationID)
 
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine := ensureWorkflowEngine(t)
 
@@ -628,7 +628,7 @@ func TestWorkflowGraphQLMyAssignments(t *testing.T) {
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver2, enums.RoleAdmin, initiator.OrganizationID)
 
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine := ensureWorkflowEngine(t)
 
@@ -748,7 +748,7 @@ func TestWorkflowGraphQLApprovalAuthorization(t *testing.T) {
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
 	suite.AddUserToOrganization(initiator.UserCtx, t, &unauthorizedUser, enums.RoleAdmin, initiator.OrganizationID)
 
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine := ensureWorkflowEngine(t)
 
@@ -1000,7 +1000,7 @@ func TestWorkflowGraphQLGroupApprovalAuthorization(t *testing.T) {
 	suite.AddUserToOrganization(initiator.UserCtx, t, &groupMember, enums.RoleAdmin, initiator.OrganizationID)
 	suite.AddUserToOrganization(initiator.UserCtx, t, &nonGroupMember, enums.RoleAdmin, initiator.OrganizationID)
 
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	// Create a group with only groupMember
 	approvalGroup, err := suite.Client.DB.Group.Create().
@@ -1280,7 +1280,7 @@ func TestWorkflowGraphQLObjectRef(t *testing.T) {
 
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
 
-	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine := ensureWorkflowEngine(t)
 

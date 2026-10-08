@@ -14,7 +14,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
@@ -191,21 +190,20 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 // submitTrustCenterNDAResponse submits a trust center NDA response
 func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error) {
-	tcID, hasTCID := auth.ActiveTrustCenterIDKey.Get(ctx)
-	caller, hasCaller := auth.CallerFromContext(ctx)
-	if !hasTCID || tcID == "" || !hasCaller || caller == nil || caller.SubjectEmail == "" || caller.OrganizationID == "" {
+	caller, tcID, ok := auth.GetTrustCenterUserCaller(ctx)
+	if !ok {
 		return nil, newPermissionDeniedError()
 	}
 
-	allowCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), caller)
+	internalCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, caller))
 
-	txnCtx := withTransactionalMutation(allowCtx)
+	txnCtx := withTransactionalMutation(internalCtx)
 
 	ndaRequest, err := txnCtx.TrustCenterNDARequest.Query().
 		Where(
 			trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
 			trustcenterndarequest.TrustCenterID(tcID),
-		).First(allowCtx)
+		).First(internalCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
@@ -222,7 +220,7 @@ func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCe
 			TemplateID: lo.ToPtr(input.TemplateID),
 			Data:       input.Response,
 		},
-	).Save(allowCtx)
+	).Save(internalCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}

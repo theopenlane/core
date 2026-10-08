@@ -13,7 +13,6 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
@@ -26,7 +25,7 @@ import (
 func TestTrustCenterPostNotificationEmail(t *testing.T) {
 	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := th.SetInternalContext(tc.Owner.UserCtx, suite.Client.DB)
 
 	// brand the live trust center setting so the email pulls trust center branding
 	tcLoaded, err := suite.Client.DB.TrustCenter.Query().Where(trustcenter.IDEQ(tc.TrustCenter.ID)).WithSetting().Only(dbCtx)
@@ -108,7 +107,7 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := th.SetInternalContext(tc.Owner.UserCtx, suite.Client.DB)
 
 	tcLoaded, err := suite.Client.DB.TrustCenter.Query().Where(trustcenter.IDEQ(tc.TrustCenter.ID)).WithSetting().Only(dbCtx)
 	assert.NilError(t, err)

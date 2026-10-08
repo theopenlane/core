@@ -127,11 +127,11 @@ func (p FileDownloadToken) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.DownloadToken](),
-			rule.AllowMutationAfterApplyingOwnerFilter(),
+			rule.AllowMutationAfterApplyingUserOwnerFilter(),
 		),
 		policy.WithOnMutationRules(
 			ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete,
-			rule.AllowMutationAfterApplyingOwnerFilter(),
+			rule.AllowMutationAfterApplyingUserOwnerFilter(),
 		),
 	)
 }

@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -162,8 +161,8 @@ func constructWherePredicatesFromStandardRefCodes[T predicate.Control | predicat
 	predicates := []T{}
 
 	// use to determine if we should filter by system owned controls
-	caller, _ := auth.CallerFromContext(ctx)
-	systemOwned := caller != nil && caller.Has(auth.CapSystemAdmin)
+	caller, ok := auth.CallerFromContext(ctx)
+	systemOwned := ok && caller.Has(auth.CapSystemAdmin)
 
 	for standardShortName, refCodes := range standardRefCodes {
 		switch any(*new(T)).(type) {
@@ -291,7 +290,7 @@ func getMappedControlsBySubcontrolID(ctx context.Context, subcontrolID string) (
 	)
 
 	// skip filters, this is already filtered on organization
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	return withTransactionalMutation(ctx).MappedControl.Query().
 		Where(
 			mappedcontrol.Or(
@@ -300,7 +299,7 @@ func getMappedControlsBySubcontrolID(ctx context.Context, subcontrolID string) (
 			),
 		).
 		WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().
-		All(allowCtx)
+		All(internalCtx)
 }
 
 // getControlMappings returns the controls and subcontrols mapped to a control based on the ref code and framework
@@ -313,11 +312,11 @@ func getControlMappings(ctx context.Context, refCode string, framework *string, 
 	}
 
 	// skip filters, this is already filtered on organization
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	res, err := withTransactionalMutation(ctx).MappedControl.Query().
 		Where(
 			fullWhere...,
-		).WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().All(allowCtx)
+		).WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().All(internalCtx)
 	if err != nil {
 		return nil, err
 	}
@@ -440,8 +439,8 @@ func findOrganizationControlInfoForMappings(ctx context.Context, controls map[st
 
 	}
 
-	// use allowContext because this is filtered on authorized organizations already
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	// runs as an internal read because this is filtered on authorized organizations already
+	internalCtx := auth.WithInternalReadContext(ctx)
 	if len(subcontrolRefCodes) > 0 {
 		orClauses := make([]predicate.Subcontrol, 0, len(subcontrolRefCodes))
 		for fw, refCodes := range subcontrolRefCodes {
@@ -455,7 +454,7 @@ func findOrganizationControlInfoForMappings(ctx context.Context, controls map[st
 			subcontrol.SystemOwned(false),
 			subcontrol.OwnerIDIn(orgIDs...),
 			subcontrol.Or(orClauses...),
-		).All(allowCtx)
+		).All(internalCtx)
 		if err != nil {
 			// only log errors that are not because it does not exist
 			if !generated.IsNotFound(err) {
@@ -484,7 +483,7 @@ func findOrganizationControlInfoForMappings(ctx context.Context, controls map[st
 				control.SystemOwned(false),
 				control.OwnerIDIn(orgIDs...),
 				control.Or(orClauses...),
-			).All(allowCtx)
+			).All(internalCtx)
 		if err != nil {
 			// only log errors that are not because it does not exist
 			if !generated.IsNotFound(err) {
@@ -532,7 +531,7 @@ func getStandardsInOrg(ctx context.Context) ([]string, error) {
 		return nil, err
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	return withTransactionalMutation(ctx).Control.Query().
 		Where(
@@ -540,5 +539,5 @@ func getStandardsInOrg(ctx context.Context) ([]string, error) {
 			control.OwnerIDIn(orgIDs...),
 			control.ReferenceFrameworkNotNil(),
 		).
-		Unique(true).Select(control.FieldReferenceFramework).Strings(allowCtx)
+		Unique(true).Select(control.FieldReferenceFramework).Strings(internalCtx)
 }

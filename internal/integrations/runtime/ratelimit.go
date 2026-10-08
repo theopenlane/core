@@ -26,7 +26,7 @@ func (r *Runtime) checkRateLimit(ctx context.Context, operation types.OperationR
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		return true, nil
 	}
 

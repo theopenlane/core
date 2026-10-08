@@ -16,7 +16,6 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
@@ -250,7 +249,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		// don't log here, the caller is already logging this when it is actually an issue, otherwise it is expected
 		// because it is happening during the login flow
 		return "", auth.ErrNoAuthUser
@@ -300,9 +299,9 @@ func (a *Client) getUserDefaultOrg(ctx context.Context, user *generated.User) (s
 		return user.Edges.Setting.Edges.DefaultOrg.ID, nil
 	}
 
-	// otherwise, query the default org from the user setting and allow the request
+	// otherwise, query the default org from the user setting as an internal read
 	// incase the user is in the login process
-	orgCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	orgCtx := auth.WithInternalReadContext(ctx)
 
 	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
 	if err != nil {
@@ -357,12 +356,12 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 		return "", err
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	err = a.db.UserSetting.Update().
 		SetDefaultOrgID(personalOrg.ID).
 		Where(usersetting.UserID(user.ID)).
-		Exec(allowCtx)
+		Exec(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error updating default org")
 
@@ -388,20 +387,13 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 // getPersonalOrgID returns the personal org ID for the user
 func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*generated.Organization, error) {
 	// ensure the organization is not filtered by the default interceptor
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(allowCtx)
+	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(auth.WithInternalReadContext(ctx))
 }
 
 // skipOrgValidation checks if the org validation should be skipped based on the context
 func skipOrgValidation(ctx context.Context) bool {
-	// skip if explicitly allowed or if it's an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
-		return true
-	}
-
 	// skip on internal operations (e.g. org creation)
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapInternalOperation) {
+	if auth.HasInContextCaller(ctx, auth.CapInternalOperation) {
 		return true
 	}
 

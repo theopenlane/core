@@ -1,0 +1,5 @@
+mutation ImportDomainScanReview($input: ImportDomainScanReviewInput!) {
+  importDomainScanReview(input: $input) {
+    accepted
+  }
+}

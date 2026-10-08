@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	catalogprices "github.com/theopenlane/core/v2/internal/entitlements"
 	em "github.com/theopenlane/core/v2/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
@@ -157,8 +156,8 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 		return h.Success(ctx, "unsupported event type")
 	}
 
-	newCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
-	newCtx = auth.WithCaller(newCtx, auth.NewWebhookCaller(""))
+	// stripe deliveries are unauthenticated and the owning org is not known until the event resolves, so this is a cross-org internal context
+	newCtx := auth.WithInternalCrossOrgContext(req.Context())
 
 	exists, err := h.checkForEventID(newCtx, event.ID)
 	if err != nil {
@@ -263,8 +262,7 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 
 // invalidateAPITokens invalidates all API tokens for an organization
 func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(orgID))
+	internalCtx := auth.WithOrgInternalCaller(ctx, orgID)
 
 	num, err := h.DBClient.APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
@@ -273,7 +271,7 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 		SetRevokedAt(time.Now()).
 		SetRevokedReason("subscription paused or deleted").
 		SetRevokedBy("entitlements_engine").
-		Save(allowCtx)
+		Save(internalCtx)
 	if err != nil {
 		return err
 	}
@@ -285,13 +283,13 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 
 // invalidatePersonalAccessTokens invalidates all personal access tokens tokens for an organization
 func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID string) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(orgID))
+	// the user owned mixin filters updates to the caller's own tokens and only skips on an allow decision, so revoking every member's tokens needs it
+	internalCtx := auth.WithOrgInternalCaller(ctx, orgID)
 
 	num, err := h.DBClient.PersonalAccessToken.Update().
 		RemoveOrganizationIDs(orgID).
 		Where(personalaccesstoken.HasOrganizationsWith(organization.ID(orgID))).
-		Save(allowCtx)
+		Save(internalCtx)
 	if err != nil {
 		return err
 	}
@@ -409,11 +407,9 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	org, err := transaction.FromContext(ctx).Organization.Query().
 		Where(organization.StripeCustomerID(paymentMethod.Customer.ID)).
-		Only(allowCtx)
+		Only(auth.WithInternalReadCrossOrgContext(ctx))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("could not fetch organization by stripe customer id")
 		return err
@@ -423,7 +419,7 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 		Where(organizationsetting.OrganizationID(org.ID)).
 		SetPaymentMethodAdded(true).
 		ClearPendingDeletionAt().
-		Exec(ctx)
+		Exec(auth.WithOrgInternalCaller(ctx, org.ID))
 }
 
 // findOrgSubscriptionByCustomer resolves an OrgSubscription through the stripe customer on the
@@ -435,10 +431,10 @@ func findOrgSubscriptionByCustomer(ctx context.Context, subscription *stripe.Sub
 		return nil
 	}
 
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(""))
+	internalCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	org, err := transaction.FromContext(ctx).Organization.Query().
-		Where(organization.StripeCustomerID(subscription.Customer.ID)).Only(allowCtx)
+		Where(organization.StripeCustomerID(subscription.Customer.ID)).Only(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Str("stripe_customer_id", subscription.Customer.ID).
 			Msg("no organization found for stripe customer")
@@ -451,7 +447,7 @@ func findOrgSubscriptionByCustomer(ctx context.Context, subscription *stripe.Sub
 	orgSub, err := transaction.FromContext(ctx).OrgSubscription.Query().
 		Where(orgsubscription.OwnerID(org.ID), orgsubscription.DeletedAtIsNil()).
 		Order(ent.Desc(orgsubscription.FieldCreatedAt)).
-		First(allowCtx)
+		First(internalCtx)
 	if err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Str("organization_id", org.ID).
 			Msg("no org subscription found for organization")
@@ -469,11 +465,11 @@ func adoptStripeSubscriptionID(ctx context.Context, orgSub *ent.OrgSubscription,
 		return
 	}
 
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(""))
+	internalCtx := auth.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 
 	if err := transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSub).
 		SetStripeSubscriptionID(subscriptionID).
-		Exec(allowCtx); err != nil {
+		Exec(internalCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("subscription_id", subscriptionID).
 			Msg("failed to update org subscription with stripe subscription id")
 
@@ -488,10 +484,10 @@ func adoptStripeSubscriptionID(ctx context.Context, orgSub *ent.OrgSubscription,
 
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
 func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(""))
+	internalCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
-		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(allowCtx)
+		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(internalCtx)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			// try by the metadata field as a fallback if customer is provided
@@ -501,12 +497,12 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 				// first try org_subscription_id
 				if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
 					orgSubscription, _ = transaction.FromContext(ctx).OrgSubscription.Query().
-						Where(orgsubscription.ID(orgSubID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
+						Where(orgsubscription.ID(orgSubID), orgsubscription.DeletedAtIsNil()).Only(internalCtx)
 					if orgSubscription == nil {
 						// fallback to organization_id
 						if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
 							orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
-								Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
+								Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(internalCtx)
 						}
 					}
 				}
@@ -531,15 +527,15 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 
 			// if we got here we could not find the org subscription
 			// first check to see if the org was deleted already
-			allowCtx = entx.SkipSoftDelete(allowCtx)
+			internalCtx = entx.SkipSoftDelete(internalCtx)
 			if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
 				orgSubscription, _ = transaction.FromContext(ctx).OrgSubscription.Query().
-					Where(orgsubscription.ID(orgSubID)).Only(allowCtx)
+					Where(orgsubscription.ID(orgSubID)).Only(internalCtx)
 				if orgSubscription == nil {
 					// fallback to organization_id
 					if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
 						orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
-							Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
+							Where(orgsubscription.OwnerID(orgID)).Only(internalCtx)
 					}
 				}
 			}

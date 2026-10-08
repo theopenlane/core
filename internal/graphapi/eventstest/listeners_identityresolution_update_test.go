@@ -20,7 +20,7 @@ import (
 
 func TestIdentityResolutionUpdateCascade(t *testing.T) {
 	idUser := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(idUser.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(idUser.UserCtx, suite.Client.DB)
 
 	irSetup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.IdentityResolutionListeners())
 	assert.NilError(t, err)

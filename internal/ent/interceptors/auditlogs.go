@@ -21,7 +21,7 @@ import (
 func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
 

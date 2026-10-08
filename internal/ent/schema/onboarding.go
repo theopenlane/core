@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 	"github.com/theopenlane/entx/accessmap"
 )
@@ -132,7 +131,6 @@ func (o Onboarding) Policy() ent.Policy {
 			privacy.AlwaysDenyRule(), // deny all queries by default
 		),
 		policy.WithMutationRules(
-			rule.AllowIfContextAllowRule(),
 			privacy.AlwaysAllowRule(), // Allow all other users (e.g. a user with a JWT should be able to create a new org)
 		),
 	)

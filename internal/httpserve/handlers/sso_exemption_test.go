@@ -22,7 +22,6 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -52,10 +51,9 @@ func (suite *HandlerTestSuite) enforceSSOOnSetting(ctx context.Context, settingI
 // ssoEnforcedOrg creates an SSO-enforced organization owned by a fresh user and returns it
 func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	owner := suite.userBuilderWithInput(ctx, &userInput{password: "0wn3rP@ssw0rd!", confirmedUser: true})
-	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
+	ownerCtx := auth.WithInternalOperationContext(owner.UserCtx)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	t := suite.T()
@@ -87,7 +85,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 	member := suite.userBuilderWithInput(ctx, &userInput{password: "$uper$ecretP@ssword", confirmedUser: true})
 
 	memberCtx := auth.NewTestContextWithOrgID(member.ID, org.ID)
-	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = auth.WithInternalOperationContext(memberCtx)
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
 	// member is explicitly exempt from SSO for this organization
@@ -120,7 +118,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 
 	org := suite.ssoEnforcedOrg()
 
-	ctx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	ctx := auth.WithInternalCrossOrgContext(echocontext.NewTestEchoContext().Request().Context())
 	ctx = ent.NewContext(ctx, suite.db)
 
 	exemptDomain := strings.ToLower(ulids.New().String()) + ".example.com"
@@ -133,7 +131,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	member := suite.userBuilderWithInput(ctx, &userInput{email: memberEmail, password: "$uper$ecretP@ssword", confirmedUser: true})
 
 	memberCtx := auth.NewTestContextWithOrgID(member.ID, org.ID)
-	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = auth.WithInternalOperationContext(memberCtx)
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
 	// member relies on the per-domain exemption, not a per-user flag
@@ -164,11 +162,11 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
 
 	org := suite.ssoEnforcedOrg()
 
-	ctx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	ctx := echocontext.NewTestEchoContext().Request().Context()
 	member := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
 
 	memberCtx := auth.NewTestContextWithOrgID(member.ID, org.ID)
-	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = auth.WithInternalOperationContext(memberCtx)
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
 	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
@@ -202,7 +200,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
 func (suite *HandlerTestSuite) TestOrgOwnerSeededSSOExempt() {
 	t := suite.T()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
@@ -232,7 +230,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
 	member := suite.userBuilderWithInput(ctx, &userInput{password: "0p3nl@n3rocks!", confirmedUser: true})
 
 	memberCtx := auth.NewTestContextWithOrgID(member.ID, org.ID)
-	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = auth.WithInternalOperationContext(memberCtx)
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
 	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
@@ -258,7 +256,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
 func (suite *HandlerTestSuite) TestInviteGrantsSSOExempt() {
 	t := suite.T()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	orgID := testUser1.OrganizationID
@@ -285,7 +283,7 @@ func (suite *HandlerTestSuite) TestInviteGrantsSSOExempt() {
 
 	// accepting the invite as the recipient triggers the accepted hook, which creates the membership
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, orgID)
-	recipientCtx = privacy.DecisionContext(recipientCtx, privacy.Allow)
+	recipientCtx = auth.WithInternalOperationContext(recipientCtx)
 	recipientCtx = ent.NewContext(recipientCtx, suite.db)
 
 	require.NoError(t, suite.db.Invite.UpdateOneID(inv.ID).SetStatus(enums.InvitationAccepted).Exec(recipientCtx))
@@ -306,7 +304,7 @@ func (suite *HandlerTestSuite) TestInviteGrantsSSOExempt() {
 func (suite *HandlerTestSuite) TestImpersonatorAttributionStamped() {
 	t := suite.T()
 
-	base := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	base := testUser1.UserCtx
 
 	caller := &auth.Caller{
 		SubjectID:       testUser1.ID,
@@ -321,7 +319,7 @@ func (suite *HandlerTestSuite) TestImpersonatorAttributionStamped() {
 	}
 
 	impCtx := auth.WithCaller(base, caller)
-	impCtx = privacy.DecisionContext(impCtx, privacy.Allow)
+	impCtx = auth.WithInternalOperationContext(impCtx)
 	impCtx = ent.NewContext(impCtx, suite.db)
 
 	group, err := suite.db.Group.Create().
@@ -341,7 +339,7 @@ func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainOverlap() {
 	t := suite.T()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().
@@ -365,7 +363,7 @@ func (suite *HandlerTestSuite) TestAutoJoinSuppressedWhenSSOEnforced() {
 	t := suite.T()
 
 	// a real caller is required so the organization create hook can assign the owner membership
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	const allowedDomain = "enforced-autojoin.com"

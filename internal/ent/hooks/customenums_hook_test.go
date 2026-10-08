@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
@@ -28,8 +27,8 @@ func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
 	userCtx := auth.NewTestContextWithOrgID(systemAdmin.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
 
-	allowSysCtx := privacy.DecisionContext(sysCtx, privacy.Allow)
-	allowUserCtx := privacy.DecisionContext(userCtx, privacy.Allow)
+	internalSysCtx := auth.WithInternalOperationContext(sysCtx)
+	internalUserCtx := auth.WithInternalOperationContext(userCtx)
 
 	enumName := "TestEnum-" + gofakeit.UUID()
 
@@ -38,7 +37,7 @@ func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
 		SetName(enumName).
 		SetObjectType("task").
 		SetField("kind").
-		Save(allowSysCtx)
+		Save(internalSysCtx)
 	require.NoError(t, err)
 	assert.True(t, sysEnum.SystemOwned)
 
@@ -48,7 +47,7 @@ func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
 		SetObjectType("task").
 		SetField("kind").
 		SetOwnerID(orgID).
-		Save(allowUserCtx)
+		Save(internalUserCtx)
 	require.NoError(t, err)
 	assert.False(t, orgEnum.SystemOwned)
 

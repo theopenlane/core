@@ -8,27 +8,32 @@ import (
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 )
 
-// BuildTokenURL appends a token query parameter to the base URL and optionally
-// shortens the result via the shortlinks client. If sl is nil or shortening
-// fails, the full-length URL is returned (graceful degradation)
-func BuildTokenURL(ctx context.Context, sl *shortlinks.Client, baseURL url.URL, token string) (string, error) {
-	resolved := baseURL.ResolveReference(&url.URL{
-		RawQuery: url.Values{"token": []string{token}}.Encode(),
-	})
+// tokenQueryParam is the query parameter carrying a signed token on generated links
+const tokenQueryParam = "token"
 
-	regularLink := resolved.String()
+// TokenURL appends a token query parameter to the base URL
+func TokenURL(baseURL url.URL, token string) string {
+	return baseURL.ResolveReference(&url.URL{
+		RawQuery: url.Values{tokenQueryParam: []string{token}}.Encode(),
+	}).String()
+}
 
-	if sl == nil {
-		return regularLink, nil
+// Shorten creates a shortlink for req.URL. The original URL is returned unchanged when sl is
+// nil, when the context suppresses shortening, or when the service call fails, so delivery of a
+// link never depends on the service being reachable
+func Shorten(ctx context.Context, sl *shortlinks.Client, req shortlinks.CreateRequest) string {
+	if sl == nil || req.URL == "" || shortlinks.DisabledFromContext(ctx) {
+		return req.URL
 	}
 
-	shortenedURL, err := sl.Create(ctx, regularLink, "")
+	shortened, err := sl.Create(ctx, req)
 	if err != nil {
-		// don't log the full link as it contains a confidential token, just log the base URL
-		logx.FromContext(ctx).Error().Str("baseURL", baseURL.String()).Err(err).Msg("failed to shorten URL, using original")
+		// the full link may carry a confidential token, so only its host and the purpose are logged
+		host, _ := NormalizeHostname(req.URL)
+		logx.FromContext(ctx).Error().Str("host", host).Str("purpose", string(req.Metadata.Purpose)).Err(err).Msg("failed to shorten URL, using original")
 
-		return regularLink, nil
+		return req.URL
 	}
 
-	return shortenedURL, nil
+	return shortened
 }
