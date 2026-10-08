@@ -14,3 +14,31 @@
 - user: user:ulid-other-1
   relation: editor
   object: evidence:evidence-1
+
+# note-2 is a comment on a vulnerability
+- user: user:ulid-admin
+  relation: owner
+  object: note:note-2
+- user: organization:openlane
+  relation: parent_context
+  object: note:note-2
+- user: vulnerability:vulnerability-notes
+  relation: parent
+  object: note:note-2
+- user: user:ulid-vuln-viewer
+  relation: viewer
+  object: vulnerability:vulnerability-notes
+
+# note-3 is a comment on a finding
+- user: user:ulid-admin
+  relation: owner
+  object: note:note-3
+- user: organization:openlane
+  relation: parent_context
+  object: note:note-3
+- user: finding:finding-notes
+  relation: parent
+  object: note:note-3
+- user: user:ulid-finding-viewer
+  relation: viewer
+  object: finding:finding-notes

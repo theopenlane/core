@@ -44032,6 +44032,8 @@ func (_q *NoteQuery) clonePage() *NoteQuery {
 	c.withRisk = _q.withRisk.clonePage()
 	c.withInternalPolicy = _q.withInternalPolicy.clonePage()
 	c.withReview = _q.withReview.clonePage()
+	c.withVulnerability = _q.withVulnerability.clonePage()
+	c.withFinding = _q.withFinding.clonePage()
 	c.withEvidence = _q.withEvidence.clonePage()
 	c.withTrustCenter = _q.withTrustCenter.clonePage()
 	c.withDiscussion = _q.withDiscussion.clonePage()

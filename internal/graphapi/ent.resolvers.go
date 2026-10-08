@@ -3234,6 +3234,11 @@ func (r *Resolver) UpdateEvidenceInput() gqlgenerated.UpdateEvidenceInputResolve
 	return &updateEvidenceInputResolver{r}
 }
 
+// UpdateFindingInput returns gqlgenerated.UpdateFindingInputResolver implementation.
+func (r *Resolver) UpdateFindingInput() gqlgenerated.UpdateFindingInputResolver {
+	return &updateFindingInputResolver{r}
+}
+
 // UpdateGroupInput returns gqlgenerated.UpdateGroupInputResolver implementation.
 func (r *Resolver) UpdateGroupInput() gqlgenerated.UpdateGroupInputResolver {
 	return &updateGroupInputResolver{r}
@@ -3299,6 +3304,11 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 	return &updateTrustCenterInputResolver{r}
 }
 
+// UpdateVulnerabilityInput returns gqlgenerated.UpdateVulnerabilityInputResolver implementation.
+func (r *Resolver) UpdateVulnerabilityInput() gqlgenerated.UpdateVulnerabilityInputResolver {
+	return &updateVulnerabilityInputResolver{r}
+}
+
 type (
 	actionPlanResolver                  struct{ *Resolver }
 	assessmentResolver                  struct{ *Resolver }
@@ -3337,6 +3347,7 @@ type (
 	updateDiscussionInputResolver       struct{ *Resolver }
 	updateEntityInputResolver           struct{ *Resolver }
 	updateEvidenceInputResolver         struct{ *Resolver }
+	updateFindingInputResolver          struct{ *Resolver }
 	updateGroupInputResolver            struct{ *Resolver }
 	updateInternalPolicyInputResolver   struct{ *Resolver }
 	updateOrganizationInputResolver     struct{ *Resolver }
@@ -3350,4 +3361,5 @@ type (
 	updateTaskInputResolver             struct{ *Resolver }
 	updateTrustCenterFAQInputResolver   struct{ *Resolver }
 	updateTrustCenterInputResolver      struct{ *Resolver }
+	updateVulnerabilityInputResolver    struct{ *Resolver }
 )

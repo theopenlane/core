@@ -67,6 +67,10 @@ const (
 	EdgeInternalPolicy = "internal_policy"
 	// EdgeReview holds the string denoting the review edge name in mutations.
 	EdgeReview = "review"
+	// EdgeVulnerability holds the string denoting the vulnerability edge name in mutations.
+	EdgeVulnerability = "vulnerability"
+	// EdgeFinding holds the string denoting the finding edge name in mutations.
+	EdgeFinding = "finding"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
@@ -135,6 +139,20 @@ const (
 	ReviewInverseTable = "reviews"
 	// ReviewColumn is the table column denoting the review relation/edge.
 	ReviewColumn = "review_comments"
+	// VulnerabilityTable is the table that holds the vulnerability relation/edge.
+	VulnerabilityTable = "notes"
+	// VulnerabilityInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilityInverseTable = "vulnerabilities"
+	// VulnerabilityColumn is the table column denoting the vulnerability relation/edge.
+	VulnerabilityColumn = "vulnerability_comments"
+	// FindingTable is the table that holds the finding relation/edge.
+	FindingTable = "notes"
+	// FindingInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingInverseTable = "findings"
+	// FindingColumn is the table column denoting the finding relation/edge.
+	FindingColumn = "finding_comments"
 	// EvidenceTable is the table that holds the evidence relation/edge.
 	EvidenceTable = "notes"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -406,6 +424,20 @@ func ByReviewField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByVulnerabilityField orders the results by vulnerability field.
+func ByVulnerabilityField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilityStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFindingField orders the results by finding field.
+func ByFindingField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByEvidenceField orders the results by evidence field.
 func ByEvidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -508,6 +540,20 @@ func newReviewStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReviewInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, ReviewTable, ReviewColumn),
+	)
+}
+func newVulnerabilityStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilityInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, VulnerabilityTable, VulnerabilityColumn),
+	)
+}
+func newFindingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, FindingTable, FindingColumn),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {
