@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -24,6 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 )
 
 // NoteCreate is the builder for creating a Note entity.
@@ -413,6 +415,44 @@ func (_c *NoteCreate) SetReview(v *Review) *NoteCreate {
 	return _c.SetReviewID(v.ID)
 }
 
+// SetVulnerabilityID sets the "vulnerability" edge to the Vulnerability entity by ID.
+func (_c *NoteCreate) SetVulnerabilityID(id string) *NoteCreate {
+	_c.mutation.SetVulnerabilityID(id)
+	return _c
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability" edge to the Vulnerability entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableVulnerabilityID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetVulnerabilityID(*id)
+	}
+	return _c
+}
+
+// SetVulnerability sets the "vulnerability" edge to the Vulnerability entity.
+func (_c *NoteCreate) SetVulnerability(v *Vulnerability) *NoteCreate {
+	return _c.SetVulnerabilityID(v.ID)
+}
+
+// SetFindingID sets the "finding" edge to the Finding entity by ID.
+func (_c *NoteCreate) SetFindingID(id string) *NoteCreate {
+	_c.mutation.SetFindingID(id)
+	return _c
+}
+
+// SetNillableFindingID sets the "finding" edge to the Finding entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableFindingID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetFindingID(*id)
+	}
+	return _c
+}
+
+// SetFinding sets the "finding" edge to the Finding entity.
+func (_c *NoteCreate) SetFinding(v *Finding) *NoteCreate {
+	return _c.SetFindingID(v.ID)
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
 func (_c *NoteCreate) SetEvidenceID(id string) *NoteCreate {
 	_c.mutation.SetEvidenceID(id)
@@ -796,6 +836,40 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.review_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.VulnerabilityTable,
+			Columns: []string{note.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.vulnerability_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.FindingTable,
+			Columns: []string{note.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.finding_comments = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {

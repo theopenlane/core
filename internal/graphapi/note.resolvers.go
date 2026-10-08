@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
@@ -21,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -293,6 +295,54 @@ func (r *mutationResolver) UpdateReviewComment(ctx context.Context, id string, i
 	}, nil
 }
 
+// UpdateVulnerabilityComment is the resolver for the updateVulnerabilityComment field.
+func (r *mutationResolver) UpdateVulnerabilityComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.VulnerabilityUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vulnerability"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vulnerability"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).Vulnerability.Query().Where(vulnerability.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vulnerability"})
+	}
+
+	return &model.VulnerabilityUpdatePayload{
+		Vulnerability: objectRes,
+	}, nil
+}
+
+// UpdateFindingComment is the resolver for the updateFindingComment field.
+func (r *mutationResolver) UpdateFindingComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.FindingUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).Finding.Query().Where(finding.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
+	}
+
+	return &model.FindingUpdatePayload{
+		Finding: objectRes,
+	}, nil
+}
+
 // DeleteNote is the resolver for the deleteNote field.
 func (r *mutationResolver) DeleteNote(ctx context.Context, id string) (*model.NoteDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(id).Exec(ctx); err != nil {
@@ -480,6 +530,45 @@ func (r *updateEvidenceInputResolver) AddComment(ctx context.Context, obj *gener
 
 // DeleteComment is the resolver for the deleteComment field.
 func (r *updateEvidenceInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateEvidenceInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateFindingInputResolver) AddComment(ctx context.Context, obj *generated.UpdateFindingInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.FindingID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.FindingID == nil {
+		return common.NewNotFoundError("finding")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateFindingInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateFindingInput, data *string) error {
 	if data == nil {
 		return nil
 	}
@@ -1051,6 +1140,45 @@ func (r *updateTrustCenterInputResolver) AddPost(ctx context.Context, obj *gener
 
 // DeletePost is the resolver for the deletePost field.
 func (r *updateTrustCenterInputResolver) DeletePost(ctx context.Context, obj *generated.UpdateTrustCenterInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateVulnerabilityInputResolver) AddComment(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.VulnerabilityID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.VulnerabilityID == nil {
+		return common.NewNotFoundError("vulnerability")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateVulnerabilityInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *string) error {
 	if data == nil {
 		return nil
 	}

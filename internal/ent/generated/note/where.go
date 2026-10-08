@@ -1379,6 +1379,52 @@ func HasReviewWith(preds ...predicate.Review) predicate.Note {
 	})
 }
 
+// HasVulnerability applies the HasEdge predicate on the "vulnerability" edge.
+func HasVulnerability() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, VulnerabilityTable, VulnerabilityColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilityWith applies the HasEdge predicate on the "vulnerability" edge with a given conditions (other predicates).
+func HasVulnerabilityWith(preds ...predicate.Vulnerability) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newVulnerabilityStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFinding applies the HasEdge predicate on the "finding" edge.
+func HasFinding() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, FindingTable, FindingColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingWith applies the HasEdge predicate on the "finding" edge with a given conditions (other predicates).
+func HasFindingWith(preds ...predicate.Finding) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newFindingStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEvidence applies the HasEdge predicate on the "evidence" edge.
 func HasEvidence() predicate.Note {
 	return predicate.Note(func(s *sql.Selector) {

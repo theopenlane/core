@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -28,6 +29,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -47,6 +49,8 @@ type NoteQuery struct {
 	withRisk                 *RiskQuery
 	withInternalPolicy       *InternalPolicyQuery
 	withReview               *ReviewQuery
+	withVulnerability        *VulnerabilityQuery
+	withFinding              *FindingQuery
 	withEvidence             *EvidenceQuery
 	withTrustCenter          *TrustCenterQuery
 	withDiscussion           *DiscussionQuery
@@ -262,6 +266,50 @@ func (_q *NoteQuery) QueryReview() *ReviewQuery {
 			sqlgraph.From(note.Table, note.FieldID, selector),
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, note.ReviewTable, note.ReviewColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerability chains the current query on the "vulnerability" edge.
+func (_q *NoteQuery) QueryVulnerability() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.VulnerabilityTable, note.VulnerabilityColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFinding chains the current query on the "finding" edge.
+func (_q *NoteQuery) QueryFinding() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.FindingTable, note.FindingColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -579,6 +627,8 @@ func (_q *NoteQuery) Clone() *NoteQuery {
 		withRisk:            _q.withRisk.Clone(),
 		withInternalPolicy:  _q.withInternalPolicy.Clone(),
 		withReview:          _q.withReview.Clone(),
+		withVulnerability:   _q.withVulnerability.Clone(),
+		withFinding:         _q.withFinding.Clone(),
 		withEvidence:        _q.withEvidence.Clone(),
 		withTrustCenter:     _q.withTrustCenter.Clone(),
 		withDiscussion:      _q.withDiscussion.Clone(),
@@ -676,6 +726,28 @@ func (_q *NoteQuery) WithReview(opts ...func(*ReviewQuery)) *NoteQuery {
 		opt(query)
 	}
 	_q.withReview = query
+	return _q
+}
+
+// WithVulnerability tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerability" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithVulnerability(opts ...func(*VulnerabilityQuery)) *NoteQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerability = query
+	return _q
+}
+
+// WithFinding tells the query-builder to eager-load the nodes that are connected to
+// the "finding" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithFinding(opts ...func(*FindingQuery)) *NoteQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFinding = query
 	return _q
 }
 
@@ -819,7 +891,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [15]bool{
 			_q.withOwner != nil,
 			_q.withTask != nil,
 			_q.withControl != nil,
@@ -828,6 +900,8 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			_q.withRisk != nil,
 			_q.withInternalPolicy != nil,
 			_q.withReview != nil,
+			_q.withVulnerability != nil,
+			_q.withFinding != nil,
 			_q.withEvidence != nil,
 			_q.withTrustCenter != nil,
 			_q.withDiscussion != nil,
@@ -835,7 +909,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			_q.withFiles != nil,
 		}
 	)
-	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil || _q.withProcedure != nil || _q.withRisk != nil || _q.withInternalPolicy != nil || _q.withReview != nil || _q.withEvidence != nil {
+	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil || _q.withProcedure != nil || _q.withRisk != nil || _q.withInternalPolicy != nil || _q.withReview != nil || _q.withVulnerability != nil || _q.withFinding != nil || _q.withEvidence != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -907,6 +981,18 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	if query := _q.withReview; query != nil {
 		if err := _q.loadReview(ctx, query, nodes, nil,
 			func(n *Note, e *Review) { n.Edges.Review = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerability; query != nil {
+		if err := _q.loadVulnerability(ctx, query, nodes, nil,
+			func(n *Note, e *Vulnerability) { n.Edges.Vulnerability = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFinding; query != nil {
+		if err := _q.loadFinding(ctx, query, nodes, nil,
+			func(n *Note, e *Finding) { n.Edges.Finding = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1210,6 +1296,70 @@ func (_q *NoteQuery) loadReview(ctx context.Context, query *ReviewQuery, nodes [
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "review_comments" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *NoteQuery) loadVulnerability(ctx context.Context, query *VulnerabilityQuery, nodes []*Note, init func(*Note), assign func(*Note, *Vulnerability)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		if nodes[i].vulnerability_comments == nil {
+			continue
+		}
+		fk := *nodes[i].vulnerability_comments
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(vulnerability.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "vulnerability_comments" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *NoteQuery) loadFinding(ctx context.Context, query *FindingQuery, nodes []*Note, init func(*Note), assign func(*Note, *Finding)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		if nodes[i].finding_comments == nil {
+			continue
+		}
+		fk := *nodes[i].finding_comments
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(finding.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "finding_comments" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

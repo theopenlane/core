@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 // Finding defines the finding schema.
@@ -439,6 +440,7 @@ func (Finding) Annotations() []schema.Annotation {
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
 		entx.IntegrationMappingSchema().StockPersist(),
+		entx.ConsoleRoute(entx.WithConsoleBase("exposure/findings"), entx.WithConsoleIDParam("id")),
 	}
 }
 
@@ -448,6 +450,7 @@ func (f Finding) Policy() ent.Policy {
 		policy.WithMutationRules(
 			policy.CanCreateObjectsUnderParents([]string{Control{}.PluralName(), Review{}.PluralName()}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.FindingMutation](),
 		),
 	)

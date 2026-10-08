@@ -3247,6 +3247,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[FindingProjection](),
+		ConsoleRoute:          &ConsoleRoute{Base: "exposure/findings", IDParam: "id"},
 		OwnerField:            finding.FieldOwnerID,
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
@@ -5543,6 +5544,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[VulnerabilityProjection](),
+		ConsoleRoute:          &ConsoleRoute{Base: "exposure/vulnerabilities", IDParam: "id"},
 		OwnerField:            vulnerability.FieldOwnerID,
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
@@ -13688,6 +13690,15 @@ func init() {
 			AddField:    "add_file_ids",
 		},
 		{
+			Name:        "finding",
+			Label:       "Finding",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			Unique:      true,
+			CreateField: "finding_id",
+			Field:       "finding_comments",
+		},
+		{
 			Name:        "internal_policy",
 			Label:       "InternalPolicy",
 			Target:      SchemaInternalPolicy,
@@ -13766,6 +13777,15 @@ func init() {
 			TargetType:  "TrustCenterFAQ",
 			CreateField: "trust_center_faq_ids",
 			AddField:    "add_trust_center_faq_ids",
+		},
+		{
+			Name:        "vulnerability",
+			Label:       "Vulnerability",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			Unique:      true,
+			CreateField: "vulnerability_id",
+			Field:       "vulnerability_comments",
 		},
 	}
 	SchemaNotification.Edges = []EdgeDescriptor{
