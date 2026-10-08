@@ -407,13 +407,6 @@ func (_m *ActionPlanHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ActionPlanHistoryQuery) clonePage() *ActionPlanHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// ActionPlanHistoryOrderFieldHistoryTime orders ActionPlanHistory by history_time.
 	ActionPlanHistoryOrderFieldHistoryTime = &ActionPlanHistoryOrderField{
@@ -938,13 +931,6 @@ func (_m *AssessmentHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *AssessmentHistoryQuery) clonePage() *AssessmentHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// AssessmentHistoryOrderFieldHistoryTime orders AssessmentHistory by history_time.
 	AssessmentHistoryOrderFieldHistoryTime = &AssessmentHistoryOrderField{
@@ -1343,13 +1329,6 @@ func (_m *AssessmentPolicyHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *AssessmentPolicyHistoryQuery) clonePage() *AssessmentPolicyHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// AssessmentPolicyHistoryOrderFieldHistoryTime orders AssessmentPolicyHistory by history_time.
 	AssessmentPolicyHistoryOrderFieldHistoryTime = &AssessmentPolicyHistoryOrderField{
@@ -1692,13 +1671,6 @@ func (_m *AssessmentResponseHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *AssessmentResponseHistoryQuery) clonePage() *AssessmentResponseHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -2315,13 +2287,6 @@ func (_m *AssetHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *AssetHistoryQuery) clonePage() *AssetHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// AssetHistoryOrderFieldHistoryTime orders AssetHistory by history_time.
 	AssetHistoryOrderFieldHistoryTime = &AssetHistoryOrderField{
@@ -2924,13 +2889,6 @@ func (_m *CampaignHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *CampaignHistoryQuery) clonePage() *CampaignHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -3723,13 +3681,6 @@ func (_m *CampaignTargetHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *CampaignTargetHistoryQuery) clonePage() *CampaignTargetHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// CampaignTargetHistoryOrderFieldHistoryTime orders CampaignTargetHistory by history_time.
 	CampaignTargetHistoryOrderFieldHistoryTime = &CampaignTargetHistoryOrderField{
@@ -4188,13 +4139,6 @@ func (_m *ContactHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ContactHistoryQuery) clonePage() *ContactHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -4680,13 +4624,6 @@ func (_m *ControlHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ControlHistoryQuery) clonePage() *ControlHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// ControlHistoryOrderFieldHistoryTime orders ControlHistory by history_time.
 	ControlHistoryOrderFieldHistoryTime = &ControlHistoryOrderField{
@@ -5170,13 +5107,6 @@ func (_m *ControlImplementationHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ControlImplementationHistoryQuery) clonePage() *ControlImplementationHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// ControlImplementationHistoryOrderFieldHistoryTime orders ControlImplementationHistory by history_time.
 	ControlImplementationHistoryOrderFieldHistoryTime = &ControlImplementationHistoryOrderField{
@@ -5591,13 +5521,6 @@ func (_m *ControlObjectiveHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ControlObjectiveHistoryQuery) clonePage() *ControlObjectiveHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -6070,13 +5993,6 @@ func (_m *CustomDomainHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *CustomDomainHistoryQuery) clonePage() *CustomDomainHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// CustomDomainHistoryOrderFieldHistoryTime orders CustomDomainHistory by history_time.
 	CustomDomainHistoryOrderFieldHistoryTime = &CustomDomainHistoryOrderField{
@@ -6439,13 +6355,6 @@ func (_m *DiscussionHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *DiscussionHistoryQuery) clonePage() *DiscussionHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// DiscussionHistoryOrderFieldHistoryTime orders DiscussionHistory by history_time.
 	DiscussionHistoryOrderFieldHistoryTime = &DiscussionHistoryOrderField{
@@ -6790,13 +6699,6 @@ func (_m *DocumentDataHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *DocumentDataHistoryQuery) clonePage() *DocumentDataHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// DocumentDataHistoryOrderFieldHistoryTime orders DocumentDataHistory by history_time.
 	DocumentDataHistoryOrderFieldHistoryTime = &DocumentDataHistoryOrderField{
@@ -7139,13 +7041,6 @@ func (_m *EmailTemplateHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *EmailTemplateHistoryQuery) clonePage() *EmailTemplateHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -7634,13 +7529,6 @@ func (_m *EntityHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *EntityHistoryQuery) clonePage() *EntityHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -8618,13 +8506,6 @@ func (_m *EntityTypeHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *EntityTypeHistoryQuery) clonePage() *EntityTypeHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// EntityTypeHistoryOrderFieldHistoryTime orders EntityTypeHistory by history_time.
 	EntityTypeHistoryOrderFieldHistoryTime = &EntityTypeHistoryOrderField{
@@ -8985,13 +8866,6 @@ func (_m *EvidenceHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *EvidenceHistoryQuery) clonePage() *EvidenceHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -9454,13 +9328,6 @@ func (_m *FileHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *FileHistoryQuery) clonePage() *FileHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// FileHistoryOrderFieldHistoryTime orders FileHistory by history_time.
 	FileHistoryOrderFieldHistoryTime = &FileHistoryOrderField{
@@ -9836,13 +9703,6 @@ func (_m *FindingControlHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *FindingControlHistoryQuery) clonePage() *FindingControlHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// FindingControlHistoryOrderFieldHistoryTime orders FindingControlHistory by history_time.
 	FindingControlHistoryOrderFieldHistoryTime = &FindingControlHistoryOrderField{
@@ -10185,13 +10045,6 @@ func (_m *FindingHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *FindingHistoryQuery) clonePage() *FindingHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -10708,13 +10561,6 @@ func (_m *GroupHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *GroupHistoryQuery) clonePage() *GroupHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// GroupHistoryOrderFieldHistoryTime orders GroupHistory by history_time.
 	GroupHistoryOrderFieldHistoryTime = &GroupHistoryOrderField{
@@ -11095,13 +10941,6 @@ func (_m *GroupMembershipHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *GroupMembershipHistoryQuery) clonePage() *GroupMembershipHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// GroupMembershipHistoryOrderFieldHistoryTime orders GroupMembershipHistory by history_time.
 	GroupMembershipHistoryOrderFieldHistoryTime = &GroupMembershipHistoryOrderField{
@@ -11464,13 +11303,6 @@ func (_m *GroupSettingHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *GroupSettingHistoryQuery) clonePage() *GroupSettingHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// GroupSettingHistoryOrderFieldHistoryTime orders GroupSettingHistory by history_time.
 	GroupSettingHistoryOrderFieldHistoryTime = &GroupSettingHistoryOrderField{
@@ -11813,13 +11645,6 @@ func (_m *HushHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *HushHistoryQuery) clonePage() *HushHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -12262,13 +12087,6 @@ func (_m *IdentityHolderHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *IdentityHolderHistoryQuery) clonePage() *IdentityHolderHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -12929,13 +12747,6 @@ func (_m *InternalPolicyHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *InternalPolicyHistoryQuery) clonePage() *InternalPolicyHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// InternalPolicyHistoryOrderFieldHistoryTime orders InternalPolicyHistory by history_time.
 	InternalPolicyHistoryOrderFieldHistoryTime = &InternalPolicyHistoryOrderField{
@@ -13388,13 +13199,6 @@ func (_m *MappableDomainHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *MappableDomainHistoryQuery) clonePage() *MappableDomainHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// MappableDomainHistoryOrderFieldHistoryTime orders MappableDomainHistory by history_time.
 	MappableDomainHistoryOrderFieldHistoryTime = &MappableDomainHistoryOrderField{
@@ -13755,13 +13559,6 @@ func (_m *MappedControlHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *MappedControlHistoryQuery) clonePage() *MappedControlHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -14144,13 +13941,6 @@ func (_m *NarrativeHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *NarrativeHistoryQuery) clonePage() *NarrativeHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// NarrativeHistoryOrderFieldHistoryTime orders NarrativeHistory by history_time.
 	NarrativeHistoryOrderFieldHistoryTime = &NarrativeHistoryOrderField{
@@ -14513,13 +14303,6 @@ func (_m *NoteHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *NoteHistoryQuery) clonePage() *NoteHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// NoteHistoryOrderFieldHistoryTime orders NoteHistory by history_time.
 	NoteHistoryOrderFieldHistoryTime = &NoteHistoryOrderField{
@@ -14862,13 +14645,6 @@ func (_m *NotificationPreferenceHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *NotificationPreferenceHistoryQuery) clonePage() *NotificationPreferenceHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -15267,13 +15043,6 @@ func (_m *NotificationTemplateHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *NotificationTemplateHistoryQuery) clonePage() *NotificationTemplateHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -15800,13 +15569,6 @@ func (_m *OrgMembershipHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *OrgMembershipHistoryQuery) clonePage() *OrgMembershipHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// OrgMembershipHistoryOrderFieldHistoryTime orders OrgMembershipHistory by history_time.
 	OrgMembershipHistoryOrderFieldHistoryTime = &OrgMembershipHistoryOrderField{
@@ -16167,13 +15929,6 @@ func (_m *OrganizationHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *OrganizationHistoryQuery) clonePage() *OrganizationHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -16556,13 +16311,6 @@ func (_m *OrganizationSettingHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *OrganizationSettingHistoryQuery) clonePage() *OrganizationSettingHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// OrganizationSettingHistoryOrderFieldHistoryTime orders OrganizationSettingHistory by history_time.
 	OrganizationSettingHistoryOrderFieldHistoryTime = &OrganizationSettingHistoryOrderField{
@@ -16905,13 +16653,6 @@ func (_m *PlatformHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *PlatformHistoryQuery) clonePage() *PlatformHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -17559,13 +17300,6 @@ func (_m *ProcedureHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ProcedureHistoryQuery) clonePage() *ProcedureHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// ProcedureHistoryOrderFieldHistoryTime orders ProcedureHistory by history_time.
 	ProcedureHistoryOrderFieldHistoryTime = &ProcedureHistoryOrderField{
@@ -18016,13 +17750,6 @@ func (_m *ProgramHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ProgramHistoryQuery) clonePage() *ProgramHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -18531,13 +18258,6 @@ func (_m *ProgramMembershipHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ProgramMembershipHistoryQuery) clonePage() *ProgramMembershipHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// ProgramMembershipHistoryOrderFieldHistoryTime orders ProgramMembershipHistory by history_time.
 	ProgramMembershipHistoryOrderFieldHistoryTime = &ProgramMembershipHistoryOrderField{
@@ -18898,13 +18618,6 @@ func (_m *RemediationHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *RemediationHistoryQuery) clonePage() *RemediationHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -19341,13 +19054,6 @@ func (_m *ReviewHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *ReviewHistoryQuery) clonePage() *ReviewHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// ReviewHistoryOrderFieldHistoryTime orders ReviewHistory by history_time.
 	ReviewHistoryOrderFieldHistoryTime = &ReviewHistoryOrderField{
@@ -19762,13 +19468,6 @@ func (_m *RiskHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *RiskHistoryQuery) clonePage() *RiskHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -20504,13 +20203,6 @@ func (_m *SLADefinitionHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *SLADefinitionHistoryQuery) clonePage() *SLADefinitionHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// SLADefinitionHistoryOrderFieldHistoryTime orders SLADefinitionHistory by history_time.
 	SLADefinitionHistoryOrderFieldHistoryTime = &SLADefinitionHistoryOrderField{
@@ -20889,13 +20581,6 @@ func (_m *StandardHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *StandardHistoryQuery) clonePage() *StandardHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -21366,13 +21051,6 @@ func (_m *SubcontrolHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *SubcontrolHistoryQuery) clonePage() *SubcontrolHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -21858,13 +21536,6 @@ func (_m *SubprocessorHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *SubprocessorHistoryQuery) clonePage() *SubprocessorHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// SubprocessorHistoryOrderFieldHistoryTime orders SubprocessorHistory by history_time.
 	SubprocessorHistoryOrderFieldHistoryTime = &SubprocessorHistoryOrderField{
@@ -22227,13 +21898,6 @@ func (_m *SystemDetailHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *SystemDetailHistoryQuery) clonePage() *SystemDetailHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// SystemDetailHistoryOrderFieldHistoryTime orders SystemDetailHistory by history_time.
 	SystemDetailHistoryOrderFieldHistoryTime = &SystemDetailHistoryOrderField{
@@ -22594,13 +22258,6 @@ func (_m *TaskHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TaskHistoryQuery) clonePage() *TaskHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -23099,13 +22756,6 @@ func (_m *TemplateHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TemplateHistoryQuery) clonePage() *TemplateHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// TemplateHistoryOrderFieldHistoryTime orders TemplateHistory by history_time.
 	TemplateHistoryOrderFieldHistoryTime = &TemplateHistoryOrderField{
@@ -23504,13 +23154,6 @@ func (_m *TrustCenterComplianceHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterComplianceHistoryQuery) clonePage() *TrustCenterComplianceHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// TrustCenterComplianceHistoryOrderFieldHistoryTime orders TrustCenterComplianceHistory by history_time.
 	TrustCenterComplianceHistoryOrderFieldHistoryTime = &TrustCenterComplianceHistoryOrderField{
@@ -23855,13 +23498,6 @@ func (_m *TrustCenterDocHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterDocHistoryQuery) clonePage() *TrustCenterDocHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// TrustCenterDocHistoryOrderFieldHistoryTime orders TrustCenterDocHistory by history_time.
 	TrustCenterDocHistoryOrderFieldHistoryTime = &TrustCenterDocHistoryOrderField{
@@ -24204,13 +23840,6 @@ func (_m *TrustCenterEntityHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterEntityHistoryQuery) clonePage() *TrustCenterEntityHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -24575,13 +24204,6 @@ func (_m *TrustCenterFAQHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterFAQHistoryQuery) clonePage() *TrustCenterFAQHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// TrustCenterFAQHistoryOrderFieldHistoryTime orders TrustCenterFAQHistory by history_time.
 	TrustCenterFAQHistoryOrderFieldHistoryTime = &TrustCenterFAQHistoryOrderField{
@@ -24944,13 +24566,6 @@ func (_m *TrustCenterHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterHistoryQuery) clonePage() *TrustCenterHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// TrustCenterHistoryOrderFieldHistoryTime orders TrustCenterHistory by history_time.
 	TrustCenterHistoryOrderFieldHistoryTime = &TrustCenterHistoryOrderField{
@@ -25293,13 +24908,6 @@ func (_m *TrustCenterNDARequestHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterNDARequestHistoryQuery) clonePage() *TrustCenterNDARequestHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -25646,13 +25254,6 @@ func (_m *TrustCenterSettingHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterSettingHistoryQuery) clonePage() *TrustCenterSettingHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// TrustCenterSettingHistoryOrderFieldHistoryTime orders TrustCenterSettingHistory by history_time.
 	TrustCenterSettingHistoryOrderFieldHistoryTime = &TrustCenterSettingHistoryOrderField{
@@ -25995,13 +25596,6 @@ func (_m *TrustCenterSubprocessorHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterSubprocessorHistoryQuery) clonePage() *TrustCenterSubprocessorHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -26348,13 +25942,6 @@ func (_m *TrustCenterWatermarkConfigHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *TrustCenterWatermarkConfigHistoryQuery) clonePage() *TrustCenterWatermarkConfigHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// TrustCenterWatermarkConfigHistoryOrderFieldHistoryTime orders TrustCenterWatermarkConfigHistory by history_time.
 	TrustCenterWatermarkConfigHistoryOrderFieldHistoryTime = &TrustCenterWatermarkConfigHistoryOrderField{
@@ -26697,13 +26284,6 @@ func (_m *UserHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *UserHistoryQuery) clonePage() *UserHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -27104,13 +26684,6 @@ func (_m *UserSettingHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *UserSettingHistoryQuery) clonePage() *UserSettingHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// UserSettingHistoryOrderFieldHistoryTime orders UserSettingHistory by history_time.
 	UserSettingHistoryOrderFieldHistoryTime = &UserSettingHistoryOrderField{
@@ -27453,13 +27026,6 @@ func (_m *VendorRiskScoreHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *VendorRiskScoreHistoryQuery) clonePage() *VendorRiskScoreHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -27896,13 +27462,6 @@ func (_m *VendorScoringConfigHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *VendorScoringConfigHistoryQuery) clonePage() *VendorScoringConfigHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// VendorScoringConfigHistoryOrderFieldHistoryTime orders VendorScoringConfigHistory by history_time.
 	VendorScoringConfigHistoryOrderFieldHistoryTime = &VendorScoringConfigHistoryOrderField{
@@ -28263,13 +27822,6 @@ func (_m *VulnerabilityHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *VulnerabilityHistoryQuery) clonePage() *VulnerabilityHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -28760,13 +28312,6 @@ func (_m *WorkflowAssignmentHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *WorkflowAssignmentHistoryQuery) clonePage() *WorkflowAssignmentHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// WorkflowAssignmentHistoryOrderFieldHistoryTime orders WorkflowAssignmentHistory by history_time.
 	WorkflowAssignmentHistoryOrderFieldHistoryTime = &WorkflowAssignmentHistoryOrderField{
@@ -29109,13 +28654,6 @@ func (_m *WorkflowAssignmentTargetHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
-}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *WorkflowAssignmentTargetHistoryQuery) clonePage() *WorkflowAssignmentTargetHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
 }
 
 var (
@@ -29462,13 +29000,6 @@ func (_m *WorkflowDefinitionHistoryQuery) Paginate(
 	return conn, nil
 }
 
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func (_m *WorkflowDefinitionHistoryQuery) clonePage() *WorkflowDefinitionHistoryQuery {
-	c := _m.Clone()
-	c.loadTotal = _m.loadTotal
-	return c
-}
-
 var (
 	// WorkflowDefinitionHistoryOrderFieldHistoryTime orders WorkflowDefinitionHistory by history_time.
 	WorkflowDefinitionHistoryOrderFieldHistoryTime = &WorkflowDefinitionHistoryOrderField{
@@ -29591,4 +29122,674 @@ func (_m *WorkflowDefinitionHistory) ToEdge(order *WorkflowDefinitionHistoryOrde
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ActionPlanHistoryQuery) clonePage() *ActionPlanHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentHistoryQuery) clonePage() *AssessmentHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentPolicyHistoryQuery) clonePage() *AssessmentPolicyHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentResponseHistoryQuery) clonePage() *AssessmentResponseHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssetHistoryQuery) clonePage() *AssetHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CampaignHistoryQuery) clonePage() *CampaignHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CampaignTargetHistoryQuery) clonePage() *CampaignTargetHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ContactHistoryQuery) clonePage() *ContactHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlHistoryQuery) clonePage() *ControlHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlImplementationHistoryQuery) clonePage() *ControlImplementationHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlObjectiveHistoryQuery) clonePage() *ControlObjectiveHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CustomDomainHistoryQuery) clonePage() *CustomDomainHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DiscussionHistoryQuery) clonePage() *DiscussionHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DocumentDataHistoryQuery) clonePage() *DocumentDataHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EmailTemplateHistoryQuery) clonePage() *EmailTemplateHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EntityHistoryQuery) clonePage() *EntityHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EntityTypeHistoryQuery) clonePage() *EntityTypeHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EvidenceHistoryQuery) clonePage() *EvidenceHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FileHistoryQuery) clonePage() *FileHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FindingControlHistoryQuery) clonePage() *FindingControlHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FindingHistoryQuery) clonePage() *FindingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupHistoryQuery) clonePage() *GroupHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupMembershipHistoryQuery) clonePage() *GroupMembershipHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupSettingHistoryQuery) clonePage() *GroupSettingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *HushHistoryQuery) clonePage() *HushHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *IdentityHolderHistoryQuery) clonePage() *IdentityHolderHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *InternalPolicyHistoryQuery) clonePage() *InternalPolicyHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *MappableDomainHistoryQuery) clonePage() *MappableDomainHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *MappedControlHistoryQuery) clonePage() *MappedControlHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NarrativeHistoryQuery) clonePage() *NarrativeHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NoteHistoryQuery) clonePage() *NoteHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NotificationPreferenceHistoryQuery) clonePage() *NotificationPreferenceHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NotificationTemplateHistoryQuery) clonePage() *NotificationTemplateHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrgMembershipHistoryQuery) clonePage() *OrgMembershipHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrganizationHistoryQuery) clonePage() *OrganizationHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrganizationSettingHistoryQuery) clonePage() *OrganizationSettingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *PlatformHistoryQuery) clonePage() *PlatformHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProcedureHistoryQuery) clonePage() *ProcedureHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProgramHistoryQuery) clonePage() *ProgramHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProgramMembershipHistoryQuery) clonePage() *ProgramMembershipHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *RemediationHistoryQuery) clonePage() *RemediationHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ReviewHistoryQuery) clonePage() *ReviewHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *RiskHistoryQuery) clonePage() *RiskHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SLADefinitionHistoryQuery) clonePage() *SLADefinitionHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *StandardHistoryQuery) clonePage() *StandardHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SubcontrolHistoryQuery) clonePage() *SubcontrolHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SubprocessorHistoryQuery) clonePage() *SubprocessorHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SystemDetailHistoryQuery) clonePage() *SystemDetailHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TaskHistoryQuery) clonePage() *TaskHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TemplateHistoryQuery) clonePage() *TemplateHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterComplianceHistoryQuery) clonePage() *TrustCenterComplianceHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterDocHistoryQuery) clonePage() *TrustCenterDocHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterEntityHistoryQuery) clonePage() *TrustCenterEntityHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterFAQHistoryQuery) clonePage() *TrustCenterFAQHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterHistoryQuery) clonePage() *TrustCenterHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterNDARequestHistoryQuery) clonePage() *TrustCenterNDARequestHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterSettingHistoryQuery) clonePage() *TrustCenterSettingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterSubprocessorHistoryQuery) clonePage() *TrustCenterSubprocessorHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterWatermarkConfigHistoryQuery) clonePage() *TrustCenterWatermarkConfigHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *UserHistoryQuery) clonePage() *UserHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *UserSettingHistoryQuery) clonePage() *UserSettingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VendorRiskScoreHistoryQuery) clonePage() *VendorRiskScoreHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VendorScoringConfigHistoryQuery) clonePage() *VendorScoringConfigHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VulnerabilityHistoryQuery) clonePage() *VulnerabilityHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowAssignmentHistoryQuery) clonePage() *WorkflowAssignmentHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowAssignmentTargetHistoryQuery) clonePage() *WorkflowAssignmentTargetHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowDefinitionHistoryQuery) clonePage() *WorkflowDefinitionHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
 }

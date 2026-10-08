@@ -116,7 +116,7 @@ func ({{ $receiver }} *{{ $query }}) collectField(ctx context.Context, oneNode b
 									return err
 								}
 							}
-							if limit := paginateLimitMult(args.first, args.last, {{ if $e.Type.Annotations.OPENLANE_SKIP_FGA_OVERFETCH.enabled }}1{{ else }}10{{ end }}); limit > 0 {
+							if limit := paginateLimit(args.first, args.last); limit > 0 {
 								{{- /* Limit per row is not required, as there is only node returned by the top query. */}}
 								if oneNode {
 									pager.applyOrder(query.Limit(limit))

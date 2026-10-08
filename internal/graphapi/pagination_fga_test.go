@@ -118,31 +118,51 @@ func TestPaginateKeepsNamedEdgesAcrossFGABatches(t *testing.T) {
 	order := []*generated.EvidenceOrder{{Field: generated.EvidenceOrderFieldCreatedAt, Direction: entgql.OrderDirectionDesc}}
 
 	conn, err := suite.Client.DB.Evidence.Query().
-		WithNamedPrograms("programs").
+		WithNamedPrograms("programs", withNamedProgramMembers).
 		Paginate(users.Member.UserCtx, nil, &first, nil, nil, generated.WithEvidenceOrder(order))
 	assert.NilError(t, err)
 	assert.Assert(t, is.Len(conn.Edges, 1))
 	assert.Check(t, is.Equal(conn.Edges[0].Node.ID, newer.ID))
 	assert.Check(t, conn.PageInfo.HasNextPage)
 
-	programs, err := conn.Edges[0].Node.NamedPrograms("programs")
-	assert.NilError(t, err)
-	assert.Assert(t, is.Len(programs, 1))
-	assert.Check(t, is.Equal(programs[0].ID, program.ID))
+	checkEagerLoadedProgramMember(t, conn.Edges[0].Node, program.ID, users.Member.ID)
 
 	conn, err = suite.Client.DB.Evidence.Query().
-		WithNamedPrograms("programs").
+		WithNamedPrograms("programs", withNamedProgramMembers).
 		Paginate(users.Member.UserCtx, conn.PageInfo.EndCursor, &first, nil, nil, generated.WithEvidenceOrder(order))
 	assert.NilError(t, err)
 	assert.Assert(t, is.Len(conn.Edges, 1))
 	assert.Check(t, is.Equal(conn.Edges[0].Node.ID, older.ID))
 
-	programs, err = conn.Edges[0].Node.NamedPrograms("programs")
-	assert.NilError(t, err)
-	assert.Assert(t, is.Len(programs, 1))
-	assert.Check(t, is.Equal(programs[0].ID, program.ID))
+	checkEagerLoadedProgramMember(t, conn.Edges[0].Node, program.ID, users.Member.ID)
 
 	th.CleanupOrganizationDataWithContext(ownerCtx, t)
+}
+
+func withNamedProgramMembers(q *generated.ProgramQuery) {
+	q.WithNamedMembers("members")
+}
+
+func checkEagerLoadedProgramMember(t *testing.T, evidence *generated.Evidence, programID, userID string) {
+	t.Helper()
+
+	programs, err := evidence.NamedPrograms("programs")
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(programs, 1))
+	assert.Check(t, is.Equal(programs[0].ID, programID))
+
+	members, err := programs[0].NamedMembers("members")
+	assert.NilError(t, err)
+
+	found := false
+
+	for _, m := range members {
+		if m.UserID == userID {
+			found = true
+		}
+	}
+
+	assert.Check(t, found, "member %s not eager loaded on program %s", userID, programID)
 }
 
 func TestQueryEvidencesNestedTotalCountAcrossFGABatches(t *testing.T) {

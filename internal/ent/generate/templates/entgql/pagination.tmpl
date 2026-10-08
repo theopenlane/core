@@ -489,26 +489,6 @@ func ({{ $r }} *{{ $query }}) Paginate(
 	{{- end -}}
 }
 
-{{- if not $node.Annotations.OPENLANE_SKIP_FGA_OVERFETCH.enabled }}
-
-// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
-func ({{ $r }} *{{ $query }}) clonePage() *{{ $query }} {
-	c := {{ $r }}.Clone()
-	{{- range $e := $node.Edges }}
-		{{- if not $e.Unique }}
-	if {{ $r }}.{{ $e.EagerLoadNamedField }} != nil {
-		c.{{ $e.EagerLoadNamedField }} = make(map[string]*{{ $e.Type.QueryName }}, len({{ $r }}.{{ $e.EagerLoadNamedField }}))
-		for name, q := range {{ $r }}.{{ $e.EagerLoadNamedField }} {
-			c.{{ $e.EagerLoadNamedField }}[name] = q.Clone()
-		}
-	}
-		{{- end }}
-	{{- end }}
-	c.loadTotal = {{ $r }}.loadTotal
-	return c
-}
-{{- end }}
-
 {{ $orderField := $names.OrderField -}}
 {{- if $orderFields }}
 	var (
@@ -665,6 +645,30 @@ func ({{ $r }} *{{ $name }}) ToEdge(order *{{ $order }}) *{{ $edge }} {
 	}
 }
 
+{{- end }}
+
+{{- range $n := $.Nodes }}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *{{ $n.QueryName }}) clonePage() *{{ $n.QueryName }} {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	{{- range $e := $n.Edges }}
+	c.{{ $e.EagerLoadField }} = _q.{{ $e.EagerLoadField }}.clonePage()
+		{{- if not $e.Unique }}
+	if _q.{{ $e.EagerLoadNamedField }} != nil {
+		c.{{ $e.EagerLoadNamedField }} = make(map[string]*{{ $e.Type.QueryName }}, len(_q.{{ $e.EagerLoadNamedField }}))
+		for name, q := range _q.{{ $e.EagerLoadNamedField }} {
+			c.{{ $e.EagerLoadNamedField }}[name] = q.clonePage()
+		}
+	}
+		{{- end }}
+	{{- end }}
+	c.loadTotal = _q.loadTotal
+	return c
+}
 {{- end }}
 {{ end }}
 
