@@ -198,7 +198,7 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Default(true).
 			Optional(),
 		field.Bool("enable_auto_approval").
-			Comment("enable auto approval rules, this is different from requiring approvals").
+			Comment("enable auto approval rules provides configurable settings to skip manual approvals").
 			Optional(),
 		field.JSON("auto_approval_rules", models.TrustCenterNDARequestSetting{}).
 			Comment("rules for approving trust center NDA requests").
