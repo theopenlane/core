@@ -2,9 +2,8 @@ package models
 
 import "io"
 
-// TrustCenterNDARequestSetting contains the manu possible approval rules
+// TrustCenterNDARequestSetting contains the possible approval rules
 type TrustCenterNDARequestSetting struct {
-
 	// AllowDisposableEmail enables known disposable emails to be used
 	AllowDisposableEmail bool `json:"allowDisposableEmail"`
 
