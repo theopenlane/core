@@ -16,11 +16,15 @@ const (
 	CatalogVulnerabilityManagementModule OrgModule = "vulnerability_management_module"
 )
 
+// CatalogAnyModule is not in the catalog; a schema requiring it is satisfied by any enabled module other than the base module
+const CatalogAnyModule OrgModule = "any_module"
+
 // AllOrgModules contains every module and addon in the catalog
 var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule}
 
 // OrgModuleByConstName maps the name of each module constant to the module it holds
 var OrgModuleByConstName = map[string]OrgModule{
+	"CatalogAnyModule":                     CatalogAnyModule,
 	"CatalogBaseModule":                    CatalogBaseModule,
 	"CatalogComplianceModule":              CatalogComplianceModule,
 	"CatalogDomainScanningAddon":           CatalogDomainScanningAddon,

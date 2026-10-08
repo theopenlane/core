@@ -251,7 +251,7 @@ func (i Integration) Policy() ent.Policy {
 
 func (Integration) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 
