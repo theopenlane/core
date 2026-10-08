@@ -348,6 +348,8 @@ Cond:
 	query := query.Clone()
 	{{- /* totalCount may be greater than len(nodes). */}}
 	{{ $receiver }}.loadTotal = append({{ $receiver }}.loadTotal, func(ctx context.Context, nodes []*{{ $node.Name }}) error {
+		{{- /* clone per call, paginate may run this once per batch and predicates would otherwise accumulate */}}
+		query := query.Clone()
 		ids := make([]driver.Value, len(nodes))
 		for i := range nodes {
 			ids[i] = nodes[i].{{ $node.ID.StructField }}
