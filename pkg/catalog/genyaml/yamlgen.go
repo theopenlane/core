@@ -30,6 +30,10 @@ const (
 	modelsPath     = "github.com/theopenlane/core/common/models"
 	sandboxCatalog = "catalog_sandbox.yaml"
 	sandboxOutput  = "./gencatalog/gencatalog_sandbox.go"
+	// anyModuleConstName is the sentinel OrgModule constant satisfied by any enabled module other than the base module
+	anyModuleConstName = "CatalogAnyModule"
+	// anyModuleValue is the value the sentinel holds; it is not a catalog entry
+	anyModuleValue = "any_module"
 )
 
 // genyamlApp creates a CLI application for generating Go source files
@@ -307,6 +311,11 @@ func writeModuleConstants(path string, c models.Catalog) error {
 	})
 	f.Line()
 
+	// the sentinel is kept out of AllOrgModules and TrialModules so it is never a valid or purchasable module
+	f.Comment(anyModuleConstName + " is not in the catalog; a schema requiring it is satisfied by any enabled module other than the base module")
+	f.Const().Id(anyModuleConstName).Id("OrgModule").Op("=").Lit(anyModuleValue)
+	f.Line()
+
 	f.Comment("AllOrgModules contains every module and addon in the catalog")
 	f.Var().Id("AllOrgModules").Op("=").Index().Id("OrgModule").ValuesFunc(func(g *jen.Group) {
 		for _, k := range modKeys {
@@ -323,6 +332,8 @@ func writeModuleConstants(path string, c models.Catalog) error {
 			name := "Catalog" + strcase.UpperCamelCase(k)
 			d[jen.Lit(name)] = jen.Id(name)
 		}
+
+		d[jen.Lit(anyModuleConstName)] = jen.Id(anyModuleConstName)
 	}))
 	f.Line()
 

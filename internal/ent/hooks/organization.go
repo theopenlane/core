@@ -338,19 +338,8 @@ func createEntityTypes(ctx context.Context, orgID string, m *generated.Organizat
 
 // postOrganizationCreation runs after an organization is created to perform additional setup
 func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
-	// create default entity types, if configured
-	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
-		return err
-	}
-
-	// create generated groups
-	if err := generateOrganizationGroups(ctx, m, orgCreated.ID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error creating generated groups")
-
-		return err
-	}
-
 	// create subscriptions if the entitlement manager is enabled
+	// modules must exist before the module-gated defaults below are created
 	if m.EntitlementManager.Config.IsEnabled() {
 		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
 		if err != nil {
@@ -366,6 +355,18 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		if err != nil {
 			return err
 		}
+	}
+
+	// create default entity types, if configured
+	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
+		return err
+	}
+
+	// create generated groups
+	if err := generateOrganizationGroups(ctx, m, orgCreated.ID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating generated groups")
+
+		return err
 	}
 
 	if err := createDefaultSLADefinitions(ctx, orgCreated.ID, m.Client()); err != nil {

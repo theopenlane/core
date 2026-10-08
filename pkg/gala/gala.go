@@ -29,6 +29,9 @@ const (
 	DispatchModeInMemory DispatchMode = "in_memory"
 )
 
+// defaultWaitIdleTimeout bounds WaitIdle when the caller's context has no deadline, so a stuck job fails fast
+const defaultWaitIdleTimeout = 2 * time.Minute
+
 // Config configures cohesive Gala startup
 type Config struct {
 	// DispatchMode controls whether events are dispatched durably (River) or in-memory.
@@ -544,6 +547,25 @@ func (g *Gala) StopWorkers(ctx context.Context) error {
 // WaitIdle blocks until runnable work drains or the context ends
 // Future scheduled and retry work does not count as busy in durable mode
 func (g *Gala) WaitIdle(ctx context.Context) error {
+	if _, hasDeadline := ctx.Deadline(); hasDeadline {
+		return g.waitIdle(ctx)
+	}
+
+	boundedCtx, cancel := context.WithTimeout(ctx, defaultWaitIdleTimeout)
+	defer cancel()
+
+	if err := g.waitIdle(boundedCtx); err != nil {
+		if errors.Is(err, context.DeadlineExceeded) && ctx.Err() == nil {
+			return fmt.Errorf("%w: %w", ErrWaitIdleTimeout, err)
+		}
+
+		return err
+	}
+
+	return nil
+}
+
+func (g *Gala) waitIdle(ctx context.Context) error {
 	switch g.dispatchMode {
 	case DispatchModeInMemory:
 		if g.inMemoryPool != nil {

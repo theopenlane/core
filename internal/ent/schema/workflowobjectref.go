@@ -373,7 +373,7 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 
 // Modules this schema has access to
 func (WorkflowObjectRef) Modules() []models.OrgModule {
-	return []models.OrgModule{models.CatalogBaseModule}
+	return []models.OrgModule{models.CatalogAnyModule}
 }
 
 // Annotations of the WorkflowObjectRef

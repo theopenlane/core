@@ -18,6 +18,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 )
 
 // WorkflowDefinition stores workflow configurations, both system-provided templates and organization-specific instances
@@ -104,13 +107,30 @@ func (WorkflowDefinition) Fields() []ent.Field {
 			GoType(enums.WorkflowApprovalSubmissionMode("")).
 			Optional().
 			Default(string(enums.WorkflowApprovalSubmissionModeAutoSubmit)),
-		field.JSON("definition_json", models.WorkflowDefinitionDocument{}).
-			Comment("Typed document describing triggers, conditions, and actions").
-			Optional(),
+		definitionJSONField(),
 		field.Strings("tracked_fields").
 			Comment("Cached list of fields that should trigger workflow evaluation").
 			Optional(),
 	}
+}
+
+// definitionJSONField is the definition document field with the webhook destination validator attached
+func definitionJSONField() ent.Field {
+	definitionJSON := field.JSON("definition_json", models.WorkflowDefinitionDocument{}).
+		Comment("Typed document describing triggers, conditions, and actions").
+		Optional()
+
+	definitionJSON.Descriptor().Validators = append(definitionJSON.Descriptor().Validators, validateDefinitionWebhooks)
+
+	return definitionJSON
+}
+
+// validateDefinitionWebhooks checks webhook destinations, honoring the registered engine's private address
+// setting and staying strict when no engine is registered
+func validateDefinitionWebhooks(doc models.WorkflowDefinitionDocument) error {
+	wfEngine := engine.Default()
+
+	return workflows.ValidateWebhookDestinations(doc, wfEngine != nil && wfEngine.WebhookAllowPrivateAddresses())
 }
 
 // Edges of the WorkflowDefinition
@@ -164,7 +184,7 @@ func (w WorkflowDefinition) Mixin() []ent.Mixin {
 
 // Modules this schema has access to.
 func (WorkflowDefinition) Modules() []models.OrgModule {
-	return []models.OrgModule{models.CatalogBaseModule}
+	return []models.OrgModule{models.CatalogAnyModule}
 }
 
 // Annotations of the WorkflowDefinition
@@ -181,6 +201,7 @@ func (WorkflowDefinition) Policy() ent.Policy {
 			policy.CheckOrgEditAccess(),
 		),
 		policy.WithMutationRules(
+			rule.RequirePaymentMethod(),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowDefinitionMutation](),
 		),

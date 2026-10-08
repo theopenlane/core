@@ -2375,6 +2375,9 @@
         },
         "gala": {
           "$ref": "#/$defs/workflows.GalaConfig"
+        },
+        "webhookallowprivateaddresses": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false,

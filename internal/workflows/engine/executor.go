@@ -26,6 +26,7 @@ import (
 	wfworkflows "github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/core/v2/pkg/celx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (
@@ -35,7 +36,7 @@ const (
 	defaultWebhookFallbackBackoffMS = 100
 	defaultWebhookTimeoutMS         = 10_000
 
-	httpStatusClientErrorMin = 400
+	httpStatusRedirectMin    = 300
 	httpStatusClientErrorMax = 500
 )
 
@@ -441,6 +442,13 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 		return ErrWebhookURLRequired
 	}
 
+	// ensure before execution the webhook is allowed
+	if !e.config.WebhookAllowPrivateAddresses {
+		if _, err := urlx.ValidatePublicURL(params.URL); err != nil {
+			return fmt.Errorf("%w: %w", ErrWebhookFailed, err)
+		}
+	}
+
 	method := params.Method
 	if method == "" {
 		method = "POST"
@@ -502,13 +510,18 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 		idempotencyKey = fmt.Sprintf("wf_%s_%s_%s", instance.ID, action.Key, hex.EncodeToString(payloadSum[:]))
 	}
 
+	clientOpts := []httpclient.Option{httpclient.Timeout(time.Duration(timeoutMS) * time.Millisecond), httpclient.NoRedirects()}
+	if !e.config.WebhookAllowPrivateAddresses {
+		clientOpts = append(clientOpts, urlx.PublicOnly())
+	}
+
 	requestOpts := []httpsling.Option{
 		httpsling.Method(method),
 		httpsling.URL(params.URL),
 		httpsling.Body(basePayload),
 		httpsling.ContentType(httpsling.ContentTypeJSON),
 		httpsling.Accept(httpsling.ContentTypeJSON),
-		httpsling.Client(httpclient.Timeout(time.Duration(timeoutMS) * time.Millisecond)),
+		httpsling.Client(clientOpts...),
 		httpsling.Header("Idempotency-Key", idempotencyKey),
 		httpsling.Header("X-Workflow-Idempotency-Key", idempotencyKey),
 	}
@@ -540,7 +553,13 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 			return nil
 		}
 
-		if err == nil && resp != nil && resp.StatusCode >= httpStatusClientErrorMin && resp.StatusCode < httpStatusClientErrorMax {
+		// a blocked destination will not change on retry
+		if errors.Is(err, urlx.ErrNonPublicDestination) {
+			return fmt.Errorf("%w: %w", ErrWebhookFailed, err)
+		}
+
+		// redirects are not followed, so a 3xx will not change on retry either
+		if err == nil && resp != nil && resp.StatusCode >= httpStatusRedirectMin && resp.StatusCode < httpStatusClientErrorMax {
 			return ErrWebhookFailed
 		}
 
