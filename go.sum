@@ -411,8 +411,8 @@ github.com/gorilla/securecookie v1.1.2 h1:YCIWL56dvtr73r6715mJs5ZvhtnY73hBvEF8kX
 github.com/gorilla/securecookie v1.1.2/go.mod h1:NfCASbcHqRSY+3a8tlWJwsQap2VX5pwzwo4h3eOamfo=
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 h1:JeSE6pjso5THxAzdVpqr6/geYxZytqFMBCOtn/ujyeo=
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674/go.mod h1:r4w70xmWCQKmi1ONH4KIaBptdivuRPyosB9RmPlGEwA=
-github.com/gqlgo/gqlgenc v0.40.1 h1:B03/5ky2dv5JNW7WtTVtERlVHeo+0duZJbv78+GeKPA=
-github.com/gqlgo/gqlgenc v0.40.1/go.mod h1:vlKFea1Az8ntXMzbADLuuxAGJ68KTZAE56clI0JyADo=
+github.com/gqlgo/gqlgenc v0.43.0 h1:hrhBHNURZtj9re7pFPYEZWzLyIM5nhrea7xit2OWKGA=
+github.com/gqlgo/gqlgenc v0.43.0/go.mod h1:vlKFea1Az8ntXMzbADLuuxAGJ68KTZAE56clI0JyADo=
 github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 h1:UH//fgunKIs4JdUbpDl1VZCDaL56wXCB/5+wF6uHfaI=
 github.com/grpc-ecosystem/go-grpc-middleware v1.4.0/go.mod h1:g5qyo/la0ALbONm6Vbp88Yd8NsDy6rZz+RcrMPxvld8=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.30.0 h1:/Tnpcb2E0Pz/tN9s3bfEY2Q8ePCEX9iuS+cneUwncnw=
