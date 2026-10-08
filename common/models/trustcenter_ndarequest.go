@@ -8,7 +8,7 @@ type TrustCenterNDARequestSetting struct {
 	// AllowDisposableEmail enables known disposable emails to be used
 	AllowDisposableEmail bool `json:"allowDisposableEmail"`
 
-	// WorkEmailOnly restricts the auto approval to allow for only work emails
+	// WorkEmailOnly approves email addresses from non-free, non-disposable domains.
 	WorkEmailOnly bool `json:"workEmailOnly"`
 
 	// AllowRoleAccount if the domain matches a known role format like

@@ -16,8 +16,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/ssoutils"
 
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
@@ -89,37 +91,53 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 	}
 
 	switch req.Status {
+	// we have requested here because that will be the state still if auto approval rules not enabled
+	// so user will always get the email if org has no auto approval set up or if it was auto approved
 	case enums.TrustCenterNDARequestStatusRequested, enums.TrustCenterNDARequestStatusApproved:
 
-		return sendSystemEmail(inv.Context, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
+		err := sendSystemEmail(inv.Context, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: req.Email},
 			RequestID:     req.ID,
 			TrustCenterID: req.TrustCenterID,
 		})
 
+		if err != nil {
+			logx.FromContext(inv.Context).Error().Err(err).
+				Msg("failed to send trustcenter nda approval email")
+		}
+
 	case enums.TrustCenterNDARequestStatusNeedsApproval:
 
-		tc, err := inv.Client.TrustCenter.Query().Where(trustcenter.ID(req.TrustCenterID)).WithSetting().Only(inv.Context)
+		tc, err := inv.Client.TrustCenter.Query().Where(
+			trustcenter.ID(req.TrustCenterID),
+		).
+			WithSetting(func(q *generated.TrustCenterSettingQuery) {
+				q.Where(trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive))
+			}).
+			Only(inv.Context)
 		if err != nil {
 			return err
 		}
+
 		if err := createNDARequestMutationNotification(inv.Context, inv.Client, req, tc.OwnerID, string(inv.Envelope.ID)); err != nil {
 			return err
 		}
+
 		return sendNDAApprovalRequestEmails(inv.Context, inv.Client, req, tc)
 
 	case enums.TrustCenterNDARequestStatusSigned:
 
-		status, _ := payload.StringValue(trustcenterndarequest.FieldStatus)
-		if payload.Operation != entityops.OpCreate || status == enums.TrustCenterNDARequestStatusSigned.String() {
-			return nil
-		}
-
-		return sendSystemEmail(inv.Context, emaildef.TCAuthOp.Name(), emaildef.TrustCenterAuthEmail{
+		err := sendSystemEmail(inv.Context, emaildef.TCAuthOp.Name(), emaildef.TrustCenterAuthEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: req.Email},
 			RequestID:     req.ID,
 			TrustCenterID: req.TrustCenterID,
 		})
+
+		if err != nil {
+			logx.FromContext(inv.Context).Error().Err(err).
+				Msg("failed to send trustcenter nda signed/auth email")
+		}
+
 	}
 
 	return nil
@@ -141,22 +159,28 @@ func processApproval(ctx context.Context, client *generated.Client, request *gen
 
 	approvalRules := settings.AutoApprovalRules
 
-	isApproved := !settings.NdaApprovalRequired
+	ok := !settings.NdaApprovalRequired
+
+	// fine to do this as we auto set all to pending approval in the hook
+	status := enums.TrustCenterNDARequestStatusNeedsApproval
 
 	if settings.NdaApprovalRequired && settings.EnableAutoApproval {
-		isApproved, err = evaluateRules(ctx, client, request, &approvalRules)
+		ok, err = evaluateRules(ctx, client, request, &approvalRules)
 		if err != nil {
 			return nil, err
 		}
+
+		switch {
+		case ok:
+			status = enums.TrustCenterNDARequestStatusApproved
+
+		case !approvalRules.ManualApprovalOnFailure:
+
+			status = enums.TrustCenterNDARequestStatusDeclined
+		}
 	}
 
-	status := enums.TrustCenterNDARequestStatusNeedsApproval
-	if isApproved {
-		status = enums.TrustCenterNDARequestStatusApproved
-	} else if !approvalRules.ManualApprovalOnFailure {
-		status = enums.TrustCenterNDARequestStatusDeclined
-	}
-
+	// saving this will retrigger the listener, so be sure to skip it
 	oc, _ := gala.OperationContextFromContext(ctx)
 	source, _ := gala.DecodeAttributes[ndaApprovalSource](oc)
 	source.SkipNDAApprovalNotification = true
@@ -173,7 +197,7 @@ func processApproval(ctx context.Context, client *generated.Client, request *gen
 			trustcenterndarequest.EmailEQ(request.Email),
 		).
 		SetStatus(status).
-		SetAutoApproved(isApproved).
+		SetAutoApproved(ok).
 		ClearApprovedByUserID().
 		Save(ctx)
 }
@@ -208,36 +232,37 @@ func evaluateRules(ctx context.Context, client *generated.Client, request *gener
 		var err error
 		result, err = client.EmailVerifier.Client.Verify(request.Email)
 		if err != nil {
-			return false, err
+
+			// we do not want to fail the job. Instead log and return here
+			logx.FromContext(ctx).Error().Err(err).
+				Str("email", request.Email).
+				Msg("could not verify email")
+
+			return false, nil
 		}
 	}
 
-	if !validateEmailRules(result, setting) {
-		return false, nil
-	}
-
-	return !setting.UseDomainAllowlist && !setting.ApproveIfContactExists &&
-		!setting.ApproveFromExistingRequestDomain && !setting.ApproveFromContactDomain, nil
+	return validateEmailRules(result, setting), nil
 }
 
 func validateEmailRules(result *emailverifier.Result, setting *models.TrustCenterNDARequestSetting) bool {
-	if result == nil {
-		return !setting.WorkEmailOnly && setting.AllowDisposableEmail && setting.AllowRoleAccount
-	}
-
-	if !result.Syntax.Valid {
+	if result == nil || !result.Syntax.Valid {
 		return false
 	}
 
-	if result.Disposable && !setting.AllowDisposableEmail {
-		return false
+	if setting.AllowDisposableEmail && result.Disposable {
+		return true
 	}
 
-	if result.RoleAccount && !setting.AllowRoleAccount {
-		return false
+	if setting.AllowRoleAccount && result.RoleAccount {
+		return true
 	}
 
-	return !setting.WorkEmailOnly || (!result.Free && !result.Disposable)
+	if setting.WorkEmailOnly && !result.Free && !result.Disposable {
+		return true
+	}
+
+	return false
 }
 
 func validateDomainList(domain string, setting *models.TrustCenterNDARequestSetting) (isApproved, didMatch bool) {

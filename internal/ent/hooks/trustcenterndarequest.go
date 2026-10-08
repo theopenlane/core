@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -19,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
@@ -65,6 +67,17 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				queryCtx = auth.WithInternalOperationContext(ctx)
 			}
 
+			setting, err := m.Client().TrustCenterSetting.Query().
+				Where(
+					trustcentersetting.TrustCenterID(trustCenterID),
+					trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
+				).
+				Select(trustcentersetting.FieldEnableAutoApproval).
+				Only(ctx)
+			if err != nil {
+				return nil, err
+			}
+
 			existingRequest, err := m.Client().TrustCenterNDARequest.Query().
 				Where(
 					trustcenterndarequest.TrustCenterIDEQ(trustCenterID),
@@ -80,10 +93,26 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 					return recordSignedNDARequest(ctx, queryCtx, m, existingRequest)
 				}
 
+				// if we have an existing nda request, auto approval enabled and as long as the request is not approved,
+				// make sure to re-evaluate it
+				if setting.EnableAutoApproval && existingRequest.Status != enums.TrustCenterNDARequestStatusApproved {
+
+					existingRequest.Status = enums.TrustCenterNDARequestStatusPendingApproval
+
+					err := m.Client().TrustCenterNDARequest.UpdateOne(existingRequest).
+						SetStatus(enums.TrustCenterNDARequestStatusPendingApproval).
+						Exec(queryCtx)
+					if err != nil {
+						return nil, err
+					}
+				}
+
 				return existingRequest, nil
 			}
 
-			if requestedStatus == enums.TrustCenterNDARequestStatusRequested {
+			// if auto approval is enabled, automatically transition into pending approval state
+			// else leave in requested state
+			if setting.EnableAutoApproval && requestedStatus == enums.TrustCenterNDARequestStatusRequested {
 				m.SetStatus(enums.TrustCenterNDARequestStatusPendingApproval)
 			}
 
@@ -348,13 +377,18 @@ func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client,
 		requesterName = ""
 	}
 
-	return sendSystemEmail(ctx, emaildef.TCNDAApprovalRequestOp.Name(), emaildef.TrustCenterNDAApprovalRequestEmail{
+	err = sendSystemEmail(ctx, emaildef.TCNDAApprovalRequestOp.Name(), emaildef.TrustCenterNDAApprovalRequestEmail{
 		RecipientInfo:  emaildef.RecipientInfo{Email: emails[0], Recipients: emails},
 		OrgName:        org.DisplayName,
 		OrgID:          tc.OwnerID,
 		RequesterName:  requesterName,
 		RequesterEmail: ndaRequest.Email,
 	})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("could not send email to organization approvers")
+	}
+
+	return nil
 }
 
 func getNDAApproverEmails(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
