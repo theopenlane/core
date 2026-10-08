@@ -143367,6 +143367,52 @@ func (ec *executionContext) fieldContext_Scan_scopeID(_ context.Context, field g
 	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Scan_documentKindName(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_documentKindName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DocumentKindName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_documentKindName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _Scan_documentKindID(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_documentKindID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DocumentKindID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_documentKindID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Scan_target(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -143503,6 +143549,29 @@ func (ec *executionContext) _Scan_nextScanRunAt(ctx context.Context, field graph
 }
 func (ec *executionContext) fieldContext_Scan_nextScanRunAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type DateTime does not have child fields"))
+}
+
+func (ec *executionContext) _Scan_origin(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_origin(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Origin, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.ScanOrigin) graphql.Marshaler {
+			return ec.marshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_origin(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ScanScanOrigin does not have child fields"))
 }
 
 func (ec *executionContext) _Scan_performedBy(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
@@ -144007,6 +144076,38 @@ func (ec *executionContext) _Scan_scope(ctx context.Context, field graphql.Colle
 	)
 }
 func (ec *executionContext) fieldContext_Scan_scope(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Scan",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CustomTypeEnum(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Scan_documentKind(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_documentKind(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DocumentKind(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
+			return ec.marshalOCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_documentKind(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Scan",
 		Field:      field,
@@ -213975,7 +214076,7 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "reviewedBy", "assignedTo", "environmentName", "scopeName", "target", "scanType", "metadata", "scanDate", "scanSchedule", "nextScanRunAt", "performedBy", "discoveredVulnerabilityIds", "status", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "assetIDs", "entityIDs", "evidenceIDs", "fileIDs", "remediationIDs", "actionPlanIDs", "taskIDs", "platformIDs", "vulnerabilityIDs", "controlIDs", "subcontrolIDs", "findingIDs", "generatedByPlatformID", "performedByUserID", "performedByGroupID"}
+	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "reviewedBy", "assignedTo", "environmentName", "scopeName", "documentKindName", "target", "scanType", "metadata", "scanDate", "scanSchedule", "nextScanRunAt", "performedBy", "discoveredVulnerabilityIds", "status", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "documentKindID", "assetIDs", "entityIDs", "evidenceIDs", "fileIDs", "remediationIDs", "actionPlanIDs", "taskIDs", "platformIDs", "vulnerabilityIDs", "controlIDs", "subcontrolIDs", "findingIDs", "generatedByPlatformID", "performedByUserID", "performedByGroupID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -214065,6 +214166,13 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.ScopeName = data
+		case "documentKindName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindName = data
 		case "target":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("target"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -214205,6 +214313,13 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.ScopeID = data
+		case "documentKindID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindID = data
 		case "assetIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -299552,7 +299667,7 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "documentKindName", "documentKindNameNEQ", "documentKindNameIn", "documentKindNameNotIn", "documentKindNameContains", "documentKindNameHasPrefix", "documentKindNameHasSuffix", "documentKindNameIsNil", "documentKindNameNotNil", "documentKindNameEqualFold", "documentKindNameContainsFold", "documentKindID", "documentKindIDNEQ", "documentKindIDIn", "documentKindIDNotIn", "documentKindIDContains", "documentKindIDHasPrefix", "documentKindIDHasSuffix", "documentKindIDIsNil", "documentKindIDNotNil", "documentKindIDEqualFold", "documentKindIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "origin", "originNEQ", "originIn", "originNotIn", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasDocumentKind", "hasDocumentKindWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -301134,6 +301249,160 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ScopeIDContainsFold = data
+		case "documentKindName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindName = data
+		case "documentKindNameNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameNEQ = data
+		case "documentKindNameIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameIn = data
+		case "documentKindNameNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameNotIn = data
+		case "documentKindNameContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameContains = data
+		case "documentKindNameHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameHasPrefix = data
+		case "documentKindNameHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameHasSuffix = data
+		case "documentKindNameIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameIsNil = data
+		case "documentKindNameNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameNotNil = data
+		case "documentKindNameEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameEqualFold = data
+		case "documentKindNameContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindNameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindNameContainsFold = data
+		case "documentKindID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindID = data
+		case "documentKindIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDNEQ = data
+		case "documentKindIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDIn = data
+		case "documentKindIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDNotIn = data
+		case "documentKindIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDContains = data
+		case "documentKindIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDHasPrefix = data
+		case "documentKindIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDHasSuffix = data
+		case "documentKindIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDIsNil = data
+		case "documentKindIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDNotNil = data
+		case "documentKindIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDEqualFold = data
+		case "documentKindIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindIDContainsFold = data
 		case "target":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("target"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -301323,6 +301592,34 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.NextScanRunAtNotNil = data
+		case "origin":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("origin"))
+			data, err := ec.unmarshalOScanScanOrigin2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Origin = data
+		case "originNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("originNEQ"))
+			data, err := ec.unmarshalOScanScanOrigin2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OriginNEQ = data
+		case "originIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("originIn"))
+			data, err := ec.unmarshalOScanScanOrigin2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOriginᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OriginIn = data
+		case "originNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("originNotIn"))
+			data, err := ec.unmarshalOScanScanOrigin2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOriginᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OriginNotIn = data
 		case "performedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("performedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -301813,6 +302110,20 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.HasScopeWith = data
+		case "hasDocumentKind":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDocumentKind"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasDocumentKind = data
+		case "hasDocumentKindWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDocumentKindWith"))
+			data, err := ec.unmarshalOCustomTypeEnumWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasDocumentKindWith = data
 		case "hasAssets":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssets"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -354037,7 +354348,7 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "target", "scanType", "metadata", "clearMetadata", "scanDate", "clearScanDate", "scanSchedule", "clearScanSchedule", "nextScanRunAt", "clearNextScanRunAt", "performedBy", "clearPerformedBy", "discoveredVulnerabilityIds", "appendDiscoveredVulnerabilityIds", "clearDiscoveredVulnerabilityIds", "status", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addFileIDs", "removeFileIDs", "clearFiles", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "generatedByPlatformID", "clearGeneratedByPlatform", "performedByUserID", "clearPerformedByUser", "performedByGroupID", "clearPerformedByGroup"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "documentKindName", "clearDocumentKindName", "target", "scanType", "metadata", "clearMetadata", "scanDate", "clearScanDate", "scanSchedule", "clearScanSchedule", "nextScanRunAt", "clearNextScanRunAt", "performedBy", "clearPerformedBy", "discoveredVulnerabilityIds", "appendDiscoveredVulnerabilityIds", "clearDiscoveredVulnerabilityIds", "status", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "documentKindID", "clearDocumentKind", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addFileIDs", "removeFileIDs", "clearFiles", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "generatedByPlatformID", "clearGeneratedByPlatform", "performedByUserID", "clearPerformedByUser", "performedByGroupID", "clearPerformedByGroup"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -354198,6 +354509,20 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearScopeName = data
+		case "documentKindName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindName = data
+		case "clearDocumentKindName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDocumentKindName"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearDocumentKindName = data
 		case "target":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("target"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -354464,6 +354789,20 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearScope = data
+		case "documentKindID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("documentKindID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentKindID = data
+		case "clearDocumentKind":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDocumentKind"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearDocumentKind = data
 		case "addAssetIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAssetIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -439679,6 +440018,16 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "documentKindName":
+			out.Values[i] = ec._Scan_documentKindName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "documentKindID":
+			out.Values[i] = ec._Scan_documentKindID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "target":
 			out.Values[i] = ec._Scan_target(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -439707,6 +440056,11 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 		case "nextScanRunAt":
 			out.Values[i] = ec._Scan_nextScanRunAt(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "origin":
+			out.Values[i] = ec._Scan_origin(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "performedBy":
@@ -440129,6 +440483,44 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 					}
 				}()
 				res = ec._Scan_scope(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "documentKind":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Scan_documentKind(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -463413,6 +463805,16 @@ func (ec *executionContext) marshalNScanOrderField2ᚖgithubᚗcomᚋtheopenlane
 	return v
 }
 
+func (ec *executionContext) unmarshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx context.Context, v any) (enums.ScanOrigin, error) {
+	var res enums.ScanOrigin
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx context.Context, sel ast.SelectionSet, v enums.ScanOrigin) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNScanScanStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanStatus(ctx context.Context, v any) (enums.ScanStatus, error) {
 	var res enums.ScanStatus
 	err := res.UnmarshalGQL(v)
@@ -476918,6 +477320,58 @@ func (ec *executionContext) unmarshalOScanOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) unmarshalOScanScanOrigin2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOriginᚄ(ctx context.Context, v any) ([]enums.ScanOrigin, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]enums.ScanOrigin, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOScanScanOrigin2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOriginᚄ(ctx context.Context, sel ast.SelectionSet, v []enums.ScanOrigin) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOScanScanOrigin2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx context.Context, v any) (*enums.ScanOrigin, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(enums.ScanOrigin)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOScanScanOrigin2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx context.Context, sel ast.SelectionSet, v *enums.ScanOrigin) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOScanScanStatus2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanStatusᚄ(ctx context.Context, v any) ([]enums.ScanStatus, error) {

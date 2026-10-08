@@ -101,6 +101,29 @@ func SchemaID(schema json.RawMessage) string {
 	return path.Base(doc.Ref)
 }
 
+// AllowAdditionalProperties returns the schema with additional properties permitted on the root
+// type, for validating payloads that carry fields deliberately excluded from the authored schema
+func AllowAdditionalProperties(schema json.RawMessage) json.RawMessage {
+	var doc jsonschema.Schema
+	if err := json.Unmarshal(schema, &doc); err != nil {
+		return schema
+	}
+
+	typeDef, ok := doc.Definitions[SchemaID(schema)]
+	if !ok {
+		return schema
+	}
+
+	typeDef.AdditionalProperties = jsonschema.TrueSchema
+
+	out, err := json.Marshal(&doc)
+	if err != nil {
+		return schema
+	}
+
+	return out
+}
+
 // InjectDefaults returns the schema document as raw JSON with stored values injected
 // as "default" at every level of nesting, following $ref pointers into $defs recursively.
 // Using jsonschema.Schema preserves the original property ordering on serialization.

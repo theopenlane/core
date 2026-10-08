@@ -182,6 +182,16 @@ func ScopeID(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldScopeID, v))
 }
 
+// DocumentKindName applies equality check predicate on the "document_kind_name" field. It's identical to DocumentKindNameEQ.
+func DocumentKindName(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldDocumentKindName, v))
+}
+
+// DocumentKindID applies equality check predicate on the "document_kind_id" field. It's identical to DocumentKindIDEQ.
+func DocumentKindID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldDocumentKindID, v))
+}
+
 // Target applies equality check predicate on the "target" field. It's identical to TargetEQ.
 func Target(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldTarget, v))
@@ -1827,6 +1837,156 @@ func ScopeIDContainsFold(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldContainsFold(FieldScopeID, v))
 }
 
+// DocumentKindNameEQ applies the EQ predicate on the "document_kind_name" field.
+func DocumentKindNameEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameNEQ applies the NEQ predicate on the "document_kind_name" field.
+func DocumentKindNameNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameIn applies the In predicate on the "document_kind_name" field.
+func DocumentKindNameIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldDocumentKindName, vs...))
+}
+
+// DocumentKindNameNotIn applies the NotIn predicate on the "document_kind_name" field.
+func DocumentKindNameNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldDocumentKindName, vs...))
+}
+
+// DocumentKindNameGT applies the GT predicate on the "document_kind_name" field.
+func DocumentKindNameGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameGTE applies the GTE predicate on the "document_kind_name" field.
+func DocumentKindNameGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameLT applies the LT predicate on the "document_kind_name" field.
+func DocumentKindNameLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameLTE applies the LTE predicate on the "document_kind_name" field.
+func DocumentKindNameLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameContains applies the Contains predicate on the "document_kind_name" field.
+func DocumentKindNameContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameHasPrefix applies the HasPrefix predicate on the "document_kind_name" field.
+func DocumentKindNameHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameHasSuffix applies the HasSuffix predicate on the "document_kind_name" field.
+func DocumentKindNameHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameIsNil applies the IsNil predicate on the "document_kind_name" field.
+func DocumentKindNameIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldDocumentKindName))
+}
+
+// DocumentKindNameNotNil applies the NotNil predicate on the "document_kind_name" field.
+func DocumentKindNameNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldDocumentKindName))
+}
+
+// DocumentKindNameEqualFold applies the EqualFold predicate on the "document_kind_name" field.
+func DocumentKindNameEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldDocumentKindName, v))
+}
+
+// DocumentKindNameContainsFold applies the ContainsFold predicate on the "document_kind_name" field.
+func DocumentKindNameContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldDocumentKindName, v))
+}
+
+// DocumentKindIDEQ applies the EQ predicate on the "document_kind_id" field.
+func DocumentKindIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDNEQ applies the NEQ predicate on the "document_kind_id" field.
+func DocumentKindIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDIn applies the In predicate on the "document_kind_id" field.
+func DocumentKindIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldDocumentKindID, vs...))
+}
+
+// DocumentKindIDNotIn applies the NotIn predicate on the "document_kind_id" field.
+func DocumentKindIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldDocumentKindID, vs...))
+}
+
+// DocumentKindIDGT applies the GT predicate on the "document_kind_id" field.
+func DocumentKindIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDGTE applies the GTE predicate on the "document_kind_id" field.
+func DocumentKindIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDLT applies the LT predicate on the "document_kind_id" field.
+func DocumentKindIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDLTE applies the LTE predicate on the "document_kind_id" field.
+func DocumentKindIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDContains applies the Contains predicate on the "document_kind_id" field.
+func DocumentKindIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDHasPrefix applies the HasPrefix predicate on the "document_kind_id" field.
+func DocumentKindIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDHasSuffix applies the HasSuffix predicate on the "document_kind_id" field.
+func DocumentKindIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDIsNil applies the IsNil predicate on the "document_kind_id" field.
+func DocumentKindIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldDocumentKindID))
+}
+
+// DocumentKindIDNotNil applies the NotNil predicate on the "document_kind_id" field.
+func DocumentKindIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldDocumentKindID))
+}
+
+// DocumentKindIDEqualFold applies the EqualFold predicate on the "document_kind_id" field.
+func DocumentKindIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldDocumentKindID, v))
+}
+
+// DocumentKindIDContainsFold applies the ContainsFold predicate on the "document_kind_id" field.
+func DocumentKindIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldDocumentKindID, v))
+}
+
 // TargetEQ applies the EQ predicate on the "target" field.
 func TargetEQ(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldTarget, v))
@@ -2110,6 +2270,36 @@ func NextScanRunAtIsNil() predicate.Scan {
 // NextScanRunAtNotNil applies the NotNil predicate on the "next_scan_run_at" field.
 func NextScanRunAtNotNil() predicate.Scan {
 	return predicate.Scan(sql.FieldNotNull(FieldNextScanRunAt))
+}
+
+// OriginEQ applies the EQ predicate on the "origin" field.
+func OriginEQ(v enums.ScanOrigin) predicate.Scan {
+	vc := v
+	return predicate.Scan(sql.FieldEQ(FieldOrigin, vc))
+}
+
+// OriginNEQ applies the NEQ predicate on the "origin" field.
+func OriginNEQ(v enums.ScanOrigin) predicate.Scan {
+	vc := v
+	return predicate.Scan(sql.FieldNEQ(FieldOrigin, vc))
+}
+
+// OriginIn applies the In predicate on the "origin" field.
+func OriginIn(vs ...enums.ScanOrigin) predicate.Scan {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Scan(sql.FieldIn(FieldOrigin, v...))
+}
+
+// OriginNotIn applies the NotIn predicate on the "origin" field.
+func OriginNotIn(vs ...enums.ScanOrigin) predicate.Scan {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Scan(sql.FieldNotIn(FieldOrigin, v...))
 }
 
 // PerformedByEQ applies the EQ predicate on the "performed_by" field.
@@ -2697,6 +2887,29 @@ func HasScope() predicate.Scan {
 func HasScopeWith(preds ...predicate.CustomTypeEnum) predicate.Scan {
 	return predicate.Scan(func(s *sql.Selector) {
 		step := newScopeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDocumentKind applies the HasEdge predicate on the "document_kind" edge.
+func HasDocumentKind() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DocumentKindTable, DocumentKindColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDocumentKindWith applies the HasEdge predicate on the "document_kind" edge with a given conditions (other predicates).
+func HasDocumentKindWith(preds ...predicate.CustomTypeEnum) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newDocumentKindStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

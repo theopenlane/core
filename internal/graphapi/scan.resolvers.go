@@ -19,7 +19,7 @@ import (
 )
 
 // CreateScan is the resolver for the createScan field.
-func (r *mutationResolver) CreateScan(ctx context.Context, input generated.CreateScanInput) (*model.ScanCreatePayload, error) {
+func (r *mutationResolver) CreateScan(ctx context.Context, input generated.CreateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) (*model.ScanCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
 	if err != nil {
@@ -104,7 +104,7 @@ func (r *mutationResolver) UpdateBulkScan(ctx context.Context, ids []string, inp
 }
 
 // UpdateScan is the resolver for the updateScan field.
-func (r *mutationResolver) UpdateScan(ctx context.Context, id string, input generated.UpdateScanInput) (*model.ScanUpdatePayload, error) {
+func (r *mutationResolver) UpdateScan(ctx context.Context, id string, input generated.UpdateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) (*model.ScanUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Scan.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scan"})

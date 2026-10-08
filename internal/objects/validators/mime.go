@@ -7,6 +7,9 @@ import (
 
 const pdfMimeType = "application/pdf"
 
+// scanFilesField is the multipart key report pdfs are uploaded under on scan mutations
+const scanFilesField = "scanFiles"
+
 // importSchemaMimeTypes is a list of mime-types that are accepted for files uploaded as part of the import schema process (e.g. procedure, internal policy, action plan).
 // Parameter suffixes (e.g. "; charset=utf-8") are normalized away by MimeTypeValidator, so each
 // media type only needs to be listed once here.
@@ -53,6 +56,7 @@ var validMimeTypes = map[string][]string{
 	"actionPlanFile":     importSchemaMimeTypes,
 	"trustCenterDocFile": {"image/jpeg", "image/png", "image/webp", pdfMimeType, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
 	"documentDataFile":   {pdfMimeType},
+	scanFilesField:       {pdfMimeType},
 	"heroImageFile":      {"image/jpeg", "image/png", "image/webp"},
 	"watermarkFile":      {"image/jpeg", "image/png"},
 }
@@ -70,4 +74,8 @@ func mimeTypeValidator(f storage.File) error {
 var MimeTypeValidator storage.ValidationFunc = mimeTypeValidator
 
 // UploadValidator is the validation chain applied to every upload before it reaches storage
-var UploadValidator = storage.ValidationFunc(pkgobjects.ChainValidators(mimeTypeValidator, ndaValidator))
+var UploadValidator = storage.ValidationFunc(pkgobjects.ChainValidators(
+	mimeTypeValidator,
+	ndaValidator,
+	passwordProtectedValidator,
+))

@@ -1,4 +1,4 @@
-h1:QagojlX1voTfmKsgJKj81jSWQQpR1/2moO8VZTiVf58=
+h1:UoBMPchuWWqwnn3VH0nV08fV3uYa7vPRv80j9Gjojtg=
 20260809191428_init.sql h1:e7XUbYRmYEuXlSQWAOGqtGoUWWTgdIqqEP+MKzHQsHA=
 20260809191432_init_history.sql h1:KxDA3vA8rL783PP0DM5PVPb2BYSpDQh4nDVJOUnJvVo=
 20260824131122_drop_scheduledjob_scheduledjobrun_jobresult_jobrunnerregistrationtoken_jobrunnertoken_jobrunner_jobtemplate.sql h1:RIPOncMYlv1z9a6/2vibmBv1QH2+mz6lq52OmIJUYG8=
@@ -25,3 +25,4 @@ h1:QagojlX1voTfmKsgJKj81jSWQQpR1/2moO8VZTiVf58=
 20261006041222_policy_assessments_history.sql h1:anbU5r04h89CN9jVTaihrJWFM2DcUyZv3LBP56xFjzg=
 20261007145416_systemownedentities.sql h1:aYEcxUiZ+5DSJKAlbUFrSv+7lidLKPR0u4ymi81v7hg=
 20261007145423_systemownedentities_history.sql h1:lBn/NP84oC9yb0J4ecmQKdtVWX8w5xC7I470H7r29ag=
+20261008222400_scan.sql h1:alUfQ8gEZjSIR9lf6/edbt/F8YfVP7IEm2ofiOEjq4g=

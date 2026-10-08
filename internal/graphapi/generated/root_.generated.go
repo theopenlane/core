@@ -3716,7 +3716,7 @@ type ComplexityRoot struct {
 		CreateReview                         func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateSLADefinition                  func(childComplexity int, input generated.CreateSLADefinitionInput) int
-		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
+		CreateScan                           func(childComplexity int, input generated.CreateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
 		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
@@ -4065,7 +4065,7 @@ type ComplexityRoot struct {
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateSLADefinition                  func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
-		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
+		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
@@ -5887,6 +5887,9 @@ type ComplexityRoot struct {
 		CreatedAt                  func(childComplexity int) int
 		CreatedBy                  func(childComplexity int) int
 		DiscoveredVulnerabilityIds func(childComplexity int) int
+		DocumentKind               func(childComplexity int) int
+		DocumentKindID             func(childComplexity int) int
+		DocumentKindName           func(childComplexity int) int
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment                func(childComplexity int) int
@@ -5901,6 +5904,7 @@ type ComplexityRoot struct {
 		InternalNotes              func(childComplexity int) int
 		Metadata                   func(childComplexity int) int
 		NextScanRunAt              func(childComplexity int) int
+		Origin                     func(childComplexity int) int
 		Owner                      func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
 		PerformedBy                func(childComplexity int) int
@@ -26694,7 +26698,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput)), true
+		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createStandard":
 		if e.ComplexityRoot.Mutation.CreateStandard == nil {
 			break
@@ -30528,7 +30532,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput)), true
+		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateStandard":
 		if e.ComplexityRoot.Mutation.UpdateStandard == nil {
 			break
@@ -41327,6 +41331,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Scan.DiscoveredVulnerabilityIds(childComplexity), true
+	case "Scan.documentKind":
+		if e.ComplexityRoot.Scan.DocumentKind == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKind(childComplexity), true
+	case "Scan.documentKindID":
+		if e.ComplexityRoot.Scan.DocumentKindID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKindID(childComplexity), true
+	case "Scan.documentKindName":
+		if e.ComplexityRoot.Scan.DocumentKindName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKindName(childComplexity), true
 	case "Scan.editors":
 		if e.ComplexityRoot.Scan.Editors == nil {
 			break
@@ -41436,6 +41458,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Scan.NextScanRunAt(childComplexity), true
+	case "Scan.origin":
+		if e.ComplexityRoot.Scan.Origin == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.Origin(childComplexity), true
 	case "Scan.owner":
 		if e.ComplexityRoot.Scan.Owner == nil {
 			break
@@ -71783,6 +71811,10 @@ input CreateScanInput {
   """
   scopeName: String
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -71829,6 +71861,7 @@ input CreateScanInput {
   assignedToIdentityHolderID: ID
   environmentID: ID
   scopeID: ID
+  documentKindID: ID
   assetIDs: [ID!]
   entityIDs: [ID!]
   evidenceIDs: [ID!]
@@ -96594,6 +96627,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
   EXPORT
   STANDARD_UPDATE
   DOMAIN_SCAN
+  REPORT_SCAN
   IMPORT_COMPLETE
   ORGANIZATION_READY
   INTEGRATION
@@ -115164,6 +115198,14 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   scopeID: ID
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
+  the document_kind of the scan
+  """
+  documentKindID: ID
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -115187,6 +115229,10 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   when the scan is scheduled to run next
   """
   nextScanRunAt: DateTime
+  """
+  how the scan was created, derived from the caller on create and never supplied as input
+  """
+  origin: ScanScanOrigin!
   """
   who performed the scan when no user or group is linked
   """
@@ -115282,6 +115328,7 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   assignedToIdentityHolder: IdentityHolder
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  documentKind: CustomTypeEnum
   assets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -115710,7 +115757,17 @@ enum ScanOrderField {
   SCAN_TYPE
   scan_date
   next_scan_run_at
+  ORIGIN
   STATUS
+}
+"""
+ScanScanOrigin is enum for the field origin
+"""
+enum ScanScanOrigin @goModel(model: "github.com/theopenlane/core/common/enums.ScanOrigin") {
+  USER
+  SYSTEM
+  INTEGRATION
+  API
 }
 """
 ScanScanStatus is enum for the field status
@@ -115729,6 +115786,7 @@ enum ScanScanType @goModel(model: "github.com/theopenlane/core/common/enums.Scan
   VULNERABILITY
   VENDOR
   PROVIDER
+  REPORT
 }
 """
 ScanWhereInput is used for filtering Scan objects.
@@ -116027,6 +116085,34 @@ input ScanWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  document_kind_name field predicates
+  """
+  documentKindName: String
+  documentKindNameNEQ: String
+  documentKindNameIn: [String!]
+  documentKindNameNotIn: [String!]
+  documentKindNameContains: String
+  documentKindNameHasPrefix: String
+  documentKindNameHasSuffix: String
+  documentKindNameIsNil: Boolean
+  documentKindNameNotNil: Boolean
+  documentKindNameEqualFold: String
+  documentKindNameContainsFold: String
+  """
+  document_kind_id field predicates
+  """
+  documentKindID: ID
+  documentKindIDNEQ: ID
+  documentKindIDIn: [ID!]
+  documentKindIDNotIn: [ID!]
+  documentKindIDContains: ID
+  documentKindIDHasPrefix: ID
+  documentKindIDHasSuffix: ID
+  documentKindIDIsNil: Boolean
+  documentKindIDNotNil: Boolean
+  documentKindIDEqualFold: ID
+  documentKindIDContainsFold: ID
+  """
   target field predicates
   """
   target: String
@@ -116065,6 +116151,13 @@ input ScanWhereInput {
   nextScanRunAtLTE: DateTime
   nextScanRunAtIsNil: Boolean
   nextScanRunAtNotNil: Boolean
+  """
+  origin field predicates
+  """
+  origin: ScanScanOrigin
+  originNEQ: ScanScanOrigin
+  originIn: [ScanScanOrigin!]
+  originNotIn: [ScanScanOrigin!]
   """
   performed_by field predicates
   """
@@ -116183,6 +116276,11 @@ input ScanWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  document_kind edge predicates
+  """
+  hasDocumentKind: Boolean
+  hasDocumentKindWith: [CustomTypeEnumWhereInput!]
   """
   assets edge predicates
   """
@@ -132297,6 +132395,11 @@ input UpdateScanInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  clearDocumentKindName: Boolean
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String
@@ -132361,6 +132464,8 @@ input UpdateScanInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  documentKindID: ID
+  clearDocumentKind: Boolean
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
@@ -148425,6 +148530,8 @@ extend type Mutation{
         values of the scan
         """
         input: CreateScanInput!
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanCreatePayload!
     """
     Create multiple new scans
@@ -148469,6 +148576,8 @@ extend type Mutation{
         New values for the scan
         """
         input: UpdateScanInput!
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanUpdatePayload!
     """
     Delete an existing scan
@@ -164260,6 +164369,10 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_scopeName(ctx, field)
 	case "scopeID":
 		return ec.fieldContext_Scan_scopeID(ctx, field)
+	case "documentKindName":
+		return ec.fieldContext_Scan_documentKindName(ctx, field)
+	case "documentKindID":
+		return ec.fieldContext_Scan_documentKindID(ctx, field)
 	case "target":
 		return ec.fieldContext_Scan_target(ctx, field)
 	case "scanType":
@@ -164272,6 +164385,8 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_scanSchedule(ctx, field)
 	case "nextScanRunAt":
 		return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
+	case "origin":
+		return ec.fieldContext_Scan_origin(ctx, field)
 	case "performedBy":
 		return ec.fieldContext_Scan_performedBy(ctx, field)
 	case "performedByUserID":
@@ -164306,6 +164421,8 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_environment(ctx, field)
 	case "scope":
 		return ec.fieldContext_Scan_scope(ctx, field)
+	case "documentKind":
+		return ec.fieldContext_Scan_documentKind(ctx, field)
 	case "assets":
 		return ec.fieldContext_Scan_assets(ctx, field)
 	case "entities":

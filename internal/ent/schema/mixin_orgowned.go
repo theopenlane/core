@@ -274,9 +274,8 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		// if the auth into the api was an API token AND then
-		// current query is not an internal request, check scopes
-		if auth.IsAPITokenAuthentication(ctx) && !auth.IsInternalReadRequest(ctx) {
+		// check API Token scope and return error if scope not set on token for object
+		if auth.IsAPITokenAuthentication(ctx) {
 			if err := rule.CheckSubjectScope(ctx, q.Type(), fgax.CanView, nil); errors.Is(err, rule.ErrRequiredScopeNotSet) {
 				return err
 			}
@@ -305,7 +304,11 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // trust center anonymous capability without an active trust center key is malformed and is
 // denied rather than falling through to the organization filter
 func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
-	// reject callers with no resolvable org, a PAT's org may only be in its authorized list
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return "", false, auth.ErrNoAuthUser
+	}
+
 	if _, err := auth.GetOrganizationIDFromContext(ctx); err != nil {
 		return "", false, err
 	}
@@ -314,17 +317,21 @@ func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
 		return orgID, true, nil
 	}
 
-	if auth.HasAnonymousTrustCenterCapability(ctx) {
+	if caller.Has(auth.CapTrustCenterAnonymous) {
 		return "", false, privacy.Denyf("trust center request without active trust center key")
 	}
 
 	return "", false, nil
 }
 
-// orgInterceptorSkipper skips the organization interceptor based on the context and query type
-// Callers with CapBypassOrgFilter skip the interceptor.
+// orgInterceptorSkipper skips the organization interceptor based on the context
+// and query type. Callers with CapBypassOrgFilter skip the interceptor.
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
-	return auth.HasCrossOrgCapabilities(ctx)
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter) {
+		return true
+	}
+
+	return false
 }
 
 // orgHookSkipper skips the organization hook based on the context

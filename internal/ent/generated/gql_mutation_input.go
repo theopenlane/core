@@ -22534,6 +22534,7 @@ type CreateScanInput struct {
 	AssignedTo                 *string                `json:"assigned_to,omitempty"`
 	EnvironmentName            *string                `json:"environment_name,omitempty"`
 	ScopeName                  *string                `json:"scope_name,omitempty"`
+	DocumentKindName           *string                `json:"document_kind_name,omitempty"`
 	Target                     string                 `json:"target,omitempty"`
 	ScanType                   *enums.ScanType        `json:"scan_type,omitempty"`
 	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
@@ -22554,6 +22555,7 @@ type CreateScanInput struct {
 	AssignedToIdentityHolderID *string                `json:"assigned_to_identity_holder_id,omitempty"`
 	EnvironmentID              *string                `json:"environment_id,omitempty"`
 	ScopeID                    *string                `json:"scope_id,omitempty"`
+	DocumentKindID             *string                `json:"document_kind_id,omitempty"`
 	AssetIDs                   []string               `json:"asset_ids,omitempty"`
 	EntityIDs                  []string               `json:"entity_ids,omitempty"`
 	EvidenceIDs                []string               `json:"evidence_ids,omitempty"`
@@ -22593,6 +22595,9 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.DocumentKindName; v != nil {
+		m.SetDocumentKindName(*v)
 	}
 	m.SetTarget(i.Target)
 	if v := i.ScanType; v != nil {
@@ -22651,6 +22656,9 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if v := i.DocumentKindID; v != nil {
+		m.SetDocumentKindID(*v)
 	}
 	if v := i.AssetIDs; len(v) > 0 {
 		m.AddAssetIDs(v...)
@@ -22721,7 +22729,9 @@ type UpdateScanInput struct {
 	ClearEnvironmentName             bool
 	EnvironmentName                  *string `json:"environment_name,omitempty"`
 	ClearScopeName                   bool
-	ScopeName                        *string         `json:"scope_name,omitempty"`
+	ScopeName                        *string `json:"scope_name,omitempty"`
+	ClearDocumentKindName            bool
+	DocumentKindName                 *string         `json:"document_kind_name,omitempty"`
 	Target                           *string         `json:"target,omitempty"`
 	ScanType                         *enums.ScanType `json:"scan_type,omitempty"`
 	ClearMetadata                    bool
@@ -22760,6 +22770,8 @@ type UpdateScanInput struct {
 	EnvironmentID                    *string `json:"environment_id,omitempty"`
 	ClearScope                       bool
 	ScopeID                          *string `json:"scope_id,omitempty"`
+	ClearDocumentKind                bool
+	DocumentKindID                   *string `json:"document_kind_id,omitempty"`
 	ClearAssets                      bool
 	AddAssetIDs                      []string `json:"add_asset_ids,omitempty"`
 	RemoveAssetIDs                   []string `json:"remove_asset_ids,omitempty"`
@@ -22850,6 +22862,12 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearDocumentKindName {
+		m.ClearDocumentKindName()
+	}
+	if v := i.DocumentKindName; v != nil {
+		m.SetDocumentKindName(*v)
 	}
 	if v := i.Target; v != nil {
 		m.SetTarget(*v)
@@ -22964,6 +22982,12 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if i.ClearDocumentKind {
+		m.ClearDocumentKind()
+	}
+	if v := i.DocumentKindID; v != nil {
+		m.SetDocumentKindID(*v)
 	}
 	if i.ClearAssets {
 		m.ClearAssets()

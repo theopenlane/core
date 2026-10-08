@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -91,6 +92,15 @@ func (Scan) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("next_scan_run_at"),
 			),
+		field.Enum("origin").
+			Comment("how the scan was created, derived from the caller on create and never supplied as input").
+			GoType(enums.ScanOrigin("")).
+			Default(enums.ScanOriginSystem.String()).
+			Immutable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
+				entgql.OrderField("ORIGIN"),
+			),
 		field.String("performed_by").
 			Comment("who performed the scan when no user or group is linked").
 			Optional(),
@@ -145,6 +155,7 @@ func (s Scan) Mixin() []ent.Mixin {
 			newResponsibilityMixin(s, withReviewedBy(), withAssignedTo()),
 			newCustomEnumMixin(s, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(s, withEnumFieldName("scope"), withGlobalEnum()),
+			newCustomEnumMixin(s, withEnumFieldName("document_kind"), withGlobalEnum()),
 		},
 	}.getMixins(s)
 }
@@ -192,6 +203,15 @@ func (s Scan) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
+	}
+}
+
+// Hooks of the Scan
+func (Scan) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookScanDefaults(),
+		hooks.HookScanFiles(),
+		hooks.HookScanReportSubmit(),
 	}
 }
 
