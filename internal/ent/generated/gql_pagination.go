@@ -906,7 +906,7 @@ func (_m *ActionPlanQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -920,6 +920,103 @@ func (_m *ActionPlanQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ActionPlanQuery) clonePage() *ActionPlanQuery {
+	c := _m.Clone()
+	if _m.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_m.withNamedIntegrationRuns))
+		for name, q := range _m.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_m.withNamedRisks))
+		for name, q := range _m.withNamedRisks {
+			c.withNamedRisks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_m.withNamedVulnerabilities))
+		for name, q := range _m.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_m.withNamedScans))
+		for name, q := range _m.withNamedScans {
+			c.withNamedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_m.withNamedReviews))
+		for name, q := range _m.withNamedReviews {
+			c.withNamedReviews[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_m.withNamedRemediations))
+		for name, q := range _m.withNamedRemediations {
+			c.withNamedRemediations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_m.withNamedIntegrations))
+		for name, q := range _m.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -1453,7 +1550,7 @@ func (_m *AssessmentQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -1467,6 +1564,73 @@ func (_m *AssessmentQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *AssessmentQuery) clonePage() *AssessmentQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolders))
+		for name, q := range _m.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_m.withNamedAssessmentResponses))
+		for name, q := range _m.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_m.withNamedCampaigns))
+		for name, q := range _m.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPolicyAttestations != nil {
+		c.withNamedPolicyAttestations = make(map[string]*AssessmentPolicyQuery, len(_m.withNamedPolicyAttestations))
+		for name, q := range _m.withNamedPolicyAttestations {
+			c.withNamedPolicyAttestations[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -2227,7 +2391,7 @@ func (_m *AssessmentResponseQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -2241,6 +2405,25 @@ func (_m *AssessmentResponseQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *AssessmentResponseQuery) clonePage() *AssessmentResponseQuery {
+	c := _m.Clone()
+	if _m.withNamedVendorRiskScores != nil {
+		c.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery, len(_m.withNamedVendorRiskScores))
+		for name, q := range _m.withNamedVendorRiskScores {
+			c.withNamedVendorRiskScores[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -2864,7 +3047,7 @@ func (_m *AssetQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -2878,6 +3061,127 @@ func (_m *AssetQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *AssetQuery) clonePage() *AssetQuery {
+	c := _m.Clone()
+	if _m.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_m.withNamedIntegrationRuns))
+		for name, q := range _m.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_m.withNamedScans))
+		for name, q := range _m.withNamedScans {
+			c.withNamedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_m.withNamedSystemDetails))
+		for name, q := range _m.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOutOfScopePlatforms != nil {
+		c.withNamedOutOfScopePlatforms = make(map[string]*PlatformQuery, len(_m.withNamedOutOfScopePlatforms))
+		for name, q := range _m.withNamedOutOfScopePlatforms {
+			c.withNamedOutOfScopePlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolders))
+		for name, q := range _m.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_m.withNamedVulnerabilities))
+		for name, q := range _m.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_m.withNamedReviews))
+		for name, q := range _m.withNamedReviews {
+			c.withNamedReviews[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_m.withNamedRemediations))
+		for name, q := range _m.withNamedRemediations {
+			c.withNamedRemediations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedConnectedAssets != nil {
+		c.withNamedConnectedAssets = make(map[string]*AssetQuery, len(_m.withNamedConnectedAssets))
+		for name, q := range _m.withNamedConnectedAssets {
+			c.withNamedConnectedAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedConnectedFrom != nil {
+		c.withNamedConnectedFrom = make(map[string]*AssetQuery, len(_m.withNamedConnectedFrom))
+		for name, q := range _m.withNamedConnectedFrom {
+			c.withNamedConnectedFrom[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -3491,7 +3795,7 @@ func (_m *CampaignQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -3505,6 +3809,79 @@ func (_m *CampaignQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *CampaignQuery) clonePage() *CampaignQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_m.withNamedCampaignTargets))
+		for name, q := range _m.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_m.withNamedAssessmentResponses))
+		for name, q := range _m.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.Clone()
+		}
+	}
+	if _m.withNamedContacts != nil {
+		c.withNamedContacts = make(map[string]*ContactQuery, len(_m.withNamedContacts))
+		for name, q := range _m.withNamedContacts {
+			c.withNamedContacts[name] = q.Clone()
+		}
+	}
+	if _m.withNamedUsers != nil {
+		c.withNamedUsers = make(map[string]*UserQuery, len(_m.withNamedUsers))
+		for name, q := range _m.withNamedUsers {
+			c.withNamedUsers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_m.withNamedGroups))
+		for name, q := range _m.withNamedGroups {
+			c.withNamedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolders))
+		for name, q := range _m.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -4304,7 +4681,7 @@ func (_m *CampaignTargetQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -4318,6 +4695,19 @@ func (_m *CampaignTargetQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *CampaignTargetQuery) clonePage() *CampaignTargetQuery {
+	c := _m.Clone()
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -4787,7 +5177,7 @@ func (_m *CheckResultQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -4801,6 +5191,49 @@ func (_m *CheckResultQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *CheckResultQuery) clonePage() *CheckResultQuery {
+	c := _m.Clone()
+	if _m.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_m.withNamedIntegrationRuns))
+		for name, q := range _m.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -6290,7 +6723,7 @@ func (_m *ControlImplementationQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -6304,6 +6737,49 @@ func (_m *ControlImplementationQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ControlImplementationQuery) clonePage() *ControlImplementationQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -6729,7 +7205,7 @@ func (_m *ControlObjectiveQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -6743,6 +7219,85 @@ func (_m *ControlObjectiveQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ControlObjectiveQuery) clonePage() *ControlObjectiveQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_m.withNamedEvidence))
+		for name, q := range _m.withNamedEvidence {
+			c.withNamedEvidence[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_m.withNamedProcedures))
+		for name, q := range _m.withNamedProcedures {
+			c.withNamedProcedures[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_m.withNamedRisks))
+		for name, q := range _m.withNamedRisks {
+			c.withNamedRisks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_m.withNamedNarratives))
+		for name, q := range _m.withNamedNarratives {
+			c.withNamedNarratives[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -8353,7 +8908,7 @@ func (_m *DirectoryAccountQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -8367,6 +8922,43 @@ func (_m *DirectoryAccountQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *DirectoryAccountQuery) clonePage() *DirectoryAccountQuery {
+	c := _m.Clone()
+	if _m.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_m.withNamedIntegrationRuns))
+		for name, q := range _m.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*DirectoryGroupQuery, len(_m.withNamedGroups))
+		for name, q := range _m.withNamedGroups {
+			c.withNamedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedMemberships != nil {
+		c.withNamedMemberships = make(map[string]*DirectoryMembershipQuery, len(_m.withNamedMemberships))
+		for name, q := range _m.withNamedMemberships {
+			c.withNamedMemberships[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -9653,7 +10245,7 @@ func (_m *DiscussionQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -9667,6 +10259,19 @@ func (_m *DiscussionQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *DiscussionQuery) clonePage() *DiscussionQuery {
+	c := _m.Clone()
+	if _m.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_m.withNamedComments))
+		for name, q := range _m.withNamedComments {
+			c.withNamedComments[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -10020,7 +10625,7 @@ func (_m *DocumentDataQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10034,6 +10639,25 @@ func (_m *DocumentDataQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *DocumentDataQuery) clonePage() *DocumentDataQuery {
+	c := _m.Clone()
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -10387,7 +11011,7 @@ func (_m *EmailTemplateQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10401,6 +11025,49 @@ func (_m *EmailTemplateQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *EmailTemplateQuery) clonePage() *EmailTemplateQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_m.withNamedCampaigns))
+		for name, q := range _m.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNotificationTemplates != nil {
+		c.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery, len(_m.withNamedNotificationTemplates))
+		for name, q := range _m.withNamedNotificationTemplates {
+			c.withNamedNotificationTemplates[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -12253,7 +12920,7 @@ func (_m *EventQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -12267,6 +12934,85 @@ func (_m *EventQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *EventQuery) clonePage() *EventQuery {
+	c := _m.Clone()
+	if _m.withNamedUsers != nil {
+		c.withNamedUsers = make(map[string]*UserQuery, len(_m.withNamedUsers))
+		for name, q := range _m.withNamedUsers {
+			c.withNamedUsers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_m.withNamedGroups))
+		for name, q := range _m.withNamedGroups {
+			c.withNamedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_m.withNamedIntegrations))
+		for name, q := range _m.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrganizations != nil {
+		c.withNamedOrganizations = make(map[string]*OrganizationQuery, len(_m.withNamedOrganizations))
+		for name, q := range _m.withNamedOrganizations {
+			c.withNamedOrganizations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInvites != nil {
+		c.withNamedInvites = make(map[string]*InviteQuery, len(_m.withNamedInvites))
+		for name, q := range _m.withNamedInvites {
+			c.withNamedInvites[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPersonalAccessTokens != nil {
+		c.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery, len(_m.withNamedPersonalAccessTokens))
+		for name, q := range _m.withNamedPersonalAccessTokens {
+			c.withNamedPersonalAccessTokens[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSecrets != nil {
+		c.withNamedSecrets = make(map[string]*HushQuery, len(_m.withNamedSecrets))
+		for name, q := range _m.withNamedSecrets {
+			c.withNamedSecrets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrgMemberships != nil {
+		c.withNamedOrgMemberships = make(map[string]*OrgMembershipQuery, len(_m.withNamedOrgMemberships))
+		for name, q := range _m.withNamedOrgMemberships {
+			c.withNamedOrgMemberships[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroupMemberships != nil {
+		c.withNamedGroupMemberships = make(map[string]*GroupMembershipQuery, len(_m.withNamedGroupMemberships))
+		for name, q := range _m.withNamedGroupMemberships {
+			c.withNamedGroupMemberships[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubscribers != nil {
+		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_m.withNamedSubscribers))
+		for name, q := range _m.withNamedSubscribers {
+			c.withNamedSubscribers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrgSubscriptions != nil {
+		c.withNamedOrgSubscriptions = make(map[string]*OrgSubscriptionQuery, len(_m.withNamedOrgSubscriptions))
+		for name, q := range _m.withNamedOrgSubscriptions {
+			c.withNamedOrgSubscriptions[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -12620,7 +13366,7 @@ func (_m *EvidenceQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -12634,6 +13380,91 @@ func (_m *EvidenceQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *EvidenceQuery) clonePage() *EvidenceQuery {
+	c := _m.Clone()
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_m.withNamedControlObjectives))
+		for name, q := range _m.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_m.withNamedControlImplementations))
+		for name, q := range _m.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_m.withNamedProcedures))
+		for name, q := range _m.withNamedProcedures {
+			c.withNamedProcedures[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_m.withNamedScans))
+		for name, q := range _m.withNamedScans {
+			c.withNamedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_m.withNamedComments))
+		for name, q := range _m.withNamedComments {
+			c.withNamedComments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -13528,7 +14359,7 @@ func (_m *FileQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -13542,6 +14373,121 @@ func (_m *FileQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *FileQuery) clonePage() *FileQuery {
+	c := _m.Clone()
+	if _m.withNamedOrganization != nil {
+		c.withNamedOrganization = make(map[string]*OrganizationQuery, len(_m.withNamedOrganization))
+		for name, q := range _m.withNamedOrganization {
+			c.withNamedOrganization[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_m.withNamedGroups))
+		for name, q := range _m.withNamedGroups {
+			c.withNamedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedContact != nil {
+		c.withNamedContact = make(map[string]*ContactQuery, len(_m.withNamedContact))
+		for name, q := range _m.withNamedContact {
+			c.withNamedContact[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntity != nil {
+		c.withNamedEntity = make(map[string]*EntityQuery, len(_m.withNamedEntity))
+		for name, q := range _m.withNamedEntity {
+			c.withNamedEntity[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrganizationSetting != nil {
+		c.withNamedOrganizationSetting = make(map[string]*OrganizationSettingQuery, len(_m.withNamedOrganizationSetting))
+		for name, q := range _m.withNamedOrganizationSetting {
+			c.withNamedOrganizationSetting[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTemplate != nil {
+		c.withNamedTemplate = make(map[string]*TemplateQuery, len(_m.withNamedTemplate))
+		for name, q := range _m.withNamedTemplate {
+			c.withNamedTemplate[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDocument != nil {
+		c.withNamedDocument = make(map[string]*DocumentDataQuery, len(_m.withNamedDocument))
+		for name, q := range _m.withNamedDocument {
+			c.withNamedDocument[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProgram != nil {
+		c.withNamedProgram = make(map[string]*ProgramQuery, len(_m.withNamedProgram))
+		for name, q := range _m.withNamedProgram {
+			c.withNamedProgram[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatform != nil {
+		c.withNamedPlatform = make(map[string]*PlatformQuery, len(_m.withNamedPlatform))
+		for name, q := range _m.withNamedPlatform {
+			c.withNamedPlatform[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_m.withNamedEvidence))
+		for name, q := range _m.withNamedEvidence {
+			c.withNamedEvidence[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolder != nil {
+		c.withNamedIdentityHolder = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolder))
+		for name, q := range _m.withNamedIdentityHolder {
+			c.withNamedIdentityHolder[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScan != nil {
+		c.withNamedScan = make(map[string]*ScanQuery, len(_m.withNamedScan))
+		for name, q := range _m.withNamedScan {
+			c.withNamedScan[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_m.withNamedEvents))
+		for name, q := range _m.withNamedEvents {
+			c.withNamedEvents[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_m.withNamedIntegrations))
+		for name, q := range _m.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSecrets != nil {
+		c.withNamedSecrets = make(map[string]*HushQuery, len(_m.withNamedSecrets))
+		for name, q := range _m.withNamedSecrets {
+			c.withNamedSecrets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterEntities != nil {
+		c.withNamedTrustCenterEntities = make(map[string]*TrustCenterEntityQuery, len(_m.withNamedTrustCenterEntities))
+		for name, q := range _m.withNamedTrustCenterEntities {
+			c.withNamedTrustCenterEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterDoc != nil {
+		c.withNamedTrustCenterDoc = make(map[string]*TrustCenterDocQuery, len(_m.withNamedTrustCenterDoc))
+		for name, q := range _m.withNamedTrustCenterDoc {
+			c.withNamedTrustCenterDoc[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOriginalTrustCenterDoc != nil {
+		c.withNamedOriginalTrustCenterDoc = make(map[string]*TrustCenterDocQuery, len(_m.withNamedOriginalTrustCenterDoc))
+		for name, q := range _m.withNamedOriginalTrustCenterDoc {
+			c.withNamedOriginalTrustCenterDoc[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -15191,7 +16137,7 @@ func (_m *GroupMembershipQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15205,6 +16151,19 @@ func (_m *GroupMembershipQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *GroupMembershipQuery) clonePage() *GroupMembershipQuery {
+	c := _m.Clone()
+	if _m.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_m.withNamedEvents))
+		for name, q := range _m.withNamedEvents {
+			c.withNamedEvents[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -15576,7 +16535,7 @@ func (_m *GroupSettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15590,6 +16549,13 @@ func (_m *GroupSettingQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *GroupSettingQuery) clonePage() *GroupSettingQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -16394,7 +17360,7 @@ func (_m *IdentityHolderQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -16408,6 +17374,127 @@ func (_m *IdentityHolderQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *IdentityHolderQuery) clonePage() *IdentityHolderQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_m.withNamedAssessmentResponses))
+		for name, q := range _m.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_m.withNamedAssessments))
+		for name, q := range _m.withNamedAssessments {
+			c.withNamedAssessments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTemplates != nil {
+		c.withNamedTemplates = make(map[string]*TemplateQuery, len(_m.withNamedTemplates))
+		for name, q := range _m.withNamedTemplates {
+			c.withNamedTemplates[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_m.withNamedAssets))
+		for name, q := range _m.withNamedAssets {
+			c.withNamedAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_m.withNamedDirectoryAccounts))
+		for name, q := range _m.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_m.withNamedCampaigns))
+		for name, q := range _m.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAccessPlatforms != nil {
+		c.withNamedAccessPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedAccessPlatforms))
+		for name, q := range _m.withNamedAccessPlatforms {
+			c.withNamedAccessPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -17562,7 +18649,7 @@ func (_m *IntegrationRunQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -17576,6 +18663,91 @@ func (_m *IntegrationRunQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *IntegrationRunQuery) clonePage() *IntegrationRunQuery {
+	c := _m.Clone()
+	if _m.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_m.withNamedActionPlans))
+		for name, q := range _m.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_m.withNamedAssets))
+		for name, q := range _m.withNamedAssets {
+			c.withNamedAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCheckResults != nil {
+		c.withNamedCheckResults = make(map[string]*CheckResultQuery, len(_m.withNamedCheckResults))
+		for name, q := range _m.withNamedCheckResults {
+			c.withNamedCheckResults[name] = q.Clone()
+		}
+	}
+	if _m.withNamedContacts != nil {
+		c.withNamedContacts = make(map[string]*ContactQuery, len(_m.withNamedContacts))
+		for name, q := range _m.withNamedContacts {
+			c.withNamedContacts[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_m.withNamedDirectoryAccounts))
+		for name, q := range _m.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryGroups != nil {
+		c.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery, len(_m.withNamedDirectoryGroups))
+		for name, q := range _m.withNamedDirectoryGroups {
+			c.withNamedDirectoryGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryMemberships != nil {
+		c.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery, len(_m.withNamedDirectoryMemberships))
+		for name, q := range _m.withNamedDirectoryMemberships {
+			c.withNamedDirectoryMemberships[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_m.withNamedProcedures))
+		for name, q := range _m.withNamedProcedures {
+			c.withNamedProcedures[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_m.withNamedRisks))
+		for name, q := range _m.withNamedRisks {
+			c.withNamedRisks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_m.withNamedVulnerabilities))
+		for name, q := range _m.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -18936,7 +20108,7 @@ func (_m *MappableDomainQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -18950,6 +20122,19 @@ func (_m *MappableDomainQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *MappableDomainQuery) clonePage() *MappableDomainQuery {
+	c := _m.Clone()
+	if _m.withNamedCustomDomains != nil {
+		c.withNamedCustomDomains = make(map[string]*CustomDomainQuery, len(_m.withNamedCustomDomains))
+		for name, q := range _m.withNamedCustomDomains {
+			c.withNamedCustomDomains[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -19710,7 +20895,7 @@ func (_m *NarrativeQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -19724,6 +20909,55 @@ func (_m *NarrativeQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *NarrativeQuery) clonePage() *NarrativeQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSatisfies != nil {
+		c.withNamedSatisfies = make(map[string]*ControlQuery, len(_m.withNamedSatisfies))
+		for name, q := range _m.withNamedSatisfies {
+			c.withNamedSatisfies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_m.withNamedProcedures))
+		for name, q := range _m.withNamedProcedures {
+			c.withNamedProcedures[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -20095,7 +21329,7 @@ func (_m *NoteQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -20109,6 +21343,25 @@ func (_m *NoteQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *NoteQuery) clonePage() *NoteQuery {
+	c := _m.Clone()
+	if _m.withNamedTrustCenterFaqs != nil {
+		c.withNamedTrustCenterFaqs = make(map[string]*TrustCenterFAQQuery, len(_m.withNamedTrustCenterFaqs))
+		for name, q := range _m.withNamedTrustCenterFaqs {
+			c.withNamedTrustCenterFaqs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -21181,7 +22434,7 @@ func (_m *NotificationTemplateQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21195,6 +22448,19 @@ func (_m *NotificationTemplateQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *NotificationTemplateQuery) clonePage() *NotificationTemplateQuery {
+	c := _m.Clone()
+	if _m.withNamedNotifications != nil {
+		c.withNamedNotifications = make(map[string]*NotificationQuery, len(_m.withNamedNotifications))
+		for name, q := range _m.withNamedNotifications {
+			c.withNamedNotifications[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -21687,7 +22953,7 @@ func (_m *OnboardingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21701,6 +22967,13 @@ func (_m *OnboardingQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *OnboardingQuery) clonePage() *OnboardingQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 // OnboardingOrderField defines the ordering field of Onboarding.
@@ -21989,7 +23262,7 @@ func (_m *OrgMembershipQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -22003,6 +23276,19 @@ func (_m *OrgMembershipQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *OrgMembershipQuery) clonePage() *OrgMembershipQuery {
+	c := _m.Clone()
+	if _m.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_m.withNamedEvents))
+		for name, q := range _m.withNamedEvents {
+			c.withNamedEvents[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -22815,7 +24101,7 @@ func (_m *OrganizationQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -22829,6 +24115,943 @@ func (_m *OrganizationQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *OrganizationQuery) clonePage() *OrganizationQuery {
+	c := _m.Clone()
+	if _m.withNamedActionPlanCreators != nil {
+		c.withNamedActionPlanCreators = make(map[string]*GroupQuery, len(_m.withNamedActionPlanCreators))
+		for name, q := range _m.withNamedActionPlanCreators {
+			c.withNamedActionPlanCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAPITokenCreators != nil {
+		c.withNamedAPITokenCreators = make(map[string]*GroupQuery, len(_m.withNamedAPITokenCreators))
+		for name, q := range _m.withNamedAPITokenCreators {
+			c.withNamedAPITokenCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessmentCreators != nil {
+		c.withNamedAssessmentCreators = make(map[string]*GroupQuery, len(_m.withNamedAssessmentCreators))
+		for name, q := range _m.withNamedAssessmentCreators {
+			c.withNamedAssessmentCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessmentPolicyCreators != nil {
+		c.withNamedAssessmentPolicyCreators = make(map[string]*GroupQuery, len(_m.withNamedAssessmentPolicyCreators))
+		for name, q := range _m.withNamedAssessmentPolicyCreators {
+			c.withNamedAssessmentPolicyCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssetCreators != nil {
+		c.withNamedAssetCreators = make(map[string]*GroupQuery, len(_m.withNamedAssetCreators))
+		for name, q := range _m.withNamedAssetCreators {
+			c.withNamedAssetCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaignCreators != nil {
+		c.withNamedCampaignCreators = make(map[string]*GroupQuery, len(_m.withNamedCampaignCreators))
+		for name, q := range _m.withNamedCampaignCreators {
+			c.withNamedCampaignCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaignTargetCreators != nil {
+		c.withNamedCampaignTargetCreators = make(map[string]*GroupQuery, len(_m.withNamedCampaignTargetCreators))
+		for name, q := range _m.withNamedCampaignTargetCreators {
+			c.withNamedCampaignTargetCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCheckResultCreators != nil {
+		c.withNamedCheckResultCreators = make(map[string]*GroupQuery, len(_m.withNamedCheckResultCreators))
+		for name, q := range _m.withNamedCheckResultCreators {
+			c.withNamedCheckResultCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedContactCreators != nil {
+		c.withNamedContactCreators = make(map[string]*GroupQuery, len(_m.withNamedContactCreators))
+		for name, q := range _m.withNamedContactCreators {
+			c.withNamedContactCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlCreators != nil {
+		c.withNamedControlCreators = make(map[string]*GroupQuery, len(_m.withNamedControlCreators))
+		for name, q := range _m.withNamedControlCreators {
+			c.withNamedControlCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlImplementationCreators != nil {
+		c.withNamedControlImplementationCreators = make(map[string]*GroupQuery, len(_m.withNamedControlImplementationCreators))
+		for name, q := range _m.withNamedControlImplementationCreators {
+			c.withNamedControlImplementationCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlObjectiveCreators != nil {
+		c.withNamedControlObjectiveCreators = make(map[string]*GroupQuery, len(_m.withNamedControlObjectiveCreators))
+		for name, q := range _m.withNamedControlObjectiveCreators {
+			c.withNamedControlObjectiveCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCustomDomainCreators != nil {
+		c.withNamedCustomDomainCreators = make(map[string]*GroupQuery, len(_m.withNamedCustomDomainCreators))
+		for name, q := range _m.withNamedCustomDomainCreators {
+			c.withNamedCustomDomainCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCustomTypeEnumCreators != nil {
+		c.withNamedCustomTypeEnumCreators = make(map[string]*GroupQuery, len(_m.withNamedCustomTypeEnumCreators))
+		for name, q := range _m.withNamedCustomTypeEnumCreators {
+			c.withNamedCustomTypeEnumCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryAccountCreators != nil {
+		c.withNamedDirectoryAccountCreators = make(map[string]*GroupQuery, len(_m.withNamedDirectoryAccountCreators))
+		for name, q := range _m.withNamedDirectoryAccountCreators {
+			c.withNamedDirectoryAccountCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryGroupCreators != nil {
+		c.withNamedDirectoryGroupCreators = make(map[string]*GroupQuery, len(_m.withNamedDirectoryGroupCreators))
+		for name, q := range _m.withNamedDirectoryGroupCreators {
+			c.withNamedDirectoryGroupCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryMembershipCreators != nil {
+		c.withNamedDirectoryMembershipCreators = make(map[string]*GroupQuery, len(_m.withNamedDirectoryMembershipCreators))
+		for name, q := range _m.withNamedDirectoryMembershipCreators {
+			c.withNamedDirectoryMembershipCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDiscussionCreators != nil {
+		c.withNamedDiscussionCreators = make(map[string]*GroupQuery, len(_m.withNamedDiscussionCreators))
+		for name, q := range _m.withNamedDiscussionCreators {
+			c.withNamedDiscussionCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDocumentDataCreators != nil {
+		c.withNamedDocumentDataCreators = make(map[string]*GroupQuery, len(_m.withNamedDocumentDataCreators))
+		for name, q := range _m.withNamedDocumentDataCreators {
+			c.withNamedDocumentDataCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEmailTemplateCreators != nil {
+		c.withNamedEmailTemplateCreators = make(map[string]*GroupQuery, len(_m.withNamedEmailTemplateCreators))
+		for name, q := range _m.withNamedEmailTemplateCreators {
+			c.withNamedEmailTemplateCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntityCreators != nil {
+		c.withNamedEntityCreators = make(map[string]*GroupQuery, len(_m.withNamedEntityCreators))
+		for name, q := range _m.withNamedEntityCreators {
+			c.withNamedEntityCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntityTypeCreators != nil {
+		c.withNamedEntityTypeCreators = make(map[string]*GroupQuery, len(_m.withNamedEntityTypeCreators))
+		for name, q := range _m.withNamedEntityTypeCreators {
+			c.withNamedEntityTypeCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvidenceCreators != nil {
+		c.withNamedEvidenceCreators = make(map[string]*GroupQuery, len(_m.withNamedEvidenceCreators))
+		for name, q := range _m.withNamedEvidenceCreators {
+			c.withNamedEvidenceCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFileCreators != nil {
+		c.withNamedFileCreators = make(map[string]*GroupQuery, len(_m.withNamedFileCreators))
+		for name, q := range _m.withNamedFileCreators {
+			c.withNamedFileCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindingCreators != nil {
+		c.withNamedFindingCreators = make(map[string]*GroupQuery, len(_m.withNamedFindingCreators))
+		for name, q := range _m.withNamedFindingCreators {
+			c.withNamedFindingCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindingControlCreators != nil {
+		c.withNamedFindingControlCreators = make(map[string]*GroupQuery, len(_m.withNamedFindingControlCreators))
+		for name, q := range _m.withNamedFindingControlCreators {
+			c.withNamedFindingControlCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroupCreators != nil {
+		c.withNamedGroupCreators = make(map[string]*GroupQuery, len(_m.withNamedGroupCreators))
+		for name, q := range _m.withNamedGroupCreators {
+			c.withNamedGroupCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroupMembershipCreators != nil {
+		c.withNamedGroupMembershipCreators = make(map[string]*GroupQuery, len(_m.withNamedGroupMembershipCreators))
+		for name, q := range _m.withNamedGroupMembershipCreators {
+			c.withNamedGroupMembershipCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroupSettingCreators != nil {
+		c.withNamedGroupSettingCreators = make(map[string]*GroupQuery, len(_m.withNamedGroupSettingCreators))
+		for name, q := range _m.withNamedGroupSettingCreators {
+			c.withNamedGroupSettingCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedHushCreators != nil {
+		c.withNamedHushCreators = make(map[string]*GroupQuery, len(_m.withNamedHushCreators))
+		for name, q := range _m.withNamedHushCreators {
+			c.withNamedHushCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolderCreators != nil {
+		c.withNamedIdentityHolderCreators = make(map[string]*GroupQuery, len(_m.withNamedIdentityHolderCreators))
+		for name, q := range _m.withNamedIdentityHolderCreators {
+			c.withNamedIdentityHolderCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicyCreators != nil {
+		c.withNamedInternalPolicyCreators = make(map[string]*GroupQuery, len(_m.withNamedInternalPolicyCreators))
+		for name, q := range _m.withNamedInternalPolicyCreators {
+			c.withNamedInternalPolicyCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInviteCreators != nil {
+		c.withNamedInviteCreators = make(map[string]*GroupQuery, len(_m.withNamedInviteCreators))
+		for name, q := range _m.withNamedInviteCreators {
+			c.withNamedInviteCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedMappedControlCreators != nil {
+		c.withNamedMappedControlCreators = make(map[string]*GroupQuery, len(_m.withNamedMappedControlCreators))
+		for name, q := range _m.withNamedMappedControlCreators {
+			c.withNamedMappedControlCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNarrativeCreators != nil {
+		c.withNamedNarrativeCreators = make(map[string]*GroupQuery, len(_m.withNamedNarrativeCreators))
+		for name, q := range _m.withNamedNarrativeCreators {
+			c.withNamedNarrativeCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNoteCreators != nil {
+		c.withNamedNoteCreators = make(map[string]*GroupQuery, len(_m.withNamedNoteCreators))
+		for name, q := range _m.withNamedNoteCreators {
+			c.withNamedNoteCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNotificationTemplateCreators != nil {
+		c.withNamedNotificationTemplateCreators = make(map[string]*GroupQuery, len(_m.withNamedNotificationTemplateCreators))
+		for name, q := range _m.withNamedNotificationTemplateCreators {
+			c.withNamedNotificationTemplateCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrgMembershipCreators != nil {
+		c.withNamedOrgMembershipCreators = make(map[string]*GroupQuery, len(_m.withNamedOrgMembershipCreators))
+		for name, q := range _m.withNamedOrgMembershipCreators {
+			c.withNamedOrgMembershipCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatformCreators != nil {
+		c.withNamedPlatformCreators = make(map[string]*GroupQuery, len(_m.withNamedPlatformCreators))
+		for name, q := range _m.withNamedPlatformCreators {
+			c.withNamedPlatformCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProcedureCreators != nil {
+		c.withNamedProcedureCreators = make(map[string]*GroupQuery, len(_m.withNamedProcedureCreators))
+		for name, q := range _m.withNamedProcedureCreators {
+			c.withNamedProcedureCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProgramCreators != nil {
+		c.withNamedProgramCreators = make(map[string]*GroupQuery, len(_m.withNamedProgramCreators))
+		for name, q := range _m.withNamedProgramCreators {
+			c.withNamedProgramCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProgramMembershipCreators != nil {
+		c.withNamedProgramMembershipCreators = make(map[string]*GroupQuery, len(_m.withNamedProgramMembershipCreators))
+		for name, q := range _m.withNamedProgramMembershipCreators {
+			c.withNamedProgramMembershipCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRemediationCreators != nil {
+		c.withNamedRemediationCreators = make(map[string]*GroupQuery, len(_m.withNamedRemediationCreators))
+		for name, q := range _m.withNamedRemediationCreators {
+			c.withNamedRemediationCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedReviewCreators != nil {
+		c.withNamedReviewCreators = make(map[string]*GroupQuery, len(_m.withNamedReviewCreators))
+		for name, q := range _m.withNamedReviewCreators {
+			c.withNamedReviewCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRiskCreators != nil {
+		c.withNamedRiskCreators = make(map[string]*GroupQuery, len(_m.withNamedRiskCreators))
+		for name, q := range _m.withNamedRiskCreators {
+			c.withNamedRiskCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScanCreators != nil {
+		c.withNamedScanCreators = make(map[string]*GroupQuery, len(_m.withNamedScanCreators))
+		for name, q := range _m.withNamedScanCreators {
+			c.withNamedScanCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSLADefinitionCreators != nil {
+		c.withNamedSLADefinitionCreators = make(map[string]*GroupQuery, len(_m.withNamedSLADefinitionCreators))
+		for name, q := range _m.withNamedSLADefinitionCreators {
+			c.withNamedSLADefinitionCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedStandardCreators != nil {
+		c.withNamedStandardCreators = make(map[string]*GroupQuery, len(_m.withNamedStandardCreators))
+		for name, q := range _m.withNamedStandardCreators {
+			c.withNamedStandardCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrolCreators != nil {
+		c.withNamedSubcontrolCreators = make(map[string]*GroupQuery, len(_m.withNamedSubcontrolCreators))
+		for name, q := range _m.withNamedSubcontrolCreators {
+			c.withNamedSubcontrolCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubprocessorCreators != nil {
+		c.withNamedSubprocessorCreators = make(map[string]*GroupQuery, len(_m.withNamedSubprocessorCreators))
+		for name, q := range _m.withNamedSubprocessorCreators {
+			c.withNamedSubprocessorCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubscriberCreators != nil {
+		c.withNamedSubscriberCreators = make(map[string]*GroupQuery, len(_m.withNamedSubscriberCreators))
+		for name, q := range _m.withNamedSubscriberCreators {
+			c.withNamedSubscriberCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSystemDetailCreators != nil {
+		c.withNamedSystemDetailCreators = make(map[string]*GroupQuery, len(_m.withNamedSystemDetailCreators))
+		for name, q := range _m.withNamedSystemDetailCreators {
+			c.withNamedSystemDetailCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTagDefinitionCreators != nil {
+		c.withNamedTagDefinitionCreators = make(map[string]*GroupQuery, len(_m.withNamedTagDefinitionCreators))
+		for name, q := range _m.withNamedTagDefinitionCreators {
+			c.withNamedTagDefinitionCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTaskCreators != nil {
+		c.withNamedTaskCreators = make(map[string]*GroupQuery, len(_m.withNamedTaskCreators))
+		for name, q := range _m.withNamedTaskCreators {
+			c.withNamedTaskCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTemplateCreators != nil {
+		c.withNamedTemplateCreators = make(map[string]*GroupQuery, len(_m.withNamedTemplateCreators))
+		for name, q := range _m.withNamedTemplateCreators {
+			c.withNamedTemplateCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterCreators != nil {
+		c.withNamedTrustCenterCreators = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterCreators))
+		for name, q := range _m.withNamedTrustCenterCreators {
+			c.withNamedTrustCenterCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterComplianceCreators != nil {
+		c.withNamedTrustCenterComplianceCreators = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterComplianceCreators))
+		for name, q := range _m.withNamedTrustCenterComplianceCreators {
+			c.withNamedTrustCenterComplianceCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterDocCreators != nil {
+		c.withNamedTrustCenterDocCreators = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterDocCreators))
+		for name, q := range _m.withNamedTrustCenterDocCreators {
+			c.withNamedTrustCenterDocCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterEntityCreators != nil {
+		c.withNamedTrustCenterEntityCreators = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterEntityCreators))
+		for name, q := range _m.withNamedTrustCenterEntityCreators {
+			c.withNamedTrustCenterEntityCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterFaqCreators != nil {
+		c.withNamedTrustCenterFaqCreators = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterFaqCreators))
+		for name, q := range _m.withNamedTrustCenterFaqCreators {
+			c.withNamedTrustCenterFaqCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterNdaRequestCreators != nil {
+		c.withNamedTrustCenterNdaRequestCreators = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterNdaRequestCreators))
+		for name, q := range _m.withNamedTrustCenterNdaRequestCreators {
+			c.withNamedTrustCenterNdaRequestCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterSubprocessorCreators != nil {
+		c.withNamedTrustCenterSubprocessorCreators = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterSubprocessorCreators))
+		for name, q := range _m.withNamedTrustCenterSubprocessorCreators {
+			c.withNamedTrustCenterSubprocessorCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterWatermarkConfigCreators != nil {
+		c.withNamedTrustCenterWatermarkConfigCreators = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterWatermarkConfigCreators))
+		for name, q := range _m.withNamedTrustCenterWatermarkConfigCreators {
+			c.withNamedTrustCenterWatermarkConfigCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVendorRiskScoreCreators != nil {
+		c.withNamedVendorRiskScoreCreators = make(map[string]*GroupQuery, len(_m.withNamedVendorRiskScoreCreators))
+		for name, q := range _m.withNamedVendorRiskScoreCreators {
+			c.withNamedVendorRiskScoreCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVendorScoringConfigCreators != nil {
+		c.withNamedVendorScoringConfigCreators = make(map[string]*GroupQuery, len(_m.withNamedVendorScoringConfigCreators))
+		for name, q := range _m.withNamedVendorScoringConfigCreators {
+			c.withNamedVendorScoringConfigCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVulnerabilityCreators != nil {
+		c.withNamedVulnerabilityCreators = make(map[string]*GroupQuery, len(_m.withNamedVulnerabilityCreators))
+		for name, q := range _m.withNamedVulnerabilityCreators {
+			c.withNamedVulnerabilityCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowDefinitionCreators != nil {
+		c.withNamedWorkflowDefinitionCreators = make(map[string]*GroupQuery, len(_m.withNamedWorkflowDefinitionCreators))
+		for name, q := range _m.withNamedWorkflowDefinitionCreators {
+			c.withNamedWorkflowDefinitionCreators[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaignsManager != nil {
+		c.withNamedCampaignsManager = make(map[string]*GroupQuery, len(_m.withNamedCampaignsManager))
+		for name, q := range _m.withNamedCampaignsManager {
+			c.withNamedCampaignsManager[name] = q.Clone()
+		}
+	}
+	if _m.withNamedComplianceManager != nil {
+		c.withNamedComplianceManager = make(map[string]*GroupQuery, len(_m.withNamedComplianceManager))
+		for name, q := range _m.withNamedComplianceManager {
+			c.withNamedComplianceManager[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroupManager != nil {
+		c.withNamedGroupManager = make(map[string]*GroupQuery, len(_m.withNamedGroupManager))
+		for name, q := range _m.withNamedGroupManager {
+			c.withNamedGroupManager[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPoliciesManager != nil {
+		c.withNamedPoliciesManager = make(map[string]*GroupQuery, len(_m.withNamedPoliciesManager))
+		for name, q := range _m.withNamedPoliciesManager {
+			c.withNamedPoliciesManager[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRegistryManager != nil {
+		c.withNamedRegistryManager = make(map[string]*GroupQuery, len(_m.withNamedRegistryManager))
+		for name, q := range _m.withNamedRegistryManager {
+			c.withNamedRegistryManager[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRiskManager != nil {
+		c.withNamedRiskManager = make(map[string]*GroupQuery, len(_m.withNamedRiskManager))
+		for name, q := range _m.withNamedRiskManager {
+			c.withNamedRiskManager[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterManager != nil {
+		c.withNamedTrustCenterManager = make(map[string]*GroupQuery, len(_m.withNamedTrustCenterManager))
+		for name, q := range _m.withNamedTrustCenterManager {
+			c.withNamedTrustCenterManager[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowsManager != nil {
+		c.withNamedWorkflowsManager = make(map[string]*GroupQuery, len(_m.withNamedWorkflowsManager))
+		for name, q := range _m.withNamedWorkflowsManager {
+			c.withNamedWorkflowsManager[name] = q.Clone()
+		}
+	}
+	if _m.withNamedChildren != nil {
+		c.withNamedChildren = make(map[string]*OrganizationQuery, len(_m.withNamedChildren))
+		for name, q := range _m.withNamedChildren {
+			c.withNamedChildren[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPersonalAccessTokens != nil {
+		c.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery, len(_m.withNamedPersonalAccessTokens))
+		for name, q := range _m.withNamedPersonalAccessTokens {
+			c.withNamedPersonalAccessTokens[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAPITokens != nil {
+		c.withNamedAPITokens = make(map[string]*APITokenQuery, len(_m.withNamedAPITokens))
+		for name, q := range _m.withNamedAPITokens {
+			c.withNamedAPITokens[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEmailTemplates != nil {
+		c.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery, len(_m.withNamedEmailTemplates))
+		for name, q := range _m.withNamedEmailTemplates {
+			c.withNamedEmailTemplates[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIntegrationWebhooks != nil {
+		c.withNamedIntegrationWebhooks = make(map[string]*IntegrationWebhookQuery, len(_m.withNamedIntegrationWebhooks))
+		for name, q := range _m.withNamedIntegrationWebhooks {
+			c.withNamedIntegrationWebhooks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_m.withNamedIntegrationRuns))
+		for name, q := range _m.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNotificationPreferences != nil {
+		c.withNamedNotificationPreferences = make(map[string]*NotificationPreferenceQuery, len(_m.withNamedNotificationPreferences))
+		for name, q := range _m.withNamedNotificationPreferences {
+			c.withNamedNotificationPreferences[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNotificationTemplates != nil {
+		c.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery, len(_m.withNamedNotificationTemplates))
+		for name, q := range _m.withNamedNotificationTemplates {
+			c.withNamedNotificationTemplates[name] = q.Clone()
+		}
+	}
+	if _m.withNamedUsers != nil {
+		c.withNamedUsers = make(map[string]*UserQuery, len(_m.withNamedUsers))
+		for name, q := range _m.withNamedUsers {
+			c.withNamedUsers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_m.withNamedEvents))
+		for name, q := range _m.withNamedEvents {
+			c.withNamedEvents[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSecrets != nil {
+		c.withNamedSecrets = make(map[string]*HushQuery, len(_m.withNamedSecrets))
+		for name, q := range _m.withNamedSecrets {
+			c.withNamedSecrets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_m.withNamedGroups))
+		for name, q := range _m.withNamedGroups {
+			c.withNamedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTemplates != nil {
+		c.withNamedTemplates = make(map[string]*TemplateQuery, len(_m.withNamedTemplates))
+		for name, q := range _m.withNamedTemplates {
+			c.withNamedTemplates[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_m.withNamedIntegrations))
+		for name, q := range _m.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDocuments != nil {
+		c.withNamedDocuments = make(map[string]*DocumentDataQuery, len(_m.withNamedDocuments))
+		for name, q := range _m.withNamedDocuments {
+			c.withNamedDocuments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrgSubscriptions != nil {
+		c.withNamedOrgSubscriptions = make(map[string]*OrgSubscriptionQuery, len(_m.withNamedOrgSubscriptions))
+		for name, q := range _m.withNamedOrgSubscriptions {
+			c.withNamedOrgSubscriptions[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrgProducts != nil {
+		c.withNamedOrgProducts = make(map[string]*OrgProductQuery, len(_m.withNamedOrgProducts))
+		for name, q := range _m.withNamedOrgProducts {
+			c.withNamedOrgProducts[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrgPrices != nil {
+		c.withNamedOrgPrices = make(map[string]*OrgPriceQuery, len(_m.withNamedOrgPrices))
+		for name, q := range _m.withNamedOrgPrices {
+			c.withNamedOrgPrices[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrgModules != nil {
+		c.withNamedOrgModules = make(map[string]*OrgModuleQuery, len(_m.withNamedOrgModules))
+		for name, q := range _m.withNamedOrgModules {
+			c.withNamedOrgModules[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInvites != nil {
+		c.withNamedInvites = make(map[string]*InviteQuery, len(_m.withNamedInvites))
+		for name, q := range _m.withNamedInvites {
+			c.withNamedInvites[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubscribers != nil {
+		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_m.withNamedSubscribers))
+		for name, q := range _m.withNamedSubscribers {
+			c.withNamedSubscribers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolders))
+		for name, q := range _m.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_m.withNamedCampaigns))
+		for name, q := range _m.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_m.withNamedCampaignTargets))
+		for name, q := range _m.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntityTypes != nil {
+		c.withNamedEntityTypes = make(map[string]*EntityTypeQuery, len(_m.withNamedEntityTypes))
+		for name, q := range _m.withNamedEntityTypes {
+			c.withNamedEntityTypes[name] = q.Clone()
+		}
+	}
+	if _m.withNamedContacts != nil {
+		c.withNamedContacts = make(map[string]*ContactQuery, len(_m.withNamedContacts))
+		for name, q := range _m.withNamedContacts {
+			c.withNamedContacts[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNotes != nil {
+		c.withNamedNotes = make(map[string]*NoteQuery, len(_m.withNamedNotes))
+		for name, q := range _m.withNamedNotes {
+			c.withNamedNotes[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_m.withNamedSystemDetails))
+		for name, q := range _m.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_m.withNamedProcedures))
+		for name, q := range _m.withNamedProcedures {
+			c.withNamedProcedures[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_m.withNamedRisks))
+		for name, q := range _m.withNamedRisks {
+			c.withNamedRisks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_m.withNamedControlObjectives))
+		for name, q := range _m.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_m.withNamedNarratives))
+		for name, q := range _m.withNamedNarratives {
+			c.withNamedNarratives[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_m.withNamedControlImplementations))
+		for name, q := range _m.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedMappedControls != nil {
+		c.withNamedMappedControls = make(map[string]*MappedControlQuery, len(_m.withNamedMappedControls))
+		for name, q := range _m.withNamedMappedControls {
+			c.withNamedMappedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_m.withNamedEvidence))
+		for name, q := range _m.withNamedEvidence {
+			c.withNamedEvidence[name] = q.Clone()
+		}
+	}
+	if _m.withNamedStandards != nil {
+		c.withNamedStandards = make(map[string]*StandardQuery, len(_m.withNamedStandards))
+		for name, q := range _m.withNamedStandards {
+			c.withNamedStandards[name] = q.Clone()
+		}
+	}
+	if _m.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_m.withNamedActionPlans))
+		for name, q := range _m.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCustomDomains != nil {
+		c.withNamedCustomDomains = make(map[string]*CustomDomainQuery, len(_m.withNamedCustomDomains))
+		for name, q := range _m.withNamedCustomDomains {
+			c.withNamedCustomDomains[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDNSVerifications != nil {
+		c.withNamedDNSVerifications = make(map[string]*DNSVerificationQuery, len(_m.withNamedDNSVerifications))
+		for name, q := range _m.withNamedDNSVerifications {
+			c.withNamedDNSVerifications[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenters != nil {
+		c.withNamedTrustCenters = make(map[string]*TrustCenterQuery, len(_m.withNamedTrustCenters))
+		for name, q := range _m.withNamedTrustCenters {
+			c.withNamedTrustCenters[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_m.withNamedAssets))
+		for name, q := range _m.withNamedAssets {
+			c.withNamedAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_m.withNamedScans))
+		for name, q := range _m.withNamedScans {
+			c.withNamedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSLADefinitions != nil {
+		c.withNamedSLADefinitions = make(map[string]*SLADefinitionQuery, len(_m.withNamedSLADefinitions))
+		for name, q := range _m.withNamedSLADefinitions {
+			c.withNamedSLADefinitions[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubprocessors != nil {
+		c.withNamedSubprocessors = make(map[string]*SubprocessorQuery, len(_m.withNamedSubprocessors))
+		for name, q := range _m.withNamedSubprocessors {
+			c.withNamedSubprocessors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedExports != nil {
+		c.withNamedExports = make(map[string]*ExportQuery, len(_m.withNamedExports))
+		for name, q := range _m.withNamedExports {
+			c.withNamedExports[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterWatermarkConfigs != nil {
+		c.withNamedTrustCenterWatermarkConfigs = make(map[string]*TrustCenterWatermarkConfigQuery, len(_m.withNamedTrustCenterWatermarkConfigs))
+		for name, q := range _m.withNamedTrustCenterWatermarkConfigs {
+			c.withNamedTrustCenterWatermarkConfigs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedImpersonationEvents != nil {
+		c.withNamedImpersonationEvents = make(map[string]*ImpersonationEventQuery, len(_m.withNamedImpersonationEvents))
+		for name, q := range _m.withNamedImpersonationEvents {
+			c.withNamedImpersonationEvents[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_m.withNamedAssessments))
+		for name, q := range _m.withNamedAssessments {
+			c.withNamedAssessments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_m.withNamedAssessmentResponses))
+		for name, q := range _m.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessmentPolicies != nil {
+		c.withNamedAssessmentPolicies = make(map[string]*AssessmentPolicyQuery, len(_m.withNamedAssessmentPolicies))
+		for name, q := range _m.withNamedAssessmentPolicies {
+			c.withNamedAssessmentPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCustomTypeEnums != nil {
+		c.withNamedCustomTypeEnums = make(map[string]*CustomTypeEnumQuery, len(_m.withNamedCustomTypeEnums))
+		for name, q := range _m.withNamedCustomTypeEnums {
+			c.withNamedCustomTypeEnums[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTagDefinitions != nil {
+		c.withNamedTagDefinitions = make(map[string]*TagDefinitionQuery, len(_m.withNamedTagDefinitions))
+		for name, q := range _m.withNamedTagDefinitions {
+			c.withNamedTagDefinitions[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_m.withNamedRemediations))
+		for name, q := range _m.withNamedRemediations {
+			c.withNamedRemediations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindingControls != nil {
+		c.withNamedFindingControls = make(map[string]*FindingControlQuery, len(_m.withNamedFindingControls))
+		for name, q := range _m.withNamedFindingControls {
+			c.withNamedFindingControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_m.withNamedReviews))
+		for name, q := range _m.withNamedReviews {
+			c.withNamedReviews[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_m.withNamedVulnerabilities))
+		for name, q := range _m.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNotifications != nil {
+		c.withNamedNotifications = make(map[string]*NotificationQuery, len(_m.withNamedNotifications))
+		for name, q := range _m.withNamedNotifications {
+			c.withNamedNotifications[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowDefinitions != nil {
+		c.withNamedWorkflowDefinitions = make(map[string]*WorkflowDefinitionQuery, len(_m.withNamedWorkflowDefinitions))
+		for name, q := range _m.withNamedWorkflowDefinitions {
+			c.withNamedWorkflowDefinitions[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowInstances != nil {
+		c.withNamedWorkflowInstances = make(map[string]*WorkflowInstanceQuery, len(_m.withNamedWorkflowInstances))
+		for name, q := range _m.withNamedWorkflowInstances {
+			c.withNamedWorkflowInstances[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowEvents != nil {
+		c.withNamedWorkflowEvents = make(map[string]*WorkflowEventQuery, len(_m.withNamedWorkflowEvents))
+		for name, q := range _m.withNamedWorkflowEvents {
+			c.withNamedWorkflowEvents[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowAssignments != nil {
+		c.withNamedWorkflowAssignments = make(map[string]*WorkflowAssignmentQuery, len(_m.withNamedWorkflowAssignments))
+		for name, q := range _m.withNamedWorkflowAssignments {
+			c.withNamedWorkflowAssignments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowAssignmentTargets != nil {
+		c.withNamedWorkflowAssignmentTargets = make(map[string]*WorkflowAssignmentTargetQuery, len(_m.withNamedWorkflowAssignmentTargets))
+		for name, q := range _m.withNamedWorkflowAssignmentTargets {
+			c.withNamedWorkflowAssignmentTargets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowProposals != nil {
+		c.withNamedWorkflowProposals = make(map[string]*WorkflowProposalQuery, len(_m.withNamedWorkflowProposals))
+		for name, q := range _m.withNamedWorkflowProposals {
+			c.withNamedWorkflowProposals[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_m.withNamedDirectoryAccounts))
+		for name, q := range _m.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryGroups != nil {
+		c.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery, len(_m.withNamedDirectoryGroups))
+		for name, q := range _m.withNamedDirectoryGroups {
+			c.withNamedDirectoryGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryMemberships != nil {
+		c.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery, len(_m.withNamedDirectoryMemberships))
+		for name, q := range _m.withNamedDirectoryMemberships {
+			c.withNamedDirectoryMemberships[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDiscussions != nil {
+		c.withNamedDiscussions = make(map[string]*DiscussionQuery, len(_m.withNamedDiscussions))
+		for name, q := range _m.withNamedDiscussions {
+			c.withNamedDiscussions[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVendorScoringConfigs != nil {
+		c.withNamedVendorScoringConfigs = make(map[string]*VendorScoringConfigQuery, len(_m.withNamedVendorScoringConfigs))
+		for name, q := range _m.withNamedVendorScoringConfigs {
+			c.withNamedVendorScoringConfigs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVendorRiskScores != nil {
+		c.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery, len(_m.withNamedVendorRiskScores))
+		for name, q := range _m.withNamedVendorRiskScores {
+			c.withNamedVendorRiskScores[name] = q.Clone()
+		}
+	}
+	if _m.withNamedMembers != nil {
+		c.withNamedMembers = make(map[string]*OrgMembershipQuery, len(_m.withNamedMembers))
+		for name, q := range _m.withNamedMembers {
+			c.withNamedMembers[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -23218,7 +25441,7 @@ func (_m *OrganizationSettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23232,6 +25455,19 @@ func (_m *OrganizationSettingQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *OrganizationSettingQuery) clonePage() *OrganizationSettingQuery {
+	c := _m.Clone()
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -23585,7 +25821,7 @@ func (_m *PersonalAccessTokenQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23599,6 +25835,25 @@ func (_m *PersonalAccessTokenQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *PersonalAccessTokenQuery) clonePage() *PersonalAccessTokenQuery {
+	c := _m.Clone()
+	if _m.withNamedOrganizations != nil {
+		c.withNamedOrganizations = make(map[string]*OrganizationQuery, len(_m.withNamedOrganizations))
+		for name, q := range _m.withNamedOrganizations {
+			c.withNamedOrganizations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_m.withNamedEvents))
+		for name, q := range _m.withNamedEvents {
+			c.withNamedEvents[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -24050,7 +26305,7 @@ func (_m *PlatformQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -24064,6 +26319,181 @@ func (_m *PlatformQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *PlatformQuery) clonePage() *PlatformQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_m.withNamedAssets))
+		for name, q := range _m.withNamedAssets {
+			c.withNamedAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_m.withNamedEvidence))
+		for name, q := range _m.withNamedEvidence {
+			c.withNamedEvidence[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedArchitectureDiagrams != nil {
+		c.withNamedArchitectureDiagrams = make(map[string]*FileQuery, len(_m.withNamedArchitectureDiagrams))
+		for name, q := range _m.withNamedArchitectureDiagrams {
+			c.withNamedArchitectureDiagrams[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDataFlowDiagrams != nil {
+		c.withNamedDataFlowDiagrams = make(map[string]*FileQuery, len(_m.withNamedDataFlowDiagrams))
+		for name, q := range _m.withNamedDataFlowDiagrams {
+			c.withNamedDataFlowDiagrams[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustBoundaryDiagrams != nil {
+		c.withNamedTrustBoundaryDiagrams = make(map[string]*FileQuery, len(_m.withNamedTrustBoundaryDiagrams))
+		for name, q := range _m.withNamedTrustBoundaryDiagrams {
+			c.withNamedTrustBoundaryDiagrams[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_m.withNamedRisks))
+		for name, q := range _m.withNamedRisks {
+			c.withNamedRisks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_m.withNamedAssessments))
+		for name, q := range _m.withNamedAssessments {
+			c.withNamedAssessments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_m.withNamedScans))
+		for name, q := range _m.withNamedScans {
+			c.withNamedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolders))
+		for name, q := range _m.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_m.withNamedIntegrations))
+		for name, q := range _m.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_m.withNamedDirectoryAccounts))
+		for name, q := range _m.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryGroups != nil {
+		c.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery, len(_m.withNamedDirectoryGroups))
+		for name, q := range _m.withNamedDirectoryGroups {
+			c.withNamedDirectoryGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDirectoryMemberships != nil {
+		c.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery, len(_m.withNamedDirectoryMemberships))
+		for name, q := range _m.withNamedDirectoryMemberships {
+			c.withNamedDirectoryMemberships[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSourceAssets != nil {
+		c.withNamedSourceAssets = make(map[string]*AssetQuery, len(_m.withNamedSourceAssets))
+		for name, q := range _m.withNamedSourceAssets {
+			c.withNamedSourceAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSourceEntities != nil {
+		c.withNamedSourceEntities = make(map[string]*EntityQuery, len(_m.withNamedSourceEntities))
+		for name, q := range _m.withNamedSourceEntities {
+			c.withNamedSourceEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOutOfScopeAssets != nil {
+		c.withNamedOutOfScopeAssets = make(map[string]*AssetQuery, len(_m.withNamedOutOfScopeAssets))
+		for name, q := range _m.withNamedOutOfScopeAssets {
+			c.withNamedOutOfScopeAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOutOfScopeVendors != nil {
+		c.withNamedOutOfScopeVendors = make(map[string]*EntityQuery, len(_m.withNamedOutOfScopeVendors))
+		for name, q := range _m.withNamedOutOfScopeVendors {
+			c.withNamedOutOfScopeVendors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedApplicableFrameworks != nil {
+		c.withNamedApplicableFrameworks = make(map[string]*StandardQuery, len(_m.withNamedApplicableFrameworks))
+		for name, q := range _m.withNamedApplicableFrameworks {
+			c.withNamedApplicableFrameworks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGeneratedScans != nil {
+		c.withNamedGeneratedScans = make(map[string]*ScanQuery, len(_m.withNamedGeneratedScans))
+		for name, q := range _m.withNamedGeneratedScans {
+			c.withNamedGeneratedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_m.withNamedSystemDetails))
+		for name, q := range _m.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -25694,7 +28124,7 @@ func (_m *ProgramMembershipQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -25708,6 +28138,13 @@ func (_m *ProgramMembershipQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ProgramMembershipQuery) clonePage() *ProgramMembershipQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -26947,7 +29384,7 @@ func (_m *RiskQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -26961,6 +29398,145 @@ func (_m *RiskQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *RiskQuery) clonePage() *RiskQuery {
+	c := _m.Clone()
+	if _m.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_m.withNamedIntegrationRuns))
+		for name, q := range _m.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_m.withNamedProcedures))
+		for name, q := range _m.withNamedProcedures {
+			c.withNamedProcedures[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_m.withNamedActionPlans))
+		for name, q := range _m.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_m.withNamedAssets))
+		for name, q := range _m.withNamedAssets {
+			c.withNamedAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_m.withNamedScans))
+		for name, q := range _m.withNamedScans {
+			c.withNamedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_m.withNamedComments))
+		for name, q := range _m.withNamedComments {
+			c.withNamedComments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedDiscussions != nil {
+		c.withNamedDiscussions = make(map[string]*DiscussionQuery, len(_m.withNamedDiscussions))
+		for name, q := range _m.withNamedDiscussions {
+			c.withNamedDiscussions[name] = q.Clone()
+		}
+	}
+	if _m.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_m.withNamedReviews))
+		for name, q := range _m.withNamedReviews {
+			c.withNamedReviews[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_m.withNamedRemediations))
+		for name, q := range _m.withNamedRemediations {
+			c.withNamedRemediations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_m.withNamedVulnerabilities))
+		for name, q := range _m.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -28092,7 +30668,7 @@ func (_m *ScanQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -28106,6 +30682,97 @@ func (_m *ScanQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ScanQuery) clonePage() *ScanQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_m.withNamedAssets))
+		for name, q := range _m.withNamedAssets {
+			c.withNamedAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_m.withNamedEvidence))
+		for name, q := range _m.withNamedEvidence {
+			c.withNamedEvidence[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_m.withNamedRemediations))
+		for name, q := range _m.withNamedRemediations {
+			c.withNamedRemediations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_m.withNamedActionPlans))
+		for name, q := range _m.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_m.withNamedVulnerabilities))
+		for name, q := range _m.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -29613,7 +32280,7 @@ func (_m *SubprocessorQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -29627,6 +32294,25 @@ func (_m *SubprocessorQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *SubprocessorQuery) clonePage() *SubprocessorQuery {
+	c := _m.Clone()
+	if _m.withNamedTrustCenterSubprocessors != nil {
+		c.withNamedTrustCenterSubprocessors = make(map[string]*TrustCenterSubprocessorQuery, len(_m.withNamedTrustCenterSubprocessors))
+		for name, q := range _m.withNamedTrustCenterSubprocessors {
+			c.withNamedTrustCenterSubprocessors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -30423,7 +33109,7 @@ func (_m *SystemDetailQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -30437,6 +33123,37 @@ func (_m *SystemDetailQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *SystemDetailQuery) clonePage() *SystemDetailQuery {
+	c := _m.Clone()
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_m.withNamedAssets))
+		for name, q := range _m.withNamedAssets {
+			c.withNamedAssets[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -30808,7 +33525,7 @@ func (_m *TFASettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -30822,6 +33539,13 @@ func (_m *TFASettingQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TFASettingQuery) clonePage() *TFASettingQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -31564,7 +34288,7 @@ func (_m *TaskQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -31578,6 +34302,127 @@ func (_m *TaskQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TaskQuery) clonePage() *TaskQuery {
+	c := _m.Clone()
+	if _m.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_m.withNamedComments))
+		for name, q := range _m.withNamedComments {
+			c.withNamedComments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_m.withNamedGroups))
+		for name, q := range _m.withNamedGroups {
+			c.withNamedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_m.withNamedInternalPolicies))
+		for name, q := range _m.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_m.withNamedProcedures))
+		for name, q := range _m.withNamedProcedures {
+			c.withNamedProcedures[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_m.withNamedControlObjectives))
+		for name, q := range _m.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_m.withNamedRisks))
+		for name, q := range _m.withNamedRisks {
+			c.withNamedRisks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_m.withNamedPlatforms))
+		for name, q := range _m.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_m.withNamedScans))
+		for name, q := range _m.withNamedScans {
+			c.withNamedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolders))
+		for name, q := range _m.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_m.withNamedControlImplementations))
+		for name, q := range _m.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_m.withNamedActionPlans))
+		for name, q := range _m.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_m.withNamedEvidence))
+		for name, q := range _m.withNamedEvidence {
+			c.withNamedEvidence[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	if _m.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_m.withNamedVulnerabilities))
+		for name, q := range _m.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -32083,7 +34928,7 @@ func (_m *TemplateQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -32097,6 +34942,43 @@ func (_m *TemplateQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TemplateQuery) clonePage() *TemplateQuery {
+	c := _m.Clone()
+	if _m.withNamedDocuments != nil {
+		c.withNamedDocuments = make(map[string]*DocumentDataQuery, len(_m.withNamedDocuments))
+		for name, q := range _m.withNamedDocuments {
+			c.withNamedDocuments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_m.withNamedAssessments))
+		for name, q := range _m.withNamedAssessments {
+			c.withNamedAssessments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_m.withNamedCampaigns))
+		for name, q := range _m.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolders))
+		for name, q := range _m.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -32857,7 +35739,7 @@ func (_m *TrustCenterComplianceQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -32871,6 +35753,25 @@ func (_m *TrustCenterComplianceQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterComplianceQuery) clonePage() *TrustCenterComplianceQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -33224,7 +36125,7 @@ func (_m *TrustCenterDocQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -33238,6 +36139,25 @@ func (_m *TrustCenterDocQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterDocQuery) clonePage() *TrustCenterDocQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -33591,7 +36511,7 @@ func (_m *TrustCenterEntityQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -33605,6 +36525,25 @@ func (_m *TrustCenterEntityQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterEntityQuery) clonePage() *TrustCenterEntityQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -33976,7 +36915,7 @@ func (_m *TrustCenterFAQQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -33990,6 +36929,25 @@ func (_m *TrustCenterFAQQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterFAQQuery) clonePage() *TrustCenterFAQQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -34361,7 +37319,7 @@ func (_m *TrustCenterNDARequestQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -34375,6 +37333,31 @@ func (_m *TrustCenterNDARequestQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterNDARequestQuery) clonePage() *TrustCenterNDARequestQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenterDocs != nil {
+		c.withNamedTrustCenterDocs = make(map[string]*TrustCenterDocQuery, len(_m.withNamedTrustCenterDocs))
+		for name, q := range _m.withNamedTrustCenterDocs {
+			c.withNamedTrustCenterDocs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -34728,7 +37711,7 @@ func (_m *TrustCenterSettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -34742,6 +37725,25 @@ func (_m *TrustCenterSettingQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterSettingQuery) clonePage() *TrustCenterSettingQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -35108,7 +38110,7 @@ func (_m *TrustCenterSubprocessorQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -35122,6 +38124,25 @@ func (_m *TrustCenterSubprocessorQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterSubprocessorQuery) clonePage() *TrustCenterSubprocessorQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -35499,7 +38520,7 @@ func (_m *TrustCenterWatermarkConfigQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -35513,6 +38534,31 @@ func (_m *TrustCenterWatermarkConfigQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterWatermarkConfigQuery) clonePage() *TrustCenterWatermarkConfigQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTrustCenter != nil {
+		c.withNamedTrustCenter = make(map[string]*TrustCenterQuery, len(_m.withNamedTrustCenter))
+		for name, q := range _m.withNamedTrustCenter {
+			c.withNamedTrustCenter[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -35866,7 +38912,7 @@ func (_m *UserQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -35880,6 +38926,163 @@ func (_m *UserQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *UserQuery) clonePage() *UserQuery {
+	c := _m.Clone()
+	if _m.withNamedPersonalAccessTokens != nil {
+		c.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery, len(_m.withNamedPersonalAccessTokens))
+		for name, q := range _m.withNamedPersonalAccessTokens {
+			c.withNamedPersonalAccessTokens[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTfaSettings != nil {
+		c.withNamedTfaSettings = make(map[string]*TFASettingQuery, len(_m.withNamedTfaSettings))
+		for name, q := range _m.withNamedTfaSettings {
+			c.withNamedTfaSettings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEmailVerificationTokens != nil {
+		c.withNamedEmailVerificationTokens = make(map[string]*EmailVerificationTokenQuery, len(_m.withNamedEmailVerificationTokens))
+		for name, q := range _m.withNamedEmailVerificationTokens {
+			c.withNamedEmailVerificationTokens[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFileDownloadTokens != nil {
+		c.withNamedFileDownloadTokens = make(map[string]*FileDownloadTokenQuery, len(_m.withNamedFileDownloadTokens))
+		for name, q := range _m.withNamedFileDownloadTokens {
+			c.withNamedFileDownloadTokens[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPasswordResetTokens != nil {
+		c.withNamedPasswordResetTokens = make(map[string]*PasswordResetTokenQuery, len(_m.withNamedPasswordResetTokens))
+		for name, q := range _m.withNamedPasswordResetTokens {
+			c.withNamedPasswordResetTokens[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubscribers != nil {
+		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_m.withNamedSubscribers))
+		for name, q := range _m.withNamedSubscribers {
+			c.withNamedSubscribers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_m.withNamedGroups))
+		for name, q := range _m.withNamedGroups {
+			c.withNamedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrganizations != nil {
+		c.withNamedOrganizations = make(map[string]*OrganizationQuery, len(_m.withNamedOrganizations))
+		for name, q := range _m.withNamedOrganizations {
+			c.withNamedOrganizations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWebauthns != nil {
+		c.withNamedWebauthns = make(map[string]*WebauthnQuery, len(_m.withNamedWebauthns))
+		for name, q := range _m.withNamedWebauthns {
+			c.withNamedWebauthns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_m.withNamedEvents))
+		for name, q := range _m.withNamedEvents {
+			c.withNamedEvents[name] = q.Clone()
+		}
+	}
+	if _m.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_m.withNamedActionPlans))
+		for name, q := range _m.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_m.withNamedCampaigns))
+		for name, q := range _m.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_m.withNamedCampaignTargets))
+		for name, q := range _m.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssignerTasks != nil {
+		c.withNamedAssignerTasks = make(map[string]*TaskQuery, len(_m.withNamedAssignerTasks))
+		for name, q := range _m.withNamedAssignerTasks {
+			c.withNamedAssignerTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssigneeTasks != nil {
+		c.withNamedAssigneeTasks = make(map[string]*TaskQuery, len(_m.withNamedAssigneeTasks))
+		for name, q := range _m.withNamedAssigneeTasks {
+			c.withNamedAssigneeTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProgramsOwned != nil {
+		c.withNamedProgramsOwned = make(map[string]*ProgramQuery, len(_m.withNamedProgramsOwned))
+		for name, q := range _m.withNamedProgramsOwned {
+			c.withNamedProgramsOwned[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPlatformsOwned != nil {
+		c.withNamedPlatformsOwned = make(map[string]*PlatformQuery, len(_m.withNamedPlatformsOwned))
+		for name, q := range _m.withNamedPlatformsOwned {
+			c.withNamedPlatformsOwned[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIdentityHolderProfiles != nil {
+		c.withNamedIdentityHolderProfiles = make(map[string]*IdentityHolderQuery, len(_m.withNamedIdentityHolderProfiles))
+		for name, q := range _m.withNamedIdentityHolderProfiles {
+			c.withNamedIdentityHolderProfiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedImpersonationEvents != nil {
+		c.withNamedImpersonationEvents = make(map[string]*ImpersonationEventQuery, len(_m.withNamedImpersonationEvents))
+		for name, q := range _m.withNamedImpersonationEvents {
+			c.withNamedImpersonationEvents[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTargetedImpersonations != nil {
+		c.withNamedTargetedImpersonations = make(map[string]*ImpersonationEventQuery, len(_m.withNamedTargetedImpersonations))
+		for name, q := range _m.withNamedTargetedImpersonations {
+			c.withNamedTargetedImpersonations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroupMemberships != nil {
+		c.withNamedGroupMemberships = make(map[string]*GroupMembershipQuery, len(_m.withNamedGroupMemberships))
+		for name, q := range _m.withNamedGroupMemberships {
+			c.withNamedGroupMemberships[name] = q.Clone()
+		}
+	}
+	if _m.withNamedOrgMemberships != nil {
+		c.withNamedOrgMemberships = make(map[string]*OrgMembershipQuery, len(_m.withNamedOrgMemberships))
+		for name, q := range _m.withNamedOrgMemberships {
+			c.withNamedOrgMemberships[name] = q.Clone()
+		}
+	}
+	if _m.withNamedProgramMemberships != nil {
+		c.withNamedProgramMemberships = make(map[string]*ProgramMembershipQuery, len(_m.withNamedProgramMemberships))
+		for name, q := range _m.withNamedProgramMemberships {
+			c.withNamedProgramMemberships[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -36287,7 +39490,7 @@ func (_m *UserSettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -36301,6 +39504,13 @@ func (_m *UserSettingQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *UserSettingQuery) clonePage() *UserSettingQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -36654,7 +39864,7 @@ func (_m *VendorRiskScoreQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -36668,6 +39878,13 @@ func (_m *VendorRiskScoreQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *VendorRiskScoreQuery) clonePage() *VendorRiskScoreQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -37482,7 +40699,7 @@ func (_m *VulnerabilityQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -37496,6 +40713,133 @@ func (_m *VulnerabilityQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *VulnerabilityQuery) clonePage() *VulnerabilityQuery {
+	c := _m.Clone()
+	if _m.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_m.withNamedIntegrationRuns))
+		for name, q := range _m.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.Clone()
+		}
+	}
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_m.withNamedIntegrations))
+		for name, q := range _m.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_m.withNamedFindings))
+		for name, q := range _m.withNamedFindings {
+			c.withNamedFindings[name] = q.Clone()
+		}
+	}
+	if _m.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_m.withNamedActionPlans))
+		for name, q := range _m.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_m.withNamedControls))
+		for name, q := range _m.withNamedControls {
+			c.withNamedControls[name] = q.Clone()
+		}
+	}
+	if _m.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_m.withNamedSubcontrols))
+		for name, q := range _m.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_m.withNamedRisks))
+		for name, q := range _m.withNamedRisks {
+			c.withNamedRisks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_m.withNamedPrograms))
+		for name, q := range _m.withNamedPrograms {
+			c.withNamedPrograms[name] = q.Clone()
+		}
+	}
+	if _m.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_m.withNamedAssets))
+		for name, q := range _m.withNamedAssets {
+			c.withNamedAssets[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_m.withNamedEntities))
+		for name, q := range _m.withNamedEntities {
+			c.withNamedEntities[name] = q.Clone()
+		}
+	}
+	if _m.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_m.withNamedScans))
+		for name, q := range _m.withNamedScans {
+			c.withNamedScans[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_m.withNamedTasks))
+		for name, q := range _m.withNamedTasks {
+			c.withNamedTasks[name] = q.Clone()
+		}
+	}
+	if _m.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_m.withNamedRemediations))
+		for name, q := range _m.withNamedRemediations {
+			c.withNamedRemediations[name] = q.Clone()
+		}
+	}
+	if _m.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_m.withNamedReviews))
+		for name, q := range _m.withNamedReviews {
+			c.withNamedReviews[name] = q.Clone()
+		}
+	}
+	if _m.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_m.withNamedComments))
+		for name, q := range _m.withNamedComments {
+			c.withNamedComments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_m.withNamedFiles))
+		for name, q := range _m.withNamedFiles {
+			c.withNamedFiles[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -37952,7 +41296,7 @@ func (_m *WebauthnQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -37966,6 +41310,13 @@ func (_m *WebauthnQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WebauthnQuery) clonePage() *WebauthnQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -38319,7 +41670,7 @@ func (_m *WorkflowAssignmentQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -38333,6 +41684,19 @@ func (_m *WorkflowAssignmentQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowAssignmentQuery) clonePage() *WorkflowAssignmentQuery {
+	c := _m.Clone()
+	if _m.withNamedWorkflowAssignmentTargets != nil {
+		c.withNamedWorkflowAssignmentTargets = make(map[string]*WorkflowAssignmentTargetQuery, len(_m.withNamedWorkflowAssignmentTargets))
+		for name, q := range _m.withNamedWorkflowAssignmentTargets {
+			c.withNamedWorkflowAssignmentTargets[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -38686,7 +42050,7 @@ func (_m *WorkflowAssignmentTargetQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -38700,6 +42064,13 @@ func (_m *WorkflowAssignmentTargetQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowAssignmentTargetQuery) clonePage() *WorkflowAssignmentTargetQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -39053,7 +42424,7 @@ func (_m *WorkflowDefinitionQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -39067,6 +42438,61 @@ func (_m *WorkflowDefinitionQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowDefinitionQuery) clonePage() *WorkflowDefinitionQuery {
+	c := _m.Clone()
+	if _m.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_m.withNamedBlockedGroups))
+		for name, q := range _m.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_m.withNamedEditors))
+		for name, q := range _m.withNamedEditors {
+			c.withNamedEditors[name] = q.Clone()
+		}
+	}
+	if _m.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_m.withNamedViewers))
+		for name, q := range _m.withNamedViewers {
+			c.withNamedViewers[name] = q.Clone()
+		}
+	}
+	if _m.withNamedTagDefinitions != nil {
+		c.withNamedTagDefinitions = make(map[string]*TagDefinitionQuery, len(_m.withNamedTagDefinitions))
+		for name, q := range _m.withNamedTagDefinitions {
+			c.withNamedTagDefinitions[name] = q.Clone()
+		}
+	}
+	if _m.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_m.withNamedGroups))
+		for name, q := range _m.withNamedGroups {
+			c.withNamedGroups[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowInstances != nil {
+		c.withNamedWorkflowInstances = make(map[string]*WorkflowInstanceQuery, len(_m.withNamedWorkflowInstances))
+		for name, q := range _m.withNamedWorkflowInstances {
+			c.withNamedWorkflowInstances[name] = q.Clone()
+		}
+	}
+	if _m.withNamedNotificationTemplates != nil {
+		c.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery, len(_m.withNamedNotificationTemplates))
+		for name, q := range _m.withNamedNotificationTemplates {
+			c.withNamedNotificationTemplates[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEmailTemplates != nil {
+		c.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery, len(_m.withNamedEmailTemplates))
+		for name, q := range _m.withNamedEmailTemplates {
+			c.withNamedEmailTemplates[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -39420,7 +42846,7 @@ func (_m *WorkflowEventQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -39434,6 +42860,13 @@ func (_m *WorkflowEventQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowEventQuery) clonePage() *WorkflowEventQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -39787,7 +43220,7 @@ func (_m *WorkflowInstanceQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -39801,6 +43234,37 @@ func (_m *WorkflowInstanceQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowInstanceQuery) clonePage() *WorkflowInstanceQuery {
+	c := _m.Clone()
+	if _m.withNamedWorkflowAssignments != nil {
+		c.withNamedWorkflowAssignments = make(map[string]*WorkflowAssignmentQuery, len(_m.withNamedWorkflowAssignments))
+		for name, q := range _m.withNamedWorkflowAssignments {
+			c.withNamedWorkflowAssignments[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowEvents != nil {
+		c.withNamedWorkflowEvents = make(map[string]*WorkflowEventQuery, len(_m.withNamedWorkflowEvents))
+		for name, q := range _m.withNamedWorkflowEvents {
+			c.withNamedWorkflowEvents[name] = q.Clone()
+		}
+	}
+	if _m.withNamedEmailTemplates != nil {
+		c.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery, len(_m.withNamedEmailTemplates))
+		for name, q := range _m.withNamedEmailTemplates {
+			c.withNamedEmailTemplates[name] = q.Clone()
+		}
+	}
+	if _m.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_m.withNamedWorkflowObjectRefs))
+		for name, q := range _m.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -40154,7 +43618,7 @@ func (_m *WorkflowObjectRefQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -40168,6 +43632,19 @@ func (_m *WorkflowObjectRefQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowObjectRefQuery) clonePage() *WorkflowObjectRefQuery {
+	c := _m.Clone()
+	if _m.withNamedWorkflowProposals != nil {
+		c.withNamedWorkflowProposals = make(map[string]*WorkflowProposalQuery, len(_m.withNamedWorkflowProposals))
+		for name, q := range _m.withNamedWorkflowProposals {
+			c.withNamedWorkflowProposals[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -40480,7 +43957,7 @@ func (_m *WorkflowProposalQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -40494,6 +43971,19 @@ func (_m *WorkflowProposalQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowProposalQuery) clonePage() *WorkflowProposalQuery {
+	c := _m.Clone()
+	if _m.withNamedWorkflowInstances != nil {
+		c.withNamedWorkflowInstances = make(map[string]*WorkflowInstanceQuery, len(_m.withNamedWorkflowInstances))
+		for name, q := range _m.withNamedWorkflowInstances {
+			c.withNamedWorkflowInstances[name] = q.Clone()
+		}
+	}
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (

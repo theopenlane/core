@@ -391,7 +391,7 @@ func (_m *ActionPlanHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -405,6 +405,13 @@ func (_m *ActionPlanHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ActionPlanHistoryQuery) clonePage() *ActionPlanHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -915,7 +922,7 @@ func (_m *AssessmentHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -929,6 +936,13 @@ func (_m *AssessmentHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *AssessmentHistoryQuery) clonePage() *AssessmentHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -1313,7 +1327,7 @@ func (_m *AssessmentPolicyHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -1327,6 +1341,13 @@ func (_m *AssessmentPolicyHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *AssessmentPolicyHistoryQuery) clonePage() *AssessmentPolicyHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -1657,7 +1678,7 @@ func (_m *AssessmentResponseHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -1671,6 +1692,13 @@ func (_m *AssessmentResponseHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *AssessmentResponseHistoryQuery) clonePage() *AssessmentResponseHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -2271,7 +2299,7 @@ func (_m *AssetHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -2285,6 +2313,13 @@ func (_m *AssetHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *AssetHistoryQuery) clonePage() *AssetHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -2875,7 +2910,7 @@ func (_m *CampaignHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -2889,6 +2924,13 @@ func (_m *CampaignHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *CampaignHistoryQuery) clonePage() *CampaignHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -3665,7 +3707,7 @@ func (_m *CampaignTargetHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -3679,6 +3721,13 @@ func (_m *CampaignTargetHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *CampaignTargetHistoryQuery) clonePage() *CampaignTargetHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -4125,7 +4174,7 @@ func (_m *ContactHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -4139,6 +4188,13 @@ func (_m *ContactHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ContactHistoryQuery) clonePage() *ContactHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -4608,7 +4664,7 @@ func (_m *ControlHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -4622,6 +4678,13 @@ func (_m *ControlHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ControlHistoryQuery) clonePage() *ControlHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -5091,7 +5154,7 @@ func (_m *ControlImplementationHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -5105,6 +5168,13 @@ func (_m *ControlImplementationHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ControlImplementationHistoryQuery) clonePage() *ControlImplementationHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -5507,7 +5577,7 @@ func (_m *ControlObjectiveHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -5521,6 +5591,13 @@ func (_m *ControlObjectiveHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ControlObjectiveHistoryQuery) clonePage() *ControlObjectiveHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -5977,7 +6054,7 @@ func (_m *CustomDomainHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -5991,6 +6068,13 @@ func (_m *CustomDomainHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *CustomDomainHistoryQuery) clonePage() *CustomDomainHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -6339,7 +6423,7 @@ func (_m *DiscussionHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -6353,6 +6437,13 @@ func (_m *DiscussionHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *DiscussionHistoryQuery) clonePage() *DiscussionHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -6683,7 +6774,7 @@ func (_m *DocumentDataHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -6697,6 +6788,13 @@ func (_m *DocumentDataHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *DocumentDataHistoryQuery) clonePage() *DocumentDataHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -7027,7 +7125,7 @@ func (_m *EmailTemplateHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -7041,6 +7139,13 @@ func (_m *EmailTemplateHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *EmailTemplateHistoryQuery) clonePage() *EmailTemplateHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -7515,7 +7620,7 @@ func (_m *EntityHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -7529,6 +7634,13 @@ func (_m *EntityHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *EntityHistoryQuery) clonePage() *EntityHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -8490,7 +8602,7 @@ func (_m *EntityTypeHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -8504,6 +8616,13 @@ func (_m *EntityTypeHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *EntityTypeHistoryQuery) clonePage() *EntityTypeHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -8852,7 +8971,7 @@ func (_m *EvidenceHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -8866,6 +8985,13 @@ func (_m *EvidenceHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *EvidenceHistoryQuery) clonePage() *EvidenceHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -9312,7 +9438,7 @@ func (_m *FileHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -9326,6 +9452,13 @@ func (_m *FileHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *FileHistoryQuery) clonePage() *FileHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -9687,7 +9820,7 @@ func (_m *FindingControlHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -9701,6 +9834,13 @@ func (_m *FindingControlHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *FindingControlHistoryQuery) clonePage() *FindingControlHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -10031,7 +10171,7 @@ func (_m *FindingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10045,6 +10185,13 @@ func (_m *FindingHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *FindingHistoryQuery) clonePage() *FindingHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -10545,7 +10692,7 @@ func (_m *GroupHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10559,6 +10706,13 @@ func (_m *GroupHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *GroupHistoryQuery) clonePage() *GroupHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -10925,7 +11079,7 @@ func (_m *GroupMembershipHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10939,6 +11093,13 @@ func (_m *GroupMembershipHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *GroupMembershipHistoryQuery) clonePage() *GroupMembershipHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -11287,7 +11448,7 @@ func (_m *GroupSettingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -11301,6 +11462,13 @@ func (_m *GroupSettingHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *GroupSettingHistoryQuery) clonePage() *GroupSettingHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -11631,7 +11799,7 @@ func (_m *HushHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -11645,6 +11813,13 @@ func (_m *HushHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *HushHistoryQuery) clonePage() *HushHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -12073,7 +12248,7 @@ func (_m *IdentityHolderHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -12087,6 +12262,13 @@ func (_m *IdentityHolderHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *IdentityHolderHistoryQuery) clonePage() *IdentityHolderHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -12731,7 +12913,7 @@ func (_m *InternalPolicyHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -12745,6 +12927,13 @@ func (_m *InternalPolicyHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *InternalPolicyHistoryQuery) clonePage() *InternalPolicyHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -13183,7 +13372,7 @@ func (_m *MappableDomainHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -13197,6 +13386,13 @@ func (_m *MappableDomainHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *MappableDomainHistoryQuery) clonePage() *MappableDomainHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -13545,7 +13741,7 @@ func (_m *MappedControlHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -13559,6 +13755,13 @@ func (_m *MappedControlHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *MappedControlHistoryQuery) clonePage() *MappedControlHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -13925,7 +14128,7 @@ func (_m *NarrativeHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -13939,6 +14142,13 @@ func (_m *NarrativeHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *NarrativeHistoryQuery) clonePage() *NarrativeHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -14287,7 +14497,7 @@ func (_m *NoteHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -14301,6 +14511,13 @@ func (_m *NoteHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *NoteHistoryQuery) clonePage() *NoteHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -14631,7 +14848,7 @@ func (_m *NotificationPreferenceHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -14645,6 +14862,13 @@ func (_m *NotificationPreferenceHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *NotificationPreferenceHistoryQuery) clonePage() *NotificationPreferenceHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -15029,7 +15253,7 @@ func (_m *NotificationTemplateHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15043,6 +15267,13 @@ func (_m *NotificationTemplateHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *NotificationTemplateHistoryQuery) clonePage() *NotificationTemplateHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -15553,7 +15784,7 @@ func (_m *OrgMembershipHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15567,6 +15798,13 @@ func (_m *OrgMembershipHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *OrgMembershipHistoryQuery) clonePage() *OrgMembershipHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -15915,7 +16153,7 @@ func (_m *OrganizationHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15929,6 +16167,13 @@ func (_m *OrganizationHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *OrganizationHistoryQuery) clonePage() *OrganizationHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -16295,7 +16540,7 @@ func (_m *OrganizationSettingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -16309,6 +16554,13 @@ func (_m *OrganizationSettingHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *OrganizationSettingHistoryQuery) clonePage() *OrganizationSettingHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -16639,7 +16891,7 @@ func (_m *PlatformHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -16653,6 +16905,13 @@ func (_m *PlatformHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *PlatformHistoryQuery) clonePage() *PlatformHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -17284,7 +17543,7 @@ func (_m *ProcedureHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -17298,6 +17557,13 @@ func (_m *ProcedureHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ProcedureHistoryQuery) clonePage() *ProcedureHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -17736,7 +18002,7 @@ func (_m *ProgramHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -17750,6 +18016,13 @@ func (_m *ProgramHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ProgramHistoryQuery) clonePage() *ProgramHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -18242,7 +18515,7 @@ func (_m *ProgramMembershipHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -18256,6 +18529,13 @@ func (_m *ProgramMembershipHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ProgramMembershipHistoryQuery) clonePage() *ProgramMembershipHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -18604,7 +18884,7 @@ func (_m *RemediationHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -18618,6 +18898,13 @@ func (_m *RemediationHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *RemediationHistoryQuery) clonePage() *RemediationHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -19038,7 +19325,7 @@ func (_m *ReviewHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -19052,6 +19339,13 @@ func (_m *ReviewHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *ReviewHistoryQuery) clonePage() *ReviewHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -19454,7 +19748,7 @@ func (_m *RiskHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -19468,6 +19762,13 @@ func (_m *RiskHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *RiskHistoryQuery) clonePage() *RiskHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -20187,7 +20488,7 @@ func (_m *SLADefinitionHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -20201,6 +20502,13 @@ func (_m *SLADefinitionHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *SLADefinitionHistoryQuery) clonePage() *SLADefinitionHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -20567,7 +20875,7 @@ func (_m *StandardHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -20581,6 +20889,13 @@ func (_m *StandardHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *StandardHistoryQuery) clonePage() *StandardHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -21037,7 +21352,7 @@ func (_m *SubcontrolHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21051,6 +21366,13 @@ func (_m *SubcontrolHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *SubcontrolHistoryQuery) clonePage() *SubcontrolHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -21520,7 +21842,7 @@ func (_m *SubprocessorHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21534,6 +21856,13 @@ func (_m *SubprocessorHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *SubprocessorHistoryQuery) clonePage() *SubprocessorHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -21882,7 +22211,7 @@ func (_m *SystemDetailHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21896,6 +22225,13 @@ func (_m *SystemDetailHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *SystemDetailHistoryQuery) clonePage() *SystemDetailHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -22244,7 +22580,7 @@ func (_m *TaskHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -22258,6 +22594,13 @@ func (_m *TaskHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TaskHistoryQuery) clonePage() *TaskHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -22740,7 +23083,7 @@ func (_m *TemplateHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -22754,6 +23097,13 @@ func (_m *TemplateHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TemplateHistoryQuery) clonePage() *TemplateHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -23138,7 +23488,7 @@ func (_m *TrustCenterComplianceHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23152,6 +23502,13 @@ func (_m *TrustCenterComplianceHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterComplianceHistoryQuery) clonePage() *TrustCenterComplianceHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -23482,7 +23839,7 @@ func (_m *TrustCenterDocHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23496,6 +23853,13 @@ func (_m *TrustCenterDocHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterDocHistoryQuery) clonePage() *TrustCenterDocHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -23826,7 +24190,7 @@ func (_m *TrustCenterEntityHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23840,6 +24204,13 @@ func (_m *TrustCenterEntityHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterEntityHistoryQuery) clonePage() *TrustCenterEntityHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -24188,7 +24559,7 @@ func (_m *TrustCenterFAQHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -24202,6 +24573,13 @@ func (_m *TrustCenterFAQHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterFAQHistoryQuery) clonePage() *TrustCenterFAQHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -24550,7 +24928,7 @@ func (_m *TrustCenterHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -24564,6 +24942,13 @@ func (_m *TrustCenterHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterHistoryQuery) clonePage() *TrustCenterHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -24894,7 +25279,7 @@ func (_m *TrustCenterNDARequestHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -24908,6 +25293,13 @@ func (_m *TrustCenterNDARequestHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterNDARequestHistoryQuery) clonePage() *TrustCenterNDARequestHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -25238,7 +25630,7 @@ func (_m *TrustCenterSettingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -25252,6 +25644,13 @@ func (_m *TrustCenterSettingHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterSettingHistoryQuery) clonePage() *TrustCenterSettingHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -25582,7 +25981,7 @@ func (_m *TrustCenterSubprocessorHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -25596,6 +25995,13 @@ func (_m *TrustCenterSubprocessorHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterSubprocessorHistoryQuery) clonePage() *TrustCenterSubprocessorHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -25926,7 +26332,7 @@ func (_m *TrustCenterWatermarkConfigHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -25940,6 +26346,13 @@ func (_m *TrustCenterWatermarkConfigHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *TrustCenterWatermarkConfigHistoryQuery) clonePage() *TrustCenterWatermarkConfigHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -26270,7 +26683,7 @@ func (_m *UserHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -26284,6 +26697,13 @@ func (_m *UserHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *UserHistoryQuery) clonePage() *UserHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -26668,7 +27088,7 @@ func (_m *UserSettingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -26682,6 +27102,13 @@ func (_m *UserSettingHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *UserSettingHistoryQuery) clonePage() *UserSettingHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -27012,7 +27439,7 @@ func (_m *VendorRiskScoreHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -27026,6 +27453,13 @@ func (_m *VendorRiskScoreHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *VendorRiskScoreHistoryQuery) clonePage() *VendorRiskScoreHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -27446,7 +27880,7 @@ func (_m *VendorScoringConfigHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -27460,6 +27894,13 @@ func (_m *VendorScoringConfigHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *VendorScoringConfigHistoryQuery) clonePage() *VendorScoringConfigHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -27808,7 +28249,7 @@ func (_m *VulnerabilityHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -27822,6 +28263,13 @@ func (_m *VulnerabilityHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *VulnerabilityHistoryQuery) clonePage() *VulnerabilityHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -28296,7 +28744,7 @@ func (_m *WorkflowAssignmentHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -28310,6 +28758,13 @@ func (_m *WorkflowAssignmentHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowAssignmentHistoryQuery) clonePage() *WorkflowAssignmentHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -28640,7 +29095,7 @@ func (_m *WorkflowAssignmentTargetHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -28654,6 +29109,13 @@ func (_m *WorkflowAssignmentTargetHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowAssignmentTargetHistoryQuery) clonePage() *WorkflowAssignmentTargetHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (
@@ -28984,7 +29446,7 @@ func (_m *WorkflowDefinitionHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -28998,6 +29460,13 @@ func (_m *WorkflowDefinitionHistoryQuery) Paginate(
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
+}
+
+// clonePage clones the query for a pagination batch, keeping the named edge eager loads collected from the request
+func (_m *WorkflowDefinitionHistoryQuery) clonePage() *WorkflowDefinitionHistoryQuery {
+	c := _m.Clone()
+	c.loadTotal = _m.loadTotal
+	return c
 }
 
 var (

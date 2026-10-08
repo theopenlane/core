@@ -5,10 +5,12 @@ package graphapi_test
 import (
 	"testing"
 
+	"entgo.io/contrib/entgql"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 )
@@ -70,6 +72,56 @@ func TestQueryEvidencesPaginationFillsPageAfterFGAFilter(t *testing.T) {
 	assert.Assert(t, is.Len(secondPage.Evidences.Edges, 1))
 	assert.Check(t, is.Equal(secondPage.Evidences.Edges[0].Node.ID, older.ID))
 	assert.Check(t, !secondPage.Evidences.PageInfo.HasNextPage)
+
+	th.CleanupOrganizationDataWithContext(ownerCtx, t)
+}
+
+func TestPaginateKeepsNamedEdgesAcrossFGABatches(t *testing.T) {
+	users := suite.SeedFreshMinimalOrgUsers(t, true)
+	ownerCtx := users.Owner.UserCtx
+
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
+	(&th.ProgramMemberBuilder{Client: suite.Client, ProgramID: program.ID, UserID: users.Member.ID, Role: enums.RoleMember.String()}).MustNew(ownerCtx, t)
+
+	const hiddenPerGap = 12
+
+	older := (&th.EvidenceBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(ownerCtx, t)
+	for range hiddenPerGap {
+		(&th.EvidenceBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
+	}
+
+	newer := (&th.EvidenceBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(ownerCtx, t)
+	for range hiddenPerGap {
+		(&th.EvidenceBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
+	}
+
+	first := 1
+	order := []*generated.EvidenceOrder{{Field: generated.EvidenceOrderFieldCreatedAt, Direction: entgql.OrderDirectionDesc}}
+
+	conn, err := suite.Client.DB.Evidence.Query().
+		WithNamedPrograms("programs").
+		Paginate(users.Member.UserCtx, nil, &first, nil, nil, generated.WithEvidenceOrder(order))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(conn.Edges, 1))
+	assert.Check(t, is.Equal(conn.Edges[0].Node.ID, newer.ID))
+	assert.Check(t, conn.PageInfo.HasNextPage)
+
+	programs, err := conn.Edges[0].Node.NamedPrograms("programs")
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(programs, 1))
+	assert.Check(t, is.Equal(programs[0].ID, program.ID))
+
+	conn, err = suite.Client.DB.Evidence.Query().
+		WithNamedPrograms("programs").
+		Paginate(users.Member.UserCtx, conn.PageInfo.EndCursor, &first, nil, nil, generated.WithEvidenceOrder(order))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(conn.Edges, 1))
+	assert.Check(t, is.Equal(conn.Edges[0].Node.ID, older.ID))
+
+	programs, err = conn.Edges[0].Node.NamedPrograms("programs")
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(programs, 1))
+	assert.Check(t, is.Equal(programs[0].ID, program.ID))
 
 	th.CleanupOrganizationDataWithContext(ownerCtx, t)
 }
