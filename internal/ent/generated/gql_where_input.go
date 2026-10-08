@@ -95049,6 +95049,12 @@ type TrustCenterNDARequestWhereInput struct {
 	ApprovedByUserIDEqualFold    *string  `json:"approvedByUserIDEqualFold,omitempty"`
 	ApprovedByUserIDContainsFold *string  `json:"approvedByUserIDContainsFold,omitempty"`
 
+	// "auto_approved" field predicates.
+	AutoApproved       *bool `json:"autoApproved,omitempty"`
+	AutoApprovedNEQ    *bool `json:"autoApprovedNEQ,omitempty"`
+	AutoApprovedIsNil  bool  `json:"autoApprovedIsNil,omitempty"`
+	AutoApprovedNotNil bool  `json:"autoApprovedNotNil,omitempty"`
+
 	// "signed_at" field predicates.
 	SignedAt       *models.DateTime `json:"signedAt,omitempty"`
 	SignedAtGT     *models.DateTime `json:"signedAtGT,omitempty"`
@@ -95615,6 +95621,18 @@ func (i *TrustCenterNDARequestWhereInput) P() (predicate.TrustCenterNDARequest, 
 	}
 	if i.ApprovedByUserIDContainsFold != nil {
 		predicates = append(predicates, trustcenterndarequest.ApprovedByUserIDContainsFold(*i.ApprovedByUserIDContainsFold))
+	}
+	if i.AutoApproved != nil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedEQ(*i.AutoApproved))
+	}
+	if i.AutoApprovedNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedNEQ(*i.AutoApprovedNEQ))
+	}
+	if i.AutoApprovedIsNil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedIsNil())
+	}
+	if i.AutoApprovedNotNil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedNotNil())
 	}
 	if i.SignedAt != nil {
 		predicates = append(predicates, trustcenterndarequest.SignedAtEQ(*i.SignedAt))

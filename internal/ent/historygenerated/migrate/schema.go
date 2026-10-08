@@ -2671,6 +2671,7 @@ var (
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING_APPROVAL", "REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
 		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
 		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "auto_approved", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},

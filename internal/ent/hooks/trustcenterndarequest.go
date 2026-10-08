@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
-	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
@@ -84,17 +83,8 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				return existingRequest, nil
 			}
 
-			tc, err := m.Client().TrustCenter.Query().
-				Where(trustcenter.IDEQ(trustCenterID)).
-				WithSetting().
-				Only(queryCtx)
-			if err != nil {
-				return nil, err
-			}
-
-			requiresApproval := tc.Edges.Setting != nil && tc.Edges.Setting.NdaApprovalRequired
-			if requiresApproval && !recordSigned {
-				m.SetStatus(enums.TrustCenterNDARequestStatusNeedsApproval)
+			if requestedStatus == enums.TrustCenterNDARequestStatusRequested {
+				m.SetStatus(enums.TrustCenterNDARequestStatusPendingApproval)
 			}
 
 			if recordSigned {
@@ -128,7 +118,6 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 		})
 	}, ent.OpCreate)
 }
-
 
 // HookTrustCenterNDARequestUpdate handles NDA request status updates
 func HookTrustCenterNDARequestUpdate() ent.Hook {
@@ -189,7 +178,7 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 
 			m.SetApprovedAt(*now)
 
-			if _, ok := m.ApprovedByUserID(); !ok {
+			if _, ok := m.ApprovedByUserID(); !ok && !auth.IsInternalRequest(ctx) {
 				userID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil || userID == "" {
 					return nil, auth.ErrNoAuthUser
@@ -330,36 +319,6 @@ func recordSignedNDARequest(ctx, queryCtx context.Context, m *generated.TrustCen
 	}
 
 	return update.Save(queryCtx)
-}
-
-func createNDARequestNotification(ctx context.Context, ndaRequest *generated.TrustCenterNDARequest, ownerID string) error {
-	name := fmt.Sprintf("%s %s", ndaRequest.FirstName, ndaRequest.LastName)
-	if name == " " {
-		name = ndaRequest.Email
-	}
-
-	topic := enums.NotificationTopicApproval
-
-	input := generated.CreateNotificationInput{
-		NotificationType: enums.NotificationTypeOrganization,
-		Title:            "New NDA Access Request",
-		Body:             fmt.Sprintf("%s has requested access to private trust center documents.", name),
-		ObjectType:       "trust_center_nda_request",
-		OwnerID:          &ownerID,
-		Topic:            &topic,
-		Data: map[string]any{
-			"nda_request_id":  ndaRequest.ID,
-			"trust_center_id": ndaRequest.TrustCenterID,
-			"email":           ndaRequest.Email,
-			"url":             "trust-center/NDAs",
-		},
-	}
-
-	internalCtx := auth.WithInternalOperationContext(ctx)
-
-	_, err := transactionFromContext(ctx).Notification.Create().SetInput(input).Save(internalCtx)
-
-	return err
 }
 
 // ndaApproverRoles are the fallback organization roles notified when no NDA approver group is configured.

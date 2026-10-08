@@ -256253,6 +256253,7 @@ type TrustCenterNDARequestMutation struct {
 	access_level             *enums.TrustCenterNDARequestAccessLevel
 	status                   *enums.TrustCenterNDARequestStatus
 	approved_at              *models.DateTime
+	auto_approved            *bool
 	signed_at                *models.DateTime
 	clearedFields            map[string]struct{}
 	blocked_groups           map[string]struct{}
@@ -257240,6 +257241,55 @@ func (m *TrustCenterNDARequestMutation) ResetApprovedByUserID() {
 	delete(m.clearedFields, trustcenterndarequest.FieldApprovedByUserID)
 }
 
+// SetAutoApproved sets the "auto_approved" field.
+func (m *TrustCenterNDARequestMutation) SetAutoApproved(b bool) {
+	m.auto_approved = &b
+}
+
+// AutoApproved returns the value of the "auto_approved" field in the mutation.
+func (m *TrustCenterNDARequestMutation) AutoApproved() (r bool, exists bool) {
+	v := m.auto_approved
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAutoApproved returns the old "auto_approved" field's value of the TrustCenterNDARequest entity.
+// If the TrustCenterNDARequest object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestMutation) OldAutoApproved(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAutoApproved is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAutoApproved requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAutoApproved: %w", err)
+	}
+	return oldValue.AutoApproved, nil
+}
+
+// ClearAutoApproved clears the value of the "auto_approved" field.
+func (m *TrustCenterNDARequestMutation) ClearAutoApproved() {
+	m.auto_approved = nil
+	m.clearedFields[trustcenterndarequest.FieldAutoApproved] = struct{}{}
+}
+
+// AutoApprovedCleared returns if the "auto_approved" field was cleared in this mutation.
+func (m *TrustCenterNDARequestMutation) AutoApprovedCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequest.FieldAutoApproved]
+	return ok
+}
+
+// ResetAutoApproved resets all changes to the "auto_approved" field.
+func (m *TrustCenterNDARequestMutation) ResetAutoApproved() {
+	m.auto_approved = nil
+	delete(m.clearedFields, trustcenterndarequest.FieldAutoApproved)
+}
+
 // SetSignedAt sets the "signed_at" field.
 func (m *TrustCenterNDARequestMutation) SetSignedAt(mt models.DateTime) {
 	m.signed_at = &mt
@@ -257704,7 +257754,7 @@ func (m *TrustCenterNDARequestMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterNDARequestMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, trustcenterndarequest.FieldCreatedAt)
 	}
@@ -257759,6 +257809,9 @@ func (m *TrustCenterNDARequestMutation) Fields() []string {
 	if m.approved_by_user != nil {
 		fields = append(fields, trustcenterndarequest.FieldApprovedByUserID)
 	}
+	if m.auto_approved != nil {
+		fields = append(fields, trustcenterndarequest.FieldAutoApproved)
+	}
 	if m.signed_at != nil {
 		fields = append(fields, trustcenterndarequest.FieldSignedAt)
 	}
@@ -257812,6 +257865,8 @@ func (m *TrustCenterNDARequestMutation) Field(name string) (ent.Value, bool) {
 		return m.ApprovedAt()
 	case trustcenterndarequest.FieldApprovedByUserID:
 		return m.ApprovedByUserID()
+	case trustcenterndarequest.FieldAutoApproved:
+		return m.AutoApproved()
 	case trustcenterndarequest.FieldSignedAt:
 		return m.SignedAt()
 	case trustcenterndarequest.FieldDocumentDataID:
@@ -257863,6 +257918,8 @@ func (m *TrustCenterNDARequestMutation) OldField(ctx context.Context, name strin
 		return m.OldApprovedAt(ctx)
 	case trustcenterndarequest.FieldApprovedByUserID:
 		return m.OldApprovedByUserID(ctx)
+	case trustcenterndarequest.FieldAutoApproved:
+		return m.OldAutoApproved(ctx)
 	case trustcenterndarequest.FieldSignedAt:
 		return m.OldSignedAt(ctx)
 	case trustcenterndarequest.FieldDocumentDataID:
@@ -258004,6 +258061,13 @@ func (m *TrustCenterNDARequestMutation) SetField(name string, value ent.Value) e
 		}
 		m.SetApprovedByUserID(v)
 		return nil
+	case trustcenterndarequest.FieldAutoApproved:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAutoApproved(v)
+		return nil
 	case trustcenterndarequest.FieldSignedAt:
 		v, ok := value.(models.DateTime)
 		if !ok {
@@ -258100,6 +258164,9 @@ func (m *TrustCenterNDARequestMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcenterndarequest.FieldApprovedByUserID) {
 		fields = append(fields, trustcenterndarequest.FieldApprovedByUserID)
 	}
+	if m.FieldCleared(trustcenterndarequest.FieldAutoApproved) {
+		fields = append(fields, trustcenterndarequest.FieldAutoApproved)
+	}
 	if m.FieldCleared(trustcenterndarequest.FieldSignedAt) {
 		fields = append(fields, trustcenterndarequest.FieldSignedAt)
 	}
@@ -258167,6 +258234,9 @@ func (m *TrustCenterNDARequestMutation) ClearField(name string) error {
 		return nil
 	case trustcenterndarequest.FieldApprovedByUserID:
 		m.ClearApprovedByUserID()
+		return nil
+	case trustcenterndarequest.FieldAutoApproved:
+		m.ClearAutoApproved()
 		return nil
 	case trustcenterndarequest.FieldSignedAt:
 		m.ClearSignedAt()
@@ -258238,6 +258308,9 @@ func (m *TrustCenterNDARequestMutation) ResetField(name string) error {
 		return nil
 	case trustcenterndarequest.FieldApprovedByUserID:
 		m.ResetApprovedByUserID()
+		return nil
+	case trustcenterndarequest.FieldAutoApproved:
+		m.ResetAutoApproved()
 		return nil
 	case trustcenterndarequest.FieldSignedAt:
 		m.ResetSignedAt()

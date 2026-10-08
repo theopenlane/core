@@ -29953,6 +29953,7 @@ type TrustCenterNDARequestHistory implements Node {
   ID of the user who approved the request
   """
   approvedByUserID: String
+  autoApproved: Boolean
   """
   timestamp when the NDA was signed
   """
@@ -30271,6 +30272,13 @@ input TrustCenterNDARequestHistoryWhereInput {
   approvedByUserIDNotNil: Boolean
   approvedByUserIDEqualFold: String
   approvedByUserIDContainsFold: String
+  """
+  auto_approved field predicates
+  """
+  autoApproved: Boolean
+  autoApprovedNEQ: Boolean
+  autoApprovedIsNil: Boolean
+  autoApprovedNotNil: Boolean
   """
   signed_at field predicates
   """

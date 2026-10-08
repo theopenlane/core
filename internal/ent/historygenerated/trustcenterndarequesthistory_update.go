@@ -118,6 +118,9 @@ func (_u *TrustCenterNDARequestHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.ApprovedByUserIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString)
 	}
+	if _u.mutation.AutoApprovedCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldAutoApproved, field.TypeBool)
+	}
 	if _u.mutation.SignedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime)
 	}
@@ -265,6 +268,9 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if _u.mutation.ApprovedByUserIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString)
+	}
+	if _u.mutation.AutoApprovedCleared() {
+		_spec.ClearField(trustcenterndarequesthistory.FieldAutoApproved, field.TypeBool)
 	}
 	if _u.mutation.SignedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime)

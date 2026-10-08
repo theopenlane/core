@@ -12,19 +12,34 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
+const ndaRequestEmailDomain = "@theopenlane.io"
+
 func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	trustCenterNoApproval := tcOrg.TrustCenter
 
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
 	trustCenterWithApproval := tcOrg2.TrustCenter
 
-	_, err := suite.Client.API.UpdateTrustCenter(tcOrg2.Admin.UserCtx, trustCenterWithApproval.ID, testclient.UpdateTrustCenterInput{
+	_, err = suite.Client.API.UpdateTrustCenter(tcOrg2.Admin.UserCtx, trustCenterWithApproval.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 			NdaApprovalRequired: lo.ToPtr(true),
+			AutoApprovalRules: &models.TrustCenterNDARequestSetting{
+				UseDomainAllowlist:      true,
+				ManualApprovalOnFailure: true,
+			},
 		},
 	})
 	assert.NilError(t, err)
@@ -32,21 +47,21 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 	noApprovalRequiredRequest := testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenterNoApproval.ID,
 	}
 
 	emailApprovedRequest := testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenterWithApproval.ID,
 	}
 
 	emailDeclinedRequest := testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenterWithApproval.ID,
 	}
 
@@ -68,19 +83,19 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		expectedSecondaryEmail string
 	}{
 		{
-			name:            "happy path - no approval required, status should be REQUESTED",
+			name:            "happy path - no approval required, status should be APPROVED",
 			input:           noApprovalRequiredRequest,
 			client:          suite.Client.API,
 			ctx:             tcOrg.Owner.UserCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
+			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
 			expectEmailSent: ndaEmail,
 		},
 		{
-			name:            "happy path - resend request with no approval required, status should be REQUESTED",
+			name:            "happy path - resend request with no approval required, status should be APPROVED",
 			input:           noApprovalRequiredRequest,
 			client:          suite.Client.API,
 			ctx:             tcOrg.Owner.UserCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
+			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
 			expectEmailSent: ndaEmail,
 			setStatus:       &enums.TrustCenterNDARequestStatusSigned,
 		},
@@ -127,14 +142,14 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
-				Email:         gofakeit.Email(),
+				Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 				CompanyName:   lo.ToPtr(gofakeit.Company()),
 				Reason:        lo.ToPtr("Need access to security documentation"),
 				TrustCenterID: &trustCenterNoApproval.ID,
 			},
 			client:          suite.Client.API,
 			ctx:             tcOrg.Owner.UserCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
+			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
 			expectEmailSent: ndaEmail,
 		},
 		{
@@ -142,7 +157,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
-				Email:         gofakeit.Email(),
+				Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 				TrustCenterID: &trustCenterNoApproval.ID,
 			},
 			client:      suite.Client.API,
@@ -154,7 +169,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
-				Email:         gofakeit.Email(),
+				Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 				TrustCenterID: &trustCenterWithApproval.ID,
 			},
 			client:      suite.Client.API,
@@ -178,7 +193,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     "",
 				LastName:      gofakeit.LastName(),
-				Email:         gofakeit.Email(),
+				Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 				TrustCenterID: &trustCenterNoApproval.ID,
 			},
 			client:      suite.Client.API,
@@ -207,7 +222,6 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			assert.Equal(t, tc.input.FirstName, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.FirstName)
 			assert.Equal(t, tc.input.LastName, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.LastName)
 			assert.Equal(t, tc.input.Email, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Email)
-			assert.Equal(t, tc.expectedStatus, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 			if tc.input.CompanyName != nil {
 				assert.Equal(t, *tc.input.CompanyName, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.CompanyName)
@@ -219,6 +233,10 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 
 			// Verify the email was or was not sent based on expectation
 			waitForEvents()
+
+			request, err := suite.Client.API.GetTrustCenterNDARequestByID(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+			assert.NilError(t, err)
+			assert.Equal(t, tc.expectedStatus, *request.TrustCenterNDARequest.Status)
 
 			if tc.expectEmailSent != "" {
 				msgs := mockEmailSender().Messages()
@@ -285,12 +303,21 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	trustCenter := tcOrg.TrustCenter
 
-	_, err := suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+	_, err = suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 			NdaApprovalRequired: lo.ToPtr(true),
+			AutoApprovalRules: &models.TrustCenterNDARequestSetting{
+				UseDomainAllowlist:      true,
+				ManualApprovalOnFailure: true,
+			},
 		},
 	})
 	assert.NilError(t, err)
@@ -298,11 +325,17 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 	ndaRequest, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusPendingApproval, *ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+
+	waitForEvents()
+
+	request, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	assert.NilError(t, err)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *request.TrustCenterNDARequest.Status)
 
 	testCases := []struct {
 		name            string
@@ -398,16 +431,25 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 }
 
 func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	trustcenterOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
 	trustCenter := trustcenterOrg.TrustCenter
 
 	group := (&th.GroupBuilder{Client: suite.Client}).MustNew(trustcenterOrg.Owner.UserCtx, t)
 	(&th.GroupMemberBuilder{Client: suite.Client, GroupID: group.ID, UserID: trustcenterOrg.Member.ID}).MustNew(trustcenterOrg.Owner.UserCtx, t)
 
-	_, err := suite.Client.API.UpdateTrustCenter(trustcenterOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+	_, err = suite.Client.API.UpdateTrustCenter(trustcenterOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 			NdaApprovalRequired: lo.ToPtr(true),
 			NdaApproverGroupID:  &group.ID,
+			AutoApprovalRules: &models.TrustCenterNDARequestSetting{
+				UseDomainAllowlist:      true,
+				ManualApprovalOnFailure: true,
+			},
 		},
 	})
 	assert.NilError(t, err)
@@ -419,13 +461,17 @@ func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testin
 	req, err := suite.Client.API.CreateTrustCenterNDARequest(trustcenterOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusPendingApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 	waitForEvents()
+
+	request, err := suite.Client.API.GetTrustCenterNDARequestByID(trustcenterOrg.Owner.UserCtx, req.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	assert.NilError(t, err)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *request.TrustCenterNDARequest.Status)
 
 	msgs := mockEmailSender().Messages()
 	assert.Assert(t, len(msgs) == 1, "expected 1 email, got multiple ( %d )", len(msgs))
@@ -438,12 +484,21 @@ func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testin
 }
 
 func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	trustcenterOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
 	trustCenter := trustcenterOrg.TrustCenter
 
-	_, err := suite.Client.API.UpdateTrustCenter(trustcenterOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+	_, err = suite.Client.API.UpdateTrustCenter(trustcenterOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 			NdaApprovalRequired: lo.ToPtr(true),
+			AutoApprovalRules: &models.TrustCenterNDARequestSetting{
+				UseDomainAllowlist:      true,
+				ManualApprovalOnFailure: true,
+			},
 		},
 	})
 	assert.NilError(t, err)
@@ -455,12 +510,17 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 	req, err := suite.Client.API.CreateTrustCenterNDARequest(trustcenterOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusPendingApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+
 	waitForEvents()
+
+	request, err := suite.Client.API.GetTrustCenterNDARequestByID(trustcenterOrg.Owner.UserCtx, req.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	assert.NilError(t, err)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *request.TrustCenterNDARequest.Status)
 
 	msgs := mockEmailSender().Messages()
 	assert.Assert(t, len(msgs) == 1, "expected 1 email, got multiple ( %d )", len(msgs))
@@ -473,6 +533,11 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 }
 
 func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	trustCenter := tcOrg.TrustCenter
 	pdfHash := th.GetMD5Hash(t, th.PdfFilePath)
@@ -480,7 +545,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	otherTrustCenter := tcOrg2.TrustCenter
 
-	anonEmail := gofakeit.Email()
+	anonEmail := gofakeit.LetterN(12) + ndaRequestEmailDomain
 	anonCtx, anonUser := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, anonEmail)
 	wrongTrustCenterAnonCtx := th.CreateAnonymousTrustCenterContext(otherTrustCenter.ID, otherTrustCenter.OwnerID)
 
@@ -507,7 +572,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			},
 			client:          suite.Client.API,
 			ctx:             anonCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
+			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
 			expectEmailSent: true,
 			testResponse:    true,
 		},
@@ -517,7 +582,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
 				CompanyName:   &companyName,
-				Email:         gofakeit.Email(),
+				Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 				TrustCenterID: &otherTrustCenter.ID,
 			},
 			client:          suite.Client.API,
@@ -530,7 +595,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			input: testclient.CreateTrustCenterNDARequestInput{
 				FirstName:     gofakeit.FirstName(),
 				LastName:      gofakeit.LastName(),
-				Email:         gofakeit.Email(),
+				Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 				CompanyName:   &companyName,
 				TrustCenterID: &trustCenter.ID,
 			},
@@ -561,10 +626,14 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			assert.Equal(t, tc.input.FirstName, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.FirstName)
 			assert.Equal(t, tc.input.LastName, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.LastName)
 			assert.Equal(t, tc.input.Email, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Email)
-			assert.Equal(t, tc.expectedStatus, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 			// Verify the email was or was not sent based on expectation
 			waitForEvents()
+
+			request, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+			assert.NilError(t, err)
+
+			assert.Equal(t, tc.expectedStatus, *request.TrustCenterNDARequest.Status)
 
 			if tc.expectEmailSent {
 				msgs := mockEmailSender().Messages()
@@ -610,27 +679,32 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 }
 
 func TestMutationRequestNewTrustCenterToken(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	trustCenter := tcOrg.TrustCenter
 
 	ndaSigned := testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenter.ID,
 	}
 
 	ndaRequested := testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenter.ID,
 	}
 
 	ndaNeedsApproval := testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
-		Email:         gofakeit.Email(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
 		TrustCenterID: &trustCenter.ID,
 	}
 
@@ -643,6 +717,8 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 	ndaRequestNeedsApproval, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, ndaNeedsApproval)
 	assert.NilError(t, err)
 
+	waitForEvents()
+
 	_, err = suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, ndaRequestSigned.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
 		Status: lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
 	})
@@ -654,9 +730,10 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 	assert.NilError(t, err)
 
 	anonCtxSigned, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaSigned.Email)
+	waitForEvents()
 	anonCtxRequested, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaRequested.Email)
 	anonCtxNeedsApproval, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaNeedsApproval.Email)
-	anonCtxRandom, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
+	anonCtxRandom, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.LetterN(12)+ndaRequestEmailDomain)
 
 	ndaEmail := "Trust Center NDA Request"
 	authEmail := "Access"
@@ -692,13 +769,13 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 		},
 		{
 			name:   "no nda request, no-op",
-			email:  gofakeit.Email(),
+			email:  gofakeit.LetterN(12) + ndaRequestEmailDomain,
 			client: suite.Client.API,
 			ctx:    anonCtxRandom,
 		},
 		{
 			name:        "not anonymous context, error",
-			email:       gofakeit.Email(),
+			email:       gofakeit.LetterN(12) + ndaRequestEmailDomain,
 			client:      suite.Client.API,
 			ctx:         tcOrg.Owner.UserCtx,
 			expectedErr: th.NotAuthorizedErrorMsg,

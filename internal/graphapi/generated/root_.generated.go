@@ -6980,6 +6980,7 @@ type ComplexityRoot struct {
 		ApprovedAt            func(childComplexity int) int
 		ApprovedByUser        func(childComplexity int) int
 		ApprovedByUserID      func(childComplexity int) int
+		AutoApproved          func(childComplexity int) int
 		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CompanyName           func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -46112,6 +46113,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterNDARequest.ApprovedByUserID(childComplexity), true
+	case "TrustCenterNDARequest.autoApproved":
+		if e.ComplexityRoot.TrustCenterNDARequest.AutoApproved == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequest.AutoApproved(childComplexity), true
 	case "TrustCenterNDARequest.blockedGroups":
 		if e.ComplexityRoot.TrustCenterNDARequest.BlockedGroups == nil {
 			break
@@ -123692,6 +123699,7 @@ type TrustCenterNDARequest implements Node @modules(names: ["trust_center_module
   ID of the user who approved the request
   """
   approvedByUserID: ID
+  autoApproved: Boolean
   """
   timestamp when the NDA was signed
   """
@@ -124075,6 +124083,13 @@ input TrustCenterNDARequestWhereInput {
   approvedByUserIDNotNil: Boolean
   approvedByUserIDEqualFold: ID
   approvedByUserIDContainsFold: ID
+  """
+  auto_approved field predicates
+  """
+  autoApproved: Boolean
+  autoApprovedNEQ: Boolean
+  autoApprovedIsNil: Boolean
+  autoApprovedNotNil: Boolean
   """
   signed_at field predicates
   """
@@ -166314,6 +166329,8 @@ func (ec *executionContext) childFields_TrustCenterNDARequest(ctx context.Contex
 		return ec.fieldContext_TrustCenterNDARequest_approvedAt(ctx, field)
 	case "approvedByUserID":
 		return ec.fieldContext_TrustCenterNDARequest_approvedByUserID(ctx, field)
+	case "autoApproved":
+		return ec.fieldContext_TrustCenterNDARequest_autoApproved(ctx, field)
 	case "signedAt":
 		return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
 	case "documentDataID":

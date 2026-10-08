@@ -14,13 +14,21 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 const signedNDAAttachmentName = "signed_nda_file.pdf"
 
 func TestNDAAttestationListener(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	t.Run("signed nda stamps file on the signed request and emails the signer", func(t *testing.T) {
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 		trustCenter := tcOrg.TrustCenter
@@ -103,7 +111,7 @@ func TestNDAAttestationListener(t *testing.T) {
 			trustcenterndarequest.TrustCenterID(trustCenter.ID),
 		).Only(internalCtx)
 		assert.NilError(t, err)
-		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, bystander.Status))
+		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusApproved, bystander.Status))
 		assert.Check(t, bystander.FileID == nil)
 
 		docData, err := suite.Client.DB.DocumentData.Get(internalCtx, docDataID)

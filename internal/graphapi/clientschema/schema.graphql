@@ -82073,6 +82073,7 @@ type TrustCenterNDARequest implements Node @modules(names: ["trust_center_module
 	ID of the user who approved the request
 	"""
 	approvedByUserID: ID
+	autoApproved: Boolean
 	"""
 	timestamp when the NDA was signed
 	"""
@@ -82510,6 +82511,13 @@ input TrustCenterNDARequestWhereInput {
 	approvedByUserIDNotNil: Boolean
 	approvedByUserIDEqualFold: ID
 	approvedByUserIDContainsFold: ID
+	"""
+	auto_approved field predicates
+	"""
+	autoApproved: Boolean
+	autoApprovedNEQ: Boolean
+	autoApprovedIsNil: Boolean
+	autoApprovedNotNil: Boolean
 	"""
 	signed_at field predicates
 	"""

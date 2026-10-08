@@ -2530,6 +2530,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequesthistory.FieldStatus:                {Type: field.TypeEnum, Column: trustcenterndarequesthistory.FieldStatus},
 			trustcenterndarequesthistory.FieldApprovedAt:            {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldApprovedAt},
 			trustcenterndarequesthistory.FieldApprovedByUserID:      {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldApprovedByUserID},
+			trustcenterndarequesthistory.FieldAutoApproved:          {Type: field.TypeBool, Column: trustcenterndarequesthistory.FieldAutoApproved},
 			trustcenterndarequesthistory.FieldSignedAt:              {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldSignedAt},
 			trustcenterndarequesthistory.FieldDocumentDataID:        {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldDocumentDataID},
 			trustcenterndarequesthistory.FieldFileID:                {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldFileID},
@@ -13865,6 +13866,11 @@ func (f *TrustCenterNDARequestHistoryFilter) WhereApprovedAt(p entql.TimeP) {
 // WhereApprovedByUserID applies the entql string predicate on the approved_by_user_id field.
 func (f *TrustCenterNDARequestHistoryFilter) WhereApprovedByUserID(p entql.StringP) {
 	f.Where(p.Field(trustcenterndarequesthistory.FieldApprovedByUserID))
+}
+
+// WhereAutoApproved applies the entql bool predicate on the auto_approved field.
+func (f *TrustCenterNDARequestHistoryFilter) WhereAutoApproved(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequesthistory.FieldAutoApproved))
 }
 
 // WhereSignedAt applies the entql time.Time predicate on the signed_at field.

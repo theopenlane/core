@@ -23078,6 +23078,10 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Cont
 		create = create.SetNillableApprovedByUserID(&approvedByUserID)
 	}
 
+	if autoApproved, exists := m.AutoApproved(); exists {
+		create = create.SetAutoApproved(autoApproved)
+	}
+
 	if signedAt, exists := m.SignedAt(); exists {
 		create = create.SetNillableSignedAt(&signedAt)
 	}
@@ -23232,6 +23236,12 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetNillableApprovedByUserID(trustcenterndarequest.ApprovedByUserID)
 		}
 
+		if autoApproved, exists := m.AutoApproved(); exists {
+			create = create.SetAutoApproved(autoApproved)
+		} else {
+			create = create.SetAutoApproved(trustcenterndarequest.AutoApproved)
+		}
+
 		if signedAt, exists := m.SignedAt(); exists {
 			create = create.SetNillableSignedAt(&signedAt)
 		} else {
@@ -23306,6 +23316,7 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetStatus(trustcenterndarequest.Status).
 			SetNillableApprovedAt(trustcenterndarequest.ApprovedAt).
 			SetNillableApprovedByUserID(trustcenterndarequest.ApprovedByUserID).
+			SetAutoApproved(trustcenterndarequest.AutoApproved).
 			SetNillableSignedAt(trustcenterndarequest.SignedAt).
 			SetNillableDocumentDataID(trustcenterndarequest.DocumentDataID).
 			SetNillableFileID(trustcenterndarequest.FileID).

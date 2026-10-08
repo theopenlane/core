@@ -13,11 +13,19 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
+
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 )
 
 func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
 
@@ -52,11 +60,16 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.NilError(t, err)
 
 	assert.Assert(t, ndaCreateResp != nil)
-	// make sure the nda request is in requested status, the approval is off by default
-	assert.Check(t, *ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status == enums.TrustCenterNDARequestStatusRequested)
+	assert.Check(t, *ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status == enums.TrustCenterNDARequestStatusPendingApproval)
 
 	// the access email mints the signing identity from the request id, not the browsing session
 	ndaRequestID := ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID
+
+	waitForEvents()
+
+	approvedRequest, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, ndaRequestID)
+	assert.NilError(t, err)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusApproved, *approvedRequest.TrustCenterNDARequest.Status)
 	anonCtx, signer := th.CreateAnonymousTrustCenterContextForSubject(trustCenter.ID, trustCenter.OwnerID, ndaRequestID, email)
 
 	input := testclient.SubmitTrustCenterNDAResponseInput{

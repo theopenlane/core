@@ -66,6 +66,12 @@ var backfillRoutines = []backfillRoutine{
 		// 	return backfillX(ctx, deps.Client)
 		// },
 	},
+	{
+		Name:    "trustcenter-auto-approval-rules",
+		Version: "v2",
+		Enabled: true,
+		Run:     backfillTrustCenterSetting,
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run

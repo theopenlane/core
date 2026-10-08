@@ -8070,6 +8070,7 @@ func init() {
 		{Name: "access_level", Label: "AccessLevel", Type: "enums.TrustCenterNDARequestAccessLevel", Clearable: true},
 		{Name: "approved_at", Label: "ApprovedAt", Type: "models.DateTime", Clearable: true},
 		{Name: "approved_by_user_id", Label: "ApprovedByUserID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "auto_approved", Label: "AutoApproved", Type: "bool", Clearable: true},
 		{Name: "company_name", Label: "CompanyName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},

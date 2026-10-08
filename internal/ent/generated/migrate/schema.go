@@ -8189,6 +8189,7 @@ var (
 		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING_APPROVAL", "REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
 		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
+		{Name: "auto_approved", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
@@ -8203,25 +8204,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_nda_requests_trust_centers_trust_center_nda_requests",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[18]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_document_data_document",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
 				RefColumns: []*schema.Column{DocumentDataColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_files_file",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_users_approved_by_user",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[22]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8230,22 +8231,22 @@ var (
 			{
 				Name:    "trust_center_nda_request_trust_center_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[18]},
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[19]},
 			},
 			{
 				Name:    "trust_center_nda_request_document_data_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[19]},
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[20]},
 			},
 			{
 				Name:    "trust_center_nda_request_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[20]},
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[21]},
 			},
 			{
 				Name:    "trust_center_nda_request_approved_by_user_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[21]},
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[22]},
 			},
 		},
 	}

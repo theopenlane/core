@@ -2470,6 +2470,10 @@ func init() {
 	trustcenterndarequesthistoryDescTags := trustcenterndarequesthistoryFields[11].Descriptor()
 	// trustcenterndarequesthistory.DefaultTags holds the default value on creation for the tags field.
 	trustcenterndarequesthistory.DefaultTags = trustcenterndarequesthistoryDescTags.Default.([]string)
+	// trustcenterndarequesthistoryDescAutoApproved is the schema descriptor for auto_approved field.
+	trustcenterndarequesthistoryDescAutoApproved := trustcenterndarequesthistoryFields[22].Descriptor()
+	// trustcenterndarequesthistory.DefaultAutoApproved holds the default value on creation for the auto_approved field.
+	trustcenterndarequesthistory.DefaultAutoApproved = trustcenterndarequesthistoryDescAutoApproved.Default.(bool)
 	// trustcenterndarequesthistoryDescID is the schema descriptor for id field.
 	trustcenterndarequesthistoryDescID := trustcenterndarequesthistoryFields[10].Descriptor()
 	// trustcenterndarequesthistory.DefaultID holds the default value on creation for the id field.

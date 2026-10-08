@@ -2534,6 +2534,7 @@ type ComplexityRoot struct {
 		AccessLevel           func(childComplexity int) int
 		ApprovedAt            func(childComplexity int) int
 		ApprovedByUserID      func(childComplexity int) int
+		AutoApproved          func(childComplexity int) int
 		CompanyName           func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -15543,6 +15544,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterNDARequestHistory.ApprovedByUserID(childComplexity), true
+	case "TrustCenterNDARequestHistory.autoApproved":
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.AutoApproved == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.AutoApproved(childComplexity), true
 	case "TrustCenterNDARequestHistory.companyName":
 		if e.ComplexityRoot.TrustCenterNDARequestHistory.CompanyName == nil {
 			break
@@ -48263,6 +48270,7 @@ type TrustCenterNDARequestHistory implements Node {
   ID of the user who approved the request
   """
   approvedByUserID: String
+  autoApproved: Boolean
   """
   timestamp when the NDA was signed
   """
@@ -48581,6 +48589,13 @@ input TrustCenterNDARequestHistoryWhereInput {
   approvedByUserIDNotNil: Boolean
   approvedByUserIDEqualFold: String
   approvedByUserIDContainsFold: String
+  """
+  auto_approved field predicates
+  """
+  autoApproved: Boolean
+  autoApprovedNEQ: Boolean
+  autoApprovedIsNil: Boolean
+  autoApprovedNotNil: Boolean
   """
   signed_at field predicates
   """
@@ -58763,6 +58778,8 @@ func (ec *executionContext) childFields_TrustCenterNDARequestHistory(ctx context
 		return ec.fieldContext_TrustCenterNDARequestHistory_approvedAt(ctx, field)
 	case "approvedByUserID":
 		return ec.fieldContext_TrustCenterNDARequestHistory_approvedByUserID(ctx, field)
+	case "autoApproved":
+		return ec.fieldContext_TrustCenterNDARequestHistory_autoApproved(ctx, field)
 	case "signedAt":
 		return ec.fieldContext_TrustCenterNDARequestHistory_signedAt(ctx, field)
 	case "documentDataID":

@@ -34370,6 +34370,7 @@ type TrustCenterNDARequest struct {
 	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
 	// ID of the user who approved the request
 	ApprovedByUserID *string `json:"approvedByUserID,omitempty"`
+	AutoApproved     *bool   `json:"autoApproved,omitempty"`
 	// timestamp when the NDA was signed
 	SignedAt *models.DateTime `json:"signedAt,omitempty"`
 	// ID of the signed NDA document data
@@ -34614,6 +34615,11 @@ type TrustCenterNDARequestWhereInput struct {
 	ApprovedByUserIDNotNil       *bool    `json:"approvedByUserIDNotNil,omitempty"`
 	ApprovedByUserIDEqualFold    *string  `json:"approvedByUserIDEqualFold,omitempty"`
 	ApprovedByUserIDContainsFold *string  `json:"approvedByUserIDContainsFold,omitempty"`
+	// auto_approved field predicates
+	AutoApproved       *bool `json:"autoApproved,omitempty"`
+	AutoApprovedNeq    *bool `json:"autoApprovedNEQ,omitempty"`
+	AutoApprovedIsNil  *bool `json:"autoApprovedIsNil,omitempty"`
+	AutoApprovedNotNil *bool `json:"autoApprovedNotNil,omitempty"`
 	// signed_at field predicates
 	SignedAt       *models.DateTime `json:"signedAt,omitempty"`
 	SignedAtGt     *models.DateTime `json:"signedAtGT,omitempty"`

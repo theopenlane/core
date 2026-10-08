@@ -60,6 +60,8 @@ type TrustCenterNDARequest struct {
 	ApprovedAt *models.DateTime `json:"approved_at,omitempty"`
 	// ID of the user who approved the request
 	ApprovedByUserID *string `json:"approved_by_user_id,omitempty"`
+	// AutoApproved holds the value of the "auto_approved" field.
+	AutoApproved bool `json:"auto_approved,omitempty"`
 	// timestamp when the NDA was signed
 	SignedAt *models.DateTime `json:"signed_at,omitempty"`
 	// ID of the signed NDA document data
@@ -179,6 +181,8 @@ func (*TrustCenterNDARequest) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case trustcenterndarequest.FieldTags:
 			values[i] = new([]byte)
+		case trustcenterndarequest.FieldAutoApproved:
+			values[i] = new(sql.NullBool)
 		case trustcenterndarequest.FieldID, trustcenterndarequest.FieldCreatedBy, trustcenterndarequest.FieldUpdatedBy, trustcenterndarequest.FieldUpdatedByImpersonator, trustcenterndarequest.FieldDeletedBy, trustcenterndarequest.FieldTrustCenterID, trustcenterndarequest.FieldFirstName, trustcenterndarequest.FieldLastName, trustcenterndarequest.FieldEmail, trustcenterndarequest.FieldCompanyName, trustcenterndarequest.FieldReason, trustcenterndarequest.FieldAccessLevel, trustcenterndarequest.FieldStatus, trustcenterndarequest.FieldApprovedByUserID, trustcenterndarequest.FieldDocumentDataID, trustcenterndarequest.FieldFileID:
 			values[i] = new(sql.NullString)
 		case trustcenterndarequest.FieldCreatedAt, trustcenterndarequest.FieldUpdatedAt, trustcenterndarequest.FieldDeletedAt:
@@ -318,6 +322,12 @@ func (_m *TrustCenterNDARequest) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.ApprovedByUserID = new(string)
 				*_m.ApprovedByUserID = value.String
+			}
+		case trustcenterndarequest.FieldAutoApproved:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field auto_approved", values[i])
+			} else if value.Valid {
+				_m.AutoApproved = value.Bool
 			}
 		case trustcenterndarequest.FieldSignedAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -474,6 +484,9 @@ func (_m *TrustCenterNDARequest) String() string {
 		builder.WriteString("approved_by_user_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("auto_approved=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AutoApproved))
 	builder.WriteString(", ")
 	if v := _m.SignedAt; v != nil {
 		builder.WriteString("signed_at=")

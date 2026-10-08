@@ -54337,6 +54337,29 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestHistory_approvedBy
 	return graphql.NewScalarFieldContext("TrustCenterNDARequestHistory", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
+func (ec *executionContext) _TrustCenterNDARequestHistory_autoApproved(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestHistory_autoApproved(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AutoApproved, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestHistory_autoApproved(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
 func (ec *executionContext) _TrustCenterNDARequestHistory_signedAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -160517,7 +160540,7 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "firstName", "firstNameNEQ", "firstNameIn", "firstNameNotIn", "firstNameContains", "firstNameHasPrefix", "firstNameHasSuffix", "firstNameEqualFold", "firstNameContainsFold", "lastName", "lastNameNEQ", "lastNameIn", "lastNameNotIn", "lastNameContains", "lastNameHasPrefix", "lastNameHasSuffix", "lastNameEqualFold", "lastNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "reason", "reasonNEQ", "reasonIn", "reasonNotIn", "reasonContains", "reasonHasPrefix", "reasonHasSuffix", "reasonIsNil", "reasonNotNil", "reasonEqualFold", "reasonContainsFold", "accessLevel", "accessLevelNEQ", "accessLevelIn", "accessLevelNotIn", "accessLevelIsNil", "accessLevelNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedAt", "approvedAtGT", "approvedAtGTE", "approvedAtLT", "approvedAtLTE", "approvedAtIsNil", "approvedAtNotNil", "approvedByUserID", "approvedByUserIDNEQ", "approvedByUserIDIn", "approvedByUserIDNotIn", "approvedByUserIDContains", "approvedByUserIDHasPrefix", "approvedByUserIDHasSuffix", "approvedByUserIDIsNil", "approvedByUserIDNotNil", "approvedByUserIDEqualFold", "approvedByUserIDContainsFold", "signedAt", "signedAtGT", "signedAtGTE", "signedAtLT", "signedAtLTE", "signedAtIsNil", "signedAtNotNil", "documentDataID", "documentDataIDNEQ", "documentDataIDIn", "documentDataIDNotIn", "documentDataIDContains", "documentDataIDHasPrefix", "documentDataIDHasSuffix", "documentDataIDIsNil", "documentDataIDNotNil", "documentDataIDEqualFold", "documentDataIDContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "firstName", "firstNameNEQ", "firstNameIn", "firstNameNotIn", "firstNameContains", "firstNameHasPrefix", "firstNameHasSuffix", "firstNameEqualFold", "firstNameContainsFold", "lastName", "lastNameNEQ", "lastNameIn", "lastNameNotIn", "lastNameContains", "lastNameHasPrefix", "lastNameHasSuffix", "lastNameEqualFold", "lastNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "reason", "reasonNEQ", "reasonIn", "reasonNotIn", "reasonContains", "reasonHasPrefix", "reasonHasSuffix", "reasonIsNil", "reasonNotNil", "reasonEqualFold", "reasonContainsFold", "accessLevel", "accessLevelNEQ", "accessLevelIn", "accessLevelNotIn", "accessLevelIsNil", "accessLevelNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedAt", "approvedAtGT", "approvedAtGTE", "approvedAtLT", "approvedAtLTE", "approvedAtIsNil", "approvedAtNotNil", "approvedByUserID", "approvedByUserIDNEQ", "approvedByUserIDIn", "approvedByUserIDNotIn", "approvedByUserIDContains", "approvedByUserIDHasPrefix", "approvedByUserIDHasSuffix", "approvedByUserIDIsNil", "approvedByUserIDNotNil", "approvedByUserIDEqualFold", "approvedByUserIDContainsFold", "autoApproved", "autoApprovedNEQ", "autoApprovedIsNil", "autoApprovedNotNil", "signedAt", "signedAtGT", "signedAtGTE", "signedAtLT", "signedAtLTE", "signedAtIsNil", "signedAtNotNil", "documentDataID", "documentDataIDNEQ", "documentDataIDIn", "documentDataIDNotIn", "documentDataIDContains", "documentDataIDHasPrefix", "documentDataIDHasSuffix", "documentDataIDIsNil", "documentDataIDNotNil", "documentDataIDEqualFold", "documentDataIDContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -161686,6 +161709,34 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 				return it, err
 			}
 			it.ApprovedByUserIDContainsFold = data
+		case "autoApproved":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApproved"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApproved = data
+		case "autoApprovedNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprovedNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprovedNEQ = data
+		case "autoApprovedIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprovedIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprovedIsNil = data
+		case "autoApprovedNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprovedNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprovedNotNil = data
 		case "signedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("signedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -197253,6 +197304,11 @@ func (ec *executionContext) _TrustCenterNDARequestHistory(ctx context.Context, s
 			}
 		case "approvedByUserID":
 			out.Values[i] = ec._TrustCenterNDARequestHistory_approvedByUserID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "autoApproved":
+			out.Values[i] = ec._TrustCenterNDARequestHistory_autoApproved(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

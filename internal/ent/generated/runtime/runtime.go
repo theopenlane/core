@@ -7837,6 +7837,10 @@ func init() {
 			return nil
 		}
 	}()
+	// trustcenterndarequestDescAutoApproved is the schema descriptor for auto_approved field.
+	trustcenterndarequestDescAutoApproved := trustcenterndarequestFields[10].Descriptor()
+	// trustcenterndarequest.DefaultAutoApproved holds the default value on creation for the auto_approved field.
+	trustcenterndarequest.DefaultAutoApproved = trustcenterndarequestDescAutoApproved.Default.(bool)
 	// trustcenterndarequestDescID is the schema descriptor for id field.
 	trustcenterndarequestDescID := trustcenterndarequestMixinFields4[0].Descriptor()
 	// trustcenterndarequest.DefaultID holds the default value on creation for the id field.
