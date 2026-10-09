@@ -165,6 +165,16 @@ func TestQueryOrganizations(t *testing.T) {
 		org3Found := false
 
 		for _, o := range resp.Organizations.Edges {
+			var ownerRole enums.Role
+
+			for _, m := range o.Node.Members.Edges {
+				if m.Node.User.ID == orgUser.Owner.ID {
+					ownerRole = m.Node.Role
+				}
+			}
+
+			assert.Check(t, is.Equal(enums.RoleOwner, ownerRole), "missing owner role for organization %s", o.Node.ID)
+
 			if o.Node.ID == org1ID {
 				org1Found = true
 				// no avatar set

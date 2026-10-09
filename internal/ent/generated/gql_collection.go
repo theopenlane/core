@@ -344,6 +344,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -482,6 +483,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -575,6 +577,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -668,6 +671,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -776,6 +780,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -869,6 +874,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -962,6 +968,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1055,6 +1062,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1148,6 +1156,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1241,6 +1250,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1334,6 +1344,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1427,6 +1438,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1520,6 +1532,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1613,6 +1626,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1721,6 +1735,7 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2170,6 +2185,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2259,6 +2275,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2348,6 +2365,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2452,6 +2470,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2545,6 +2564,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2638,6 +2658,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2727,6 +2748,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2816,6 +2838,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2909,6 +2932,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2998,6 +3022,7 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3532,6 +3557,7 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*AssessmentResponse) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3621,6 +3647,7 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*AssessmentResponse) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3945,6 +3972,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4053,6 +4081,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4142,6 +4171,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4231,6 +4261,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4485,6 +4516,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4578,6 +4610,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4671,6 +4704,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4764,6 +4798,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4857,6 +4892,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4950,6 +4986,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5043,6 +5080,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5136,6 +5174,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5229,6 +5268,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5322,6 +5362,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5415,6 +5456,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5508,6 +5550,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5601,6 +5644,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5724,6 +5768,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5817,6 +5862,7 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6285,6 +6331,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6378,6 +6425,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6471,6 +6519,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6699,6 +6748,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6788,6 +6838,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6877,6 +6928,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6970,6 +7022,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -7063,6 +7116,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -7156,6 +7210,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -7249,6 +7304,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -7342,6 +7398,7 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Campaign) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -7816,6 +7873,7 @@ func (_q *CampaignTargetQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CampaignTarget) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8085,6 +8143,7 @@ func (_q *CheckResultQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CheckResult) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8178,6 +8237,7 @@ func (_q *CheckResultQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CheckResult) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8267,6 +8327,7 @@ func (_q *CheckResultQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CheckResult) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8356,6 +8417,7 @@ func (_q *CheckResultQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CheckResult) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8445,6 +8507,7 @@ func (_q *CheckResultQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CheckResult) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8538,6 +8601,7 @@ func (_q *CheckResultQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CheckResult) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8826,6 +8890,7 @@ func (_q *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Contact) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8934,6 +8999,7 @@ func (_q *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Contact) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9027,6 +9093,7 @@ func (_q *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Contact) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9120,6 +9187,7 @@ func (_q *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Contact) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9209,6 +9277,7 @@ func (_q *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Contact) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9302,6 +9371,7 @@ func (_q *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Contact) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9591,6 +9661,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9684,6 +9755,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9777,6 +9849,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9870,6 +9943,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9963,6 +10037,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10056,6 +10131,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10149,6 +10225,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10242,6 +10319,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10335,6 +10413,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10424,6 +10503,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10558,6 +10638,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10651,6 +10732,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10744,6 +10826,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10852,6 +10935,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10945,6 +11029,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11098,6 +11183,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11191,6 +11277,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11284,6 +11371,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11377,6 +11465,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11470,6 +11559,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11563,6 +11653,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11656,6 +11747,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11749,6 +11841,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11842,6 +11935,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11935,6 +12029,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12028,6 +12123,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12117,6 +12213,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12206,6 +12303,7 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12660,6 +12758,7 @@ func (_q *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12753,6 +12852,7 @@ func (_q *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12846,6 +12946,7 @@ func (_q *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12939,6 +13040,7 @@ func (_q *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13032,6 +13134,7 @@ func (_q *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13125,6 +13228,7 @@ func (_q *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13403,6 +13507,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13496,6 +13601,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13589,6 +13695,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13682,6 +13789,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13775,6 +13883,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13868,6 +13977,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13961,6 +14071,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14054,6 +14165,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14147,6 +14259,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14236,6 +14349,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14325,6 +14439,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14414,6 +14529,7 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14922,6 +15038,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15011,6 +15128,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15100,6 +15218,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15189,6 +15308,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15278,6 +15398,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15367,6 +15488,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15456,6 +15578,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15545,6 +15668,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15634,6 +15758,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15723,6 +15848,7 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*CustomTypeEnum) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15992,6 +16118,7 @@ func (_q *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DNSVerification) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -16251,6 +16378,7 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryAccount) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -16449,6 +16577,7 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryAccount) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -16542,6 +16671,7 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryAccount) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -16635,6 +16765,7 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryAccount) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -16724,6 +16855,7 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryAccount) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17138,6 +17270,7 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryGroup) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17306,6 +17439,7 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryGroup) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17399,6 +17533,7 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryGroup) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17488,6 +17623,7 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryGroup) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17842,6 +17978,7 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryMembership) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18040,6 +18177,7 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryMembership) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18129,6 +18267,7 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryMembership) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18458,6 +18597,7 @@ func (_q *DiscussionQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Discussion) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18792,6 +18932,7 @@ func (_q *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DocumentData) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18885,6 +19026,7 @@ func (_q *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DocumentData) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19148,6 +19290,7 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*EmailTemplate) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19237,6 +19380,7 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*EmailTemplate) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19326,6 +19470,7 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*EmailTemplate) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19475,6 +19620,7 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*EmailTemplate) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19564,6 +19710,7 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*EmailTemplate) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19653,6 +19800,7 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*EmailTemplate) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19952,6 +20100,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20060,6 +20209,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20153,6 +20303,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20351,6 +20502,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20515,6 +20667,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20608,6 +20761,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20701,6 +20855,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20790,6 +20945,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20883,6 +21039,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20976,6 +21133,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21069,6 +21227,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21162,6 +21321,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21251,6 +21411,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21340,6 +21501,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21429,6 +21591,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21522,6 +21685,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21615,6 +21779,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21704,6 +21869,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21793,6 +21959,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21886,6 +22053,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21979,6 +22147,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22072,6 +22241,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22165,6 +22335,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22258,6 +22429,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22351,6 +22523,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22444,6 +22617,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22537,6 +22711,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22630,6 +22805,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22753,6 +22929,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -23321,6 +23498,7 @@ func (_q *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*EntityType) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -23555,6 +23733,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -23648,6 +23827,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -23741,6 +23921,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -23834,6 +24015,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -23927,6 +24109,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24020,6 +24203,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24113,6 +24297,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24206,6 +24391,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24299,6 +24485,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24392,6 +24579,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24485,6 +24673,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24578,6 +24767,7 @@ func (_q *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Event) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24851,6 +25041,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24944,6 +25135,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25037,6 +25229,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25130,6 +25323,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25219,6 +25413,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25308,6 +25503,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25397,6 +25593,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25490,6 +25687,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25583,6 +25781,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25676,6 +25875,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25769,6 +25969,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25862,6 +26063,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25951,6 +26153,7 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26270,6 +26473,7 @@ func (_q *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Export) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26359,6 +26563,7 @@ func (_q *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Export) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26671,6 +26876,7 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*File) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26894,6 +27100,7 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*File) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26987,6 +27194,7 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*File) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27076,6 +27284,7 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*File) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27169,6 +27378,7 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*File) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27534,6 +27744,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27642,6 +27853,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27735,6 +27947,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28008,6 +28221,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28101,6 +28315,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28194,6 +28409,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28287,6 +28503,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28380,6 +28597,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28473,6 +28691,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28566,6 +28785,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28659,6 +28879,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28752,6 +28973,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28845,6 +29067,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28938,6 +29161,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29031,6 +29255,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29124,6 +29349,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29217,6 +29443,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29310,6 +29537,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29403,6 +29631,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29492,6 +29721,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29581,6 +29811,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29670,6 +29901,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29763,6 +29995,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -30542,6 +30775,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -30635,6 +30869,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -30728,6 +30963,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -30821,6 +31057,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -30914,6 +31151,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31007,6 +31245,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31100,6 +31339,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31193,6 +31433,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31286,6 +31527,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31379,6 +31621,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31472,6 +31715,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31565,6 +31809,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31658,6 +31903,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31751,6 +31997,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31844,6 +32091,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31937,6 +32185,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32030,6 +32279,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32123,6 +32373,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32216,6 +32467,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32309,6 +32561,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32402,6 +32655,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32495,6 +32749,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32588,6 +32843,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32681,6 +32937,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32774,6 +33031,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32867,6 +33125,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32960,6 +33219,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33053,6 +33313,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33146,6 +33407,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33239,6 +33501,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33332,6 +33595,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33425,6 +33689,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33518,6 +33783,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33611,6 +33877,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33704,6 +33971,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33797,6 +34065,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33890,6 +34159,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33983,6 +34253,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34076,6 +34347,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34169,6 +34441,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34262,6 +34535,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34355,6 +34629,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34459,6 +34734,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34552,6 +34828,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34645,6 +34922,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34749,6 +35027,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34842,6 +35121,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34935,6 +35215,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35028,6 +35309,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35117,6 +35399,7 @@ func (_q *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Group) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35436,6 +35719,7 @@ func (_q *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*GroupMembership) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35829,6 +36113,7 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Hush) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35922,6 +36207,7 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Hush) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36015,6 +36301,7 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Hush) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36298,6 +36585,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36387,6 +36675,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36476,6 +36765,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36655,6 +36945,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36744,6 +37035,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36837,6 +37129,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36930,6 +37223,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37023,6 +37317,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37116,6 +37411,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37205,6 +37501,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37298,6 +37595,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37391,6 +37689,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37484,6 +37783,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37577,6 +37877,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37670,6 +37971,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37763,6 +38065,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37856,6 +38159,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37945,6 +38249,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38049,6 +38354,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IdentityHolder) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38467,6 +38773,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38560,6 +38867,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38649,6 +38957,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38742,6 +39051,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38835,6 +39145,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38928,6 +39239,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39021,6 +39333,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39114,6 +39427,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39207,6 +39521,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39296,6 +39611,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39389,6 +39705,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39478,6 +39795,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39567,6 +39885,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39656,6 +39975,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39745,6 +40065,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39849,6 +40170,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39938,6 +40260,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40027,6 +40350,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40116,6 +40440,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40205,6 +40530,7 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40568,6 +40894,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40661,6 +40988,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40754,6 +41082,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40847,6 +41176,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40940,6 +41270,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41033,6 +41364,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41126,6 +41458,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41219,6 +41552,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41312,6 +41646,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41405,6 +41740,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41498,6 +41834,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41591,6 +41928,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41684,6 +42022,7 @@ func (_q *IntegrationRunQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*IntegrationRun) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41951,6 +42290,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42059,6 +42399,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42152,6 +42493,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42320,6 +42662,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42413,6 +42756,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42502,6 +42846,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42595,6 +42940,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42688,6 +43034,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42781,6 +43128,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42874,6 +43222,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42967,6 +43316,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43060,6 +43410,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43168,6 +43519,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43257,6 +43609,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43346,6 +43699,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43435,6 +43789,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43528,6 +43883,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43621,6 +43977,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43714,6 +44071,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43807,6 +44165,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43900,6 +44259,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43993,6 +44353,7 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44417,6 +44778,7 @@ func (_q *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Invite) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44510,6 +44872,7 @@ func (_q *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Invite) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44763,6 +45126,7 @@ func (_q *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*MappableDomain) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44997,6 +45361,7 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45090,6 +45455,7 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45183,6 +45549,7 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45276,6 +45643,7 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45369,6 +45737,7 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45462,6 +45831,7 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45730,6 +46100,7 @@ func (_q *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45823,6 +46194,7 @@ func (_q *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45916,6 +46288,7 @@ func (_q *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -46009,6 +46382,7 @@ func (_q *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -46102,6 +46476,7 @@ func (_q *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -46195,6 +46570,7 @@ func (_q *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -46288,6 +46664,7 @@ func (_q *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -46674,6 +47051,7 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Note) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -46763,6 +47141,7 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Note) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -47548,6 +47927,7 @@ func (_q *NotificationTemplateQuery) collectField(ctx context.Context, oneNode b
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*NotificationTemplate) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -48029,6 +48409,7 @@ func (_q *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*OrgMembership) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -48307,6 +48688,7 @@ func (_q *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*OrgSubscription) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -48549,6 +48931,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -48638,6 +49021,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -48727,6 +49111,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -48816,6 +49201,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -48905,6 +49291,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -48994,6 +49381,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49083,6 +49471,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49172,6 +49561,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49261,6 +49651,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49350,6 +49741,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49439,6 +49831,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49528,6 +49921,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49617,6 +50011,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49706,6 +50101,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49795,6 +50191,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49884,6 +50281,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -49973,6 +50371,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50062,6 +50461,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50151,6 +50551,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50240,6 +50641,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50329,6 +50731,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50418,6 +50821,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50507,6 +50911,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50596,6 +51001,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50685,6 +51091,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50774,6 +51181,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50863,6 +51271,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -50952,6 +51361,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51041,6 +51451,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51130,6 +51541,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51219,6 +51631,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51308,6 +51721,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51397,6 +51811,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51486,6 +51901,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51575,6 +51991,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51664,6 +52081,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51753,6 +52171,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51842,6 +52261,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -51931,6 +52351,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52020,6 +52441,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52109,6 +52531,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52198,6 +52621,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52287,6 +52711,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52376,6 +52801,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52465,6 +52891,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52554,6 +52981,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52643,6 +53071,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52732,6 +53161,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52821,6 +53251,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52910,6 +53341,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -52999,6 +53431,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53088,6 +53521,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53177,6 +53611,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53266,6 +53701,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53355,6 +53791,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53444,6 +53881,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53533,6 +53971,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53622,6 +54061,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53711,6 +54151,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53800,6 +54241,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53889,6 +54331,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -53978,6 +54421,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54067,6 +54511,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54156,6 +54601,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54245,6 +54691,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54334,6 +54781,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54423,6 +54871,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54512,6 +54961,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54601,6 +55051,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54690,6 +55141,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54779,6 +55231,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54868,6 +55321,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -54957,6 +55411,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55046,6 +55501,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55135,6 +55591,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55239,6 +55696,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55339,6 +55797,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55432,6 +55891,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55525,6 +55985,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55618,6 +56079,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55739,6 +56201,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -55828,6 +56291,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -56097,6 +56561,7 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*OrganizationSetting) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -56475,6 +56940,7 @@ func (_q *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode bo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*PersonalAccessToken) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -56568,6 +57034,7 @@ func (_q *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode bo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*PersonalAccessToken) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -56851,6 +57318,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -56944,6 +57412,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -57037,6 +57506,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -57430,6 +57900,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -57523,6 +57994,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -57616,6 +58088,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -57709,6 +58182,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -57802,6 +58276,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -57891,6 +58366,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -57980,6 +58456,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58069,6 +58546,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58162,6 +58640,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58255,6 +58734,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58348,6 +58828,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58441,6 +58922,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58534,6 +59016,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58627,6 +59110,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58716,6 +59200,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58805,6 +59290,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58894,6 +59380,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -58983,6 +59470,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -59072,6 +59560,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -59161,6 +59650,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -59254,6 +59744,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -59347,6 +59838,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -59440,6 +59932,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -59533,6 +60026,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -59637,6 +60131,7 @@ func (_q *PlatformQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Platform) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60120,6 +60615,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60228,6 +60724,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60321,6 +60818,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60489,6 +60987,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60582,6 +61081,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60675,6 +61175,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60768,6 +61269,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60861,6 +61363,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -60954,6 +61457,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -61047,6 +61551,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -61140,6 +61645,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -61229,6 +61735,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -61333,6 +61840,7 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -61752,6 +62260,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -61845,6 +62354,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -61938,6 +62448,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62046,6 +62557,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62139,6 +62651,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62228,6 +62741,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62321,6 +62835,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62414,6 +62929,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62507,6 +63023,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62600,6 +63117,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62693,6 +63211,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62782,6 +63301,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62875,6 +63395,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -62968,6 +63489,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -63061,6 +63583,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -63154,6 +63677,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -63247,6 +63771,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -63340,6 +63865,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -63433,6 +63959,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -63526,6 +64053,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -63619,6 +64147,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -63727,6 +64256,7 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Program) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64221,6 +64751,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64314,6 +64845,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64437,6 +64969,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64530,6 +65063,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64623,6 +65157,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64716,6 +65251,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64809,6 +65345,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64902,6 +65439,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -64991,6 +65529,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65084,6 +65623,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65177,6 +65717,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65270,6 +65811,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65363,6 +65905,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65456,6 +65999,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65549,6 +66093,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65642,6 +66187,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65731,6 +66277,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -65820,6 +66367,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66194,6 +66742,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66287,6 +66836,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66410,6 +66960,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66503,6 +67054,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66596,6 +67148,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66689,6 +67242,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66782,6 +67336,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66875,6 +67430,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -66968,6 +67524,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -67061,6 +67618,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -67154,6 +67712,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -67247,6 +67806,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -67340,6 +67900,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -67433,6 +67994,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -67537,6 +68099,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -67626,6 +68189,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -67715,6 +68279,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Review) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68063,6 +68628,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68171,6 +68737,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68264,6 +68831,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68357,6 +68925,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68600,6 +69169,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68693,6 +69263,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68786,6 +69357,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68879,6 +69451,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -68972,6 +69545,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69065,6 +69639,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69158,6 +69733,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69251,6 +69827,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69344,6 +69921,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69433,6 +70011,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69522,6 +70101,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69641,6 +70221,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69730,6 +70311,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69819,6 +70401,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -69912,6 +70495,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -70005,6 +70589,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -70098,6 +70683,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -70191,6 +70777,7 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -70660,6 +71247,7 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*SLADefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -70749,6 +71337,7 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*SLADefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -70993,6 +71582,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71086,6 +71676,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71299,6 +71890,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71392,6 +71984,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71485,6 +72078,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71578,6 +72172,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71671,6 +72266,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71764,6 +72360,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71857,6 +72454,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -71950,6 +72548,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -72043,6 +72642,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -72136,6 +72736,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -72229,6 +72830,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -72322,6 +72924,7 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -72735,6 +73338,7 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Standard) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -72824,6 +73428,7 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Standard) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -72913,6 +73518,7 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Standard) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73002,6 +73608,7 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Standard) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73325,6 +73932,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73418,6 +74026,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73511,6 +74120,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73604,6 +74214,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73693,6 +74304,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73786,6 +74398,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73875,6 +74488,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -73968,6 +74582,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74061,6 +74676,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74150,6 +74766,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74284,6 +74901,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74377,6 +74995,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74470,6 +75089,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74608,6 +75228,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74701,6 +75322,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74790,6 +75412,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74883,6 +75506,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -74976,6 +75600,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -75069,6 +75694,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -75162,6 +75788,7 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -75605,6 +76232,7 @@ func (_q *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subprocessor) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -75694,6 +76322,7 @@ func (_q *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subprocessor) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -75962,6 +76591,7 @@ func (_q *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subscriber) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -76070,6 +76700,7 @@ func (_q *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subscriber) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -76379,6 +77010,7 @@ func (_q *SystemDetailQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*SystemDetail) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -76472,6 +77104,7 @@ func (_q *SystemDetailQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*SystemDetail) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -76565,6 +77198,7 @@ func (_q *SystemDetailQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*SystemDetail) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -76658,6 +77292,7 @@ func (_q *SystemDetailQuery) collectField(ctx context.Context, oneNode bool, opC
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*SystemDetail) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -77326,6 +77961,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -77415,6 +78051,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -77508,6 +78145,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -77601,6 +78239,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -77694,6 +78333,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -77787,6 +78427,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -77880,6 +78521,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -77973,6 +78615,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78066,6 +78709,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78159,6 +78803,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78252,6 +78897,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78345,6 +78991,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78438,6 +79085,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78531,6 +79179,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78624,6 +79273,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78717,6 +79367,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78806,6 +79457,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -78899,6 +79551,7 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -79325,6 +79978,7 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Template) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -79414,6 +80068,7 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Template) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -79522,6 +80177,7 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Template) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -79611,6 +80267,7 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Template) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -79700,6 +80357,7 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Template) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80008,6 +80666,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80097,6 +80756,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80249,6 +80909,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80338,6 +80999,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80427,6 +81089,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80516,6 +81179,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80605,6 +81269,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80694,6 +81359,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80783,6 +81449,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80872,6 +81539,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -80961,6 +81629,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -81050,6 +81719,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -81139,6 +81809,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -81393,6 +82064,7 @@ func (_q *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterCompliance) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -81482,6 +82154,7 @@ func (_q *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterCompliance) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -81746,6 +82419,7 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterDoc) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -81835,6 +82509,7 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterDoc) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -82154,6 +82829,7 @@ func (_q *TrustCenterEntityQuery) collectField(ctx context.Context, oneNode bool
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterEntity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -82243,6 +82919,7 @@ func (_q *TrustCenterEntityQuery) collectField(ctx context.Context, oneNode bool
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterEntity) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -82532,6 +83209,7 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterFAQ) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -82621,6 +83299,7 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterFAQ) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -82885,6 +83564,7 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterNDARequest) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -82974,6 +83654,7 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterNDARequest) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -83078,6 +83759,7 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterNDARequest) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -83397,6 +84079,7 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterSetting) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -83486,6 +84169,7 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterSetting) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -83910,6 +84594,7 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterSubprocessor) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -83999,6 +84684,7 @@ func (_q *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNod
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterSubprocessor) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -84273,6 +84959,7 @@ func (_q *TrustCenterWatermarkConfigQuery) collectField(ctx context.Context, one
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterWatermarkConfig) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -84362,6 +85049,7 @@ func (_q *TrustCenterWatermarkConfigQuery) collectField(ctx context.Context, one
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterWatermarkConfig) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -84644,6 +85332,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -84733,6 +85422,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -84833,6 +85523,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -84922,6 +85613,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85015,6 +85707,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85108,6 +85801,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85212,6 +85906,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85305,6 +86000,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85394,6 +86090,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85487,6 +86184,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85576,6 +86274,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85665,6 +86364,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85754,6 +86454,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85843,6 +86544,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -85936,6 +86638,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -86025,6 +86728,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -86114,6 +86818,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -86203,6 +86908,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -86292,6 +86998,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -86381,6 +87088,7 @@ func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*User) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -87141,6 +87849,7 @@ func (_q *VendorScoringConfigQuery) collectField(ctx context.Context, oneNode bo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*VendorScoringConfig) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -87370,6 +88079,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -87478,6 +88188,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -87567,6 +88278,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -87656,6 +88368,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -87925,6 +88638,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88018,6 +88732,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88111,6 +88826,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88204,6 +88920,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88297,6 +89014,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88390,6 +89108,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88483,6 +89202,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88576,6 +89296,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88669,6 +89390,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88762,6 +89484,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88855,6 +89578,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -88948,6 +89672,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -89041,6 +89766,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -89134,6 +89860,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -89223,6 +89950,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -89312,6 +90040,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -90045,6 +90774,7 @@ func (_q *WorkflowAssignmentQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowAssignment) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -90604,6 +91334,7 @@ func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -90693,6 +91424,7 @@ func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -90782,6 +91514,7 @@ func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -90871,6 +91604,7 @@ func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -90960,6 +91694,7 @@ func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -91049,6 +91784,7 @@ func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -91138,6 +91874,7 @@ func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode boo
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -91907,6 +92644,7 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowInstance) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -91996,6 +92734,7 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowInstance) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -92085,6 +92824,7 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowInstance) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -92174,6 +92914,7 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
 					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowInstance) error {
+						query := query.Clone()
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID

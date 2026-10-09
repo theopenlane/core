@@ -78493,7 +78493,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   systemInternalID: String @hidden(if: true)
   """
-  the system-owned catalogue entity this entity was adopted from
+  the system-owned catalog entity this entity was adopted from
   """
   catalogEntityID: ID
   """
@@ -78501,7 +78501,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   externallyVisible: Boolean
   """
-  the lookup key of the catalogue entity this entity was adopted from
+  the lookup key of the catalog entity this entity was adopted from
   """
   catalogEntityKey: String
   """
@@ -78793,7 +78793,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   reviewedByGroup: Group
   reviewedByIdentityHolder: IdentityHolder
   """
-  the system-owned catalogue entity this entity was adopted from
+  the system-owned catalog entity this entity was adopted from
   """
   catalogEntity: Entity
   adoptedEntities(

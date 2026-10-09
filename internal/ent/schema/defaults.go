@@ -116,7 +116,7 @@ func (m mixinConfig) getMixins(s ent.Interface) []ent.Mixin {
 			}
 		}
 
-		// hand the owner field to the SystemOwnedMixin so its catalogue index uses it
+		// hand the owner field to the SystemOwnedMixin so its catalog index uses it
 		for i, mx := range m.additionalMixins {
 			if so, ok := mx.(mixin.SystemOwnedMixin); ok {
 				mixin.WithOwnerField(ownerField)(&so)
