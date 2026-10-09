@@ -3,6 +3,7 @@ package summarizer
 import (
 	"bytes"
 	"context"
+	"html"
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -56,7 +57,7 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 	// also convert markdown to HTML before sanitizing
 	sanitizedSentence := string(mdToHTML([]byte(sentence)))
 
-	sanitizedSentence = s.sanitizer.Sanitize(sanitizedSentence)
+	sanitizedSentence = html.UnescapeString(s.sanitizer.Sanitize(sanitizedSentence))
 
 	if strings.TrimSpace(sanitizedSentence) == "" {
 		return "", nil
