@@ -1,6 +1,6 @@
 {
-  "hash": "215f8967eb644ffbd2ddf167ce34305bf061deedec1b28a4a904e3743f85ffcf",
-  "version": "01M4A6JGR5QZEWAH24J7259TZG",
+  "hash": "ebbe34900e6262459c3425362292bf204de8501c4e99eb5d3bebdefa67117b4d",
+  "version": "01M4FBBR14Z82SVFXS4YDRMJW7",
   "surface": {
     "id": "def_01K0SLACK000000000000000001",
     "credentials": [
@@ -46,6 +46,9 @@
                 "expiry": {
                   "type": "string",
                   "format": "date-time"
+                },
+                "defaultChannel": {
+                  "type": "string"
                 }
               },
               "additionalProperties": false,
@@ -66,6 +69,11 @@
               "defaultMessaging": {
                 "type": "boolean",
                 "title": "Default Messaging"
+              },
+              "defaultChannel": {
+                "type": "string",
+                "title": "Default Channel",
+                "description": "Slack channel id used as the default delivery target for system notifications"
               }
             },
             "additionalProperties": false,
@@ -89,6 +97,10 @@
               "teamName": {
                 "type": "string",
                 "title": "Team Name"
+              },
+              "defaultChannel": {
+                "type": "string",
+                "title": "Default Channel"
               }
             },
             "additionalProperties": false,
