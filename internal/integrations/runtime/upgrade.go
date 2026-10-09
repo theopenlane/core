@@ -115,10 +115,14 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	providerStateNext := installation.ProviderState
+	next := *installation
+	next.UserInput = userInput
+	next.OperationConfig = operationConfig
+	next.Health.UnhealthyOperations = retiredHealth(installation.Health.UnhealthyOperations, def)
+	next.DefinitionVersion = r.Registry().Version(def.ID)
 
 	if nextState != providerState {
-		providerStateNext, err = def.WithProviderState(installation.ProviderState, nextState)
+		next.ProviderState, err = def.WithProviderState(installation.ProviderState, nextState)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed resolving provider state")
 
@@ -126,54 +130,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		}
 	}
 
-	installationMetadataNext, metadataNext := installation.InstallationMetadata, installation.Metadata
-
-	health := installation.Health
-	health.UnhealthyOperations = retiredHealth(installation.Health.UnhealthyOperations, def)
-	version := r.Registry().Version(def.ID)
-
 	claimed, err := workflows.WithTx(ctx, r.DB(), nil, func(ctx context.Context, tx *ent.Tx) (bool, error) {
-		stamped, err := tx.Integration.Update().
-			Where(integration.ID(installation.ID), integration.Or(integration.DefinitionVersionIsNil(), integration.DefinitionVersionLT(version))).
-			SetDefinitionVersion(version).
-			Save(ctx)
-		if err != nil || stamped == 0 {
-			return false, err
-		}
-
-		if err := r.keystore().ReplaceCredentials(ctx, installation, records, credentials); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed replacing credentials")
-
-			return false, fmt.Errorf("replace credentials: %w", err)
-		}
-
-		installationMetadataNext, metadataNext, err = conformInstallationMetadata(ctx, tx, req, def, installation, nextState.CredentialRef)
-		if err != nil {
-			return false, err
-		}
-
-		if err := tx.Integration.UpdateOneID(installation.ID).
-			SetUserInput(userInput).
-			SetOperationConfig(operationConfig).
-			SetProviderState(providerStateNext).
-			SetHealth(health).
-			Exec(ctx); err != nil {
-			return false, err
-		}
-
-		if err := renameRetiredRows(ctx, tx, installation.ID, def); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed renaming retired rows")
-
-			return false, err
-		}
-
-		if err := r.reconcileInstallationWebhooks(ctx, tx.Client(), installation, ""); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed reconciling installation webhooks")
-
-			return false, fmt.Errorf("upgrade webhooks: %w", err)
-		}
-
-		return true, nil
+		return r.persistUpgrade(ctx, tx, req, def, &next, records, credentials, nextState.CredentialRef)
 	})
 	if err != nil {
 		return err
@@ -190,17 +148,56 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		return nil
 	}
 
-	installation.UserInput = userInput
-	installation.OperationConfig = operationConfig
-	installation.ProviderState = providerStateNext
-	installation.InstallationMetadata = installationMetadataNext
-	installation.Metadata = metadataNext
-	installation.Health = health
-	installation.DefinitionVersion = version
+	*installation = next
 
 	r.keystore().InvalidateClients(installation.ID)
 
 	return nil
+}
+
+// persistUpgrade claims the installation by stamping the next definition version, then writes every upgraded document inside the transaction; claimed false when another upgrade already stamped it
+func (r *Runtime) persistUpgrade(ctx context.Context, tx *ent.Tx, req types.InstallationRequest, def types.Definition, next *ent.Integration, records, credentials map[string]types.CredentialSet, credentialRef string) (bool, error) {
+	stamped, err := tx.Integration.Update().
+		Where(integration.ID(next.ID), integration.Or(integration.DefinitionVersionIsNil(), integration.DefinitionVersionLT(next.DefinitionVersion))).
+		SetDefinitionVersion(next.DefinitionVersion).
+		Save(ctx)
+	if err != nil || stamped == 0 {
+		return false, err
+	}
+
+	if err := r.keystore().ReplaceCredentials(ctx, next, records, credentials); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed replacing credentials")
+
+		return false, fmt.Errorf("replace credentials: %w", err)
+	}
+
+	next.InstallationMetadata, next.Metadata, err = conformInstallationMetadata(ctx, tx, req, def, next, credentialRef)
+	if err != nil {
+		return false, err
+	}
+
+	if err := tx.Integration.UpdateOneID(next.ID).
+		SetUserInput(next.UserInput).
+		SetOperationConfig(next.OperationConfig).
+		SetProviderState(next.ProviderState).
+		SetHealth(next.Health).
+		Exec(ctx); err != nil {
+		return false, err
+	}
+
+	if err := renameRetiredRows(ctx, tx, next.ID, def); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed renaming retired rows")
+
+		return false, err
+	}
+
+	if err := r.reconcileInstallationWebhooks(ctx, tx.Client(), next, ""); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed reconciling installation webhooks")
+
+		return false, fmt.Errorf("upgrade webhooks: %w", err)
+	}
+
+	return true, nil
 }
 
 // upgradeCredentialRef moves the persisted credential ref onto its replacement, adopts the single held connection when none is persisted, and fails on a ref the definition no longer declares
@@ -400,7 +397,7 @@ func retiredHealth(unhealthy map[string]string, def types.Definition) map[string
 		}
 	}
 
-	maps.DeleteFunc(next, func(name string, _ string) bool {
+	maps.DeleteFunc(next, func(name, _ string) bool {
 		_, declared := def.Operation(name)
 
 		return !declared

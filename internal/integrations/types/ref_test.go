@@ -515,64 +515,60 @@ func TestOperationRefOfDerivesNameFromSchema(t *testing.T) {
 func TestOperationRefRegistration(t *testing.T) {
 	t.Parallel()
 
-	t.Run("without a client", func(t *testing.T) {
-		t.Parallel()
+	ref := NewOperationRef[refTestInput]("refTestInput").Description("sync")
+	reg := ref.Registration()
 
-		ref := NewOperationRef[refTestInput]("refTestInput").Description("sync")
-		reg := ref.Registration()
+	if reg.Name != "refTestInput" {
+		t.Fatalf("Name = %q", reg.Name)
+	}
 
-		if reg.Name != "refTestInput" {
-			t.Fatalf("Name = %q", reg.Name)
-		}
+	if !reg.Stored || reg.Input.Name != "refTestInput" || string(reg.Input.Schema) != string(ref.Schema()) {
+		t.Fatalf("Input = %+v, want the reflected layout", reg.Input)
+	}
 
-		if !reg.Stored || reg.Input.Name != "refTestInput" || string(reg.Input.Schema) != string(ref.Schema()) {
-			t.Fatalf("Input = %+v, want the reflected layout", reg.Input)
-		}
+	if reg.Input.Upgrade != nil {
+		t.Fatalf("expected no upgrade on a plain operation, got %+v", reg.Input)
+	}
 
-		if reg.Input.Upgrade != nil {
-			t.Fatalf("expected no upgrade on a plain operation, got %+v", reg.Input)
-		}
+	if reg.ClientRef != "" {
+		t.Fatal("expected no client ref")
+	}
 
-		if reg.ClientRef != "" {
-			t.Fatal("expected no client ref")
-		}
+	if reg.Description != "sync" {
+		t.Fatalf("expected the ref description projected, got %+v", reg)
+	}
+}
 
-		if reg.Description != "sync" {
-			t.Fatalf("expected the ref description projected, got %+v", reg)
-		}
-	})
+func TestOperationRefRegistrationWithClient(t *testing.T) {
+	t.Parallel()
 
-	t.Run("with a client", func(t *testing.T) {
-		t.Parallel()
+	reg := NewOperationRef[refTestInput]("refTestInput").Handles(func(context.Context, OperationRequest, string, refTestInput) (json.RawMessage, error) {
+		return nil, nil
+	}).Registration()
 
-		reg := NewOperationRef[refTestInput]("refTestInput").Handles(func(context.Context, OperationRequest, string, refTestInput) (json.RawMessage, error) {
-			return nil, nil
-		}).Registration()
+	if reg.ClientRef != "string" {
+		t.Fatalf("ClientRef = %q, want %q", reg.ClientRef, "string")
+	}
+}
 
-		if reg.ClientRef != "string" {
-			t.Fatalf("ClientRef = %q, want %q", reg.ClientRef, "string")
-		}
-	})
+func TestOperationRefRegistrationProjectsHealthCheck(t *testing.T) {
+	t.Parallel()
 
-	t.Run("health check declared on the ref is projected", func(t *testing.T) {
-		t.Parallel()
+	reg := NewOperationRef[refTestInput]("refTestInput").HealthCheck(func(context.Context, OperationRequest, string) error {
+		return nil
+	}).Registration()
 
-		reg := NewOperationRef[refTestInput]("refTestInput").HealthCheck(func(context.Context, OperationRequest, string) error {
-			return nil
-		}).Registration()
+	if reg.HealthCheck == nil || reg.ClientRef != "string" {
+		t.Fatalf("expected HealthCheck and its client projected, got %+v", reg)
+	}
 
-		if reg.HealthCheck == nil || reg.ClientRef != "string" {
-			t.Fatalf("expected HealthCheck and its client projected, got %+v", reg)
-		}
+	if got, err := reg.HealthCheck(context.Background(), OperationRequest{Client: "live"}); err != nil || got != nil {
+		t.Fatalf("HealthCheck() = %s, %v", got, err)
+	}
 
-		if got, err := reg.HealthCheck(context.Background(), OperationRequest{Client: "live"}); err != nil || got != nil {
-			t.Fatalf("HealthCheck() = %s, %v", got, err)
-		}
-
-		if _, err := reg.HealthCheck(context.Background(), OperationRequest{Client: 1}); !errors.Is(err, ErrClientCastFailed) {
-			t.Fatalf("expected %v, got %v", ErrClientCastFailed, err)
-		}
-	})
+	if _, err := reg.HealthCheck(context.Background(), OperationRequest{Client: 1}); !errors.Is(err, ErrClientCastFailed) {
+		t.Fatalf("expected %v, got %v", ErrClientCastFailed, err)
+	}
 }
 
 func TestOperationRefHandlesDoesNotAliasTheReceiver(t *testing.T) {

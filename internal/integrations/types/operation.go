@@ -20,7 +20,9 @@ type OperationSettings struct {
 }
 
 // operationSettings marks the type as carrying the uniform operation settings
-func (OperationSettings) operationSettings() {}
+func (OperationSettings) operationSettings() {
+	// marker method with no behaviour; embedding OperationSettings is what satisfies OperationInput
+}
 
 // OperationInput is satisfied by any config type that embeds OperationSettings, which every stored-input operation requires
 type OperationInput interface {

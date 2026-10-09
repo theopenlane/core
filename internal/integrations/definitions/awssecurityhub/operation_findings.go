@@ -40,34 +40,25 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c C
 	}
 
 	for {
-		input := &securityhub.GetFindingsInput{
+		resp, err := hub.GetFindings(ctx, &securityhub.GetFindingsInput{
 			MaxResults: aws.Int32(defaultPageSize),
 			Filters:    filters,
-		}
-		if nextToken != nil {
-			input.NextToken = nextToken
-		}
-
-		resp, err := hub.GetFindings(ctx, input)
+			NextToken:  nextToken,
+		})
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("awssecurityhub: error fetching findings")
 			return nil, ErrFindingsFetchFailed
 		}
 
-		for i, finding := range resp.Findings {
-			envelope, err := buildFindingEnvelope(resp.Findings[i])
-			if err != nil {
-				return nil, err
-			}
-
-			if slices.Contains(finding.Types, vulnerabilityType) {
-				vulnerabilityEnvelopes = append(vulnerabilityEnvelopes, envelope)
-			} else {
-				findingEnvelopes = append(findingEnvelopes, envelope)
-			}
+		findings, vulnerabilities, err := classifyFindings(resp.Findings)
+		if err != nil {
+			return nil, err
 		}
 
-		if resp.NextToken == nil || *resp.NextToken == "" {
+		findingEnvelopes = append(findingEnvelopes, findings...)
+		vulnerabilityEnvelopes = append(vulnerabilityEnvelopes, vulnerabilities...)
+
+		if aws.ToString(resp.NextToken) == "" {
 			break
 		}
 
@@ -84,6 +75,26 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c C
 			Envelopes: vulnerabilityEnvelopes,
 		},
 	}, nil
+}
+
+// classifyFindings serializes one page of findings into envelopes, separating vulnerability findings from the rest
+func classifyFindings(findings []securityhubtypes.AwsSecurityFinding) ([]types.MappingEnvelope, []types.MappingEnvelope, error) {
+	var findingEnvelopes, vulnerabilityEnvelopes []types.MappingEnvelope
+
+	for i := range findings {
+		envelope, err := buildFindingEnvelope(findings[i])
+		if err != nil {
+			return nil, nil, err
+		}
+
+		if slices.Contains(findings[i].Types, vulnerabilityType) {
+			vulnerabilityEnvelopes = append(vulnerabilityEnvelopes, envelope)
+		} else {
+			findingEnvelopes = append(findingEnvelopes, envelope)
+		}
+	}
+
+	return findingEnvelopes, vulnerabilityEnvelopes, nil
 }
 
 // buildFilters builds the Security Hub finding filters for the collection scope and last run time

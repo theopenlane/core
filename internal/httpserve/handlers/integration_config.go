@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -63,21 +64,9 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		InstallationMetadata: installationRec.InstallationMetadata.Attributes,
 	}
 
-	var primaryWebhookURL string
-	var primaryWebhookSecret string
-
-	for i, registration := range def.Webhooks {
-		webhook, webhookErr := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installationRec, registration.Name, "")
-		if webhookErr != nil {
-			logx.FromContext(requestCtx).Error().Err(webhookErr).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
-
-			return h.BadRequest(ctx, ErrProcessingRequest)
-		}
-
-		if i == 0 && webhook != nil {
-			primaryWebhookURL = absoluteEndpointURL(ctx, lo.FromPtr(webhook.EndpointURL))
-			primaryWebhookSecret = webhook.SecretToken
-		}
+	primaryWebhookURL, primaryWebhookSecret, err := h.ensureInstallationWebhooks(ctx, installationRec, def)
+	if err != nil {
+		return h.BadRequest(ctx, ErrProcessingRequest)
 	}
 
 	if isNewInstallation {
@@ -95,6 +84,29 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, resp)
+}
+
+// ensureInstallationWebhooks ensures every declared webhook exists for the installation and returns the first webhook's absolute endpoint URL and secret
+func (h *Handler) ensureInstallationWebhooks(ctx echo.Context, installationRec *ent.Integration, def types.Definition) (string, string, error) {
+	requestCtx := ctx.Request().Context()
+
+	var primaryWebhookURL, primaryWebhookSecret string
+
+	for i, registration := range def.Webhooks {
+		webhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installationRec, registration.Name, "")
+		if err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
+
+			return "", "", err
+		}
+
+		if i == 0 && webhook != nil {
+			primaryWebhookURL = absoluteEndpointURL(ctx, lo.FromPtr(webhook.EndpointURL))
+			primaryWebhookSecret = webhook.SecretToken
+		}
+	}
+
+	return primaryWebhookURL, primaryWebhookSecret, nil
 }
 
 func absoluteEndpointURL(ctx echo.Context, path string) string {

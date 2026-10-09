@@ -20,7 +20,7 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[goo
 			return DriveClient{}, ErrOAuthTokenMissing
 		}
 
-		ts := providerkit.GoogleTokenSource(context.Background(), cfg.ClientID, cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+		ts := providerkit.GoogleTokenSource(ctx, cfg.ClientID, cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 
 		svc, err := drive.NewService(ctx, option.WithTokenSource(ts))
 		if err != nil {

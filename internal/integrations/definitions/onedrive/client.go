@@ -44,7 +44,7 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[one
 			},
 		}
 
-		ts := oauthCfg.TokenSource(context.Background(), providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+		ts := oauthCfg.TokenSource(ctx, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 
 		tokenCred := &oauthTokenCredential{ts: ts}
 

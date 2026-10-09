@@ -70,43 +70,76 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 		return nil, ErrInstallationRequired
 	}
 
-	var scanRecord *generated.Scan
-	var err error
+	scanRecord, err := findScanRecord(ctx, request.DB, cfg, organizationID)
+	if err != nil {
+		return nil, err
+	}
 
-	switch {
-	case cfg.ScanID != "":
-		scanRecord, err = request.DB.Scan.Query().Where(
+	if scanRecord != nil && scanRecord.Status != enums.ScanStatusPending && scanRecord.Status != enums.ScanStatusProcessing {
+		return providerkit.EncodeResult(DomainScanRequestResult{
+			Message: "domain scan already processed",
+			ScanID:  scanRecord.ID,
+		}, ErrResultEncode)
+	}
+
+	scanRecord, err = ensureScanRecord(ctx, request, cfg, organizationID, groupID, scanRecord)
+	if err != nil {
+		return nil, err
+	}
+
+	if request.Integration != nil {
+		return providerkit.EncodeResult(DomainScanRequestResult{
+			Message: "domain scan queued",
+			ScanID:  scanRecord.ID,
+		}, ErrResultEncode)
+	}
+
+	saga := domainScanSaga{services: request.Services}
+
+	if cfg.BrandDesignOnly {
+		return runBrandDesignRequest(ctx, saga, organizationID, scanRecord, cfg.Domain)
+	}
+
+	if err := saga.submitAndScheduleDomainScan(ctx, organizationID, scanRecord.ID, cfg.Domain, cfg.ForceRefresh); err != nil {
+		return nil, err
+	}
+
+	return providerkit.EncodeResult(DomainScanRequestResult{
+		Message: "domain scan submitted",
+		ScanID:  scanRecord.ID,
+	}, ErrResultEncode)
+}
+
+// findScanRecord loads the Scan the request names, or the pending domain scan for the target when none is named, nil when there is none
+func findScanRecord(ctx context.Context, db *generated.Client, cfg DomainScanRequest, organizationID string) (*generated.Scan, error) {
+	if cfg.ScanID != "" {
+		return db.Scan.Query().Where(
 			scan.ID(cfg.ScanID),
 			scan.OwnerID(organizationID),
 			scan.Target(cfg.Domain),
 			scan.ScanTypeEQ(enums.ScanTypeDomain),
 			scan.PerformedBy(DomainScanPerformedBy),
 		).Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-
-		if scanRecord.Status != enums.ScanStatusPending && scanRecord.Status != enums.ScanStatusProcessing {
-			return providerkit.EncodeResult(DomainScanRequestResult{
-				Message: "domain scan already processed",
-				ScanID:  scanRecord.ID,
-			}, ErrResultEncode)
-		}
-	default:
-		scanRecord, err = request.DB.Scan.Query().
-			Where(
-				scan.OwnerID(organizationID),
-				scan.Target(cfg.Domain),
-				scan.ScanTypeEQ(enums.ScanTypeDomain),
-				scan.PerformedBy(DomainScanPerformedBy),
-				scan.StatusEQ(enums.ScanStatusPending),
-			).
-			First(ctx)
-		if err != nil && !generated.IsNotFound(err) {
-			return nil, err
-		}
 	}
 
+	scanRecord, err := db.Scan.Query().
+		Where(
+			scan.OwnerID(organizationID),
+			scan.Target(cfg.Domain),
+			scan.ScanTypeEQ(enums.ScanTypeDomain),
+			scan.PerformedBy(DomainScanPerformedBy),
+			scan.StatusEQ(enums.ScanStatusPending),
+		).
+		First(ctx)
+	if err != nil && !generated.IsNotFound(err) {
+		return nil, err
+	}
+
+	return scanRecord, nil
+}
+
+// ensureScanRecord creates the pending Scan when none exists, or refreshes the group metadata on the existing one for a grouped request
+func ensureScanRecord(ctx context.Context, request types.OperationRequest, cfg DomainScanRequest, organizationID, groupID string, scanRecord *generated.Scan) (*generated.Scan, error) {
 	switch {
 	case scanRecord == nil:
 		metadata := map[string]any{"forceRefresh": cfg.ForceRefresh}
@@ -124,7 +157,7 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 			createCtx = entityops.WithEmissionVetoed(ctx)
 		}
 
-		scanRecord, err = request.DB.Scan.Create().
+		return request.DB.Scan.Create().
 			SetOwnerID(organizationID).
 			SetTarget(cfg.Domain).
 			SetScanType(enums.ScanTypeDomain).
@@ -132,57 +165,37 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 			SetStatus(enums.ScanStatusPending).
 			SetMetadata(metadata).
 			Save(createCtx)
-		if err != nil {
-			return nil, err
-		}
 	case groupID != "":
 		metadata := map[string]any{DomainScanGroupMetadataKey: groupID}
 		metadata[DomainScanApplyBrandDesignToPreviewMetadataKey] = cfg.ApplyBrandDesignToPreview
 		metadata[DomainScanApplyBrandDesignToLiveMetadataKey] = cfg.ApplyBrandDesignToLive
 
-		scanRecord, err = scanRecord.Update().SetMetadata(metadata).Save(ctx)
-		if err != nil {
-			return nil, err
-		}
+		return scanRecord.Update().SetMetadata(metadata).Save(ctx)
+	default:
+		return scanRecord, nil
 	}
+}
 
-	if request.Integration != nil {
-		return providerkit.EncodeResult(DomainScanRequestResult{
-			Message: "domain scan queued",
-			ScanID:  scanRecord.ID,
-		}, ErrResultEncode)
-	}
+// runBrandDesignRequest runs the brand design extraction for the scan, marking the scan failed when the extraction errors
+func runBrandDesignRequest(ctx context.Context, saga domainScanSaga, organizationID string, scanRecord *generated.Scan, domain string) (json.RawMessage, error) {
+	applyToPreview, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToPreviewMetadataKey].(bool)
+	applyToLive, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToLiveMetadataKey].(bool)
 
-	saga := domainScanSaga{services: request.Services}
+	if err := saga.runBrandDesignScan(ctx, brandDesignScanOpts{
+		organizationID:            organizationID,
+		scanID:                    scanRecord.ID,
+		domain:                    domain,
+		applyBrandDesignToPreview: applyToPreview,
+		applyBrandDesignToLive:    applyToLive,
+	}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("scan_id", scanRecord.ID).Msg("domain scan: brand design scan failed")
+		saga.markDomainScanFailed(ctx, organizationID, scanRecord.ID)
 
-	if cfg.BrandDesignOnly {
-		applyToPreview, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToPreviewMetadataKey].(bool)
-		applyToLive, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToLiveMetadataKey].(bool)
-		if err := saga.runBrandDesignScan(ctx, brandDesignScanOpts{
-			organizationID:            organizationID,
-			scanID:                    scanRecord.ID,
-			domain:                    cfg.Domain,
-			applyBrandDesignToPreview: applyToPreview,
-			applyBrandDesignToLive:    applyToLive,
-		}); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("scan_id", scanRecord.ID).Msg("domain scan: brand design scan failed")
-			saga.markDomainScanFailed(ctx, organizationID, scanRecord.ID)
-
-			return nil, err
-		}
-
-		return providerkit.EncodeResult(DomainScanRequestResult{
-			Message: "domain brand design scan completed",
-			ScanID:  scanRecord.ID,
-		}, ErrResultEncode)
-	}
-
-	if err := saga.submitAndScheduleDomainScan(ctx, organizationID, scanRecord.ID, cfg.Domain, cfg.ForceRefresh); err != nil {
 		return nil, err
 	}
 
 	return providerkit.EncodeResult(DomainScanRequestResult{
-		Message: "domain scan submitted",
+		Message: "domain brand design scan completed",
 		ScanID:  scanRecord.ID,
 	}, ErrResultEncode)
 }

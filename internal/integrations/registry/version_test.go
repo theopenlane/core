@@ -106,10 +106,11 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 	return def
 }
 
-func TestDefinitionSurface(t *testing.T) {
-	t.Parallel()
+// registeredSurface registers a surface definition under id and returns the surface of the finalized registration
+func registeredSurface(t *testing.T, id string) Surface {
+	t.Helper()
 
-	def := surfaceDefinition("surface-def")
+	def := surfaceDefinition(id)
 
 	reg := New()
 	if err := reg.Register(def); err != nil {
@@ -117,7 +118,14 @@ func TestDefinitionSurface(t *testing.T) {
 	}
 
 	registered, _ := reg.Definition(def.ID)
-	surface := DefinitionSurface(registered)
+
+	return DefinitionSurface(registered)
+}
+
+func TestDefinitionSurface(t *testing.T) {
+	t.Parallel()
+
+	surface := registeredSurface(t, "surface-def")
 
 	if surface.UserInput == nil || !surface.UserInput.Upgrade {
 		t.Fatalf("UserInput = %+v, want a schema declaring an upgrade", surface.UserInput)
@@ -155,6 +163,12 @@ func TestDefinitionSurface(t *testing.T) {
 	if _, ok := root.Properties.Get("disable"); !ok {
 		t.Fatal("expected the surfaced operation schema to carry the uniform settings")
 	}
+}
+
+func TestDefinitionSurfaceWebhooks(t *testing.T) {
+	t.Parallel()
+
+	surface := registeredSurface(t, "surface-webhooks-def")
 
 	if got := lo.Map(surface.Webhooks, func(w SurfaceWebhook, _ int) string { return w.Name }); !slices.Equal(got, []string{"events.v2", "static"}) {
 		t.Fatalf("Webhooks = %v, want sorted names", got)
@@ -171,6 +185,10 @@ func TestDefinitionSurface(t *testing.T) {
 	if len(surface.Webhooks[1].Events) != 0 || surface.Webhooks[1].Replaces != nil {
 		t.Fatalf("static webhook = %+v, want no events and no replacements", surface.Webhooks[1])
 	}
+}
+
+func TestDefinitionSurfaceOmitsAbsentSections(t *testing.T) {
+	t.Parallel()
 
 	unfinalized := minimalDefinition("minimal-def")
 
