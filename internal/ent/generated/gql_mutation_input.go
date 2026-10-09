@@ -7321,6 +7321,7 @@ type CreateEntityInput struct {
 	LastReviewedAt                        *models.DateTime       `json:"last_reviewed_at,omitempty"`
 	InternalNotes                         *string                `json:"internal_notes,omitempty"`
 	SystemInternalID                      *string                `json:"system_internal_id,omitempty"`
+	ExternallyVisible                     *bool                  `json:"externally_visible,omitempty"`
 	EntityRelationshipStateName           *string                `json:"entity_relationship_state_name,omitempty"`
 	EntitySecurityQuestionnaireStatusName *string                `json:"entity_security_questionnaire_status_name,omitempty"`
 	EntitySourceTypeName                  *string                `json:"entity_source_type_name,omitempty"`
@@ -7423,6 +7424,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.ExternallyVisible; v != nil {
+		m.SetExternallyVisible(*v)
 	}
 	if v := i.EntityRelationshipStateName; v != nil {
 		m.SetEntityRelationshipStateName(*v)
@@ -7690,6 +7694,8 @@ type UpdateEntityInput struct {
 	InternalNotes                              *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID                      bool
 	SystemInternalID                           *string `json:"system_internal_id,omitempty"`
+	ClearExternallyVisible                     bool
+	ExternallyVisible                          *bool `json:"externally_visible,omitempty"`
 	ClearEntityRelationshipStateName           bool
 	EntityRelationshipStateName                *string `json:"entity_relationship_state_name,omitempty"`
 	ClearEntitySecurityQuestionnaireStatusName bool
@@ -7925,6 +7931,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearExternallyVisible {
+		m.ClearExternallyVisible()
+	}
+	if v := i.ExternallyVisible; v != nil {
+		m.SetExternallyVisible(*v)
 	}
 	if i.ClearEntityRelationshipStateName {
 		m.ClearEntityRelationshipStateName()

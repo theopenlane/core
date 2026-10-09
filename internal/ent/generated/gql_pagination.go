@@ -906,7 +906,7 @@ func (_m *ActionPlanQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -1453,7 +1453,7 @@ func (_m *AssessmentQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -2227,7 +2227,7 @@ func (_m *AssessmentResponseQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -2864,7 +2864,7 @@ func (_m *AssetQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -3491,7 +3491,7 @@ func (_m *CampaignQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -4304,7 +4304,7 @@ func (_m *CampaignTargetQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -4787,7 +4787,7 @@ func (_m *CheckResultQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -6290,7 +6290,7 @@ func (_m *ControlImplementationQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -6729,7 +6729,7 @@ func (_m *ControlObjectiveQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -8353,7 +8353,7 @@ func (_m *DirectoryAccountQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -9653,7 +9653,7 @@ func (_m *DiscussionQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10020,7 +10020,7 @@ func (_m *DocumentDataQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10387,7 +10387,7 @@ func (_m *EmailTemplateQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -12253,7 +12253,7 @@ func (_m *EventQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -12620,7 +12620,7 @@ func (_m *EvidenceQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -13528,7 +13528,7 @@ func (_m *FileQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15191,7 +15191,7 @@ func (_m *GroupMembershipQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15576,7 +15576,7 @@ func (_m *GroupSettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -16394,7 +16394,7 @@ func (_m *IdentityHolderQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -17562,7 +17562,7 @@ func (_m *IntegrationRunQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -18936,7 +18936,7 @@ func (_m *MappableDomainQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -19710,7 +19710,7 @@ func (_m *NarrativeQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -20095,7 +20095,7 @@ func (_m *NoteQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21181,7 +21181,7 @@ func (_m *NotificationTemplateQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21687,7 +21687,7 @@ func (_m *OnboardingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21989,7 +21989,7 @@ func (_m *OrgMembershipQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -22815,7 +22815,7 @@ func (_m *OrganizationQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23218,7 +23218,7 @@ func (_m *OrganizationSettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23585,7 +23585,7 @@ func (_m *PersonalAccessTokenQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -24050,7 +24050,7 @@ func (_m *PlatformQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -25694,7 +25694,7 @@ func (_m *ProgramMembershipQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -26947,7 +26947,7 @@ func (_m *RiskQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -28092,7 +28092,7 @@ func (_m *ScanQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -29613,7 +29613,7 @@ func (_m *SubprocessorQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -30423,7 +30423,7 @@ func (_m *SystemDetailQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -30808,7 +30808,7 @@ func (_m *TFASettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -31564,7 +31564,7 @@ func (_m *TaskQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -32083,7 +32083,7 @@ func (_m *TemplateQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -32857,7 +32857,7 @@ func (_m *TrustCenterComplianceQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -33224,7 +33224,7 @@ func (_m *TrustCenterDocQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -33591,7 +33591,7 @@ func (_m *TrustCenterEntityQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -33976,7 +33976,7 @@ func (_m *TrustCenterFAQQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -34361,7 +34361,7 @@ func (_m *TrustCenterNDARequestQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -34728,7 +34728,7 @@ func (_m *TrustCenterSettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -35108,7 +35108,7 @@ func (_m *TrustCenterSubprocessorQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -35499,7 +35499,7 @@ func (_m *TrustCenterWatermarkConfigQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -35866,7 +35866,7 @@ func (_m *UserQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -36287,7 +36287,7 @@ func (_m *UserSettingQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -36654,7 +36654,7 @@ func (_m *VendorRiskScoreQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -37482,7 +37482,7 @@ func (_m *VulnerabilityQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -37952,7 +37952,7 @@ func (_m *WebauthnQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -38319,7 +38319,7 @@ func (_m *WorkflowAssignmentQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -38686,7 +38686,7 @@ func (_m *WorkflowAssignmentTargetQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -39053,7 +39053,7 @@ func (_m *WorkflowDefinitionQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -39420,7 +39420,7 @@ func (_m *WorkflowEventQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -39787,7 +39787,7 @@ func (_m *WorkflowInstanceQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -40154,7 +40154,7 @@ func (_m *WorkflowObjectRefQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -40480,7 +40480,7 @@ func (_m *WorkflowProposalQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -40600,4 +40600,7389 @@ func (_m *WorkflowProposal) ToEdge(order *WorkflowProposalOrder) *WorkflowPropos
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *APITokenQuery) clonePage() *APITokenQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ActionPlanQuery) clonePage() *ActionPlanQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withApprover = _q.withApprover.clonePage()
+	c.withDelegate = _q.withDelegate.clonePage()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withActionPlanKind = _q.withActionPlanKind.clonePage()
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withFile = _q.withFile.clonePage()
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentQuery) clonePage() *AssessmentQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withTemplate = _q.withTemplate.clonePage()
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withAssessmentResponses = _q.withAssessmentResponses.clonePage()
+	if _q.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_q.withNamedAssessmentResponses))
+		for name, q := range _q.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withPolicyAttestations = _q.withPolicyAttestations.clonePage()
+	if _q.withNamedPolicyAttestations != nil {
+		c.withNamedPolicyAttestations = make(map[string]*AssessmentPolicyQuery, len(_q.withNamedPolicyAttestations))
+		for name, q := range _q.withNamedPolicyAttestations {
+			c.withNamedPolicyAttestations[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentPolicyQuery) clonePage() *AssessmentPolicyQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withAssessment = _q.withAssessment.clonePage()
+	c.withInternalPolicy = _q.withInternalPolicy.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentResponseQuery) clonePage() *AssessmentResponseQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withAssessment = _q.withAssessment.clonePage()
+	c.withCampaign = _q.withCampaign.clonePage()
+	c.withIdentityHolder = _q.withIdentityHolder.clonePage()
+	c.withEntity = _q.withEntity.clonePage()
+	c.withDocument = _q.withDocument.clonePage()
+	c.withVendorRiskScores = _q.withVendorRiskScores.clonePage()
+	if _q.withNamedVendorRiskScores != nil {
+		c.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery, len(_q.withNamedVendorRiskScores))
+		for name, q := range _q.withNamedVendorRiskScores {
+			c.withNamedVendorRiskScores[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssetQuery) clonePage() *AssetQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withAssetSubtype = _q.withAssetSubtype.clonePage()
+	c.withAssetDataClassification = _q.withAssetDataClassification.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withAccessModel = _q.withAccessModel.clonePage()
+	c.withEncryptionStatus = _q.withEncryptionStatus.clonePage()
+	c.withSecurityTier = _q.withSecurityTier.clonePage()
+	c.withCriticality = _q.withCriticality.clonePage()
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withSystemDetails = _q.withSystemDetails.clonePage()
+	if _q.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_q.withNamedSystemDetails))
+		for name, q := range _q.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.clonePage()
+		}
+	}
+	c.withOutOfScopePlatforms = _q.withOutOfScopePlatforms.clonePage()
+	if _q.withNamedOutOfScopePlatforms != nil {
+		c.withNamedOutOfScopePlatforms = make(map[string]*PlatformQuery, len(_q.withNamedOutOfScopePlatforms))
+		for name, q := range _q.withNamedOutOfScopePlatforms {
+			c.withNamedOutOfScopePlatforms[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withSourcePlatform = _q.withSourcePlatform.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withConnectedAssets = _q.withConnectedAssets.clonePage()
+	if _q.withNamedConnectedAssets != nil {
+		c.withNamedConnectedAssets = make(map[string]*AssetQuery, len(_q.withNamedConnectedAssets))
+		for name, q := range _q.withNamedConnectedAssets {
+			c.withNamedConnectedAssets[name] = q.clonePage()
+		}
+	}
+	c.withConnectedFrom = _q.withConnectedFrom.clonePage()
+	if _q.withNamedConnectedFrom != nil {
+		c.withNamedConnectedFrom = make(map[string]*AssetQuery, len(_q.withNamedConnectedFrom))
+		for name, q := range _q.withNamedConnectedFrom {
+			c.withNamedConnectedFrom[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CampaignQuery) clonePage() *CampaignQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withAssessment = _q.withAssessment.clonePage()
+	c.withTemplate = _q.withTemplate.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withEmailTemplate = _q.withEmailTemplate.clonePage()
+	c.withEntity = _q.withEntity.clonePage()
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withCampaignTargets = _q.withCampaignTargets.clonePage()
+	if _q.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_q.withNamedCampaignTargets))
+		for name, q := range _q.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.clonePage()
+		}
+	}
+	c.withAssessmentResponses = _q.withAssessmentResponses.clonePage()
+	if _q.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_q.withNamedAssessmentResponses))
+		for name, q := range _q.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.clonePage()
+		}
+	}
+	c.withContacts = _q.withContacts.clonePage()
+	if _q.withNamedContacts != nil {
+		c.withNamedContacts = make(map[string]*ContactQuery, len(_q.withNamedContacts))
+		for name, q := range _q.withNamedContacts {
+			c.withNamedContacts[name] = q.clonePage()
+		}
+	}
+	c.withUsers = _q.withUsers.clonePage()
+	if _q.withNamedUsers != nil {
+		c.withNamedUsers = make(map[string]*UserQuery, len(_q.withNamedUsers))
+		for name, q := range _q.withNamedUsers {
+			c.withNamedUsers[name] = q.clonePage()
+		}
+	}
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CampaignTargetQuery) clonePage() *CampaignTargetQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withCampaign = _q.withCampaign.clonePage()
+	c.withContact = _q.withContact.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.withGroup = _q.withGroup.clonePage()
+	c.withSubscriber = _q.withSubscriber.clonePage()
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CheckResultQuery) clonePage() *CheckResultQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ContactQuery) clonePage() *ContactQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withCampaignTargets = _q.withCampaignTargets.clonePage()
+	if _q.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_q.withNamedCampaignTargets))
+		for name, q := range _q.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withSubscribers = _q.withSubscribers.clonePage()
+	if _q.withNamedSubscribers != nil {
+		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_q.withNamedSubscribers))
+		for name, q := range _q.withNamedSubscribers {
+			c.withNamedSubscribers[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlQuery) clonePage() *ControlQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectives = _q.withControlObjectives.clonePage()
+	if _q.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectives))
+		for name, q := range _q.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withNarratives = _q.withNarratives.clonePage()
+	if _q.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_q.withNamedNarratives))
+		for name, q := range _q.withNamedNarratives {
+			c.withNamedNarratives[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withDiscussions = _q.withDiscussions.clonePage()
+	if _q.withNamedDiscussions != nil {
+		c.withNamedDiscussions = make(map[string]*DiscussionQuery, len(_q.withNamedDiscussions))
+		for name, q := range _q.withNamedDiscussions {
+			c.withNamedDiscussions[name] = q.clonePage()
+		}
+	}
+	c.withControlOwner = _q.withControlOwner.clonePage()
+	c.withDelegate = _q.withDelegate.clonePage()
+	c.withResponsibleParty = _q.withResponsibleParty.clonePage()
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withControlKind = _q.withControlKind.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withStandard = _q.withStandard.clonePage()
+	c.withCheckResults = _q.withCheckResults.clonePage()
+	if _q.withNamedCheckResults != nil {
+		c.withNamedCheckResults = make(map[string]*CheckResultQuery, len(_q.withNamedCheckResults))
+		for name, q := range _q.withNamedCheckResults {
+			c.withNamedCheckResults[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementations = _q.withControlImplementations.clonePage()
+	if _q.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementations))
+		for name, q := range _q.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withMappedToControls = _q.withMappedToControls.clonePage()
+	if _q.withNamedMappedToControls != nil {
+		c.withNamedMappedToControls = make(map[string]*MappedControlQuery, len(_q.withNamedMappedToControls))
+		for name, q := range _q.withNamedMappedToControls {
+			c.withNamedMappedToControls[name] = q.clonePage()
+		}
+	}
+	c.withMappedFromControls = _q.withMappedFromControls.clonePage()
+	if _q.withNamedMappedFromControls != nil {
+		c.withNamedMappedFromControls = make(map[string]*MappedControlQuery, len(_q.withNamedMappedFromControls))
+		for name, q := range _q.withNamedMappedFromControls {
+			c.withNamedMappedFromControls[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withControlMappings = _q.withControlMappings.clonePage()
+	if _q.withNamedControlMappings != nil {
+		c.withNamedControlMappings = make(map[string]*FindingControlQuery, len(_q.withNamedControlMappings))
+		for name, q := range _q.withNamedControlMappings {
+			c.withNamedControlMappings[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlImplementationQuery) clonePage() *ControlImplementationQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlObjectiveQuery) clonePage() *ControlObjectiveQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withNarratives = _q.withNarratives.clonePage()
+	if _q.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_q.withNamedNarratives))
+		for name, q := range _q.withNamedNarratives {
+			c.withNamedNarratives[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CustomDomainQuery) clonePage() *CustomDomainQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withMappableDomain = _q.withMappableDomain.clonePage()
+	c.withDNSVerification = _q.withDNSVerification.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CustomTypeEnumQuery) clonePage() *CustomTypeEnumQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withRiskCategories = _q.withRiskCategories.clonePage()
+	if _q.withNamedRiskCategories != nil {
+		c.withNamedRiskCategories = make(map[string]*RiskQuery, len(_q.withNamedRiskCategories))
+		for name, q := range _q.withNamedRiskCategories {
+			c.withNamedRiskCategories[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DNSVerificationQuery) clonePage() *DNSVerificationQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withCustomDomains = _q.withCustomDomains.clonePage()
+	if _q.withNamedCustomDomains != nil {
+		c.withNamedCustomDomains = make(map[string]*CustomDomainQuery, len(_q.withNamedCustomDomains))
+		for name, q := range _q.withNamedCustomDomains {
+			c.withNamedCustomDomains[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DirectoryAccountQuery) clonePage() *DirectoryAccountQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withPlatform = _q.withPlatform.clonePage()
+	c.withIdentityHolder = _q.withIdentityHolder.clonePage()
+	c.withAvatarFile = _q.withAvatarFile.clonePage()
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*DirectoryGroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withMemberships = _q.withMemberships.clonePage()
+	if _q.withNamedMemberships != nil {
+		c.withNamedMemberships = make(map[string]*DirectoryMembershipQuery, len(_q.withNamedMemberships))
+		for name, q := range _q.withNamedMemberships {
+			c.withNamedMemberships[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DirectoryGroupQuery) clonePage() *DirectoryGroupQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withPlatform = _q.withPlatform.clonePage()
+	c.withAccounts = _q.withAccounts.clonePage()
+	if _q.withNamedAccounts != nil {
+		c.withNamedAccounts = make(map[string]*DirectoryAccountQuery, len(_q.withNamedAccounts))
+		for name, q := range _q.withNamedAccounts {
+			c.withNamedAccounts[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withMembers = _q.withMembers.clonePage()
+	if _q.withNamedMembers != nil {
+		c.withNamedMembers = make(map[string]*DirectoryMembershipQuery, len(_q.withNamedMembers))
+		for name, q := range _q.withNamedMembers {
+			c.withNamedMembers[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DirectoryMembershipQuery) clonePage() *DirectoryMembershipQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withPlatform = _q.withPlatform.clonePage()
+	c.withDirectoryAccount = _q.withDirectoryAccount.clonePage()
+	c.withDirectoryGroup = _q.withDirectoryGroup.clonePage()
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DiscussionQuery) clonePage() *DiscussionQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withControl = _q.withControl.clonePage()
+	c.withSubcontrol = _q.withSubcontrol.clonePage()
+	c.withProcedure = _q.withProcedure.clonePage()
+	c.withRisk = _q.withRisk.clonePage()
+	c.withInternalPolicy = _q.withInternalPolicy.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DocumentDataQuery) clonePage() *DocumentDataQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withTemplate = _q.withTemplate.clonePage()
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EmailTemplateQuery) clonePage() *EmailTemplateQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withWorkflowDefinition = _q.withWorkflowDefinition.clonePage()
+	c.withWorkflowInstance = _q.withWorkflowInstance.clonePage()
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withNotificationTemplates = _q.withNotificationTemplates.clonePage()
+	if _q.withNamedNotificationTemplates != nil {
+		c.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery, len(_q.withNamedNotificationTemplates))
+		for name, q := range _q.withNamedNotificationTemplates {
+			c.withNamedNotificationTemplates[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EmailVerificationTokenQuery) clonePage() *EmailVerificationTokenQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EntityQuery) clonePage() *EntityQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withReviewedByUser = _q.withReviewedByUser.clonePage()
+	c.withReviewedByGroup = _q.withReviewedByGroup.clonePage()
+	c.withReviewedByIdentityHolder = _q.withReviewedByIdentityHolder.clonePage()
+	c.withCatalogEntity = _q.withCatalogEntity.clonePage()
+	c.withAdoptedEntities = _q.withAdoptedEntities.clonePage()
+	if _q.withNamedAdoptedEntities != nil {
+		c.withNamedAdoptedEntities = make(map[string]*EntityQuery, len(_q.withNamedAdoptedEntities))
+		for name, q := range _q.withNamedAdoptedEntities {
+			c.withNamedAdoptedEntities[name] = q.clonePage()
+		}
+	}
+	c.withEntityRelationshipState = _q.withEntityRelationshipState.clonePage()
+	c.withEntitySecurityQuestionnaireStatus = _q.withEntitySecurityQuestionnaireStatus.clonePage()
+	c.withEntitySourceType = _q.withEntitySourceType.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withContacts = _q.withContacts.clonePage()
+	if _q.withNamedContacts != nil {
+		c.withNamedContacts = make(map[string]*ContactQuery, len(_q.withNamedContacts))
+		for name, q := range _q.withNamedContacts {
+			c.withNamedContacts[name] = q.clonePage()
+		}
+	}
+	c.withDocuments = _q.withDocuments.clonePage()
+	if _q.withNamedDocuments != nil {
+		c.withNamedDocuments = make(map[string]*DocumentDataQuery, len(_q.withNamedDocuments))
+		for name, q := range _q.withNamedDocuments {
+			c.withNamedDocuments[name] = q.clonePage()
+		}
+	}
+	c.withNotes = _q.withNotes.clonePage()
+	if _q.withNamedNotes != nil {
+		c.withNamedNotes = make(map[string]*NoteQuery, len(_q.withNamedNotes))
+		for name, q := range _q.withNamedNotes {
+			c.withNamedNotes[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withSystemDetails = _q.withSystemDetails.clonePage()
+	if _q.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_q.withNamedSystemDetails))
+		for name, q := range _q.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withAssessmentResponses = _q.withAssessmentResponses.clonePage()
+	if _q.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_q.withNamedAssessmentResponses))
+		for name, q := range _q.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.clonePage()
+		}
+	}
+	c.withVendorRiskScores = _q.withVendorRiskScores.clonePage()
+	if _q.withNamedVendorRiskScores != nil {
+		c.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery, len(_q.withNamedVendorRiskScores))
+		for name, q := range _q.withNamedVendorRiskScores {
+			c.withNamedVendorRiskScores[name] = q.clonePage()
+		}
+	}
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withSubprocessors = _q.withSubprocessors.clonePage()
+	if _q.withNamedSubprocessors != nil {
+		c.withNamedSubprocessors = make(map[string]*SubprocessorQuery, len(_q.withNamedSubprocessors))
+		for name, q := range _q.withNamedSubprocessors {
+			c.withNamedSubprocessors[name] = q.clonePage()
+		}
+	}
+	c.withAuthMethods = _q.withAuthMethods.clonePage()
+	if _q.withNamedAuthMethods != nil {
+		c.withNamedAuthMethods = make(map[string]*CustomTypeEnumQuery, len(_q.withNamedAuthMethods))
+		for name, q := range _q.withNamedAuthMethods {
+			c.withNamedAuthMethods[name] = q.clonePage()
+		}
+	}
+	c.withEmployerIdentityHolders = _q.withEmployerIdentityHolders.clonePage()
+	if _q.withNamedEmployerIdentityHolders != nil {
+		c.withNamedEmployerIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedEmployerIdentityHolders))
+		for name, q := range _q.withNamedEmployerIdentityHolders {
+			c.withNamedEmployerIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withOutOfScopePlatforms = _q.withOutOfScopePlatforms.clonePage()
+	if _q.withNamedOutOfScopePlatforms != nil {
+		c.withNamedOutOfScopePlatforms = make(map[string]*PlatformQuery, len(_q.withNamedOutOfScopePlatforms))
+		for name, q := range _q.withNamedOutOfScopePlatforms {
+			c.withNamedOutOfScopePlatforms[name] = q.clonePage()
+		}
+	}
+	c.withSourcePlatforms = _q.withSourcePlatforms.clonePage()
+	if _q.withNamedSourcePlatforms != nil {
+		c.withNamedSourcePlatforms = make(map[string]*PlatformQuery, len(_q.withNamedSourcePlatforms))
+		for name, q := range _q.withNamedSourcePlatforms {
+			c.withNamedSourcePlatforms[name] = q.clonePage()
+		}
+	}
+	c.withEntityType = _q.withEntityType.clonePage()
+	c.withLogoFile = _q.withLogoFile.clonePage()
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EntityTypeQuery) clonePage() *EntityTypeQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EventQuery) clonePage() *EventQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withUsers = _q.withUsers.clonePage()
+	if _q.withNamedUsers != nil {
+		c.withNamedUsers = make(map[string]*UserQuery, len(_q.withNamedUsers))
+		for name, q := range _q.withNamedUsers {
+			c.withNamedUsers[name] = q.clonePage()
+		}
+	}
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withOrganizations = _q.withOrganizations.clonePage()
+	if _q.withNamedOrganizations != nil {
+		c.withNamedOrganizations = make(map[string]*OrganizationQuery, len(_q.withNamedOrganizations))
+		for name, q := range _q.withNamedOrganizations {
+			c.withNamedOrganizations[name] = q.clonePage()
+		}
+	}
+	c.withInvites = _q.withInvites.clonePage()
+	if _q.withNamedInvites != nil {
+		c.withNamedInvites = make(map[string]*InviteQuery, len(_q.withNamedInvites))
+		for name, q := range _q.withNamedInvites {
+			c.withNamedInvites[name] = q.clonePage()
+		}
+	}
+	c.withPersonalAccessTokens = _q.withPersonalAccessTokens.clonePage()
+	if _q.withNamedPersonalAccessTokens != nil {
+		c.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery, len(_q.withNamedPersonalAccessTokens))
+		for name, q := range _q.withNamedPersonalAccessTokens {
+			c.withNamedPersonalAccessTokens[name] = q.clonePage()
+		}
+	}
+	c.withSecrets = _q.withSecrets.clonePage()
+	if _q.withNamedSecrets != nil {
+		c.withNamedSecrets = make(map[string]*HushQuery, len(_q.withNamedSecrets))
+		for name, q := range _q.withNamedSecrets {
+			c.withNamedSecrets[name] = q.clonePage()
+		}
+	}
+	c.withOrgMemberships = _q.withOrgMemberships.clonePage()
+	if _q.withNamedOrgMemberships != nil {
+		c.withNamedOrgMemberships = make(map[string]*OrgMembershipQuery, len(_q.withNamedOrgMemberships))
+		for name, q := range _q.withNamedOrgMemberships {
+			c.withNamedOrgMemberships[name] = q.clonePage()
+		}
+	}
+	c.withGroupMemberships = _q.withGroupMemberships.clonePage()
+	if _q.withNamedGroupMemberships != nil {
+		c.withNamedGroupMemberships = make(map[string]*GroupMembershipQuery, len(_q.withNamedGroupMemberships))
+		for name, q := range _q.withNamedGroupMemberships {
+			c.withNamedGroupMemberships[name] = q.clonePage()
+		}
+	}
+	c.withSubscribers = _q.withSubscribers.clonePage()
+	if _q.withNamedSubscribers != nil {
+		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_q.withNamedSubscribers))
+		for name, q := range _q.withNamedSubscribers {
+			c.withNamedSubscribers[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withOrgSubscriptions = _q.withOrgSubscriptions.clonePage()
+	if _q.withNamedOrgSubscriptions != nil {
+		c.withNamedOrgSubscriptions = make(map[string]*OrgSubscriptionQuery, len(_q.withNamedOrgSubscriptions))
+		for name, q := range _q.withNamedOrgSubscriptions {
+			c.withNamedOrgSubscriptions[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EvidenceQuery) clonePage() *EvidenceQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectives = _q.withControlObjectives.clonePage()
+	if _q.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectives))
+		for name, q := range _q.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementations = _q.withControlImplementations.clonePage()
+	if _q.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementations))
+		for name, q := range _q.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ExportQuery) clonePage() *ExportQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FileQuery) clonePage() *FileQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withCategory = _q.withCategory.clonePage()
+	c.withOrganization = _q.withOrganization.clonePage()
+	if _q.withNamedOrganization != nil {
+		c.withNamedOrganization = make(map[string]*OrganizationQuery, len(_q.withNamedOrganization))
+		for name, q := range _q.withNamedOrganization {
+			c.withNamedOrganization[name] = q.clonePage()
+		}
+	}
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.withContact = _q.withContact.clonePage()
+	if _q.withNamedContact != nil {
+		c.withNamedContact = make(map[string]*ContactQuery, len(_q.withNamedContact))
+		for name, q := range _q.withNamedContact {
+			c.withNamedContact[name] = q.clonePage()
+		}
+	}
+	c.withEntity = _q.withEntity.clonePage()
+	if _q.withNamedEntity != nil {
+		c.withNamedEntity = make(map[string]*EntityQuery, len(_q.withNamedEntity))
+		for name, q := range _q.withNamedEntity {
+			c.withNamedEntity[name] = q.clonePage()
+		}
+	}
+	c.withOrganizationSetting = _q.withOrganizationSetting.clonePage()
+	if _q.withNamedOrganizationSetting != nil {
+		c.withNamedOrganizationSetting = make(map[string]*OrganizationSettingQuery, len(_q.withNamedOrganizationSetting))
+		for name, q := range _q.withNamedOrganizationSetting {
+			c.withNamedOrganizationSetting[name] = q.clonePage()
+		}
+	}
+	c.withTemplate = _q.withTemplate.clonePage()
+	if _q.withNamedTemplate != nil {
+		c.withNamedTemplate = make(map[string]*TemplateQuery, len(_q.withNamedTemplate))
+		for name, q := range _q.withNamedTemplate {
+			c.withNamedTemplate[name] = q.clonePage()
+		}
+	}
+	c.withDocument = _q.withDocument.clonePage()
+	if _q.withNamedDocument != nil {
+		c.withNamedDocument = make(map[string]*DocumentDataQuery, len(_q.withNamedDocument))
+		for name, q := range _q.withNamedDocument {
+			c.withNamedDocument[name] = q.clonePage()
+		}
+	}
+	c.withProgram = _q.withProgram.clonePage()
+	if _q.withNamedProgram != nil {
+		c.withNamedProgram = make(map[string]*ProgramQuery, len(_q.withNamedProgram))
+		for name, q := range _q.withNamedProgram {
+			c.withNamedProgram[name] = q.clonePage()
+		}
+	}
+	c.withPlatform = _q.withPlatform.clonePage()
+	if _q.withNamedPlatform != nil {
+		c.withNamedPlatform = make(map[string]*PlatformQuery, len(_q.withNamedPlatform))
+		for name, q := range _q.withNamedPlatform {
+			c.withNamedPlatform[name] = q.clonePage()
+		}
+	}
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolder = _q.withIdentityHolder.clonePage()
+	if _q.withNamedIdentityHolder != nil {
+		c.withNamedIdentityHolder = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolder))
+		for name, q := range _q.withNamedIdentityHolder {
+			c.withNamedIdentityHolder[name] = q.clonePage()
+		}
+	}
+	c.withScan = _q.withScan.clonePage()
+	if _q.withNamedScan != nil {
+		c.withNamedScan = make(map[string]*ScanQuery, len(_q.withNamedScan))
+		for name, q := range _q.withNamedScan {
+			c.withNamedScan[name] = q.clonePage()
+		}
+	}
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withSecrets = _q.withSecrets.clonePage()
+	if _q.withNamedSecrets != nil {
+		c.withNamedSecrets = make(map[string]*HushQuery, len(_q.withNamedSecrets))
+		for name, q := range _q.withNamedSecrets {
+			c.withNamedSecrets[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterEntities = _q.withTrustCenterEntities.clonePage()
+	if _q.withNamedTrustCenterEntities != nil {
+		c.withNamedTrustCenterEntities = make(map[string]*TrustCenterEntityQuery, len(_q.withNamedTrustCenterEntities))
+		for name, q := range _q.withNamedTrustCenterEntities {
+			c.withNamedTrustCenterEntities[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterDoc = _q.withTrustCenterDoc.clonePage()
+	if _q.withNamedTrustCenterDoc != nil {
+		c.withNamedTrustCenterDoc = make(map[string]*TrustCenterDocQuery, len(_q.withNamedTrustCenterDoc))
+		for name, q := range _q.withNamedTrustCenterDoc {
+			c.withNamedTrustCenterDoc[name] = q.clonePage()
+		}
+	}
+	c.withOriginalTrustCenterDoc = _q.withOriginalTrustCenterDoc.clonePage()
+	if _q.withNamedOriginalTrustCenterDoc != nil {
+		c.withNamedOriginalTrustCenterDoc = make(map[string]*TrustCenterDocQuery, len(_q.withNamedOriginalTrustCenterDoc))
+		for name, q := range _q.withNamedOriginalTrustCenterDoc {
+			c.withNamedOriginalTrustCenterDoc[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FileDownloadTokenQuery) clonePage() *FileDownloadTokenQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FindingQuery) clonePage() *FindingQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withReviewedByUser = _q.withReviewedByUser.clonePage()
+	c.withReviewedByGroup = _q.withReviewedByGroup.clonePage()
+	c.withReviewedByIdentityHolder = _q.withReviewedByIdentityHolder.clonePage()
+	c.withAssignedToUser = _q.withAssignedToUser.clonePage()
+	c.withAssignedToGroup = _q.withAssignedToGroup.clonePage()
+	c.withAssignedToIdentityHolder = _q.withAssignedToIdentityHolder.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withFindingStatus = _q.withFindingStatus.clonePage()
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryAccounts = _q.withDirectoryAccounts.clonePage()
+	if _q.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_q.withNamedDirectoryAccounts))
+		for name, q := range _q.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withCheckResults = _q.withCheckResults.clonePage()
+	if _q.withNamedCheckResults != nil {
+		c.withNamedCheckResults = make(map[string]*CheckResultQuery, len(_q.withNamedCheckResults))
+		for name, q := range _q.withNamedCheckResults {
+			c.withNamedCheckResults[name] = q.clonePage()
+		}
+	}
+	c.withControlMappings = _q.withControlMappings.clonePage()
+	if _q.withNamedControlMappings != nil {
+		c.withNamedControlMappings = make(map[string]*FindingControlQuery, len(_q.withNamedControlMappings))
+		for name, q := range _q.withNamedControlMappings {
+			c.withNamedControlMappings[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FindingControlQuery) clonePage() *FindingControlQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withFinding = _q.withFinding.clonePage()
+	c.withControl = _q.withControl.clonePage()
+	c.withStandard = _q.withStandard.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupQuery) clonePage() *GroupQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withProgramEditors = _q.withProgramEditors.clonePage()
+	if _q.withNamedProgramEditors != nil {
+		c.withNamedProgramEditors = make(map[string]*ProgramQuery, len(_q.withNamedProgramEditors))
+		for name, q := range _q.withNamedProgramEditors {
+			c.withNamedProgramEditors[name] = q.clonePage()
+		}
+	}
+	c.withProgramBlockedGroups = _q.withProgramBlockedGroups.clonePage()
+	if _q.withNamedProgramBlockedGroups != nil {
+		c.withNamedProgramBlockedGroups = make(map[string]*ProgramQuery, len(_q.withNamedProgramBlockedGroups))
+		for name, q := range _q.withNamedProgramBlockedGroups {
+			c.withNamedProgramBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withProgramViewers = _q.withProgramViewers.clonePage()
+	if _q.withNamedProgramViewers != nil {
+		c.withNamedProgramViewers = make(map[string]*ProgramQuery, len(_q.withNamedProgramViewers))
+		for name, q := range _q.withNamedProgramViewers {
+			c.withNamedProgramViewers[name] = q.clonePage()
+		}
+	}
+	c.withRiskEditors = _q.withRiskEditors.clonePage()
+	if _q.withNamedRiskEditors != nil {
+		c.withNamedRiskEditors = make(map[string]*RiskQuery, len(_q.withNamedRiskEditors))
+		for name, q := range _q.withNamedRiskEditors {
+			c.withNamedRiskEditors[name] = q.clonePage()
+		}
+	}
+	c.withRiskBlockedGroups = _q.withRiskBlockedGroups.clonePage()
+	if _q.withNamedRiskBlockedGroups != nil {
+		c.withNamedRiskBlockedGroups = make(map[string]*RiskQuery, len(_q.withNamedRiskBlockedGroups))
+		for name, q := range _q.withNamedRiskBlockedGroups {
+			c.withNamedRiskBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withRiskViewers = _q.withRiskViewers.clonePage()
+	if _q.withNamedRiskViewers != nil {
+		c.withNamedRiskViewers = make(map[string]*RiskQuery, len(_q.withNamedRiskViewers))
+		for name, q := range _q.withNamedRiskViewers {
+			c.withNamedRiskViewers[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectiveEditors = _q.withControlObjectiveEditors.clonePage()
+	if _q.withNamedControlObjectiveEditors != nil {
+		c.withNamedControlObjectiveEditors = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectiveEditors))
+		for name, q := range _q.withNamedControlObjectiveEditors {
+			c.withNamedControlObjectiveEditors[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectiveBlockedGroups = _q.withControlObjectiveBlockedGroups.clonePage()
+	if _q.withNamedControlObjectiveBlockedGroups != nil {
+		c.withNamedControlObjectiveBlockedGroups = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectiveBlockedGroups))
+		for name, q := range _q.withNamedControlObjectiveBlockedGroups {
+			c.withNamedControlObjectiveBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectiveViewers = _q.withControlObjectiveViewers.clonePage()
+	if _q.withNamedControlObjectiveViewers != nil {
+		c.withNamedControlObjectiveViewers = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectiveViewers))
+		for name, q := range _q.withNamedControlObjectiveViewers {
+			c.withNamedControlObjectiveViewers[name] = q.clonePage()
+		}
+	}
+	c.withNarrativeEditors = _q.withNarrativeEditors.clonePage()
+	if _q.withNamedNarrativeEditors != nil {
+		c.withNamedNarrativeEditors = make(map[string]*NarrativeQuery, len(_q.withNamedNarrativeEditors))
+		for name, q := range _q.withNamedNarrativeEditors {
+			c.withNamedNarrativeEditors[name] = q.clonePage()
+		}
+	}
+	c.withNarrativeBlockedGroups = _q.withNarrativeBlockedGroups.clonePage()
+	if _q.withNamedNarrativeBlockedGroups != nil {
+		c.withNamedNarrativeBlockedGroups = make(map[string]*NarrativeQuery, len(_q.withNamedNarrativeBlockedGroups))
+		for name, q := range _q.withNamedNarrativeBlockedGroups {
+			c.withNamedNarrativeBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withNarrativeViewers = _q.withNarrativeViewers.clonePage()
+	if _q.withNamedNarrativeViewers != nil {
+		c.withNamedNarrativeViewers = make(map[string]*NarrativeQuery, len(_q.withNamedNarrativeViewers))
+		for name, q := range _q.withNamedNarrativeViewers {
+			c.withNamedNarrativeViewers[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementationEditors = _q.withControlImplementationEditors.clonePage()
+	if _q.withNamedControlImplementationEditors != nil {
+		c.withNamedControlImplementationEditors = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementationEditors))
+		for name, q := range _q.withNamedControlImplementationEditors {
+			c.withNamedControlImplementationEditors[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementationBlockedGroups = _q.withControlImplementationBlockedGroups.clonePage()
+	if _q.withNamedControlImplementationBlockedGroups != nil {
+		c.withNamedControlImplementationBlockedGroups = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementationBlockedGroups))
+		for name, q := range _q.withNamedControlImplementationBlockedGroups {
+			c.withNamedControlImplementationBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementationViewers = _q.withControlImplementationViewers.clonePage()
+	if _q.withNamedControlImplementationViewers != nil {
+		c.withNamedControlImplementationViewers = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementationViewers))
+		for name, q := range _q.withNamedControlImplementationViewers {
+			c.withNamedControlImplementationViewers[name] = q.clonePage()
+		}
+	}
+	c.withActionPlanEditors = _q.withActionPlanEditors.clonePage()
+	if _q.withNamedActionPlanEditors != nil {
+		c.withNamedActionPlanEditors = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlanEditors))
+		for name, q := range _q.withNamedActionPlanEditors {
+			c.withNamedActionPlanEditors[name] = q.clonePage()
+		}
+	}
+	c.withActionPlanBlockedGroups = _q.withActionPlanBlockedGroups.clonePage()
+	if _q.withNamedActionPlanBlockedGroups != nil {
+		c.withNamedActionPlanBlockedGroups = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlanBlockedGroups))
+		for name, q := range _q.withNamedActionPlanBlockedGroups {
+			c.withNamedActionPlanBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withActionPlanViewers = _q.withActionPlanViewers.clonePage()
+	if _q.withNamedActionPlanViewers != nil {
+		c.withNamedActionPlanViewers = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlanViewers))
+		for name, q := range _q.withNamedActionPlanViewers {
+			c.withNamedActionPlanViewers[name] = q.clonePage()
+		}
+	}
+	c.withPlatformEditors = _q.withPlatformEditors.clonePage()
+	if _q.withNamedPlatformEditors != nil {
+		c.withNamedPlatformEditors = make(map[string]*PlatformQuery, len(_q.withNamedPlatformEditors))
+		for name, q := range _q.withNamedPlatformEditors {
+			c.withNamedPlatformEditors[name] = q.clonePage()
+		}
+	}
+	c.withPlatformBlockedGroups = _q.withPlatformBlockedGroups.clonePage()
+	if _q.withNamedPlatformBlockedGroups != nil {
+		c.withNamedPlatformBlockedGroups = make(map[string]*PlatformQuery, len(_q.withNamedPlatformBlockedGroups))
+		for name, q := range _q.withNamedPlatformBlockedGroups {
+			c.withNamedPlatformBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withPlatformViewers = _q.withPlatformViewers.clonePage()
+	if _q.withNamedPlatformViewers != nil {
+		c.withNamedPlatformViewers = make(map[string]*PlatformQuery, len(_q.withNamedPlatformViewers))
+		for name, q := range _q.withNamedPlatformViewers {
+			c.withNamedPlatformViewers[name] = q.clonePage()
+		}
+	}
+	c.withCampaignEditors = _q.withCampaignEditors.clonePage()
+	if _q.withNamedCampaignEditors != nil {
+		c.withNamedCampaignEditors = make(map[string]*CampaignQuery, len(_q.withNamedCampaignEditors))
+		for name, q := range _q.withNamedCampaignEditors {
+			c.withNamedCampaignEditors[name] = q.clonePage()
+		}
+	}
+	c.withCampaignBlockedGroups = _q.withCampaignBlockedGroups.clonePage()
+	if _q.withNamedCampaignBlockedGroups != nil {
+		c.withNamedCampaignBlockedGroups = make(map[string]*CampaignQuery, len(_q.withNamedCampaignBlockedGroups))
+		for name, q := range _q.withNamedCampaignBlockedGroups {
+			c.withNamedCampaignBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withCampaignViewers = _q.withCampaignViewers.clonePage()
+	if _q.withNamedCampaignViewers != nil {
+		c.withNamedCampaignViewers = make(map[string]*CampaignQuery, len(_q.withNamedCampaignViewers))
+		for name, q := range _q.withNamedCampaignViewers {
+			c.withNamedCampaignViewers[name] = q.clonePage()
+		}
+	}
+	c.withProcedureEditors = _q.withProcedureEditors.clonePage()
+	if _q.withNamedProcedureEditors != nil {
+		c.withNamedProcedureEditors = make(map[string]*ProcedureQuery, len(_q.withNamedProcedureEditors))
+		for name, q := range _q.withNamedProcedureEditors {
+			c.withNamedProcedureEditors[name] = q.clonePage()
+		}
+	}
+	c.withProcedureBlockedGroups = _q.withProcedureBlockedGroups.clonePage()
+	if _q.withNamedProcedureBlockedGroups != nil {
+		c.withNamedProcedureBlockedGroups = make(map[string]*ProcedureQuery, len(_q.withNamedProcedureBlockedGroups))
+		for name, q := range _q.withNamedProcedureBlockedGroups {
+			c.withNamedProcedureBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicyEditors = _q.withInternalPolicyEditors.clonePage()
+	if _q.withNamedInternalPolicyEditors != nil {
+		c.withNamedInternalPolicyEditors = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicyEditors))
+		for name, q := range _q.withNamedInternalPolicyEditors {
+			c.withNamedInternalPolicyEditors[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicyBlockedGroups = _q.withInternalPolicyBlockedGroups.clonePage()
+	if _q.withNamedInternalPolicyBlockedGroups != nil {
+		c.withNamedInternalPolicyBlockedGroups = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicyBlockedGroups))
+		for name, q := range _q.withNamedInternalPolicyBlockedGroups {
+			c.withNamedInternalPolicyBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withControlEditors = _q.withControlEditors.clonePage()
+	if _q.withNamedControlEditors != nil {
+		c.withNamedControlEditors = make(map[string]*ControlQuery, len(_q.withNamedControlEditors))
+		for name, q := range _q.withNamedControlEditors {
+			c.withNamedControlEditors[name] = q.clonePage()
+		}
+	}
+	c.withControlBlockedGroups = _q.withControlBlockedGroups.clonePage()
+	if _q.withNamedControlBlockedGroups != nil {
+		c.withNamedControlBlockedGroups = make(map[string]*ControlQuery, len(_q.withNamedControlBlockedGroups))
+		for name, q := range _q.withNamedControlBlockedGroups {
+			c.withNamedControlBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withMappedControlEditors = _q.withMappedControlEditors.clonePage()
+	if _q.withNamedMappedControlEditors != nil {
+		c.withNamedMappedControlEditors = make(map[string]*MappedControlQuery, len(_q.withNamedMappedControlEditors))
+		for name, q := range _q.withNamedMappedControlEditors {
+			c.withNamedMappedControlEditors[name] = q.clonePage()
+		}
+	}
+	c.withMappedControlBlockedGroups = _q.withMappedControlBlockedGroups.clonePage()
+	if _q.withNamedMappedControlBlockedGroups != nil {
+		c.withNamedMappedControlBlockedGroups = make(map[string]*MappedControlQuery, len(_q.withNamedMappedControlBlockedGroups))
+		for name, q := range _q.withNamedMappedControlBlockedGroups {
+			c.withNamedMappedControlBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withScanEditors = _q.withScanEditors.clonePage()
+	if _q.withNamedScanEditors != nil {
+		c.withNamedScanEditors = make(map[string]*ScanQuery, len(_q.withNamedScanEditors))
+		for name, q := range _q.withNamedScanEditors {
+			c.withNamedScanEditors[name] = q.clonePage()
+		}
+	}
+	c.withScanBlockedGroups = _q.withScanBlockedGroups.clonePage()
+	if _q.withNamedScanBlockedGroups != nil {
+		c.withNamedScanBlockedGroups = make(map[string]*ScanQuery, len(_q.withNamedScanBlockedGroups))
+		for name, q := range _q.withNamedScanBlockedGroups {
+			c.withNamedScanBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEntityEditors = _q.withEntityEditors.clonePage()
+	if _q.withNamedEntityEditors != nil {
+		c.withNamedEntityEditors = make(map[string]*EntityQuery, len(_q.withNamedEntityEditors))
+		for name, q := range _q.withNamedEntityEditors {
+			c.withNamedEntityEditors[name] = q.clonePage()
+		}
+	}
+	c.withEntityBlockedGroups = _q.withEntityBlockedGroups.clonePage()
+	if _q.withNamedEntityBlockedGroups != nil {
+		c.withNamedEntityBlockedGroups = make(map[string]*EntityQuery, len(_q.withNamedEntityBlockedGroups))
+		for name, q := range _q.withNamedEntityBlockedGroups {
+			c.withNamedEntityBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withFindingEditors = _q.withFindingEditors.clonePage()
+	if _q.withNamedFindingEditors != nil {
+		c.withNamedFindingEditors = make(map[string]*FindingQuery, len(_q.withNamedFindingEditors))
+		for name, q := range _q.withNamedFindingEditors {
+			c.withNamedFindingEditors[name] = q.clonePage()
+		}
+	}
+	c.withFindingBlockedGroups = _q.withFindingBlockedGroups.clonePage()
+	if _q.withNamedFindingBlockedGroups != nil {
+		c.withNamedFindingBlockedGroups = make(map[string]*FindingQuery, len(_q.withNamedFindingBlockedGroups))
+		for name, q := range _q.withNamedFindingBlockedGroups {
+			c.withNamedFindingBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withReviewEditors = _q.withReviewEditors.clonePage()
+	if _q.withNamedReviewEditors != nil {
+		c.withNamedReviewEditors = make(map[string]*ReviewQuery, len(_q.withNamedReviewEditors))
+		for name, q := range _q.withNamedReviewEditors {
+			c.withNamedReviewEditors[name] = q.clonePage()
+		}
+	}
+	c.withReviewBlockedGroups = _q.withReviewBlockedGroups.clonePage()
+	if _q.withNamedReviewBlockedGroups != nil {
+		c.withNamedReviewBlockedGroups = make(map[string]*ReviewQuery, len(_q.withNamedReviewBlockedGroups))
+		for name, q := range _q.withNamedReviewBlockedGroups {
+			c.withNamedReviewBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withRemediationEditors = _q.withRemediationEditors.clonePage()
+	if _q.withNamedRemediationEditors != nil {
+		c.withNamedRemediationEditors = make(map[string]*RemediationQuery, len(_q.withNamedRemediationEditors))
+		for name, q := range _q.withNamedRemediationEditors {
+			c.withNamedRemediationEditors[name] = q.clonePage()
+		}
+	}
+	c.withRemediationBlockedGroups = _q.withRemediationBlockedGroups.clonePage()
+	if _q.withNamedRemediationBlockedGroups != nil {
+		c.withNamedRemediationBlockedGroups = make(map[string]*RemediationQuery, len(_q.withNamedRemediationBlockedGroups))
+		for name, q := range _q.withNamedRemediationBlockedGroups {
+			c.withNamedRemediationBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withSetting = _q.withSetting.clonePage()
+	c.withUsers = _q.withUsers.clonePage()
+	if _q.withNamedUsers != nil {
+		c.withNamedUsers = make(map[string]*UserQuery, len(_q.withNamedUsers))
+		for name, q := range _q.withNamedUsers {
+			c.withNamedUsers[name] = q.clonePage()
+		}
+	}
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withAvatarFile = _q.withAvatarFile.clonePage()
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withCampaignTargets = _q.withCampaignTargets.clonePage()
+	if _q.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_q.withNamedCampaignTargets))
+		for name, q := range _q.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.clonePage()
+		}
+	}
+	c.withInvites = _q.withInvites.clonePage()
+	if _q.withNamedInvites != nil {
+		c.withNamedInvites = make(map[string]*InviteQuery, len(_q.withNamedInvites))
+		for name, q := range _q.withNamedInvites {
+			c.withNamedInvites[name] = q.clonePage()
+		}
+	}
+	c.withMembers = _q.withMembers.clonePage()
+	if _q.withNamedMembers != nil {
+		c.withNamedMembers = make(map[string]*GroupMembershipQuery, len(_q.withNamedMembers))
+		for name, q := range _q.withNamedMembers {
+			c.withNamedMembers[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupMembershipQuery) clonePage() *GroupMembershipQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withGroup = _q.withGroup.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.withOrgMembership = _q.withOrgMembership.clonePage()
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupSettingQuery) clonePage() *GroupSettingQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withGroup = _q.withGroup.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *HushQuery) clonePage() *HushQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *IdentityHolderQuery) clonePage() *IdentityHolderQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withEmployer = _q.withEmployer.clonePage()
+	c.withAssessmentResponses = _q.withAssessmentResponses.clonePage()
+	if _q.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_q.withNamedAssessmentResponses))
+		for name, q := range _q.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.clonePage()
+		}
+	}
+	c.withAssessments = _q.withAssessments.clonePage()
+	if _q.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_q.withNamedAssessments))
+		for name, q := range _q.withNamedAssessments {
+			c.withNamedAssessments[name] = q.clonePage()
+		}
+	}
+	c.withTemplates = _q.withTemplates.clonePage()
+	if _q.withNamedTemplates != nil {
+		c.withNamedTemplates = make(map[string]*TemplateQuery, len(_q.withNamedTemplates))
+		for name, q := range _q.withNamedTemplates {
+			c.withNamedTemplates[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryAccounts = _q.withDirectoryAccounts.clonePage()
+	if _q.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_q.withNamedDirectoryAccounts))
+		for name, q := range _q.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withAccessPlatforms = _q.withAccessPlatforms.clonePage()
+	if _q.withNamedAccessPlatforms != nil {
+		c.withNamedAccessPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedAccessPlatforms))
+		for name, q := range _q.withNamedAccessPlatforms {
+			c.withNamedAccessPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withUser = _q.withUser.clonePage()
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ImpersonationEventQuery) clonePage() *ImpersonationEventQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withUser = _q.withUser.clonePage()
+	c.withTargetUser = _q.withTargetUser.clonePage()
+	c.withOrganization = _q.withOrganization.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *IntegrationQuery) clonePage() *IntegrationQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withSecrets = _q.withSecrets.clonePage()
+	if _q.withNamedSecrets != nil {
+		c.withNamedSecrets = make(map[string]*HushQuery, len(_q.withNamedSecrets))
+		for name, q := range _q.withNamedSecrets {
+			c.withNamedSecrets[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryAccounts = _q.withDirectoryAccounts.clonePage()
+	if _q.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_q.withNamedDirectoryAccounts))
+		for name, q := range _q.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryGroups = _q.withDirectoryGroups.clonePage()
+	if _q.withNamedDirectoryGroups != nil {
+		c.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery, len(_q.withNamedDirectoryGroups))
+		for name, q := range _q.withNamedDirectoryGroups {
+			c.withNamedDirectoryGroups[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryMemberships = _q.withDirectoryMemberships.clonePage()
+	if _q.withNamedDirectoryMemberships != nil {
+		c.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery, len(_q.withNamedDirectoryMemberships))
+		for name, q := range _q.withNamedDirectoryMemberships {
+			c.withNamedDirectoryMemberships[name] = q.clonePage()
+		}
+	}
+	c.withCheckResults = _q.withCheckResults.clonePage()
+	if _q.withNamedCheckResults != nil {
+		c.withNamedCheckResults = make(map[string]*CheckResultQuery, len(_q.withNamedCheckResults))
+		for name, q := range _q.withNamedCheckResults {
+			c.withNamedCheckResults[name] = q.clonePage()
+		}
+	}
+	c.withPlatform = _q.withPlatform.clonePage()
+	c.withNotificationTemplates = _q.withNotificationTemplates.clonePage()
+	if _q.withNamedNotificationTemplates != nil {
+		c.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery, len(_q.withNamedNotificationTemplates))
+		for name, q := range _q.withNamedNotificationTemplates {
+			c.withNamedNotificationTemplates[name] = q.clonePage()
+		}
+	}
+	c.withEmailTemplates = _q.withEmailTemplates.clonePage()
+	if _q.withNamedEmailTemplates != nil {
+		c.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery, len(_q.withNamedEmailTemplates))
+		for name, q := range _q.withNamedEmailTemplates {
+			c.withNamedEmailTemplates[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withIntegrationWebhooks = _q.withIntegrationWebhooks.clonePage()
+	if _q.withNamedIntegrationWebhooks != nil {
+		c.withNamedIntegrationWebhooks = make(map[string]*IntegrationWebhookQuery, len(_q.withNamedIntegrationWebhooks))
+		for name, q := range _q.withNamedIntegrationWebhooks {
+			c.withNamedIntegrationWebhooks[name] = q.clonePage()
+		}
+	}
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *IntegrationRunQuery) clonePage() *IntegrationRunQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withCheckResults = _q.withCheckResults.clonePage()
+	if _q.withNamedCheckResults != nil {
+		c.withNamedCheckResults = make(map[string]*CheckResultQuery, len(_q.withNamedCheckResults))
+		for name, q := range _q.withNamedCheckResults {
+			c.withNamedCheckResults[name] = q.clonePage()
+		}
+	}
+	c.withContacts = _q.withContacts.clonePage()
+	if _q.withNamedContacts != nil {
+		c.withNamedContacts = make(map[string]*ContactQuery, len(_q.withNamedContacts))
+		for name, q := range _q.withNamedContacts {
+			c.withNamedContacts[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryAccounts = _q.withDirectoryAccounts.clonePage()
+	if _q.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_q.withNamedDirectoryAccounts))
+		for name, q := range _q.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryGroups = _q.withDirectoryGroups.clonePage()
+	if _q.withNamedDirectoryGroups != nil {
+		c.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery, len(_q.withNamedDirectoryGroups))
+		for name, q := range _q.withNamedDirectoryGroups {
+			c.withNamedDirectoryGroups[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryMemberships = _q.withDirectoryMemberships.clonePage()
+	if _q.withNamedDirectoryMemberships != nil {
+		c.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery, len(_q.withNamedDirectoryMemberships))
+		for name, q := range _q.withNamedDirectoryMemberships {
+			c.withNamedDirectoryMemberships[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *IntegrationWebhookQuery) clonePage() *IntegrationWebhookQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *InternalPolicyQuery) clonePage() *InternalPolicyQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withApprover = _q.withApprover.clonePage()
+	c.withDelegate = _q.withDelegate.clonePage()
+	c.withInternalPolicyKind = _q.withInternalPolicyKind.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withControlObjectives = _q.withControlObjectives.clonePage()
+	if _q.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectives))
+		for name, q := range _q.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementations = _q.withControlImplementations.clonePage()
+	if _q.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementations))
+		for name, q := range _q.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withNarratives = _q.withNarratives.clonePage()
+	if _q.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_q.withNamedNarratives))
+		for name, q := range _q.withNamedNarratives {
+			c.withNamedNarratives[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withFile = _q.withFile.clonePage()
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withDiscussions = _q.withDiscussions.clonePage()
+	if _q.withNamedDiscussions != nil {
+		c.withNamedDiscussions = make(map[string]*DiscussionQuery, len(_q.withNamedDiscussions))
+		for name, q := range _q.withNamedDiscussions {
+			c.withNamedDiscussions[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withAssessments = _q.withAssessments.clonePage()
+	if _q.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_q.withNamedAssessments))
+		for name, q := range _q.withNamedAssessments {
+			c.withNamedAssessments[name] = q.clonePage()
+		}
+	}
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withPolicyAttestations = _q.withPolicyAttestations.clonePage()
+	if _q.withNamedPolicyAttestations != nil {
+		c.withNamedPolicyAttestations = make(map[string]*AssessmentPolicyQuery, len(_q.withNamedPolicyAttestations))
+		for name, q := range _q.withNamedPolicyAttestations {
+			c.withNamedPolicyAttestations[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *InviteQuery) clonePage() *InviteQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *MappableDomainQuery) clonePage() *MappableDomainQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withCustomDomains = _q.withCustomDomains.clonePage()
+	if _q.withNamedCustomDomains != nil {
+		c.withNamedCustomDomains = make(map[string]*CustomDomainQuery, len(_q.withNamedCustomDomains))
+		for name, q := range _q.withNamedCustomDomains {
+			c.withNamedCustomDomains[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *MappedControlQuery) clonePage() *MappedControlQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withFromControls = _q.withFromControls.clonePage()
+	if _q.withNamedFromControls != nil {
+		c.withNamedFromControls = make(map[string]*ControlQuery, len(_q.withNamedFromControls))
+		for name, q := range _q.withNamedFromControls {
+			c.withNamedFromControls[name] = q.clonePage()
+		}
+	}
+	c.withToControls = _q.withToControls.clonePage()
+	if _q.withNamedToControls != nil {
+		c.withNamedToControls = make(map[string]*ControlQuery, len(_q.withNamedToControls))
+		for name, q := range _q.withNamedToControls {
+			c.withNamedToControls[name] = q.clonePage()
+		}
+	}
+	c.withFromSubcontrols = _q.withFromSubcontrols.clonePage()
+	if _q.withNamedFromSubcontrols != nil {
+		c.withNamedFromSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedFromSubcontrols))
+		for name, q := range _q.withNamedFromSubcontrols {
+			c.withNamedFromSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withToSubcontrols = _q.withToSubcontrols.clonePage()
+	if _q.withNamedToSubcontrols != nil {
+		c.withNamedToSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedToSubcontrols))
+		for name, q := range _q.withNamedToSubcontrols {
+			c.withNamedToSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NarrativeQuery) clonePage() *NarrativeQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withSatisfies = _q.withSatisfies.clonePage()
+	if _q.withNamedSatisfies != nil {
+		c.withNamedSatisfies = make(map[string]*ControlQuery, len(_q.withNamedSatisfies))
+		for name, q := range _q.withNamedSatisfies {
+			c.withNamedSatisfies[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NoteQuery) clonePage() *NoteQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withTask = _q.withTask.clonePage()
+	c.withControl = _q.withControl.clonePage()
+	c.withSubcontrol = _q.withSubcontrol.clonePage()
+	c.withProcedure = _q.withProcedure.clonePage()
+	c.withRisk = _q.withRisk.clonePage()
+	c.withInternalPolicy = _q.withInternalPolicy.clonePage()
+	c.withReview = _q.withReview.clonePage()
+	c.withEvidence = _q.withEvidence.clonePage()
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withDiscussion = _q.withDiscussion.clonePage()
+	c.withTrustCenterFaqs = _q.withTrustCenterFaqs.clonePage()
+	if _q.withNamedTrustCenterFaqs != nil {
+		c.withNamedTrustCenterFaqs = make(map[string]*TrustCenterFAQQuery, len(_q.withNamedTrustCenterFaqs))
+		for name, q := range _q.withNamedTrustCenterFaqs {
+			c.withNamedTrustCenterFaqs[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NotificationQuery) clonePage() *NotificationQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withNotificationTemplate = _q.withNotificationTemplate.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NotificationPreferenceQuery) clonePage() *NotificationPreferenceQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.withNotificationTemplate = _q.withNotificationTemplate.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NotificationTemplateQuery) clonePage() *NotificationTemplateQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withWorkflowDefinition = _q.withWorkflowDefinition.clonePage()
+	c.withEmailTemplate = _q.withEmailTemplate.clonePage()
+	c.withNotifications = _q.withNotifications.clonePage()
+	if _q.withNamedNotifications != nil {
+		c.withNamedNotifications = make(map[string]*NotificationQuery, len(_q.withNamedNotifications))
+		for name, q := range _q.withNamedNotifications {
+			c.withNamedNotifications[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OnboardingQuery) clonePage() *OnboardingQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOrganization = _q.withOrganization.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrgMembershipQuery) clonePage() *OrgMembershipQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOrganization = _q.withOrganization.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrgModuleQuery) clonePage() *OrgModuleQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withOrgSubscription = _q.withOrgSubscription.clonePage()
+	c.withOrgProducts = _q.withOrgProducts.clonePage()
+	if _q.withNamedOrgProducts != nil {
+		c.withNamedOrgProducts = make(map[string]*OrgProductQuery, len(_q.withNamedOrgProducts))
+		for name, q := range _q.withNamedOrgProducts {
+			c.withNamedOrgProducts[name] = q.clonePage()
+		}
+	}
+	c.withOrgPrices = _q.withOrgPrices.clonePage()
+	if _q.withNamedOrgPrices != nil {
+		c.withNamedOrgPrices = make(map[string]*OrgPriceQuery, len(_q.withNamedOrgPrices))
+		for name, q := range _q.withNamedOrgPrices {
+			c.withNamedOrgPrices[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrgPriceQuery) clonePage() *OrgPriceQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withOrgProducts = _q.withOrgProducts.clonePage()
+	if _q.withNamedOrgProducts != nil {
+		c.withNamedOrgProducts = make(map[string]*OrgProductQuery, len(_q.withNamedOrgProducts))
+		for name, q := range _q.withNamedOrgProducts {
+			c.withNamedOrgProducts[name] = q.clonePage()
+		}
+	}
+	c.withOrgModules = _q.withOrgModules.clonePage()
+	if _q.withNamedOrgModules != nil {
+		c.withNamedOrgModules = make(map[string]*OrgModuleQuery, len(_q.withNamedOrgModules))
+		for name, q := range _q.withNamedOrgModules {
+			c.withNamedOrgModules[name] = q.clonePage()
+		}
+	}
+	c.withOrgSubscription = _q.withOrgSubscription.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrgProductQuery) clonePage() *OrgProductQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withOrgSubscription = _q.withOrgSubscription.clonePage()
+	c.withOrgPrices = _q.withOrgPrices.clonePage()
+	if _q.withNamedOrgPrices != nil {
+		c.withNamedOrgPrices = make(map[string]*OrgPriceQuery, len(_q.withNamedOrgPrices))
+		for name, q := range _q.withNamedOrgPrices {
+			c.withNamedOrgPrices[name] = q.clonePage()
+		}
+	}
+	c.withOrgModules = _q.withOrgModules.clonePage()
+	if _q.withNamedOrgModules != nil {
+		c.withNamedOrgModules = make(map[string]*OrgModuleQuery, len(_q.withNamedOrgModules))
+		for name, q := range _q.withNamedOrgModules {
+			c.withNamedOrgModules[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrgSubscriptionQuery) clonePage() *OrgSubscriptionQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withModules = _q.withModules.clonePage()
+	if _q.withNamedModules != nil {
+		c.withNamedModules = make(map[string]*OrgModuleQuery, len(_q.withNamedModules))
+		for name, q := range _q.withNamedModules {
+			c.withNamedModules[name] = q.clonePage()
+		}
+	}
+	c.withProducts = _q.withProducts.clonePage()
+	if _q.withNamedProducts != nil {
+		c.withNamedProducts = make(map[string]*OrgProductQuery, len(_q.withNamedProducts))
+		for name, q := range _q.withNamedProducts {
+			c.withNamedProducts[name] = q.clonePage()
+		}
+	}
+	c.withPrices = _q.withPrices.clonePage()
+	if _q.withNamedPrices != nil {
+		c.withNamedPrices = make(map[string]*OrgPriceQuery, len(_q.withNamedPrices))
+		for name, q := range _q.withNamedPrices {
+			c.withNamedPrices[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withActionPlanCreators = _q.withActionPlanCreators.clonePage()
+	if _q.withNamedActionPlanCreators != nil {
+		c.withNamedActionPlanCreators = make(map[string]*GroupQuery, len(_q.withNamedActionPlanCreators))
+		for name, q := range _q.withNamedActionPlanCreators {
+			c.withNamedActionPlanCreators[name] = q.clonePage()
+		}
+	}
+	c.withAPITokenCreators = _q.withAPITokenCreators.clonePage()
+	if _q.withNamedAPITokenCreators != nil {
+		c.withNamedAPITokenCreators = make(map[string]*GroupQuery, len(_q.withNamedAPITokenCreators))
+		for name, q := range _q.withNamedAPITokenCreators {
+			c.withNamedAPITokenCreators[name] = q.clonePage()
+		}
+	}
+	c.withAssessmentCreators = _q.withAssessmentCreators.clonePage()
+	if _q.withNamedAssessmentCreators != nil {
+		c.withNamedAssessmentCreators = make(map[string]*GroupQuery, len(_q.withNamedAssessmentCreators))
+		for name, q := range _q.withNamedAssessmentCreators {
+			c.withNamedAssessmentCreators[name] = q.clonePage()
+		}
+	}
+	c.withAssessmentPolicyCreators = _q.withAssessmentPolicyCreators.clonePage()
+	if _q.withNamedAssessmentPolicyCreators != nil {
+		c.withNamedAssessmentPolicyCreators = make(map[string]*GroupQuery, len(_q.withNamedAssessmentPolicyCreators))
+		for name, q := range _q.withNamedAssessmentPolicyCreators {
+			c.withNamedAssessmentPolicyCreators[name] = q.clonePage()
+		}
+	}
+	c.withAssetCreators = _q.withAssetCreators.clonePage()
+	if _q.withNamedAssetCreators != nil {
+		c.withNamedAssetCreators = make(map[string]*GroupQuery, len(_q.withNamedAssetCreators))
+		for name, q := range _q.withNamedAssetCreators {
+			c.withNamedAssetCreators[name] = q.clonePage()
+		}
+	}
+	c.withCampaignCreators = _q.withCampaignCreators.clonePage()
+	if _q.withNamedCampaignCreators != nil {
+		c.withNamedCampaignCreators = make(map[string]*GroupQuery, len(_q.withNamedCampaignCreators))
+		for name, q := range _q.withNamedCampaignCreators {
+			c.withNamedCampaignCreators[name] = q.clonePage()
+		}
+	}
+	c.withCampaignTargetCreators = _q.withCampaignTargetCreators.clonePage()
+	if _q.withNamedCampaignTargetCreators != nil {
+		c.withNamedCampaignTargetCreators = make(map[string]*GroupQuery, len(_q.withNamedCampaignTargetCreators))
+		for name, q := range _q.withNamedCampaignTargetCreators {
+			c.withNamedCampaignTargetCreators[name] = q.clonePage()
+		}
+	}
+	c.withCheckResultCreators = _q.withCheckResultCreators.clonePage()
+	if _q.withNamedCheckResultCreators != nil {
+		c.withNamedCheckResultCreators = make(map[string]*GroupQuery, len(_q.withNamedCheckResultCreators))
+		for name, q := range _q.withNamedCheckResultCreators {
+			c.withNamedCheckResultCreators[name] = q.clonePage()
+		}
+	}
+	c.withContactCreators = _q.withContactCreators.clonePage()
+	if _q.withNamedContactCreators != nil {
+		c.withNamedContactCreators = make(map[string]*GroupQuery, len(_q.withNamedContactCreators))
+		for name, q := range _q.withNamedContactCreators {
+			c.withNamedContactCreators[name] = q.clonePage()
+		}
+	}
+	c.withControlCreators = _q.withControlCreators.clonePage()
+	if _q.withNamedControlCreators != nil {
+		c.withNamedControlCreators = make(map[string]*GroupQuery, len(_q.withNamedControlCreators))
+		for name, q := range _q.withNamedControlCreators {
+			c.withNamedControlCreators[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementationCreators = _q.withControlImplementationCreators.clonePage()
+	if _q.withNamedControlImplementationCreators != nil {
+		c.withNamedControlImplementationCreators = make(map[string]*GroupQuery, len(_q.withNamedControlImplementationCreators))
+		for name, q := range _q.withNamedControlImplementationCreators {
+			c.withNamedControlImplementationCreators[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectiveCreators = _q.withControlObjectiveCreators.clonePage()
+	if _q.withNamedControlObjectiveCreators != nil {
+		c.withNamedControlObjectiveCreators = make(map[string]*GroupQuery, len(_q.withNamedControlObjectiveCreators))
+		for name, q := range _q.withNamedControlObjectiveCreators {
+			c.withNamedControlObjectiveCreators[name] = q.clonePage()
+		}
+	}
+	c.withCustomDomainCreators = _q.withCustomDomainCreators.clonePage()
+	if _q.withNamedCustomDomainCreators != nil {
+		c.withNamedCustomDomainCreators = make(map[string]*GroupQuery, len(_q.withNamedCustomDomainCreators))
+		for name, q := range _q.withNamedCustomDomainCreators {
+			c.withNamedCustomDomainCreators[name] = q.clonePage()
+		}
+	}
+	c.withCustomTypeEnumCreators = _q.withCustomTypeEnumCreators.clonePage()
+	if _q.withNamedCustomTypeEnumCreators != nil {
+		c.withNamedCustomTypeEnumCreators = make(map[string]*GroupQuery, len(_q.withNamedCustomTypeEnumCreators))
+		for name, q := range _q.withNamedCustomTypeEnumCreators {
+			c.withNamedCustomTypeEnumCreators[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryAccountCreators = _q.withDirectoryAccountCreators.clonePage()
+	if _q.withNamedDirectoryAccountCreators != nil {
+		c.withNamedDirectoryAccountCreators = make(map[string]*GroupQuery, len(_q.withNamedDirectoryAccountCreators))
+		for name, q := range _q.withNamedDirectoryAccountCreators {
+			c.withNamedDirectoryAccountCreators[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryGroupCreators = _q.withDirectoryGroupCreators.clonePage()
+	if _q.withNamedDirectoryGroupCreators != nil {
+		c.withNamedDirectoryGroupCreators = make(map[string]*GroupQuery, len(_q.withNamedDirectoryGroupCreators))
+		for name, q := range _q.withNamedDirectoryGroupCreators {
+			c.withNamedDirectoryGroupCreators[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryMembershipCreators = _q.withDirectoryMembershipCreators.clonePage()
+	if _q.withNamedDirectoryMembershipCreators != nil {
+		c.withNamedDirectoryMembershipCreators = make(map[string]*GroupQuery, len(_q.withNamedDirectoryMembershipCreators))
+		for name, q := range _q.withNamedDirectoryMembershipCreators {
+			c.withNamedDirectoryMembershipCreators[name] = q.clonePage()
+		}
+	}
+	c.withDiscussionCreators = _q.withDiscussionCreators.clonePage()
+	if _q.withNamedDiscussionCreators != nil {
+		c.withNamedDiscussionCreators = make(map[string]*GroupQuery, len(_q.withNamedDiscussionCreators))
+		for name, q := range _q.withNamedDiscussionCreators {
+			c.withNamedDiscussionCreators[name] = q.clonePage()
+		}
+	}
+	c.withDocumentDataCreators = _q.withDocumentDataCreators.clonePage()
+	if _q.withNamedDocumentDataCreators != nil {
+		c.withNamedDocumentDataCreators = make(map[string]*GroupQuery, len(_q.withNamedDocumentDataCreators))
+		for name, q := range _q.withNamedDocumentDataCreators {
+			c.withNamedDocumentDataCreators[name] = q.clonePage()
+		}
+	}
+	c.withEmailTemplateCreators = _q.withEmailTemplateCreators.clonePage()
+	if _q.withNamedEmailTemplateCreators != nil {
+		c.withNamedEmailTemplateCreators = make(map[string]*GroupQuery, len(_q.withNamedEmailTemplateCreators))
+		for name, q := range _q.withNamedEmailTemplateCreators {
+			c.withNamedEmailTemplateCreators[name] = q.clonePage()
+		}
+	}
+	c.withEntityCreators = _q.withEntityCreators.clonePage()
+	if _q.withNamedEntityCreators != nil {
+		c.withNamedEntityCreators = make(map[string]*GroupQuery, len(_q.withNamedEntityCreators))
+		for name, q := range _q.withNamedEntityCreators {
+			c.withNamedEntityCreators[name] = q.clonePage()
+		}
+	}
+	c.withEntityTypeCreators = _q.withEntityTypeCreators.clonePage()
+	if _q.withNamedEntityTypeCreators != nil {
+		c.withNamedEntityTypeCreators = make(map[string]*GroupQuery, len(_q.withNamedEntityTypeCreators))
+		for name, q := range _q.withNamedEntityTypeCreators {
+			c.withNamedEntityTypeCreators[name] = q.clonePage()
+		}
+	}
+	c.withEvidenceCreators = _q.withEvidenceCreators.clonePage()
+	if _q.withNamedEvidenceCreators != nil {
+		c.withNamedEvidenceCreators = make(map[string]*GroupQuery, len(_q.withNamedEvidenceCreators))
+		for name, q := range _q.withNamedEvidenceCreators {
+			c.withNamedEvidenceCreators[name] = q.clonePage()
+		}
+	}
+	c.withFileCreators = _q.withFileCreators.clonePage()
+	if _q.withNamedFileCreators != nil {
+		c.withNamedFileCreators = make(map[string]*GroupQuery, len(_q.withNamedFileCreators))
+		for name, q := range _q.withNamedFileCreators {
+			c.withNamedFileCreators[name] = q.clonePage()
+		}
+	}
+	c.withFindingCreators = _q.withFindingCreators.clonePage()
+	if _q.withNamedFindingCreators != nil {
+		c.withNamedFindingCreators = make(map[string]*GroupQuery, len(_q.withNamedFindingCreators))
+		for name, q := range _q.withNamedFindingCreators {
+			c.withNamedFindingCreators[name] = q.clonePage()
+		}
+	}
+	c.withFindingControlCreators = _q.withFindingControlCreators.clonePage()
+	if _q.withNamedFindingControlCreators != nil {
+		c.withNamedFindingControlCreators = make(map[string]*GroupQuery, len(_q.withNamedFindingControlCreators))
+		for name, q := range _q.withNamedFindingControlCreators {
+			c.withNamedFindingControlCreators[name] = q.clonePage()
+		}
+	}
+	c.withGroupCreators = _q.withGroupCreators.clonePage()
+	if _q.withNamedGroupCreators != nil {
+		c.withNamedGroupCreators = make(map[string]*GroupQuery, len(_q.withNamedGroupCreators))
+		for name, q := range _q.withNamedGroupCreators {
+			c.withNamedGroupCreators[name] = q.clonePage()
+		}
+	}
+	c.withGroupMembershipCreators = _q.withGroupMembershipCreators.clonePage()
+	if _q.withNamedGroupMembershipCreators != nil {
+		c.withNamedGroupMembershipCreators = make(map[string]*GroupQuery, len(_q.withNamedGroupMembershipCreators))
+		for name, q := range _q.withNamedGroupMembershipCreators {
+			c.withNamedGroupMembershipCreators[name] = q.clonePage()
+		}
+	}
+	c.withGroupSettingCreators = _q.withGroupSettingCreators.clonePage()
+	if _q.withNamedGroupSettingCreators != nil {
+		c.withNamedGroupSettingCreators = make(map[string]*GroupQuery, len(_q.withNamedGroupSettingCreators))
+		for name, q := range _q.withNamedGroupSettingCreators {
+			c.withNamedGroupSettingCreators[name] = q.clonePage()
+		}
+	}
+	c.withHushCreators = _q.withHushCreators.clonePage()
+	if _q.withNamedHushCreators != nil {
+		c.withNamedHushCreators = make(map[string]*GroupQuery, len(_q.withNamedHushCreators))
+		for name, q := range _q.withNamedHushCreators {
+			c.withNamedHushCreators[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolderCreators = _q.withIdentityHolderCreators.clonePage()
+	if _q.withNamedIdentityHolderCreators != nil {
+		c.withNamedIdentityHolderCreators = make(map[string]*GroupQuery, len(_q.withNamedIdentityHolderCreators))
+		for name, q := range _q.withNamedIdentityHolderCreators {
+			c.withNamedIdentityHolderCreators[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicyCreators = _q.withInternalPolicyCreators.clonePage()
+	if _q.withNamedInternalPolicyCreators != nil {
+		c.withNamedInternalPolicyCreators = make(map[string]*GroupQuery, len(_q.withNamedInternalPolicyCreators))
+		for name, q := range _q.withNamedInternalPolicyCreators {
+			c.withNamedInternalPolicyCreators[name] = q.clonePage()
+		}
+	}
+	c.withInviteCreators = _q.withInviteCreators.clonePage()
+	if _q.withNamedInviteCreators != nil {
+		c.withNamedInviteCreators = make(map[string]*GroupQuery, len(_q.withNamedInviteCreators))
+		for name, q := range _q.withNamedInviteCreators {
+			c.withNamedInviteCreators[name] = q.clonePage()
+		}
+	}
+	c.withMappedControlCreators = _q.withMappedControlCreators.clonePage()
+	if _q.withNamedMappedControlCreators != nil {
+		c.withNamedMappedControlCreators = make(map[string]*GroupQuery, len(_q.withNamedMappedControlCreators))
+		for name, q := range _q.withNamedMappedControlCreators {
+			c.withNamedMappedControlCreators[name] = q.clonePage()
+		}
+	}
+	c.withNarrativeCreators = _q.withNarrativeCreators.clonePage()
+	if _q.withNamedNarrativeCreators != nil {
+		c.withNamedNarrativeCreators = make(map[string]*GroupQuery, len(_q.withNamedNarrativeCreators))
+		for name, q := range _q.withNamedNarrativeCreators {
+			c.withNamedNarrativeCreators[name] = q.clonePage()
+		}
+	}
+	c.withNoteCreators = _q.withNoteCreators.clonePage()
+	if _q.withNamedNoteCreators != nil {
+		c.withNamedNoteCreators = make(map[string]*GroupQuery, len(_q.withNamedNoteCreators))
+		for name, q := range _q.withNamedNoteCreators {
+			c.withNamedNoteCreators[name] = q.clonePage()
+		}
+	}
+	c.withNotificationTemplateCreators = _q.withNotificationTemplateCreators.clonePage()
+	if _q.withNamedNotificationTemplateCreators != nil {
+		c.withNamedNotificationTemplateCreators = make(map[string]*GroupQuery, len(_q.withNamedNotificationTemplateCreators))
+		for name, q := range _q.withNamedNotificationTemplateCreators {
+			c.withNamedNotificationTemplateCreators[name] = q.clonePage()
+		}
+	}
+	c.withOrgMembershipCreators = _q.withOrgMembershipCreators.clonePage()
+	if _q.withNamedOrgMembershipCreators != nil {
+		c.withNamedOrgMembershipCreators = make(map[string]*GroupQuery, len(_q.withNamedOrgMembershipCreators))
+		for name, q := range _q.withNamedOrgMembershipCreators {
+			c.withNamedOrgMembershipCreators[name] = q.clonePage()
+		}
+	}
+	c.withPlatformCreators = _q.withPlatformCreators.clonePage()
+	if _q.withNamedPlatformCreators != nil {
+		c.withNamedPlatformCreators = make(map[string]*GroupQuery, len(_q.withNamedPlatformCreators))
+		for name, q := range _q.withNamedPlatformCreators {
+			c.withNamedPlatformCreators[name] = q.clonePage()
+		}
+	}
+	c.withProcedureCreators = _q.withProcedureCreators.clonePage()
+	if _q.withNamedProcedureCreators != nil {
+		c.withNamedProcedureCreators = make(map[string]*GroupQuery, len(_q.withNamedProcedureCreators))
+		for name, q := range _q.withNamedProcedureCreators {
+			c.withNamedProcedureCreators[name] = q.clonePage()
+		}
+	}
+	c.withProgramCreators = _q.withProgramCreators.clonePage()
+	if _q.withNamedProgramCreators != nil {
+		c.withNamedProgramCreators = make(map[string]*GroupQuery, len(_q.withNamedProgramCreators))
+		for name, q := range _q.withNamedProgramCreators {
+			c.withNamedProgramCreators[name] = q.clonePage()
+		}
+	}
+	c.withProgramMembershipCreators = _q.withProgramMembershipCreators.clonePage()
+	if _q.withNamedProgramMembershipCreators != nil {
+		c.withNamedProgramMembershipCreators = make(map[string]*GroupQuery, len(_q.withNamedProgramMembershipCreators))
+		for name, q := range _q.withNamedProgramMembershipCreators {
+			c.withNamedProgramMembershipCreators[name] = q.clonePage()
+		}
+	}
+	c.withRemediationCreators = _q.withRemediationCreators.clonePage()
+	if _q.withNamedRemediationCreators != nil {
+		c.withNamedRemediationCreators = make(map[string]*GroupQuery, len(_q.withNamedRemediationCreators))
+		for name, q := range _q.withNamedRemediationCreators {
+			c.withNamedRemediationCreators[name] = q.clonePage()
+		}
+	}
+	c.withReviewCreators = _q.withReviewCreators.clonePage()
+	if _q.withNamedReviewCreators != nil {
+		c.withNamedReviewCreators = make(map[string]*GroupQuery, len(_q.withNamedReviewCreators))
+		for name, q := range _q.withNamedReviewCreators {
+			c.withNamedReviewCreators[name] = q.clonePage()
+		}
+	}
+	c.withRiskCreators = _q.withRiskCreators.clonePage()
+	if _q.withNamedRiskCreators != nil {
+		c.withNamedRiskCreators = make(map[string]*GroupQuery, len(_q.withNamedRiskCreators))
+		for name, q := range _q.withNamedRiskCreators {
+			c.withNamedRiskCreators[name] = q.clonePage()
+		}
+	}
+	c.withScanCreators = _q.withScanCreators.clonePage()
+	if _q.withNamedScanCreators != nil {
+		c.withNamedScanCreators = make(map[string]*GroupQuery, len(_q.withNamedScanCreators))
+		for name, q := range _q.withNamedScanCreators {
+			c.withNamedScanCreators[name] = q.clonePage()
+		}
+	}
+	c.withSLADefinitionCreators = _q.withSLADefinitionCreators.clonePage()
+	if _q.withNamedSLADefinitionCreators != nil {
+		c.withNamedSLADefinitionCreators = make(map[string]*GroupQuery, len(_q.withNamedSLADefinitionCreators))
+		for name, q := range _q.withNamedSLADefinitionCreators {
+			c.withNamedSLADefinitionCreators[name] = q.clonePage()
+		}
+	}
+	c.withStandardCreators = _q.withStandardCreators.clonePage()
+	if _q.withNamedStandardCreators != nil {
+		c.withNamedStandardCreators = make(map[string]*GroupQuery, len(_q.withNamedStandardCreators))
+		for name, q := range _q.withNamedStandardCreators {
+			c.withNamedStandardCreators[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrolCreators = _q.withSubcontrolCreators.clonePage()
+	if _q.withNamedSubcontrolCreators != nil {
+		c.withNamedSubcontrolCreators = make(map[string]*GroupQuery, len(_q.withNamedSubcontrolCreators))
+		for name, q := range _q.withNamedSubcontrolCreators {
+			c.withNamedSubcontrolCreators[name] = q.clonePage()
+		}
+	}
+	c.withSubprocessorCreators = _q.withSubprocessorCreators.clonePage()
+	if _q.withNamedSubprocessorCreators != nil {
+		c.withNamedSubprocessorCreators = make(map[string]*GroupQuery, len(_q.withNamedSubprocessorCreators))
+		for name, q := range _q.withNamedSubprocessorCreators {
+			c.withNamedSubprocessorCreators[name] = q.clonePage()
+		}
+	}
+	c.withSubscriberCreators = _q.withSubscriberCreators.clonePage()
+	if _q.withNamedSubscriberCreators != nil {
+		c.withNamedSubscriberCreators = make(map[string]*GroupQuery, len(_q.withNamedSubscriberCreators))
+		for name, q := range _q.withNamedSubscriberCreators {
+			c.withNamedSubscriberCreators[name] = q.clonePage()
+		}
+	}
+	c.withSystemDetailCreators = _q.withSystemDetailCreators.clonePage()
+	if _q.withNamedSystemDetailCreators != nil {
+		c.withNamedSystemDetailCreators = make(map[string]*GroupQuery, len(_q.withNamedSystemDetailCreators))
+		for name, q := range _q.withNamedSystemDetailCreators {
+			c.withNamedSystemDetailCreators[name] = q.clonePage()
+		}
+	}
+	c.withTagDefinitionCreators = _q.withTagDefinitionCreators.clonePage()
+	if _q.withNamedTagDefinitionCreators != nil {
+		c.withNamedTagDefinitionCreators = make(map[string]*GroupQuery, len(_q.withNamedTagDefinitionCreators))
+		for name, q := range _q.withNamedTagDefinitionCreators {
+			c.withNamedTagDefinitionCreators[name] = q.clonePage()
+		}
+	}
+	c.withTaskCreators = _q.withTaskCreators.clonePage()
+	if _q.withNamedTaskCreators != nil {
+		c.withNamedTaskCreators = make(map[string]*GroupQuery, len(_q.withNamedTaskCreators))
+		for name, q := range _q.withNamedTaskCreators {
+			c.withNamedTaskCreators[name] = q.clonePage()
+		}
+	}
+	c.withTemplateCreators = _q.withTemplateCreators.clonePage()
+	if _q.withNamedTemplateCreators != nil {
+		c.withNamedTemplateCreators = make(map[string]*GroupQuery, len(_q.withNamedTemplateCreators))
+		for name, q := range _q.withNamedTemplateCreators {
+			c.withNamedTemplateCreators[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterCreators = _q.withTrustCenterCreators.clonePage()
+	if _q.withNamedTrustCenterCreators != nil {
+		c.withNamedTrustCenterCreators = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterCreators))
+		for name, q := range _q.withNamedTrustCenterCreators {
+			c.withNamedTrustCenterCreators[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterComplianceCreators = _q.withTrustCenterComplianceCreators.clonePage()
+	if _q.withNamedTrustCenterComplianceCreators != nil {
+		c.withNamedTrustCenterComplianceCreators = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterComplianceCreators))
+		for name, q := range _q.withNamedTrustCenterComplianceCreators {
+			c.withNamedTrustCenterComplianceCreators[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterDocCreators = _q.withTrustCenterDocCreators.clonePage()
+	if _q.withNamedTrustCenterDocCreators != nil {
+		c.withNamedTrustCenterDocCreators = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterDocCreators))
+		for name, q := range _q.withNamedTrustCenterDocCreators {
+			c.withNamedTrustCenterDocCreators[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterEntityCreators = _q.withTrustCenterEntityCreators.clonePage()
+	if _q.withNamedTrustCenterEntityCreators != nil {
+		c.withNamedTrustCenterEntityCreators = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterEntityCreators))
+		for name, q := range _q.withNamedTrustCenterEntityCreators {
+			c.withNamedTrustCenterEntityCreators[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterFaqCreators = _q.withTrustCenterFaqCreators.clonePage()
+	if _q.withNamedTrustCenterFaqCreators != nil {
+		c.withNamedTrustCenterFaqCreators = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterFaqCreators))
+		for name, q := range _q.withNamedTrustCenterFaqCreators {
+			c.withNamedTrustCenterFaqCreators[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterNdaRequestCreators = _q.withTrustCenterNdaRequestCreators.clonePage()
+	if _q.withNamedTrustCenterNdaRequestCreators != nil {
+		c.withNamedTrustCenterNdaRequestCreators = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterNdaRequestCreators))
+		for name, q := range _q.withNamedTrustCenterNdaRequestCreators {
+			c.withNamedTrustCenterNdaRequestCreators[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterSubprocessorCreators = _q.withTrustCenterSubprocessorCreators.clonePage()
+	if _q.withNamedTrustCenterSubprocessorCreators != nil {
+		c.withNamedTrustCenterSubprocessorCreators = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterSubprocessorCreators))
+		for name, q := range _q.withNamedTrustCenterSubprocessorCreators {
+			c.withNamedTrustCenterSubprocessorCreators[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterWatermarkConfigCreators = _q.withTrustCenterWatermarkConfigCreators.clonePage()
+	if _q.withNamedTrustCenterWatermarkConfigCreators != nil {
+		c.withNamedTrustCenterWatermarkConfigCreators = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterWatermarkConfigCreators))
+		for name, q := range _q.withNamedTrustCenterWatermarkConfigCreators {
+			c.withNamedTrustCenterWatermarkConfigCreators[name] = q.clonePage()
+		}
+	}
+	c.withVendorRiskScoreCreators = _q.withVendorRiskScoreCreators.clonePage()
+	if _q.withNamedVendorRiskScoreCreators != nil {
+		c.withNamedVendorRiskScoreCreators = make(map[string]*GroupQuery, len(_q.withNamedVendorRiskScoreCreators))
+		for name, q := range _q.withNamedVendorRiskScoreCreators {
+			c.withNamedVendorRiskScoreCreators[name] = q.clonePage()
+		}
+	}
+	c.withVendorScoringConfigCreators = _q.withVendorScoringConfigCreators.clonePage()
+	if _q.withNamedVendorScoringConfigCreators != nil {
+		c.withNamedVendorScoringConfigCreators = make(map[string]*GroupQuery, len(_q.withNamedVendorScoringConfigCreators))
+		for name, q := range _q.withNamedVendorScoringConfigCreators {
+			c.withNamedVendorScoringConfigCreators[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilityCreators = _q.withVulnerabilityCreators.clonePage()
+	if _q.withNamedVulnerabilityCreators != nil {
+		c.withNamedVulnerabilityCreators = make(map[string]*GroupQuery, len(_q.withNamedVulnerabilityCreators))
+		for name, q := range _q.withNamedVulnerabilityCreators {
+			c.withNamedVulnerabilityCreators[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowDefinitionCreators = _q.withWorkflowDefinitionCreators.clonePage()
+	if _q.withNamedWorkflowDefinitionCreators != nil {
+		c.withNamedWorkflowDefinitionCreators = make(map[string]*GroupQuery, len(_q.withNamedWorkflowDefinitionCreators))
+		for name, q := range _q.withNamedWorkflowDefinitionCreators {
+			c.withNamedWorkflowDefinitionCreators[name] = q.clonePage()
+		}
+	}
+	c.withCampaignsManager = _q.withCampaignsManager.clonePage()
+	if _q.withNamedCampaignsManager != nil {
+		c.withNamedCampaignsManager = make(map[string]*GroupQuery, len(_q.withNamedCampaignsManager))
+		for name, q := range _q.withNamedCampaignsManager {
+			c.withNamedCampaignsManager[name] = q.clonePage()
+		}
+	}
+	c.withComplianceManager = _q.withComplianceManager.clonePage()
+	if _q.withNamedComplianceManager != nil {
+		c.withNamedComplianceManager = make(map[string]*GroupQuery, len(_q.withNamedComplianceManager))
+		for name, q := range _q.withNamedComplianceManager {
+			c.withNamedComplianceManager[name] = q.clonePage()
+		}
+	}
+	c.withGroupManager = _q.withGroupManager.clonePage()
+	if _q.withNamedGroupManager != nil {
+		c.withNamedGroupManager = make(map[string]*GroupQuery, len(_q.withNamedGroupManager))
+		for name, q := range _q.withNamedGroupManager {
+			c.withNamedGroupManager[name] = q.clonePage()
+		}
+	}
+	c.withPoliciesManager = _q.withPoliciesManager.clonePage()
+	if _q.withNamedPoliciesManager != nil {
+		c.withNamedPoliciesManager = make(map[string]*GroupQuery, len(_q.withNamedPoliciesManager))
+		for name, q := range _q.withNamedPoliciesManager {
+			c.withNamedPoliciesManager[name] = q.clonePage()
+		}
+	}
+	c.withRegistryManager = _q.withRegistryManager.clonePage()
+	if _q.withNamedRegistryManager != nil {
+		c.withNamedRegistryManager = make(map[string]*GroupQuery, len(_q.withNamedRegistryManager))
+		for name, q := range _q.withNamedRegistryManager {
+			c.withNamedRegistryManager[name] = q.clonePage()
+		}
+	}
+	c.withRiskManager = _q.withRiskManager.clonePage()
+	if _q.withNamedRiskManager != nil {
+		c.withNamedRiskManager = make(map[string]*GroupQuery, len(_q.withNamedRiskManager))
+		for name, q := range _q.withNamedRiskManager {
+			c.withNamedRiskManager[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterManager = _q.withTrustCenterManager.clonePage()
+	if _q.withNamedTrustCenterManager != nil {
+		c.withNamedTrustCenterManager = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterManager))
+		for name, q := range _q.withNamedTrustCenterManager {
+			c.withNamedTrustCenterManager[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowsManager = _q.withWorkflowsManager.clonePage()
+	if _q.withNamedWorkflowsManager != nil {
+		c.withNamedWorkflowsManager = make(map[string]*GroupQuery, len(_q.withNamedWorkflowsManager))
+		for name, q := range _q.withNamedWorkflowsManager {
+			c.withNamedWorkflowsManager[name] = q.clonePage()
+		}
+	}
+	c.withParent = _q.withParent.clonePage()
+	c.withChildren = _q.withChildren.clonePage()
+	if _q.withNamedChildren != nil {
+		c.withNamedChildren = make(map[string]*OrganizationQuery, len(_q.withNamedChildren))
+		for name, q := range _q.withNamedChildren {
+			c.withNamedChildren[name] = q.clonePage()
+		}
+	}
+	c.withSetting = _q.withSetting.clonePage()
+	c.withPersonalAccessTokens = _q.withPersonalAccessTokens.clonePage()
+	if _q.withNamedPersonalAccessTokens != nil {
+		c.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery, len(_q.withNamedPersonalAccessTokens))
+		for name, q := range _q.withNamedPersonalAccessTokens {
+			c.withNamedPersonalAccessTokens[name] = q.clonePage()
+		}
+	}
+	c.withAPITokens = _q.withAPITokens.clonePage()
+	if _q.withNamedAPITokens != nil {
+		c.withNamedAPITokens = make(map[string]*APITokenQuery, len(_q.withNamedAPITokens))
+		for name, q := range _q.withNamedAPITokens {
+			c.withNamedAPITokens[name] = q.clonePage()
+		}
+	}
+	c.withEmailTemplates = _q.withEmailTemplates.clonePage()
+	if _q.withNamedEmailTemplates != nil {
+		c.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery, len(_q.withNamedEmailTemplates))
+		for name, q := range _q.withNamedEmailTemplates {
+			c.withNamedEmailTemplates[name] = q.clonePage()
+		}
+	}
+	c.withIntegrationWebhooks = _q.withIntegrationWebhooks.clonePage()
+	if _q.withNamedIntegrationWebhooks != nil {
+		c.withNamedIntegrationWebhooks = make(map[string]*IntegrationWebhookQuery, len(_q.withNamedIntegrationWebhooks))
+		for name, q := range _q.withNamedIntegrationWebhooks {
+			c.withNamedIntegrationWebhooks[name] = q.clonePage()
+		}
+	}
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withNotificationPreferences = _q.withNotificationPreferences.clonePage()
+	if _q.withNamedNotificationPreferences != nil {
+		c.withNamedNotificationPreferences = make(map[string]*NotificationPreferenceQuery, len(_q.withNamedNotificationPreferences))
+		for name, q := range _q.withNamedNotificationPreferences {
+			c.withNamedNotificationPreferences[name] = q.clonePage()
+		}
+	}
+	c.withNotificationTemplates = _q.withNotificationTemplates.clonePage()
+	if _q.withNamedNotificationTemplates != nil {
+		c.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery, len(_q.withNamedNotificationTemplates))
+		for name, q := range _q.withNamedNotificationTemplates {
+			c.withNamedNotificationTemplates[name] = q.clonePage()
+		}
+	}
+	c.withUsers = _q.withUsers.clonePage()
+	if _q.withNamedUsers != nil {
+		c.withNamedUsers = make(map[string]*UserQuery, len(_q.withNamedUsers))
+		for name, q := range _q.withNamedUsers {
+			c.withNamedUsers[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withSecrets = _q.withSecrets.clonePage()
+	if _q.withNamedSecrets != nil {
+		c.withNamedSecrets = make(map[string]*HushQuery, len(_q.withNamedSecrets))
+		for name, q := range _q.withNamedSecrets {
+			c.withNamedSecrets[name] = q.clonePage()
+		}
+	}
+	c.withAvatarFile = _q.withAvatarFile.clonePage()
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.withTemplates = _q.withTemplates.clonePage()
+	if _q.withNamedTemplates != nil {
+		c.withNamedTemplates = make(map[string]*TemplateQuery, len(_q.withNamedTemplates))
+		for name, q := range _q.withNamedTemplates {
+			c.withNamedTemplates[name] = q.clonePage()
+		}
+	}
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withDocuments = _q.withDocuments.clonePage()
+	if _q.withNamedDocuments != nil {
+		c.withNamedDocuments = make(map[string]*DocumentDataQuery, len(_q.withNamedDocuments))
+		for name, q := range _q.withNamedDocuments {
+			c.withNamedDocuments[name] = q.clonePage()
+		}
+	}
+	c.withOrgSubscriptions = _q.withOrgSubscriptions.clonePage()
+	if _q.withNamedOrgSubscriptions != nil {
+		c.withNamedOrgSubscriptions = make(map[string]*OrgSubscriptionQuery, len(_q.withNamedOrgSubscriptions))
+		for name, q := range _q.withNamedOrgSubscriptions {
+			c.withNamedOrgSubscriptions[name] = q.clonePage()
+		}
+	}
+	c.withOrgProducts = _q.withOrgProducts.clonePage()
+	if _q.withNamedOrgProducts != nil {
+		c.withNamedOrgProducts = make(map[string]*OrgProductQuery, len(_q.withNamedOrgProducts))
+		for name, q := range _q.withNamedOrgProducts {
+			c.withNamedOrgProducts[name] = q.clonePage()
+		}
+	}
+	c.withOrgPrices = _q.withOrgPrices.clonePage()
+	if _q.withNamedOrgPrices != nil {
+		c.withNamedOrgPrices = make(map[string]*OrgPriceQuery, len(_q.withNamedOrgPrices))
+		for name, q := range _q.withNamedOrgPrices {
+			c.withNamedOrgPrices[name] = q.clonePage()
+		}
+	}
+	c.withOrgModules = _q.withOrgModules.clonePage()
+	if _q.withNamedOrgModules != nil {
+		c.withNamedOrgModules = make(map[string]*OrgModuleQuery, len(_q.withNamedOrgModules))
+		for name, q := range _q.withNamedOrgModules {
+			c.withNamedOrgModules[name] = q.clonePage()
+		}
+	}
+	c.withInvites = _q.withInvites.clonePage()
+	if _q.withNamedInvites != nil {
+		c.withNamedInvites = make(map[string]*InviteQuery, len(_q.withNamedInvites))
+		for name, q := range _q.withNamedInvites {
+			c.withNamedInvites[name] = q.clonePage()
+		}
+	}
+	c.withSubscribers = _q.withSubscribers.clonePage()
+	if _q.withNamedSubscribers != nil {
+		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_q.withNamedSubscribers))
+		for name, q := range _q.withNamedSubscribers {
+			c.withNamedSubscribers[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withCampaignTargets = _q.withCampaignTargets.clonePage()
+	if _q.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_q.withNamedCampaignTargets))
+		for name, q := range _q.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.clonePage()
+		}
+	}
+	c.withEntityTypes = _q.withEntityTypes.clonePage()
+	if _q.withNamedEntityTypes != nil {
+		c.withNamedEntityTypes = make(map[string]*EntityTypeQuery, len(_q.withNamedEntityTypes))
+		for name, q := range _q.withNamedEntityTypes {
+			c.withNamedEntityTypes[name] = q.clonePage()
+		}
+	}
+	c.withContacts = _q.withContacts.clonePage()
+	if _q.withNamedContacts != nil {
+		c.withNamedContacts = make(map[string]*ContactQuery, len(_q.withNamedContacts))
+		for name, q := range _q.withNamedContacts {
+			c.withNamedContacts[name] = q.clonePage()
+		}
+	}
+	c.withNotes = _q.withNotes.clonePage()
+	if _q.withNamedNotes != nil {
+		c.withNamedNotes = make(map[string]*NoteQuery, len(_q.withNamedNotes))
+		for name, q := range _q.withNamedNotes {
+			c.withNamedNotes[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withSystemDetails = _q.withSystemDetails.clonePage()
+	if _q.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_q.withNamedSystemDetails))
+		for name, q := range _q.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectives = _q.withControlObjectives.clonePage()
+	if _q.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectives))
+		for name, q := range _q.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.clonePage()
+		}
+	}
+	c.withNarratives = _q.withNarratives.clonePage()
+	if _q.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_q.withNamedNarratives))
+		for name, q := range _q.withNamedNarratives {
+			c.withNamedNarratives[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementations = _q.withControlImplementations.clonePage()
+	if _q.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementations))
+		for name, q := range _q.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.clonePage()
+		}
+	}
+	c.withMappedControls = _q.withMappedControls.clonePage()
+	if _q.withNamedMappedControls != nil {
+		c.withNamedMappedControls = make(map[string]*MappedControlQuery, len(_q.withNamedMappedControls))
+		for name, q := range _q.withNamedMappedControls {
+			c.withNamedMappedControls[name] = q.clonePage()
+		}
+	}
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withStandards = _q.withStandards.clonePage()
+	if _q.withNamedStandards != nil {
+		c.withNamedStandards = make(map[string]*StandardQuery, len(_q.withNamedStandards))
+		for name, q := range _q.withNamedStandards {
+			c.withNamedStandards[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withCustomDomains = _q.withCustomDomains.clonePage()
+	if _q.withNamedCustomDomains != nil {
+		c.withNamedCustomDomains = make(map[string]*CustomDomainQuery, len(_q.withNamedCustomDomains))
+		for name, q := range _q.withNamedCustomDomains {
+			c.withNamedCustomDomains[name] = q.clonePage()
+		}
+	}
+	c.withDNSVerifications = _q.withDNSVerifications.clonePage()
+	if _q.withNamedDNSVerifications != nil {
+		c.withNamedDNSVerifications = make(map[string]*DNSVerificationQuery, len(_q.withNamedDNSVerifications))
+		for name, q := range _q.withNamedDNSVerifications {
+			c.withNamedDNSVerifications[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenters = _q.withTrustCenters.clonePage()
+	if _q.withNamedTrustCenters != nil {
+		c.withNamedTrustCenters = make(map[string]*TrustCenterQuery, len(_q.withNamedTrustCenters))
+		for name, q := range _q.withNamedTrustCenters {
+			c.withNamedTrustCenters[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withSLADefinitions = _q.withSLADefinitions.clonePage()
+	if _q.withNamedSLADefinitions != nil {
+		c.withNamedSLADefinitions = make(map[string]*SLADefinitionQuery, len(_q.withNamedSLADefinitions))
+		for name, q := range _q.withNamedSLADefinitions {
+			c.withNamedSLADefinitions[name] = q.clonePage()
+		}
+	}
+	c.withSubprocessors = _q.withSubprocessors.clonePage()
+	if _q.withNamedSubprocessors != nil {
+		c.withNamedSubprocessors = make(map[string]*SubprocessorQuery, len(_q.withNamedSubprocessors))
+		for name, q := range _q.withNamedSubprocessors {
+			c.withNamedSubprocessors[name] = q.clonePage()
+		}
+	}
+	c.withExports = _q.withExports.clonePage()
+	if _q.withNamedExports != nil {
+		c.withNamedExports = make(map[string]*ExportQuery, len(_q.withNamedExports))
+		for name, q := range _q.withNamedExports {
+			c.withNamedExports[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterWatermarkConfigs = _q.withTrustCenterWatermarkConfigs.clonePage()
+	if _q.withNamedTrustCenterWatermarkConfigs != nil {
+		c.withNamedTrustCenterWatermarkConfigs = make(map[string]*TrustCenterWatermarkConfigQuery, len(_q.withNamedTrustCenterWatermarkConfigs))
+		for name, q := range _q.withNamedTrustCenterWatermarkConfigs {
+			c.withNamedTrustCenterWatermarkConfigs[name] = q.clonePage()
+		}
+	}
+	c.withImpersonationEvents = _q.withImpersonationEvents.clonePage()
+	if _q.withNamedImpersonationEvents != nil {
+		c.withNamedImpersonationEvents = make(map[string]*ImpersonationEventQuery, len(_q.withNamedImpersonationEvents))
+		for name, q := range _q.withNamedImpersonationEvents {
+			c.withNamedImpersonationEvents[name] = q.clonePage()
+		}
+	}
+	c.withAssessments = _q.withAssessments.clonePage()
+	if _q.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_q.withNamedAssessments))
+		for name, q := range _q.withNamedAssessments {
+			c.withNamedAssessments[name] = q.clonePage()
+		}
+	}
+	c.withAssessmentResponses = _q.withAssessmentResponses.clonePage()
+	if _q.withNamedAssessmentResponses != nil {
+		c.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery, len(_q.withNamedAssessmentResponses))
+		for name, q := range _q.withNamedAssessmentResponses {
+			c.withNamedAssessmentResponses[name] = q.clonePage()
+		}
+	}
+	c.withAssessmentPolicies = _q.withAssessmentPolicies.clonePage()
+	if _q.withNamedAssessmentPolicies != nil {
+		c.withNamedAssessmentPolicies = make(map[string]*AssessmentPolicyQuery, len(_q.withNamedAssessmentPolicies))
+		for name, q := range _q.withNamedAssessmentPolicies {
+			c.withNamedAssessmentPolicies[name] = q.clonePage()
+		}
+	}
+	c.withCustomTypeEnums = _q.withCustomTypeEnums.clonePage()
+	if _q.withNamedCustomTypeEnums != nil {
+		c.withNamedCustomTypeEnums = make(map[string]*CustomTypeEnumQuery, len(_q.withNamedCustomTypeEnums))
+		for name, q := range _q.withNamedCustomTypeEnums {
+			c.withNamedCustomTypeEnums[name] = q.clonePage()
+		}
+	}
+	c.withTagDefinitions = _q.withTagDefinitions.clonePage()
+	if _q.withNamedTagDefinitions != nil {
+		c.withNamedTagDefinitions = make(map[string]*TagDefinitionQuery, len(_q.withNamedTagDefinitions))
+		for name, q := range _q.withNamedTagDefinitions {
+			c.withNamedTagDefinitions[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withFindingControls = _q.withFindingControls.clonePage()
+	if _q.withNamedFindingControls != nil {
+		c.withNamedFindingControls = make(map[string]*FindingControlQuery, len(_q.withNamedFindingControls))
+		for name, q := range _q.withNamedFindingControls {
+			c.withNamedFindingControls[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withNotifications = _q.withNotifications.clonePage()
+	if _q.withNamedNotifications != nil {
+		c.withNamedNotifications = make(map[string]*NotificationQuery, len(_q.withNamedNotifications))
+		for name, q := range _q.withNamedNotifications {
+			c.withNamedNotifications[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowDefinitions = _q.withWorkflowDefinitions.clonePage()
+	if _q.withNamedWorkflowDefinitions != nil {
+		c.withNamedWorkflowDefinitions = make(map[string]*WorkflowDefinitionQuery, len(_q.withNamedWorkflowDefinitions))
+		for name, q := range _q.withNamedWorkflowDefinitions {
+			c.withNamedWorkflowDefinitions[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowInstances = _q.withWorkflowInstances.clonePage()
+	if _q.withNamedWorkflowInstances != nil {
+		c.withNamedWorkflowInstances = make(map[string]*WorkflowInstanceQuery, len(_q.withNamedWorkflowInstances))
+		for name, q := range _q.withNamedWorkflowInstances {
+			c.withNamedWorkflowInstances[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowEvents = _q.withWorkflowEvents.clonePage()
+	if _q.withNamedWorkflowEvents != nil {
+		c.withNamedWorkflowEvents = make(map[string]*WorkflowEventQuery, len(_q.withNamedWorkflowEvents))
+		for name, q := range _q.withNamedWorkflowEvents {
+			c.withNamedWorkflowEvents[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowAssignments = _q.withWorkflowAssignments.clonePage()
+	if _q.withNamedWorkflowAssignments != nil {
+		c.withNamedWorkflowAssignments = make(map[string]*WorkflowAssignmentQuery, len(_q.withNamedWorkflowAssignments))
+		for name, q := range _q.withNamedWorkflowAssignments {
+			c.withNamedWorkflowAssignments[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowAssignmentTargets = _q.withWorkflowAssignmentTargets.clonePage()
+	if _q.withNamedWorkflowAssignmentTargets != nil {
+		c.withNamedWorkflowAssignmentTargets = make(map[string]*WorkflowAssignmentTargetQuery, len(_q.withNamedWorkflowAssignmentTargets))
+		for name, q := range _q.withNamedWorkflowAssignmentTargets {
+			c.withNamedWorkflowAssignmentTargets[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowProposals = _q.withWorkflowProposals.clonePage()
+	if _q.withNamedWorkflowProposals != nil {
+		c.withNamedWorkflowProposals = make(map[string]*WorkflowProposalQuery, len(_q.withNamedWorkflowProposals))
+		for name, q := range _q.withNamedWorkflowProposals {
+			c.withNamedWorkflowProposals[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryAccounts = _q.withDirectoryAccounts.clonePage()
+	if _q.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_q.withNamedDirectoryAccounts))
+		for name, q := range _q.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryGroups = _q.withDirectoryGroups.clonePage()
+	if _q.withNamedDirectoryGroups != nil {
+		c.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery, len(_q.withNamedDirectoryGroups))
+		for name, q := range _q.withNamedDirectoryGroups {
+			c.withNamedDirectoryGroups[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryMemberships = _q.withDirectoryMemberships.clonePage()
+	if _q.withNamedDirectoryMemberships != nil {
+		c.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery, len(_q.withNamedDirectoryMemberships))
+		for name, q := range _q.withNamedDirectoryMemberships {
+			c.withNamedDirectoryMemberships[name] = q.clonePage()
+		}
+	}
+	c.withDiscussions = _q.withDiscussions.clonePage()
+	if _q.withNamedDiscussions != nil {
+		c.withNamedDiscussions = make(map[string]*DiscussionQuery, len(_q.withNamedDiscussions))
+		for name, q := range _q.withNamedDiscussions {
+			c.withNamedDiscussions[name] = q.clonePage()
+		}
+	}
+	c.withVendorScoringConfigs = _q.withVendorScoringConfigs.clonePage()
+	if _q.withNamedVendorScoringConfigs != nil {
+		c.withNamedVendorScoringConfigs = make(map[string]*VendorScoringConfigQuery, len(_q.withNamedVendorScoringConfigs))
+		for name, q := range _q.withNamedVendorScoringConfigs {
+			c.withNamedVendorScoringConfigs[name] = q.clonePage()
+		}
+	}
+	c.withVendorRiskScores = _q.withVendorRiskScores.clonePage()
+	if _q.withNamedVendorRiskScores != nil {
+		c.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery, len(_q.withNamedVendorRiskScores))
+		for name, q := range _q.withNamedVendorRiskScores {
+			c.withNamedVendorRiskScores[name] = q.clonePage()
+		}
+	}
+	c.withMembers = _q.withMembers.clonePage()
+	if _q.withNamedMembers != nil {
+		c.withNamedMembers = make(map[string]*OrgMembershipQuery, len(_q.withNamedMembers))
+		for name, q := range _q.withNamedMembers {
+			c.withNamedMembers[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrganizationSettingQuery) clonePage() *OrganizationSettingQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOrganization = _q.withOrganization.clonePage()
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *PasswordResetTokenQuery) clonePage() *PasswordResetTokenQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *PersonalAccessTokenQuery) clonePage() *PersonalAccessTokenQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withOrganizations = _q.withOrganizations.clonePage()
+	if _q.withNamedOrganizations != nil {
+		c.withNamedOrganizations = make(map[string]*OrganizationQuery, len(_q.withNamedOrganizations))
+		for name, q := range _q.withNamedOrganizations {
+			c.withNamedOrganizations[name] = q.clonePage()
+		}
+	}
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *PlatformQuery) clonePage() *PlatformQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withBusinessOwnerUser = _q.withBusinessOwnerUser.clonePage()
+	c.withBusinessOwnerGroup = _q.withBusinessOwnerGroup.clonePage()
+	c.withBusinessOwnerIdentityHolder = _q.withBusinessOwnerIdentityHolder.clonePage()
+	c.withTechnicalOwnerUser = _q.withTechnicalOwnerUser.clonePage()
+	c.withTechnicalOwnerGroup = _q.withTechnicalOwnerGroup.clonePage()
+	c.withTechnicalOwnerIdentityHolder = _q.withTechnicalOwnerIdentityHolder.clonePage()
+	c.withSecurityOwnerUser = _q.withSecurityOwnerUser.clonePage()
+	c.withSecurityOwnerGroup = _q.withSecurityOwnerGroup.clonePage()
+	c.withSecurityOwnerIdentityHolder = _q.withSecurityOwnerIdentityHolder.clonePage()
+	c.withPlatformKind = _q.withPlatformKind.clonePage()
+	c.withPlatformDataClassification = _q.withPlatformDataClassification.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withAccessModel = _q.withAccessModel.clonePage()
+	c.withEncryptionStatus = _q.withEncryptionStatus.clonePage()
+	c.withSecurityTier = _q.withSecurityTier.clonePage()
+	c.withCriticality = _q.withCriticality.clonePage()
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withArchitectureDiagrams = _q.withArchitectureDiagrams.clonePage()
+	if _q.withNamedArchitectureDiagrams != nil {
+		c.withNamedArchitectureDiagrams = make(map[string]*FileQuery, len(_q.withNamedArchitectureDiagrams))
+		for name, q := range _q.withNamedArchitectureDiagrams {
+			c.withNamedArchitectureDiagrams[name] = q.clonePage()
+		}
+	}
+	c.withDataFlowDiagrams = _q.withDataFlowDiagrams.clonePage()
+	if _q.withNamedDataFlowDiagrams != nil {
+		c.withNamedDataFlowDiagrams = make(map[string]*FileQuery, len(_q.withNamedDataFlowDiagrams))
+		for name, q := range _q.withNamedDataFlowDiagrams {
+			c.withNamedDataFlowDiagrams[name] = q.clonePage()
+		}
+	}
+	c.withTrustBoundaryDiagrams = _q.withTrustBoundaryDiagrams.clonePage()
+	if _q.withNamedTrustBoundaryDiagrams != nil {
+		c.withNamedTrustBoundaryDiagrams = make(map[string]*FileQuery, len(_q.withNamedTrustBoundaryDiagrams))
+		for name, q := range _q.withNamedTrustBoundaryDiagrams {
+			c.withNamedTrustBoundaryDiagrams[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withAssessments = _q.withAssessments.clonePage()
+	if _q.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_q.withNamedAssessments))
+		for name, q := range _q.withNamedAssessments {
+			c.withNamedAssessments[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryAccounts = _q.withDirectoryAccounts.clonePage()
+	if _q.withNamedDirectoryAccounts != nil {
+		c.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery, len(_q.withNamedDirectoryAccounts))
+		for name, q := range _q.withNamedDirectoryAccounts {
+			c.withNamedDirectoryAccounts[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryGroups = _q.withDirectoryGroups.clonePage()
+	if _q.withNamedDirectoryGroups != nil {
+		c.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery, len(_q.withNamedDirectoryGroups))
+		for name, q := range _q.withNamedDirectoryGroups {
+			c.withNamedDirectoryGroups[name] = q.clonePage()
+		}
+	}
+	c.withDirectoryMemberships = _q.withDirectoryMemberships.clonePage()
+	if _q.withNamedDirectoryMemberships != nil {
+		c.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery, len(_q.withNamedDirectoryMemberships))
+		for name, q := range _q.withNamedDirectoryMemberships {
+			c.withNamedDirectoryMemberships[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withSourceAssets = _q.withSourceAssets.clonePage()
+	if _q.withNamedSourceAssets != nil {
+		c.withNamedSourceAssets = make(map[string]*AssetQuery, len(_q.withNamedSourceAssets))
+		for name, q := range _q.withNamedSourceAssets {
+			c.withNamedSourceAssets[name] = q.clonePage()
+		}
+	}
+	c.withSourceEntities = _q.withSourceEntities.clonePage()
+	if _q.withNamedSourceEntities != nil {
+		c.withNamedSourceEntities = make(map[string]*EntityQuery, len(_q.withNamedSourceEntities))
+		for name, q := range _q.withNamedSourceEntities {
+			c.withNamedSourceEntities[name] = q.clonePage()
+		}
+	}
+	c.withOutOfScopeAssets = _q.withOutOfScopeAssets.clonePage()
+	if _q.withNamedOutOfScopeAssets != nil {
+		c.withNamedOutOfScopeAssets = make(map[string]*AssetQuery, len(_q.withNamedOutOfScopeAssets))
+		for name, q := range _q.withNamedOutOfScopeAssets {
+			c.withNamedOutOfScopeAssets[name] = q.clonePage()
+		}
+	}
+	c.withOutOfScopeVendors = _q.withOutOfScopeVendors.clonePage()
+	if _q.withNamedOutOfScopeVendors != nil {
+		c.withNamedOutOfScopeVendors = make(map[string]*EntityQuery, len(_q.withNamedOutOfScopeVendors))
+		for name, q := range _q.withNamedOutOfScopeVendors {
+			c.withNamedOutOfScopeVendors[name] = q.clonePage()
+		}
+	}
+	c.withApplicableFrameworks = _q.withApplicableFrameworks.clonePage()
+	if _q.withNamedApplicableFrameworks != nil {
+		c.withNamedApplicableFrameworks = make(map[string]*StandardQuery, len(_q.withNamedApplicableFrameworks))
+		for name, q := range _q.withNamedApplicableFrameworks {
+			c.withNamedApplicableFrameworks[name] = q.clonePage()
+		}
+	}
+	c.withGeneratedScans = _q.withGeneratedScans.clonePage()
+	if _q.withNamedGeneratedScans != nil {
+		c.withNamedGeneratedScans = make(map[string]*ScanQuery, len(_q.withNamedGeneratedScans))
+		for name, q := range _q.withNamedGeneratedScans {
+			c.withNamedGeneratedScans[name] = q.clonePage()
+		}
+	}
+	c.withPlatformOwner = _q.withPlatformOwner.clonePage()
+	c.withSystemDetails = _q.withSystemDetails.clonePage()
+	if _q.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_q.withNamedSystemDetails))
+		for name, q := range _q.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProcedureQuery) clonePage() *ProcedureQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withApprover = _q.withApprover.clonePage()
+	c.withDelegate = _q.withDelegate.clonePage()
+	c.withProcedureKind = _q.withProcedureKind.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withNarratives = _q.withNarratives.clonePage()
+	if _q.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_q.withNamedNarratives))
+		for name, q := range _q.withNamedNarratives {
+			c.withNamedNarratives[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withDiscussions = _q.withDiscussions.clonePage()
+	if _q.withNamedDiscussions != nil {
+		c.withNamedDiscussions = make(map[string]*DiscussionQuery, len(_q.withNamedDiscussions))
+		for name, q := range _q.withNamedDiscussions {
+			c.withNamedDiscussions[name] = q.clonePage()
+		}
+	}
+	c.withFile = _q.withFile.clonePage()
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProgramQuery) clonePage() *ProgramQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withProgramKind = _q.withProgramKind.clonePage()
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectives = _q.withControlObjectives.clonePage()
+	if _q.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectives))
+		for name, q := range _q.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withNotes = _q.withNotes.clonePage()
+	if _q.withNamedNotes != nil {
+		c.withNamedNotes = make(map[string]*NoteQuery, len(_q.withNamedNotes))
+		for name, q := range _q.withNamedNotes {
+			c.withNamedNotes[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withNarratives = _q.withNarratives.clonePage()
+	if _q.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_q.withNamedNarratives))
+		for name, q := range _q.withNamedNarratives {
+			c.withNamedNarratives[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withSystemDetails = _q.withSystemDetails.clonePage()
+	if _q.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_q.withNamedSystemDetails))
+		for name, q := range _q.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withUsers = _q.withUsers.clonePage()
+	if _q.withNamedUsers != nil {
+		c.withNamedUsers = make(map[string]*UserQuery, len(_q.withNamedUsers))
+		for name, q := range _q.withNamedUsers {
+			c.withNamedUsers[name] = q.clonePage()
+		}
+	}
+	c.withProgramOwner = _q.withProgramOwner.clonePage()
+	c.withMembers = _q.withMembers.clonePage()
+	if _q.withNamedMembers != nil {
+		c.withNamedMembers = make(map[string]*ProgramMembershipQuery, len(_q.withNamedMembers))
+		for name, q := range _q.withNamedMembers {
+			c.withNamedMembers[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProgramMembershipQuery) clonePage() *ProgramMembershipQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withProgram = _q.withProgram.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.withOrgMembership = _q.withOrgMembership.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *RemediationQuery) clonePage() *RemediationQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ReviewQuery) clonePage() *ReviewQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withReviewer = _q.withReviewer.clonePage()
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *RiskQuery) clonePage() *RiskQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withStakeholderUser = _q.withStakeholderUser.clonePage()
+	c.withStakeholderGroup = _q.withStakeholderGroup.clonePage()
+	c.withStakeholderIdentityHolder = _q.withStakeholderIdentityHolder.clonePage()
+	c.withDelegateUser = _q.withDelegateUser.clonePage()
+	c.withDelegateGroup = _q.withDelegateGroup.clonePage()
+	c.withDelegateIdentityHolder = _q.withDelegateIdentityHolder.clonePage()
+	c.withRiskKind = _q.withRiskKind.clonePage()
+	c.withRiskCategory = _q.withRiskCategory.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withStakeholder = _q.withStakeholder.clonePage()
+	c.withDelegate = _q.withDelegate.clonePage()
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withDiscussions = _q.withDiscussions.clonePage()
+	if _q.withNamedDiscussions != nil {
+		c.withNamedDiscussions = make(map[string]*DiscussionQuery, len(_q.withNamedDiscussions))
+		for name, q := range _q.withNamedDiscussions {
+			c.withNamedDiscussions[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SLADefinitionQuery) clonePage() *SLADefinitionQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ScanQuery) clonePage() *ScanQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withReviewedByUser = _q.withReviewedByUser.clonePage()
+	c.withReviewedByGroup = _q.withReviewedByGroup.clonePage()
+	c.withReviewedByIdentityHolder = _q.withReviewedByIdentityHolder.clonePage()
+	c.withAssignedToUser = _q.withAssignedToUser.clonePage()
+	c.withAssignedToGroup = _q.withAssignedToGroup.clonePage()
+	c.withAssignedToIdentityHolder = _q.withAssignedToIdentityHolder.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withGeneratedByPlatform = _q.withGeneratedByPlatform.clonePage()
+	c.withPerformedByUser = _q.withPerformedByUser.clonePage()
+	c.withPerformedByGroup = _q.withPerformedByGroup.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *StandardQuery) clonePage() *StandardQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterCompliances = _q.withTrustCenterCompliances.clonePage()
+	if _q.withNamedTrustCenterCompliances != nil {
+		c.withNamedTrustCenterCompliances = make(map[string]*TrustCenterComplianceQuery, len(_q.withNamedTrustCenterCompliances))
+		for name, q := range _q.withNamedTrustCenterCompliances {
+			c.withNamedTrustCenterCompliances[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterDocs = _q.withTrustCenterDocs.clonePage()
+	if _q.withNamedTrustCenterDocs != nil {
+		c.withNamedTrustCenterDocs = make(map[string]*TrustCenterDocQuery, len(_q.withNamedTrustCenterDocs))
+		for name, q := range _q.withNamedTrustCenterDocs {
+			c.withNamedTrustCenterDocs[name] = q.clonePage()
+		}
+	}
+	c.withApplicablePlatforms = _q.withApplicablePlatforms.clonePage()
+	if _q.withNamedApplicablePlatforms != nil {
+		c.withNamedApplicablePlatforms = make(map[string]*PlatformQuery, len(_q.withNamedApplicablePlatforms))
+		for name, q := range _q.withNamedApplicablePlatforms {
+			c.withNamedApplicablePlatforms[name] = q.clonePage()
+		}
+	}
+	c.withLogoFile = _q.withLogoFile.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SubcontrolQuery) clonePage() *SubcontrolQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectives = _q.withControlObjectives.clonePage()
+	if _q.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectives))
+		for name, q := range _q.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withNarratives = _q.withNarratives.clonePage()
+	if _q.withNamedNarratives != nil {
+		c.withNamedNarratives = make(map[string]*NarrativeQuery, len(_q.withNamedNarratives))
+		for name, q := range _q.withNamedNarratives {
+			c.withNamedNarratives[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withDiscussions = _q.withDiscussions.clonePage()
+	if _q.withNamedDiscussions != nil {
+		c.withNamedDiscussions = make(map[string]*DiscussionQuery, len(_q.withNamedDiscussions))
+		for name, q := range _q.withNamedDiscussions {
+			c.withNamedDiscussions[name] = q.clonePage()
+		}
+	}
+	c.withControlOwner = _q.withControlOwner.clonePage()
+	c.withDelegate = _q.withDelegate.clonePage()
+	c.withResponsibleParty = _q.withResponsibleParty.clonePage()
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withSubcontrolKind = _q.withSubcontrolKind.clonePage()
+	c.withControl = _q.withControl.clonePage()
+	c.withControlImplementations = _q.withControlImplementations.clonePage()
+	if _q.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementations))
+		for name, q := range _q.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.clonePage()
+		}
+	}
+	c.withMappedToSubcontrols = _q.withMappedToSubcontrols.clonePage()
+	if _q.withNamedMappedToSubcontrols != nil {
+		c.withNamedMappedToSubcontrols = make(map[string]*MappedControlQuery, len(_q.withNamedMappedToSubcontrols))
+		for name, q := range _q.withNamedMappedToSubcontrols {
+			c.withNamedMappedToSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withMappedFromSubcontrols = _q.withMappedFromSubcontrols.clonePage()
+	if _q.withNamedMappedFromSubcontrols != nil {
+		c.withNamedMappedFromSubcontrols = make(map[string]*MappedControlQuery, len(_q.withNamedMappedFromSubcontrols))
+		for name, q := range _q.withNamedMappedFromSubcontrols {
+			c.withNamedMappedFromSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SubprocessorQuery) clonePage() *SubprocessorQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withLogoFile = _q.withLogoFile.clonePage()
+	c.withTrustCenterSubprocessors = _q.withTrustCenterSubprocessors.clonePage()
+	if _q.withNamedTrustCenterSubprocessors != nil {
+		c.withNamedTrustCenterSubprocessors = make(map[string]*TrustCenterSubprocessorQuery, len(_q.withNamedTrustCenterSubprocessors))
+		for name, q := range _q.withNamedTrustCenterSubprocessors {
+			c.withNamedTrustCenterSubprocessors[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SubscriberQuery) clonePage() *SubscriberQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withCampaignTargets = _q.withCampaignTargets.clonePage()
+	if _q.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_q.withNamedCampaignTargets))
+		for name, q := range _q.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.clonePage()
+		}
+	}
+	c.withContact = _q.withContact.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SystemDetailQuery) clonePage() *SystemDetailQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TFASettingQuery) clonePage() *TFASettingQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TagDefinitionQuery) clonePage() *TagDefinitionQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TaskQuery) clonePage() *TaskQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withTaskKind = _q.withTaskKind.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withAssigner = _q.withAssigner.clonePage()
+	c.withAssignee = _q.withAssignee.clonePage()
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
+	if _q.withNamedInternalPolicies != nil {
+		c.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery, len(_q.withNamedInternalPolicies))
+		for name, q := range _q.withNamedInternalPolicies {
+			c.withNamedInternalPolicies[name] = q.clonePage()
+		}
+	}
+	c.withProcedures = _q.withProcedures.clonePage()
+	if _q.withNamedProcedures != nil {
+		c.withNamedProcedures = make(map[string]*ProcedureQuery, len(_q.withNamedProcedures))
+		for name, q := range _q.withNamedProcedures {
+			c.withNamedProcedures[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withControlObjectives = _q.withControlObjectives.clonePage()
+	if _q.withNamedControlObjectives != nil {
+		c.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery, len(_q.withNamedControlObjectives))
+		for name, q := range _q.withNamedControlObjectives {
+			c.withNamedControlObjectives[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementations = _q.withControlImplementations.clonePage()
+	if _q.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementations))
+		for name, q := range _q.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withEvidence = _q.withEvidence.clonePage()
+	if _q.withNamedEvidence != nil {
+		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
+		for name, q := range _q.withNamedEvidence {
+			c.withNamedEvidence[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
+	if _q.withNamedVulnerabilities != nil {
+		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
+		for name, q := range _q.withNamedVulnerabilities {
+			c.withNamedVulnerabilities[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withParent = _q.withParent.clonePage()
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TemplateQuery) clonePage() *TemplateQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withDocuments = _q.withDocuments.clonePage()
+	if _q.withNamedDocuments != nil {
+		c.withNamedDocuments = make(map[string]*DocumentDataQuery, len(_q.withNamedDocuments))
+		for name, q := range _q.withNamedDocuments {
+			c.withNamedDocuments[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withAssessments = _q.withAssessments.clonePage()
+	if _q.withNamedAssessments != nil {
+		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_q.withNamedAssessments))
+		for name, q := range _q.withNamedAssessments {
+			c.withNamedAssessments[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolders = _q.withIdentityHolders.clonePage()
+	if _q.withNamedIdentityHolders != nil {
+		c.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolders))
+		for name, q := range _q.withNamedIdentityHolders {
+			c.withNamedIdentityHolders[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterQuery) clonePage() *TrustCenterQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withCustomDomain = _q.withCustomDomain.clonePage()
+	c.withPreviewDomain = _q.withPreviewDomain.clonePage()
+	c.withSetting = _q.withSetting.clonePage()
+	c.withPreviewSetting = _q.withPreviewSetting.clonePage()
+	c.withWatermarkConfig = _q.withWatermarkConfig.clonePage()
+	c.withTrustCenterSubprocessors = _q.withTrustCenterSubprocessors.clonePage()
+	if _q.withNamedTrustCenterSubprocessors != nil {
+		c.withNamedTrustCenterSubprocessors = make(map[string]*TrustCenterSubprocessorQuery, len(_q.withNamedTrustCenterSubprocessors))
+		for name, q := range _q.withNamedTrustCenterSubprocessors {
+			c.withNamedTrustCenterSubprocessors[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterDocs = _q.withTrustCenterDocs.clonePage()
+	if _q.withNamedTrustCenterDocs != nil {
+		c.withNamedTrustCenterDocs = make(map[string]*TrustCenterDocQuery, len(_q.withNamedTrustCenterDocs))
+		for name, q := range _q.withNamedTrustCenterDocs {
+			c.withNamedTrustCenterDocs[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterCompliances = _q.withTrustCenterCompliances.clonePage()
+	if _q.withNamedTrustCenterCompliances != nil {
+		c.withNamedTrustCenterCompliances = make(map[string]*TrustCenterComplianceQuery, len(_q.withNamedTrustCenterCompliances))
+		for name, q := range _q.withNamedTrustCenterCompliances {
+			c.withNamedTrustCenterCompliances[name] = q.clonePage()
+		}
+	}
+	c.withTemplates = _q.withTemplates.clonePage()
+	if _q.withNamedTemplates != nil {
+		c.withNamedTemplates = make(map[string]*TemplateQuery, len(_q.withNamedTemplates))
+		for name, q := range _q.withNamedTemplates {
+			c.withNamedTemplates[name] = q.clonePage()
+		}
+	}
+	c.withPosts = _q.withPosts.clonePage()
+	if _q.withNamedPosts != nil {
+		c.withNamedPosts = make(map[string]*NoteQuery, len(_q.withNamedPosts))
+		for name, q := range _q.withNamedPosts {
+			c.withNamedPosts[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterEntities = _q.withTrustCenterEntities.clonePage()
+	if _q.withNamedTrustCenterEntities != nil {
+		c.withNamedTrustCenterEntities = make(map[string]*TrustCenterEntityQuery, len(_q.withNamedTrustCenterEntities))
+		for name, q := range _q.withNamedTrustCenterEntities {
+			c.withNamedTrustCenterEntities[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterNdaRequests = _q.withTrustCenterNdaRequests.clonePage()
+	if _q.withNamedTrustCenterNdaRequests != nil {
+		c.withNamedTrustCenterNdaRequests = make(map[string]*TrustCenterNDARequestQuery, len(_q.withNamedTrustCenterNdaRequests))
+		for name, q := range _q.withNamedTrustCenterNdaRequests {
+			c.withNamedTrustCenterNdaRequests[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterFaqs = _q.withTrustCenterFaqs.clonePage()
+	if _q.withNamedTrustCenterFaqs != nil {
+		c.withNamedTrustCenterFaqs = make(map[string]*TrustCenterFAQQuery, len(_q.withNamedTrustCenterFaqs))
+		for name, q := range _q.withNamedTrustCenterFaqs {
+			c.withNamedTrustCenterFaqs[name] = q.clonePage()
+		}
+	}
+	c.withSubscribers = _q.withSubscribers.clonePage()
+	if _q.withNamedSubscribers != nil {
+		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_q.withNamedSubscribers))
+		for name, q := range _q.withNamedSubscribers {
+			c.withNamedSubscribers[name] = q.clonePage()
+		}
+	}
+	c.withEmailTemplates = _q.withEmailTemplates.clonePage()
+	if _q.withNamedEmailTemplates != nil {
+		c.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery, len(_q.withNamedEmailTemplates))
+		for name, q := range _q.withNamedEmailTemplates {
+			c.withNamedEmailTemplates[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterComplianceQuery) clonePage() *TrustCenterComplianceQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withStandard = _q.withStandard.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterDocQuery) clonePage() *TrustCenterDocQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withTrustCenterDocKind = _q.withTrustCenterDocKind.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withStandard = _q.withStandard.clonePage()
+	c.withFile = _q.withFile.clonePage()
+	c.withOriginalFile = _q.withOriginalFile.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterEntityQuery) clonePage() *TrustCenterEntityQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withLogoFile = _q.withLogoFile.clonePage()
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withEntityType = _q.withEntityType.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterFAQQuery) clonePage() *TrustCenterFAQQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withTrustCenterFaqKind = _q.withTrustCenterFaqKind.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withNote = _q.withNote.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterNDARequestQuery) clonePage() *TrustCenterNDARequestQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withTrustCenterDocs = _q.withTrustCenterDocs.clonePage()
+	if _q.withNamedTrustCenterDocs != nil {
+		c.withNamedTrustCenterDocs = make(map[string]*TrustCenterDocQuery, len(_q.withNamedTrustCenterDocs))
+		for name, q := range _q.withNamedTrustCenterDocs {
+			c.withNamedTrustCenterDocs[name] = q.clonePage()
+		}
+	}
+	c.withDocument = _q.withDocument.clonePage()
+	c.withFile = _q.withFile.clonePage()
+	c.withApprovedByUser = _q.withApprovedByUser.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterSettingQuery) clonePage() *TrustCenterSettingQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withLogoFile = _q.withLogoFile.clonePage()
+	c.withFaviconFile = _q.withFaviconFile.clonePage()
+	c.withHeroImageFile = _q.withHeroImageFile.clonePage()
+	c.withNdaApproverGroup = _q.withNdaApproverGroup.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterSubprocessorQuery) clonePage() *TrustCenterSubprocessorQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withTrustCenterSubprocessorKind = _q.withTrustCenterSubprocessorKind.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	c.withSubprocessor = _q.withSubprocessor.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterWatermarkConfigQuery) clonePage() *TrustCenterWatermarkConfigQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenter = _q.withTrustCenter.clonePage()
+	if _q.withNamedTrustCenter != nil {
+		c.withNamedTrustCenter = make(map[string]*TrustCenterQuery, len(_q.withNamedTrustCenter))
+		for name, q := range _q.withNamedTrustCenter {
+			c.withNamedTrustCenter[name] = q.clonePage()
+		}
+	}
+	c.withFile = _q.withFile.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *UserQuery) clonePage() *UserQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withPersonalAccessTokens = _q.withPersonalAccessTokens.clonePage()
+	if _q.withNamedPersonalAccessTokens != nil {
+		c.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery, len(_q.withNamedPersonalAccessTokens))
+		for name, q := range _q.withNamedPersonalAccessTokens {
+			c.withNamedPersonalAccessTokens[name] = q.clonePage()
+		}
+	}
+	c.withTfaSettings = _q.withTfaSettings.clonePage()
+	if _q.withNamedTfaSettings != nil {
+		c.withNamedTfaSettings = make(map[string]*TFASettingQuery, len(_q.withNamedTfaSettings))
+		for name, q := range _q.withNamedTfaSettings {
+			c.withNamedTfaSettings[name] = q.clonePage()
+		}
+	}
+	c.withSetting = _q.withSetting.clonePage()
+	c.withEmailVerificationTokens = _q.withEmailVerificationTokens.clonePage()
+	if _q.withNamedEmailVerificationTokens != nil {
+		c.withNamedEmailVerificationTokens = make(map[string]*EmailVerificationTokenQuery, len(_q.withNamedEmailVerificationTokens))
+		for name, q := range _q.withNamedEmailVerificationTokens {
+			c.withNamedEmailVerificationTokens[name] = q.clonePage()
+		}
+	}
+	c.withFileDownloadTokens = _q.withFileDownloadTokens.clonePage()
+	if _q.withNamedFileDownloadTokens != nil {
+		c.withNamedFileDownloadTokens = make(map[string]*FileDownloadTokenQuery, len(_q.withNamedFileDownloadTokens))
+		for name, q := range _q.withNamedFileDownloadTokens {
+			c.withNamedFileDownloadTokens[name] = q.clonePage()
+		}
+	}
+	c.withPasswordResetTokens = _q.withPasswordResetTokens.clonePage()
+	if _q.withNamedPasswordResetTokens != nil {
+		c.withNamedPasswordResetTokens = make(map[string]*PasswordResetTokenQuery, len(_q.withNamedPasswordResetTokens))
+		for name, q := range _q.withNamedPasswordResetTokens {
+			c.withNamedPasswordResetTokens[name] = q.clonePage()
+		}
+	}
+	c.withSubscribers = _q.withSubscribers.clonePage()
+	if _q.withNamedSubscribers != nil {
+		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_q.withNamedSubscribers))
+		for name, q := range _q.withNamedSubscribers {
+			c.withNamedSubscribers[name] = q.clonePage()
+		}
+	}
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.withOrganizations = _q.withOrganizations.clonePage()
+	if _q.withNamedOrganizations != nil {
+		c.withNamedOrganizations = make(map[string]*OrganizationQuery, len(_q.withNamedOrganizations))
+		for name, q := range _q.withNamedOrganizations {
+			c.withNamedOrganizations[name] = q.clonePage()
+		}
+	}
+	c.withWebauthns = _q.withWebauthns.clonePage()
+	if _q.withNamedWebauthns != nil {
+		c.withNamedWebauthns = make(map[string]*WebauthnQuery, len(_q.withNamedWebauthns))
+		for name, q := range _q.withNamedWebauthns {
+			c.withNamedWebauthns[name] = q.clonePage()
+		}
+	}
+	c.withAvatarFile = _q.withAvatarFile.clonePage()
+	c.withEvents = _q.withEvents.clonePage()
+	if _q.withNamedEvents != nil {
+		c.withNamedEvents = make(map[string]*EventQuery, len(_q.withNamedEvents))
+		for name, q := range _q.withNamedEvents {
+			c.withNamedEvents[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withCampaigns = _q.withCampaigns.clonePage()
+	if _q.withNamedCampaigns != nil {
+		c.withNamedCampaigns = make(map[string]*CampaignQuery, len(_q.withNamedCampaigns))
+		for name, q := range _q.withNamedCampaigns {
+			c.withNamedCampaigns[name] = q.clonePage()
+		}
+	}
+	c.withCampaignTargets = _q.withCampaignTargets.clonePage()
+	if _q.withNamedCampaignTargets != nil {
+		c.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery, len(_q.withNamedCampaignTargets))
+		for name, q := range _q.withNamedCampaignTargets {
+			c.withNamedCampaignTargets[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withAssignerTasks = _q.withAssignerTasks.clonePage()
+	if _q.withNamedAssignerTasks != nil {
+		c.withNamedAssignerTasks = make(map[string]*TaskQuery, len(_q.withNamedAssignerTasks))
+		for name, q := range _q.withNamedAssignerTasks {
+			c.withNamedAssignerTasks[name] = q.clonePage()
+		}
+	}
+	c.withAssigneeTasks = _q.withAssigneeTasks.clonePage()
+	if _q.withNamedAssigneeTasks != nil {
+		c.withNamedAssigneeTasks = make(map[string]*TaskQuery, len(_q.withNamedAssigneeTasks))
+		for name, q := range _q.withNamedAssigneeTasks {
+			c.withNamedAssigneeTasks[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withProgramsOwned = _q.withProgramsOwned.clonePage()
+	if _q.withNamedProgramsOwned != nil {
+		c.withNamedProgramsOwned = make(map[string]*ProgramQuery, len(_q.withNamedProgramsOwned))
+		for name, q := range _q.withNamedProgramsOwned {
+			c.withNamedProgramsOwned[name] = q.clonePage()
+		}
+	}
+	c.withPlatformsOwned = _q.withPlatformsOwned.clonePage()
+	if _q.withNamedPlatformsOwned != nil {
+		c.withNamedPlatformsOwned = make(map[string]*PlatformQuery, len(_q.withNamedPlatformsOwned))
+		for name, q := range _q.withNamedPlatformsOwned {
+			c.withNamedPlatformsOwned[name] = q.clonePage()
+		}
+	}
+	c.withIdentityHolderProfiles = _q.withIdentityHolderProfiles.clonePage()
+	if _q.withNamedIdentityHolderProfiles != nil {
+		c.withNamedIdentityHolderProfiles = make(map[string]*IdentityHolderQuery, len(_q.withNamedIdentityHolderProfiles))
+		for name, q := range _q.withNamedIdentityHolderProfiles {
+			c.withNamedIdentityHolderProfiles[name] = q.clonePage()
+		}
+	}
+	c.withImpersonationEvents = _q.withImpersonationEvents.clonePage()
+	if _q.withNamedImpersonationEvents != nil {
+		c.withNamedImpersonationEvents = make(map[string]*ImpersonationEventQuery, len(_q.withNamedImpersonationEvents))
+		for name, q := range _q.withNamedImpersonationEvents {
+			c.withNamedImpersonationEvents[name] = q.clonePage()
+		}
+	}
+	c.withTargetedImpersonations = _q.withTargetedImpersonations.clonePage()
+	if _q.withNamedTargetedImpersonations != nil {
+		c.withNamedTargetedImpersonations = make(map[string]*ImpersonationEventQuery, len(_q.withNamedTargetedImpersonations))
+		for name, q := range _q.withNamedTargetedImpersonations {
+			c.withNamedTargetedImpersonations[name] = q.clonePage()
+		}
+	}
+	c.withGroupMemberships = _q.withGroupMemberships.clonePage()
+	if _q.withNamedGroupMemberships != nil {
+		c.withNamedGroupMemberships = make(map[string]*GroupMembershipQuery, len(_q.withNamedGroupMemberships))
+		for name, q := range _q.withNamedGroupMemberships {
+			c.withNamedGroupMemberships[name] = q.clonePage()
+		}
+	}
+	c.withOrgMemberships = _q.withOrgMemberships.clonePage()
+	if _q.withNamedOrgMemberships != nil {
+		c.withNamedOrgMemberships = make(map[string]*OrgMembershipQuery, len(_q.withNamedOrgMemberships))
+		for name, q := range _q.withNamedOrgMemberships {
+			c.withNamedOrgMemberships[name] = q.clonePage()
+		}
+	}
+	c.withProgramMemberships = _q.withProgramMemberships.clonePage()
+	if _q.withNamedProgramMemberships != nil {
+		c.withNamedProgramMemberships = make(map[string]*ProgramMembershipQuery, len(_q.withNamedProgramMemberships))
+		for name, q := range _q.withNamedProgramMemberships {
+			c.withNamedProgramMemberships[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *UserSettingQuery) clonePage() *UserSettingQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withUser = _q.withUser.clonePage()
+	c.withDefaultOrg = _q.withDefaultOrg.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VendorRiskScoreQuery) clonePage() *VendorRiskScoreQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withVendorScoringConfig = _q.withVendorScoringConfig.clonePage()
+	c.withEntity = _q.withEntity.clonePage()
+	c.withAssessmentResponse = _q.withAssessmentResponse.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VendorScoringConfigQuery) clonePage() *VendorScoringConfigQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withVendorRiskScores = _q.withVendorRiskScores.clonePage()
+	if _q.withNamedVendorRiskScores != nil {
+		c.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery, len(_q.withNamedVendorRiskScores))
+		for name, q := range _q.withNamedVendorRiskScores {
+			c.withNamedVendorRiskScores[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VulnerabilityQuery) clonePage() *VulnerabilityQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withReviewedByUser = _q.withReviewedByUser.clonePage()
+	c.withReviewedByGroup = _q.withReviewedByGroup.clonePage()
+	c.withReviewedByIdentityHolder = _q.withReviewedByIdentityHolder.clonePage()
+	c.withAssignedToUser = _q.withAssignedToUser.clonePage()
+	c.withAssignedToGroup = _q.withAssignedToGroup.clonePage()
+	c.withAssignedToIdentityHolder = _q.withAssignedToIdentityHolder.clonePage()
+	c.withEnvironment = _q.withEnvironment.clonePage()
+	c.withScope = _q.withScope.clonePage()
+	c.withVulnerabilityStatus = _q.withVulnerabilityStatus.clonePage()
+	c.withIntegrations = _q.withIntegrations.clonePage()
+	if _q.withNamedIntegrations != nil {
+		c.withNamedIntegrations = make(map[string]*IntegrationQuery, len(_q.withNamedIntegrations))
+		for name, q := range _q.withNamedIntegrations {
+			c.withNamedIntegrations[name] = q.clonePage()
+		}
+	}
+	c.withFindings = _q.withFindings.clonePage()
+	if _q.withNamedFindings != nil {
+		c.withNamedFindings = make(map[string]*FindingQuery, len(_q.withNamedFindings))
+		for name, q := range _q.withNamedFindings {
+			c.withNamedFindings[name] = q.clonePage()
+		}
+	}
+	c.withActionPlans = _q.withActionPlans.clonePage()
+	if _q.withNamedActionPlans != nil {
+		c.withNamedActionPlans = make(map[string]*ActionPlanQuery, len(_q.withNamedActionPlans))
+		for name, q := range _q.withNamedActionPlans {
+			c.withNamedActionPlans[name] = q.clonePage()
+		}
+	}
+	c.withControls = _q.withControls.clonePage()
+	if _q.withNamedControls != nil {
+		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
+		for name, q := range _q.withNamedControls {
+			c.withNamedControls[name] = q.clonePage()
+		}
+	}
+	c.withSubcontrols = _q.withSubcontrols.clonePage()
+	if _q.withNamedSubcontrols != nil {
+		c.withNamedSubcontrols = make(map[string]*SubcontrolQuery, len(_q.withNamedSubcontrols))
+		for name, q := range _q.withNamedSubcontrols {
+			c.withNamedSubcontrols[name] = q.clonePage()
+		}
+	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
+	c.withPrograms = _q.withPrograms.clonePage()
+	if _q.withNamedPrograms != nil {
+		c.withNamedPrograms = make(map[string]*ProgramQuery, len(_q.withNamedPrograms))
+		for name, q := range _q.withNamedPrograms {
+			c.withNamedPrograms[name] = q.clonePage()
+		}
+	}
+	c.withAssets = _q.withAssets.clonePage()
+	if _q.withNamedAssets != nil {
+		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
+		for name, q := range _q.withNamedAssets {
+			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withEntities = _q.withEntities.clonePage()
+	if _q.withNamedEntities != nil {
+		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
+		for name, q := range _q.withNamedEntities {
+			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withScans = _q.withScans.clonePage()
+	if _q.withNamedScans != nil {
+		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))
+		for name, q := range _q.withNamedScans {
+			c.withNamedScans[name] = q.clonePage()
+		}
+	}
+	c.withTasks = _q.withTasks.clonePage()
+	if _q.withNamedTasks != nil {
+		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
+		for name, q := range _q.withNamedTasks {
+			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
+		}
+	}
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WebauthnQuery) clonePage() *WebauthnQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowAssignmentQuery) clonePage() *WorkflowAssignmentQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withWorkflowInstance = _q.withWorkflowInstance.clonePage()
+	c.withWorkflowAssignmentTargets = _q.withWorkflowAssignmentTargets.clonePage()
+	if _q.withNamedWorkflowAssignmentTargets != nil {
+		c.withNamedWorkflowAssignmentTargets = make(map[string]*WorkflowAssignmentTargetQuery, len(_q.withNamedWorkflowAssignmentTargets))
+		for name, q := range _q.withNamedWorkflowAssignmentTargets {
+			c.withNamedWorkflowAssignmentTargets[name] = q.clonePage()
+		}
+	}
+	c.withUser = _q.withUser.clonePage()
+	c.withGroup = _q.withGroup.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowAssignmentTargetQuery) clonePage() *WorkflowAssignmentTargetQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withWorkflowAssignment = _q.withWorkflowAssignment.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.withGroup = _q.withGroup.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowDefinitionQuery) clonePage() *WorkflowDefinitionQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
+	if _q.withNamedBlockedGroups != nil {
+		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
+		for name, q := range _q.withNamedBlockedGroups {
+			c.withNamedBlockedGroups[name] = q.clonePage()
+		}
+	}
+	c.withEditors = _q.withEditors.clonePage()
+	if _q.withNamedEditors != nil {
+		c.withNamedEditors = make(map[string]*GroupQuery, len(_q.withNamedEditors))
+		for name, q := range _q.withNamedEditors {
+			c.withNamedEditors[name] = q.clonePage()
+		}
+	}
+	c.withViewers = _q.withViewers.clonePage()
+	if _q.withNamedViewers != nil {
+		c.withNamedViewers = make(map[string]*GroupQuery, len(_q.withNamedViewers))
+		for name, q := range _q.withNamedViewers {
+			c.withNamedViewers[name] = q.clonePage()
+		}
+	}
+	c.withTagDefinitions = _q.withTagDefinitions.clonePage()
+	if _q.withNamedTagDefinitions != nil {
+		c.withNamedTagDefinitions = make(map[string]*TagDefinitionQuery, len(_q.withNamedTagDefinitions))
+		for name, q := range _q.withNamedTagDefinitions {
+			c.withNamedTagDefinitions[name] = q.clonePage()
+		}
+	}
+	c.withGroups = _q.withGroups.clonePage()
+	if _q.withNamedGroups != nil {
+		c.withNamedGroups = make(map[string]*GroupQuery, len(_q.withNamedGroups))
+		for name, q := range _q.withNamedGroups {
+			c.withNamedGroups[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowInstances = _q.withWorkflowInstances.clonePage()
+	if _q.withNamedWorkflowInstances != nil {
+		c.withNamedWorkflowInstances = make(map[string]*WorkflowInstanceQuery, len(_q.withNamedWorkflowInstances))
+		for name, q := range _q.withNamedWorkflowInstances {
+			c.withNamedWorkflowInstances[name] = q.clonePage()
+		}
+	}
+	c.withNotificationTemplates = _q.withNotificationTemplates.clonePage()
+	if _q.withNamedNotificationTemplates != nil {
+		c.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery, len(_q.withNamedNotificationTemplates))
+		for name, q := range _q.withNamedNotificationTemplates {
+			c.withNamedNotificationTemplates[name] = q.clonePage()
+		}
+	}
+	c.withEmailTemplates = _q.withEmailTemplates.clonePage()
+	if _q.withNamedEmailTemplates != nil {
+		c.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery, len(_q.withNamedEmailTemplates))
+		for name, q := range _q.withNamedEmailTemplates {
+			c.withNamedEmailTemplates[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowEventQuery) clonePage() *WorkflowEventQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withWorkflowInstance = _q.withWorkflowInstance.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowInstanceQuery) clonePage() *WorkflowInstanceQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withWorkflowDefinition = _q.withWorkflowDefinition.clonePage()
+	c.withControl = _q.withControl.clonePage()
+	c.withInternalPolicy = _q.withInternalPolicy.clonePage()
+	c.withEvidence = _q.withEvidence.clonePage()
+	c.withSubcontrol = _q.withSubcontrol.clonePage()
+	c.withActionPlan = _q.withActionPlan.clonePage()
+	c.withProcedure = _q.withProcedure.clonePage()
+	c.withCampaign = _q.withCampaign.clonePage()
+	c.withCampaignTarget = _q.withCampaignTarget.clonePage()
+	c.withIdentityHolder = _q.withIdentityHolder.clonePage()
+	c.withPlatform = _q.withPlatform.clonePage()
+	c.withAssessment = _q.withAssessment.clonePage()
+	c.withAssessmentResponse = _q.withAssessmentResponse.clonePage()
+	c.withFinding = _q.withFinding.clonePage()
+	c.withIntegration = _q.withIntegration.clonePage()
+	c.withRemediation = _q.withRemediation.clonePage()
+	c.withRisk = _q.withRisk.clonePage()
+	c.withTask = _q.withTask.clonePage()
+	c.withVulnerability = _q.withVulnerability.clonePage()
+	c.withWorkflowProposal = _q.withWorkflowProposal.clonePage()
+	c.withWorkflowAssignments = _q.withWorkflowAssignments.clonePage()
+	if _q.withNamedWorkflowAssignments != nil {
+		c.withNamedWorkflowAssignments = make(map[string]*WorkflowAssignmentQuery, len(_q.withNamedWorkflowAssignments))
+		for name, q := range _q.withNamedWorkflowAssignments {
+			c.withNamedWorkflowAssignments[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowEvents = _q.withWorkflowEvents.clonePage()
+	if _q.withNamedWorkflowEvents != nil {
+		c.withNamedWorkflowEvents = make(map[string]*WorkflowEventQuery, len(_q.withNamedWorkflowEvents))
+		for name, q := range _q.withNamedWorkflowEvents {
+			c.withNamedWorkflowEvents[name] = q.clonePage()
+		}
+	}
+	c.withEmailTemplates = _q.withEmailTemplates.clonePage()
+	if _q.withNamedEmailTemplates != nil {
+		c.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery, len(_q.withNamedEmailTemplates))
+		for name, q := range _q.withNamedEmailTemplates {
+			c.withNamedEmailTemplates[name] = q.clonePage()
+		}
+	}
+	c.withWorkflowObjectRefs = _q.withWorkflowObjectRefs.clonePage()
+	if _q.withNamedWorkflowObjectRefs != nil {
+		c.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery, len(_q.withNamedWorkflowObjectRefs))
+		for name, q := range _q.withNamedWorkflowObjectRefs {
+			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowObjectRefQuery) clonePage() *WorkflowObjectRefQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withWorkflowInstance = _q.withWorkflowInstance.clonePage()
+	c.withWorkflowProposals = _q.withWorkflowProposals.clonePage()
+	if _q.withNamedWorkflowProposals != nil {
+		c.withNamedWorkflowProposals = make(map[string]*WorkflowProposalQuery, len(_q.withNamedWorkflowProposals))
+		for name, q := range _q.withNamedWorkflowProposals {
+			c.withNamedWorkflowProposals[name] = q.clonePage()
+		}
+	}
+	c.withControl = _q.withControl.clonePage()
+	c.withTask = _q.withTask.clonePage()
+	c.withInternalPolicy = _q.withInternalPolicy.clonePage()
+	c.withFinding = _q.withFinding.clonePage()
+	c.withDirectoryAccount = _q.withDirectoryAccount.clonePage()
+	c.withDirectoryGroup = _q.withDirectoryGroup.clonePage()
+	c.withDirectoryMembership = _q.withDirectoryMembership.clonePage()
+	c.withEvidence = _q.withEvidence.clonePage()
+	c.withSubcontrol = _q.withSubcontrol.clonePage()
+	c.withActionPlan = _q.withActionPlan.clonePage()
+	c.withProcedure = _q.withProcedure.clonePage()
+	c.withCampaign = _q.withCampaign.clonePage()
+	c.withCampaignTarget = _q.withCampaignTarget.clonePage()
+	c.withIdentityHolder = _q.withIdentityHolder.clonePage()
+	c.withPlatform = _q.withPlatform.clonePage()
+	c.withVulnerability = _q.withVulnerability.clonePage()
+	c.withRisk = _q.withRisk.clonePage()
+	c.withAssessment = _q.withAssessment.clonePage()
+	c.withAssessmentResponse = _q.withAssessmentResponse.clonePage()
+	c.withRemediation = _q.withRemediation.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowProposalQuery) clonePage() *WorkflowProposalQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withWorkflowObjectRef = _q.withWorkflowObjectRef.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.withWorkflowInstances = _q.withWorkflowInstances.clonePage()
+	if _q.withNamedWorkflowInstances != nil {
+		c.withNamedWorkflowInstances = make(map[string]*WorkflowInstanceQuery, len(_q.withNamedWorkflowInstances))
+		for name, q := range _q.withNamedWorkflowInstances {
+			c.withNamedWorkflowInstances[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
 }

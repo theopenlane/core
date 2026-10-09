@@ -82,7 +82,7 @@ func (WorkflowEvent) Mixin() []ent.Mixin {
 
 // Modules this schema has access to
 func (WorkflowEvent) Modules() []models.OrgModule {
-	return []models.OrgModule{models.CatalogBaseModule}
+	return []models.OrgModule{models.CatalogAnyModule}
 }
 
 // Policy of the WorkflowEvent

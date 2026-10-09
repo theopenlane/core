@@ -7709,6 +7709,18 @@ type EntityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalog entity this entity was adopted from
+  """
+  catalogEntityID: String
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalog entity this entity was adopted from
+  """
+  catalogEntityKey: String
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -8370,6 +8382,41 @@ input EntityHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  catalog_entity_id field predicates
+  """
+  catalogEntityID: String
+  catalogEntityIDNEQ: String
+  catalogEntityIDIn: [String!]
+  catalogEntityIDNotIn: [String!]
+  catalogEntityIDContains: String
+  catalogEntityIDHasPrefix: String
+  catalogEntityIDHasSuffix: String
+  catalogEntityIDIsNil: Boolean
+  catalogEntityIDNotNil: Boolean
+  catalogEntityIDEqualFold: String
+  catalogEntityIDContainsFold: String
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_entity_key field predicates
+  """
+  catalogEntityKey: String
+  catalogEntityKeyNEQ: String
+  catalogEntityKeyIn: [String!]
+  catalogEntityKeyNotIn: [String!]
+  catalogEntityKeyContains: String
+  catalogEntityKeyHasPrefix: String
+  catalogEntityKeyHasSuffix: String
+  catalogEntityKeyIsNil: Boolean
+  catalogEntityKeyNotNil: Boolean
+  catalogEntityKeyEqualFold: String
+  catalogEntityKeyContainsFold: String
   """
   entity_relationship_state_name field predicates
   """

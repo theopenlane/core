@@ -6467,6 +6467,18 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
+	if catalogEntityID, exists := m.CatalogEntityID(); exists {
+		create = create.SetCatalogEntityID(catalogEntityID)
+	}
+
+	if externallyVisible, exists := m.ExternallyVisible(); exists {
+		create = create.SetExternallyVisible(externallyVisible)
+	}
+
+	if catalogEntityKey, exists := m.CatalogEntityKey(); exists {
+		create = create.SetCatalogEntityKey(catalogEntityKey)
+	}
+
 	if entityRelationshipStateName, exists := m.EntityRelationshipStateName(); exists {
 		create = create.SetEntityRelationshipStateName(entityRelationshipStateName)
 	}
@@ -6845,6 +6857,24 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableSystemInternalID(entity.SystemInternalID)
 		}
 
+		if catalogEntityID, exists := m.CatalogEntityID(); exists {
+			create = create.SetCatalogEntityID(catalogEntityID)
+		} else {
+			create = create.SetCatalogEntityID(entity.CatalogEntityID)
+		}
+
+		if externallyVisible, exists := m.ExternallyVisible(); exists {
+			create = create.SetExternallyVisible(externallyVisible)
+		} else {
+			create = create.SetExternallyVisible(entity.ExternallyVisible)
+		}
+
+		if catalogEntityKey, exists := m.CatalogEntityKey(); exists {
+			create = create.SetCatalogEntityKey(catalogEntityKey)
+		} else {
+			create = create.SetCatalogEntityKey(entity.CatalogEntityKey)
+		}
+
 		if entityRelationshipStateName, exists := m.EntityRelationshipStateName(); exists {
 			create = create.SetEntityRelationshipStateName(entityRelationshipStateName)
 		} else {
@@ -7191,6 +7221,9 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSystemOwned(entity.SystemOwned).
 			SetNillableInternalNotes(entity.InternalNotes).
 			SetNillableSystemInternalID(entity.SystemInternalID).
+			SetCatalogEntityID(entity.CatalogEntityID).
+			SetExternallyVisible(entity.ExternallyVisible).
+			SetCatalogEntityKey(entity.CatalogEntityKey).
 			SetEntityRelationshipStateName(entity.EntityRelationshipStateName).
 			SetEntityRelationshipStateID(entity.EntityRelationshipStateID).
 			SetEntitySecurityQuestionnaireStatusName(entity.EntitySecurityQuestionnaireStatusName).

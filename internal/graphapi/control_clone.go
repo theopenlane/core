@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -229,10 +228,12 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// check program access if a program is specified
 	if programID != nil {
+<<<<<<< HEAD
 		exists, err := withTransactionalMutation(ctx).Program.Query().
 			Where(program.ID(*programID)).
 			Exist(internalCtx)
 
+		exists, err := r.db.Program.Query().Where(program.ID(*programID)).Exist(internalCtx)
 		if err != nil {
 			return nil, err
 		}

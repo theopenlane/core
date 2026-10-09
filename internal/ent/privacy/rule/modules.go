@@ -46,7 +46,18 @@ func hasFeature(ctx context.Context, feature string) (bool, error) {
 		return false, err
 	}
 
+	if feature == models.CatalogAnyModule.String() {
+		return hasNonBaseModule(feats), nil
+	}
+
 	return slices.Contains(feats, feature), nil
+}
+
+// hasNonBaseModule reports whether any enabled feature is a module other than the base module
+func hasNonBaseModule(enabled []string) bool {
+	return slices.ContainsFunc(enabled, func(f string) bool {
+		return f != models.CatalogBaseModule.String()
+	})
 }
 
 var freshFeatureReadKey = contextx.NewKey[struct{}]()
@@ -190,11 +201,20 @@ func evaluateFeatures(ctx context.Context, requireAll bool, modules ...models.Or
 	}
 
 	enabledSet := mapx.MapSetFromSlice(enabled)
+	anyModule := hasNonBaseModule(enabled)
 
 	if requireAll {
 		// all features must be enabled
 		for _, f := range modules {
 			if f == models.CatalogBaseModule {
+				continue
+			}
+
+			if f == models.CatalogAnyModule {
+				if !anyModule {
+					return false, &f, nil
+				}
+
 				continue
 			}
 
@@ -208,8 +228,18 @@ func evaluateFeatures(ctx context.Context, requireAll bool, modules ...models.Or
 
 	// at least one feature must be enabled
 	for _, f := range modules {
+		// only requires base module, which all should satisfy
 		if f == models.CatalogBaseModule {
 			return true, nil, nil
+		}
+
+		// requires a module other than base module, this could be any of supported modules
+		if f == models.CatalogAnyModule {
+			if anyModule {
+				return true, nil, nil
+			}
+
+			continue
 		}
 
 		if _, ok := enabledSet[f.String()]; ok {
@@ -293,7 +323,7 @@ func DenyIfMissingAllModules() privacy.MutationRule {
 		}
 
 		if !ok {
-			return privacy.Denyf("features are not enabled")
+			return privacy.Denyf("%w", ErrFeaturesNotEnabled)
 		}
 
 		return privacy.Skip

@@ -119,7 +119,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		user := &User{
 			FirstName: req.FirstName,
 			LastName:  req.LastName,
-			Email:     req.Email,
+			Email:     meowuser.Email,
 			ID:        meowuser.ID,
 		}
 

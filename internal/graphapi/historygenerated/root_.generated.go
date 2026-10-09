@@ -700,6 +700,8 @@ type ComplexityRoot struct {
 		ApprovedForUse                        func(childComplexity int) int
 		AutoRenews                            func(childComplexity int) int
 		BillingModel                          func(childComplexity int) int
+		CatalogEntityID                       func(childComplexity int) int
+		CatalogEntityKey                      func(childComplexity int) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
 		ContractStartDate                     func(childComplexity int) int
@@ -718,6 +720,7 @@ type ComplexityRoot struct {
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
 		ExternalID                            func(childComplexity int) int
+		ExternallyVisible                     func(childComplexity int) int
 		HasSoc2                               func(childComplexity int) int
 		HistoryTime                           func(childComplexity int) int
 		ID                                    func(childComplexity int) int
@@ -6265,6 +6268,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.BillingModel(childComplexity), true
+	case "EntityHistory.catalogEntityID":
+		if e.ComplexityRoot.EntityHistory.CatalogEntityID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.CatalogEntityID(childComplexity), true
+	case "EntityHistory.catalogEntityKey":
+		if e.ComplexityRoot.EntityHistory.CatalogEntityKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.CatalogEntityKey(childComplexity), true
 	case "EntityHistory.contractEndDate":
 		if e.ComplexityRoot.EntityHistory.ContractEndDate == nil {
 			break
@@ -6373,6 +6388,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.ExternalID(childComplexity), true
+	case "EntityHistory.externallyVisible":
+		if e.ComplexityRoot.EntityHistory.ExternallyVisible == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.ExternallyVisible(childComplexity), true
 	case "EntityHistory.hasSoc2":
 		if e.ComplexityRoot.EntityHistory.HasSoc2 == nil {
 			break
@@ -26003,6 +26024,18 @@ type EntityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalog entity this entity was adopted from
+  """
+  catalogEntityID: String
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalog entity this entity was adopted from
+  """
+  catalogEntityKey: String
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -26664,6 +26697,41 @@ input EntityHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  catalog_entity_id field predicates
+  """
+  catalogEntityID: String
+  catalogEntityIDNEQ: String
+  catalogEntityIDIn: [String!]
+  catalogEntityIDNotIn: [String!]
+  catalogEntityIDContains: String
+  catalogEntityIDHasPrefix: String
+  catalogEntityIDHasSuffix: String
+  catalogEntityIDIsNil: Boolean
+  catalogEntityIDNotNil: Boolean
+  catalogEntityIDEqualFold: String
+  catalogEntityIDContainsFold: String
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_entity_key field predicates
+  """
+  catalogEntityKey: String
+  catalogEntityKeyNEQ: String
+  catalogEntityKeyIn: [String!]
+  catalogEntityKeyNotIn: [String!]
+  catalogEntityKeyContains: String
+  catalogEntityKeyHasPrefix: String
+  catalogEntityKeyHasSuffix: String
+  catalogEntityKeyIsNil: Boolean
+  catalogEntityKeyNotNil: Boolean
+  catalogEntityKeyEqualFold: String
+  catalogEntityKeyContainsFold: String
   """
   entity_relationship_state_name field predicates
   """
@@ -55219,6 +55287,12 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_EntityHistory_systemInternalID(ctx, field)
+	case "catalogEntityID":
+		return ec.fieldContext_EntityHistory_catalogEntityID(ctx, field)
+	case "externallyVisible":
+		return ec.fieldContext_EntityHistory_externallyVisible(ctx, field)
+	case "catalogEntityKey":
+		return ec.fieldContext_EntityHistory_catalogEntityKey(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_EntityHistory_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":

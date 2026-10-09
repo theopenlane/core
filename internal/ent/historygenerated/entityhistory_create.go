@@ -415,6 +415,48 @@ func (_c *EntityHistoryCreate) SetNillableSystemInternalID(v *string) *EntityHis
 	return _c
 }
 
+// SetCatalogEntityID sets the "catalog_entity_id" field.
+func (_c *EntityHistoryCreate) SetCatalogEntityID(v string) *EntityHistoryCreate {
+	_c.mutation.SetCatalogEntityID(v)
+	return _c
+}
+
+// SetNillableCatalogEntityID sets the "catalog_entity_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableCatalogEntityID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetCatalogEntityID(*v)
+	}
+	return _c
+}
+
+// SetExternallyVisible sets the "externally_visible" field.
+func (_c *EntityHistoryCreate) SetExternallyVisible(v bool) *EntityHistoryCreate {
+	_c.mutation.SetExternallyVisible(v)
+	return _c
+}
+
+// SetNillableExternallyVisible sets the "externally_visible" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableExternallyVisible(v *bool) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetExternallyVisible(*v)
+	}
+	return _c
+}
+
+// SetCatalogEntityKey sets the "catalog_entity_key" field.
+func (_c *EntityHistoryCreate) SetCatalogEntityKey(v string) *EntityHistoryCreate {
+	_c.mutation.SetCatalogEntityKey(v)
+	return _c
+}
+
+// SetNillableCatalogEntityKey sets the "catalog_entity_key" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableCatalogEntityKey(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetCatalogEntityKey(*v)
+	}
+	return _c
+}
+
 // SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
 func (_c *EntityHistoryCreate) SetEntityRelationshipStateName(v string) *EntityHistoryCreate {
 	_c.mutation.SetEntityRelationshipStateName(v)
@@ -1105,6 +1147,10 @@ func (_c *EntityHistoryCreate) defaults() error {
 		v := entityhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.ExternallyVisible(); !ok {
+		v := entityhistory.DefaultExternallyVisible
+		_c.mutation.SetExternallyVisible(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := entityhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -1345,6 +1391,18 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(entityhistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.CatalogEntityID(); ok {
+		_spec.SetField(entityhistory.FieldCatalogEntityID, field.TypeString, value)
+		_node.CatalogEntityID = value
+	}
+	if value, ok := _c.mutation.ExternallyVisible(); ok {
+		_spec.SetField(entityhistory.FieldExternallyVisible, field.TypeBool, value)
+		_node.ExternallyVisible = value
+	}
+	if value, ok := _c.mutation.CatalogEntityKey(); ok {
+		_spec.SetField(entityhistory.FieldCatalogEntityKey, field.TypeString, value)
+		_node.CatalogEntityKey = value
 	}
 	if value, ok := _c.mutation.EntityRelationshipStateName(); ok {
 		_spec.SetField(entityhistory.FieldEntityRelationshipStateName, field.TypeString, value)

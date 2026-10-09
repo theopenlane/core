@@ -132,7 +132,7 @@ func (a APIToken) Mixin() []ent.Mixin {
 
 func (APIToken) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

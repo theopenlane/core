@@ -7,6 +7,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
@@ -34,6 +35,9 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 	case errors.Is(err, rule.ErrRequiredScopeNotSet):
 		// The access token lacks the required scopes for this request.
 		return common.NewErrorWithCode(common.ErrMissingRequireScopes, gqlerrors.InsufficientScopes)
+	case errors.Is(err, rule.ErrFeaturesNotEnabled):
+		// the organization lacks the module the object requires, reported the same way module-gated reads are
+		return gqlerrors.NewCustomErrorWithModule(gqlerrors.NoAccessToModule, interceptors.ErrFeatureNotEnabled.Error(), interceptors.ErrFeatureNotEnabled, nil)
 	case generated.IsValidationError(err):
 		validationError := err.(*generated.ValidationError)
 

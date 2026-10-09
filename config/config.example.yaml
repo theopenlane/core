@@ -526,3 +526,4 @@ workflows:
         maxretries: 5
         queuename: events
         workercount: 10
+    webhookallowprivateaddresses: false

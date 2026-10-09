@@ -1930,6 +1930,7 @@ type ComplexityRoot struct {
 	}
 
 	Entity struct {
+		AdoptedEntities                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Aliases                               func(childComplexity int) int
 		AnnualSpend                           func(childComplexity int) int
 		ApprovedForUse                        func(childComplexity int) int
@@ -1940,6 +1941,9 @@ type ComplexityRoot struct {
 		BillingModel                          func(childComplexity int) int
 		BlockedGroups                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Campaigns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CatalogEntity                         func(childComplexity int) int
+		CatalogEntityID                       func(childComplexity int) int
+		CatalogEntityKey                      func(childComplexity int) int
 		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
@@ -1968,6 +1972,7 @@ type ComplexityRoot struct {
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
 		ExternalID                            func(childComplexity int) int
+		ExternallyVisible                     func(childComplexity int) int
 		Files                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Findings                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		HasSoc2                               func(childComplexity int) int
@@ -3504,6 +3509,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		AdminReassignWorkflowAssignment      func(childComplexity int, input model.ReassignWorkflowAssignmentInput) int
+		AdoptEntity                          func(childComplexity int, catalogID string, input *generated.CreateEntityInput) int
 		ApproveNDARequests                   func(childComplexity int, ids []string) int
 		ApproveWorkflowAssignment            func(childComplexity int, id string) int
 		BulkCancelWorkflowInstances          func(childComplexity int, ids []string, reason *string) int
@@ -5276,6 +5282,7 @@ type ComplexityRoot struct {
 		EmailTemplateSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EmailTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntitiesCatalog                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Entity                          func(childComplexity int, id string) int
 		EntitySearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EntityType                      func(childComplexity int, id string) int
@@ -16472,6 +16479,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateUpdatePayload.EmailTemplate(childComplexity), true
 
+	case "Entity.adoptedEntities":
+		if e.ComplexityRoot.Entity.AdoptedEntities == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_adoptedEntities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Entity.AdoptedEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Entity.aliases":
 		if e.ComplexityRoot.Entity.Aliases == nil {
 			break
@@ -16557,6 +16575,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+	case "Entity.catalogEntity":
+		if e.ComplexityRoot.Entity.CatalogEntity == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.CatalogEntity(childComplexity), true
+	case "Entity.catalogEntityID":
+		if e.ComplexityRoot.Entity.CatalogEntityID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.CatalogEntityID(childComplexity), true
+	case "Entity.catalogEntityKey":
+		if e.ComplexityRoot.Entity.CatalogEntityKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.CatalogEntityKey(childComplexity), true
 	case "Entity.contacts":
 		if e.ComplexityRoot.Entity.Contacts == nil {
 			break
@@ -16750,6 +16786,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.ExternalID(childComplexity), true
+	case "Entity.externallyVisible":
+		if e.ComplexityRoot.Entity.ExternallyVisible == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.ExternallyVisible(childComplexity), true
 	case "Entity.files":
 		if e.ComplexityRoot.Entity.Files == nil {
 			break
@@ -24365,6 +24407,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.AdminReassignWorkflowAssignment(childComplexity, args["input"].(model.ReassignWorkflowAssignmentInput)), true
+	case "Mutation.adoptEntity":
+		if e.ComplexityRoot.Mutation.AdoptEntity == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_adoptEntity_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.AdoptEntity(childComplexity, args["catalogID"].(string), args["input"].(*generated.CreateEntityInput)), true
 	case "Mutation.approveNDARequests":
 		if e.ComplexityRoot.Mutation.ApproveNDARequests == nil {
 			break
@@ -37170,6 +37223,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+	case "Query.entitiesCatalog":
+		if e.ComplexityRoot.Query.EntitiesCatalog == nil {
+			break
+		}
+
+		args, err := ec.field_Query_entitiesCatalog_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.EntitiesCatalog(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Query.entity":
 		if e.ComplexityRoot.Query.Entity == nil {
 			break
@@ -56335,7 +56399,7 @@ extend type Query {
 `, BuiltIn: false},
 	{Name: "../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
-type APIToken implements Node {
+type APIToken implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -68921,6 +68985,10 @@ input CreateEntityInput {
   """
   systemInternalID: String @readOnly
   """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -73561,7 +73629,7 @@ input CustomDomainWhereInput {
   """
   tagsHas: String
 }
-type CustomTypeEnum implements Node {
+type CustomTypeEnum implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -76978,7 +77046,7 @@ input DirectoryMembershipWhereInput {
   observedAtLT: Time
   observedAtLTE: Time
 }
-type Discussion implements Node {
+type Discussion implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -77593,7 +77661,7 @@ input DocumentDataWhereInput {
   """
   tagsHas: String
 }
-type EmailTemplate implements Node {
+type EmailTemplate implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -78425,6 +78493,18 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalog entity this entity was adopted from
+  """
+  catalogEntityID: ID
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalog entity this entity was adopted from
+  """
+  catalogEntityKey: String
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -78712,6 +78792,41 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   reviewedByUser: User
   reviewedByGroup: Group
   reviewedByIdentityHolder: IdentityHolder
+  """
+  the system-owned catalog entity this entity was adopted from
+  """
+  catalogEntity: Entity
+  adoptedEntities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
   entityRelationshipState: CustomTypeEnum
   entitySecurityQuestionnaireStatus: CustomTypeEnum
   entitySourceType: CustomTypeEnum
@@ -79601,7 +79716,7 @@ enum EntityOrderField {
   external_id
   observed_at
 }
-type EntityType implements Node {
+type EntityType implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -80204,6 +80319,41 @@ input EntityWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  catalog_entity_id field predicates
+  """
+  catalogEntityID: ID
+  catalogEntityIDNEQ: ID
+  catalogEntityIDIn: [ID!]
+  catalogEntityIDNotIn: [ID!]
+  catalogEntityIDContains: ID
+  catalogEntityIDHasPrefix: ID
+  catalogEntityIDHasSuffix: ID
+  catalogEntityIDIsNil: Boolean
+  catalogEntityIDNotNil: Boolean
+  catalogEntityIDEqualFold: ID
+  catalogEntityIDContainsFold: ID
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_entity_key field predicates
+  """
+  catalogEntityKey: String
+  catalogEntityKeyNEQ: String
+  catalogEntityKeyIn: [String!]
+  catalogEntityKeyNotIn: [String!]
+  catalogEntityKeyContains: String
+  catalogEntityKeyHasPrefix: String
+  catalogEntityKeyHasSuffix: String
+  catalogEntityKeyIsNil: Boolean
+  catalogEntityKeyNotNil: Boolean
+  catalogEntityKeyEqualFold: String
+  catalogEntityKeyContainsFold: String
+  """
   entity_relationship_state_name field predicates
   """
   entityRelationshipStateName: String
@@ -80736,6 +80886,16 @@ input EntityWhereInput {
   """
   hasReviewedByIdentityHolder: Boolean
   hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  catalog_entity edge predicates
+  """
+  hasCatalogEntity: Boolean
+  hasCatalogEntityWith: [EntityWhereInput!]
+  """
+  adopted_entities edge predicates
+  """
+  hasAdoptedEntities: Boolean
+  hasAdoptedEntitiesWith: [EntityWhereInput!]
   """
   entity_relationship_state edge predicates
   """
@@ -82498,7 +82658,7 @@ input EvidenceWhereInput {
   """
   tagsHas: String
 }
-type Export implements Node {
+type Export implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -82904,7 +83064,7 @@ input ExportWhereInput {
   """
   fieldsHas: String
 }
-type File implements Node {
+type File implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -90545,7 +90705,7 @@ input IdentityHolderWhereInput {
   """
   emailAliasesHas: String
 }
-type Integration implements Node {
+type Integration implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -91352,7 +91512,7 @@ enum IntegrationOrderField {
   status
   expires_at
 }
-type IntegrationRun implements Node {
+type IntegrationRun implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -95894,7 +96054,7 @@ interface Node @goModel(model: "github.com/theopenlane/core/v2/internal/ent/gene
   """
   id: ID!
 }
-type Note implements Node {
+type Note implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -96951,7 +97111,7 @@ input NotificationPreferenceWhereInput {
   """
   topicPatternsHas: String
 }
-type NotificationTemplate implements Node {
+type NotificationTemplate implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -102143,7 +102303,7 @@ type PageInfo {
   """
   endCursor: Cursor
 }
-type PersonalAccessToken implements Node {
+type PersonalAccessToken implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -118599,7 +118759,7 @@ input SubprocessorWhereInput {
   """
   tagsHas: String
 }
-type Subscriber implements Node {
+type Subscriber implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -119618,7 +119778,7 @@ input TFASettingWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [UserWhereInput!]
 }
-type TagDefinition implements Node {
+type TagDefinition implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -119910,7 +120070,7 @@ input TagDefinitionWhereInput {
   """
   aliasesHas: String
 }
-type Task implements Node {
+type Task implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -128018,6 +128178,11 @@ input UpdateEntityInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  clearExternallyVisible: Boolean
   """
   the relationship_state of the entity
   """
@@ -138634,7 +138799,7 @@ input WebauthnWhereInput {
   """
   tagsHas: String
 }
-type WorkflowAssignment implements Node {
+type WorkflowAssignment implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -138815,7 +138980,7 @@ enum WorkflowAssignmentOrderField {
   created_at
   updated_at
 }
-type WorkflowAssignmentTarget implements Node {
+type WorkflowAssignmentTarget implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -139390,7 +139555,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
   REJECTED
   CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node {
+type WorkflowDefinition implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140026,7 +140191,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
   LIFECYCLE
   NOTIFICATION
 }
-type WorkflowEvent implements Node {
+type WorkflowEvent implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140275,7 +140440,7 @@ enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core
   EMIT_RECOVERED
   EMIT_FAILED_TERMINAL
 }
-type WorkflowInstance implements Node {
+type WorkflowInstance implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -141192,7 +141357,7 @@ enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenla
   FAILED
   PAUSED
 }
-type WorkflowObjectRef implements Node {
+type WorkflowObjectRef implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -141938,7 +142103,7 @@ input WorkflowObjectRefWhereInput {
   hasRemediation: Boolean
   hasRemediationWith: [RemediationWhereInput!]
 }
-type WorkflowProposal implements Node {
+type WorkflowProposal implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -142208,6 +142373,19 @@ type EntityBulkUpdatePayload {
     Error message when the bulk update did not apply to every requested ID
     """
     error: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/entitycatalog.graphql", Input: `extend type Query {
+    """
+    entitiesCatalog lists the externally visible system-owned entities available for adoption
+    """
+    entitiesCatalog(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [EntityOrder!], where: EntityWhereInput): EntityConnection!
+}
+extend type Mutation {
+    """
+    adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
+    """
+    adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
 }
 `, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
@@ -157912,6 +158090,12 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_Entity_systemInternalID(ctx, field)
+	case "catalogEntityID":
+		return ec.fieldContext_Entity_catalogEntityID(ctx, field)
+	case "externallyVisible":
+		return ec.fieldContext_Entity_externallyVisible(ctx, field)
+	case "catalogEntityKey":
+		return ec.fieldContext_Entity_catalogEntityKey(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":
@@ -158026,6 +158210,10 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
 	case "reviewedByIdentityHolder":
 		return ec.fieldContext_Entity_reviewedByIdentityHolder(ctx, field)
+	case "catalogEntity":
+		return ec.fieldContext_Entity_catalogEntity(ctx, field)
+	case "adoptedEntities":
+		return ec.fieldContext_Entity_adoptedEntities(ctx, field)
 	case "entityRelationshipState":
 		return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
 	case "entitySecurityQuestionnaireStatus":

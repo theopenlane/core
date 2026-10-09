@@ -23,19 +23,15 @@ import (
 // CreateTrustCenterNDARequest is the resolver for the createTrustCenterNDARequest field.
 func (r *mutationResolver) CreateTrustCenterNDARequest(ctx context.Context, input generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestCreatePayload, error) {
 	if tcID, _, ok := auth.TrustCenterScopeFromContext(ctx); ok {
-		if input.TrustCenterID == nil || *input.TrustCenterID != tcID {
+		if input.TrustCenterID != nil && *input.TrustCenterID != tcID {
 			return nil, rout.ErrPermissionDenied
 		}
 
-		// anonymous visitors may only provide the request details, everything else is server controlled
-		input = generated.CreateTrustCenterNDARequestInput{
-			FirstName:     input.FirstName,
-			LastName:      input.LastName,
-			Email:         input.Email,
-			CompanyName:   input.CompanyName,
-			Reason:        input.Reason,
-			AccessLevel:   input.AccessLevel,
-			TrustCenterID: &tcID,
+		// use the trust center from the JWT when the input omits it, and set it on the
+		// graphql args early because the access checks read it from there
+		if input.TrustCenterID == nil {
+			input.TrustCenterID = &tcID
+			graphql.GetFieldContext(ctx).Args["input"] = input
 		}
 	}
 
