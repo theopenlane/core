@@ -53820,6 +53820,10 @@ input CloneControlInput {
     optional program ID to associate to the controls
     """
     programID: ID
+    """
+    optionally choose to import existing template mappings for the cloned controls
+    """
+    importTemplateMappings: Boolean
 }
 
 """
@@ -53876,6 +53880,11 @@ input CloneControlUploadInput {
   if the control is being clone from a system owned standard
   """
   controlInput: CreateControlInput
+
+  """
+  optionally choose to import existing template mappings for the cloned controls
+  """
+    importTemplateMappings: Boolean
 }
 
 extend type Mutation{
@@ -54183,7 +54192,8 @@ type RelatedSubcontrolEdge {
   The item at the end of the edge.
   """
   node: Subcontrol!
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/controlimplementation.graphql", Input: `extend type Query {
     """
     Look up controlImplementation by ID

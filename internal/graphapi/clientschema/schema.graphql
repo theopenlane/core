@@ -7835,6 +7835,10 @@ input CloneControlInput {
 	optional program ID to associate to the controls
 	"""
 	programID: ID
+	"""
+	optionally choose to import existing template mappings for the cloned controls
+	"""
+	importTemplateMappings: Boolean
 }
 """
 CloneControlUploadInput is used to clone controls and their subcontrols
@@ -7890,6 +7894,10 @@ input CloneControlUploadInput {
 	if the control is being clone from a system owned standard
 	"""
 	controlInput: CreateControlInput
+	"""
+	optionally choose to import existing template mappings for the cloned controls
+	"""
+	importTemplateMappings: Boolean
 }
 type Contact implements Node @modules(names: ["entity_management_module","compliance_module","registry_module"]) {
 	id: ID!
