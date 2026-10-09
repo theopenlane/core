@@ -56,7 +56,7 @@ func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.In
 	return nil
 }
 
-// upgradeInstallation conforms every stored document onto its current name, failing the whole upgrade when any document does not conform, cancels loops queued under retired operation names, and persists the documents, renamed runs, and webhook rows with the definition version in one transaction that first claims the version so a concurrent upgrade that already stamped it leaves the installation to that upgrade and reloads it
+// upgradeInstallation conforms every stored document onto its current name, failing the whole upgrade when any document does not conform, and persists the documents, renamed runs, and webhook rows with the definition version in one transaction that first claims the version so a concurrent upgrade that already stamped it leaves the installation to that upgrade and reloads it
 func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -96,25 +96,12 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 	operationConfig = types.IntegrationOperationConfig{Operations: operationDocuments}
 
-	providerStateNext := installation.ProviderState
-	nextState := providerState
-
-	connection, replaced, resolved := def.ResolveConnection(providerState.CredentialRef)
-
-	switch {
-	case resolved && replaced:
-		nextState.CredentialRef = connection.Credential.Name
-	case providerState.CredentialRef == "" && len(def.ConnectionList()) > 0:
-		named := lo.FilterMap(lo.Keys(records), func(slot string, _ int) (string, bool) {
-			held, _, ok := def.ResolveConnection(slot)
-
-			return held.Credential.Name, ok
-		})
-
-		if unique := lo.Uniq(named); len(unique) == 1 {
-			nextState.CredentialRef = unique[0]
-		}
+	nextState, err := upgradeCredentialRef(def, providerState, records)
+	if err != nil {
+		return err
 	}
+
+	providerStateNext := installation.ProviderState
 
 	if nextState != providerState {
 		providerStateNext, err = def.WithProviderState(installation.ProviderState, nextState)
@@ -129,19 +116,6 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	health.UnhealthyOperations = retiredHealth(installation.Health.UnhealthyOperations, def)
 	version := r.Registry().Version(def.ID)
 
-	for _, operation := range def.Operations {
-		for _, old := range operation.Replaces {
-			purged, err := r.purgeReconcileLoop(ctx, installation.ID, old)
-			if err != nil {
-				return fmt.Errorf("purge retired loops: %w", err)
-			}
-
-			if purged > 0 {
-				logx.FromContext(ctx).Info().Str("retired_operation", old).Str("operation", operation.Name).Int("purged", purged).Msg("cancelled reconcile loops queued under a retired operation name")
-			}
-		}
-	}
-
 	claimed, err := workflows.WithTx(ctx, r.DB(), nil, func(ctx context.Context, tx *ent.Tx) (bool, error) {
 		stamped, err := tx.Integration.Update().
 			Where(integration.ID(installation.ID), integration.Or(integration.DefinitionVersionIsNil(), integration.DefinitionVersionLT(version))).
@@ -155,52 +129,9 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 			return false, fmt.Errorf("replace credentials: %w", err)
 		}
 
-		if def.Installation != nil && len(def.ConnectionList()) > 0 {
-			current, err := tx.Integration.Get(ctx, installation.ID)
-			if err != nil {
-				return false, err
-			}
-
-			stored := map[string]json.RawMessage{}
-
-			if current.InstallationMetadata.Layout != "" || !jsonx.IsEmptyRawMessage(current.InstallationMetadata.Attributes) {
-				stored[current.InstallationMetadata.Layout] = current.InstallationMetadata.Attributes
-			}
-
-			conformed, err := conformDocuments(ctx, req, installationKind(def), stored)
-			if err != nil {
-				return false, fmt.Errorf("upgrade installation metadata: %w", err)
-			}
-
-			if len(conformed) > 0 {
-				attributes := conformed[def.Installation.Name]
-				display := current.InstallationMetadata.Display
-				display.CredentialRef = nextState.CredentialRef
-
-				switch {
-				case def.Installation.Identifiable:
-					identity, err := def.Installation.Identify(attributes)
-					if err != nil {
-						return false, fmt.Errorf("upgrade installation metadata: %w", err)
-					}
-
-					display.ExternalID, display.ExternalName = identity.ExternalID, identity.ExternalName
-				default:
-					display.ExternalID = installation.ID
-				}
-
-				displayMap, _ := jsonx.ToMap(display)
-
-				installationMetadataNext = types.IntegrationInstallationMetadata{Layout: def.Installation.Name, Attributes: attributes, Display: display}
-				metadataNext = mapx.DeepMergeMapAny(current.Metadata, mapx.PruneMapZeroAny(displayMap))
-
-				if err := tx.Integration.UpdateOneID(installation.ID).
-					SetInstallationMetadata(installationMetadataNext).
-					SetMetadata(metadataNext).
-					Exec(ctx); err != nil {
-					return false, err
-				}
-			}
+		installationMetadataNext, metadataNext, err = conformInstallationMetadata(ctx, tx, req, def, installation, nextState.CredentialRef)
+		if err != nil {
+			return false, err
 		}
 
 		if err := tx.Integration.UpdateOneID(installation.ID).
@@ -212,34 +143,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 			return false, err
 		}
 
-		for _, operation := range def.Operations {
-			if len(operation.Replaces) == 0 {
-				continue
-			}
-
-			if err := tx.IntegrationRun.Update().
-				Where(integrationrun.IntegrationIDEQ(installation.ID), integrationrun.OperationNameIn(operation.Replaces...)).
-				SetOperationName(operation.Name).
-				Exec(ctx); err != nil {
-				return false, err
-			}
-		}
-
-		for _, webhook := range def.Webhooks {
-			if len(webhook.Replaces) == 0 {
-				continue
-			}
-
-			if err := tx.IntegrationWebhook.Update().
-				Where(
-					integrationwebhook.IntegrationIDEQ(installation.ID),
-					integrationwebhook.NameIn(webhook.Replaces...),
-					integrationwebhook.ExternalEventIDNotNil(),
-				).
-				SetName(webhook.Name).
-				Exec(ctx); err != nil {
-				return false, err
-			}
+		if err := renameRetiredRows(ctx, tx, installation.ID, def); err != nil {
+			return false, err
 		}
 
 		if err := r.reconcileInstallationWebhooks(ctx, tx.Client(), installation, ""); err != nil {
@@ -272,6 +177,134 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	installation.DefinitionVersion = version
 
 	r.keystore().InvalidateClients(installation.ID)
+
+	return nil
+}
+
+// upgradeCredentialRef moves the persisted credential ref onto its replacement, adopts the single held connection when none is persisted, and fails on a ref the definition no longer declares
+func upgradeCredentialRef(def types.Definition, state types.DefinitionProviderState, records map[string]types.CredentialSet) (types.DefinitionProviderState, error) {
+	connection, replaced, resolved := def.ResolveConnection(state.CredentialRef)
+	declared := len(def.ConnectionList()) > 0
+
+	switch {
+	case resolved && replaced:
+		state.CredentialRef = connection.Credential.Name
+	case !resolved && state.CredentialRef != "" && declared:
+		return types.DefinitionProviderState{}, fmt.Errorf("resolve connection: %w: %s", ErrConnectionNotFound, state.CredentialRef)
+	case state.CredentialRef == "" && declared:
+		named := lo.FilterMap(lo.Keys(records), func(slot string, _ int) (string, bool) {
+			held, _, ok := def.ResolveConnection(slot)
+
+			return held.Credential.Name, ok
+		})
+
+		if unique := lo.Uniq(named); len(unique) == 1 {
+			state.CredentialRef = unique[0]
+		}
+	}
+
+	return state, nil
+}
+
+// conformInstallationMetadata conforms the stored installation metadata inside the upgrade transaction and returns the metadata the installation carries afterwards
+func conformInstallationMetadata(ctx context.Context, tx *ent.Tx, req types.InstallationRequest, def types.Definition, installation *ent.Integration, credentialRef string) (types.IntegrationInstallationMetadata, map[string]any, error) {
+	if def.Installation == nil || len(def.ConnectionList()) == 0 {
+		return installation.InstallationMetadata, installation.Metadata, nil
+	}
+
+	current, err := tx.Integration.Get(ctx, installation.ID)
+	if err != nil {
+		return types.IntegrationInstallationMetadata{}, nil, err
+	}
+
+	stored := map[string]json.RawMessage{}
+
+	if current.InstallationMetadata.Layout != "" || !jsonx.IsEmptyRawMessage(current.InstallationMetadata.Attributes) {
+		stored[current.InstallationMetadata.Layout] = current.InstallationMetadata.Attributes
+	}
+
+	conformed, err := conformDocuments(ctx, req, installationKind(def), stored)
+	if err != nil {
+		return types.IntegrationInstallationMetadata{}, nil, fmt.Errorf("upgrade installation metadata: %w", err)
+	}
+
+	if len(conformed) == 0 {
+		return installation.InstallationMetadata, installation.Metadata, nil
+	}
+
+	attributes := conformed[def.Installation.Name]
+
+	display, err := upgradeDisplay(def, installation.ID, current.InstallationMetadata.Display, attributes, credentialRef)
+	if err != nil {
+		return types.IntegrationInstallationMetadata{}, nil, fmt.Errorf("upgrade installation metadata: %w", err)
+	}
+
+	displayMap, _ := jsonx.ToMap(display)
+
+	next := types.IntegrationInstallationMetadata{Layout: def.Installation.Name, Attributes: attributes, Display: display}
+	metadata := mapx.DeepMergeMapAny(current.Metadata, mapx.PruneMapZeroAny(displayMap))
+
+	if err := tx.Integration.UpdateOneID(installation.ID).
+		SetInstallationMetadata(next).
+		SetMetadata(metadata).
+		Exec(ctx); err != nil {
+		return types.IntegrationInstallationMetadata{}, nil, err
+	}
+
+	return next, metadata, nil
+}
+
+// upgradeDisplay recomputes the display identity from the conformed metadata, keeping the installation id as the external id when the layout is not identifiable
+func upgradeDisplay(def types.Definition, installationID string, display types.IntegrationInstallationIdentity, attributes json.RawMessage, credentialRef string) (types.IntegrationInstallationIdentity, error) {
+	display.CredentialRef = credentialRef
+
+	if !def.Installation.Identifiable {
+		display.ExternalID = installationID
+
+		return display, nil
+	}
+
+	identity, err := def.Installation.Identify(attributes)
+	if err != nil {
+		return types.IntegrationInstallationIdentity{}, err
+	}
+
+	display.ExternalID, display.ExternalName = identity.ExternalID, identity.ExternalName
+
+	return display, nil
+}
+
+// renameRetiredRows moves run and webhook rows stored under retired names onto their current names
+func renameRetiredRows(ctx context.Context, tx *ent.Tx, installationID string, def types.Definition) error {
+	for _, operation := range def.Operations {
+		if len(operation.Replaces) == 0 {
+			continue
+		}
+
+		if err := tx.IntegrationRun.Update().
+			Where(integrationrun.IntegrationIDEQ(installationID), integrationrun.OperationNameIn(operation.Replaces...)).
+			SetOperationName(operation.Name).
+			Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	for _, webhook := range def.Webhooks {
+		if len(webhook.Replaces) == 0 {
+			continue
+		}
+
+		if err := tx.IntegrationWebhook.Update().
+			Where(
+				integrationwebhook.IntegrationIDEQ(installationID),
+				integrationwebhook.NameIn(webhook.Replaces...),
+				integrationwebhook.ExternalEventIDNotNil(),
+			).
+			SetName(webhook.Name).
+			Exec(ctx); err != nil {
+			return err
+		}
+	}
 
 	return nil
 }

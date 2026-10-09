@@ -648,7 +648,9 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 
 	client, err := r.buildInstallationClient(ctx, integration, operation.ClientRef, clientForce)
 	if err != nil {
-		return nil, types.Unhealthy(err, fmt.Sprintf(clientUnresolvedReasonFmt, err))
+		unresolved := fmt.Errorf("%w: %w", ErrClientUnresolved, err)
+
+		return nil, types.Unhealthy(unresolved, unresolved.Error())
 	}
 
 	logx.FromContext(ctx).Debug().Msg("client initialized")

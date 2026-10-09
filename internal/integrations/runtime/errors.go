@@ -37,4 +37,8 @@ var (
 	ErrInstallationVersionAhead = errors.New("integrations/runtime: installation definition version is ahead of this binary")
 	// ErrInstallationUpgradeFailed indicates the installation couldn't reach the current version
 	ErrInstallationUpgradeFailed = errors.New("integrations/runtime: installation upgrade failed")
+	// ErrClientUnresolved indicates the installation could not establish a connection and needs to be reconnected
+	ErrClientUnresolved = errors.New("the integration could not establish a connection and needs to be reconnected")
+	// ErrReconcileExhausted indicates a reconcile loop exhausted its error budget
+	ErrReconcileExhausted = errors.New("repeated sync failures")
 )

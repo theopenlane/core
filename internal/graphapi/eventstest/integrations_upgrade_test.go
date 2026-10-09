@@ -652,7 +652,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Nil(t, retiredAt)
 	})
 
-	t.Run("an operation rename cancels the loop queued under the retired name and reseeds one under the current name", func(t *testing.T) {
+	t.Run("an operation rename leaves the queue untouched until the next loop reset cancels the retired loop and seeds one under the current name", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
 
@@ -684,6 +684,10 @@ func TestInstallationUpgrade(t *testing.T) {
 
 		waitForEvents()
 
+		require.Equal(t, 1, activeReconcileJobs(t, retiredFragment))
+		require.Zero(t, activeReconcileJobs(t, currentFragment))
+
+		require.NoError(t, renamed.ResetReconcileLoops(subCtx, reloadIntegration(t, subCtx, installation.ID)))
 		require.Zero(t, activeReconcileJobs(t, retiredFragment))
 		require.Equal(t, 1, activeReconcileJobs(t, currentFragment))
 	})

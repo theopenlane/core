@@ -51,7 +51,7 @@ func (r *Runtime) resetReconcileLoop(ctx context.Context, installation *ent.Inte
 		if _, err := r.BuildClientForIntegration(ctx, installation, op.ClientRef); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("client unresolved, marking unhealthy instead of seeding loop")
 
-			return r.MarkIntegrationUnhealthy(ctx, installation, fmt.Sprintf(clientUnresolvedReasonFmt, err))
+			return r.MarkIntegrationUnhealthy(ctx, installation, fmt.Errorf("%w: %w", ErrClientUnresolved, err).Error())
 		}
 	}
 
@@ -83,12 +83,6 @@ func (r *Runtime) purgeReconcileLoop(ctx context.Context, integrationID, operati
 	return r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
 }
 
-// clientUnresolvedReasonFmt formats the reason recorded when a client can't be established
-const clientUnresolvedReasonFmt = "the integration could not establish a connection and needs to be reconnected: %s"
-
-// reconcileExhaustedReasonFmt formats the user-facing reason recorded on the unhealthy installation
-const reconcileExhaustedReasonFmt = "repeated sync failures due to %s"
-
 // markReconcileExhausted marks the installation unhealthy when its loop exhausts its error budget
 func (r *Runtime) markReconcileExhausted(ctx context.Context, e operations.ReconcileEnvelope, cause error) {
 	src := types.IntegrationSourceFrom(e.OperationContext)
@@ -107,12 +101,12 @@ func (r *Runtime) markReconcileExhausted(ctx context.Context, e operations.Recon
 
 	logx.FromContext(ctx).Error().Err(cause).Msg("reconcile loop exhausted error budget, marking integration unhealthy")
 
-	if err := r.MarkIntegrationUnhealthy(ctx, installation, fmt.Sprintf(reconcileExhaustedReasonFmt, cause)); err != nil {
+	if err := r.MarkIntegrationUnhealthy(ctx, installation, fmt.Errorf("%w: %w", ErrReconcileExhausted, cause).Error()); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed marking integration unhealthy after exhausted reconcile loop")
 	}
 }
 
-// ResetReconcileLoops collapses every runnable reconcile operation to exactly one recurring loop
+// ResetReconcileLoops cancels loops queued under retired operation names and collapses every runnable reconcile operation to exactly one recurring loop
 func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Integration) error {
 	if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
 		return nil
@@ -139,6 +133,19 @@ func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Int
 	var errs []error
 
 	for _, op := range def.Operations {
+		for _, old := range op.Replaces {
+			purged, err := r.purgeReconcileLoop(ctx, installation.ID, old)
+			if err != nil {
+				errs = append(errs, fmt.Errorf("purge retired loop %s: %w", old, err))
+
+				continue
+			}
+
+			if purged > 0 {
+				logx.FromContext(ctx).Info().Str("retired_operation", old).Str("operation", op.Name).Int("purged", purged).Msg("cancelled reconcile loops queued under a retired operation name")
+			}
+		}
+
 		_, failing := installation.Health.UnhealthyOperations[op.Name]
 		if !op.Policy.Reconcile || failing || op.DisabledFor(installation.OperationConfig.For(op.Name)) {
 			continue
