@@ -17139,6 +17139,38 @@ type EntityHistoryWhereInput struct {
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 
+	// "catalog_entity_id" field predicates.
+	CatalogEntityID             *string  `json:"catalogEntityID,omitempty"`
+	CatalogEntityIDNEQ          *string  `json:"catalogEntityIDNEQ,omitempty"`
+	CatalogEntityIDIn           []string `json:"catalogEntityIDIn,omitempty"`
+	CatalogEntityIDNotIn        []string `json:"catalogEntityIDNotIn,omitempty"`
+	CatalogEntityIDContains     *string  `json:"catalogEntityIDContains,omitempty"`
+	CatalogEntityIDHasPrefix    *string  `json:"catalogEntityIDHasPrefix,omitempty"`
+	CatalogEntityIDHasSuffix    *string  `json:"catalogEntityIDHasSuffix,omitempty"`
+	CatalogEntityIDIsNil        bool     `json:"catalogEntityIDIsNil,omitempty"`
+	CatalogEntityIDNotNil       bool     `json:"catalogEntityIDNotNil,omitempty"`
+	CatalogEntityIDEqualFold    *string  `json:"catalogEntityIDEqualFold,omitempty"`
+	CatalogEntityIDContainsFold *string  `json:"catalogEntityIDContainsFold,omitempty"`
+
+	// "externally_visible" field predicates.
+	ExternallyVisible       *bool `json:"externallyVisible,omitempty"`
+	ExternallyVisibleNEQ    *bool `json:"externallyVisibleNEQ,omitempty"`
+	ExternallyVisibleIsNil  bool  `json:"externallyVisibleIsNil,omitempty"`
+	ExternallyVisibleNotNil bool  `json:"externallyVisibleNotNil,omitempty"`
+
+	// "catalog_entity_key" field predicates.
+	CatalogEntityKey             *string  `json:"catalogEntityKey,omitempty"`
+	CatalogEntityKeyNEQ          *string  `json:"catalogEntityKeyNEQ,omitempty"`
+	CatalogEntityKeyIn           []string `json:"catalogEntityKeyIn,omitempty"`
+	CatalogEntityKeyNotIn        []string `json:"catalogEntityKeyNotIn,omitempty"`
+	CatalogEntityKeyContains     *string  `json:"catalogEntityKeyContains,omitempty"`
+	CatalogEntityKeyHasPrefix    *string  `json:"catalogEntityKeyHasPrefix,omitempty"`
+	CatalogEntityKeyHasSuffix    *string  `json:"catalogEntityKeyHasSuffix,omitempty"`
+	CatalogEntityKeyIsNil        bool     `json:"catalogEntityKeyIsNil,omitempty"`
+	CatalogEntityKeyNotNil       bool     `json:"catalogEntityKeyNotNil,omitempty"`
+	CatalogEntityKeyEqualFold    *string  `json:"catalogEntityKeyEqualFold,omitempty"`
+	CatalogEntityKeyContainsFold *string  `json:"catalogEntityKeyContainsFold,omitempty"`
+
 	// "entity_relationship_state_name" field predicates.
 	EntityRelationshipStateName             *string  `json:"entityRelationshipStateName,omitempty"`
 	EntityRelationshipStateNameNEQ          *string  `json:"entityRelationshipStateNameNEQ,omitempty"`
@@ -18450,6 +18482,84 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 	}
 	if i.SystemInternalIDContainsFold != nil {
 		predicates = append(predicates, entityhistory.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
+	}
+	if i.CatalogEntityID != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDEQ(*i.CatalogEntityID))
+	}
+	if i.CatalogEntityIDNEQ != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDNEQ(*i.CatalogEntityIDNEQ))
+	}
+	if len(i.CatalogEntityIDIn) > 0 {
+		predicates = append(predicates, entityhistory.CatalogEntityIDIn(i.CatalogEntityIDIn...))
+	}
+	if len(i.CatalogEntityIDNotIn) > 0 {
+		predicates = append(predicates, entityhistory.CatalogEntityIDNotIn(i.CatalogEntityIDNotIn...))
+	}
+	if i.CatalogEntityIDContains != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDContains(*i.CatalogEntityIDContains))
+	}
+	if i.CatalogEntityIDHasPrefix != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDHasPrefix(*i.CatalogEntityIDHasPrefix))
+	}
+	if i.CatalogEntityIDHasSuffix != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDHasSuffix(*i.CatalogEntityIDHasSuffix))
+	}
+	if i.CatalogEntityIDIsNil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDIsNil())
+	}
+	if i.CatalogEntityIDNotNil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDNotNil())
+	}
+	if i.CatalogEntityIDEqualFold != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDEqualFold(*i.CatalogEntityIDEqualFold))
+	}
+	if i.CatalogEntityIDContainsFold != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityIDContainsFold(*i.CatalogEntityIDContainsFold))
+	}
+	if i.ExternallyVisible != nil {
+		predicates = append(predicates, entityhistory.ExternallyVisibleEQ(*i.ExternallyVisible))
+	}
+	if i.ExternallyVisibleNEQ != nil {
+		predicates = append(predicates, entityhistory.ExternallyVisibleNEQ(*i.ExternallyVisibleNEQ))
+	}
+	if i.ExternallyVisibleIsNil {
+		predicates = append(predicates, entityhistory.ExternallyVisibleIsNil())
+	}
+	if i.ExternallyVisibleNotNil {
+		predicates = append(predicates, entityhistory.ExternallyVisibleNotNil())
+	}
+	if i.CatalogEntityKey != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyEQ(*i.CatalogEntityKey))
+	}
+	if i.CatalogEntityKeyNEQ != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyNEQ(*i.CatalogEntityKeyNEQ))
+	}
+	if len(i.CatalogEntityKeyIn) > 0 {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyIn(i.CatalogEntityKeyIn...))
+	}
+	if len(i.CatalogEntityKeyNotIn) > 0 {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyNotIn(i.CatalogEntityKeyNotIn...))
+	}
+	if i.CatalogEntityKeyContains != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyContains(*i.CatalogEntityKeyContains))
+	}
+	if i.CatalogEntityKeyHasPrefix != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyHasPrefix(*i.CatalogEntityKeyHasPrefix))
+	}
+	if i.CatalogEntityKeyHasSuffix != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyHasSuffix(*i.CatalogEntityKeyHasSuffix))
+	}
+	if i.CatalogEntityKeyIsNil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyIsNil())
+	}
+	if i.CatalogEntityKeyNotNil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyNotNil())
+	}
+	if i.CatalogEntityKeyEqualFold != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyEqualFold(*i.CatalogEntityKeyEqualFold))
+	}
+	if i.CatalogEntityKeyContainsFold != nil {
+		predicates = append(predicates, entityhistory.CatalogEntityKeyContainsFold(*i.CatalogEntityKeyContainsFold))
 	}
 	if i.EntityRelationshipStateName != nil {
 		predicates = append(predicates, entityhistory.EntityRelationshipStateNameEQ(*i.EntityRelationshipStateName))

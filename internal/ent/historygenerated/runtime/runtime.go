@@ -774,44 +774,48 @@ func init() {
 	entityhistoryDescSystemOwned := entityhistoryFields[27].Descriptor()
 	// entityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entityhistory.DefaultSystemOwned = entityhistoryDescSystemOwned.Default.(bool)
+	// entityhistoryDescExternallyVisible is the schema descriptor for externally_visible field.
+	entityhistoryDescExternallyVisible := entityhistoryFields[31].Descriptor()
+	// entityhistory.DefaultExternallyVisible holds the default value on creation for the externally_visible field.
+	entityhistory.DefaultExternallyVisible = entityhistoryDescExternallyVisible.Default.(bool)
 	// entityhistoryDescApprovedForUse is the schema descriptor for approved_for_use field.
-	entityhistoryDescApprovedForUse := entityhistoryFields[47].Descriptor()
+	entityhistoryDescApprovedForUse := entityhistoryFields[50].Descriptor()
 	// entityhistory.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.
 	entityhistory.DefaultApprovedForUse = entityhistoryDescApprovedForUse.Default.(bool)
 	// entityhistoryDescLinkedAssetIds is the schema descriptor for linked_asset_ids field.
-	entityhistoryDescLinkedAssetIds := entityhistoryFields[48].Descriptor()
+	entityhistoryDescLinkedAssetIds := entityhistoryFields[51].Descriptor()
 	// entityhistory.DefaultLinkedAssetIds holds the default value on creation for the linked_asset_ids field.
 	entityhistory.DefaultLinkedAssetIds = entityhistoryDescLinkedAssetIds.Default.([]string)
 	// entityhistoryDescHasSoc2 is the schema descriptor for has_soc2 field.
-	entityhistoryDescHasSoc2 := entityhistoryFields[49].Descriptor()
+	entityhistoryDescHasSoc2 := entityhistoryFields[52].Descriptor()
 	// entityhistory.DefaultHasSoc2 holds the default value on creation for the has_soc2 field.
 	entityhistory.DefaultHasSoc2 = entityhistoryDescHasSoc2.Default.(bool)
 	// entityhistoryDescAutoRenews is the schema descriptor for auto_renews field.
-	entityhistoryDescAutoRenews := entityhistoryFields[53].Descriptor()
+	entityhistoryDescAutoRenews := entityhistoryFields[56].Descriptor()
 	// entityhistory.DefaultAutoRenews holds the default value on creation for the auto_renews field.
 	entityhistory.DefaultAutoRenews = entityhistoryDescAutoRenews.Default.(bool)
 	// entityhistoryDescSpendCurrency is the schema descriptor for spend_currency field.
-	entityhistoryDescSpendCurrency := entityhistoryFields[56].Descriptor()
+	entityhistoryDescSpendCurrency := entityhistoryFields[59].Descriptor()
 	// entityhistory.DefaultSpendCurrency holds the default value on creation for the spend_currency field.
 	entityhistory.DefaultSpendCurrency = entityhistoryDescSpendCurrency.Default.(string)
 	// entityhistoryDescSSOEnforced is the schema descriptor for sso_enforced field.
-	entityhistoryDescSSOEnforced := entityhistoryFields[59].Descriptor()
+	entityhistoryDescSSOEnforced := entityhistoryFields[62].Descriptor()
 	// entityhistory.DefaultSSOEnforced holds the default value on creation for the sso_enforced field.
 	entityhistory.DefaultSSOEnforced = entityhistoryDescSSOEnforced.Default.(bool)
 	// entityhistoryDescMfaSupported is the schema descriptor for mfa_supported field.
-	entityhistoryDescMfaSupported := entityhistoryFields[60].Descriptor()
+	entityhistoryDescMfaSupported := entityhistoryFields[63].Descriptor()
 	// entityhistory.DefaultMfaSupported holds the default value on creation for the mfa_supported field.
 	entityhistory.DefaultMfaSupported = entityhistoryDescMfaSupported.Default.(bool)
 	// entityhistoryDescMfaEnforced is the schema descriptor for mfa_enforced field.
-	entityhistoryDescMfaEnforced := entityhistoryFields[61].Descriptor()
+	entityhistoryDescMfaEnforced := entityhistoryFields[64].Descriptor()
 	// entityhistory.DefaultMfaEnforced holds the default value on creation for the mfa_enforced field.
 	entityhistory.DefaultMfaEnforced = entityhistoryDescMfaEnforced.Default.(bool)
 	// entityhistoryDescProvidedServices is the schema descriptor for provided_services field.
-	entityhistoryDescProvidedServices := entityhistoryFields[63].Descriptor()
+	entityhistoryDescProvidedServices := entityhistoryFields[66].Descriptor()
 	// entityhistory.DefaultProvidedServices holds the default value on creation for the provided_services field.
 	entityhistory.DefaultProvidedServices = entityhistoryDescProvidedServices.Default.([]string)
 	// entityhistoryDescLinks is the schema descriptor for links field.
-	entityhistoryDescLinks := entityhistoryFields[64].Descriptor()
+	entityhistoryDescLinks := entityhistoryFields[67].Descriptor()
 	// entityhistory.DefaultLinks holds the default value on creation for the links field.
 	entityhistory.DefaultLinks = entityhistoryDescLinks.Default.([]string)
 	// entityhistoryDescID is the schema descriptor for id field.

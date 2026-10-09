@@ -14153,6 +14153,10 @@ input CreateEntityInput {
 	"""
 	systemInternalID: String @readOnly
 	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
+	"""
 	the relationship_state of the entity
 	"""
 	entityRelationshipStateName: String
@@ -24364,6 +24368,18 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	systemInternalID: String @hidden(if: true)
 	"""
+	the system-owned catalogue entity this entity was adopted from
+	"""
+	catalogEntityID: ID
+	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
+	"""
+	the lookup key of the catalogue entity this entity was adopted from
+	"""
+	catalogEntityKey: String
+	"""
 	the relationship_state of the entity
 	"""
 	entityRelationshipStateName: String
@@ -24651,6 +24667,41 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	reviewedByUser: User
 	reviewedByGroup: Group
 	reviewedByIdentityHolder: IdentityHolder
+	"""
+	the system-owned catalogue entity this entity was adopted from
+	"""
+	catalogEntity: Entity
+	adoptedEntities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
 	entityRelationshipState: CustomTypeEnum
 	entitySecurityQuestionnaireStatus: CustomTypeEnum
 	entitySourceType: CustomTypeEnum
@@ -26291,6 +26342,41 @@ input EntityWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	catalog_entity_id field predicates
+	"""
+	catalogEntityID: ID
+	catalogEntityIDNEQ: ID
+	catalogEntityIDIn: [ID!]
+	catalogEntityIDNotIn: [ID!]
+	catalogEntityIDContains: ID
+	catalogEntityIDHasPrefix: ID
+	catalogEntityIDHasSuffix: ID
+	catalogEntityIDIsNil: Boolean
+	catalogEntityIDNotNil: Boolean
+	catalogEntityIDEqualFold: ID
+	catalogEntityIDContainsFold: ID
+	"""
+	externally_visible field predicates
+	"""
+	externallyVisible: Boolean
+	externallyVisibleNEQ: Boolean
+	externallyVisibleIsNil: Boolean
+	externallyVisibleNotNil: Boolean
+	"""
+	catalog_entity_key field predicates
+	"""
+	catalogEntityKey: String
+	catalogEntityKeyNEQ: String
+	catalogEntityKeyIn: [String!]
+	catalogEntityKeyNotIn: [String!]
+	catalogEntityKeyContains: String
+	catalogEntityKeyHasPrefix: String
+	catalogEntityKeyHasSuffix: String
+	catalogEntityKeyIsNil: Boolean
+	catalogEntityKeyNotNil: Boolean
+	catalogEntityKeyEqualFold: String
+	catalogEntityKeyContainsFold: String
+	"""
 	entity_relationship_state_name field predicates
 	"""
 	entityRelationshipStateName: String
@@ -26823,6 +26909,16 @@ input EntityWhereInput {
 	"""
 	hasReviewedByIdentityHolder: Boolean
 	hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
+	catalog_entity edge predicates
+	"""
+	hasCatalogEntity: Boolean
+	hasCatalogEntityWith: [EntityWhereInput!]
+	"""
+	adopted_entities edge predicates
+	"""
+	hasAdoptedEntities: Boolean
+	hasAdoptedEntitiesWith: [EntityWhereInput!]
 	"""
 	entity_relationship_state edge predicates
 	"""
@@ -44633,6 +44729,10 @@ type Mutation {
 		"""
 		input: Upload!
 	): EntityBulkUpdatePayload!
+	"""
+	adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
+	"""
+	adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
 	"""
 	Create a new entityType
 	"""
@@ -65234,6 +65334,10 @@ type Query {
 		"""
 		id: ID!
 	): Entity!
+	"""
+	entitiesCatalog lists the externally visible system-owned entities available for adoption
+	"""
+	entitiesCatalog(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [EntityOrder!], where: EntityWhereInput): EntityConnection!
 	"""
 	Look up entityType by ID
 	"""
@@ -86686,6 +86790,11 @@ input UpdateEntityInput {
 	"""
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
+	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
+	clearExternallyVisible: Boolean
 	"""
 	the relationship_state of the entity
 	"""

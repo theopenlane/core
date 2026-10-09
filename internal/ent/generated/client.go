@@ -8605,6 +8605,38 @@ func (c *EntityClient) QueryReviewedByIdentityHolder(_m *Entity) *IdentityHolder
 	return query
 }
 
+// QueryCatalogEntity queries the catalog_entity edge of a Entity.
+func (c *EntityClient) QueryCatalogEntity(_m *Entity) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entity.CatalogEntityTable, entity.CatalogEntityColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAdoptedEntities queries the adopted_entities edge of a Entity.
+func (c *EntityClient) QueryAdoptedEntities(_m *Entity) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.AdoptedEntitiesTable, entity.AdoptedEntitiesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEntityRelationshipState queries the entity_relationship_state edge of a Entity.
 func (c *EntityClient) QueryEntityRelationshipState(_m *Entity) *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: c.config}).Query()

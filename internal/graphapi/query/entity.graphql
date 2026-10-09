@@ -187,6 +187,8 @@ query GetEntityByID ($entityId: ID!) {
 		approvedForUse
 		autoRenews
 		billingModel
+		catalogEntityID
+		catalogEntityKey
 		contractEndDate
 		contractRenewalAt
 		contractStartDate
@@ -205,6 +207,7 @@ query GetEntityByID ($entityId: ID!) {
 		environmentID
 		environmentName
 		externalID
+		externallyVisible
 		hasSoc2
 		id
 		integrationRunID

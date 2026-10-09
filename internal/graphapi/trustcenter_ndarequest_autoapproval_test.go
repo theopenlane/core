@@ -281,7 +281,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			},
 			status: enums.TrustCenterNDARequestStatusDeclined,
 		},
-
+		{
 			ctx:   tcOrg.Owner.UserCtx,
 			name:  "existing contact match approves before work email restriction",
 			email: workEmail,

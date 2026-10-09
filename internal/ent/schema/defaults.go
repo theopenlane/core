@@ -103,11 +103,24 @@ func (m mixinConfig) getMixins(s ent.Interface) []ent.Mixin {
 	}
 
 	if autoSetSkipForSystemAdmin(&m) {
+		ownerField := ""
+
 		// if both SystemOwnedMixin and ObjectOwnedMixin are present, set skip for system admin to true
 		for i, mixin := range m.additionalMixins {
 			if o, ok := mixin.(ObjectOwnedMixin); ok {
 				o.AllowEmptyForSystemAdmin = true
 				m.additionalMixins[i] = o
+				ownerField = o.OwnerFieldName
+
+				break
+			}
+		}
+
+		// hand the owner field to the SystemOwnedMixin so its catalogue index uses it
+		for i, mx := range m.additionalMixins {
+			if so, ok := mx.(mixin.SystemOwnedMixin); ok {
+				mixin.WithOwnerField(ownerField)(&so)
+				m.additionalMixins[i] = so
 
 				break
 			}

@@ -785,6 +785,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldSystemOwned:                           {Type: field.TypeBool, Column: entityhistory.FieldSystemOwned},
 			entityhistory.FieldInternalNotes:                         {Type: field.TypeString, Column: entityhistory.FieldInternalNotes},
 			entityhistory.FieldSystemInternalID:                      {Type: field.TypeString, Column: entityhistory.FieldSystemInternalID},
+			entityhistory.FieldCatalogEntityID:                       {Type: field.TypeString, Column: entityhistory.FieldCatalogEntityID},
+			entityhistory.FieldExternallyVisible:                     {Type: field.TypeBool, Column: entityhistory.FieldExternallyVisible},
+			entityhistory.FieldCatalogEntityKey:                      {Type: field.TypeString, Column: entityhistory.FieldCatalogEntityKey},
 			entityhistory.FieldEntityRelationshipStateName:           {Type: field.TypeString, Column: entityhistory.FieldEntityRelationshipStateName},
 			entityhistory.FieldEntityRelationshipStateID:             {Type: field.TypeString, Column: entityhistory.FieldEntityRelationshipStateID},
 			entityhistory.FieldEntitySecurityQuestionnaireStatusName: {Type: field.TypeString, Column: entityhistory.FieldEntitySecurityQuestionnaireStatusName},
@@ -6141,6 +6144,21 @@ func (f *EntityHistoryFilter) WhereInternalNotes(p entql.StringP) {
 // WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
 func (f *EntityHistoryFilter) WhereSystemInternalID(p entql.StringP) {
 	f.Where(p.Field(entityhistory.FieldSystemInternalID))
+}
+
+// WhereCatalogEntityID applies the entql string predicate on the catalog_entity_id field.
+func (f *EntityHistoryFilter) WhereCatalogEntityID(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldCatalogEntityID))
+}
+
+// WhereExternallyVisible applies the entql bool predicate on the externally_visible field.
+func (f *EntityHistoryFilter) WhereExternallyVisible(p entql.BoolP) {
+	f.Where(p.Field(entityhistory.FieldExternallyVisible))
+}
+
+// WhereCatalogEntityKey applies the entql string predicate on the catalog_entity_key field.
+func (f *EntityHistoryFilter) WhereCatalogEntityKey(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldCatalogEntityKey))
 }
 
 // WhereEntityRelationshipStateName applies the entql string predicate on the entity_relationship_state_name field.

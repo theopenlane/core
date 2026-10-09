@@ -70,6 +70,12 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldCatalogEntityID holds the string denoting the catalog_entity_id field in the database.
+	FieldCatalogEntityID = "catalog_entity_id"
+	// FieldExternallyVisible holds the string denoting the externally_visible field in the database.
+	FieldExternallyVisible = "externally_visible"
+	// FieldCatalogEntityKey holds the string denoting the catalog_entity_key field in the database.
+	FieldCatalogEntityKey = "catalog_entity_key"
 	// FieldEntityRelationshipStateName holds the string denoting the entity_relationship_state_name field in the database.
 	FieldEntityRelationshipStateName = "entity_relationship_state_name"
 	// FieldEntityRelationshipStateID holds the string denoting the entity_relationship_state_id field in the database.
@@ -184,6 +190,10 @@ const (
 	EdgeReviewedByGroup = "reviewed_by_group"
 	// EdgeReviewedByIdentityHolder holds the string denoting the reviewed_by_identity_holder edge name in mutations.
 	EdgeReviewedByIdentityHolder = "reviewed_by_identity_holder"
+	// EdgeCatalogEntity holds the string denoting the catalog_entity edge name in mutations.
+	EdgeCatalogEntity = "catalog_entity"
+	// EdgeAdoptedEntities holds the string denoting the adopted_entities edge name in mutations.
+	EdgeAdoptedEntities = "adopted_entities"
 	// EdgeEntityRelationshipState holds the string denoting the entity_relationship_state edge name in mutations.
 	EdgeEntityRelationshipState = "entity_relationship_state"
 	// EdgeEntitySecurityQuestionnaireStatus holds the string denoting the entity_security_questionnaire_status edge name in mutations.
@@ -314,6 +324,14 @@ const (
 	ReviewedByIdentityHolderInverseTable = "identity_holders"
 	// ReviewedByIdentityHolderColumn is the table column denoting the reviewed_by_identity_holder relation/edge.
 	ReviewedByIdentityHolderColumn = "reviewed_by_identity_holder_id"
+	// CatalogEntityTable is the table that holds the catalog_entity relation/edge.
+	CatalogEntityTable = "entities"
+	// CatalogEntityColumn is the table column denoting the catalog_entity relation/edge.
+	CatalogEntityColumn = "catalog_entity_id"
+	// AdoptedEntitiesTable is the table that holds the adopted_entities relation/edge.
+	AdoptedEntitiesTable = "entities"
+	// AdoptedEntitiesColumn is the table column denoting the adopted_entities relation/edge.
+	AdoptedEntitiesColumn = "catalog_entity_id"
 	// EntityRelationshipStateTable is the table that holds the entity_relationship_state relation/edge.
 	EntityRelationshipStateTable = "entities"
 	// EntityRelationshipStateInverseTable is the table name for the CustomTypeEnum entity.
@@ -531,6 +549,9 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldCatalogEntityID,
+	FieldExternallyVisible,
+	FieldCatalogEntityKey,
 	FieldEntityRelationshipStateName,
 	FieldEntityRelationshipStateID,
 	FieldEntitySecurityQuestionnaireStatusName,
@@ -692,6 +713,8 @@ var (
 	OwnerIDValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultExternallyVisible holds the default value on creation for the "externally_visible" field.
+	DefaultExternallyVisible bool
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
@@ -895,6 +918,21 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByCatalogEntityID orders the results by the catalog_entity_id field.
+func ByCatalogEntityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCatalogEntityID, opts...).ToFunc()
+}
+
+// ByExternallyVisible orders the results by the externally_visible field.
+func ByExternallyVisible(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternallyVisible, opts...).ToFunc()
+}
+
+// ByCatalogEntityKey orders the results by the catalog_entity_key field.
+func ByCatalogEntityKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCatalogEntityKey, opts...).ToFunc()
 }
 
 // ByEntityRelationshipStateName orders the results by the entity_relationship_state_name field.
@@ -1190,6 +1228,27 @@ func ByReviewedByGroupField(field string, opts ...sql.OrderTermOption) OrderOpti
 func ByReviewedByIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newReviewedByIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCatalogEntityField orders the results by catalog_entity field.
+func ByCatalogEntityField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCatalogEntityStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAdoptedEntitiesCount orders the results by adopted_entities count.
+func ByAdoptedEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAdoptedEntitiesStep(), opts...)
+	}
+}
+
+// ByAdoptedEntities orders the results by adopted_entities terms.
+func ByAdoptedEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAdoptedEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1659,6 +1718,20 @@ func newReviewedByIdentityHolderStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReviewedByIdentityHolderInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByIdentityHolderTable, ReviewedByIdentityHolderColumn),
+	)
+}
+func newCatalogEntityStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CatalogEntityTable, CatalogEntityColumn),
+	)
+}
+func newAdoptedEntitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AdoptedEntitiesTable, AdoptedEntitiesColumn),
 	)
 }
 func newEntityRelationshipStateStep() *sqlgraph.Step {

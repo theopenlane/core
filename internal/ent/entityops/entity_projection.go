@@ -675,6 +675,8 @@ type EntityProjection struct {
 	ApprovedForUse                        bool                   `json:"approved_for_use,omitempty"`
 	AutoRenews                            bool                   `json:"auto_renews,omitempty"`
 	BillingModel                          string                 `json:"billing_model,omitempty"`
+	CatalogEntityID                       string                 `json:"catalog_entity_id,omitempty"`
+	CatalogEntityKey                      string                 `json:"catalog_entity_key,omitempty"`
 	ContractEndDate                       models.DateTime        `json:"contract_end_date,omitempty"`
 	ContractRenewalAt                     models.DateTime        `json:"contract_renewal_at,omitempty"`
 	ContractStartDate                     models.DateTime        `json:"contract_start_date,omitempty"`
@@ -693,6 +695,7 @@ type EntityProjection struct {
 	EnvironmentID                         string                 `json:"environment_id,omitempty"`
 	EnvironmentName                       string                 `json:"environment_name,omitempty"`
 	ExternalID                            string                 `json:"external_id,omitempty"`
+	ExternallyVisible                     bool                   `json:"externally_visible,omitempty"`
 	HasSoc2                               bool                   `json:"has_soc2,omitempty"`
 	IntegrationRunID                      string                 `json:"integration_run_id,omitempty"`
 	InternalNotes                         string                 `json:"internal_notes,omitempty"`
