@@ -4,7 +4,6 @@ package graphapi_test
 
 import (
 	"context"
-	"strings"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
