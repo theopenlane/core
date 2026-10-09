@@ -7,6 +7,7 @@ import (
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
 	goldmarkparser "github.com/yuin/goldmark/parser"
 	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 )
@@ -66,6 +67,7 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 
 func mdToHTML(md []byte) []byte {
 	gm := goldmark.New(
+		goldmark.WithExtensions(extension.Table),
 		goldmark.WithParserOptions(
 			goldmarkparser.WithAutoHeadingID(),
 		),
