@@ -72,6 +72,21 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 			return nil, ErrInstallationRequired
 		}
 
+		if request.DB.EmailVerifier != nil && request.DB.EmailVerifier.IsFreeOrDisposableDomain(cfg.Domain) {
+			logx.FromContext(ctx).Info().Str("domain", cfg.Domain).Str("organization_id", organizationID).Msg("domain scan: skipping free or disposable domain")
+
+			if cfg.ScanID != "" {
+				if err := request.DB.Scan.Update().
+					Where(scan.ID(cfg.ScanID), scan.OwnerID(organizationID), scan.StatusEQ(enums.ScanStatusPending)).
+					SetStatus(enums.ScanStatusInvalid).
+					Exec(ctx); err != nil {
+					return nil, err
+				}
+			}
+
+			return nil, ErrDomainScanDomainBlocked
+		}
+
 		var scanRecord *generated.Scan
 		var err error
 

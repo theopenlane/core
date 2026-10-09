@@ -2,6 +2,7 @@ package validator
 
 import (
 	"errors"
+	"strings"
 
 	emailverifier "github.com/AfterShip/email-verifier"
 	"github.com/rs/zerolog/log"
@@ -153,4 +154,16 @@ func (c *EmailVerifier) IncludesFreeDomain(domains []string) bool {
 	}
 
 	return false
+}
+
+// IsFreeOrDisposableDomain checks if the domain is a free or disposable email domain
+// If there is no client configured, it returns false
+func (c *EmailVerifier) IsFreeOrDisposableDomain(domain string) bool {
+	if c == nil || c.Client == nil {
+		return false
+	}
+
+	domain = strings.ToLower(strings.TrimSpace(domain))
+
+	return c.Client.IsFreeDomain(domain) || c.Client.IsDisposable(domain)
 }
