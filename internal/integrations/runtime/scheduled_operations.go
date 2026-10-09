@@ -19,14 +19,14 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 
 	operation, err := r.Registry().Operation(src.DefinitionID, envelope.Operation)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed retrieving operation from registry")
+
 		return 0, err
 	}
 
 	if operation.DisabledFor(nil) {
 		return 0, operations.ErrOperationDisabled
 	}
-
-	logx.FromContext(ctx).Info().Msg("scheduled operation cycle started")
 
 	response, err := r.executeOperationInline(ctx, nil, src.DefinitionID, operation, nil)
 	if err != nil {
@@ -39,8 +39,6 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 	if err := jsonx.UnmarshalIfPresent(response, &result); err != nil {
 		return 0, err
 	}
-
-	logx.FromContext(ctx).Info().Int("processed", result.Processed).Msg("scheduled operation cycle completed")
 
 	return result.Processed, nil
 }
@@ -97,14 +95,14 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 
 	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed checking for active scheduled job")
+
 		return err
 	}
 
 	if active {
 		return nil
 	}
-
-	logx.FromContext(ctx).Info().Msg("seeding scheduled operation")
 
 	_, err = r.Gala().EmitWithHeaders(ctx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
 

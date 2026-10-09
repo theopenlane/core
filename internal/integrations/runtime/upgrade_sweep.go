@@ -32,6 +32,8 @@ func (r *Runtime) UpgradeInstallations(ctx context.Context) error {
 		).
 		All(auth.EnsureIntegrationCaller(ctx, ""))
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed querying installations")
+
 		return err
 	}
 
@@ -42,8 +44,6 @@ func (r *Runtime) UpgradeInstallations(ctx context.Context) error {
 	}), func(err error, _ int) bool {
 		return err != nil
 	})
-
-	logx.FromContext(ctx).Info().Int("swept", len(stale)).Int("failed", len(failures)).Msg("installation definition version sweep completed")
 
 	return errors.Join(failures...)
 }

@@ -56,25 +56,33 @@ func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.In
 	return nil
 }
 
-// upgradeInstallation conforms every stored document onto its current name, failing the whole upgrade when any document does not conform, and persists the documents, renamed runs, and webhook rows with the definition version in one transaction that first claims the version so a concurrent upgrade that already stamped it leaves the installation to that upgrade and reloads it
+// upgradeInstallation conforms every stored document onto its current name
 func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed resolving definition for installation")
+
 		return fmt.Errorf("resolve definition: %w", err)
 	}
 
 	providerState, err := def.ProviderState(installation.ProviderState)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed resolving provider state")
+
 		return fmt.Errorf("resolve provider state: %w", err)
 	}
 
 	req, records, err := r.installationRequest(ctx, installation)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed loading credentials")
+
 		return fmt.Errorf("load credentials: %w", err)
 	}
 
 	credentials, err := conformCredentials(ctx, req, def, records)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed conforming credentials")
+
 		return fmt.Errorf("upgrade credentials: %w", err)
 	}
 
@@ -84,6 +92,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 	userInput, err = conformUserInput(ctx, req, def, userInput)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed conforming user input")
+
 		return fmt.Errorf("upgrade user input: %w", err)
 	}
 
@@ -91,6 +101,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 	operationDocuments, err := conformDocuments(ctx, req, operationInputKind(def), operationConfig.Operations)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed conforming operation input")
+
 		return fmt.Errorf("upgrade operation input: %w", err)
 	}
 
@@ -98,6 +110,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 	nextState, err := upgradeCredentialRef(def, providerState, records)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed upgrading credential reference")
+
 		return err
 	}
 
@@ -106,6 +120,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	if nextState != providerState {
 		providerStateNext, err = def.WithProviderState(installation.ProviderState, nextState)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed resolving provider state")
+
 			return fmt.Errorf("resolve provider state: %w", err)
 		}
 	}
@@ -126,6 +142,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		}
 
 		if err := r.keystore().ReplaceCredentials(ctx, installation, records, credentials); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed replacing credentials")
+
 			return false, fmt.Errorf("replace credentials: %w", err)
 		}
 
@@ -144,10 +162,14 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		}
 
 		if err := renameRetiredRows(ctx, tx, installation.ID, def); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed renaming retired rows")
+
 			return false, err
 		}
 
 		if err := r.reconcileInstallationWebhooks(ctx, tx.Client(), installation, ""); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed reconciling installation webhooks")
+
 			return false, fmt.Errorf("upgrade webhooks: %w", err)
 		}
 
@@ -225,6 +247,8 @@ func conformInstallationMetadata(ctx context.Context, tx *ent.Tx, req types.Inst
 
 	conformed, err := conformDocuments(ctx, req, installationKind(def), stored)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed conforming installation metadata")
+
 		return types.IntegrationInstallationMetadata{}, nil, fmt.Errorf("upgrade installation metadata: %w", err)
 	}
 
@@ -236,6 +260,8 @@ func conformInstallationMetadata(ctx context.Context, tx *ent.Tx, req types.Inst
 
 	display, err := upgradeDisplay(def, installation.ID, current.InstallationMetadata.Display, attributes, credentialRef)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed upgrading installation display")
+
 		return types.IntegrationInstallationMetadata{}, nil, fmt.Errorf("upgrade installation metadata: %w", err)
 	}
 
@@ -285,6 +311,9 @@ func renameRetiredRows(ctx context.Context, tx *ent.Tx, installationID string, d
 			Where(integrationrun.IntegrationIDEQ(installationID), integrationrun.OperationNameIn(operation.Replaces...)).
 			SetOperationName(operation.Name).
 			Exec(ctx); err != nil {
+
+			logx.FromContext(ctx).Error().Err(err).Msg("failed renaming retired run rows")
+
 			return err
 		}
 	}
@@ -302,6 +331,9 @@ func renameRetiredRows(ctx context.Context, tx *ent.Tx, installationID string, d
 			).
 			SetName(webhook.Name).
 			Exec(ctx); err != nil {
+
+			logx.FromContext(ctx).Error().Err(err).Msg("failed renaming retired webhook rows")
+
 			return err
 		}
 	}
@@ -391,6 +423,8 @@ func conformCredentials(ctx context.Context, req types.InstallationRequest, def 
 
 	conformed, err := conformDocuments(ctx, req, credentialKind(def), stored)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed conforming credentials")
+
 		return nil, err
 	}
 
@@ -534,6 +568,8 @@ func conformStored(ctx context.Context, req types.InstallationRequest, layout ty
 	if layout.Upgrade != nil {
 		upgraded, err := layout.Upgrade(ctx, req, from, stored)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed upgrading stored document")
+
 			return nil, fmt.Errorf("%w: upgrade: %w", sentinel, err)
 		}
 
@@ -542,6 +578,8 @@ func conformStored(ctx context.Context, req types.InstallationRequest, layout ty
 
 	conformed, err := jsonx.ConformToSchema(layout.Schema, document)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed conforming stored document to schema")
+
 		return nil, fmt.Errorf("%w: conform to schema: %w", sentinel, err)
 	}
 
