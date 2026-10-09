@@ -1,5 +1,5 @@
-version: v0.0.15
-sha: e8fd713c4b3b614220b734973cbb016d1bbfea582f135ca74f3b973d54efd093
+version: v0.0.16
+sha: e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2
 modules:
   base_module:
     display_name: Base Module
@@ -11,14 +11,14 @@ modules:
         unit_amount: 0
         nickname: base_module_monthly
         lookup_key: base_module_monthly
-        price_id: price_1S3qXEJIzM4Pa2Zc3bZXrIC8
+        price_id: price_1RnPMmQsIOtQgZAIywN4pEcD
       - interval: year
         unit_amount: 0
         nickname: base_module_free
         lookup_key: base_module_free
-        price_id: price_1S3qXEJIzM4Pa2ZcYaKVbHkk
+        price_id: price_1RnPMnQsIOtQgZAIQuMmMN2Q
     audience: public
-    product_id: prod_Szq52Y33Hzvxc6
+    product_id: prod_Sir4DHmlTwNTLu
     personal_org: true
     include_with_trial: true
   compliance_module:
@@ -32,16 +32,16 @@ modules:
         unit_amount: 45000
         nickname: price_compliance_monthly
         lookup_key: price_compliance_monthly
-        price_id: price_1S3qX6JIzM4Pa2ZcRtuinRdG
+        price_id: price_1RnPMrQsIOtQgZAIdAF1TY4c
       - interval: year
         unit_amount: 500000
         nickname: price_compliance_annually
         lookup_key: price_compliance_annually
-        price_id: price_1S3qX7JIzM4Pa2ZchMVxiS1l
+        price_id: price_1RnPMsQsIOtQgZAILrkvLDq7
     audience: public
     usage:
       evidence_storage_gb: 25000
-    product_id: prod_SzqDyAvxP2D7fA
+    product_id: prod_Sir43Od2PyTiua
     include_with_trial: true
   entity_management_module:
     display_name: Vendor Risk Management
@@ -54,14 +54,14 @@ modules:
         unit_amount: 20000
         nickname: price_entity_monthly
         lookup_key: price_entity_monthly
-        price_id: price_1S3qX8JIzM4Pa2ZcQNF64Nta
+        price_id: price_1RnPMwQsIOtQgZAIDWYFRS6y
       - interval: year
         unit_amount: 200000
         nickname: price_vendor_annually
         lookup_key: price_vendor_annually
-        price_id: price_1S3qX9JIzM4Pa2ZcNFO9ciiV
+        price_id: price_1RnPMxQsIOtQgZAIFfvIL8sY
     audience: private
-    product_id: prod_SzqDiFERRVzRmP
+    product_id: prod_Sir5QyuCjNUQpt
   registry_module:
     display_name: Registry
     lookup_key: registry_module
@@ -73,15 +73,14 @@ modules:
         unit_amount: 0
         nickname: price_registry_monthly
         lookup_key: price_registry_monthly
-        price_id: price_1Tm59FJIzM4Pa2ZcgKUBWL8L
+        price_id: price_1UC2o2QsIOtQgZAI3D8ypblG
       - interval: year
         unit_amount: 0
         nickname: price_registry_annually
         lookup_key: price_registry_annually
-        price_id: price_1Tm59FJIzM4Pa2Zctv6XeooE
+        price_id: price_1UC2o3QsIOtQgZAIgDzazGK7
     audience: public
-    product_id: prod_UlcOm2q6nv0DJC
-    include_with_trial: false
+    product_id: prod_VCRhBFY52Bon6y
   trust_center_module:
     display_name: Trust Center
     lookup_key: trust_center_module
@@ -93,14 +92,14 @@ modules:
         unit_amount: 30000
         nickname: price_trustcenter_monthly
         lookup_key: price_trustcenter_monthly
-        price_id: price_1S3qXAJIzM4Pa2Zc61jfLMe9
+        price_id: price_1RnPN1QsIOtQgZAI2Cw2Xu1D
       - interval: year
         unit_amount: 300000
         nickname: price_trustcenter_annually
         lookup_key: price_trustcenter_annually
-        price_id: price_1S3qXBJIzM4Pa2Zcq3Y0vzDa
+        price_id: price_1RnPN3QsIOtQgZAIFosQfSx3
     audience: public
-    product_id: prod_SzqDywr83XkXk5
+    product_id: prod_Sir5icUIPdUDFp
     include_with_trial: true
   vulnerability_management_module:
     display_name: Vulnerability Tracking and Management
@@ -113,14 +112,14 @@ modules:
         unit_amount: 10000
         nickname: price_vulnerability_mgmt_monthly
         lookup_key: price_vulnerability_mgmt_monthly
-        price_id: price_1S3qXCJIzM4Pa2ZcYODHbvop
+        price_id: price_1RnPN6QsIOtQgZAIOWKE8EaG
       - interval: year
         unit_amount: 100000
         nickname: price_vulnerability_mgmt_annually
         lookup_key: price_vulnerability_mgmt_annually
-        price_id: price_1S3qXCJIzM4Pa2ZcViTlqrmK
+        price_id: price_1RnPN8QsIOtQgZAIWSe48kGN
     audience: private
-    product_id: prod_SzpzB3d9rAjrb3
+    product_id: prod_Sir5ZkrfKbKZ7h
 addons:
   domain_scanning_addon:
     display_name: Domain and Vulnerability Scanning
@@ -133,14 +132,14 @@ addons:
         unit_amount: 10000
         nickname: domain_scan_monthly
         lookup_key: domain_scan_monthly
-        price_id: price_1S3qXLJIzM4Pa2ZcYRPuLSoJ
+        price_id: price_1RnPNBQsIOtQgZAImWlQr0gc
       - interval: year
         unit_amount: 100000
         nickname: domain_scan_annually
         lookup_key: domain_scan_annually
-        price_id: price_1S3qXLJIzM4Pa2Zc8Y6fRo5x
+        price_id: price_1RnPNDQsIOtQgZAII2FicFRM
     audience: private
-    product_id: prod_SzqDWb1fSmvyXC
+    product_id: prod_Sir5sZmMkwJadw
   extra_evidence_storage_addon:
     display_name: Additional Evidence Storage (100GB)
     lookup_key: extra_evidence_storage_addon
@@ -154,9 +153,9 @@ addons:
         lookup_key: extra_evidence_storage_100gb
         metadata:
           increment_gb: "100"
-        price_id: price_1S3qXFJIzM4Pa2ZcUKyDYErM
+        price_id: price_1RnPNGQsIOtQgZAIvgnH6EGi
     audience: public
-    product_id: prod_SzqDCzuPVc6Lrn
+    product_id: prod_Sir59RpF5oXO5U
   policy_management_addon:
     display_name: Policy and Procedure Management
     lookup_key: policy_management_addon
@@ -168,14 +167,14 @@ addons:
         unit_amount: 1000
         nickname: price_policy_mgmt_monthly
         lookup_key: price_policy_mgmt_monthly
-        price_id: price_1S3qXHJIzM4Pa2ZcWKG6pb5z
+        price_id: price_1RnPNKQsIOtQgZAIBlQEWIvR
       - interval: month
         unit_amount: 10000
         nickname: price_policy_mgmt_annually
         lookup_key: price_policy_mgmt_annually
-        price_id: price_1S3qXHJIzM4Pa2Zcjl8y3TWX
+        price_id: price_1RnPNLQsIOtQgZAISH7iKY8K
     audience: beta
-    product_id: prod_SzqDMmZeWJiUDm
+    product_id: prod_Sir59lIzlGXEeQ
   risk_management_addon:
     display_name: Risk Management
     lookup_key: risk_management_addon
@@ -187,11 +186,25 @@ addons:
         unit_amount: 1000
         nickname: price_risk_mgmt_monthly
         lookup_key: price_risk_mgmt_monthly
-        price_id: price_1S3qXJJIzM4Pa2Zcl4Vn7Gc6
+        price_id: price_1RnPNOQsIOtQgZAIBj29WWvu
       - interval: year
         unit_amount: 10000
         nickname: price_risk_mgmt_annually
         lookup_key: price_risk_mgmt_annually
-        price_id: price_1S3qXJJIzM4Pa2Zc0V7TvS0A
+        price_id: price_1RnPNQQsIOtQgZAIaoA1EEYR
     audience: beta
-    product_id: prod_SzqDvmryWdfvr7
+    product_id: prod_Sir5v8JKCLB3mf
+  workflow_addon:
+    display_name: Workflow Automation
+    lookup_key: workflow_addon
+    description: Workflow Automation
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 5000
+        nickname: price_workflow_monthly
+        lookup_key: price_workflow_monthly
+        price_id: price_1UQ8aAQsIOtQgZAISjq1uT1D
+    audience: private
+    product_id: prod_VR0b3U0Wy2fbRH
+    include_with_trial: true

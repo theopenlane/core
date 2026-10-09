@@ -26,8 +26,8 @@ import (
 )
 
 func TestWorkflowAssignmentMutationListener(t *testing.T) {
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	approver := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	approver := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
 
 	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)

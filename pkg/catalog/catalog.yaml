@@ -122,6 +122,14 @@ modules:
     audience: private
     product_id: prod_SeI46ZmXn9BpA1
 addons:
+  workflow_addon:
+    display_name: Workflow Automation
+    lookup_key: workflow_addon
+    description: Workflow Automation
+    billing:
+      prices: []
+    audience: private
+    include_with_trial: true
   domain_scanning_addon:
     display_name: Domain and Vulnerability Scanning
     lookup_key: domain_scanning_addon

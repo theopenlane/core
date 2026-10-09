@@ -153,7 +153,7 @@ func TestRequestChangesWorkflowAssignment(t *testing.T) {
 	ensureWorkflowEngine(t)
 	t.Parallel()
 
-	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
 	ctx := user.UserCtx
 
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
@@ -264,9 +264,9 @@ func TestAdminReassignWorkflowAssignment(t *testing.T) {
 	ensureWorkflowEngine(t)
 	t.Parallel()
 
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	oldTarget := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	newTarget := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	oldTarget := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	newTarget := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
 	suite.AddUserToOrganization(owner.UserCtx, t, &oldTarget, enums.RoleAdmin, owner.OrganizationID)
 	suite.AddUserToOrganization(owner.UserCtx, t, &newTarget, enums.RoleAdmin, owner.OrganizationID)
 
@@ -332,7 +332,7 @@ func TestAdminReassignWorkflowAssignment(t *testing.T) {
 func TestWorkflowProposalSubmitAndWithdraw(t *testing.T) {
 	ensureWorkflowEngine(t)
 
-	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
 	ctx := user.UserCtx
 
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
@@ -392,7 +392,7 @@ func TestWorkflowProposalPreview(t *testing.T) {
 	ensureWorkflowEngine(t)
 	t.Parallel()
 
-	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
 	ctx := user.UserCtx
 
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
@@ -506,7 +506,7 @@ func TestWorkflowProposalAccess(t *testing.T) {
 func TestPreCommitApprovalRoutesMemberUpdateToProposal(t *testing.T) {
 	ensureWorkflowEngine(t)
 
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
 	complianceManager := suite.OrgMemberWithFunctionalRoles(t, owner, "compliance_manager")
 
 	ctx := owner.UserCtx

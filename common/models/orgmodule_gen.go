@@ -14,13 +14,14 @@ const (
 	CatalogRiskManagementAddon           OrgModule = "risk_management_addon"
 	CatalogTrustCenterModule             OrgModule = "trust_center_module"
 	CatalogVulnerabilityManagementModule OrgModule = "vulnerability_management_module"
+	CatalogWorkflowAddon                 OrgModule = "workflow_addon"
 )
 
 // CatalogAnyModule is not in the catalog; a schema requiring it is satisfied by any enabled module other than the base module
 const CatalogAnyModule OrgModule = "any_module"
 
 // AllOrgModules contains every module and addon in the catalog
-var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule}
+var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule, CatalogWorkflowAddon}
 
 // OrgModuleByConstName maps the name of each module constant to the module it holds
 var OrgModuleByConstName = map[string]OrgModule{
@@ -35,7 +36,8 @@ var OrgModuleByConstName = map[string]OrgModule{
 	"CatalogRiskManagementAddon":           CatalogRiskManagementAddon,
 	"CatalogTrustCenterModule":             CatalogTrustCenterModule,
 	"CatalogVulnerabilityManagementModule": CatalogVulnerabilityManagementModule,
+	"CatalogWorkflowAddon":                 CatalogWorkflowAddon,
 }
 
 // TrialModules contains the modules and addons included with a trial
-var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogTrustCenterModule}
+var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogTrustCenterModule, CatalogWorkflowAddon}

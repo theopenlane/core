@@ -138799,7 +138799,7 @@ input WebauthnWhereInput {
   """
   tagsHas: String
 }
-type WorkflowAssignment implements Node @modules(names: ["any_module"]) {
+type WorkflowAssignment implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -138980,7 +138980,7 @@ enum WorkflowAssignmentOrderField {
   created_at
   updated_at
 }
-type WorkflowAssignmentTarget implements Node @modules(names: ["any_module"]) {
+type WorkflowAssignmentTarget implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -139555,7 +139555,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
   REJECTED
   CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node @modules(names: ["any_module"]) {
+type WorkflowDefinition implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140191,7 +140191,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
   LIFECYCLE
   NOTIFICATION
 }
-type WorkflowEvent implements Node @modules(names: ["any_module"]) {
+type WorkflowEvent implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140440,7 +140440,7 @@ enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core
   EMIT_RECOVERED
   EMIT_FAILED_TERMINAL
 }
-type WorkflowInstance implements Node @modules(names: ["any_module"]) {
+type WorkflowInstance implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -141357,7 +141357,7 @@ enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenla
   FAILED
   PAUSED
 }
-type WorkflowObjectRef implements Node @modules(names: ["any_module"]) {
+type WorkflowObjectRef implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -142103,7 +142103,7 @@ input WorkflowObjectRefWhereInput {
   hasRemediation: Boolean
   hasRemediationWith: [RemediationWhereInput!]
 }
-type WorkflowProposal implements Node @modules(names: ["any_module"]) {
+type WorkflowProposal implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time

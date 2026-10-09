@@ -85,6 +85,14 @@ var DefaultCatalog = models.Catalog{
 			MarketingDescription: "Comprehensive risk assessment and monitoring solution. Make data-driven decisions about your security posture.",
 			ProductID:            "prod_SeI54PHvjUiTKZ",
 		},
+		string(models.CatalogWorkflowAddon): models.Feature{
+			Audience:         "private",
+			Billing:          models.Billing{Prices: []models.ItemPrice{}},
+			Description:      "Workflow Automation",
+			DisplayName:      "Workflow Automation",
+			IncludeWithTrial: true,
+			LookupKey:        "workflow_addon",
+		},
 	},
 	Modules: map[string]models.Feature{
 		string(models.CatalogBaseModule): models.Feature{
