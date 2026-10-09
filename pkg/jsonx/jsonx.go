@@ -149,7 +149,6 @@ func DecodeAnyOrNil(raw json.RawMessage) any {
 	return out
 }
 
-
 // DeepMerge returns patch deep-merged into base and whether it changed
 func DeepMerge(base, patch json.RawMessage) (json.RawMessage, bool, error) {
 	if len(patch) == 0 {

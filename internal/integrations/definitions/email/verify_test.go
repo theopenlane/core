@@ -30,12 +30,13 @@ func TestVerify_ConfiguredSender(t *testing.T) {
 	client := &Client{
 		Sender: mockSender,
 		Config: RuntimeEmailConfig{
-			Provider:  "mock",
 			FromEmail: "noreply@test.com",
 		},
 	}
 
-	metadata, err := verify(context.Background(), types.ConnectionRequest[Credential]{}, client)
+	metadata, err := verify(context.Background(), types.ConnectionRequest[Credential]{
+		Credential: Credential{Provider: "mock"},
+	}, client)
 	require.NoError(t, err)
 
 	assert.Equal(t, "mock", metadata.Provider)

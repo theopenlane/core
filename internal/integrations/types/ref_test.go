@@ -740,7 +740,9 @@ func TestOperationRefClientConflict(t *testing.T) {
 
 	consistent := OperationRefOf[refTestConfig]().
 		HealthCheck(func(context.Context, OperationRequest, *refTestClientA) error { return nil }).
-		Ingests(func(context.Context, OperationRequest, *refTestClientA, refTestConfig) ([]IngestPayloadSet, error) { return nil, nil }).
+		Ingests(func(context.Context, OperationRequest, *refTestClientA, refTestConfig) ([]IngestPayloadSet, error) {
+			return nil, nil
+		}).
 		Registration()
 
 	if consistent.ClientRef != clientName[*refTestClientA]() || consistent.ClientConflict != "" {
@@ -749,7 +751,9 @@ func TestOperationRefClientConflict(t *testing.T) {
 
 	mixed := OperationRefOf[refTestConfig]().
 		HealthCheck(func(context.Context, OperationRequest, *refTestClientA) error { return nil }).
-		Ingests(func(context.Context, OperationRequest, *refTestClientB, refTestConfig) ([]IngestPayloadSet, error) { return nil, nil }).
+		Ingests(func(context.Context, OperationRequest, *refTestClientB, refTestConfig) ([]IngestPayloadSet, error) {
+			return nil, nil
+		}).
 		Registration()
 
 	if mixed.ClientRef != clientName[*refTestClientA]() || mixed.ClientConflict != clientName[*refTestClientB]() {
