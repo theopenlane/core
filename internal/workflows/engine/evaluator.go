@@ -99,8 +99,8 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.
 	if obj != nil && obj.Node == nil {
-		allowCtx := workflows.AllowContext(ctx)
-		if _, err := e.loadObjectNode(allowCtx, obj); err != nil {
+		readCtx := auth.WithInternalReadContext(ctx)
+		if _, err := e.loadObjectNode(readCtx, obj); err != nil {
 			return nil, err
 		}
 	}
@@ -112,14 +112,14 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 			return nil, err
 		}
 
-		allowCtx := workflows.AllowContext(ctx)
+		readCtx := auth.WithInternalReadContext(ctx)
 
 		proposal, err := e.client.WorkflowProposal.Query().
 			Where(
 				workflowproposal.IDEQ(instance.WorkflowProposalID),
 				workflowproposal.OwnerIDEQ(orgID),
 			).
-			Only(allowCtx)
+			Only(readCtx)
 		if err == nil && proposal != nil {
 			proposedChanges = proposal.Changes
 		}
@@ -137,9 +137,9 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 	)
 
 	// Merge assignment context (assignments, instance, initiator)
-	// Use privacy bypass for internal workflow operations that query assignment state
-	allowCtx := workflows.AllowContext(ctx)
-	assignmentCtx, err := workflows.BuildAssignmentContext(allowCtx, e.client, instance.ID)
+	// Use an internal read to query assignment state
+	readCtx := auth.WithInternalReadContext(ctx)
+	assignmentCtx, err := workflows.BuildAssignmentContext(readCtx, e.client, instance.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -164,8 +164,8 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 	ctx = scope.Context()
 	defer scope.End(err, nil)
 
-	// Use privacy bypass for internal workflow operations, scoped to the organization owning the object
-	orgID, err := workflows.ObjectOwnerID(workflows.AllowContext(ctx), e.client, obj.Type, obj.ID)
+	// the owning org is not known yet and the caller may not have one selected, so this lookup bypasses the org filter; everything after is scoped to the owner
+	orgID, err := workflows.ObjectOwnerID(auth.WithInternalReadCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}

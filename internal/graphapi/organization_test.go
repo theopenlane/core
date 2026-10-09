@@ -21,8 +21,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -167,6 +165,16 @@ func TestQueryOrganizations(t *testing.T) {
 		org3Found := false
 
 		for _, o := range resp.Organizations.Edges {
+			var ownerRole enums.Role
+
+			for _, m := range o.Node.Members.Edges {
+				if m.Node.User.ID == orgUser.Owner.ID {
+					ownerRole = m.Node.Role
+				}
+			}
+
+			assert.Check(t, is.Equal(enums.RoleOwner, ownerRole), "missing owner role for organization %s", o.Node.ID)
+
 			if o.Node.ID == org1ID {
 				org1Found = true
 				// no avatar set
@@ -979,14 +987,14 @@ func TestMutationDeleteOrganization(t *testing.T) {
 			assert.Check(t, orgUser.Owner.OrganizationID != settingUpdated.UserSetting.DefaultOrg.ID)
 
 			// allow ctx to ensure the org no longer exists after deletion
-			allowCtx := ent.NewContext(rule.WithInternalContext(reqCtx), suite.Client.DB)
+			allowCtx := ent.NewContext(auth.WithInternalCrossOrgContext(reqCtx), suite.Client.DB)
 
 			_, err = suite.Client.API.GetOrganizationByID(allowCtx, tc.orgID)
 			assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
 			// tuples and entity are deleted, so we need to skip soft delete and privacy checks
 			ctx := entx.SkipSoftDelete(reqCtx)
-			ctx = privacy.DecisionContext(ctx, privacy.Allow)
+			ctx = auth.WithInternalOperationContext(ctx)
 
 			o, err := suite.Client.API.GetOrganizationByID(ctx, tc.orgID)
 			assert.NilError(t, err)

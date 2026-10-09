@@ -181,13 +181,17 @@ type InternalPolicyEdges struct {
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// Reviews holds the value of the reviews edge.
 	Reviews []*Review `json:"reviews,omitempty"`
+	// Assessments holds the value of the assessments edge.
+	Assessments []*Assessment `json:"assessments,omitempty"`
 	// integration that manages this policy (if applicable)
 	Integrations []*Integration `json:"integrations,omitempty"`
+	// PolicyAttestations holds the value of the policy_attestations edge.
+	PolicyAttestations []*AssessmentPolicy `json:"policy_attestations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [29]bool
 	// totalCount holds the count of the edges above.
-	totalCount [27]map[string]int
+	totalCount [29]map[string]int
 
 	namedIntegrationRuns        map[string][]*IntegrationRun
 	namedBlockedGroups          map[string][]*Group
@@ -208,7 +212,9 @@ type InternalPolicyEdges struct {
 	namedEntities               map[string][]*Entity
 	namedIdentityHolders        map[string][]*IdentityHolder
 	namedReviews                map[string][]*Review
+	namedAssessments            map[string][]*Assessment
 	namedIntegrations           map[string][]*Integration
+	namedPolicyAttestations     map[string][]*AssessmentPolicy
 }
 
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
@@ -459,13 +465,31 @@ func (e InternalPolicyEdges) ReviewsOrErr() ([]*Review, error) {
 	return nil, &NotLoadedError{edge: "reviews"}
 }
 
+// AssessmentsOrErr returns the Assessments value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) AssessmentsOrErr() ([]*Assessment, error) {
+	if e.loadedTypes[26] {
+		return e.Assessments, nil
+	}
+	return nil, &NotLoadedError{edge: "assessments"}
+}
+
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
+}
+
+// PolicyAttestationsOrErr returns the PolicyAttestations value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) PolicyAttestationsOrErr() ([]*AssessmentPolicy, error) {
+	if e.loadedTypes[28] {
+		return e.PolicyAttestations, nil
+	}
+	return nil, &NotLoadedError{edge: "policy_attestations"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -975,9 +999,19 @@ func (_m *InternalPolicy) QueryReviews() *ReviewQuery {
 	return NewInternalPolicyClient(_m.config).QueryReviews(_m)
 }
 
+// QueryAssessments queries the "assessments" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryAssessments() *AssessmentQuery {
+	return NewInternalPolicyClient(_m.config).QueryAssessments(_m)
+}
+
 // QueryIntegrations queries the "integrations" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryIntegrations() *IntegrationQuery {
 	return NewInternalPolicyClient(_m.config).QueryIntegrations(_m)
+}
+
+// QueryPolicyAttestations queries the "policy_attestations" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryPolicyAttestations() *AssessmentPolicyQuery {
+	return NewInternalPolicyClient(_m.config).QueryPolicyAttestations(_m)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -1622,6 +1656,30 @@ func (_m *InternalPolicy) appendNamedReviews(name string, edges ...*Review) {
 	}
 }
 
+// NamedAssessments returns the Assessments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedAssessments(name string) ([]*Assessment, error) {
+	if _m.Edges.namedAssessments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAssessments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedAssessments(name string, edges ...*Assessment) {
+	if _m.Edges.namedAssessments == nil {
+		_m.Edges.namedAssessments = make(map[string][]*Assessment)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAssessments[name] = []*Assessment{}
+	} else {
+		_m.Edges.namedAssessments[name] = append(_m.Edges.namedAssessments[name], edges...)
+	}
+}
+
 // NamedIntegrations returns the Integrations named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *InternalPolicy) NamedIntegrations(name string) ([]*Integration, error) {
@@ -1643,6 +1701,30 @@ func (_m *InternalPolicy) appendNamedIntegrations(name string, edges ...*Integra
 		_m.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
 		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
+	}
+}
+
+// NamedPolicyAttestations returns the PolicyAttestations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedPolicyAttestations(name string) ([]*AssessmentPolicy, error) {
+	if _m.Edges.namedPolicyAttestations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPolicyAttestations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedPolicyAttestations(name string, edges ...*AssessmentPolicy) {
+	if _m.Edges.namedPolicyAttestations == nil {
+		_m.Edges.namedPolicyAttestations = make(map[string][]*AssessmentPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPolicyAttestations[name] = []*AssessmentPolicy{}
+	} else {
+		_m.Edges.namedPolicyAttestations[name] = append(_m.Edges.namedPolicyAttestations[name], edges...)
 	}
 }
 

@@ -95,6 +95,24 @@ type AssessmentProjection struct {
 	WorkflowEligibleMarker bool                   `json:"workflow_eligible_marker,omitempty"`
 }
 
+// AssessmentPolicyProjection is the flat, CEL- and jsonschema-facing view of a AssessmentPolicy: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.AssessmentPolicy whose edge graph cannot be reflected
+type AssessmentPolicyProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string    `json:"id,omitempty"`
+	AssessmentID          string    `json:"assessment_id,omitempty"`
+	CreatedAt             time.Time `json:"created_at,omitempty"`
+	CreatedBy             string    `json:"created_by,omitempty"`
+	InternalPolicyID      string    `json:"internal_policy_id,omitempty"`
+	OwnerID               string    `json:"owner_id,omitempty"`
+	PolicyRevision        string    `json:"policy_revision,omitempty"`
+	UpdatedAt             time.Time `json:"updated_at,omitempty"`
+	UpdatedBy             string    `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string    `json:"updated_by_impersonator,omitempty"`
+}
+
 // AssessmentResponseProjection is the flat, CEL- and jsonschema-facing view of a AssessmentResponse: its
 // readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
 // names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
@@ -657,6 +675,8 @@ type EntityProjection struct {
 	ApprovedForUse                        bool                   `json:"approved_for_use,omitempty"`
 	AutoRenews                            bool                   `json:"auto_renews,omitempty"`
 	BillingModel                          string                 `json:"billing_model,omitempty"`
+	CatalogEntityID                       string                 `json:"catalog_entity_id,omitempty"`
+	CatalogEntityKey                      string                 `json:"catalog_entity_key,omitempty"`
 	ContractEndDate                       models.DateTime        `json:"contract_end_date,omitempty"`
 	ContractRenewalAt                     models.DateTime        `json:"contract_renewal_at,omitempty"`
 	ContractStartDate                     models.DateTime        `json:"contract_start_date,omitempty"`
@@ -675,6 +695,7 @@ type EntityProjection struct {
 	EnvironmentID                         string                 `json:"environment_id,omitempty"`
 	EnvironmentName                       string                 `json:"environment_name,omitempty"`
 	ExternalID                            string                 `json:"external_id,omitempty"`
+	ExternallyVisible                     bool                   `json:"externally_visible,omitempty"`
 	HasSoc2                               bool                   `json:"has_soc2,omitempty"`
 	IntegrationRunID                      string                 `json:"integration_run_id,omitempty"`
 	InternalNotes                         string                 `json:"internal_notes,omitempty"`

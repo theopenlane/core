@@ -26,6 +26,7 @@ import (
 	wfworkflows "github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/core/v2/pkg/celx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (
@@ -35,7 +36,7 @@ const (
 	defaultWebhookFallbackBackoffMS = 100
 	defaultWebhookTimeoutMS         = 10_000
 
-	httpStatusClientErrorMin = 400
+	httpStatusRedirectMin    = 300
 	httpStatusClientErrorMax = 500
 )
 
@@ -90,8 +91,8 @@ type gatedActionConfig struct {
 
 // resolveTargetUsers resolves target user IDs and logs warnings if no users are found
 func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkflows.TargetConfig, obj *wfworkflows.Object, actionType string, actionKey string) ([]string, error) {
-	allowCtx := wfworkflows.AllowContext(ctx)
-	userIDs, err := e.ResolveTargets(allowCtx, target, obj)
+	readCtx := auth.WithInternalReadContext(ctx)
+	userIDs, err := e.ResolveTargets(readCtx, target, obj)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +110,7 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 
 // executeGatedAction creates workflow assignments for approval and review actions
 func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object, cfg gatedActionConfig) error {
-	allowCtx := wfworkflows.AllowContext(ctx)
+	allowCtx := auth.WithInternalOperationContext(ctx)
 
 	if len(cfg.Targets) == 0 {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, action.Type, observability.ActionFields(action.Key, nil), nil)
@@ -122,12 +123,12 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 
 	ownerID := instance.OwnerID
 	if ownerID == "" {
-		caller, callerOk := auth.CallerFromContext(ctx)
-		if !callerOk || caller == nil || caller.OrganizationID == "" {
+		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+		if err != nil {
 			return auth.ErrNoAuthUser
 		}
 
-		ownerID = caller.OrganizationID
+		ownerID = orgID
 	}
 
 	actionIndex := actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key)
@@ -410,7 +411,7 @@ func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, obj 
 				builder.SetTopic(enums.NotificationTopic(topic))
 			}
 
-			if err := builder.Exec(wfworkflows.AllowContext(ctx)); err != nil {
+			if err := builder.Exec(auth.WithInternalOperationContext(ctx)); err != nil {
 				return nil, fmt.Errorf("%w: %w", ErrNotificationCreationFailed, err)
 			}
 		}
@@ -441,6 +442,13 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 		return ErrWebhookURLRequired
 	}
 
+	// ensure before execution the webhook is allowed
+	if !e.config.WebhookAllowPrivateAddresses {
+		if _, err := urlx.ValidatePublicURL(params.URL); err != nil {
+			return fmt.Errorf("%w: %w", ErrWebhookFailed, err)
+		}
+	}
+
 	method := params.Method
 	if method == "" {
 		method = "POST"
@@ -449,14 +457,14 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 	_, basePayload := wfworkflows.BuildWorkflowActionContext(instance, obj, action.Key)
 
 	// Resolve user IDs to display names for human-readable webhook payloads
-	allowCtx := wfworkflows.AllowContext(ctx)
+	readCtx := auth.WithInternalReadContext(ctx)
 	// Get initiator from the object that triggered the workflow (not the service that created the instance)
 	initiatorID := wfworkflows.GetObjectUpdatedBy(obj)
 	if initiatorID == "" {
 		initiatorID = instance.CreatedBy
 	}
-	initiatorName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, initiatorID)
-	approverName := wfworkflows.ResolveUserDisplayName(allowCtx, e.client, instance.UpdatedBy)
+	initiatorName := wfworkflows.ResolveUserDisplayName(readCtx, e.client, initiatorID)
+	approverName := wfworkflows.ResolveUserDisplayName(readCtx, e.client, instance.UpdatedBy)
 
 	basePayload["approved_by"] = approverName
 	basePayload["initiator"] = initiatorName
@@ -464,7 +472,7 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 
 	// Enrich with object-specific details from canonical schema annotations.
 	// This adds fields like ref_code, title, name, status based on schema annotations.
-	if err := wfworkflows.EnrichWorkflowPayload(allowCtx, e.client, obj.Type, obj.ID, basePayload); err != nil {
+	if err := wfworkflows.EnrichWorkflowPayload(readCtx, e.client, obj.Type, obj.ID, basePayload); err != nil {
 		return fmt.Errorf("%w: %w", ErrFailedToEnrichWebhookPayload, err)
 	}
 
@@ -502,13 +510,18 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 		idempotencyKey = fmt.Sprintf("wf_%s_%s_%s", instance.ID, action.Key, hex.EncodeToString(payloadSum[:]))
 	}
 
+	clientOpts := []httpclient.Option{httpclient.Timeout(time.Duration(timeoutMS) * time.Millisecond), httpclient.NoRedirects()}
+	if !e.config.WebhookAllowPrivateAddresses {
+		clientOpts = append(clientOpts, urlx.PublicOnly())
+	}
+
 	requestOpts := []httpsling.Option{
 		httpsling.Method(method),
 		httpsling.URL(params.URL),
 		httpsling.Body(basePayload),
 		httpsling.ContentType(httpsling.ContentTypeJSON),
 		httpsling.Accept(httpsling.ContentTypeJSON),
-		httpsling.Client(httpclient.Timeout(time.Duration(timeoutMS) * time.Millisecond)),
+		httpsling.Client(clientOpts...),
 		httpsling.Header("Idempotency-Key", idempotencyKey),
 		httpsling.Header("X-Workflow-Idempotency-Key", idempotencyKey),
 	}
@@ -540,7 +553,13 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 			return nil
 		}
 
-		if err == nil && resp != nil && resp.StatusCode >= httpStatusClientErrorMin && resp.StatusCode < httpStatusClientErrorMax {
+		// a blocked destination will not change on retry
+		if errors.Is(err, urlx.ErrNonPublicDestination) {
+			return fmt.Errorf("%w: %w", ErrWebhookFailed, err)
+		}
+
+		// redirects are not followed, so a 3xx will not change on retry either
+		if err == nil && resp != nil && resp.StatusCode >= httpStatusRedirectMin && resp.StatusCode < httpStatusClientErrorMax {
 			return ErrWebhookFailed
 		}
 

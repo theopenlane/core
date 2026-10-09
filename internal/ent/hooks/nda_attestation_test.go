@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"bytes"
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"testing"
@@ -232,22 +233,22 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 	}
 
 	t.Run("valid document passes", func(t *testing.T) {
-		err := validateTrustCenterNDAJSON(validDoc, "tc-123", "jane@example.com", "user-456", templateFile)
+		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-123", "jane@example.com", "user-456", templateFile)
 		assert.NoError(t, err)
 	})
 
 	t.Run("mismatched trust center id", func(t *testing.T) {
-		err := validateTrustCenterNDAJSON(validDoc, "tc-wrong", "jane@example.com", "user-456", templateFile)
+		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-wrong", "jane@example.com", "user-456", templateFile)
 		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
 	})
 
 	t.Run("mismatched email", func(t *testing.T) {
-		err := validateTrustCenterNDAJSON(validDoc, "tc-123", "wrong@example.com", "user-456", templateFile)
+		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-123", "wrong@example.com", "user-456", templateFile)
 		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
 	})
 
 	t.Run("mismatched user id", func(t *testing.T) {
-		err := validateTrustCenterNDAJSON(validDoc, "tc-123", "jane@example.com", "user-wrong", templateFile)
+		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-123", "jane@example.com", "user-wrong", templateFile)
 		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
 	})
 
@@ -258,7 +259,7 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 			"trust_center_id": "tc-123",
 		}
 
-		err := validateTrustCenterNDAJSON(incomplete, "tc-123", "jane@example.com", "user-456", templateFile)
+		err := validateTrustCenterNDAJSON(context.Background(), incomplete, "tc-123", "jane@example.com", "user-456", templateFile)
 		assert.ErrorIs(t, err, errValidationFailed)
 	})
 
@@ -281,12 +282,12 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 			},
 		}
 
-		err := validateTrustCenterNDAJSON(doc, "tc-123", "jane@example.com", "user-456", templateFile)
+		err := validateTrustCenterNDAJSON(context.Background(), doc, "tc-123", "jane@example.com", "user-456", templateFile)
 		assert.ErrorIs(t, err, errValidationFailed)
 	})
 
 	t.Run("nil document", func(t *testing.T) {
-		err := validateTrustCenterNDAJSON(nil, "tc-123", "jane@example.com", "user-456", templateFile)
+		err := validateTrustCenterNDAJSON(context.Background(), nil, "tc-123", "jane@example.com", "user-456", templateFile)
 		assert.Error(t, err)
 	})
 }

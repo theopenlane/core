@@ -9,17 +9,17 @@ import (
 )
 
 // getPrePolicies returns the pre-policies which are executed before privacy policy
-func getPrePolicies(skipDenyOrgRule bool) privacy.Policy {
+func getPrePolicies(skipDenyOrgRule bool, beforeScope privacy.MutationPolicy) privacy.Policy {
 	// prePolicy is executed before privacy policy
 	base := privacy.Policy{
 		Query: privacy.QueryPolicy{
-			// allow internal requests (used in tests) to proceed to query tables
-			rule.AllowIfInternalRequest(),
+			// allow internal operations and reads (CapInternalOperation or CapInternalRead) to proceed to query tables
+			rule.AllowIfInternalReadRequest(),
 			// allow history requests to proceed to query tables
 			history.AllowIfHistoryRequest(),
 		},
 		Mutation: privacy.MutationPolicy{
-			// allow internal requests (used in tests) to proceed to mutate tables
+			// allow internal operations (system code paths with CapInternalOperation) to proceed to mutate tables
 			rule.AllowIfInternalRequest(),
 			// deny mutation if missing all modules
 			rule.DenyIfMissingAllModules(),
@@ -32,6 +32,8 @@ func getPrePolicies(skipDenyOrgRule bool) privacy.Policy {
 			rule.DenyIfNotInOrganization(),
 		)
 	}
+
+	base.Mutation = append(base.Mutation, beforeScope...)
 
 	base.Mutation = append(base.Mutation,
 		// allow mutation if the api token has the appropriate mutation scope
@@ -58,6 +60,7 @@ type Option func(*policies)
 type policies struct {
 	query        privacy.QueryPolicy
 	mutation     privacy.MutationPolicy
+	beforeScope  privacy.MutationPolicy
 	pre, post    privacy.Policy
 	skipDenyRule bool
 }
@@ -78,6 +81,31 @@ func WithMutationRules(rules ...privacy.MutationRule) Option {
 
 // WithOnMutationRules adds mutation rules to policy for specific operations.
 func WithOnMutationRules(op ent.Op, rules ...privacy.MutationRule) Option {
+	opRules := onMutationOperation(op, rules)
+
+	return func(policies *policies) {
+		policies.mutation = append(policies.mutation, opRules...)
+	}
+}
+
+// WithMutationRulesBeforeScope adds mutation rules that run before the mutation scope allow rule
+func WithMutationRulesBeforeScope(rules ...privacy.MutationRule) Option {
+	return func(policies *policies) {
+		policies.beforeScope = append(policies.beforeScope, rules...)
+	}
+}
+
+// WithOnMutationRulesBeforeScope adds mutation rules for specific operations that run before the mutation scope allow rule
+func WithOnMutationRulesBeforeScope(op ent.Op, rules ...privacy.MutationRule) Option {
+	opRules := onMutationOperation(op, rules)
+
+	return func(policies *policies) {
+		policies.beforeScope = append(policies.beforeScope, opRules...)
+	}
+}
+
+// onMutationOperation wraps each rule so it only runs for the given operation
+func onMutationOperation(op ent.Op, rules []privacy.MutationRule) []privacy.MutationRule {
 	opRules := []privacy.MutationRule{}
 
 	for _, rule := range rules {
@@ -89,9 +117,7 @@ func WithOnMutationRules(op ent.Op, rules ...privacy.MutationRule) Option {
 		opRules = append(opRules, r)
 	}
 
-	return func(policies *policies) {
-		policies.mutation = append(policies.mutation, opRules...)
-	}
+	return opRules
 }
 
 // WithPrePolicy overrides the pre-policy to be executed.
@@ -125,7 +151,7 @@ func NewPolicy(opts ...Option) ent.Policy {
 		opt(&policies)
 	}
 
-	policies.pre = getPrePolicies(policies.skipDenyRule)
+	policies.pre = getPrePolicies(policies.skipDenyRule, policies.beforeScope)
 
 	return privacy.Policy{
 		Query:    policies.queryPolicy(),

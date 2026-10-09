@@ -17,7 +17,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -173,12 +172,11 @@ func TestMutationUpdateUser(t *testing.T) {
 	displayNameUpdate := gofakeit.LetterN(40)
 	nameUpdateLong := gofakeit.LetterN(200)
 
-	user := (&th.UserBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-
-	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
+	testUser := suite.UserBuilder(context.Background(), t)
+	user := testUser.UserInfo
 
 	// setup valid user context
-	reqCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
+	reqCtx := testUser.UserCtx
 
 	weakPassword := "notsecure"
 
@@ -315,7 +313,7 @@ func TestMutationUpdateUser(t *testing.T) {
 
 func TestMutationDeleteUser(t *testing.T) {
 	// bypass auth on object creation
-	ctx := privacy.DecisionContext(th.SharedTestUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(th.SharedTestUser1.UserCtx)
 
 	user := (&th.UserBuilder{Client: suite.Client}).MustNew(ctx, t)
 
@@ -359,7 +357,7 @@ func TestMutationDeleteUser(t *testing.T) {
 
 			// make sure the personal org is deleted
 			// add allow context to bypass auth since the tuple will be deleted
-			reqCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
+			reqCtx = auth.WithInternalOperationContext(reqCtx)
 
 			_, err = suite.Client.API.GetOrganizationByID(reqCtx, personalOrgID)
 

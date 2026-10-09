@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
@@ -279,6 +280,8 @@ func (t TrustCenter) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
+		entx.ConsoleRoute(
+			entx.WithConsoleBase("trust-center")),
 	}
 }
 

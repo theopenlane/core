@@ -27,6 +27,9 @@ services:
       - OPENFGA_LIST_OBJECTS_MAX_RESULTS=1000
       - OPENFGA_MAX_CHECKS_PER_BATCH_CHECK=500
       - OPENFGA_LIST_OBJECTS_DEADLINE=5s
+      # enable to mimic production fga caching
+      # - OPENFGA_CHECK_QUERY_CACHE_ENABLED=true
+      # - OPENFGA_CHECK_QUERY_CACHE_TTL=60s
     command:
       - run
       - --check-query-cache-enabled

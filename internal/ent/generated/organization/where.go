@@ -1329,6 +1329,29 @@ func HasAssessmentCreatorsWith(preds ...predicate.Group) predicate.Organization 
 	})
 }
 
+// HasAssessmentPolicyCreators applies the HasEdge predicate on the "assessment_policy_creators" edge.
+func HasAssessmentPolicyCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AssessmentPolicyCreatorsTable, AssessmentPolicyCreatorsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssessmentPolicyCreatorsWith applies the HasEdge predicate on the "assessment_policy_creators" edge with a given conditions (other predicates).
+func HasAssessmentPolicyCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newAssessmentPolicyCreatorsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasAssetCreators applies the HasEdge predicate on the "asset_creators" edge.
 func HasAssetCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -4334,6 +4357,29 @@ func HasAssessmentResponses() predicate.Organization {
 func HasAssessmentResponsesWith(preds ...predicate.AssessmentResponse) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := newAssessmentResponsesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssessmentPolicies applies the HasEdge predicate on the "assessment_policies" edge.
+func HasAssessmentPolicies() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AssessmentPoliciesTable, AssessmentPoliciesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssessmentPoliciesWith applies the HasEdge predicate on the "assessment_policies" edge with a given conditions (other predicates).
+func HasAssessmentPoliciesWith(preds ...predicate.AssessmentPolicy) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newAssessmentPoliciesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

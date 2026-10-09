@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
@@ -29,7 +28,7 @@ const taskRuleOrganizationReadyObjectType = "organization.ready"
 
 func TestTaskRuleListenersRealMutations(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.TaskRuleListeners())
 	assert.NilError(t, err)
@@ -37,11 +36,11 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 
 	onboarding, err := suite.Client.DB.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Task Rule Listener Co",
-	}).Save(allowCtx)
+	}).Save(internalCtx)
 	assert.NilError(t, err)
 
 	orgID := onboarding.OrganizationID
-	orgCtx := privacy.DecisionContext(th.SetContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.Client.DB), privacy.Allow)
+	orgCtx := th.SetInternalContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.Client.DB)
 
 	taskCount := func(t *testing.T) int {
 		t.Helper()
@@ -89,6 +88,13 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 			Exist(orgCtx)
 		assert.NilError(t, err)
 		assert.Check(t, exists)
+
+		tasks, err := suite.Client.DB.Task.Query().Where(task.OwnerIDEQ(orgID)).All(orgCtx)
+		assert.NilError(t, err)
+
+		for _, tk := range tasks {
+			assert.Check(t, is.Equal("", tk.AssignerID), "suggested task %s should not have an assigner", tk.SourceKey)
+		}
 	})
 
 	t.Run("organization ready notification emitted", func(t *testing.T) {

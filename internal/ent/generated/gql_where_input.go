@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -3099,9 +3100,17 @@ type AssessmentWhereInput struct {
 	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
 	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
 
+	// "internal_policies" edge predicates.
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+
 	// "workflow_object_refs" edge predicates.
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+
+	// "policy_attestations" edge predicates.
+	HasPolicyAttestations     *bool                         `json:"hasPolicyAttestations,omitempty"`
+	HasPolicyAttestationsWith []*AssessmentPolicyWhereInput `json:"hasPolicyAttestationsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3732,6 +3741,25 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 		}
 		predicates = append(predicates, assessment.HasCampaignsWith(with...))
 	}
+	if i.HasInternalPolicies != nil {
+		p := assessment.HasInternalPolicies()
+		if !*i.HasInternalPolicies {
+			p = assessment.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalPoliciesWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
+		for _, w := range i.HasInternalPoliciesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalPoliciesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, assessment.HasInternalPoliciesWith(with...))
+	}
 	if i.HasWorkflowObjectRefs != nil {
 		p := assessment.HasWorkflowObjectRefs()
 		if !*i.HasWorkflowObjectRefs {
@@ -3750,6 +3778,24 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 		}
 		predicates = append(predicates, assessment.HasWorkflowObjectRefsWith(with...))
 	}
+	if i.HasPolicyAttestations != nil {
+		p := assessment.HasPolicyAttestations()
+		if !*i.HasPolicyAttestations {
+			p = assessment.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPolicyAttestationsWith) > 0 {
+		with := make([]predicate.AssessmentPolicy, 0, len(i.HasPolicyAttestationsWith))
+		for _, w := range i.HasPolicyAttestationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPolicyAttestationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, assessment.HasPolicyAttestationsWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyAssessmentWhereInput
@@ -3757,6 +3803,557 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 		return predicates[0], nil
 	default:
 		return assessment.And(predicates...), nil
+	}
+}
+
+// AssessmentPolicyWhereInput represents a where input for filtering AssessmentPolicy queries.
+type AssessmentPolicyWhereInput struct {
+	Predicates []predicate.AssessmentPolicy  `json:"-"`
+	Not        *AssessmentPolicyWhereInput   `json:"not,omitempty"`
+	Or         []*AssessmentPolicyWhereInput `json:"or,omitempty"`
+	And        []*AssessmentPolicyWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time `json:"createdAt,omitempty"`
+	CreatedAtGT     *time.Time `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool       `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool       `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time `json:"updatedAt,omitempty"`
+	UpdatedAtGT     *time.Time `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool       `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool       `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "updated_by_impersonator" field predicates.
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNEQ          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "assessment_id" field predicates.
+	AssessmentID             *string  `json:"assessmentID,omitempty"`
+	AssessmentIDNEQ          *string  `json:"assessmentIDNEQ,omitempty"`
+	AssessmentIDIn           []string `json:"assessmentIDIn,omitempty"`
+	AssessmentIDNotIn        []string `json:"assessmentIDNotIn,omitempty"`
+	AssessmentIDContains     *string  `json:"assessmentIDContains,omitempty"`
+	AssessmentIDHasPrefix    *string  `json:"assessmentIDHasPrefix,omitempty"`
+	AssessmentIDHasSuffix    *string  `json:"assessmentIDHasSuffix,omitempty"`
+	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
+	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
+
+	// "internal_policy_id" field predicates.
+	InternalPolicyID             *string  `json:"internalPolicyID,omitempty"`
+	InternalPolicyIDNEQ          *string  `json:"internalPolicyIDNEQ,omitempty"`
+	InternalPolicyIDIn           []string `json:"internalPolicyIDIn,omitempty"`
+	InternalPolicyIDNotIn        []string `json:"internalPolicyIDNotIn,omitempty"`
+	InternalPolicyIDContains     *string  `json:"internalPolicyIDContains,omitempty"`
+	InternalPolicyIDHasPrefix    *string  `json:"internalPolicyIDHasPrefix,omitempty"`
+	InternalPolicyIDHasSuffix    *string  `json:"internalPolicyIDHasSuffix,omitempty"`
+	InternalPolicyIDEqualFold    *string  `json:"internalPolicyIDEqualFold,omitempty"`
+	InternalPolicyIDContainsFold *string  `json:"internalPolicyIDContainsFold,omitempty"`
+
+	// "policy_revision" field predicates.
+	PolicyRevision             *string  `json:"policyRevision,omitempty"`
+	PolicyRevisionNEQ          *string  `json:"policyRevisionNEQ,omitempty"`
+	PolicyRevisionIn           []string `json:"policyRevisionIn,omitempty"`
+	PolicyRevisionNotIn        []string `json:"policyRevisionNotIn,omitempty"`
+	PolicyRevisionContains     *string  `json:"policyRevisionContains,omitempty"`
+	PolicyRevisionHasPrefix    *string  `json:"policyRevisionHasPrefix,omitempty"`
+	PolicyRevisionHasSuffix    *string  `json:"policyRevisionHasSuffix,omitempty"`
+	PolicyRevisionIsNil        bool     `json:"policyRevisionIsNil,omitempty"`
+	PolicyRevisionNotNil       bool     `json:"policyRevisionNotNil,omitempty"`
+	PolicyRevisionEqualFold    *string  `json:"policyRevisionEqualFold,omitempty"`
+	PolicyRevisionContainsFold *string  `json:"policyRevisionContainsFold,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "assessment" edge predicates.
+	HasAssessment     *bool                   `json:"hasAssessment,omitempty"`
+	HasAssessmentWith []*AssessmentWhereInput `json:"hasAssessmentWith,omitempty"`
+
+	// "internal_policy" edge predicates.
+	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
+	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *AssessmentPolicyWhereInput) AddPredicates(predicates ...predicate.AssessmentPolicy) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the AssessmentPolicyWhereInput filter on the AssessmentPolicyQuery builder.
+func (i *AssessmentPolicyWhereInput) Filter(q *AssessmentPolicyQuery) (*AssessmentPolicyQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyAssessmentPolicyWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyAssessmentPolicyWhereInput is returned in case the AssessmentPolicyWhereInput is empty.
+var ErrEmptyAssessmentPolicyWhereInput = errors.New("generated: empty predicate AssessmentPolicyWhereInput")
+
+// P returns a predicate for filtering assessmentpolicies.
+// An error is returned if the input is empty or invalid.
+func (i *AssessmentPolicyWhereInput) P() (predicate.AssessmentPolicy, error) {
+	var predicates []predicate.AssessmentPolicy
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, assessmentpolicy.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.AssessmentPolicy, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, assessmentpolicy.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.AssessmentPolicy, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, assessmentpolicy.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, assessmentpolicy.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, assessmentpolicy.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, assessmentpolicy.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, assessmentpolicy.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, assessmentpolicy.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, assessmentpolicy.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, assessmentpolicy.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, assessmentpolicy.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, assessmentpolicy.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, assessmentpolicy.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, assessmentpolicy.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.UpdatedByImpersonator != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorEQ(*i.UpdatedByImpersonator))
+	}
+	if i.UpdatedByImpersonatorNEQ != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorNEQ(*i.UpdatedByImpersonatorNEQ))
+	}
+	if len(i.UpdatedByImpersonatorIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorIn(i.UpdatedByImpersonatorIn...))
+	}
+	if len(i.UpdatedByImpersonatorNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorNotIn(i.UpdatedByImpersonatorNotIn...))
+	}
+	if i.UpdatedByImpersonatorContains != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
+	if i.UpdatedByImpersonatorHasSuffix != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
+	}
+	if i.UpdatedByImpersonatorIsNil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorIsNil())
+	}
+	if i.UpdatedByImpersonatorNotNil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorNotNil())
+	}
+	if i.UpdatedByImpersonatorEqualFold != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorEqualFold(*i.UpdatedByImpersonatorEqualFold))
+	}
+	if i.UpdatedByImpersonatorContainsFold != nil {
+		predicates = append(predicates, assessmentpolicy.UpdatedByImpersonatorContainsFold(*i.UpdatedByImpersonatorContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, assessmentpolicy.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.AssessmentID != nil {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDEQ(*i.AssessmentID))
+	}
+	if i.AssessmentIDNEQ != nil {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDNEQ(*i.AssessmentIDNEQ))
+	}
+	if len(i.AssessmentIDIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDIn(i.AssessmentIDIn...))
+	}
+	if len(i.AssessmentIDNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDNotIn(i.AssessmentIDNotIn...))
+	}
+	if i.AssessmentIDContains != nil {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDContains(*i.AssessmentIDContains))
+	}
+	if i.AssessmentIDHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDHasPrefix(*i.AssessmentIDHasPrefix))
+	}
+	if i.AssessmentIDHasSuffix != nil {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDHasSuffix(*i.AssessmentIDHasSuffix))
+	}
+	if i.AssessmentIDEqualFold != nil {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDEqualFold(*i.AssessmentIDEqualFold))
+	}
+	if i.AssessmentIDContainsFold != nil {
+		predicates = append(predicates, assessmentpolicy.AssessmentIDContainsFold(*i.AssessmentIDContainsFold))
+	}
+	if i.InternalPolicyID != nil {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDEQ(*i.InternalPolicyID))
+	}
+	if i.InternalPolicyIDNEQ != nil {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDNEQ(*i.InternalPolicyIDNEQ))
+	}
+	if len(i.InternalPolicyIDIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDIn(i.InternalPolicyIDIn...))
+	}
+	if len(i.InternalPolicyIDNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDNotIn(i.InternalPolicyIDNotIn...))
+	}
+	if i.InternalPolicyIDContains != nil {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDContains(*i.InternalPolicyIDContains))
+	}
+	if i.InternalPolicyIDHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDHasPrefix(*i.InternalPolicyIDHasPrefix))
+	}
+	if i.InternalPolicyIDHasSuffix != nil {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDHasSuffix(*i.InternalPolicyIDHasSuffix))
+	}
+	if i.InternalPolicyIDEqualFold != nil {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDEqualFold(*i.InternalPolicyIDEqualFold))
+	}
+	if i.InternalPolicyIDContainsFold != nil {
+		predicates = append(predicates, assessmentpolicy.InternalPolicyIDContainsFold(*i.InternalPolicyIDContainsFold))
+	}
+	if i.PolicyRevision != nil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionEQ(*i.PolicyRevision))
+	}
+	if i.PolicyRevisionNEQ != nil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionNEQ(*i.PolicyRevisionNEQ))
+	}
+	if len(i.PolicyRevisionIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionIn(i.PolicyRevisionIn...))
+	}
+	if len(i.PolicyRevisionNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionNotIn(i.PolicyRevisionNotIn...))
+	}
+	if i.PolicyRevisionContains != nil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionContains(*i.PolicyRevisionContains))
+	}
+	if i.PolicyRevisionHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionHasPrefix(*i.PolicyRevisionHasPrefix))
+	}
+	if i.PolicyRevisionHasSuffix != nil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionHasSuffix(*i.PolicyRevisionHasSuffix))
+	}
+	if i.PolicyRevisionIsNil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionIsNil())
+	}
+	if i.PolicyRevisionNotNil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionNotNil())
+	}
+	if i.PolicyRevisionEqualFold != nil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionEqualFold(*i.PolicyRevisionEqualFold))
+	}
+	if i.PolicyRevisionContainsFold != nil {
+		predicates = append(predicates, assessmentpolicy.PolicyRevisionContainsFold(*i.PolicyRevisionContainsFold))
+	}
+
+	if i.HasOwner != nil {
+		p := assessmentpolicy.HasOwner()
+		if !*i.HasOwner {
+			p = assessmentpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, assessmentpolicy.HasOwnerWith(with...))
+	}
+	if i.HasAssessment != nil {
+		p := assessmentpolicy.HasAssessment()
+		if !*i.HasAssessment {
+			p = assessmentpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAssessmentWith) > 0 {
+		with := make([]predicate.Assessment, 0, len(i.HasAssessmentWith))
+		with = append(with, assessment.DeletedAtIsNil())
+		for _, w := range i.HasAssessmentWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAssessmentWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, assessmentpolicy.HasAssessmentWith(with...))
+	}
+	if i.HasInternalPolicy != nil {
+		p := assessmentpolicy.HasInternalPolicy()
+		if !*i.HasInternalPolicy {
+			p = assessmentpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalPolicyWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
+		for _, w := range i.HasInternalPolicyWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalPolicyWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, assessmentpolicy.HasInternalPolicyWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyAssessmentPolicyWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return assessmentpolicy.And(predicates...), nil
 	}
 }
 
@@ -28060,6 +28657,38 @@ type EntityWhereInput struct {
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 
+	// "catalog_entity_id" field predicates.
+	CatalogEntityID             *string  `json:"catalogEntityID,omitempty"`
+	CatalogEntityIDNEQ          *string  `json:"catalogEntityIDNEQ,omitempty"`
+	CatalogEntityIDIn           []string `json:"catalogEntityIDIn,omitempty"`
+	CatalogEntityIDNotIn        []string `json:"catalogEntityIDNotIn,omitempty"`
+	CatalogEntityIDContains     *string  `json:"catalogEntityIDContains,omitempty"`
+	CatalogEntityIDHasPrefix    *string  `json:"catalogEntityIDHasPrefix,omitempty"`
+	CatalogEntityIDHasSuffix    *string  `json:"catalogEntityIDHasSuffix,omitempty"`
+	CatalogEntityIDIsNil        bool     `json:"catalogEntityIDIsNil,omitempty"`
+	CatalogEntityIDNotNil       bool     `json:"catalogEntityIDNotNil,omitempty"`
+	CatalogEntityIDEqualFold    *string  `json:"catalogEntityIDEqualFold,omitempty"`
+	CatalogEntityIDContainsFold *string  `json:"catalogEntityIDContainsFold,omitempty"`
+
+	// "externally_visible" field predicates.
+	ExternallyVisible       *bool `json:"externallyVisible,omitempty"`
+	ExternallyVisibleNEQ    *bool `json:"externallyVisibleNEQ,omitempty"`
+	ExternallyVisibleIsNil  bool  `json:"externallyVisibleIsNil,omitempty"`
+	ExternallyVisibleNotNil bool  `json:"externallyVisibleNotNil,omitempty"`
+
+	// "catalog_entity_key" field predicates.
+	CatalogEntityKey             *string  `json:"catalogEntityKey,omitempty"`
+	CatalogEntityKeyNEQ          *string  `json:"catalogEntityKeyNEQ,omitempty"`
+	CatalogEntityKeyIn           []string `json:"catalogEntityKeyIn,omitempty"`
+	CatalogEntityKeyNotIn        []string `json:"catalogEntityKeyNotIn,omitempty"`
+	CatalogEntityKeyContains     *string  `json:"catalogEntityKeyContains,omitempty"`
+	CatalogEntityKeyHasPrefix    *string  `json:"catalogEntityKeyHasPrefix,omitempty"`
+	CatalogEntityKeyHasSuffix    *string  `json:"catalogEntityKeyHasSuffix,omitempty"`
+	CatalogEntityKeyIsNil        bool     `json:"catalogEntityKeyIsNil,omitempty"`
+	CatalogEntityKeyNotNil       bool     `json:"catalogEntityKeyNotNil,omitempty"`
+	CatalogEntityKeyEqualFold    *string  `json:"catalogEntityKeyEqualFold,omitempty"`
+	CatalogEntityKeyContainsFold *string  `json:"catalogEntityKeyContainsFold,omitempty"`
+
 	// "entity_relationship_state_name" field predicates.
 	EntityRelationshipStateName             *string  `json:"entityRelationshipStateName,omitempty"`
 	EntityRelationshipStateNameNEQ          *string  `json:"entityRelationshipStateNameNEQ,omitempty"`
@@ -28559,6 +29188,14 @@ type EntityWhereInput struct {
 	// "reviewed_by_identity_holder" edge predicates.
 	HasReviewedByIdentityHolder     *bool                       `json:"hasReviewedByIdentityHolder,omitempty"`
 	HasReviewedByIdentityHolderWith []*IdentityHolderWhereInput `json:"hasReviewedByIdentityHolderWith,omitempty"`
+
+	// "catalog_entity" edge predicates.
+	HasCatalogEntity     *bool               `json:"hasCatalogEntity,omitempty"`
+	HasCatalogEntityWith []*EntityWhereInput `json:"hasCatalogEntityWith,omitempty"`
+
+	// "adopted_entities" edge predicates.
+	HasAdoptedEntities     *bool               `json:"hasAdoptedEntities,omitempty"`
+	HasAdoptedEntitiesWith []*EntityWhereInput `json:"hasAdoptedEntitiesWith,omitempty"`
 
 	// "entity_relationship_state" edge predicates.
 	HasEntityRelationshipState     *bool                       `json:"hasEntityRelationshipState,omitempty"`
@@ -29479,6 +30116,84 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if i.SystemInternalIDContainsFold != nil {
 		predicates = append(predicates, entity.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
+	}
+	if i.CatalogEntityID != nil {
+		predicates = append(predicates, entity.CatalogEntityIDEQ(*i.CatalogEntityID))
+	}
+	if i.CatalogEntityIDNEQ != nil {
+		predicates = append(predicates, entity.CatalogEntityIDNEQ(*i.CatalogEntityIDNEQ))
+	}
+	if len(i.CatalogEntityIDIn) > 0 {
+		predicates = append(predicates, entity.CatalogEntityIDIn(i.CatalogEntityIDIn...))
+	}
+	if len(i.CatalogEntityIDNotIn) > 0 {
+		predicates = append(predicates, entity.CatalogEntityIDNotIn(i.CatalogEntityIDNotIn...))
+	}
+	if i.CatalogEntityIDContains != nil {
+		predicates = append(predicates, entity.CatalogEntityIDContains(*i.CatalogEntityIDContains))
+	}
+	if i.CatalogEntityIDHasPrefix != nil {
+		predicates = append(predicates, entity.CatalogEntityIDHasPrefix(*i.CatalogEntityIDHasPrefix))
+	}
+	if i.CatalogEntityIDHasSuffix != nil {
+		predicates = append(predicates, entity.CatalogEntityIDHasSuffix(*i.CatalogEntityIDHasSuffix))
+	}
+	if i.CatalogEntityIDIsNil {
+		predicates = append(predicates, entity.CatalogEntityIDIsNil())
+	}
+	if i.CatalogEntityIDNotNil {
+		predicates = append(predicates, entity.CatalogEntityIDNotNil())
+	}
+	if i.CatalogEntityIDEqualFold != nil {
+		predicates = append(predicates, entity.CatalogEntityIDEqualFold(*i.CatalogEntityIDEqualFold))
+	}
+	if i.CatalogEntityIDContainsFold != nil {
+		predicates = append(predicates, entity.CatalogEntityIDContainsFold(*i.CatalogEntityIDContainsFold))
+	}
+	if i.ExternallyVisible != nil {
+		predicates = append(predicates, entity.ExternallyVisibleEQ(*i.ExternallyVisible))
+	}
+	if i.ExternallyVisibleNEQ != nil {
+		predicates = append(predicates, entity.ExternallyVisibleNEQ(*i.ExternallyVisibleNEQ))
+	}
+	if i.ExternallyVisibleIsNil {
+		predicates = append(predicates, entity.ExternallyVisibleIsNil())
+	}
+	if i.ExternallyVisibleNotNil {
+		predicates = append(predicates, entity.ExternallyVisibleNotNil())
+	}
+	if i.CatalogEntityKey != nil {
+		predicates = append(predicates, entity.CatalogEntityKeyEQ(*i.CatalogEntityKey))
+	}
+	if i.CatalogEntityKeyNEQ != nil {
+		predicates = append(predicates, entity.CatalogEntityKeyNEQ(*i.CatalogEntityKeyNEQ))
+	}
+	if len(i.CatalogEntityKeyIn) > 0 {
+		predicates = append(predicates, entity.CatalogEntityKeyIn(i.CatalogEntityKeyIn...))
+	}
+	if len(i.CatalogEntityKeyNotIn) > 0 {
+		predicates = append(predicates, entity.CatalogEntityKeyNotIn(i.CatalogEntityKeyNotIn...))
+	}
+	if i.CatalogEntityKeyContains != nil {
+		predicates = append(predicates, entity.CatalogEntityKeyContains(*i.CatalogEntityKeyContains))
+	}
+	if i.CatalogEntityKeyHasPrefix != nil {
+		predicates = append(predicates, entity.CatalogEntityKeyHasPrefix(*i.CatalogEntityKeyHasPrefix))
+	}
+	if i.CatalogEntityKeyHasSuffix != nil {
+		predicates = append(predicates, entity.CatalogEntityKeyHasSuffix(*i.CatalogEntityKeyHasSuffix))
+	}
+	if i.CatalogEntityKeyIsNil {
+		predicates = append(predicates, entity.CatalogEntityKeyIsNil())
+	}
+	if i.CatalogEntityKeyNotNil {
+		predicates = append(predicates, entity.CatalogEntityKeyNotNil())
+	}
+	if i.CatalogEntityKeyEqualFold != nil {
+		predicates = append(predicates, entity.CatalogEntityKeyEqualFold(*i.CatalogEntityKeyEqualFold))
+	}
+	if i.CatalogEntityKeyContainsFold != nil {
+		predicates = append(predicates, entity.CatalogEntityKeyContainsFold(*i.CatalogEntityKeyContainsFold))
 	}
 	if i.EntityRelationshipStateName != nil {
 		predicates = append(predicates, entity.EntityRelationshipStateNameEQ(*i.EntityRelationshipStateName))
@@ -30792,6 +31507,44 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, entity.HasReviewedByIdentityHolderWith(with...))
+	}
+	if i.HasCatalogEntity != nil {
+		p := entity.HasCatalogEntity()
+		if !*i.HasCatalogEntity {
+			p = entity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCatalogEntityWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasCatalogEntityWith))
+		with = append(with, entity.DeletedAtIsNil())
+		for _, w := range i.HasCatalogEntityWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCatalogEntityWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, entity.HasCatalogEntityWith(with...))
+	}
+	if i.HasAdoptedEntities != nil {
+		p := entity.HasAdoptedEntities()
+		if !*i.HasAdoptedEntities {
+			p = entity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAdoptedEntitiesWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasAdoptedEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
+		for _, w := range i.HasAdoptedEntitiesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAdoptedEntitiesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, entity.HasAdoptedEntitiesWith(with...))
 	}
 	if i.HasEntityRelationshipState != nil {
 		p := entity.HasEntityRelationshipState()
@@ -50067,9 +50820,17 @@ type InternalPolicyWhereInput struct {
 	HasReviews     *bool               `json:"hasReviews,omitempty"`
 	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
 
+	// "assessments" edge predicates.
+	HasAssessments     *bool                   `json:"hasAssessments,omitempty"`
+	HasAssessmentsWith []*AssessmentWhereInput `json:"hasAssessmentsWith,omitempty"`
+
 	// "integrations" edge predicates.
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+
+	// "policy_attestations" edge predicates.
+	HasPolicyAttestations     *bool                         `json:"hasPolicyAttestations,omitempty"`
+	HasPolicyAttestationsWith []*AssessmentPolicyWhereInput `json:"hasPolicyAttestationsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -51769,6 +52530,25 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 		}
 		predicates = append(predicates, internalpolicy.HasReviewsWith(with...))
 	}
+	if i.HasAssessments != nil {
+		p := internalpolicy.HasAssessments()
+		if !*i.HasAssessments {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAssessmentsWith) > 0 {
+		with := make([]predicate.Assessment, 0, len(i.HasAssessmentsWith))
+		with = append(with, assessment.DeletedAtIsNil())
+		for _, w := range i.HasAssessmentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAssessmentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasAssessmentsWith(with...))
+	}
 	if i.HasIntegrations != nil {
 		p := internalpolicy.HasIntegrations()
 		if !*i.HasIntegrations {
@@ -51787,6 +52567,24 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, internalpolicy.HasIntegrationsWith(with...))
+	}
+	if i.HasPolicyAttestations != nil {
+		p := internalpolicy.HasPolicyAttestations()
+		if !*i.HasPolicyAttestations {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPolicyAttestationsWith) > 0 {
+		with := make([]predicate.AssessmentPolicy, 0, len(i.HasPolicyAttestationsWith))
+		for _, w := range i.HasPolicyAttestationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPolicyAttestationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasPolicyAttestationsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -59410,6 +60208,10 @@ type OrganizationWhereInput struct {
 	HasAssessmentCreators     *bool              `json:"hasAssessmentCreators,omitempty"`
 	HasAssessmentCreatorsWith []*GroupWhereInput `json:"hasAssessmentCreatorsWith,omitempty"`
 
+	// "assessment_policy_creators" edge predicates.
+	HasAssessmentPolicyCreators     *bool              `json:"hasAssessmentPolicyCreators,omitempty"`
+	HasAssessmentPolicyCreatorsWith []*GroupWhereInput `json:"hasAssessmentPolicyCreatorsWith,omitempty"`
+
 	// "asset_creators" edge predicates.
 	HasAssetCreators     *bool              `json:"hasAssetCreators,omitempty"`
 	HasAssetCreatorsWith []*GroupWhereInput `json:"hasAssetCreatorsWith,omitempty"`
@@ -59710,22 +60512,6 @@ type OrganizationWhereInput struct {
 	HasPersonalAccessTokens     *bool                            `json:"hasPersonalAccessTokens,omitempty"`
 	HasPersonalAccessTokensWith []*PersonalAccessTokenWhereInput `json:"hasPersonalAccessTokensWith,omitempty"`
 
-	// "api_tokens" edge predicates.
-	HasAPITokens     *bool                 `json:"hasAPITokens,omitempty"`
-	HasAPITokensWith []*APITokenWhereInput `json:"hasAPITokensWith,omitempty"`
-
-	// "email_templates" edge predicates.
-	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
-	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
-
-	// "notification_preferences" edge predicates.
-	HasNotificationPreferences     *bool                               `json:"hasNotificationPreferences,omitempty"`
-	HasNotificationPreferencesWith []*NotificationPreferenceWhereInput `json:"hasNotificationPreferencesWith,omitempty"`
-
-	// "notification_templates" edge predicates.
-	HasNotificationTemplates     *bool                             `json:"hasNotificationTemplates,omitempty"`
-	HasNotificationTemplatesWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplatesWith,omitempty"`
-
 	// "users" edge predicates.
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
@@ -59738,29 +60524,9 @@ type OrganizationWhereInput struct {
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 
-	// "secrets" edge predicates.
-	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
-	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
-
 	// "avatar_file" edge predicates.
 	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
 	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`
-
-	// "groups" edge predicates.
-	HasGroups     *bool              `json:"hasGroups,omitempty"`
-	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
-
-	// "templates" edge predicates.
-	HasTemplates     *bool                 `json:"hasTemplates,omitempty"`
-	HasTemplatesWith []*TemplateWhereInput `json:"hasTemplatesWith,omitempty"`
-
-	// "integrations" edge predicates.
-	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
-	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
-
-	// "documents" edge predicates.
-	HasDocuments     *bool                     `json:"hasDocuments,omitempty"`
-	HasDocumentsWith []*DocumentDataWhereInput `json:"hasDocumentsWith,omitempty"`
 
 	// "org_subscriptions" edge predicates.
 	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
@@ -59769,222 +60535,6 @@ type OrganizationWhereInput struct {
 	// "invites" edge predicates.
 	HasInvites     *bool               `json:"hasInvites,omitempty"`
 	HasInvitesWith []*InviteWhereInput `json:"hasInvitesWith,omitempty"`
-
-	// "subscribers" edge predicates.
-	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
-	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
-
-	// "entities" edge predicates.
-	HasEntities     *bool               `json:"hasEntities,omitempty"`
-	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
-
-	// "platforms" edge predicates.
-	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
-	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
-
-	// "identity_holders" edge predicates.
-	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
-	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
-
-	// "campaigns" edge predicates.
-	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
-	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
-
-	// "campaign_targets" edge predicates.
-	HasCampaignTargets     *bool                       `json:"hasCampaignTargets,omitempty"`
-	HasCampaignTargetsWith []*CampaignTargetWhereInput `json:"hasCampaignTargetsWith,omitempty"`
-
-	// "entity_types" edge predicates.
-	HasEntityTypes     *bool                   `json:"hasEntityTypes,omitempty"`
-	HasEntityTypesWith []*EntityTypeWhereInput `json:"hasEntityTypesWith,omitempty"`
-
-	// "contacts" edge predicates.
-	HasContacts     *bool                `json:"hasContacts,omitempty"`
-	HasContactsWith []*ContactWhereInput `json:"hasContactsWith,omitempty"`
-
-	// "notes" edge predicates.
-	HasNotes     *bool             `json:"hasNotes,omitempty"`
-	HasNotesWith []*NoteWhereInput `json:"hasNotesWith,omitempty"`
-
-	// "tasks" edge predicates.
-	HasTasks     *bool             `json:"hasTasks,omitempty"`
-	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
-
-	// "programs" edge predicates.
-	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
-	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
-
-	// "system_details" edge predicates.
-	HasSystemDetails     *bool                     `json:"hasSystemDetails,omitempty"`
-	HasSystemDetailsWith []*SystemDetailWhereInput `json:"hasSystemDetailsWith,omitempty"`
-
-	// "procedures" edge predicates.
-	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
-	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
-
-	// "internal_policies" edge predicates.
-	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
-	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
-
-	// "risks" edge predicates.
-	HasRisks     *bool             `json:"hasRisks,omitempty"`
-	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
-
-	// "control_objectives" edge predicates.
-	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
-	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
-
-	// "narratives" edge predicates.
-	HasNarratives     *bool                  `json:"hasNarratives,omitempty"`
-	HasNarrativesWith []*NarrativeWhereInput `json:"hasNarrativesWith,omitempty"`
-
-	// "controls" edge predicates.
-	HasControls     *bool                `json:"hasControls,omitempty"`
-	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
-
-	// "subcontrols" edge predicates.
-	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
-	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
-
-	// "control_implementations" edge predicates.
-	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
-	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
-
-	// "mapped_controls" edge predicates.
-	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
-	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
-
-	// "evidence" edge predicates.
-	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
-	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
-
-	// "standards" edge predicates.
-	HasStandards     *bool                 `json:"hasStandards,omitempty"`
-	HasStandardsWith []*StandardWhereInput `json:"hasStandardsWith,omitempty"`
-
-	// "action_plans" edge predicates.
-	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
-	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
-
-	// "custom_domains" edge predicates.
-	HasCustomDomains     *bool                     `json:"hasCustomDomains,omitempty"`
-	HasCustomDomainsWith []*CustomDomainWhereInput `json:"hasCustomDomainsWith,omitempty"`
-
-	// "dns_verifications" edge predicates.
-	HasDNSVerifications     *bool                        `json:"hasDNSVerifications,omitempty"`
-	HasDNSVerificationsWith []*DNSVerificationWhereInput `json:"hasDNSVerificationsWith,omitempty"`
-
-	// "trust_centers" edge predicates.
-	HasTrustCenters     *bool                    `json:"hasTrustCenters,omitempty"`
-	HasTrustCentersWith []*TrustCenterWhereInput `json:"hasTrustCentersWith,omitempty"`
-
-	// "assets" edge predicates.
-	HasAssets     *bool              `json:"hasAssets,omitempty"`
-	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
-
-	// "scans" edge predicates.
-	HasScans     *bool             `json:"hasScans,omitempty"`
-	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
-
-	// "sla_definitions" edge predicates.
-	HasSLADefinitions     *bool                      `json:"hasSLADefinitions,omitempty"`
-	HasSLADefinitionsWith []*SLADefinitionWhereInput `json:"hasSLADefinitionsWith,omitempty"`
-
-	// "subprocessors" edge predicates.
-	HasSubprocessors     *bool                     `json:"hasSubprocessors,omitempty"`
-	HasSubprocessorsWith []*SubprocessorWhereInput `json:"hasSubprocessorsWith,omitempty"`
-
-	// "exports" edge predicates.
-	HasExports     *bool               `json:"hasExports,omitempty"`
-	HasExportsWith []*ExportWhereInput `json:"hasExportsWith,omitempty"`
-
-	// "trust_center_watermark_configs" edge predicates.
-	HasTrustCenterWatermarkConfigs     *bool                                   `json:"hasTrustCenterWatermarkConfigs,omitempty"`
-	HasTrustCenterWatermarkConfigsWith []*TrustCenterWatermarkConfigWhereInput `json:"hasTrustCenterWatermarkConfigsWith,omitempty"`
-
-	// "assessments" edge predicates.
-	HasAssessments     *bool                   `json:"hasAssessments,omitempty"`
-	HasAssessmentsWith []*AssessmentWhereInput `json:"hasAssessmentsWith,omitempty"`
-
-	// "assessment_responses" edge predicates.
-	HasAssessmentResponses     *bool                           `json:"hasAssessmentResponses,omitempty"`
-	HasAssessmentResponsesWith []*AssessmentResponseWhereInput `json:"hasAssessmentResponsesWith,omitempty"`
-
-	// "custom_type_enums" edge predicates.
-	HasCustomTypeEnums     *bool                       `json:"hasCustomTypeEnums,omitempty"`
-	HasCustomTypeEnumsWith []*CustomTypeEnumWhereInput `json:"hasCustomTypeEnumsWith,omitempty"`
-
-	// "tag_definitions" edge predicates.
-	HasTagDefinitions     *bool                      `json:"hasTagDefinitions,omitempty"`
-	HasTagDefinitionsWith []*TagDefinitionWhereInput `json:"hasTagDefinitionsWith,omitempty"`
-
-	// "remediations" edge predicates.
-	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
-	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
-
-	// "findings" edge predicates.
-	HasFindings     *bool                `json:"hasFindings,omitempty"`
-	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
-
-	// "finding_controls" edge predicates.
-	HasFindingControls     *bool                       `json:"hasFindingControls,omitempty"`
-	HasFindingControlsWith []*FindingControlWhereInput `json:"hasFindingControlsWith,omitempty"`
-
-	// "reviews" edge predicates.
-	HasReviews     *bool               `json:"hasReviews,omitempty"`
-	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
-
-	// "vulnerabilities" edge predicates.
-	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
-	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
-
-	// "workflow_definitions" edge predicates.
-	HasWorkflowDefinitions     *bool                           `json:"hasWorkflowDefinitions,omitempty"`
-	HasWorkflowDefinitionsWith []*WorkflowDefinitionWhereInput `json:"hasWorkflowDefinitionsWith,omitempty"`
-
-	// "workflow_instances" edge predicates.
-	HasWorkflowInstances     *bool                         `json:"hasWorkflowInstances,omitempty"`
-	HasWorkflowInstancesWith []*WorkflowInstanceWhereInput `json:"hasWorkflowInstancesWith,omitempty"`
-
-	// "workflow_events" edge predicates.
-	HasWorkflowEvents     *bool                      `json:"hasWorkflowEvents,omitempty"`
-	HasWorkflowEventsWith []*WorkflowEventWhereInput `json:"hasWorkflowEventsWith,omitempty"`
-
-	// "workflow_assignments" edge predicates.
-	HasWorkflowAssignments     *bool                           `json:"hasWorkflowAssignments,omitempty"`
-	HasWorkflowAssignmentsWith []*WorkflowAssignmentWhereInput `json:"hasWorkflowAssignmentsWith,omitempty"`
-
-	// "workflow_assignment_targets" edge predicates.
-	HasWorkflowAssignmentTargets     *bool                                 `json:"hasWorkflowAssignmentTargets,omitempty"`
-	HasWorkflowAssignmentTargetsWith []*WorkflowAssignmentTargetWhereInput `json:"hasWorkflowAssignmentTargetsWith,omitempty"`
-
-	// "workflow_object_refs" edge predicates.
-	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
-	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
-
-	// "directory_accounts" edge predicates.
-	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
-	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
-
-	// "directory_groups" edge predicates.
-	HasDirectoryGroups     *bool                       `json:"hasDirectoryGroups,omitempty"`
-	HasDirectoryGroupsWith []*DirectoryGroupWhereInput `json:"hasDirectoryGroupsWith,omitempty"`
-
-	// "directory_memberships" edge predicates.
-	HasDirectoryMemberships     *bool                            `json:"hasDirectoryMemberships,omitempty"`
-	HasDirectoryMembershipsWith []*DirectoryMembershipWhereInput `json:"hasDirectoryMembershipsWith,omitempty"`
-
-	// "discussions" edge predicates.
-	HasDiscussions     *bool                   `json:"hasDiscussions,omitempty"`
-	HasDiscussionsWith []*DiscussionWhereInput `json:"hasDiscussionsWith,omitempty"`
-
-	// "vendor_scoring_configs" edge predicates.
-	HasVendorScoringConfigs     *bool                            `json:"hasVendorScoringConfigs,omitempty"`
-	HasVendorScoringConfigsWith []*VendorScoringConfigWhereInput `json:"hasVendorScoringConfigsWith,omitempty"`
-
-	// "vendor_risk_scores" edge predicates.
-	HasVendorRiskScores     *bool                        `json:"hasVendorRiskScores,omitempty"`
-	HasVendorRiskScoresWith []*VendorRiskScoreWhereInput `json:"hasVendorRiskScoresWith,omitempty"`
 
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
@@ -60477,6 +61027,25 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasAssessmentCreatorsWith(with...))
+	}
+	if i.HasAssessmentPolicyCreators != nil {
+		p := organization.HasAssessmentPolicyCreators()
+		if !*i.HasAssessmentPolicyCreators {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAssessmentPolicyCreatorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasAssessmentPolicyCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasAssessmentPolicyCreatorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAssessmentPolicyCreatorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasAssessmentPolicyCreatorsWith(with...))
 	}
 	if i.HasAssetCreators != nil {
 		p := organization.HasAssetCreators()
@@ -61903,82 +62472,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasPersonalAccessTokensWith(with...))
 	}
-	if i.HasAPITokens != nil {
-		p := organization.HasAPITokens()
-		if !*i.HasAPITokens {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasAPITokensWith) > 0 {
-		with := make([]predicate.APIToken, 0, len(i.HasAPITokensWith))
-		with = append(with, apitoken.DeletedAtIsNil())
-		for _, w := range i.HasAPITokensWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasAPITokensWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasAPITokensWith(with...))
-	}
-	if i.HasEmailTemplates != nil {
-		p := organization.HasEmailTemplates()
-		if !*i.HasEmailTemplates {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEmailTemplatesWith) > 0 {
-		with := make([]predicate.EmailTemplate, 0, len(i.HasEmailTemplatesWith))
-		with = append(with, emailtemplate.DeletedAtIsNil())
-		for _, w := range i.HasEmailTemplatesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEmailTemplatesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasEmailTemplatesWith(with...))
-	}
-	if i.HasNotificationPreferences != nil {
-		p := organization.HasNotificationPreferences()
-		if !*i.HasNotificationPreferences {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasNotificationPreferencesWith) > 0 {
-		with := make([]predicate.NotificationPreference, 0, len(i.HasNotificationPreferencesWith))
-		with = append(with, notificationpreference.DeletedAtIsNil())
-		for _, w := range i.HasNotificationPreferencesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasNotificationPreferencesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasNotificationPreferencesWith(with...))
-	}
-	if i.HasNotificationTemplates != nil {
-		p := organization.HasNotificationTemplates()
-		if !*i.HasNotificationTemplates {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasNotificationTemplatesWith) > 0 {
-		with := make([]predicate.NotificationTemplate, 0, len(i.HasNotificationTemplatesWith))
-		with = append(with, notificationtemplate.DeletedAtIsNil())
-		for _, w := range i.HasNotificationTemplatesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasNotificationTemplatesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasNotificationTemplatesWith(with...))
-	}
 	if i.HasUsers != nil {
 		p := organization.HasUsers()
 		if !*i.HasUsers {
@@ -62035,25 +62528,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasEventsWith(with...))
 	}
-	if i.HasSecrets != nil {
-		p := organization.HasSecrets()
-		if !*i.HasSecrets {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSecretsWith) > 0 {
-		with := make([]predicate.Hush, 0, len(i.HasSecretsWith))
-		with = append(with, hush.DeletedAtIsNil())
-		for _, w := range i.HasSecretsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSecretsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasSecretsWith(with...))
-	}
 	if i.HasAvatarFile != nil {
 		p := organization.HasAvatarFile()
 		if !*i.HasAvatarFile {
@@ -62072,82 +62546,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasAvatarFileWith(with...))
-	}
-	if i.HasGroups != nil {
-		p := organization.HasGroups()
-		if !*i.HasGroups {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasGroupsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
-		with = append(with, group.DeletedAtIsNil())
-		for _, w := range i.HasGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasGroupsWith(with...))
-	}
-	if i.HasTemplates != nil {
-		p := organization.HasTemplates()
-		if !*i.HasTemplates {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTemplatesWith) > 0 {
-		with := make([]predicate.Template, 0, len(i.HasTemplatesWith))
-		with = append(with, template.DeletedAtIsNil())
-		for _, w := range i.HasTemplatesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTemplatesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasTemplatesWith(with...))
-	}
-	if i.HasIntegrations != nil {
-		p := organization.HasIntegrations()
-		if !*i.HasIntegrations {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasIntegrationsWith) > 0 {
-		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
-		with = append(with, integration.DeletedAtIsNil())
-		for _, w := range i.HasIntegrationsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasIntegrationsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasIntegrationsWith(with...))
-	}
-	if i.HasDocuments != nil {
-		p := organization.HasDocuments()
-		if !*i.HasDocuments {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasDocumentsWith) > 0 {
-		with := make([]predicate.DocumentData, 0, len(i.HasDocumentsWith))
-		with = append(with, documentdata.DeletedAtIsNil())
-		for _, w := range i.HasDocumentsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDocumentsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasDocumentsWith(with...))
 	}
 	if i.HasOrgSubscriptions != nil {
 		p := organization.HasOrgSubscriptions()
@@ -62186,1030 +62584,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasInvitesWith(with...))
-	}
-	if i.HasSubscribers != nil {
-		p := organization.HasSubscribers()
-		if !*i.HasSubscribers {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSubscribersWith) > 0 {
-		with := make([]predicate.Subscriber, 0, len(i.HasSubscribersWith))
-		with = append(with, subscriber.DeletedAtIsNil())
-		for _, w := range i.HasSubscribersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSubscribersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasSubscribersWith(with...))
-	}
-	if i.HasEntities != nil {
-		p := organization.HasEntities()
-		if !*i.HasEntities {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEntitiesWith) > 0 {
-		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
-		with = append(with, entity.DeletedAtIsNil())
-		for _, w := range i.HasEntitiesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEntitiesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasEntitiesWith(with...))
-	}
-	if i.HasPlatforms != nil {
-		p := organization.HasPlatforms()
-		if !*i.HasPlatforms {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasPlatformsWith) > 0 {
-		with := make([]predicate.Platform, 0, len(i.HasPlatformsWith))
-		with = append(with, platform.DeletedAtIsNil())
-		for _, w := range i.HasPlatformsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPlatformsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasPlatformsWith(with...))
-	}
-	if i.HasIdentityHolders != nil {
-		p := organization.HasIdentityHolders()
-		if !*i.HasIdentityHolders {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasIdentityHoldersWith) > 0 {
-		with := make([]predicate.IdentityHolder, 0, len(i.HasIdentityHoldersWith))
-		with = append(with, identityholder.DeletedAtIsNil())
-		for _, w := range i.HasIdentityHoldersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasIdentityHoldersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasIdentityHoldersWith(with...))
-	}
-	if i.HasCampaigns != nil {
-		p := organization.HasCampaigns()
-		if !*i.HasCampaigns {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasCampaignsWith) > 0 {
-		with := make([]predicate.Campaign, 0, len(i.HasCampaignsWith))
-		with = append(with, campaign.DeletedAtIsNil())
-		for _, w := range i.HasCampaignsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasCampaignsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasCampaignsWith(with...))
-	}
-	if i.HasCampaignTargets != nil {
-		p := organization.HasCampaignTargets()
-		if !*i.HasCampaignTargets {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasCampaignTargetsWith) > 0 {
-		with := make([]predicate.CampaignTarget, 0, len(i.HasCampaignTargetsWith))
-		with = append(with, campaigntarget.DeletedAtIsNil())
-		for _, w := range i.HasCampaignTargetsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasCampaignTargetsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasCampaignTargetsWith(with...))
-	}
-	if i.HasEntityTypes != nil {
-		p := organization.HasEntityTypes()
-		if !*i.HasEntityTypes {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEntityTypesWith) > 0 {
-		with := make([]predicate.EntityType, 0, len(i.HasEntityTypesWith))
-		with = append(with, entitytype.DeletedAtIsNil())
-		for _, w := range i.HasEntityTypesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEntityTypesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasEntityTypesWith(with...))
-	}
-	if i.HasContacts != nil {
-		p := organization.HasContacts()
-		if !*i.HasContacts {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasContactsWith) > 0 {
-		with := make([]predicate.Contact, 0, len(i.HasContactsWith))
-		with = append(with, contact.DeletedAtIsNil())
-		for _, w := range i.HasContactsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasContactsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasContactsWith(with...))
-	}
-	if i.HasNotes != nil {
-		p := organization.HasNotes()
-		if !*i.HasNotes {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasNotesWith) > 0 {
-		with := make([]predicate.Note, 0, len(i.HasNotesWith))
-		with = append(with, note.DeletedAtIsNil())
-		for _, w := range i.HasNotesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasNotesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasNotesWith(with...))
-	}
-	if i.HasTasks != nil {
-		p := organization.HasTasks()
-		if !*i.HasTasks {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTasksWith) > 0 {
-		with := make([]predicate.Task, 0, len(i.HasTasksWith))
-		with = append(with, task.DeletedAtIsNil())
-		for _, w := range i.HasTasksWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTasksWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasTasksWith(with...))
-	}
-	if i.HasPrograms != nil {
-		p := organization.HasPrograms()
-		if !*i.HasPrograms {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasProgramsWith) > 0 {
-		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
-		with = append(with, program.DeletedAtIsNil())
-		for _, w := range i.HasProgramsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasProgramsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasProgramsWith(with...))
-	}
-	if i.HasSystemDetails != nil {
-		p := organization.HasSystemDetails()
-		if !*i.HasSystemDetails {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSystemDetailsWith) > 0 {
-		with := make([]predicate.SystemDetail, 0, len(i.HasSystemDetailsWith))
-		with = append(with, systemdetail.DeletedAtIsNil())
-		for _, w := range i.HasSystemDetailsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSystemDetailsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasSystemDetailsWith(with...))
-	}
-	if i.HasProcedures != nil {
-		p := organization.HasProcedures()
-		if !*i.HasProcedures {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasProceduresWith) > 0 {
-		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
-		with = append(with, procedure.DeletedAtIsNil())
-		for _, w := range i.HasProceduresWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasProceduresWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasProceduresWith(with...))
-	}
-	if i.HasInternalPolicies != nil {
-		p := organization.HasInternalPolicies()
-		if !*i.HasInternalPolicies {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasInternalPoliciesWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
-		with = append(with, internalpolicy.DeletedAtIsNil())
-		for _, w := range i.HasInternalPoliciesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasInternalPoliciesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasInternalPoliciesWith(with...))
-	}
-	if i.HasRisks != nil {
-		p := organization.HasRisks()
-		if !*i.HasRisks {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasRisksWith) > 0 {
-		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
-		with = append(with, risk.DeletedAtIsNil())
-		for _, w := range i.HasRisksWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasRisksWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasRisksWith(with...))
-	}
-	if i.HasControlObjectives != nil {
-		p := organization.HasControlObjectives()
-		if !*i.HasControlObjectives {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlObjectivesWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
-		with = append(with, controlobjective.DeletedAtIsNil())
-		for _, w := range i.HasControlObjectivesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlObjectivesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasControlObjectivesWith(with...))
-	}
-	if i.HasNarratives != nil {
-		p := organization.HasNarratives()
-		if !*i.HasNarratives {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasNarrativesWith) > 0 {
-		with := make([]predicate.Narrative, 0, len(i.HasNarrativesWith))
-		with = append(with, narrative.DeletedAtIsNil())
-		for _, w := range i.HasNarrativesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasNarrativesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasNarrativesWith(with...))
-	}
-	if i.HasControls != nil {
-		p := organization.HasControls()
-		if !*i.HasControls {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlsWith) > 0 {
-		with := make([]predicate.Control, 0, len(i.HasControlsWith))
-		with = append(with, control.DeletedAtIsNil())
-		for _, w := range i.HasControlsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasControlsWith(with...))
-	}
-	if i.HasSubcontrols != nil {
-		p := organization.HasSubcontrols()
-		if !*i.HasSubcontrols {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSubcontrolsWith) > 0 {
-		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
-		with = append(with, subcontrol.DeletedAtIsNil())
-		for _, w := range i.HasSubcontrolsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasSubcontrolsWith(with...))
-	}
-	if i.HasControlImplementations != nil {
-		p := organization.HasControlImplementations()
-		if !*i.HasControlImplementations {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlImplementationsWith) > 0 {
-		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
-		with = append(with, controlimplementation.DeletedAtIsNil())
-		for _, w := range i.HasControlImplementationsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasControlImplementationsWith(with...))
-	}
-	if i.HasMappedControls != nil {
-		p := organization.HasMappedControls()
-		if !*i.HasMappedControls {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasMappedControlsWith) > 0 {
-		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
-		with = append(with, mappedcontrol.DeletedAtIsNil())
-		for _, w := range i.HasMappedControlsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasMappedControlsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasMappedControlsWith(with...))
-	}
-	if i.HasEvidence != nil {
-		p := organization.HasEvidence()
-		if !*i.HasEvidence {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEvidenceWith) > 0 {
-		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
-		with = append(with, evidence.DeletedAtIsNil())
-		for _, w := range i.HasEvidenceWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEvidenceWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasEvidenceWith(with...))
-	}
-	if i.HasStandards != nil {
-		p := organization.HasStandards()
-		if !*i.HasStandards {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasStandardsWith) > 0 {
-		with := make([]predicate.Standard, 0, len(i.HasStandardsWith))
-		with = append(with, standard.DeletedAtIsNil())
-		for _, w := range i.HasStandardsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasStandardsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasStandardsWith(with...))
-	}
-	if i.HasActionPlans != nil {
-		p := organization.HasActionPlans()
-		if !*i.HasActionPlans {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasActionPlansWith) > 0 {
-		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
-		with = append(with, actionplan.DeletedAtIsNil())
-		for _, w := range i.HasActionPlansWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasActionPlansWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasActionPlansWith(with...))
-	}
-	if i.HasCustomDomains != nil {
-		p := organization.HasCustomDomains()
-		if !*i.HasCustomDomains {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasCustomDomainsWith) > 0 {
-		with := make([]predicate.CustomDomain, 0, len(i.HasCustomDomainsWith))
-		with = append(with, customdomain.DeletedAtIsNil())
-		for _, w := range i.HasCustomDomainsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasCustomDomainsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasCustomDomainsWith(with...))
-	}
-	if i.HasDNSVerifications != nil {
-		p := organization.HasDNSVerifications()
-		if !*i.HasDNSVerifications {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasDNSVerificationsWith) > 0 {
-		with := make([]predicate.DNSVerification, 0, len(i.HasDNSVerificationsWith))
-		with = append(with, dnsverification.DeletedAtIsNil())
-		for _, w := range i.HasDNSVerificationsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDNSVerificationsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasDNSVerificationsWith(with...))
-	}
-	if i.HasTrustCenters != nil {
-		p := organization.HasTrustCenters()
-		if !*i.HasTrustCenters {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTrustCentersWith) > 0 {
-		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCentersWith))
-		with = append(with, trustcenter.DeletedAtIsNil())
-		for _, w := range i.HasTrustCentersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCentersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasTrustCentersWith(with...))
-	}
-	if i.HasAssets != nil {
-		p := organization.HasAssets()
-		if !*i.HasAssets {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasAssetsWith) > 0 {
-		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
-		with = append(with, asset.DeletedAtIsNil())
-		for _, w := range i.HasAssetsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasAssetsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasAssetsWith(with...))
-	}
-	if i.HasScans != nil {
-		p := organization.HasScans()
-		if !*i.HasScans {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasScansWith) > 0 {
-		with := make([]predicate.Scan, 0, len(i.HasScansWith))
-		with = append(with, scan.DeletedAtIsNil())
-		for _, w := range i.HasScansWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasScansWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasScansWith(with...))
-	}
-	if i.HasSLADefinitions != nil {
-		p := organization.HasSLADefinitions()
-		if !*i.HasSLADefinitions {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSLADefinitionsWith) > 0 {
-		with := make([]predicate.SLADefinition, 0, len(i.HasSLADefinitionsWith))
-		with = append(with, sladefinition.DeletedAtIsNil())
-		for _, w := range i.HasSLADefinitionsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSLADefinitionsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasSLADefinitionsWith(with...))
-	}
-	if i.HasSubprocessors != nil {
-		p := organization.HasSubprocessors()
-		if !*i.HasSubprocessors {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasSubprocessorsWith) > 0 {
-		with := make([]predicate.Subprocessor, 0, len(i.HasSubprocessorsWith))
-		with = append(with, subprocessor.DeletedAtIsNil())
-		for _, w := range i.HasSubprocessorsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSubprocessorsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasSubprocessorsWith(with...))
-	}
-	if i.HasExports != nil {
-		p := organization.HasExports()
-		if !*i.HasExports {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasExportsWith) > 0 {
-		with := make([]predicate.Export, 0, len(i.HasExportsWith))
-		with = append(with, export.DeletedAtIsNil())
-		for _, w := range i.HasExportsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasExportsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasExportsWith(with...))
-	}
-	if i.HasTrustCenterWatermarkConfigs != nil {
-		p := organization.HasTrustCenterWatermarkConfigsWith(
-			predicate.TrustCenterWatermarkConfig(schemautil.TrustCenterScopePredicate()),
-		)
-		if !*i.HasTrustCenterWatermarkConfigs {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTrustCenterWatermarkConfigsWith) > 0 {
-		with := make([]predicate.TrustCenterWatermarkConfig, 0, len(i.HasTrustCenterWatermarkConfigsWith))
-		with = append(with, trustcenterwatermarkconfig.DeletedAtIsNil())
-		with = append(with, predicate.TrustCenterWatermarkConfig(schemautil.TrustCenterScopePredicate()))
-		for _, w := range i.HasTrustCenterWatermarkConfigsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCenterWatermarkConfigsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasTrustCenterWatermarkConfigsWith(with...))
-	}
-	if i.HasAssessments != nil {
-		p := organization.HasAssessments()
-		if !*i.HasAssessments {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasAssessmentsWith) > 0 {
-		with := make([]predicate.Assessment, 0, len(i.HasAssessmentsWith))
-		with = append(with, assessment.DeletedAtIsNil())
-		for _, w := range i.HasAssessmentsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasAssessmentsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasAssessmentsWith(with...))
-	}
-	if i.HasAssessmentResponses != nil {
-		p := organization.HasAssessmentResponses()
-		if !*i.HasAssessmentResponses {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasAssessmentResponsesWith) > 0 {
-		with := make([]predicate.AssessmentResponse, 0, len(i.HasAssessmentResponsesWith))
-		with = append(with, assessmentresponse.DeletedAtIsNil())
-		for _, w := range i.HasAssessmentResponsesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasAssessmentResponsesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasAssessmentResponsesWith(with...))
-	}
-	if i.HasCustomTypeEnums != nil {
-		p := organization.HasCustomTypeEnums()
-		if !*i.HasCustomTypeEnums {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasCustomTypeEnumsWith) > 0 {
-		with := make([]predicate.CustomTypeEnum, 0, len(i.HasCustomTypeEnumsWith))
-		with = append(with, customtypeenum.DeletedAtIsNil())
-		for _, w := range i.HasCustomTypeEnumsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasCustomTypeEnumsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasCustomTypeEnumsWith(with...))
-	}
-	if i.HasTagDefinitions != nil {
-		p := organization.HasTagDefinitions()
-		if !*i.HasTagDefinitions {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTagDefinitionsWith) > 0 {
-		with := make([]predicate.TagDefinition, 0, len(i.HasTagDefinitionsWith))
-		with = append(with, tagdefinition.DeletedAtIsNil())
-		for _, w := range i.HasTagDefinitionsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTagDefinitionsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasTagDefinitionsWith(with...))
-	}
-	if i.HasRemediations != nil {
-		p := organization.HasRemediations()
-		if !*i.HasRemediations {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasRemediationsWith) > 0 {
-		with := make([]predicate.Remediation, 0, len(i.HasRemediationsWith))
-		with = append(with, remediation.DeletedAtIsNil())
-		for _, w := range i.HasRemediationsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasRemediationsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasRemediationsWith(with...))
-	}
-	if i.HasFindings != nil {
-		p := organization.HasFindings()
-		if !*i.HasFindings {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasFindingsWith) > 0 {
-		with := make([]predicate.Finding, 0, len(i.HasFindingsWith))
-		with = append(with, finding.DeletedAtIsNil())
-		for _, w := range i.HasFindingsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasFindingsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasFindingsWith(with...))
-	}
-	if i.HasFindingControls != nil {
-		p := organization.HasFindingControls()
-		if !*i.HasFindingControls {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasFindingControlsWith) > 0 {
-		with := make([]predicate.FindingControl, 0, len(i.HasFindingControlsWith))
-		for _, w := range i.HasFindingControlsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasFindingControlsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasFindingControlsWith(with...))
-	}
-	if i.HasReviews != nil {
-		p := organization.HasReviews()
-		if !*i.HasReviews {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasReviewsWith) > 0 {
-		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
-		with = append(with, review.DeletedAtIsNil())
-		for _, w := range i.HasReviewsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasReviewsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasReviewsWith(with...))
-	}
-	if i.HasVulnerabilities != nil {
-		p := organization.HasVulnerabilities()
-		if !*i.HasVulnerabilities {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasVulnerabilitiesWith) > 0 {
-		with := make([]predicate.Vulnerability, 0, len(i.HasVulnerabilitiesWith))
-		with = append(with, vulnerability.DeletedAtIsNil())
-		for _, w := range i.HasVulnerabilitiesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasVulnerabilitiesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasVulnerabilitiesWith(with...))
-	}
-	if i.HasWorkflowDefinitions != nil {
-		p := organization.HasWorkflowDefinitions()
-		if !*i.HasWorkflowDefinitions {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasWorkflowDefinitionsWith) > 0 {
-		with := make([]predicate.WorkflowDefinition, 0, len(i.HasWorkflowDefinitionsWith))
-		with = append(with, workflowdefinition.DeletedAtIsNil())
-		for _, w := range i.HasWorkflowDefinitionsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasWorkflowDefinitionsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasWorkflowDefinitionsWith(with...))
-	}
-	if i.HasWorkflowInstances != nil {
-		p := organization.HasWorkflowInstances()
-		if !*i.HasWorkflowInstances {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasWorkflowInstancesWith) > 0 {
-		with := make([]predicate.WorkflowInstance, 0, len(i.HasWorkflowInstancesWith))
-		with = append(with, workflowinstance.DeletedAtIsNil())
-		for _, w := range i.HasWorkflowInstancesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasWorkflowInstancesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasWorkflowInstancesWith(with...))
-	}
-	if i.HasWorkflowEvents != nil {
-		p := organization.HasWorkflowEvents()
-		if !*i.HasWorkflowEvents {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasWorkflowEventsWith) > 0 {
-		with := make([]predicate.WorkflowEvent, 0, len(i.HasWorkflowEventsWith))
-		with = append(with, workflowevent.DeletedAtIsNil())
-		for _, w := range i.HasWorkflowEventsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasWorkflowEventsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasWorkflowEventsWith(with...))
-	}
-	if i.HasWorkflowAssignments != nil {
-		p := organization.HasWorkflowAssignments()
-		if !*i.HasWorkflowAssignments {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasWorkflowAssignmentsWith) > 0 {
-		with := make([]predicate.WorkflowAssignment, 0, len(i.HasWorkflowAssignmentsWith))
-		with = append(with, workflowassignment.DeletedAtIsNil())
-		for _, w := range i.HasWorkflowAssignmentsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasWorkflowAssignmentsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasWorkflowAssignmentsWith(with...))
-	}
-	if i.HasWorkflowAssignmentTargets != nil {
-		p := organization.HasWorkflowAssignmentTargets()
-		if !*i.HasWorkflowAssignmentTargets {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasWorkflowAssignmentTargetsWith) > 0 {
-		with := make([]predicate.WorkflowAssignmentTarget, 0, len(i.HasWorkflowAssignmentTargetsWith))
-		with = append(with, workflowassignmenttarget.DeletedAtIsNil())
-		for _, w := range i.HasWorkflowAssignmentTargetsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasWorkflowAssignmentTargetsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasWorkflowAssignmentTargetsWith(with...))
-	}
-	if i.HasWorkflowObjectRefs != nil {
-		p := organization.HasWorkflowObjectRefs()
-		if !*i.HasWorkflowObjectRefs {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasWorkflowObjectRefsWith) > 0 {
-		with := make([]predicate.WorkflowObjectRef, 0, len(i.HasWorkflowObjectRefsWith))
-		for _, w := range i.HasWorkflowObjectRefsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasWorkflowObjectRefsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasWorkflowObjectRefsWith(with...))
-	}
-	if i.HasDirectoryAccounts != nil {
-		p := organization.HasDirectoryAccounts()
-		if !*i.HasDirectoryAccounts {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasDirectoryAccountsWith) > 0 {
-		with := make([]predicate.DirectoryAccount, 0, len(i.HasDirectoryAccountsWith))
-		for _, w := range i.HasDirectoryAccountsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDirectoryAccountsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasDirectoryAccountsWith(with...))
-	}
-	if i.HasDirectoryGroups != nil {
-		p := organization.HasDirectoryGroups()
-		if !*i.HasDirectoryGroups {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasDirectoryGroupsWith) > 0 {
-		with := make([]predicate.DirectoryGroup, 0, len(i.HasDirectoryGroupsWith))
-		for _, w := range i.HasDirectoryGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDirectoryGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasDirectoryGroupsWith(with...))
-	}
-	if i.HasDirectoryMemberships != nil {
-		p := organization.HasDirectoryMemberships()
-		if !*i.HasDirectoryMemberships {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasDirectoryMembershipsWith) > 0 {
-		with := make([]predicate.DirectoryMembership, 0, len(i.HasDirectoryMembershipsWith))
-		for _, w := range i.HasDirectoryMembershipsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDirectoryMembershipsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasDirectoryMembershipsWith(with...))
-	}
-	if i.HasDiscussions != nil {
-		p := organization.HasDiscussions()
-		if !*i.HasDiscussions {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasDiscussionsWith) > 0 {
-		with := make([]predicate.Discussion, 0, len(i.HasDiscussionsWith))
-		with = append(with, discussion.DeletedAtIsNil())
-		for _, w := range i.HasDiscussionsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDiscussionsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasDiscussionsWith(with...))
-	}
-	if i.HasVendorScoringConfigs != nil {
-		p := organization.HasVendorScoringConfigs()
-		if !*i.HasVendorScoringConfigs {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasVendorScoringConfigsWith) > 0 {
-		with := make([]predicate.VendorScoringConfig, 0, len(i.HasVendorScoringConfigsWith))
-		with = append(with, vendorscoringconfig.DeletedAtIsNil())
-		for _, w := range i.HasVendorScoringConfigsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasVendorScoringConfigsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasVendorScoringConfigsWith(with...))
-	}
-	if i.HasVendorRiskScores != nil {
-		p := organization.HasVendorRiskScores()
-		if !*i.HasVendorRiskScores {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasVendorRiskScoresWith) > 0 {
-		with := make([]predicate.VendorRiskScore, 0, len(i.HasVendorRiskScoresWith))
-		with = append(with, vendorriskscore.DeletedAtIsNil())
-		for _, w := range i.HasVendorRiskScoresWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasVendorRiskScoresWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasVendorRiskScoresWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -97033,6 +96407,12 @@ type TrustCenterSettingWhereInput struct {
 	StatusPageURLEqualFold    *string  `json:"statusPageURLEqualFold,omitempty"`
 	StatusPageURLContainsFold *string  `json:"statusPageURLContainsFold,omitempty"`
 
+	// "noindex_default_domain" field predicates.
+	NoindexDefaultDomain       *bool `json:"noindexDefaultDomain,omitempty"`
+	NoindexDefaultDomainNEQ    *bool `json:"noindexDefaultDomainNEQ,omitempty"`
+	NoindexDefaultDomainIsNil  bool  `json:"noindexDefaultDomainIsNil,omitempty"`
+	NoindexDefaultDomainNotNil bool  `json:"noindexDefaultDomainNotNil,omitempty"`
+
 	// "blocked_groups" edge predicates.
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -98085,6 +97465,18 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	}
 	if i.StatusPageURLContainsFold != nil {
 		predicates = append(predicates, trustcentersetting.StatusPageURLContainsFold(*i.StatusPageURLContainsFold))
+	}
+	if i.NoindexDefaultDomain != nil {
+		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainEQ(*i.NoindexDefaultDomain))
+	}
+	if i.NoindexDefaultDomainNEQ != nil {
+		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainNEQ(*i.NoindexDefaultDomainNEQ))
+	}
+	if i.NoindexDefaultDomainIsNil {
+		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainIsNil())
+	}
+	if i.NoindexDefaultDomainNotNil {
+		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainNotNil())
 	}
 
 	if i.HasBlockedGroups != nil {

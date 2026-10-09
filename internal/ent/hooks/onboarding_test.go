@@ -1,7 +1,9 @@
 package hooks_test
 
 import (
+	"context"
 	"fmt"
+	"sync"
 	"testing"
 	"time"
 
@@ -11,13 +13,15 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 func (suite *HookTestSuite) TestHookOnboarding() {
@@ -83,7 +87,7 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 	for i, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			// setup the allow context
-			ctx := privacy.DecisionContext(userCtx, privacy.Allow)
+			ctx := auth.WithInternalOperationContext(userCtx)
 
 			// add the client to the context
 			ctx = generated.NewContext(ctx, suite.client)
@@ -121,7 +125,7 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 			assert.ElementsMatch(t, tc.input.Domains, org.Edges.Setting.Domains)
 
 			newOrgCtx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, onboarding.OrganizationID), suite.client)
-			newOrgCtx = privacy.DecisionContext(newOrgCtx, privacy.Allow)
+			newOrgCtx = auth.WithInternalOperationContext(newOrgCtx)
 
 			managedTagExists, err := suite.client.TagDefinition.Query().
 				Where(
@@ -131,8 +135,87 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 				Exist(newOrgCtx)
 			require.NoError(t, err)
 			assert.True(t, managedTagExists)
+
+			slaCount, err := suite.client.SLADefinition.Query().
+				Where(sladefinition.OwnerID(onboarding.OrganizationID)).
+				Count(newOrgCtx)
+			require.NoError(t, err)
+			assert.Equal(t, 4, slaCount)
 		})
 	}
+}
+
+func (suite *HookTestSuite) TestOnboardingProgramControlsLoadableByListeners() {
+	t := suite.T()
+
+	admin := suite.seedSystemAdmin()
+	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), suite.client)
+	framework := gofakeit.UUID()
+
+	std, err := suite.client.Standard.Create().SetName(framework).SetShortName(framework).
+		SetFramework(framework).SetIsPublic(true).SetSystemOwned(true).
+		SetStatus(enums.StandardActive).Save(sysCtx)
+	require.NoError(t, err)
+
+	const controlCount = 8
+
+	for i := range controlCount {
+		_, err = suite.client.Control.Create().SetStandardID(std.ID).
+			SetSystemOwned(true).SetRefCode(fmt.Sprintf("LOAD-%d", i)).Save(sysCtx)
+		require.NoError(t, err)
+	}
+
+	var (
+		mu        sync.Mutex
+		delivered int
+		missing   []string
+	)
+
+	listenerIDs, err := gala.Register(suite.galaRuntime, gala.Definition[entityops.MutationPayload]{
+		Topic:      entityops.MutationTopic(entityops.MutationConcernWorkflow, generated.TypeControl),
+		Name:       "test.control.loadable",
+		Operations: []string{entityops.OpCreate},
+		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+			return restored
+		},
+		Handle: func(hc gala.HandlerContext, payload entityops.MutationPayload) error {
+			_, ok, loadErr := entityops.LoadEntity(generated.NewContext(hc.Context, suite.client), payload.EntityID, suite.client.Control.Get)
+
+			mu.Lock()
+			defer mu.Unlock()
+
+			delivered++
+
+			if loadErr != nil || !ok {
+				missing = append(missing, payload.EntityID)
+			}
+
+			return nil
+		},
+	})
+	require.NoError(t, err)
+
+	t.Cleanup(func() {
+		require.NoError(t, suite.galaRuntime.RemoveListeners(context.Background(), listenerIDs...))
+	})
+
+	user := suite.seedUser()
+	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
+	ctx = auth.WithInternalOperationContext(ctx)
+
+	_, err = suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+		CompanyName: "Onboarding Co " + gofakeit.LetterN(8),
+		Compliance:  map[string]interface{}{"frameworks": []string{framework}},
+	}).Save(ctx)
+	require.NoError(t, err)
+
+	suite.waitForEvents()
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	assert.Equal(t, controlCount, delivered)
+	assert.Empty(t, missing)
 }
 
 func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
@@ -176,7 +259,7 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 		t.Run(tc.name, func(t *testing.T) {
 			user := suite.seedUser()
 			ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
-			ctx = privacy.DecisionContext(ctx, privacy.Allow)
+			ctx = auth.WithInternalOperationContext(ctx)
 
 			onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 				CompanyName: "Onboarding Co " + gofakeit.LetterN(8),

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -77,6 +78,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
@@ -208,6 +210,37 @@ func PurgeAssessmentHistory(ctx context.Context, ps ...predicate.Assessment) err
 		s.Where(sql.In(assessmenthistory.FieldRef, refs))
 	}).Exec(history.WithContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error purging assessment history")
+
+		return err
+	}
+
+	return nil
+}
+
+// PurgeAssessmentPolicyHistory removes the history rows belonging to every assessmentpolicy matching
+// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
+// deletes that should keep their audit trail are unaffected.
+// This has to run before the assessmentpolicy records themselves are deleted, the rows are matched
+// with a sub-select against the assessmentpolicy table
+func PurgeAssessmentPolicyHistory(ctx context.Context, ps ...predicate.AssessmentPolicy) error {
+	if !contextx.PurgeHistoryEnabled(ctx) {
+		return nil
+	}
+
+	client := FromContext(ctx)
+	if client == nil || client.HistoryClient == nil {
+		return nil
+	}
+
+	refs := sql.Select(assessmentpolicy.FieldID).From(sql.Table(assessmentpolicy.Table))
+	for _, p := range ps {
+		p(refs)
+	}
+
+	if _, err := client.HistoryClient.AssessmentPolicyHistory.Delete().Where(func(s *sql.Selector) {
+		s.Where(sql.In(assessmentpolicyhistory.FieldRef, refs))
+	}).Exec(history.WithContext(ctx)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error purging assessmentpolicy history")
 
 		return err
 	}

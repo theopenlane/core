@@ -116,7 +116,7 @@ func ({{ $receiver }} *{{ $query }}) collectField(ctx context.Context, oneNode b
 									return err
 								}
 							}
-							if limit := paginateLimitMult(args.first, args.last, {{ if $e.Type.Annotations.OPENLANE_SKIP_FGA_OVERFETCH.enabled }}1{{ else }}10{{ end }}); limit > 0 {
+							if limit := paginateLimit(args.first, args.last); limit > 0 {
 								{{- /* Limit per row is not required, as there is only node returned by the top query. */}}
 								if oneNode {
 									pager.applyOrder(query.Limit(limit))
@@ -348,6 +348,8 @@ Cond:
 	query := query.Clone()
 	{{- /* totalCount may be greater than len(nodes). */}}
 	{{ $receiver }}.loadTotal = append({{ $receiver }}.loadTotal, func(ctx context.Context, nodes []*{{ $node.Name }}) error {
+		{{- /* clone per call, paginate may run this once per batch and predicates would otherwise accumulate */}}
+		query := query.Clone()
 		ids := make([]driver.Value, len(nodes))
 		for i := range nodes {
 			ids[i] = nodes[i].{{ $node.ID.StructField }}

@@ -186,7 +186,7 @@ func (CustomTypeEnum) Interceptors() []ent.Interceptor {
 // Modules this schema has access to
 func (CustomTypeEnum) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

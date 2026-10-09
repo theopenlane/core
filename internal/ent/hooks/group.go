@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
@@ -102,13 +101,11 @@ func HookManagedGroups() ent.Hook {
 			}
 
 			// allow general allow context or managed group bypass to modify managed groups
-			_, allowCtx := privacy.DecisionFromContext(ctx)
-			caller, _ := auth.CallerFromContext(ctx)
-			allowManagedCtx := caller != nil && caller.Has(auth.CapBypassManagedGroup)
+			allowManagedCtx := auth.HasInContextCaller(ctx, auth.CapBypassManagedGroup)
 
 			// before returning the error, we need to allow for edges to be updated
 			// if they are permissions edges
-			if g.IsManaged && (!allowManagedCtx && !allowCtx) {
+			if g.IsManaged && !allowManagedCtx {
 				if err := checkOnlyDefaultFields(m); err != nil {
 					return nil, ErrManagedGroup
 				}
@@ -120,7 +117,6 @@ func HookManagedGroups() ent.Hook {
 
 			// if we got here, the only that that was updated was edges for permissions (Editor, Viewer, BlockedGroups)
 			// and we can continue
-
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne)
@@ -215,9 +211,9 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 	setting, ok := m.SettingID()
 	if ok {
 		// allow before tuples may be created
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+		internalCtx := auth.WithInternalReadContext(ctx)
 
-		groupSetting, err := m.Client().GroupSetting.Get(allowCtx, setting)
+		groupSetting, err := m.Client().GroupSetting.Get(internalCtx, setting)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to get group setting")
 

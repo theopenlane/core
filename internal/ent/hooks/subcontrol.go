@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/iam/auth"
 )
 
 // HookSubcontrolUpdate ensures that there is at least 1 control assigned to the subcontrol
@@ -36,9 +36,9 @@ func HookSubcontrolUpdate() ent.Hook {
 			}
 
 			// ensure that the subcontrol has at least one control assigned
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+			internalCtx := auth.WithInternalReadContext(ctx)
 
-			control, err := sc.Control(allowCtx)
+			control, err := sc.Control(internalCtx)
 			if err != nil {
 				return retVal, err
 			}

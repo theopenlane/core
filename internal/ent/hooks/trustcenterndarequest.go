@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
@@ -64,7 +63,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 
 			queryCtx := ctx
 			if auth.IsTrustCenterFromContext(ctx) {
-				queryCtx = privacy.DecisionContext(ctx, privacy.Allow)
+				queryCtx = auth.WithInternalOperationContext(ctx)
 			}
 
 			existingRequest, err := m.Client().TrustCenterNDARequest.Query().
@@ -421,7 +420,7 @@ func ndaRequestsFromMutation(ctx context.Context, m *generated.TrustCenterNDAReq
 	return m.Client().TrustCenterNDARequest.Query().
 		Where(trustcenterndarequest.IDIn(ids...)).
 		Select(trustcenterndarequest.FieldID, trustcenterndarequest.FieldTrustCenterID).
-		All(privacy.DecisionContext(ctx, privacy.Allow))
+		All(auth.WithInternalReadContext(ctx))
 }
 
 // recordSignedNDARequest marks an existing request signed when an already signed NDA is recorded
@@ -472,9 +471,9 @@ func createNDARequestNotification(ctx context.Context, ndaRequest *generated.Tru
 		},
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
-	_, err := transactionFromContext(ctx).Notification.Create().SetInput(input).Save(allowCtx)
+	_, err := transactionFromContext(ctx).Notification.Create().SetInput(input).Save(internalCtx)
 
 	return err
 }
@@ -483,12 +482,12 @@ func createNDARequestNotification(ctx context.Context, ndaRequest *generated.Tru
 var ndaApproverRoles = []enums.Role{enums.RoleOwner, enums.RoleSuperAdmin, enums.RoleAdmin}
 
 func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client, ndaRequest *generated.TrustCenterNDARequest, tc *generated.TrustCenter) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	org, err := client.Organization.Query().
 		Where(organization.IDEQ(tc.OwnerID)).
 		Select(organization.FieldDisplayName).
-		Only(allowCtx)
+		Only(internalCtx)
 	if err != nil {
 		return err
 	}
@@ -509,6 +508,7 @@ func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client,
 	return sendSystemEmail(ctx, emaildef.TCNDAApprovalRequestOp.Name(), emaildef.TrustCenterNDAApprovalRequestEmail{
 		RecipientInfo:  emaildef.RecipientInfo{Email: emails[0], Recipients: emails},
 		OrgName:        org.DisplayName,
+		OrgID:          tc.OwnerID,
 		RequesterName:  requesterName,
 		RequesterEmail: ndaRequest.Email,
 	})
@@ -524,14 +524,14 @@ func getNDAApproverEmails(ctx context.Context, client *generated.Client, ownerID
 		return nil, nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	var emails []string
 
 	err = client.User.Query().
 		Where(user.IDIn(ids...)).
 		Select(user.FieldEmail).
-		Scan(allowCtx, &emails)
+		Scan(internalCtx, &emails)
 	if err != nil {
 		return nil, err
 	}
@@ -542,7 +542,8 @@ func getNDAApproverEmails(ctx context.Context, client *generated.Client, ownerID
 }
 
 func getNDAApproverUserIDs(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	// approvers are read for the trust center owner org regardless of who made the request, both queries are pinned to it
+	internalCtx := auth.WithInternalReadCrossOrgContext(ctx)
 
 	if setting != nil && setting.NdaApproverGroupID != nil && *setting.NdaApproverGroupID != "" {
 		var ids []string
@@ -550,7 +551,7 @@ func getNDAApproverUserIDs(ctx context.Context, client *generated.Client, ownerI
 		err := client.GroupMembership.Query().
 			Where(groupmembership.GroupID(*setting.NdaApproverGroupID)).
 			Select(groupmembership.FieldUserID).
-			Scan(allowCtx, &ids)
+			Scan(internalCtx, &ids)
 		if err != nil {
 			return nil, err
 		}
@@ -566,7 +567,7 @@ func getNDAApproverUserIDs(ctx context.Context, client *generated.Client, ownerI
 			orgmembership.RoleIn(ndaApproverRoles...),
 		).
 		Select(orgmembership.FieldUserID).
-		Scan(allowCtx, &ids)
+		Scan(internalCtx, &ids)
 	if err != nil {
 		return nil, err
 	}

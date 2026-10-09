@@ -8,11 +8,11 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -155,12 +155,12 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 	policy5 := (&th.InternalPolicyBuilder{Client: suite.Client, SkipApprovalRequirement: true}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// Set approver/delegate groups using direct database access (bypasses authorization but keeps user context)
-	allowCtx := privacy.DecisionContext(th.SharedTestUser1.UserCtx, privacy.Allow)
-	suite.Client.DB.InternalPolicy.UpdateOneID(policy1.ID).SetApproverID(approverGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx)
-	suite.Client.DB.InternalPolicy.UpdateOneID(policy2.ID).SetDelegateID(delegateGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx)
-	suite.Client.DB.InternalPolicy.UpdateOneID(policy3.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx)                              // no approver group
-	suite.Client.DB.InternalPolicy.UpdateOneID(policy4.ID).SetApproverID(emptyGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx) // user not in group
-	suite.Client.DB.InternalPolicy.UpdateOneID(policy5.ID).SetApproverID(emptyGroup.ID).SetStatus(enums.DocumentDraft).SaveX(allowCtx) // approval not required so should pass
+	internalCtx := auth.WithInternalOperationContext(th.SharedTestUser1.UserCtx)
+	suite.Client.DB.InternalPolicy.UpdateOneID(policy1.ID).SetApproverID(approverGroup.ID).SetStatus(enums.DocumentDraft).SaveX(internalCtx)
+	suite.Client.DB.InternalPolicy.UpdateOneID(policy2.ID).SetDelegateID(delegateGroup.ID).SetStatus(enums.DocumentDraft).SaveX(internalCtx)
+	suite.Client.DB.InternalPolicy.UpdateOneID(policy3.ID).SetStatus(enums.DocumentDraft).SaveX(internalCtx)                              // no approver group
+	suite.Client.DB.InternalPolicy.UpdateOneID(policy4.ID).SetApproverID(emptyGroup.ID).SetStatus(enums.DocumentDraft).SaveX(internalCtx) // user not in group
+	suite.Client.DB.InternalPolicy.UpdateOneID(policy5.ID).SetApproverID(emptyGroup.ID).SetStatus(enums.DocumentDraft).SaveX(internalCtx) // approval not required so should pass
 
 	testCases := []struct {
 		name          string

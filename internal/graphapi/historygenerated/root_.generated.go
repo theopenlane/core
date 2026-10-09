@@ -139,6 +139,33 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	AssessmentPolicyHistory struct {
+		AssessmentID          func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalPolicyID      func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PolicyRevision        func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+	}
+
+	AssessmentPolicyHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AssessmentPolicyHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	AssessmentResponseHistory struct {
 		AssessmentID           func(childComplexity int) int
 		AssignedAt             func(childComplexity int) int
@@ -673,6 +700,8 @@ type ComplexityRoot struct {
 		ApprovedForUse                        func(childComplexity int) int
 		AutoRenews                            func(childComplexity int) int
 		BillingModel                          func(childComplexity int) int
+		CatalogEntityID                       func(childComplexity int) int
+		CatalogEntityKey                      func(childComplexity int) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
 		ContractStartDate                     func(childComplexity int) int
@@ -691,6 +720,7 @@ type ComplexityRoot struct {
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
 		ExternalID                            func(childComplexity int) int
+		ExternallyVisible                     func(childComplexity int) int
 		HasSoc2                               func(childComplexity int) int
 		HistoryTime                           func(childComplexity int) int
 		ID                                    func(childComplexity int) int
@@ -1813,6 +1843,7 @@ type ComplexityRoot struct {
 	Query struct {
 		ActionPlanHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ActionPlanHistoryOrder, where *historygenerated.ActionPlanHistoryWhereInput) int
 		AssessmentHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentHistoryOrder, where *historygenerated.AssessmentHistoryWhereInput) int
+		AssessmentPolicyHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentPolicyHistoryOrder, where *historygenerated.AssessmentPolicyHistoryWhereInput) int
 		AssessmentResponseHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentResponseHistoryOrder, where *historygenerated.AssessmentResponseHistoryWhereInput) int
 		AssetHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssetHistoryOrder, where *historygenerated.AssetHistoryWhereInput) int
 		CampaignHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignHistoryOrder, where *historygenerated.CampaignHistoryWhereInput) int
@@ -2560,6 +2591,7 @@ type ComplexityRoot struct {
 		LogoRemoteURL                         func(childComplexity int) int
 		NdaApprovalRequired                   func(childComplexity int) int
 		NdaApproverGroupID                    func(childComplexity int) int
+		NoindexDefaultDomain                  func(childComplexity int) int
 		NotifySubscribersOnSubprocessorChange func(childComplexity int) int
 		Operation                             func(childComplexity int) int
 		Overview                              func(childComplexity int) int
@@ -3538,6 +3570,117 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistoryEdge.Node(childComplexity), true
+
+	case "AssessmentPolicyHistory.assessmentID":
+		if e.ComplexityRoot.AssessmentPolicyHistory.AssessmentID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.AssessmentID(childComplexity), true
+	case "AssessmentPolicyHistory.createdAt":
+		if e.ComplexityRoot.AssessmentPolicyHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.CreatedAt(childComplexity), true
+	case "AssessmentPolicyHistory.createdBy":
+		if e.ComplexityRoot.AssessmentPolicyHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.CreatedBy(childComplexity), true
+	case "AssessmentPolicyHistory.historyTime":
+		if e.ComplexityRoot.AssessmentPolicyHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.HistoryTime(childComplexity), true
+	case "AssessmentPolicyHistory.id":
+		if e.ComplexityRoot.AssessmentPolicyHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.ID(childComplexity), true
+	case "AssessmentPolicyHistory.internalPolicyID":
+		if e.ComplexityRoot.AssessmentPolicyHistory.InternalPolicyID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.InternalPolicyID(childComplexity), true
+	case "AssessmentPolicyHistory.operation":
+		if e.ComplexityRoot.AssessmentPolicyHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.Operation(childComplexity), true
+	case "AssessmentPolicyHistory.ownerID":
+		if e.ComplexityRoot.AssessmentPolicyHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.OwnerID(childComplexity), true
+	case "AssessmentPolicyHistory.policyRevision":
+		if e.ComplexityRoot.AssessmentPolicyHistory.PolicyRevision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.PolicyRevision(childComplexity), true
+	case "AssessmentPolicyHistory.ref":
+		if e.ComplexityRoot.AssessmentPolicyHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.Ref(childComplexity), true
+	case "AssessmentPolicyHistory.updatedAt":
+		if e.ComplexityRoot.AssessmentPolicyHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.UpdatedAt(childComplexity), true
+	case "AssessmentPolicyHistory.updatedBy":
+		if e.ComplexityRoot.AssessmentPolicyHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.UpdatedBy(childComplexity), true
+	case "AssessmentPolicyHistory.updatedByImpersonator":
+		if e.ComplexityRoot.AssessmentPolicyHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.UpdatedByImpersonator(childComplexity), true
+
+	case "AssessmentPolicyHistoryConnection.edges":
+		if e.ComplexityRoot.AssessmentPolicyHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistoryConnection.Edges(childComplexity), true
+	case "AssessmentPolicyHistoryConnection.pageInfo":
+		if e.ComplexityRoot.AssessmentPolicyHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistoryConnection.PageInfo(childComplexity), true
+	case "AssessmentPolicyHistoryConnection.totalCount":
+		if e.ComplexityRoot.AssessmentPolicyHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistoryConnection.TotalCount(childComplexity), true
+
+	case "AssessmentPolicyHistoryEdge.cursor":
+		if e.ComplexityRoot.AssessmentPolicyHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistoryEdge.Cursor(childComplexity), true
+	case "AssessmentPolicyHistoryEdge.node":
+		if e.ComplexityRoot.AssessmentPolicyHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistoryEdge.Node(childComplexity), true
 
 	case "AssessmentResponseHistory.assessmentID":
 		if e.ComplexityRoot.AssessmentResponseHistory.AssessmentID == nil {
@@ -6125,6 +6268,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.BillingModel(childComplexity), true
+	case "EntityHistory.catalogEntityID":
+		if e.ComplexityRoot.EntityHistory.CatalogEntityID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.CatalogEntityID(childComplexity), true
+	case "EntityHistory.catalogEntityKey":
+		if e.ComplexityRoot.EntityHistory.CatalogEntityKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.CatalogEntityKey(childComplexity), true
 	case "EntityHistory.contractEndDate":
 		if e.ComplexityRoot.EntityHistory.ContractEndDate == nil {
 			break
@@ -6233,6 +6388,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.ExternalID(childComplexity), true
+	case "EntityHistory.externallyVisible":
+		if e.ComplexityRoot.EntityHistory.ExternallyVisible == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.ExternallyVisible(childComplexity), true
 	case "EntityHistory.hasSoc2":
 		if e.ComplexityRoot.EntityHistory.HasSoc2 == nil {
 			break
@@ -11683,6 +11844,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.AssessmentHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssessmentHistoryOrder), args["where"].(*historygenerated.AssessmentHistoryWhereInput)), true
+	case "Query.assessmentPolicyHistories":
+		if e.ComplexityRoot.Query.AssessmentPolicyHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_assessmentPolicyHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AssessmentPolicyHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssessmentPolicyHistoryOrder), args["where"].(*historygenerated.AssessmentPolicyHistoryWhereInput)), true
 	case "Query.assessmentResponseHistories":
 		if e.ComplexityRoot.Query.AssessmentResponseHistories == nil {
 			break
@@ -15663,6 +15835,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.NdaApproverGroupID(childComplexity), true
+	case "TrustCenterSettingHistory.noindexDefaultDomain":
+		if e.ComplexityRoot.TrustCenterSettingHistory.NoindexDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.NoindexDefaultDomain(childComplexity), true
 	case "TrustCenterSettingHistory.notifySubscribersOnSubprocessorChange":
 		if e.ComplexityRoot.TrustCenterSettingHistory.NotifySubscribersOnSubprocessorChange == nil {
 			break
@@ -17772,6 +17950,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputActionPlanHistoryWhereInput,
 		ec.unmarshalInputAssessmentHistoryOrder,
 		ec.unmarshalInputAssessmentHistoryWhereInput,
+		ec.unmarshalInputAssessmentPolicyHistoryOrder,
+		ec.unmarshalInputAssessmentPolicyHistoryWhereInput,
 		ec.unmarshalInputAssessmentResponseHistoryOrder,
 		ec.unmarshalInputAssessmentResponseHistoryWhereInput,
 		ec.unmarshalInputAssetHistoryOrder,
@@ -19299,6 +19479,256 @@ input AssessmentHistoryWhereInput {
   responseDueDurationLTE: Int
   responseDueDurationIsNil: Boolean
   responseDueDurationNotNil: Boolean
+}
+type AssessmentPolicyHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: AssessmentPolicyHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the id of the assessment attesting to the policy
+  """
+  assessmentID: String!
+  """
+  the id of the internal policy being attested to
+  """
+  internalPolicyID: String!
+  """
+  the revision of the internal policy when it was added to the assessment
+  """
+  policyRevision: String
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentPolicyHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [AssessmentPolicyHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentPolicyHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AssessmentPolicyHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+AssessmentPolicyHistoryOpType is enum for the field operation
+"""
+enum AssessmentPolicyHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for AssessmentPolicyHistory connections
+"""
+input AssessmentPolicyHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AssessmentPolicyHistories.
+  """
+  field: AssessmentPolicyHistoryOrderField!
+}
+"""
+Properties by which AssessmentPolicyHistory connections can be ordered.
+"""
+enum AssessmentPolicyHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+AssessmentPolicyHistoryWhereInput is used for filtering AssessmentPolicyHistory objects.
+Input was generated by ent.
+"""
+input AssessmentPolicyHistoryWhereInput {
+  not: AssessmentPolicyHistoryWhereInput
+  and: [AssessmentPolicyHistoryWhereInput!]
+  or: [AssessmentPolicyHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: AssessmentPolicyHistoryOpType
+  operationNEQ: AssessmentPolicyHistoryOpType
+  operationIn: [AssessmentPolicyHistoryOpType!]
+  operationNotIn: [AssessmentPolicyHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  assessment_id field predicates
+  """
+  assessmentID: String
+  assessmentIDNEQ: String
+  assessmentIDIn: [String!]
+  assessmentIDNotIn: [String!]
+  assessmentIDContains: String
+  assessmentIDHasPrefix: String
+  assessmentIDHasSuffix: String
+  assessmentIDEqualFold: String
+  assessmentIDContainsFold: String
+  """
+  internal_policy_id field predicates
+  """
+  internalPolicyID: String
+  internalPolicyIDNEQ: String
+  internalPolicyIDIn: [String!]
+  internalPolicyIDNotIn: [String!]
+  internalPolicyIDContains: String
+  internalPolicyIDHasPrefix: String
+  internalPolicyIDHasSuffix: String
+  internalPolicyIDEqualFold: String
+  internalPolicyIDContainsFold: String
+  """
+  policy_revision field predicates
+  """
+  policyRevision: String
+  policyRevisionNEQ: String
+  policyRevisionIn: [String!]
+  policyRevisionNotIn: [String!]
+  policyRevisionContains: String
+  policyRevisionHasPrefix: String
+  policyRevisionHasSuffix: String
+  policyRevisionIsNil: Boolean
+  policyRevisionNotNil: Boolean
+  policyRevisionEqualFold: String
+  policyRevisionContainsFold: String
 }
 type AssessmentResponseHistory implements Node {
   id: ID!
@@ -25594,6 +26024,18 @@ type EntityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalog entity this entity was adopted from
+  """
+  catalogEntityID: String
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalog entity this entity was adopted from
+  """
+  catalogEntityKey: String
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -26255,6 +26697,41 @@ input EntityHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  catalog_entity_id field predicates
+  """
+  catalogEntityID: String
+  catalogEntityIDNEQ: String
+  catalogEntityIDIn: [String!]
+  catalogEntityIDNotIn: [String!]
+  catalogEntityIDContains: String
+  catalogEntityIDHasPrefix: String
+  catalogEntityIDHasSuffix: String
+  catalogEntityIDIsNil: Boolean
+  catalogEntityIDNotNil: Boolean
+  catalogEntityIDEqualFold: String
+  catalogEntityIDContainsFold: String
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_entity_key field predicates
+  """
+  catalogEntityKey: String
+  catalogEntityKeyNEQ: String
+  catalogEntityKeyIn: [String!]
+  catalogEntityKeyNotIn: [String!]
+  catalogEntityKeyContains: String
+  catalogEntityKeyHasPrefix: String
+  catalogEntityKeyHasSuffix: String
+  catalogEntityKeyIsNil: Boolean
+  catalogEntityKeyNotNil: Boolean
+  catalogEntityKeyEqualFold: String
+  catalogEntityKeyContainsFold: String
   """
   entity_relationship_state_name field predicates
   """
@@ -38730,6 +39207,37 @@ type Query {
     """
     where: AssessmentHistoryWhereInput
   ): AssessmentHistoryConnection!
+  assessmentPolicyHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentPolicyHistories returned from the connection.
+    """
+    orderBy: AssessmentPolicyHistoryOrder
+
+    """
+    Filtering options for AssessmentPolicyHistories returned from the connection.
+    """
+    where: AssessmentPolicyHistoryWhereInput
+  ): AssessmentPolicyHistoryConnection!
   assessmentResponseHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -48288,6 +48796,10 @@ type TrustCenterSettingHistory implements Node {
   URL to the company's status page
   """
   statusPageURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
 }
 """
 A connection to a list of items.
@@ -48820,6 +49332,13 @@ input TrustCenterSettingHistoryWhereInput {
   statusPageURLNotNil: Boolean
   statusPageURLEqualFold: String
   statusPageURLContainsFold: String
+  """
+  noindex_default_domain field predicates
+  """
+  noindexDefaultDomain: Boolean
+  noindexDefaultDomainNEQ: Boolean
+  noindexDefaultDomainIsNil: Boolean
+  noindexDefaultDomainNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!
@@ -53600,6 +54119,60 @@ func (ec *executionContext) childFields_AssessmentHistoryEdge(ctx context.Contex
 	return nil, fmt.Errorf("no field named %q was found under type AssessmentHistoryEdge", field.Name)
 }
 
+func (ec *executionContext) childFields_AssessmentPolicyHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AssessmentPolicyHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_AssessmentPolicyHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_AssessmentPolicyHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_AssessmentPolicyHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AssessmentPolicyHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AssessmentPolicyHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AssessmentPolicyHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AssessmentPolicyHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AssessmentPolicyHistory_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AssessmentPolicyHistory_ownerID(ctx, field)
+	case "assessmentID":
+		return ec.fieldContext_AssessmentPolicyHistory_assessmentID(ctx, field)
+	case "internalPolicyID":
+		return ec.fieldContext_AssessmentPolicyHistory_internalPolicyID(ctx, field)
+	case "policyRevision":
+		return ec.fieldContext_AssessmentPolicyHistory_policyRevision(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AssessmentPolicyHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AssessmentPolicyHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AssessmentPolicyHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentPolicyHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AssessmentPolicyHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AssessmentPolicyHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentPolicyHistoryEdge", field.Name)
+}
+
 func (ec *executionContext) childFields_AssessmentResponseHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -54714,6 +55287,12 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_EntityHistory_systemInternalID(ctx, field)
+	case "catalogEntityID":
+		return ec.fieldContext_EntityHistory_catalogEntityID(ctx, field)
+	case "externallyVisible":
+		return ec.fieldContext_EntityHistory_externallyVisible(ctx, field)
+	case "catalogEntityKey":
+		return ec.fieldContext_EntityHistory_catalogEntityKey(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_EntityHistory_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":
@@ -58334,6 +58913,8 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(ctx, field)
 	case "statusPageURL":
 		return ec.fieldContext_TrustCenterSettingHistory_statusPageURL(ctx, field)
+	case "noindexDefaultDomain":
+		return ec.fieldContext_TrustCenterSettingHistory_noindexDefaultDomain(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistory", field.Name)
 }

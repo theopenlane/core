@@ -31,7 +31,7 @@ directive @readOnly on INPUT_FIELD_DEFINITION
 AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device
 """
 scalar AAGUID
-type APIToken implements Node {
+type APIToken implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -2179,6 +2179,37 @@ type Assessment implements Node @modules(names: ["compliance_module"]) {
 		"""
 		where: CampaignWhereInput
 	): CampaignConnection!
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 	workflowObjectRefs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -2210,6 +2241,37 @@ type Assessment implements Node @modules(names: ["compliance_module"]) {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	policyAttestations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssessmentPolicies returned from the connection.
+		"""
+		orderBy: [AssessmentPolicyOrder!]
+
+		"""
+		Filtering options for AssessmentPolicies returned from the connection.
+		"""
+		where: AssessmentPolicyWhereInput
+	): AssessmentPolicyConnection!
 	"""
 	Indicates if this assessment has pending changes awaiting workflow approval
 	"""
@@ -2330,6 +2392,265 @@ enum AssessmentOrderField {
 	name
 	assessment_type
 	response_due_duration
+}
+"""
+AssessmentPoliciesInput is used to attach internal policies to an assessment
+along with the assessment creation
+"""
+input AssessmentPoliciesInput {
+	internalPolicyID: ID!
+	"""
+	the revision of the internal policy, defaults to the current revision of the policy
+	"""
+	policyRevision: String
+}
+type AssessmentPolicy implements Node @modules(names: ["compliance_module"]) {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	the real user acting through an impersonation session when the record was last mutated, if any
+	"""
+	updatedByImpersonator: String
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	the id of the assessment attesting to the policy
+	"""
+	assessmentID: ID!
+	"""
+	the id of the internal policy being attested to
+	"""
+	internalPolicyID: ID!
+	"""
+	the revision of the internal policy when it was added to the assessment
+	"""
+	policyRevision: String
+	owner: Organization
+	assessment: Assessment!
+	internalPolicy: InternalPolicy!
+}
+"""
+Return response for createBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkCreatePayload {
+	"""
+	Created assessmentPolicys
+	"""
+	assessmentPolicies: [AssessmentPolicy!]
+}
+"""
+Return response for deleteBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkDeletePayload {
+	"""
+	Deleted assessmentPolicy IDs
+	"""
+	deletedIDs: [ID!]!
+	"""
+	Error returned when the bulk delete is only partially applied
+	"""
+	error: String
+	"""
+	IDs of assessmentPolicies that were not deleted
+	"""
+	notDeletedIDs: [ID!]
+}
+"""
+Return response for updateBulkAssessmentPolicy mutation
+"""
+type AssessmentPolicyBulkUpdatePayload {
+	"""
+	Updated assessmentPolicys
+	"""
+	assessmentPolicies: [AssessmentPolicy!]
+	"""
+	IDs of the updated assessmentPolicys
+	"""
+	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentPolicyConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [AssessmentPolicyEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createAssessmentPolicy mutation
+"""
+type AssessmentPolicyCreatePayload {
+	"""
+	Created assessmentPolicy
+	"""
+	assessmentPolicy: AssessmentPolicy!
+}
+"""
+Return response for deleteAssessmentPolicy mutation
+"""
+type AssessmentPolicyDeletePayload {
+	"""
+	Deleted assessmentPolicy ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentPolicyEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: AssessmentPolicy
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+Ordering options for AssessmentPolicy connections
+"""
+input AssessmentPolicyOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order AssessmentPolicies.
+	"""
+	field: AssessmentPolicyOrderField!
+}
+"""
+Properties by which AssessmentPolicy connections can be ordered.
+"""
+enum AssessmentPolicyOrderField {
+	created_at
+	updated_at
+}
+"""
+Return response for updateAssessmentPolicy mutation
+"""
+type AssessmentPolicyUpdatePayload {
+	"""
+	Updated assessmentPolicy
+	"""
+	assessmentPolicy: AssessmentPolicy!
+}
+"""
+AssessmentPolicyWhereInput is used for filtering AssessmentPolicy objects.
+Input was generated by ent.
+"""
+input AssessmentPolicyWhereInput {
+	not: AssessmentPolicyWhereInput
+	and: [AssessmentPolicyWhereInput!]
+	or: [AssessmentPolicyWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	updated_by_impersonator field predicates
+	"""
+	updatedByImpersonator: String
+	updatedByImpersonatorNEQ: String
+	updatedByImpersonatorIn: [String!]
+	updatedByImpersonatorNotIn: [String!]
+	updatedByImpersonatorContains: String
+	updatedByImpersonatorHasPrefix: String
+	updatedByImpersonatorHasSuffix: String
+	updatedByImpersonatorIsNil: Boolean
+	updatedByImpersonatorNotNil: Boolean
+	updatedByImpersonatorEqualFold: String
+	updatedByImpersonatorContainsFold: String
+	"""
+	policy_revision field predicates
+	"""
+	policyRevision: String
+	policyRevisionNEQ: String
+	policyRevisionIn: [String!]
+	policyRevisionNotIn: [String!]
+	policyRevisionContains: String
+	policyRevisionHasPrefix: String
+	policyRevisionHasSuffix: String
+	policyRevisionIsNil: Boolean
+	policyRevisionNotNil: Boolean
+	policyRevisionEqualFold: String
+	policyRevisionContainsFold: String
 }
 type AssessmentResponse implements Node @modules(names: ["compliance_module"]) {
 	id: ID!
@@ -3205,10 +3526,20 @@ input AssessmentWhereInput {
 	hasCampaigns: Boolean
 	hasCampaignsWith: [CampaignWhereInput!]
 	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
 	workflow_object_refs edge predicates
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
+	policy_attestations edge predicates
+	"""
+	hasPolicyAttestations: Boolean
+	hasPolicyAttestationsWith: [AssessmentPolicyWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -12432,6 +12763,19 @@ input CreateAssessmentInput {
 	workflowObjectRefIDs: [ID!]
 }
 """
+CreateAssessmentPolicyInput is used for create AssessmentPolicy object.
+Input was generated by ent.
+"""
+input CreateAssessmentPolicyInput {
+	"""
+	the revision of the internal policy when it was added to the assessment
+	"""
+	policyRevision: String
+	ownerID: ID
+	assessmentID: ID!
+	internalPolicyID: ID!
+}
+"""
 CreateAssessmentResponseInput is used for create AssessmentResponse object.
 Input was generated by ent.
 """
@@ -13808,6 +14152,10 @@ input CreateEntityInput {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @readOnly
+	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
 	"""
 	the relationship_state of the entity
 	"""
@@ -15520,6 +15868,7 @@ input CreateOrganizationInput {
 	actionPlanCreatorIDs: [ID!]
 	apiTokenCreatorIDs: [ID!]
 	assessmentCreatorIDs: [ID!]
+	assessmentPolicyCreatorIDs: [ID!]
 	assetCreatorIDs: [ID!]
 	campaignCreatorIDs: [ID!]
 	campaignTargetCreatorIDs: [ID!]
@@ -15594,73 +15943,12 @@ input CreateOrganizationInput {
 	parentID: ID
 	settingID: ID
 	personalAccessTokenIDs: [ID!]
-	apiTokenIDs: [ID!]
-	emailTemplateIDs: [ID!]
-	notificationPreferenceIDs: [ID!]
-	notificationTemplateIDs: [ID!]
 	fileIDs: [ID!]
 	eventIDs: [ID!]
-	secretIDs: [ID!]
 	avatarFileID: ID
-	groupIDs: [ID!]
-	templateIDs: [ID!]
-	integrationIDs: [ID!]
-	documentIDs: [ID!]
 	orgSubscriptionIDs: [ID!]
 	inviteIDs: [ID!]
-	subscriberIDs: [ID!]
-	entityIDs: [ID!]
-	platformIDs: [ID!]
-	identityHolderIDs: [ID!]
-	campaignIDs: [ID!]
-	campaignTargetIDs: [ID!]
-	entityTypeIDs: [ID!]
-	contactIDs: [ID!]
-	noteIDs: [ID!]
-	taskIDs: [ID!]
-	programIDs: [ID!]
-	systemDetailIDs: [ID!]
-	procedureIDs: [ID!]
-	internalPolicyIDs: [ID!]
-	riskIDs: [ID!]
-	controlObjectiveIDs: [ID!]
-	narrativeIDs: [ID!]
-	controlIDs: [ID!]
-	subcontrolIDs: [ID!]
-	controlImplementationIDs: [ID!]
-	mappedControlIDs: [ID!]
-	evidenceIDs: [ID!]
-	standardIDs: [ID!]
-	actionPlanIDs: [ID!]
-	customDomainIDs: [ID!]
-	dnsVerificationIDs: [ID!]
-	trustCenterIDs: [ID!]
-	assetIDs: [ID!]
-	scanIDs: [ID!]
-	slaDefinitionIDs: [ID!]
-	subprocessorIDs: [ID!]
-	exportIDs: [ID!]
-	trustCenterWatermarkConfigIDs: [ID!]
 	impersonationEventIDs: [ID!]
-	assessmentIDs: [ID!]
-	assessmentResponseIDs: [ID!]
-	customTypeEnumIDs: [ID!]
-	tagDefinitionIDs: [ID!]
-	remediationIDs: [ID!]
-	findingIDs: [ID!]
-	reviewIDs: [ID!]
-	vulnerabilityIDs: [ID!]
-	workflowDefinitionIDs: [ID!]
-	workflowInstanceIDs: [ID!]
-	workflowEventIDs: [ID!]
-	workflowAssignmentIDs: [ID!]
-	workflowAssignmentTargetIDs: [ID!]
-	workflowObjectRefIDs: [ID!]
-	directoryAccountIDs: [ID!]
-	directoryGroupIDs: [ID!]
-	discussionIDs: [ID!]
-	vendorScoringConfigIDs: [ID!]
-	vendorRiskScoreIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -17078,6 +17366,14 @@ input CreateSubscriberInput {
 	phone number of the subscriber
 	"""
 	phoneNumber: String
+	"""
+	indicates if the email address has been verified
+	"""
+	verifiedEmail: Boolean
+	"""
+	indicates if the phone number has been verified
+	"""
+	verifiedPhone: Boolean
 	ownerID: ID
 	eventIDs: [ID!]
 	trustCenterID: ID
@@ -17730,6 +18026,10 @@ input CreateTrustCenterSettingInput {
 	URL to the company's status page
 	"""
 	statusPageURL: String
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	logoFileID: ID
@@ -18736,7 +19036,7 @@ input CustomDomainWhereInput {
 	"""
 	tagsHas: String
 }
-type CustomTypeEnum implements Node {
+type CustomTypeEnum implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -22375,7 +22675,7 @@ input DirectoryMembershipWhereInput {
 	observedAtLT: Time
 	observedAtLTE: Time
 }
-type Discussion implements Node {
+type Discussion implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -23100,7 +23400,7 @@ input DocumentDataWhereInput {
 	"""
 	tagsHas: String
 }
-type EmailTemplate implements Node {
+type EmailTemplate implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -24060,6 +24360,18 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	systemInternalID: String @hidden(if: true)
 	"""
+	the system-owned catalog entity this entity was adopted from
+	"""
+	catalogEntityID: ID
+	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
+	"""
+	the lookup key of the catalog entity this entity was adopted from
+	"""
+	catalogEntityKey: String
+	"""
 	the relationship_state of the entity
 	"""
 	entityRelationshipStateName: String
@@ -24347,6 +24659,41 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	reviewedByUser: User
 	reviewedByGroup: Group
 	reviewedByIdentityHolder: IdentityHolder
+	"""
+	the system-owned catalog entity this entity was adopted from
+	"""
+	catalogEntity: Entity
+	adoptedEntities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
 	entityRelationshipState: CustomTypeEnum
 	entitySecurityQuestionnaireStatus: CustomTypeEnum
 	entitySourceType: CustomTypeEnum
@@ -25301,7 +25648,7 @@ enum EntityOrderField {
 	external_id
 	observed_at
 }
-type EntityType implements Node {
+type EntityType implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -25987,6 +26334,41 @@ input EntityWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	catalog_entity_id field predicates
+	"""
+	catalogEntityID: ID
+	catalogEntityIDNEQ: ID
+	catalogEntityIDIn: [ID!]
+	catalogEntityIDNotIn: [ID!]
+	catalogEntityIDContains: ID
+	catalogEntityIDHasPrefix: ID
+	catalogEntityIDHasSuffix: ID
+	catalogEntityIDIsNil: Boolean
+	catalogEntityIDNotNil: Boolean
+	catalogEntityIDEqualFold: ID
+	catalogEntityIDContainsFold: ID
+	"""
+	externally_visible field predicates
+	"""
+	externallyVisible: Boolean
+	externallyVisibleNEQ: Boolean
+	externallyVisibleIsNil: Boolean
+	externallyVisibleNotNil: Boolean
+	"""
+	catalog_entity_key field predicates
+	"""
+	catalogEntityKey: String
+	catalogEntityKeyNEQ: String
+	catalogEntityKeyIn: [String!]
+	catalogEntityKeyNotIn: [String!]
+	catalogEntityKeyContains: String
+	catalogEntityKeyHasPrefix: String
+	catalogEntityKeyHasSuffix: String
+	catalogEntityKeyIsNil: Boolean
+	catalogEntityKeyNotNil: Boolean
+	catalogEntityKeyEqualFold: String
+	catalogEntityKeyContainsFold: String
+	"""
 	entity_relationship_state_name field predicates
 	"""
 	entityRelationshipStateName: String
@@ -26519,6 +26901,16 @@ input EntityWhereInput {
 	"""
 	hasReviewedByIdentityHolder: Boolean
 	hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
+	catalog_entity edge predicates
+	"""
+	hasCatalogEntity: Boolean
+	hasCatalogEntityWith: [EntityWhereInput!]
+	"""
+	adopted_entities edge predicates
+	"""
+	hasAdoptedEntities: Boolean
+	hasAdoptedEntitiesWith: [EntityWhereInput!]
 	"""
 	entity_relationship_state edge predicates
 	"""
@@ -28466,7 +28858,7 @@ input EvidenceWhereInput {
 The `ExampleEvidence` scalar type represents example evidence that can be used to satisfy the control
 """
 scalar ExampleEvidence
-type Export implements Node {
+type Export implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -28929,7 +29321,7 @@ input ExportWhereInput {
 	"""
 	fieldsHas: String
 }
-type File implements Node {
+type File implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -37480,7 +37872,7 @@ input ImportDomainScanReviewVendorInput {
 	"""
 	categories: [String!]
 }
-type Integration implements Node {
+type Integration implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -38303,7 +38695,7 @@ enum IntegrationOrderField {
 	status
 	expires_at
 }
-type IntegrationRun implements Node {
+type IntegrationRun implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -40356,6 +40748,37 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
 		"""
 		where: ReviewWhereInput
 	): ReviewConnection!
+	assessments(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assessments returned from the connection.
+		"""
+		orderBy: [AssessmentOrder!]
+
+		"""
+		Filtering options for Assessments returned from the connection.
+		"""
+		where: AssessmentWhereInput
+	): AssessmentConnection!
 	integrations(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -40387,6 +40810,37 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
 		"""
 		where: IntegrationWhereInput
 	): IntegrationConnection!
+	policyAttestations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssessmentPolicies returned from the connection.
+		"""
+		orderBy: [AssessmentPolicyOrder!]
+
+		"""
+		Filtering options for AssessmentPolicies returned from the connection.
+		"""
+		where: AssessmentPolicyWhereInput
+	): AssessmentPolicyConnection!
 	"""
 	Indicates if this internalPolicy has pending changes awaiting workflow approval
 	"""
@@ -41184,10 +41638,20 @@ input InternalPolicyWhereInput {
 	hasReviews: Boolean
 	hasReviewsWith: [ReviewWhereInput!]
 	"""
+	assessments edge predicates
+	"""
+	hasAssessments: Boolean
+	hasAssessmentsWith: [AssessmentWhereInput!]
+	"""
 	integrations edge predicates
 	"""
 	hasIntegrations: Boolean
 	hasIntegrationsWith: [IntegrationWhereInput!]
+	"""
+	policy_attestations edge predicates
+	"""
+	hasPolicyAttestations: Boolean
+	hasPolicyAttestationsWith: [AssessmentPolicyWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -42780,6 +43244,102 @@ type Mutation {
 		ids: [ID!]!
 	): AssessmentBulkDeletePayload!
 	"""
+	Create a new assessment with internal policies attached
+	"""
+	createAssessmentWithPolicies(
+		"""
+		values of the assessment to be created
+		"""
+		assessmentInput: CreateAssessmentInput!
+
+		"""
+		internal policies to attach to the assessment
+		"""
+		policies: [AssessmentPoliciesInput!]
+	): AssessmentCreatePayload!
+	"""
+	Create a new assessmentPolicy
+	"""
+	createAssessmentPolicy(
+		"""
+		values of the assessmentPolicy
+		"""
+		input: CreateAssessmentPolicyInput!
+	): AssessmentPolicyCreatePayload!
+	"""
+	Create multiple new assessmentPolicys
+	"""
+	createBulkAssessmentPolicy(
+		"""
+		values of the assessmentPolicy
+		"""
+		input: [CreateAssessmentPolicyInput!]
+	): AssessmentPolicyBulkCreatePayload!
+	"""
+	Create multiple new assessmentPolicys via file upload
+	"""
+	createBulkCSVAssessmentPolicy(
+		"""
+		csv file containing values of the assessmentPolicy
+		"""
+		input: Upload!
+	): AssessmentPolicyBulkCreatePayload!
+	"""
+	Update multiple existing assessmentPolicys
+	"""
+	updateBulkAssessmentPolicy(
+		"""
+		IDs of the assessmentPolicys to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the assessmentPolicys with
+		"""
+		input: UpdateAssessmentPolicyInput!
+	): AssessmentPolicyBulkUpdatePayload!
+	"""
+	Update multiple existing assessmentPolicys via file upload
+	"""
+	updateBulkCSVAssessmentPolicy(
+		"""
+		csv file containing values of the assessmentPolicy, must include ID column
+		"""
+		input: Upload!
+	): AssessmentPolicyBulkUpdatePayload!
+	"""
+	Update an existing assessmentPolicy
+	"""
+	updateAssessmentPolicy(
+		"""
+		ID of the assessmentPolicy
+		"""
+		id: ID!
+
+		"""
+		New values for the assessmentPolicy
+		"""
+		input: UpdateAssessmentPolicyInput!
+	): AssessmentPolicyUpdatePayload!
+	"""
+	Delete an existing assessmentPolicy
+	"""
+	deleteAssessmentPolicy(
+		"""
+		ID of the assessmentPolicy
+		"""
+		id: ID!
+	): AssessmentPolicyDeletePayload!
+	"""
+	Delete multiple assessmentPolicys
+	"""
+	deleteBulkAssessmentPolicy(
+		"""
+		IDs of the assessmentPolicys to delete
+		"""
+		ids: [ID!]!
+	): AssessmentPolicyBulkDeletePayload!
+	"""
 	Create a new assessmentResponse
 	"""
 	createAssessmentResponse(
@@ -44161,6 +44721,10 @@ type Mutation {
 		"""
 		input: Upload!
 	): EntityBulkUpdatePayload!
+	"""
+	adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
+	"""
+	adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
 	"""
 	Create a new entityType
 	"""
@@ -49334,7 +49898,7 @@ interface Node @goModel(model: "github.com/theopenlane/core/v2/internal/ent/gene
 	"""
 	id: ID!
 }
-type Note implements Node {
+type Note implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -50483,7 +51047,7 @@ input NotificationPreferenceWhereInput {
 	"""
 	topicPatternsHas: String
 }
-type NotificationTemplate implements Node {
+type NotificationTemplate implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -52079,6 +52643,37 @@ type Organization implements Node {
 		where: GroupWhereInput
 	): GroupConnection!
 	assessmentCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	assessmentPolicyCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -54374,130 +54969,6 @@ type Organization implements Node {
 		"""
 		where: PersonalAccessTokenWhereInput
 	): PersonalAccessTokenConnection!
-	apiTokens(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for APITokens returned from the connection.
-		"""
-		orderBy: [APITokenOrder!]
-
-		"""
-		Filtering options for APITokens returned from the connection.
-		"""
-		where: APITokenWhereInput
-	): APITokenConnection!
-	emailTemplates(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for EmailTemplates returned from the connection.
-		"""
-		orderBy: [EmailTemplateOrder!]
-
-		"""
-		Filtering options for EmailTemplates returned from the connection.
-		"""
-		where: EmailTemplateWhereInput
-	): EmailTemplateConnection!
-	notificationPreferences(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for NotificationPreferences returned from the connection.
-		"""
-		orderBy: [NotificationPreferenceOrder!]
-
-		"""
-		Filtering options for NotificationPreferences returned from the connection.
-		"""
-		where: NotificationPreferenceWhereInput
-	): NotificationPreferenceConnection!
-	notificationTemplates(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for NotificationTemplates returned from the connection.
-		"""
-		orderBy: [NotificationTemplateOrder!]
-
-		"""
-		Filtering options for NotificationTemplates returned from the connection.
-		"""
-		where: NotificationTemplateWhereInput
-	): NotificationTemplateConnection!
 	users(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -54591,162 +55062,7 @@ type Organization implements Node {
 		"""
 		where: EventWhereInput
 	): EventConnection!
-	secrets(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Hushes returned from the connection.
-		"""
-		orderBy: [HushOrder!]
-
-		"""
-		Filtering options for Hushes returned from the connection.
-		"""
-		where: HushWhereInput
-	): HushConnection!
 	avatarFile: File
-	groups(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Groups returned from the connection.
-		"""
-		orderBy: [GroupOrder!]
-
-		"""
-		Filtering options for Groups returned from the connection.
-		"""
-		where: GroupWhereInput
-	): GroupConnection!
-	templates(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Templates returned from the connection.
-		"""
-		orderBy: [TemplateOrder!]
-
-		"""
-		Filtering options for Templates returned from the connection.
-		"""
-		where: TemplateWhereInput
-	): TemplateConnection!
-	integrations(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Integrations returned from the connection.
-		"""
-		orderBy: [IntegrationOrder!]
-
-		"""
-		Filtering options for Integrations returned from the connection.
-		"""
-		where: IntegrationWhereInput
-	): IntegrationConnection!
-	documents(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DocumentDataSlice returned from the connection.
-		"""
-		orderBy: [DocumentDataOrder!]
-
-		"""
-		Filtering options for DocumentDataSlice returned from the connection.
-		"""
-		where: DocumentDataWhereInput
-	): DocumentDataConnection!
 	orgSubscriptions: [OrgSubscription!]
 	invites(
 		"""
@@ -54779,1680 +55095,6 @@ type Organization implements Node {
 		"""
 		where: InviteWhereInput
 	): InviteConnection!
-	subscribers(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Subscribers returned from the connection.
-		"""
-		orderBy: [SubscriberOrder!]
-
-		"""
-		Filtering options for Subscribers returned from the connection.
-		"""
-		where: SubscriberWhereInput
-	): SubscriberConnection!
-	entities(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Entities returned from the connection.
-		"""
-		orderBy: [EntityOrder!]
-
-		"""
-		Filtering options for Entities returned from the connection.
-		"""
-		where: EntityWhereInput
-	): EntityConnection!
-	platforms(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Platforms returned from the connection.
-		"""
-		orderBy: [PlatformOrder!]
-
-		"""
-		Filtering options for Platforms returned from the connection.
-		"""
-		where: PlatformWhereInput
-	): PlatformConnection!
-	identityHolders(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for IdentityHolders returned from the connection.
-		"""
-		orderBy: [IdentityHolderOrder!]
-
-		"""
-		Filtering options for IdentityHolders returned from the connection.
-		"""
-		where: IdentityHolderWhereInput
-	): IdentityHolderConnection!
-	campaigns(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Campaigns returned from the connection.
-		"""
-		orderBy: [CampaignOrder!]
-
-		"""
-		Filtering options for Campaigns returned from the connection.
-		"""
-		where: CampaignWhereInput
-	): CampaignConnection!
-	campaignTargets(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for CampaignTargets returned from the connection.
-		"""
-		orderBy: [CampaignTargetOrder!]
-
-		"""
-		Filtering options for CampaignTargets returned from the connection.
-		"""
-		where: CampaignTargetWhereInput
-	): CampaignTargetConnection!
-	entityTypes(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for EntityTypes returned from the connection.
-		"""
-		orderBy: [EntityTypeOrder!]
-
-		"""
-		Filtering options for EntityTypes returned from the connection.
-		"""
-		where: EntityTypeWhereInput
-	): EntityTypeConnection!
-	contacts(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Contacts returned from the connection.
-		"""
-		orderBy: [ContactOrder!]
-
-		"""
-		Filtering options for Contacts returned from the connection.
-		"""
-		where: ContactWhereInput
-	): ContactConnection!
-	notes(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Notes returned from the connection.
-		"""
-		orderBy: [NoteOrder!]
-
-		"""
-		Filtering options for Notes returned from the connection.
-		"""
-		where: NoteWhereInput
-	): NoteConnection!
-	tasks(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Tasks returned from the connection.
-		"""
-		orderBy: [TaskOrder!]
-
-		"""
-		Filtering options for Tasks returned from the connection.
-		"""
-		where: TaskWhereInput
-	): TaskConnection!
-	programs(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Programs returned from the connection.
-		"""
-		orderBy: [ProgramOrder!]
-
-		"""
-		Filtering options for Programs returned from the connection.
-		"""
-		where: ProgramWhereInput
-	): ProgramConnection!
-	systemDetails(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for SystemDetails returned from the connection.
-		"""
-		orderBy: [SystemDetailOrder!]
-
-		"""
-		Filtering options for SystemDetails returned from the connection.
-		"""
-		where: SystemDetailWhereInput
-	): SystemDetailConnection!
-	procedures(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Procedures returned from the connection.
-		"""
-		orderBy: [ProcedureOrder!]
-
-		"""
-		Filtering options for Procedures returned from the connection.
-		"""
-		where: ProcedureWhereInput
-	): ProcedureConnection!
-	internalPolicies(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for InternalPolicies returned from the connection.
-		"""
-		orderBy: [InternalPolicyOrder!]
-
-		"""
-		Filtering options for InternalPolicies returned from the connection.
-		"""
-		where: InternalPolicyWhereInput
-	): InternalPolicyConnection!
-	risks(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Risks returned from the connection.
-		"""
-		orderBy: [RiskOrder!]
-
-		"""
-		Filtering options for Risks returned from the connection.
-		"""
-		where: RiskWhereInput
-	): RiskConnection!
-	controlObjectives(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ControlObjectives returned from the connection.
-		"""
-		orderBy: [ControlObjectiveOrder!]
-
-		"""
-		Filtering options for ControlObjectives returned from the connection.
-		"""
-		where: ControlObjectiveWhereInput
-	): ControlObjectiveConnection!
-	narratives(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Narratives returned from the connection.
-		"""
-		orderBy: [NarrativeOrder!]
-
-		"""
-		Filtering options for Narratives returned from the connection.
-		"""
-		where: NarrativeWhereInput
-	): NarrativeConnection!
-	controls(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Controls returned from the connection.
-		"""
-		orderBy: [ControlOrder!]
-
-		"""
-		Filtering options for Controls returned from the connection.
-		"""
-		where: ControlWhereInput
-	): ControlConnection!
-	subcontrols(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Subcontrols returned from the connection.
-		"""
-		orderBy: [SubcontrolOrder!]
-
-		"""
-		Filtering options for Subcontrols returned from the connection.
-		"""
-		where: SubcontrolWhereInput
-	): SubcontrolConnection!
-	controlImplementations(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ControlImplementations returned from the connection.
-		"""
-		orderBy: [ControlImplementationOrder!]
-
-		"""
-		Filtering options for ControlImplementations returned from the connection.
-		"""
-		where: ControlImplementationWhereInput
-	): ControlImplementationConnection!
-	mappedControls(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for MappedControls returned from the connection.
-		"""
-		orderBy: [MappedControlOrder!]
-
-		"""
-		Filtering options for MappedControls returned from the connection.
-		"""
-		where: MappedControlWhereInput
-	): MappedControlConnection!
-	evidence(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Evidences returned from the connection.
-		"""
-		orderBy: [EvidenceOrder!]
-
-		"""
-		Filtering options for Evidences returned from the connection.
-		"""
-		where: EvidenceWhereInput
-	): EvidenceConnection!
-	standards(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Standards returned from the connection.
-		"""
-		orderBy: [StandardOrder!]
-
-		"""
-		Filtering options for Standards returned from the connection.
-		"""
-		where: StandardWhereInput
-	): StandardConnection!
-	actionPlans(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ActionPlans returned from the connection.
-		"""
-		orderBy: [ActionPlanOrder!]
-
-		"""
-		Filtering options for ActionPlans returned from the connection.
-		"""
-		where: ActionPlanWhereInput
-	): ActionPlanConnection!
-	customDomains(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for CustomDomains returned from the connection.
-		"""
-		orderBy: [CustomDomainOrder!]
-
-		"""
-		Filtering options for CustomDomains returned from the connection.
-		"""
-		where: CustomDomainWhereInput
-	): CustomDomainConnection!
-	dnsVerifications(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DNSVerifications returned from the connection.
-		"""
-		orderBy: [DNSVerificationOrder!]
-
-		"""
-		Filtering options for DNSVerifications returned from the connection.
-		"""
-		where: DNSVerificationWhereInput
-	): DNSVerificationConnection!
-	trustCenters(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for TrustCenters returned from the connection.
-		"""
-		orderBy: [TrustCenterOrder!]
-
-		"""
-		Filtering options for TrustCenters returned from the connection.
-		"""
-		where: TrustCenterWhereInput
-	): TrustCenterConnection!
-	assets(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Assets returned from the connection.
-		"""
-		orderBy: [AssetOrder!]
-
-		"""
-		Filtering options for Assets returned from the connection.
-		"""
-		where: AssetWhereInput
-	): AssetConnection!
-	scans(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Scans returned from the connection.
-		"""
-		orderBy: [ScanOrder!]
-
-		"""
-		Filtering options for Scans returned from the connection.
-		"""
-		where: ScanWhereInput
-	): ScanConnection!
-	slaDefinitions(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for SLADefinitions returned from the connection.
-		"""
-		orderBy: [SLADefinitionOrder!]
-
-		"""
-		Filtering options for SLADefinitions returned from the connection.
-		"""
-		where: SLADefinitionWhereInput
-	): SLADefinitionConnection!
-	subprocessors(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Subprocessors returned from the connection.
-		"""
-		orderBy: [SubprocessorOrder!]
-
-		"""
-		Filtering options for Subprocessors returned from the connection.
-		"""
-		where: SubprocessorWhereInput
-	): SubprocessorConnection!
-	exports(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Exports returned from the connection.
-		"""
-		orderBy: [ExportOrder!]
-
-		"""
-		Filtering options for Exports returned from the connection.
-		"""
-		where: ExportWhereInput
-	): ExportConnection!
-	trustCenterWatermarkConfigs(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for TrustCenterWatermarkConfigs returned from the connection.
-		"""
-		orderBy: [TrustCenterWatermarkConfigOrder!]
-
-		"""
-		Filtering options for TrustCenterWatermarkConfigs returned from the connection.
-		"""
-		where: TrustCenterWatermarkConfigWhereInput
-	): TrustCenterWatermarkConfigConnection!
-	assessments(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Assessments returned from the connection.
-		"""
-		orderBy: [AssessmentOrder!]
-
-		"""
-		Filtering options for Assessments returned from the connection.
-		"""
-		where: AssessmentWhereInput
-	): AssessmentConnection!
-	assessmentResponses(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for AssessmentResponses returned from the connection.
-		"""
-		orderBy: [AssessmentResponseOrder!]
-
-		"""
-		Filtering options for AssessmentResponses returned from the connection.
-		"""
-		where: AssessmentResponseWhereInput
-	): AssessmentResponseConnection!
-	customTypeEnums(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for CustomTypeEnums returned from the connection.
-		"""
-		orderBy: [CustomTypeEnumOrder!]
-
-		"""
-		Filtering options for CustomTypeEnums returned from the connection.
-		"""
-		where: CustomTypeEnumWhereInput
-	): CustomTypeEnumConnection!
-	tagDefinitions(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for TagDefinitions returned from the connection.
-		"""
-		orderBy: [TagDefinitionOrder!]
-
-		"""
-		Filtering options for TagDefinitions returned from the connection.
-		"""
-		where: TagDefinitionWhereInput
-	): TagDefinitionConnection!
-	remediations(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Remediations returned from the connection.
-		"""
-		orderBy: [RemediationOrder!]
-
-		"""
-		Filtering options for Remediations returned from the connection.
-		"""
-		where: RemediationWhereInput
-	): RemediationConnection!
-	findings(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Findings returned from the connection.
-		"""
-		orderBy: [FindingOrder!]
-
-		"""
-		Filtering options for Findings returned from the connection.
-		"""
-		where: FindingWhereInput
-	): FindingConnection!
-	findingControls(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for FindingControls returned from the connection.
-		"""
-		orderBy: [FindingControlOrder!]
-
-		"""
-		Filtering options for FindingControls returned from the connection.
-		"""
-		where: FindingControlWhereInput
-	): FindingControlConnection!
-	reviews(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Reviews returned from the connection.
-		"""
-		orderBy: [ReviewOrder!]
-
-		"""
-		Filtering options for Reviews returned from the connection.
-		"""
-		where: ReviewWhereInput
-	): ReviewConnection!
-	vulnerabilities(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Vulnerabilities returned from the connection.
-		"""
-		orderBy: [VulnerabilityOrder!]
-
-		"""
-		Filtering options for Vulnerabilities returned from the connection.
-		"""
-		where: VulnerabilityWhereInput
-	): VulnerabilityConnection!
-	workflowDefinitions(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for WorkflowDefinitions returned from the connection.
-		"""
-		orderBy: [WorkflowDefinitionOrder!]
-
-		"""
-		Filtering options for WorkflowDefinitions returned from the connection.
-		"""
-		where: WorkflowDefinitionWhereInput
-	): WorkflowDefinitionConnection!
-	workflowInstances(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for WorkflowInstances returned from the connection.
-		"""
-		orderBy: [WorkflowInstanceOrder!]
-
-		"""
-		Filtering options for WorkflowInstances returned from the connection.
-		"""
-		where: WorkflowInstanceWhereInput
-	): WorkflowInstanceConnection!
-	workflowEvents(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for WorkflowEvents returned from the connection.
-		"""
-		orderBy: [WorkflowEventOrder!]
-
-		"""
-		Filtering options for WorkflowEvents returned from the connection.
-		"""
-		where: WorkflowEventWhereInput
-	): WorkflowEventConnection!
-	workflowAssignments(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for WorkflowAssignments returned from the connection.
-		"""
-		orderBy: [WorkflowAssignmentOrder!]
-
-		"""
-		Filtering options for WorkflowAssignments returned from the connection.
-		"""
-		where: WorkflowAssignmentWhereInput
-	): WorkflowAssignmentConnection!
-	workflowAssignmentTargets(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for WorkflowAssignmentTargets returned from the connection.
-		"""
-		orderBy: [WorkflowAssignmentTargetOrder!]
-
-		"""
-		Filtering options for WorkflowAssignmentTargets returned from the connection.
-		"""
-		where: WorkflowAssignmentTargetWhereInput
-	): WorkflowAssignmentTargetConnection!
-	workflowObjectRefs(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for WorkflowObjectRefs returned from the connection.
-		"""
-		orderBy: [WorkflowObjectRefOrder!]
-
-		"""
-		Filtering options for WorkflowObjectRefs returned from the connection.
-		"""
-		where: WorkflowObjectRefWhereInput
-	): WorkflowObjectRefConnection!
-	directoryAccounts(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectoryAccounts returned from the connection.
-		"""
-		orderBy: [DirectoryAccountOrder!]
-
-		"""
-		Filtering options for DirectoryAccounts returned from the connection.
-		"""
-		where: DirectoryAccountWhereInput
-	): DirectoryAccountConnection!
-	directoryGroups(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectoryGroups returned from the connection.
-		"""
-		orderBy: [DirectoryGroupOrder!]
-
-		"""
-		Filtering options for DirectoryGroups returned from the connection.
-		"""
-		where: DirectoryGroupWhereInput
-	): DirectoryGroupConnection!
-	directoryMemberships(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectoryMemberships returned from the connection.
-		"""
-		orderBy: [DirectoryMembershipOrder!]
-
-		"""
-		Filtering options for DirectoryMemberships returned from the connection.
-		"""
-		where: DirectoryMembershipWhereInput
-	): DirectoryMembershipConnection!
-	discussions(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Discussions returned from the connection.
-		"""
-		orderBy: [DiscussionOrder!]
-
-		"""
-		Filtering options for Discussions returned from the connection.
-		"""
-		where: DiscussionWhereInput
-	): DiscussionConnection!
-	vendorScoringConfigs(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for VendorScoringConfigs returned from the connection.
-		"""
-		orderBy: [VendorScoringConfigOrder!]
-
-		"""
-		Filtering options for VendorScoringConfigs returned from the connection.
-		"""
-		where: VendorScoringConfigWhereInput
-	): VendorScoringConfigConnection!
-	vendorRiskScores(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for VendorRiskScores returned from the connection.
-		"""
-		orderBy: [VendorRiskScoreOrder!]
-
-		"""
-		Filtering options for VendorRiskScores returned from the connection.
-		"""
-		where: VendorRiskScoreWhereInput
-	): VendorRiskScoreConnection!
 	members(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -57458,6 +56100,11 @@ input OrganizationWhereInput {
 	hasAssessmentCreators: Boolean
 	hasAssessmentCreatorsWith: [GroupWhereInput!]
 	"""
+	assessment_policy_creators edge predicates
+	"""
+	hasAssessmentPolicyCreators: Boolean
+	hasAssessmentPolicyCreatorsWith: [GroupWhereInput!]
+	"""
 	asset_creators edge predicates
 	"""
 	hasAssetCreators: Boolean
@@ -57833,26 +56480,6 @@ input OrganizationWhereInput {
 	hasPersonalAccessTokens: Boolean
 	hasPersonalAccessTokensWith: [PersonalAccessTokenWhereInput!]
 	"""
-	api_tokens edge predicates
-	"""
-	hasAPITokens: Boolean
-	hasAPITokensWith: [APITokenWhereInput!]
-	"""
-	email_templates edge predicates
-	"""
-	hasEmailTemplates: Boolean
-	hasEmailTemplatesWith: [EmailTemplateWhereInput!]
-	"""
-	notification_preferences edge predicates
-	"""
-	hasNotificationPreferences: Boolean
-	hasNotificationPreferencesWith: [NotificationPreferenceWhereInput!]
-	"""
-	notification_templates edge predicates
-	"""
-	hasNotificationTemplates: Boolean
-	hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
-	"""
 	users edge predicates
 	"""
 	hasUsers: Boolean
@@ -57868,35 +56495,10 @@ input OrganizationWhereInput {
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
 	"""
-	secrets edge predicates
-	"""
-	hasSecrets: Boolean
-	hasSecretsWith: [HushWhereInput!]
-	"""
 	avatar_file edge predicates
 	"""
 	hasAvatarFile: Boolean
 	hasAvatarFileWith: [FileWhereInput!]
-	"""
-	groups edge predicates
-	"""
-	hasGroups: Boolean
-	hasGroupsWith: [GroupWhereInput!]
-	"""
-	templates edge predicates
-	"""
-	hasTemplates: Boolean
-	hasTemplatesWith: [TemplateWhereInput!]
-	"""
-	integrations edge predicates
-	"""
-	hasIntegrations: Boolean
-	hasIntegrationsWith: [IntegrationWhereInput!]
-	"""
-	documents edge predicates
-	"""
-	hasDocuments: Boolean
-	hasDocumentsWith: [DocumentDataWhereInput!]
 	"""
 	org_subscriptions edge predicates
 	"""
@@ -57907,276 +56509,6 @@ input OrganizationWhereInput {
 	"""
 	hasInvites: Boolean
 	hasInvitesWith: [InviteWhereInput!]
-	"""
-	subscribers edge predicates
-	"""
-	hasSubscribers: Boolean
-	hasSubscribersWith: [SubscriberWhereInput!]
-	"""
-	entities edge predicates
-	"""
-	hasEntities: Boolean
-	hasEntitiesWith: [EntityWhereInput!]
-	"""
-	platforms edge predicates
-	"""
-	hasPlatforms: Boolean
-	hasPlatformsWith: [PlatformWhereInput!]
-	"""
-	identity_holders edge predicates
-	"""
-	hasIdentityHolders: Boolean
-	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
-	"""
-	campaigns edge predicates
-	"""
-	hasCampaigns: Boolean
-	hasCampaignsWith: [CampaignWhereInput!]
-	"""
-	campaign_targets edge predicates
-	"""
-	hasCampaignTargets: Boolean
-	hasCampaignTargetsWith: [CampaignTargetWhereInput!]
-	"""
-	entity_types edge predicates
-	"""
-	hasEntityTypes: Boolean
-	hasEntityTypesWith: [EntityTypeWhereInput!]
-	"""
-	contacts edge predicates
-	"""
-	hasContacts: Boolean
-	hasContactsWith: [ContactWhereInput!]
-	"""
-	notes edge predicates
-	"""
-	hasNotes: Boolean
-	hasNotesWith: [NoteWhereInput!]
-	"""
-	tasks edge predicates
-	"""
-	hasTasks: Boolean
-	hasTasksWith: [TaskWhereInput!]
-	"""
-	programs edge predicates
-	"""
-	hasPrograms: Boolean
-	hasProgramsWith: [ProgramWhereInput!]
-	"""
-	system_details edge predicates
-	"""
-	hasSystemDetails: Boolean
-	hasSystemDetailsWith: [SystemDetailWhereInput!]
-	"""
-	procedures edge predicates
-	"""
-	hasProcedures: Boolean
-	hasProceduresWith: [ProcedureWhereInput!]
-	"""
-	internal_policies edge predicates
-	"""
-	hasInternalPolicies: Boolean
-	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
-	"""
-	risks edge predicates
-	"""
-	hasRisks: Boolean
-	hasRisksWith: [RiskWhereInput!]
-	"""
-	control_objectives edge predicates
-	"""
-	hasControlObjectives: Boolean
-	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
-	"""
-	narratives edge predicates
-	"""
-	hasNarratives: Boolean
-	hasNarrativesWith: [NarrativeWhereInput!]
-	"""
-	controls edge predicates
-	"""
-	hasControls: Boolean
-	hasControlsWith: [ControlWhereInput!]
-	"""
-	subcontrols edge predicates
-	"""
-	hasSubcontrols: Boolean
-	hasSubcontrolsWith: [SubcontrolWhereInput!]
-	"""
-	control_implementations edge predicates
-	"""
-	hasControlImplementations: Boolean
-	hasControlImplementationsWith: [ControlImplementationWhereInput!]
-	"""
-	mapped_controls edge predicates
-	"""
-	hasMappedControls: Boolean
-	hasMappedControlsWith: [MappedControlWhereInput!]
-	"""
-	evidence edge predicates
-	"""
-	hasEvidence: Boolean
-	hasEvidenceWith: [EvidenceWhereInput!]
-	"""
-	standards edge predicates
-	"""
-	hasStandards: Boolean
-	hasStandardsWith: [StandardWhereInput!]
-	"""
-	action_plans edge predicates
-	"""
-	hasActionPlans: Boolean
-	hasActionPlansWith: [ActionPlanWhereInput!]
-	"""
-	custom_domains edge predicates
-	"""
-	hasCustomDomains: Boolean
-	hasCustomDomainsWith: [CustomDomainWhereInput!]
-	"""
-	dns_verifications edge predicates
-	"""
-	hasDNSVerifications: Boolean
-	hasDNSVerificationsWith: [DNSVerificationWhereInput!]
-	"""
-	trust_centers edge predicates
-	"""
-	hasTrustCenters: Boolean
-	hasTrustCentersWith: [TrustCenterWhereInput!]
-	"""
-	assets edge predicates
-	"""
-	hasAssets: Boolean
-	hasAssetsWith: [AssetWhereInput!]
-	"""
-	scans edge predicates
-	"""
-	hasScans: Boolean
-	hasScansWith: [ScanWhereInput!]
-	"""
-	sla_definitions edge predicates
-	"""
-	hasSLADefinitions: Boolean
-	hasSLADefinitionsWith: [SLADefinitionWhereInput!]
-	"""
-	subprocessors edge predicates
-	"""
-	hasSubprocessors: Boolean
-	hasSubprocessorsWith: [SubprocessorWhereInput!]
-	"""
-	exports edge predicates
-	"""
-	hasExports: Boolean
-	hasExportsWith: [ExportWhereInput!]
-	"""
-	trust_center_watermark_configs edge predicates
-	"""
-	hasTrustCenterWatermarkConfigs: Boolean
-	hasTrustCenterWatermarkConfigsWith: [TrustCenterWatermarkConfigWhereInput!]
-	"""
-	assessments edge predicates
-	"""
-	hasAssessments: Boolean
-	hasAssessmentsWith: [AssessmentWhereInput!]
-	"""
-	assessment_responses edge predicates
-	"""
-	hasAssessmentResponses: Boolean
-	hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
-	"""
-	custom_type_enums edge predicates
-	"""
-	hasCustomTypeEnums: Boolean
-	hasCustomTypeEnumsWith: [CustomTypeEnumWhereInput!]
-	"""
-	tag_definitions edge predicates
-	"""
-	hasTagDefinitions: Boolean
-	hasTagDefinitionsWith: [TagDefinitionWhereInput!]
-	"""
-	remediations edge predicates
-	"""
-	hasRemediations: Boolean
-	hasRemediationsWith: [RemediationWhereInput!]
-	"""
-	findings edge predicates
-	"""
-	hasFindings: Boolean
-	hasFindingsWith: [FindingWhereInput!]
-	"""
-	finding_controls edge predicates
-	"""
-	hasFindingControls: Boolean
-	hasFindingControlsWith: [FindingControlWhereInput!]
-	"""
-	reviews edge predicates
-	"""
-	hasReviews: Boolean
-	hasReviewsWith: [ReviewWhereInput!]
-	"""
-	vulnerabilities edge predicates
-	"""
-	hasVulnerabilities: Boolean
-	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
-	"""
-	workflow_definitions edge predicates
-	"""
-	hasWorkflowDefinitions: Boolean
-	hasWorkflowDefinitionsWith: [WorkflowDefinitionWhereInput!]
-	"""
-	workflow_instances edge predicates
-	"""
-	hasWorkflowInstances: Boolean
-	hasWorkflowInstancesWith: [WorkflowInstanceWhereInput!]
-	"""
-	workflow_events edge predicates
-	"""
-	hasWorkflowEvents: Boolean
-	hasWorkflowEventsWith: [WorkflowEventWhereInput!]
-	"""
-	workflow_assignments edge predicates
-	"""
-	hasWorkflowAssignments: Boolean
-	hasWorkflowAssignmentsWith: [WorkflowAssignmentWhereInput!]
-	"""
-	workflow_assignment_targets edge predicates
-	"""
-	hasWorkflowAssignmentTargets: Boolean
-	hasWorkflowAssignmentTargetsWith: [WorkflowAssignmentTargetWhereInput!]
-	"""
-	workflow_object_refs edge predicates
-	"""
-	hasWorkflowObjectRefs: Boolean
-	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
-	"""
-	directory_accounts edge predicates
-	"""
-	hasDirectoryAccounts: Boolean
-	hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
-	"""
-	directory_groups edge predicates
-	"""
-	hasDirectoryGroups: Boolean
-	hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
-	"""
-	directory_memberships edge predicates
-	"""
-	hasDirectoryMemberships: Boolean
-	hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
-	"""
-	discussions edge predicates
-	"""
-	hasDiscussions: Boolean
-	hasDiscussionsWith: [DiscussionWhereInput!]
-	"""
-	vendor_scoring_configs edge predicates
-	"""
-	hasVendorScoringConfigs: Boolean
-	hasVendorScoringConfigsWith: [VendorScoringConfigWhereInput!]
-	"""
-	vendor_risk_scores edge predicates
-	"""
-	hasVendorRiskScores: Boolean
-	hasVendorRiskScoresWith: [VendorRiskScoreWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -58218,7 +56550,7 @@ enum Permission @goModel(model: "github.com/theopenlane/core/common/enums.Permis
 	CREATOR
 	BLOCKED
 }
-type PersonalAccessToken implements Node {
+type PersonalAccessToken implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -63975,6 +62307,37 @@ type Query {
 		"""
 		where: AssessmentWhereInput
 	): AssessmentConnection!
+	assessmentPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssessmentPolicies returned from the connection.
+		"""
+		orderBy: [AssessmentPolicyOrder!]
+
+		"""
+		Filtering options for AssessmentPolicies returned from the connection.
+		"""
+		where: AssessmentPolicyWhereInput
+	): AssessmentPolicyConnection!
 	assessmentResponses(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -66638,6 +65001,15 @@ type Query {
 		id: ID!
 	): Assessment!
 	"""
+	Look up assessmentPolicy by ID
+	"""
+	assessmentPolicy(
+		"""
+		ID of the assessmentPolicy
+		"""
+		id: ID!
+	): AssessmentPolicy!
+	"""
 	Look up assessmentResponse by ID
 	"""
 	assessmentResponse(
@@ -66954,6 +65326,10 @@ type Query {
 		"""
 		id: ID!
 	): Entity!
+	"""
+	entitiesCatalog lists the externally visible system-owned entities available for adoption
+	"""
+	entitiesCatalog(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [EntityOrder!], where: EntityWhereInput): EntityConnection!
 	"""
 	Look up entityType by ID
 	"""
@@ -78036,7 +76412,7 @@ input SubprocessorWhereInput {
 	"""
 	tagsHas: String
 }
-type Subscriber implements Node {
+type Subscriber implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -79194,7 +77570,7 @@ input TFASettingWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [UserWhereInput!]
 }
-type TagDefinition implements Node {
+type TagDefinition implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -79522,7 +77898,7 @@ input TagDefinitionWhereInput {
 	"""
 	aliasesHas: String
 }
-type Task implements Node {
+type Task implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -84460,6 +82836,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
 	URL to the company's status page
 	"""
 	statusPageURL: String
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -85057,6 +83437,13 @@ input TrustCenterSettingWhereInput {
 	statusPageURLEqualFold: String
 	statusPageURLContainsFold: String
 	"""
+	noindex_default_domain field predicates
+	"""
+	noindexDefaultDomain: Boolean
+	noindexDefaultDomainNEQ: Boolean
+	noindexDefaultDomainIsNil: Boolean
+	noindexDefaultDomainNotNil: Boolean
+	"""
 	blocked_groups edge predicates
 	"""
 	hasBlockedGroups: Boolean
@@ -85297,6 +83684,7 @@ Properties by which TrustCenterSubprocessor connections can be ordered.
 enum TrustCenterSubprocessorOrderField {
 	created_at
 	updated_at
+	SUBPROCESSOR_name
 }
 """
 Return response for updateTrustCenterSubprocessor mutation
@@ -86601,6 +84989,14 @@ input UpdateAssessmentInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+}
+"""
+UpdateAssessmentPolicyInput is used for update AssessmentPolicy object.
+Input was generated by ent.
+"""
+input UpdateAssessmentPolicyInput {
+	ownerID: ID
+	clearOwner: Boolean
 }
 """
 UpdateAssetInput is used for update Asset object.
@@ -88362,6 +86758,11 @@ input UpdateEntityInput {
 	"""
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
+	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
+	clearExternallyVisible: Boolean
 	"""
 	the relationship_state of the entity
 	"""
@@ -90721,6 +89122,9 @@ input UpdateOrganizationInput {
 	addAssessmentCreatorIDs: [ID!]
 	removeAssessmentCreatorIDs: [ID!]
 	clearAssessmentCreators: Boolean
+	addAssessmentPolicyCreatorIDs: [ID!]
+	removeAssessmentPolicyCreatorIDs: [ID!]
+	clearAssessmentPolicyCreators: Boolean
 	addAssetCreatorIDs: [ID!]
 	removeAssetCreatorIDs: [ID!]
 	clearAssetCreators: Boolean
@@ -90939,206 +89343,23 @@ input UpdateOrganizationInput {
 	addPersonalAccessTokenIDs: [ID!]
 	removePersonalAccessTokenIDs: [ID!]
 	clearPersonalAccessTokens: Boolean
-	addAPITokenIDs: [ID!]
-	removeAPITokenIDs: [ID!]
-	clearAPITokens: Boolean
-	addEmailTemplateIDs: [ID!]
-	removeEmailTemplateIDs: [ID!]
-	clearEmailTemplates: Boolean
-	addNotificationPreferenceIDs: [ID!]
-	removeNotificationPreferenceIDs: [ID!]
-	clearNotificationPreferences: Boolean
-	addNotificationTemplateIDs: [ID!]
-	removeNotificationTemplateIDs: [ID!]
-	clearNotificationTemplates: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
-	addSecretIDs: [ID!]
-	removeSecretIDs: [ID!]
-	clearSecrets: Boolean
 	avatarFileID: ID
 	clearAvatarFile: Boolean
-	addGroupIDs: [ID!]
-	removeGroupIDs: [ID!]
-	clearGroups: Boolean
-	addTemplateIDs: [ID!]
-	removeTemplateIDs: [ID!]
-	clearTemplates: Boolean
-	addIntegrationIDs: [ID!]
-	removeIntegrationIDs: [ID!]
-	clearIntegrations: Boolean
-	addDocumentIDs: [ID!]
-	removeDocumentIDs: [ID!]
-	clearDocuments: Boolean
 	addOrgSubscriptionIDs: [ID!]
 	removeOrgSubscriptionIDs: [ID!]
 	clearOrgSubscriptions: Boolean
 	addInviteIDs: [ID!]
 	removeInviteIDs: [ID!]
 	clearInvites: Boolean
-	addSubscriberIDs: [ID!]
-	removeSubscriberIDs: [ID!]
-	clearSubscribers: Boolean
-	addEntityIDs: [ID!]
-	removeEntityIDs: [ID!]
-	clearEntities: Boolean
-	addPlatformIDs: [ID!]
-	removePlatformIDs: [ID!]
-	clearPlatforms: Boolean
-	addIdentityHolderIDs: [ID!]
-	removeIdentityHolderIDs: [ID!]
-	clearIdentityHolders: Boolean
-	addCampaignIDs: [ID!]
-	removeCampaignIDs: [ID!]
-	clearCampaigns: Boolean
-	addCampaignTargetIDs: [ID!]
-	removeCampaignTargetIDs: [ID!]
-	clearCampaignTargets: Boolean
-	addEntityTypeIDs: [ID!]
-	removeEntityTypeIDs: [ID!]
-	clearEntityTypes: Boolean
-	addContactIDs: [ID!]
-	removeContactIDs: [ID!]
-	clearContacts: Boolean
-	addNoteIDs: [ID!]
-	removeNoteIDs: [ID!]
-	clearNotes: Boolean
-	addTaskIDs: [ID!]
-	removeTaskIDs: [ID!]
-	clearTasks: Boolean
-	addProgramIDs: [ID!]
-	removeProgramIDs: [ID!]
-	clearPrograms: Boolean
-	addSystemDetailIDs: [ID!]
-	removeSystemDetailIDs: [ID!]
-	clearSystemDetails: Boolean
-	addProcedureIDs: [ID!]
-	removeProcedureIDs: [ID!]
-	clearProcedures: Boolean
-	addInternalPolicyIDs: [ID!]
-	removeInternalPolicyIDs: [ID!]
-	clearInternalPolicies: Boolean
-	addRiskIDs: [ID!]
-	removeRiskIDs: [ID!]
-	clearRisks: Boolean
-	addControlObjectiveIDs: [ID!]
-	removeControlObjectiveIDs: [ID!]
-	clearControlObjectives: Boolean
-	addNarrativeIDs: [ID!]
-	removeNarrativeIDs: [ID!]
-	clearNarratives: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
-	addSubcontrolIDs: [ID!]
-	removeSubcontrolIDs: [ID!]
-	clearSubcontrols: Boolean
-	addControlImplementationIDs: [ID!]
-	removeControlImplementationIDs: [ID!]
-	clearControlImplementations: Boolean
-	addMappedControlIDs: [ID!]
-	removeMappedControlIDs: [ID!]
-	clearMappedControls: Boolean
-	addEvidenceIDs: [ID!]
-	removeEvidenceIDs: [ID!]
-	clearEvidence: Boolean
-	addStandardIDs: [ID!]
-	removeStandardIDs: [ID!]
-	clearStandards: Boolean
-	addActionPlanIDs: [ID!]
-	removeActionPlanIDs: [ID!]
-	clearActionPlans: Boolean
-	addCustomDomainIDs: [ID!]
-	removeCustomDomainIDs: [ID!]
-	clearCustomDomains: Boolean
-	addDNSVerificationIDs: [ID!]
-	removeDNSVerificationIDs: [ID!]
-	clearDNSVerifications: Boolean
-	addTrustCenterIDs: [ID!]
-	removeTrustCenterIDs: [ID!]
-	clearTrustCenters: Boolean
-	addAssetIDs: [ID!]
-	removeAssetIDs: [ID!]
-	clearAssets: Boolean
-	addScanIDs: [ID!]
-	removeScanIDs: [ID!]
-	clearScans: Boolean
-	addSLADefinitionIDs: [ID!]
-	removeSLADefinitionIDs: [ID!]
-	clearSLADefinitions: Boolean
-	addSubprocessorIDs: [ID!]
-	removeSubprocessorIDs: [ID!]
-	clearSubprocessors: Boolean
-	addExportIDs: [ID!]
-	removeExportIDs: [ID!]
-	clearExports: Boolean
-	addTrustCenterWatermarkConfigIDs: [ID!]
-	removeTrustCenterWatermarkConfigIDs: [ID!]
-	clearTrustCenterWatermarkConfigs: Boolean
 	addImpersonationEventIDs: [ID!]
 	removeImpersonationEventIDs: [ID!]
 	clearImpersonationEvents: Boolean
-	addAssessmentIDs: [ID!]
-	removeAssessmentIDs: [ID!]
-	clearAssessments: Boolean
-	addAssessmentResponseIDs: [ID!]
-	removeAssessmentResponseIDs: [ID!]
-	clearAssessmentResponses: Boolean
-	addCustomTypeEnumIDs: [ID!]
-	removeCustomTypeEnumIDs: [ID!]
-	clearCustomTypeEnums: Boolean
-	addTagDefinitionIDs: [ID!]
-	removeTagDefinitionIDs: [ID!]
-	clearTagDefinitions: Boolean
-	addRemediationIDs: [ID!]
-	removeRemediationIDs: [ID!]
-	clearRemediations: Boolean
-	addFindingIDs: [ID!]
-	removeFindingIDs: [ID!]
-	clearFindings: Boolean
-	addReviewIDs: [ID!]
-	removeReviewIDs: [ID!]
-	clearReviews: Boolean
-	addVulnerabilityIDs: [ID!]
-	removeVulnerabilityIDs: [ID!]
-	clearVulnerabilities: Boolean
-	addWorkflowDefinitionIDs: [ID!]
-	removeWorkflowDefinitionIDs: [ID!]
-	clearWorkflowDefinitions: Boolean
-	addWorkflowInstanceIDs: [ID!]
-	removeWorkflowInstanceIDs: [ID!]
-	clearWorkflowInstances: Boolean
-	addWorkflowEventIDs: [ID!]
-	removeWorkflowEventIDs: [ID!]
-	clearWorkflowEvents: Boolean
-	addWorkflowAssignmentIDs: [ID!]
-	removeWorkflowAssignmentIDs: [ID!]
-	clearWorkflowAssignments: Boolean
-	addWorkflowAssignmentTargetIDs: [ID!]
-	removeWorkflowAssignmentTargetIDs: [ID!]
-	clearWorkflowAssignmentTargets: Boolean
-	addWorkflowObjectRefIDs: [ID!]
-	removeWorkflowObjectRefIDs: [ID!]
-	clearWorkflowObjectRefs: Boolean
-	addDirectoryAccountIDs: [ID!]
-	removeDirectoryAccountIDs: [ID!]
-	clearDirectoryAccounts: Boolean
-	addDirectoryGroupIDs: [ID!]
-	removeDirectoryGroupIDs: [ID!]
-	clearDirectoryGroups: Boolean
-	addDiscussionIDs: [ID!]
-	removeDiscussionIDs: [ID!]
-	clearDiscussions: Boolean
-	addVendorScoringConfigIDs: [ID!]
-	removeVendorScoringConfigIDs: [ID!]
-	clearVendorScoringConfigs: Boolean
-	addVendorRiskScoreIDs: [ID!]
-	removeVendorRiskScoreIDs: [ID!]
-	clearVendorRiskScores: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
@@ -94010,6 +92231,11 @@ input UpdateTrustCenterSettingInput {
 	"""
 	statusPageURL: String
 	clearStatusPageURL: Boolean
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
+	clearNoindexDefaultDomain: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -99636,7 +97862,7 @@ input WebauthnWhereInput {
 	"""
 	tagsHas: String
 }
-type WorkflowAssignment implements Node {
+type WorkflowAssignment implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -99856,7 +98082,7 @@ type WorkflowAssignmentRejectPayload {
 WorkflowAssignmentRejection captures details when an approval is rejected or denied.
 """
 scalar WorkflowAssignmentRejection
-type WorkflowAssignmentTarget implements Node {
+type WorkflowAssignmentTarget implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -100448,7 +98674,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
 	REJECTED
 	CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node {
+type WorkflowDefinition implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -101128,7 +99354,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
 	LIFECYCLE
 	NOTIFICATION
 }
-type WorkflowEvent implements Node {
+type WorkflowEvent implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -101427,7 +99653,7 @@ type WorkflowFieldMetadata {
 	"""
 	type: String!
 }
-type WorkflowInstance implements Node {
+type WorkflowInstance implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -102384,7 +100610,7 @@ type WorkflowMetadata {
 	"""
 	extensions: Map!
 }
-type WorkflowObjectRef implements Node {
+type WorkflowObjectRef implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -103159,7 +101385,7 @@ type WorkflowObjectTypeMetadata {
 	"""
 	resolverKeys: [String!]!
 }
-type WorkflowProposal implements Node {
+type WorkflowProposal implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time

@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
@@ -21,16 +20,16 @@ import (
 func TestIntegrationLifecycle(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
-	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
+	installation, fragment := newHarnessInstallation(t, internalCtx, testint.ModeRecurring)
 	require.Equal(t, org.OrganizationID, installation.OwnerID)
 
 	opName := harnessReconcileOperation(t, testint.ModeRecurring)
 
 	t.Run("seeding creates exactly one loop", func(t *testing.T) {
-		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, installation))
+		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, installation))
 
 		waitForEvents()
 
@@ -38,9 +37,9 @@ func TestIntegrationLifecycle(t *testing.T) {
 	})
 
 	t.Run("unhealthy errors the installation and cancels the loop", func(t *testing.T) {
-		require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, installation, "credentials revoked"))
+		require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, installation, "credentials revoked"))
 
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 
@@ -50,17 +49,17 @@ func TestIntegrationLifecycle(t *testing.T) {
 	})
 
 	t.Run("unhealthy is idempotent", func(t *testing.T) {
-		require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, installation, "credentials revoked again"))
+		require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, installation, "credentials revoked again"))
 
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 	})
 
 	t.Run("recovery reconnects and reseeds a single loop", func(t *testing.T) {
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(allowCtx, reloaded))
+		require.NoError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(internalCtx, reloaded))
 
-		reloaded = reloadIntegration(t, allowCtx, installation.ID)
+		reloaded = reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType))
 
@@ -74,7 +73,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 	t.Run("listener alone cancels and reseeds on direct status flips", func(t *testing.T) {
 		require.NoError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).
 			SetStatus(enums.IntegrationStatusErrored).
-			Exec(allowCtx))
+			Exec(internalCtx))
 
 		waitForEvents()
 
@@ -82,7 +81,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		require.NoError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).
 			SetStatus(enums.IntegrationStatusConnected).
-			Exec(allowCtx))
+			Exec(internalCtx))
 
 		waitForEvents()
 
@@ -98,7 +97,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 			RunType:       enums.IntegrationRunTypeReconcile,
 		})
 
-		emitCtx, headers := intobvs.EmitContext(allowCtx, oc)
+		emitCtx, headers := intobvs.EmitContext(internalCtx, oc)
 		headers.SkipUniqueKey = true
 
 		_, err := suite.GalaRuntime.EmitWithHeaders(emitCtx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
@@ -108,7 +107,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		require.Equal(t, 2, activeReconcileJobs(t, fragment))
 
-		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, reloadIntegration(t, allowCtx, installation.ID)))
+		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, reloadIntegration(t, internalCtx, installation.ID)))
 
 		waitForEvents()
 
@@ -116,7 +115,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 	})
 
 	t.Run("soft delete cancels the loop", func(t *testing.T) {
-		require.NoError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(allowCtx))
+		require.NoError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(internalCtx))
 
 		waitForEvents()
 

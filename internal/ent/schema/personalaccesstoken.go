@@ -157,7 +157,7 @@ func (p PersonalAccessToken) Mixin() []ent.Mixin {
 
 func (p PersonalAccessToken) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 
@@ -190,8 +190,8 @@ func (p PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.RequirePaymentMethod(),
-			rule.AllowIfContextAllowRule(),
-			rule.AllowMutationAfterApplyingOwnerFilter(),
+			rule.DenyIfMissingAllModules(),
+			rule.AllowMutationAfterApplyingUserOwnerFilter(),
 			privacy.AlwaysAllowRule(),
 		},
 	}

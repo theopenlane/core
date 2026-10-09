@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -108,6 +109,7 @@ type OrganizationQuery struct {
 	withActionPlanCreators                      *GroupQuery
 	withAPITokenCreators                        *GroupQuery
 	withAssessmentCreators                      *GroupQuery
+	withAssessmentPolicyCreators                *GroupQuery
 	withAssetCreators                           *GroupQuery
 	withCampaignCreators                        *GroupQuery
 	withCampaignTargetCreators                  *GroupQuery
@@ -239,6 +241,7 @@ type OrganizationQuery struct {
 	withImpersonationEvents                     *ImpersonationEventQuery
 	withAssessments                             *AssessmentQuery
 	withAssessmentResponses                     *AssessmentResponseQuery
+	withAssessmentPolicies                      *AssessmentPolicyQuery
 	withCustomTypeEnums                         *CustomTypeEnumQuery
 	withTagDefinitions                          *TagDefinitionQuery
 	withRemediations                            *RemediationQuery
@@ -266,6 +269,7 @@ type OrganizationQuery struct {
 	withNamedActionPlanCreators                 map[string]*GroupQuery
 	withNamedAPITokenCreators                   map[string]*GroupQuery
 	withNamedAssessmentCreators                 map[string]*GroupQuery
+	withNamedAssessmentPolicyCreators           map[string]*GroupQuery
 	withNamedAssetCreators                      map[string]*GroupQuery
 	withNamedCampaignCreators                   map[string]*GroupQuery
 	withNamedCampaignTargetCreators             map[string]*GroupQuery
@@ -394,6 +398,7 @@ type OrganizationQuery struct {
 	withNamedImpersonationEvents                map[string]*ImpersonationEventQuery
 	withNamedAssessments                        map[string]*AssessmentQuery
 	withNamedAssessmentResponses                map[string]*AssessmentResponseQuery
+	withNamedAssessmentPolicies                 map[string]*AssessmentPolicyQuery
 	withNamedCustomTypeEnums                    map[string]*CustomTypeEnumQuery
 	withNamedTagDefinitions                     map[string]*TagDefinitionQuery
 	withNamedRemediations                       map[string]*RemediationQuery
@@ -511,6 +516,28 @@ func (_q *OrganizationQuery) QueryAssessmentCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentCreatorsTable, organization.AssessmentCreatorsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssessmentPolicyCreators chains the current query on the "assessment_policy_creators" edge.
+func (_q *OrganizationQuery) QueryAssessmentPolicyCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentPolicyCreatorsTable, organization.AssessmentPolicyCreatorsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -3400,6 +3427,28 @@ func (_q *OrganizationQuery) QueryAssessmentResponses() *AssessmentResponseQuery
 	return query
 }
 
+// QueryAssessmentPolicies chains the current query on the "assessment_policies" edge.
+func (_q *OrganizationQuery) QueryAssessmentPolicies() *AssessmentPolicyQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(assessmentpolicy.Table, assessmentpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentPoliciesTable, organization.AssessmentPoliciesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryCustomTypeEnums chains the current query on the "custom_type_enums" edge.
 func (_q *OrganizationQuery) QueryCustomTypeEnums() *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: _q.config}).Query()
@@ -4079,6 +4128,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withActionPlanCreators:                 _q.withActionPlanCreators.Clone(),
 		withAPITokenCreators:                   _q.withAPITokenCreators.Clone(),
 		withAssessmentCreators:                 _q.withAssessmentCreators.Clone(),
+		withAssessmentPolicyCreators:           _q.withAssessmentPolicyCreators.Clone(),
 		withAssetCreators:                      _q.withAssetCreators.Clone(),
 		withCampaignCreators:                   _q.withCampaignCreators.Clone(),
 		withCampaignTargetCreators:             _q.withCampaignTargetCreators.Clone(),
@@ -4210,6 +4260,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withImpersonationEvents:                _q.withImpersonationEvents.Clone(),
 		withAssessments:                        _q.withAssessments.Clone(),
 		withAssessmentResponses:                _q.withAssessmentResponses.Clone(),
+		withAssessmentPolicies:                 _q.withAssessmentPolicies.Clone(),
 		withCustomTypeEnums:                    _q.withCustomTypeEnums.Clone(),
 		withTagDefinitions:                     _q.withTagDefinitions.Clone(),
 		withRemediations:                       _q.withRemediations.Clone(),
@@ -4269,6 +4320,17 @@ func (_q *OrganizationQuery) WithAssessmentCreators(opts ...func(*GroupQuery)) *
 		opt(query)
 	}
 	_q.withAssessmentCreators = query
+	return _q
+}
+
+// WithAssessmentPolicyCreators tells the query-builder to eager-load the nodes that are connected to
+// the "assessment_policy_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAssessmentPolicyCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessmentPolicyCreators = query
 	return _q
 }
 
@@ -5713,6 +5775,17 @@ func (_q *OrganizationQuery) WithAssessmentResponses(opts ...func(*AssessmentRes
 	return _q
 }
 
+// WithAssessmentPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "assessment_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAssessmentPolicies(opts ...func(*AssessmentPolicyQuery)) *OrganizationQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessmentPolicies = query
+	return _q
+}
+
 // WithCustomTypeEnums tells the query-builder to eager-load the nodes that are connected to
 // the "custom_type_enums" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithCustomTypeEnums(opts ...func(*CustomTypeEnumQuery)) *OrganizationQuery {
@@ -6039,10 +6112,11 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [156]bool{
+		loadedTypes = [158]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
+			_q.withAssessmentPolicyCreators != nil,
 			_q.withAssetCreators != nil,
 			_q.withCampaignCreators != nil,
 			_q.withCampaignTargetCreators != nil,
@@ -6174,6 +6248,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withImpersonationEvents != nil,
 			_q.withAssessments != nil,
 			_q.withAssessmentResponses != nil,
+			_q.withAssessmentPolicies != nil,
 			_q.withCustomTypeEnums != nil,
 			_q.withTagDefinitions != nil,
 			_q.withRemediations != nil,
@@ -6237,6 +6312,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAssessmentCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.AssessmentCreators = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.AssessmentCreators = append(n.Edges.AssessmentCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssessmentPolicyCreators; query != nil {
+		if err := _q.loadAssessmentPolicyCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.AssessmentPolicyCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.AssessmentPolicyCreators = append(n.Edges.AssessmentPolicyCreators, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -7246,6 +7330,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withAssessmentPolicies; query != nil {
+		if err := _q.loadAssessmentPolicies(ctx, query, nodes,
+			func(n *Organization) { n.Edges.AssessmentPolicies = []*AssessmentPolicy{} },
+			func(n *Organization, e *AssessmentPolicy) {
+				n.Edges.AssessmentPolicies = append(n.Edges.AssessmentPolicies, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withCustomTypeEnums; query != nil {
 		if err := _q.loadCustomTypeEnums(ctx, query, nodes,
 			func(n *Organization) { n.Edges.CustomTypeEnums = []*CustomTypeEnum{} },
@@ -7438,6 +7531,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAssessmentCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedAssessmentCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedAssessmentCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssessmentPolicyCreators {
+		if err := _q.loadAssessmentPolicyCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAssessmentPolicyCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedAssessmentPolicyCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8339,6 +8439,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedAssessmentPolicies {
+		if err := _q.loadAssessmentPolicies(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAssessmentPolicies(name) },
+			func(n *Organization, e *AssessmentPolicy) { n.appendNamedAssessmentPolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedCustomTypeEnums {
 		if err := _q.loadCustomTypeEnums(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedCustomTypeEnums(name) },
@@ -8589,6 +8696,37 @@ func (_q *OrganizationQuery) loadAssessmentCreators(ctx context.Context, query *
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_assessment_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadAssessmentPolicyCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AssessmentPolicyCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_assessment_policy_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_assessment_policy_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_assessment_policy_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -12738,6 +12876,36 @@ func (_q *OrganizationQuery) loadAssessmentResponses(ctx context.Context, query 
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadAssessmentPolicies(ctx context.Context, query *AssessmentPolicyQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *AssessmentPolicy)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(assessmentpolicy.FieldOwnerID)
+	}
+	query.Where(predicate.AssessmentPolicy(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AssessmentPoliciesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadCustomTypeEnums(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *CustomTypeEnum)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -13480,6 +13648,7 @@ func (_q *OrganizationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
+	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}
@@ -13545,6 +13714,20 @@ func (_q *OrganizationQuery) WithNamedAssessmentCreators(name string, opts ...fu
 		_q.withNamedAssessmentCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedAssessmentCreators[name] = query
+	return _q
+}
+
+// WithNamedAssessmentPolicyCreators tells the query-builder to eager-load the nodes that are connected to the "assessment_policy_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAssessmentPolicyCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessmentPolicyCreators == nil {
+		_q.withNamedAssessmentPolicyCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedAssessmentPolicyCreators[name] = query
 	return _q
 }
 
@@ -15337,6 +15520,20 @@ func (_q *OrganizationQuery) WithNamedAssessmentResponses(name string, opts ...f
 		_q.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery)
 	}
 	_q.withNamedAssessmentResponses[name] = query
+	return _q
+}
+
+// WithNamedAssessmentPolicies tells the query-builder to eager-load the nodes that are connected to the "assessment_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAssessmentPolicies(name string, opts ...func(*AssessmentPolicyQuery)) *OrganizationQuery {
+	query := (&AssessmentPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessmentPolicies == nil {
+		_q.withNamedAssessmentPolicies = make(map[string]*AssessmentPolicyQuery)
+	}
+	_q.withNamedAssessmentPolicies[name] = query
 	return _q
 }
 

@@ -50,15 +50,14 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		logx.FromContext(ctx).Error().Msg("no authenticated user found in context; unable to enqueue export job")
 		return nil, auth.ErrNoAuthUser
 	}
 
-	orgID, _ := caller.ActiveOrg()
-
-	if orgID == "" || caller.SubjectID == "" {
-		logx.FromContext(ctx).Error().Msg("authenticated user has no organization ID or user ID; unable to enqueue export job")
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Msg("authenticated user has no organization ID, unable to enqueue export job")
 
 		return nil, ErrNoOrganizationID
 	}

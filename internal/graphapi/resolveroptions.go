@@ -50,10 +50,9 @@ func (r Resolver) WithAllowedOrigins(origins []string) *Resolver {
 	return &r
 }
 
-// WithAuthOptions sets the auth options for the resolver
-func (r Resolver) WithAuthOptions(options ...mwauth.Option) *Resolver {
-	opts := mwauth.NewAuthOptions(options...)
-	r.authOptions = &opts
+// WithAuthOptions sets the auth options used to authenticate websocket connections
+func (r Resolver) WithAuthOptions(options *mwauth.Options) *Resolver {
+	r.authOptions = options
 
 	return &r
 }

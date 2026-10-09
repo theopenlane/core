@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
@@ -20,19 +19,19 @@ import (
 func TestIntegrationDegradedLifecycle(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
-	installation, fragment := seedHarnessLoop(t, allowCtx)
+	installation, fragment := seedHarnessLoop(t, internalCtx)
 
 	recurringOp := testint.RecurringOp.Name()
 	validatedOp := testint.ValidatedOp.Name()
 	repoSyncOp := testint.RepoSyncOp.Name()
 
 	t.Run("degrading one operation cancels only its loop", func(t *testing.T) {
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(allowCtx, installation, recurringOp, "missing directory permission"))
+		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, installation, recurringOp, "missing directory permission"))
 
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusDegraded, reloaded.Status)
 		require.Len(t, reloaded.Health.UnhealthyOperations, 1)
 		require.Contains(t, reloaded.Health.UnhealthyOperations, recurringOp)
@@ -45,19 +44,19 @@ func TestIntegrationDegradedLifecycle(t *testing.T) {
 	})
 
 	t.Run("degrading is idempotent", func(t *testing.T) {
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(allowCtx, reloaded, recurringOp, "missing directory permission again"))
+		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission again"))
 
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType))
 	})
 
 	t.Run("clearing the only degraded operation reconnects and reseeds", func(t *testing.T) {
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.ClearOperationUnhealthy(allowCtx, reloaded, recurringOp))
+		require.NoError(t, suite.IntegrationsRT.ClearOperationUnhealthy(internalCtx, reloaded, recurringOp))
 
-		reloaded = reloadIntegration(t, allowCtx, installation.ID)
+		reloaded = reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
 		require.Empty(t, reloaded.Health.UnhealthyOperations)
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType))
@@ -68,11 +67,11 @@ func TestIntegrationDegradedLifecycle(t *testing.T) {
 	})
 
 	t.Run("degrading a non-reconcile operation keeps other loops running", func(t *testing.T) {
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(allowCtx, reloaded, validatedOp, "required config missing upstream"))
+		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, validatedOp, "required config missing upstream"))
 
-		reloaded = reloadIntegration(t, allowCtx, installation.ID)
+		reloaded = reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusDegraded, reloaded.Status)
 		require.Equal(t, 2, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType))
 
@@ -82,18 +81,18 @@ func TestIntegrationDegradedLifecycle(t *testing.T) {
 	})
 
 	t.Run("clearing one of several failing operations stays degraded and reseeds its loop", func(t *testing.T) {
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(allowCtx, reloaded, recurringOp, "missing directory permission"))
+		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission"))
 
 		waitForEvents()
 
 		require.Equal(t, 0, activeReconcileJobs(t, fragment))
 
-		reloaded = reloadIntegration(t, allowCtx, installation.ID)
-		require.NoError(t, suite.IntegrationsRT.ClearOperationUnhealthy(allowCtx, reloaded, recurringOp))
+		reloaded = reloadIntegration(t, internalCtx, installation.ID)
+		require.NoError(t, suite.IntegrationsRT.ClearOperationUnhealthy(internalCtx, reloaded, recurringOp))
 
-		reloaded = reloadIntegration(t, allowCtx, installation.ID)
+		reloaded = reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusDegraded, reloaded.Status)
 		require.Len(t, reloaded.Health.UnhealthyOperations, 1)
 		require.Contains(t, reloaded.Health.UnhealthyOperations, validatedOp)
@@ -104,16 +103,16 @@ func TestIntegrationDegradedLifecycle(t *testing.T) {
 	})
 
 	t.Run("the last healthy workload operation failing escalates to errored", func(t *testing.T) {
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(allowCtx, reloaded, repoSyncOp, "repository access revoked"))
+		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, repoSyncOp, "repository access revoked"))
 
-		reloaded = reloadIntegration(t, allowCtx, installation.ID)
+		reloaded = reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusDegraded, reloaded.Status)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(allowCtx, reloaded, recurringOp, "missing directory permission"))
+		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission"))
 
-		reloaded = reloadIntegration(t, allowCtx, installation.ID)
+		reloaded = reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
 		require.NotEmpty(t, reloaded.Health.UnhealthyReason)
 		// escalation keeps the per-operation reasons for recovery surfaces
@@ -126,11 +125,11 @@ func TestIntegrationDegradedLifecycle(t *testing.T) {
 	})
 
 	t.Run("full recovery wipes every recorded failure", func(t *testing.T) {
-		reloaded := reloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(allowCtx, reloaded))
+		require.NoError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(internalCtx, reloaded))
 
-		reloaded = reloadIntegration(t, allowCtx, installation.ID)
+		reloaded = reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
 		require.Empty(t, reloaded.Health.UnhealthyReason)
 		require.Empty(t, reloaded.Health.UnhealthyOperations)

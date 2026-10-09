@@ -9,22 +9,21 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+	"github.com/theopenlane/iam/auth"
 )
 
 func TestOnboardingProgramListener(t *testing.T) {
-
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.OnboardingProgramListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
 	user := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	ctx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	tx, err := suite.Client.DB.Tx(ctx)
 	assert.NilError(t, err)
@@ -44,7 +43,7 @@ func TestOnboardingProgramListener(t *testing.T) {
 
 	ok, err := tx.Client().Program.Query().
 		Where(program.OwnerID(onboarding.OrganizationID)).
-		Exist(privacy.DecisionContext(txCtx, privacy.Allow))
+		Exist(auth.WithInternalOperationContext(txCtx))
 	assert.NilError(t, err)
 	assert.Assert(t, !ok)
 	assert.NilError(t, tx.Commit())
@@ -52,7 +51,7 @@ func TestOnboardingProgramListener(t *testing.T) {
 
 	created, err := suite.Client.DB.Program.Query().
 		Where(program.OwnerID(onboarding.OrganizationID)).
-		Only(allowCtx)
+		Only(internalCtx)
 	assert.NilError(t, err)
 	assert.Equal(t, created.FrameworkName, "Other")
 	assert.Equal(t, created.Auditor, "New Auditor")

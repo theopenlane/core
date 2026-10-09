@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -116,7 +115,7 @@ func TestQueryGroupMembers(t *testing.T) {
 func TestMutationCreateGroupMembers(t *testing.T) {
 	group1 := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	checkCtx := privacy.DecisionContext(th.SharedTestUser1.UserCtx, privacy.Allow)
+	checkCtx := auth.WithInternalOperationContext(th.SharedTestUser1.UserCtx)
 
 	groupMember, err := group1.QueryMembers().All(checkCtx)
 	assert.NilError(t, err)

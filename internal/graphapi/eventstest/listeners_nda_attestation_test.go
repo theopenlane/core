@@ -24,7 +24,7 @@ func TestNDAAttestationListener(t *testing.T) {
 	t.Run("signed nda stamps file on the signed request and emails the signer", func(t *testing.T) {
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 		trustCenter := tcOrg.TrustCenter
-		allowCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+		internalCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 
 		signerEmail := "nda-signer@listenerpin.io"
 		bystanderEmail := "nda-bystander@listenerpin.io"
@@ -86,7 +86,7 @@ func TestNDAAttestationListener(t *testing.T) {
 		signed, err := suite.Client.DB.TrustCenterNDARequest.Query().Where(
 			trustcenterndarequest.EmailEqualFold(signerEmail),
 			trustcenterndarequest.TrustCenterID(trustCenter.ID),
-		).Only(allowCtx)
+		).Only(internalCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusSigned, signed.Status))
 		assert.Assert(t, signed.FileID != nil)
@@ -101,18 +101,18 @@ func TestNDAAttestationListener(t *testing.T) {
 		bystander, err := suite.Client.DB.TrustCenterNDARequest.Query().Where(
 			trustcenterndarequest.EmailEqualFold(bystanderEmail),
 			trustcenterndarequest.TrustCenterID(trustCenter.ID),
-		).Only(allowCtx)
+		).Only(internalCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, bystander.Status))
 		assert.Check(t, bystander.FileID == nil)
 
-		docData, err := suite.Client.DB.DocumentData.Get(allowCtx, docDataID)
+		docData, err := suite.Client.DB.DocumentData.Get(internalCtx, docDataID)
 		assert.NilError(t, err)
 
 		attestedHash, _ := docData.Data["attested_pdf_hash"].(string)
 		assert.Check(t, attestedHash != "")
 
-		fileCount, err := suite.Client.DB.DocumentData.QueryFiles(docData).Count(allowCtx)
+		fileCount, err := suite.Client.DB.DocumentData.QueryFiles(docData).Count(internalCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(1, fileCount))
 
@@ -129,7 +129,7 @@ func TestNDAAttestationListener(t *testing.T) {
 
 	t.Run("document data for a non-nda template is skipped", func(t *testing.T) {
 		docUser := suite.UserBuilder(context.Background(), t)
-		ctx := th.SetContext(docUser.UserCtx, suite.Client.DB)
+		ctx := th.SetInternalContext(docUser.UserCtx, suite.Client.DB)
 
 		tmpl := (&th.TemplateBuilder{Client: suite.Client}).MustNew(docUser.UserCtx, t)
 

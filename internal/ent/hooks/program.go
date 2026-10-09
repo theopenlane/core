@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -47,8 +46,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 	objID, exists := m.ID()
 	if exists {
 		// create the admin program member if not using an API token (which is not associated with a user) or support
-		caller, _ := auth.CallerFromContext(ctx)
-		if !auth.IsAPITokenAuthentication(ctx) && !caller.Has(auth.CapOrgSupport) {
+		if !auth.IsUserlessContext(ctx) {
 			if err := createProgramMemberAdmin(ctx, objID, m); err != nil {
 				return err
 			}
@@ -76,8 +74,8 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 	}
 
 	// allow before the permissions have been added for the program itself
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	if err := m.Client().ProgramMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
+	internalCtx := auth.WithInternalOperationContext(ctx)
+	if err := m.Client().ProgramMembership.Create().SetInput(input).Exec(internalCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating program membership for admin")
 
 		return err

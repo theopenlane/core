@@ -25,7 +25,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil {
+	if !ok {
 		logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)

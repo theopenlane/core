@@ -37,9 +37,7 @@ func (m *ActionPlanMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -732,9 +730,7 @@ func (m *AssessmentMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -1047,15 +1043,222 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *AssessmentPolicyMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
+
+}
+
+func (m *AssessmentPolicyMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.AssessmentPolicyHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if assessmentID, exists := m.AssessmentID(); exists {
+		create = create.SetAssessmentID(assessmentID)
+	}
+
+	if internalPolicyID, exists := m.InternalPolicyID(); exists {
+		create = create.SetInternalPolicyID(internalPolicyID)
+	}
+
+	if policyRevision, exists := m.PolicyRevision(); exists {
+		create = create.SetPolicyRevision(policyRevision)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *AssessmentPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessmentpolicy, err := client.AssessmentPolicy.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AssessmentPolicyHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(assessmentpolicy.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(assessmentpolicy.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(assessmentpolicy.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(assessmentpolicy.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(assessmentpolicy.UpdatedByImpersonator)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(assessmentpolicy.OwnerID)
+		}
+
+		if assessmentID, exists := m.AssessmentID(); exists {
+			create = create.SetAssessmentID(assessmentID)
+		} else {
+			create = create.SetAssessmentID(assessmentpolicy.AssessmentID)
+		}
+
+		if internalPolicyID, exists := m.InternalPolicyID(); exists {
+			create = create.SetInternalPolicyID(internalPolicyID)
+		} else {
+			create = create.SetInternalPolicyID(assessmentpolicy.InternalPolicyID)
+		}
+
+		if policyRevision, exists := m.PolicyRevision(); exists {
+			create = create.SetPolicyRevision(policyRevision)
+		} else {
+			create = create.SetPolicyRevision(assessmentpolicy.PolicyRevision)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AssessmentPolicyMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessmentpolicy, err := client.AssessmentPolicy.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AssessmentPolicyHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(assessmentpolicy.CreatedAt).
+			SetUpdatedAt(assessmentpolicy.UpdatedAt).
+			SetCreatedBy(assessmentpolicy.CreatedBy).
+			SetUpdatedBy(assessmentpolicy.UpdatedBy).
+			SetNillableUpdatedByImpersonator(assessmentpolicy.UpdatedByImpersonator).
+			SetOwnerID(assessmentpolicy.OwnerID).
+			SetAssessmentID(assessmentpolicy.AssessmentID).
+			SetInternalPolicyID(assessmentpolicy.InternalPolicyID).
+			SetPolicyRevision(assessmentpolicy.PolicyRevision).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *AssessmentResponseMutation) skipper(ctx context.Context) bool {
 
 	if PurgeHistoryEnabled(ctx) {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -1506,9 +1709,7 @@ func (m *AssetMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -2234,9 +2435,7 @@ func (m *CampaignMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -2819,9 +3018,7 @@ func (m *CampaignTargetMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -3151,9 +3348,7 @@ func (m *ContactMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -3527,9 +3722,7 @@ func (m *ControlMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -4233,9 +4426,7 @@ func (m *ControlImplementationMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -4543,9 +4734,7 @@ func (m *ControlObjectiveMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -4897,9 +5086,7 @@ func (m *CustomDomainMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -5196,9 +5383,7 @@ func (m *DiscussionMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -5418,9 +5603,7 @@ func (m *DocumentDataMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -5695,9 +5878,7 @@ func (m *EmailTemplateMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -6159,9 +6340,7 @@ func (m *EntityMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -6286,6 +6465,18 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if systemInternalID, exists := m.SystemInternalID(); exists {
 		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
+	if catalogEntityID, exists := m.CatalogEntityID(); exists {
+		create = create.SetCatalogEntityID(catalogEntityID)
+	}
+
+	if externallyVisible, exists := m.ExternallyVisible(); exists {
+		create = create.SetExternallyVisible(externallyVisible)
+	}
+
+	if catalogEntityKey, exists := m.CatalogEntityKey(); exists {
+		create = create.SetCatalogEntityKey(catalogEntityKey)
 	}
 
 	if entityRelationshipStateName, exists := m.EntityRelationshipStateName(); exists {
@@ -6666,6 +6857,24 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableSystemInternalID(entity.SystemInternalID)
 		}
 
+		if catalogEntityID, exists := m.CatalogEntityID(); exists {
+			create = create.SetCatalogEntityID(catalogEntityID)
+		} else {
+			create = create.SetCatalogEntityID(entity.CatalogEntityID)
+		}
+
+		if externallyVisible, exists := m.ExternallyVisible(); exists {
+			create = create.SetExternallyVisible(externallyVisible)
+		} else {
+			create = create.SetExternallyVisible(entity.ExternallyVisible)
+		}
+
+		if catalogEntityKey, exists := m.CatalogEntityKey(); exists {
+			create = create.SetCatalogEntityKey(catalogEntityKey)
+		} else {
+			create = create.SetCatalogEntityKey(entity.CatalogEntityKey)
+		}
+
 		if entityRelationshipStateName, exists := m.EntityRelationshipStateName(); exists {
 			create = create.SetEntityRelationshipStateName(entityRelationshipStateName)
 		} else {
@@ -7012,6 +7221,9 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSystemOwned(entity.SystemOwned).
 			SetNillableInternalNotes(entity.InternalNotes).
 			SetNillableSystemInternalID(entity.SystemInternalID).
+			SetCatalogEntityID(entity.CatalogEntityID).
+			SetExternallyVisible(entity.ExternallyVisible).
+			SetCatalogEntityKey(entity.CatalogEntityKey).
 			SetEntityRelationshipStateName(entity.EntityRelationshipStateName).
 			SetEntityRelationshipStateID(entity.EntityRelationshipStateID).
 			SetEntitySecurityQuestionnaireStatusName(entity.EntitySecurityQuestionnaireStatusName).
@@ -7074,9 +7286,7 @@ func (m *EntityTypeMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -7329,9 +7539,7 @@ func (m *EvidenceMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -7738,9 +7946,7 @@ func (m *FileMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -8246,9 +8452,7 @@ func (m *FindingMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -9172,9 +9376,7 @@ func (m *FindingControlMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -9449,9 +9651,7 @@ func (m *GroupMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -9825,9 +10025,7 @@ func (m *GroupMembershipMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -10025,9 +10223,7 @@ func (m *GroupSettingMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -10269,9 +10465,7 @@ func (m *HushMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -10601,9 +10795,7 @@ func (m *IdentityHolderMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -11153,9 +11345,7 @@ func (m *InternalPolicyMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -11793,9 +11983,7 @@ func (m *MappableDomainMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -12015,9 +12203,7 @@ func (m *MappedControlMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -12303,9 +12489,7 @@ func (m *NarrativeMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -12591,9 +12775,7 @@ func (m *NoteMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -12901,9 +13083,7 @@ func (m *NotificationPreferenceMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -13332,9 +13512,7 @@ func (m *NotificationTemplateMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -13818,9 +13996,7 @@ func (m *OrgMembershipMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -14106,9 +14282,7 @@ func (m *OrganizationMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -14416,9 +14590,7 @@ func (m *OrganizationSettingMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -14946,9 +15118,7 @@ func (m *PlatformMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -15740,9 +15910,7 @@ func (m *ProcedureMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -16369,9 +16537,7 @@ func (m *ProgramMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -16811,9 +16977,7 @@ func (m *ProgramMembershipMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -17011,9 +17175,7 @@ func (m *RemediationMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -17541,9 +17703,7 @@ func (m *ReviewMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -18038,9 +18198,7 @@ func (m *RiskMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -18777,9 +18935,7 @@ func (m *SLADefinitionMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -19021,9 +19177,7 @@ func (m *StandardMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -19430,9 +19584,7 @@ func (m *SubcontrolMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -20070,9 +20222,7 @@ func (m *SubprocessorMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -20358,9 +20508,7 @@ func (m *SystemDetailMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -20668,9 +20816,7 @@ func (m *TaskMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -21176,9 +21322,7 @@ func (m *TemplateMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -21552,9 +21696,7 @@ func (m *TrustCenterMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -21851,9 +21993,7 @@ func (m *TrustCenterComplianceMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -22073,9 +22213,7 @@ func (m *TrustCenterDocMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -22383,9 +22521,7 @@ func (m *TrustCenterEntityMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -22627,9 +22763,7 @@ func (m *TrustCenterFAQMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -22882,9 +23016,7 @@ func (m *TrustCenterNDARequestMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -23225,9 +23357,7 @@ func (m *TrustCenterSettingMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -23388,6 +23518,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if statusPageURL, exists := m.StatusPageURL(); exists {
 		create = create.SetNillableStatusPageURL(&statusPageURL)
+	}
+
+	if noindexDefaultDomain, exists := m.NoindexDefaultDomain(); exists {
+		create = create.SetNoindexDefaultDomain(noindexDefaultDomain)
 	}
 
 	_, err := create.Save(ctx)
@@ -23634,6 +23768,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableStatusPageURL(trustcentersetting.StatusPageURL)
 		}
 
+		if noindexDefaultDomain, exists := m.NoindexDefaultDomain(); exists {
+			create = create.SetNoindexDefaultDomain(noindexDefaultDomain)
+		} else {
+			create = create.SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -23707,6 +23847,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt).
 			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
 			SetNillableStatusPageURL(trustcentersetting.StatusPageURL).
+			SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -23722,9 +23863,7 @@ func (m *TrustCenterSubprocessorMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -23966,9 +24105,7 @@ func (m *TrustCenterWatermarkConfigMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -24265,9 +24402,7 @@ func (m *UserMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -24663,9 +24798,7 @@ func (m *UserSettingMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -24995,9 +25128,7 @@ func (m *VendorRiskScoreMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -25349,9 +25480,7 @@ func (m *VendorScoringConfigMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -25593,9 +25722,7 @@ func (m *VulnerabilityMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -26574,9 +26701,7 @@ func (m *WorkflowAssignmentMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -26972,9 +27097,7 @@ func (m *WorkflowAssignmentTargetMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 
@@ -27249,9 +27372,7 @@ func (m *WorkflowDefinitionMutation) skipper(ctx context.Context) bool {
 		return true
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	return caller.HasInLineage(auth.CapBypassAuditLog)
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
 
 }
 

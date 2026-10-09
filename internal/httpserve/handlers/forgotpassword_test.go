@@ -17,7 +17,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
@@ -29,7 +29,7 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
 	// create user in the database
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(ec)
 
 	userSetting := suite.db.UserSetting.Create().
 		SetEmailConfirmed(false).

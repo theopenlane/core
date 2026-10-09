@@ -141,6 +141,44 @@ func TestClient_Summarize_UGCSanitizedInput(t *testing.T) {
 	}
 }
 
+func TestClient_Summarize_MarkdownTable(t *testing.T) {
+	client, err := NewSummarizer(Config{
+		Type:             TypeLexrank,
+		MaximumSentences: 10,
+	})
+	require.NoError(t, err)
+
+	tt := []struct {
+		name     string
+		input    string
+		contains []string
+	}{
+		{
+			name:     "cell content should be preserved",
+			input:    "| Person | Age |\n| --- | --- |\n| Bob Alice | 20 years old |\n| Bob Smith | 25 years old |",
+			contains: []string{"Bob Alice", "Bob Smith"},
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			result, err := client.Summarize(t.Context(), tc.input)
+			require.NoError(t, err)
+
+			assert.False(t, errors.Is(err, ErrSentenceEmpty))
+			require.NotEmpty(t, result)
+
+			for _, want := range tc.contains {
+				assert.Contains(t, result, want)
+			}
+
+			// verify the table markers no longer here
+			assert.NotContains(t, result, "|")
+			assert.NotContains(t, result, "---")
+		})
+	}
+}
+
 // TestClient_Summarize_NoSentenceEmptyError covers inputs that legitimately contain
 // no extractable text after the full pipeline. These must return ("", nil) rather
 // than surfacing ErrSentenceEmpty to the caller.
@@ -192,6 +230,11 @@ func TestMdToHTML(t *testing.T) {
 			name:    "bold renders strong",
 			input:   "**bold**",
 			wantSub: "<strong>bold</strong>",
+		},
+		{
+			name:    "table renders <table> element",
+			input:   "| Name | Age |\n| --- | --- |\n| Alice | 30 |",
+			wantSub: "<table>",
 		},
 		{
 			name:    "empty input returns empty",

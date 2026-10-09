@@ -14,8 +14,10 @@ import (
 type backupDestination struct {
 	// Provider is the destination backend type
 	Provider storage.ProviderType
-	// Config is the destination provider configuration the backup writes with
-	Config storage.ProviderConfigs
+	// Config is the destination provider's shared settings
+	Config storage.ProviderCommon
+	// Region optionally overrides the destination provider's region
+	Region string
 	// ReadFromBackup serves reads from this destination instead of the source
 	ReadFromBackup bool
 }
@@ -46,15 +48,10 @@ func backupDestinations(config storage.ProviderConfig) (map[storage.ProviderType
 			continue
 		}
 
-		destinationCfg.Bucket = storage.BackupBucket(destinationCfg.Bucket)
-
-		if backupCfg.Region != "" {
-			destinationCfg.Region = backupCfg.Region
-		}
-
 		destinations[source] = backupDestination{
 			Provider:       destination,
 			Config:         destinationCfg,
+			Region:         backupCfg.Region,
 			ReadFromBackup: backupCfg.ReadFromBackup,
 		}
 	}
@@ -88,7 +85,7 @@ func buildBackupProviders(resolver *providerResolver, config storage.ProviderCon
 			ReadFromBackup: destination.ReadFromBackup,
 		}
 
-		log.Debug().Str("source", string(source)).Str("destination", string(destination.Provider)).Str("bucket", destination.Config.Bucket).Bool("read_from_backup", destination.ReadFromBackup).Msg("configured backup target for storage provider")
+		log.Debug().Str("source", string(source)).Str("destination", string(destination.Provider)).Str("bucket", storage.BackupBucket(destination.Config.Bucket)).Bool("read_from_backup", destination.ReadFromBackup).Msg("configured backup target for storage provider")
 	}
 
 	return backups, nil

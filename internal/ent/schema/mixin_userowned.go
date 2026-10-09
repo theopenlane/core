@@ -18,7 +18,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
@@ -153,8 +152,8 @@ func (userOwned UserOwnedMixin) Hooks() []ent.Hook {
 	return []ent.Hook{
 		func(next ent.Mutator) ent.Mutator {
 			return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-				// skip hook if strictly set to allow
-				if _, allow := privacy.DecisionFromContext(ctx); allow {
+				// internal operations such as edge cleanup act on rows owned by other users
+				if auth.IsInternalRequest(ctx) {
 					return next.Mutate(ctx, m)
 				}
 
@@ -164,17 +163,15 @@ func (userOwned UserOwnedMixin) Hooks() []ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				caller, ok := auth.CallerFromContext(ctx)
-				if !ok || caller == nil || caller.SubjectID == "" {
+				subjectID, err := auth.GetSubjectIDFromContext(ctx)
+				if err != nil {
 					return nil, fmt.Errorf("failed to get user id from context: %w", auth.ErrNoAuthUser)
 				}
-
-				userID := caller.SubjectID
 
 				// set owner on create mutation
 				if m.Op() == ent.OpCreate {
 					// set owner on mutation
-					if err := m.SetField(ownerFieldName, userID); err != nil {
+					if err := m.SetField(ownerFieldName, subjectID); err != nil {
 						return nil, err
 					}
 				} else {
@@ -188,7 +185,7 @@ func (userOwned UserOwnedMixin) Hooks() []ent.Hook {
 						return nil, ErrUnexpectedMutationType
 					}
 
-					userOwned.P(mx, userID)
+					userOwned.P(mx, subjectID)
 				}
 
 				return next.Mutate(ctx, m)
@@ -212,8 +209,8 @@ func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 				return nil
 			}
 
-			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil || caller.SubjectID == "" {
+			subjectID, err := auth.GetSubjectIDFromContext(ctx)
+			if err != nil {
 				ctxQuery := ent.QueryFromContext(ctx)
 
 				// Skip the interceptor if the query is for a single entity
@@ -225,10 +222,8 @@ func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 				return auth.ErrNoAuthUser
 			}
 
-			userID := caller.SubjectID
-
 			// sets the owner id on the query for the current user
-			userOwned.P(q, userID)
+			userOwned.P(q, subjectID)
 
 			return nil
 		}),

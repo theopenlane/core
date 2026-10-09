@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -109,6 +110,15 @@ func (a Assessment) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(a, IdentityHolder{}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
 		defaultEdgeToWithPagination(a, Campaign{}),
+		edge.To("internal_policies", InternalPolicy.Type).
+			Annotations(
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder(),
+				accessmap.EdgeViewCheck(InternalPolicy{}.Name()),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Through("policy_attestations", AssessmentPolicy.Type),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: a,
 			edgeSchema: WorkflowObjectRef{},

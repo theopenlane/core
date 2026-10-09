@@ -318,7 +318,7 @@ func TestMutationCreateEntity(t *testing.T) {
 }
 
 func TestMutationCreateEntityEnrichment(t *testing.T) {
-	systemCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+	systemCtx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
 
 	name := "Enriched Vendor " + ulids.New().String()
 	description := "Seeded subprocessor description"

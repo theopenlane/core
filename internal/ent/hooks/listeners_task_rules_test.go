@@ -5,6 +5,7 @@ package hooks_test
 import (
 	"context"
 	"fmt"
+	"testing"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -14,10 +15,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 )
 
@@ -29,7 +32,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
 	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
 	userCtx = generated.NewContext(userCtx, suite.client)
 
-	ctx := privacy.DecisionContext(userCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(userCtx)
 	ctx = generated.NewContext(ctx, suite.client)
 
 	onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
@@ -57,7 +60,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
 }
 
 // TestTaskRuleListenersNotificationTaskOwnerAttribution guards against a suggested task
-// created off a system-context (CapInternalOperation|CapBypassFGA) mutation ending up
+// created off a system-context (CapInternalOperation) mutation ending up
 // ownerless: ObjectOwnedMixin's create hook assumes such callers set owner_id themselves,
 // so createSuggestedTask must set it explicitly rather than relying on auto-derivation
 func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttribution() {
@@ -68,7 +71,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttributio
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	userCtx = privacy.DecisionContext(userCtx, privacy.Allow)
+	userCtx = auth.WithInternalOperationContext(userCtx)
 
 	orgBEntity, err := suite.client.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name: "Org B " + gofakeit.LetterN(8),
@@ -78,9 +81,9 @@ func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttributio
 	orgB := orgBEntity.ID
 
 	// mimic domainScanSystemContext exactly: explicit caller.OrganizationID = orgA, bypassing FGA
-	scanSystemCtx := auth.WithCaller(privacy.DecisionContext(context.Background(), privacy.Allow), &auth.Caller{
+	scanSystemCtx := auth.WithCaller(context.Background(), &auth.Caller{
 		OrganizationID: orgA,
-		Capabilities:   auth.CapBypassFGA | auth.CapInternalOperation,
+		Capabilities:   auth.CapInternalOperation,
 	})
 
 	_, err = suite.client.Notification.Create().
@@ -112,7 +115,7 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 	t := suite.T()
 	user := suite.seedUser()
 	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	admin := suite.seedSystemAdmin()
 	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), suite.client)
@@ -200,5 +203,40 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 		assert.NotEqual(t, "onboarding-framework-soc2", tk.SourceKey)
 		assert.NotEqual(t, "onboarding-framework-iso27001", tk.SourceKey)
 		assert.NotEqual(t, "onboarding-"+taskrules.RuleFrameworkGeneric, tk.SourceKey)
+	}
+}
+
+func TestTaskRuleNotificationTopicGate(t *testing.T) {
+	t.Parallel()
+
+	listener, ok := taskRuleListenerFor(generated.TypeNotification)
+	require.True(t, ok)
+
+	gate := listener.Definition().Gate
+
+	assert.True(t, gate(context.Background(), notificationCreatePayload(enums.NotificationTopicDomainScan)))
+	assert.False(t, gate(context.Background(), notificationCreatePayload(enums.NotificationTopicApproval)))
+	assert.False(t, gate(context.Background(), entityops.MutationPayload{MutationType: generated.TypeNotification, Operation: entityops.OpCreate, EntityID: "notification-1"}))
+}
+
+func taskRuleListenerFor(schemaName string) (entityops.MutationListener, bool) {
+	for _, registration := range hooks.TaskRuleListeners() {
+		listener, ok := registration.(entityops.MutationListener)
+		if ok && listener.Schema.Name == schemaName {
+			return listener, true
+		}
+	}
+
+	return entityops.MutationListener{}, false
+}
+
+func notificationCreatePayload(topic enums.NotificationTopic) entityops.MutationPayload {
+	return entityops.MutationPayload{
+		MutationType: generated.TypeNotification,
+		Operation:    entityops.OpCreate,
+		EntityID:     "notification-1",
+		ChangeSet: entityops.ChangeSet{
+			ProposedChanges: map[string]any{notification.FieldTopic: topic},
+		},
 	}
 }

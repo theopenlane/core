@@ -70,12 +70,10 @@ func (e *WorkflowEngine) resolveRoleMembers(ctx context.Context, roleID string, 
 		return nil, fmt.Errorf("%w: invalid role %q", ErrMissingRequiredField, roleID)
 	}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return nil, auth.ErrNoAuthUser
 	}
-
-	orgID := caller.OrganizationID
 
 	memberships, err := e.client.OrgMembership.
 		Query().
@@ -111,12 +109,10 @@ func (e *WorkflowEngine) getObjectTags(ctx context.Context, obj *workflows.Objec
 		return nil, nil
 	}
 
-	tagCaller, tagOk := auth.CallerFromContext(ctx)
-	if !tagOk || tagCaller == nil || tagCaller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return nil, auth.ErrNoAuthUser
 	}
-
-	orgID := tagCaller.OrganizationID
 
 	tagIDs, err := e.client.TagDefinition.Query().
 		Where(

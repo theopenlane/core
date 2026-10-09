@@ -189,7 +189,7 @@ func getRequestID(ctx context.Context) string {
 // all errors are ignored because the auth data is optional
 func getAuthData(ctx context.Context) Auth {
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	if !ok {
 		// return early to prevent nil pointer panics
 		return Auth{}
 	}

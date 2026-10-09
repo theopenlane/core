@@ -10,11 +10,11 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
@@ -68,14 +68,12 @@ type trustCenterResolveResult struct {
 }
 
 // resolveTrustCenterAnonURL loads a trust center and generates an anonymous access token URL
-func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, requestID, trustCenterID, email string, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
+func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, requestID, trustCenterID, email string, purpose shortlinks.Purpose, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
 	tc, err := req.DB.TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
 		WithSetting().
-		Only(allowCtx)
+		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed loading trust center for email")
 		return trustCenterResolveResult{}, fmt.Errorf("%w: %w", ErrSendFailed, err)
@@ -94,6 +92,7 @@ func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, 
 		SubjectID: requestID,
 		OrgID:     tc.OwnerID,
 		Email:     email,
+		Purpose:   purpose,
 		Duration:  duration,
 		ExtraClaims: func(c *tokens.Claims) {
 			c.TrustCenterID = trustCenterID
@@ -107,7 +106,7 @@ func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, 
 }
 
 // resolveTrustCenterNDARequestFields populates NDAURL and OrgName on the input when empty
-func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, input *TrustCenterNDARequestEmail) error {
+func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, _ RuntimeEmailConfig, input *TrustCenterNDARequestEmail) error {
 	if input.NDAURL != "" {
 		return nil
 	}
@@ -116,7 +115,7 @@ func resolveTrustCenterNDARequestFields(ctx context.Context, req types.Operation
 		return ErrMissingURLResolutionFields
 	}
 
-	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, trustCenterNDAURL)
+	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, shortlinks.PurposeTrustCenterNDARequest, trustCenterNDAURL)
 	if err != nil {
 		return err
 	}
@@ -130,7 +129,7 @@ func resolveTrustCenterNDARequestFields(ctx context.Context, req types.Operation
 }
 
 // resolveTrustCenterNDASignedFields populates TrustCenterURL and OrgName on the input when empty
-func resolveTrustCenterNDASignedFields(ctx context.Context, req types.OperationRequest, input *TrustCenterNDASignedEmail) error {
+func resolveTrustCenterNDASignedFields(ctx context.Context, req types.OperationRequest, _ RuntimeEmailConfig, input *TrustCenterNDASignedEmail) error {
 	if input.TrustCenterURL != "" {
 		return nil
 	}
@@ -139,7 +138,7 @@ func resolveTrustCenterNDASignedFields(ctx context.Context, req types.OperationR
 		return ErrMissingURLResolutionFields
 	}
 
-	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, trustCenterBaseURL)
+	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, shortlinks.PurposeTrustCenterNDASigned, trustCenterBaseURL)
 	if err != nil {
 		return err
 	}
@@ -154,7 +153,7 @@ func resolveTrustCenterNDASignedFields(ctx context.Context, req types.OperationR
 }
 
 // resolveTrustCenterAuthFields populates AuthURL and OrgName on the input when empty
-func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationRequest, input *TrustCenterAuthEmail) error {
+func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationRequest, _ RuntimeEmailConfig, input *TrustCenterAuthEmail) error {
 	if input.AuthURL != "" {
 		return nil
 	}
@@ -163,7 +162,7 @@ func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationReques
 		return fmt.Errorf("%w: RequestID and TrustCenterID are required when AuthURL is empty", ErrMissingURLResolutionFields)
 	}
 
-	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, trustCenterBaseURL)
+	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, shortlinks.PurposeTrustCenterAuth, trustCenterBaseURL)
 	if err != nil {
 		return err
 	}
@@ -177,7 +176,7 @@ func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationReques
 }
 
 // resolveQuestionnaireOrgName populates OrgName from the caller's organization when empty
-func resolveQuestionnaireOrgName(ctx context.Context, req types.OperationRequest, input *QuestionnaireAuthEmail) error {
+func resolveQuestionnaireOrgName(ctx context.Context, req types.OperationRequest, _ RuntimeEmailConfig, input *QuestionnaireAuthEmail) error {
 	if input.OrgName != "" {
 		return nil
 	}
@@ -187,12 +186,10 @@ func resolveQuestionnaireOrgName(ctx context.Context, req types.OperationRequest
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	org, err := req.DB.Organization.Query().
 		Where(organization.IDEQ(orgID)).
 		Select(organization.FieldDisplayName, organization.FieldName).
-		Only(allowCtx)
+		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("org_id", orgID).Msg("failed resolving org name for questionnaire email")
 		return nil

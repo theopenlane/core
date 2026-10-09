@@ -28,7 +28,7 @@ import (
 // recurring campaign updates last_run_at, advances next_run_at, and sends
 // emails to all targets
 func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate, err := suite.Client.DB.EmailTemplate.Create().
 		SetName("Recurring Schedule Test Template").
@@ -131,7 +131,7 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 // TestRecurringCampaignExhaustion verifies that when next_run_at exceeds
 // recurrence_end_at the campaign is marked completed and deactivated
 func TestRecurringCampaignExhaustion(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate, err := suite.Client.DB.EmailTemplate.Create().
 		SetName("Exhaustion Test Template").
@@ -318,7 +318,7 @@ func TestNextCampaignRunAtTimezoneHandling(t *testing.T) {
 // TestDueCampaignPredicatesFiltering verifies that campaigns are correctly
 // identified as due for recurring dispatch based on their state
 func TestDueCampaignPredicatesFiltering(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	now := time.Now().UTC()
 	pastRun := models.DateTime(now.Add(-time.Hour))

@@ -268,6 +268,62 @@ var (
 			},
 		},
 	}
+	// AssessmentPoliciesColumns holds the columns for the "assessment_policies" table.
+	AssessmentPoliciesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "policy_revision", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// AssessmentPoliciesTable holds the schema information for the "assessment_policies" table.
+	AssessmentPoliciesTable = &schema.Table{
+		Name:       "assessment_policies",
+		Columns:    AssessmentPoliciesColumns,
+		PrimaryKey: []*schema.Column{AssessmentPoliciesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "assessment_policies_assessments_assessment",
+				Columns:    []*schema.Column{AssessmentPoliciesColumns[7]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "assessment_policies_internal_policies_internal_policy",
+				Columns:    []*schema.Column{AssessmentPoliciesColumns[8]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "assessment_policies_organizations_assessment_policies",
+				Columns:    []*schema.Column{AssessmentPoliciesColumns[9]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "assessment_policy_internal_policy_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentPoliciesColumns[8]},
+			},
+			{
+				Name:    "assessment_policy_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentPoliciesColumns[9]},
+			},
+			{
+				Name:    "assessmentpolicy_assessment_id_internal_policy_id",
+				Unique:  true,
+				Columns: []*schema.Column{AssessmentPoliciesColumns[7], AssessmentPoliciesColumns[8]},
+			},
+		},
+	}
 	// AssessmentResponsesColumns holds the columns for the "assessment_responses" table.
 	AssessmentResponsesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2218,6 +2274,8 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
+		{Name: "externally_visible", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "catalog_entity_key", Type: field.TypeString, Nullable: true},
 		{Name: "entity_relationship_state_name", Type: field.TypeString, Nullable: true},
 		{Name: "entity_security_questionnaire_status_name", Type: field.TypeString, Nullable: true},
 		{Name: "entity_source_type_name", Type: field.TypeString, Nullable: true},
@@ -2264,6 +2322,7 @@ var (
 		{Name: "reviewed_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_identity_holder_id", Type: field.TypeString, Nullable: true},
+		{Name: "catalog_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_relationship_state_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_security_questionnaire_status_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_source_type_id", Type: field.TypeString, Nullable: true},
@@ -2283,97 +2342,103 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "entities_users_internal_owner_user",
-				Columns:    []*schema.Column{EntitiesColumns[60]},
+				Columns:    []*schema.Column{EntitiesColumns[62]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_groups_internal_owner_group",
-				Columns:    []*schema.Column{EntitiesColumns[61]},
+				Columns:    []*schema.Column{EntitiesColumns[63]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_identity_holders_internal_owner_identity_holder",
-				Columns:    []*schema.Column{EntitiesColumns[62]},
+				Columns:    []*schema.Column{EntitiesColumns[64]},
 				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_users_reviewed_by_user",
-				Columns:    []*schema.Column{EntitiesColumns[63]},
+				Columns:    []*schema.Column{EntitiesColumns[65]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_groups_reviewed_by_group",
-				Columns:    []*schema.Column{EntitiesColumns[64]},
+				Columns:    []*schema.Column{EntitiesColumns[66]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_identity_holders_reviewed_by_identity_holder",
-				Columns:    []*schema.Column{EntitiesColumns[65]},
+				Columns:    []*schema.Column{EntitiesColumns[67]},
 				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_custom_type_enums_entity_relationship_state",
-				Columns:    []*schema.Column{EntitiesColumns[66]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "entities_custom_type_enums_entity_security_questionnaire_status",
-				Columns:    []*schema.Column{EntitiesColumns[67]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "entities_custom_type_enums_entity_source_type",
+				Symbol:     "entities_entities_adopted_entities",
 				Columns:    []*schema.Column{EntitiesColumns[68]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_custom_type_enums_environment",
+				Symbol:     "entities_custom_type_enums_entity_relationship_state",
 				Columns:    []*schema.Column{EntitiesColumns[69]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_custom_type_enums_scope",
+				Symbol:     "entities_custom_type_enums_entity_security_questionnaire_status",
 				Columns:    []*schema.Column{EntitiesColumns[70]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_entity_types_entity_type",
+				Symbol:     "entities_custom_type_enums_entity_source_type",
 				Columns:    []*schema.Column{EntitiesColumns[71]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_custom_type_enums_environment",
+				Columns:    []*schema.Column{EntitiesColumns[72]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_custom_type_enums_scope",
+				Columns:    []*schema.Column{EntitiesColumns[73]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_entity_types_entity_type",
+				Columns:    []*schema.Column{EntitiesColumns[74]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_files_logo_file",
-				Columns:    []*schema.Column{EntitiesColumns[72]},
+				Columns:    []*schema.Column{EntitiesColumns[75]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_entity_types_entities",
-				Columns:    []*schema.Column{EntitiesColumns[73]},
+				Columns:    []*schema.Column{EntitiesColumns[76]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_organizations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[74]},
+				Columns:    []*schema.Column{EntitiesColumns[77]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_risks_entities",
-				Columns:    []*schema.Column{EntitiesColumns[75]},
+				Columns:    []*schema.Column{EntitiesColumns[78]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2382,12 +2447,12 @@ var (
 			{
 				Name:    "entity_entity_type_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[71]},
+				Columns: []*schema.Column{EntitiesColumns[74]},
 			},
 			{
 				Name:    "entity_logo_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[72]},
+				Columns: []*schema.Column{EntitiesColumns[75]},
 			},
 			{
 				Name:    "entity_source_instance_id",
@@ -2402,12 +2467,20 @@ var (
 			{
 				Name:    "entity_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[74]},
+				Columns: []*schema.Column{EntitiesColumns[77]},
+			},
+			{
+				Name:    "entity_catalog_entity_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{EntitiesColumns[68], EntitiesColumns[77]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[25], EntitiesColumns[74]},
+				Columns: []*schema.Column{EntitiesColumns[27], EntitiesColumns[77]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2415,12 +2488,12 @@ var (
 			{
 				Name:    "entity_reviewed_by_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[63]},
+				Columns: []*schema.Column{EntitiesColumns[65]},
 			},
 			{
 				Name:    "entity_external_id_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[58], EntitiesColumns[74]},
+				Columns: []*schema.Column{EntitiesColumns[60], EntitiesColumns[77]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3145,6 +3218,7 @@ var (
 		{Name: "organization_action_plan_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_api_token_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_assessment_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_assessment_policy_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_asset_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_campaign_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_campaign_target_creators", Type: field.TypeString, Nullable: true},
@@ -3366,596 +3440,602 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_asset_creators",
+				Symbol:     "groups_organizations_assessment_policy_creators",
 				Columns:    []*schema.Column{GroupsColumns[42]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_campaign_creators",
+				Symbol:     "groups_organizations_asset_creators",
 				Columns:    []*schema.Column{GroupsColumns[43]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_campaign_target_creators",
+				Symbol:     "groups_organizations_campaign_creators",
 				Columns:    []*schema.Column{GroupsColumns[44]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_check_result_creators",
+				Symbol:     "groups_organizations_campaign_target_creators",
 				Columns:    []*schema.Column{GroupsColumns[45]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_contact_creators",
+				Symbol:     "groups_organizations_check_result_creators",
 				Columns:    []*schema.Column{GroupsColumns[46]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_control_creators",
+				Symbol:     "groups_organizations_contact_creators",
 				Columns:    []*schema.Column{GroupsColumns[47]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_control_implementation_creators",
+				Symbol:     "groups_organizations_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[48]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_control_objective_creators",
+				Symbol:     "groups_organizations_control_implementation_creators",
 				Columns:    []*schema.Column{GroupsColumns[49]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_custom_domain_creators",
+				Symbol:     "groups_organizations_control_objective_creators",
 				Columns:    []*schema.Column{GroupsColumns[50]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_custom_type_enum_creators",
+				Symbol:     "groups_organizations_custom_domain_creators",
 				Columns:    []*schema.Column{GroupsColumns[51]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_directory_account_creators",
+				Symbol:     "groups_organizations_custom_type_enum_creators",
 				Columns:    []*schema.Column{GroupsColumns[52]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_directory_group_creators",
+				Symbol:     "groups_organizations_directory_account_creators",
 				Columns:    []*schema.Column{GroupsColumns[53]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_directory_membership_creators",
+				Symbol:     "groups_organizations_directory_group_creators",
 				Columns:    []*schema.Column{GroupsColumns[54]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_discussion_creators",
+				Symbol:     "groups_organizations_directory_membership_creators",
 				Columns:    []*schema.Column{GroupsColumns[55]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_document_data_creators",
+				Symbol:     "groups_organizations_discussion_creators",
 				Columns:    []*schema.Column{GroupsColumns[56]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_email_template_creators",
+				Symbol:     "groups_organizations_document_data_creators",
 				Columns:    []*schema.Column{GroupsColumns[57]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_entity_creators",
+				Symbol:     "groups_organizations_email_template_creators",
 				Columns:    []*schema.Column{GroupsColumns[58]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_entity_type_creators",
+				Symbol:     "groups_organizations_entity_creators",
 				Columns:    []*schema.Column{GroupsColumns[59]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_evidence_creators",
+				Symbol:     "groups_organizations_entity_type_creators",
 				Columns:    []*schema.Column{GroupsColumns[60]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_file_creators",
+				Symbol:     "groups_organizations_evidence_creators",
 				Columns:    []*schema.Column{GroupsColumns[61]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_finding_creators",
+				Symbol:     "groups_organizations_file_creators",
 				Columns:    []*schema.Column{GroupsColumns[62]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_finding_control_creators",
+				Symbol:     "groups_organizations_finding_creators",
 				Columns:    []*schema.Column{GroupsColumns[63]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_group_creators",
+				Symbol:     "groups_organizations_finding_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[64]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_group_membership_creators",
+				Symbol:     "groups_organizations_group_creators",
 				Columns:    []*schema.Column{GroupsColumns[65]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_group_setting_creators",
+				Symbol:     "groups_organizations_group_membership_creators",
 				Columns:    []*schema.Column{GroupsColumns[66]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_hush_creators",
+				Symbol:     "groups_organizations_group_setting_creators",
 				Columns:    []*schema.Column{GroupsColumns[67]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_identity_holder_creators",
+				Symbol:     "groups_organizations_hush_creators",
 				Columns:    []*schema.Column{GroupsColumns[68]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_internal_policy_creators",
+				Symbol:     "groups_organizations_identity_holder_creators",
 				Columns:    []*schema.Column{GroupsColumns[69]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_invite_creators",
+				Symbol:     "groups_organizations_internal_policy_creators",
 				Columns:    []*schema.Column{GroupsColumns[70]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_mapped_control_creators",
+				Symbol:     "groups_organizations_invite_creators",
 				Columns:    []*schema.Column{GroupsColumns[71]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_narrative_creators",
+				Symbol:     "groups_organizations_mapped_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[72]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_note_creators",
+				Symbol:     "groups_organizations_narrative_creators",
 				Columns:    []*schema.Column{GroupsColumns[73]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_notification_template_creators",
+				Symbol:     "groups_organizations_note_creators",
 				Columns:    []*schema.Column{GroupsColumns[74]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_org_membership_creators",
+				Symbol:     "groups_organizations_notification_template_creators",
 				Columns:    []*schema.Column{GroupsColumns[75]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_platform_creators",
+				Symbol:     "groups_organizations_org_membership_creators",
 				Columns:    []*schema.Column{GroupsColumns[76]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_procedure_creators",
+				Symbol:     "groups_organizations_platform_creators",
 				Columns:    []*schema.Column{GroupsColumns[77]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_program_creators",
+				Symbol:     "groups_organizations_procedure_creators",
 				Columns:    []*schema.Column{GroupsColumns[78]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_program_membership_creators",
+				Symbol:     "groups_organizations_program_creators",
 				Columns:    []*schema.Column{GroupsColumns[79]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_remediation_creators",
+				Symbol:     "groups_organizations_program_membership_creators",
 				Columns:    []*schema.Column{GroupsColumns[80]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_review_creators",
+				Symbol:     "groups_organizations_remediation_creators",
 				Columns:    []*schema.Column{GroupsColumns[81]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_risk_creators",
+				Symbol:     "groups_organizations_review_creators",
 				Columns:    []*schema.Column{GroupsColumns[82]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_scan_creators",
+				Symbol:     "groups_organizations_risk_creators",
 				Columns:    []*schema.Column{GroupsColumns[83]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_sla_definition_creators",
+				Symbol:     "groups_organizations_scan_creators",
 				Columns:    []*schema.Column{GroupsColumns[84]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_standard_creators",
+				Symbol:     "groups_organizations_sla_definition_creators",
 				Columns:    []*schema.Column{GroupsColumns[85]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_subcontrol_creators",
+				Symbol:     "groups_organizations_standard_creators",
 				Columns:    []*schema.Column{GroupsColumns[86]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_subprocessor_creators",
+				Symbol:     "groups_organizations_subcontrol_creators",
 				Columns:    []*schema.Column{GroupsColumns[87]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_subscriber_creators",
+				Symbol:     "groups_organizations_subprocessor_creators",
 				Columns:    []*schema.Column{GroupsColumns[88]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_system_detail_creators",
+				Symbol:     "groups_organizations_subscriber_creators",
 				Columns:    []*schema.Column{GroupsColumns[89]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_tag_definition_creators",
+				Symbol:     "groups_organizations_system_detail_creators",
 				Columns:    []*schema.Column{GroupsColumns[90]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_task_creators",
+				Symbol:     "groups_organizations_tag_definition_creators",
 				Columns:    []*schema.Column{GroupsColumns[91]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_template_creators",
+				Symbol:     "groups_organizations_task_creators",
 				Columns:    []*schema.Column{GroupsColumns[92]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_creators",
+				Symbol:     "groups_organizations_template_creators",
 				Columns:    []*schema.Column{GroupsColumns[93]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_compliance_creators",
+				Symbol:     "groups_organizations_trust_center_creators",
 				Columns:    []*schema.Column{GroupsColumns[94]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_doc_creators",
+				Symbol:     "groups_organizations_trust_center_compliance_creators",
 				Columns:    []*schema.Column{GroupsColumns[95]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_entity_creators",
+				Symbol:     "groups_organizations_trust_center_doc_creators",
 				Columns:    []*schema.Column{GroupsColumns[96]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_faq_creators",
+				Symbol:     "groups_organizations_trust_center_entity_creators",
 				Columns:    []*schema.Column{GroupsColumns[97]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_nda_request_creators",
+				Symbol:     "groups_organizations_trust_center_faq_creators",
 				Columns:    []*schema.Column{GroupsColumns[98]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_subprocessor_creators",
+				Symbol:     "groups_organizations_trust_center_nda_request_creators",
 				Columns:    []*schema.Column{GroupsColumns[99]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_watermark_config_creators",
+				Symbol:     "groups_organizations_trust_center_subprocessor_creators",
 				Columns:    []*schema.Column{GroupsColumns[100]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_vendor_risk_score_creators",
+				Symbol:     "groups_organizations_trust_center_watermark_config_creators",
 				Columns:    []*schema.Column{GroupsColumns[101]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_vendor_scoring_config_creators",
+				Symbol:     "groups_organizations_vendor_risk_score_creators",
 				Columns:    []*schema.Column{GroupsColumns[102]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_vulnerability_creators",
+				Symbol:     "groups_organizations_vendor_scoring_config_creators",
 				Columns:    []*schema.Column{GroupsColumns[103]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_workflow_definition_creators",
+				Symbol:     "groups_organizations_vulnerability_creators",
 				Columns:    []*schema.Column{GroupsColumns[104]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_campaigns_manager",
+				Symbol:     "groups_organizations_workflow_definition_creators",
 				Columns:    []*schema.Column{GroupsColumns[105]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_compliance_manager",
+				Symbol:     "groups_organizations_campaigns_manager",
 				Columns:    []*schema.Column{GroupsColumns[106]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_group_manager",
+				Symbol:     "groups_organizations_compliance_manager",
 				Columns:    []*schema.Column{GroupsColumns[107]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_policies_manager",
+				Symbol:     "groups_organizations_group_manager",
 				Columns:    []*schema.Column{GroupsColumns[108]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_registry_manager",
+				Symbol:     "groups_organizations_policies_manager",
 				Columns:    []*schema.Column{GroupsColumns[109]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_risk_manager",
+				Symbol:     "groups_organizations_registry_manager",
 				Columns:    []*schema.Column{GroupsColumns[110]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_manager",
+				Symbol:     "groups_organizations_risk_manager",
 				Columns:    []*schema.Column{GroupsColumns[111]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_workflows_manager",
+				Symbol:     "groups_organizations_trust_center_manager",
 				Columns:    []*schema.Column{GroupsColumns[112]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_groups",
+				Symbol:     "groups_organizations_workflows_manager",
 				Columns:    []*schema.Column{GroupsColumns[113]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_sla_definitions_blocked_groups",
+				Symbol:     "groups_organizations_groups",
 				Columns:    []*schema.Column{GroupsColumns[114]},
-				RefColumns: []*schema.Column{SLADefinitionsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_sla_definitions_editors",
+				Symbol:     "groups_sla_definitions_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[115]},
 				RefColumns: []*schema.Column{SLADefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_centers_blocked_groups",
+				Symbol:     "groups_sla_definitions_editors",
 				Columns:    []*schema.Column{GroupsColumns[116]},
-				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				RefColumns: []*schema.Column{SLADefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_centers_editors",
+				Symbol:     "groups_trust_centers_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[117]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_compliances_blocked_groups",
+				Symbol:     "groups_trust_centers_editors",
 				Columns:    []*schema.Column{GroupsColumns[118]},
-				RefColumns: []*schema.Column{TrustCenterCompliancesColumns[0]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_compliances_editors",
+				Symbol:     "groups_trust_center_compliances_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[119]},
 				RefColumns: []*schema.Column{TrustCenterCompliancesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_docs_blocked_groups",
+				Symbol:     "groups_trust_center_compliances_editors",
 				Columns:    []*schema.Column{GroupsColumns[120]},
-				RefColumns: []*schema.Column{TrustCenterDocsColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterCompliancesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_docs_editors",
+				Symbol:     "groups_trust_center_docs_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[121]},
 				RefColumns: []*schema.Column{TrustCenterDocsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_entities_blocked_groups",
+				Symbol:     "groups_trust_center_docs_editors",
 				Columns:    []*schema.Column{GroupsColumns[122]},
-				RefColumns: []*schema.Column{TrustCenterEntitiesColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterDocsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_entities_editors",
+				Symbol:     "groups_trust_center_entities_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[123]},
 				RefColumns: []*schema.Column{TrustCenterEntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_faqs_blocked_groups",
+				Symbol:     "groups_trust_center_entities_editors",
 				Columns:    []*schema.Column{GroupsColumns[124]},
-				RefColumns: []*schema.Column{TrustCenterFaqsColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterEntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_faqs_editors",
+				Symbol:     "groups_trust_center_faqs_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[125]},
 				RefColumns: []*schema.Column{TrustCenterFaqsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_nda_requests_blocked_groups",
+				Symbol:     "groups_trust_center_faqs_editors",
 				Columns:    []*schema.Column{GroupsColumns[126]},
-				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterFaqsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_nda_requests_editors",
+				Symbol:     "groups_trust_center_nda_requests_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[127]},
 				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_settings_blocked_groups",
+				Symbol:     "groups_trust_center_nda_requests_editors",
 				Columns:    []*schema.Column{GroupsColumns[128]},
-				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_settings_editors",
+				Symbol:     "groups_trust_center_settings_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[129]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_subprocessors_blocked_groups",
+				Symbol:     "groups_trust_center_settings_editors",
 				Columns:    []*schema.Column{GroupsColumns[130]},
-				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_subprocessors_editors",
+				Symbol:     "groups_trust_center_subprocessors_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[131]},
 				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_watermark_configs_blocked_groups",
+				Symbol:     "groups_trust_center_subprocessors_editors",
 				Columns:    []*schema.Column{GroupsColumns[132]},
-				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_watermark_configs_editors",
+				Symbol:     "groups_trust_center_watermark_configs_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[133]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_blocked_groups",
+				Symbol:     "groups_trust_center_watermark_configs_editors",
 				Columns:    []*schema.Column{GroupsColumns[134]},
-				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_editors",
+				Symbol:     "groups_vulnerabilities_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[135]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_viewers",
+				Symbol:     "groups_vulnerabilities_editors",
 				Columns:    []*schema.Column{GroupsColumns[136]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_workflow_definitions_blocked_groups",
+				Symbol:     "groups_vulnerabilities_viewers",
 				Columns:    []*schema.Column{GroupsColumns[137]},
-				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_workflow_definitions_editors",
+				Symbol:     "groups_workflow_definitions_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[138]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_workflow_definitions_viewers",
+				Symbol:     "groups_workflow_definitions_editors",
 				Columns:    []*schema.Column{GroupsColumns[139]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_workflow_definitions_groups",
+				Symbol:     "groups_workflow_definitions_viewers",
 				Columns:    []*schema.Column{GroupsColumns[140]},
+				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_workflow_definitions_groups",
+				Columns:    []*schema.Column{GroupsColumns[141]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3969,17 +4049,17 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[8], GroupsColumns[113]},
+				Columns: []*schema.Column{GroupsColumns[8], GroupsColumns[114]},
 			},
 			{
 				Name:    "group_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{GroupsColumns[113]},
+				Columns: []*schema.Column{GroupsColumns[114]},
 			},
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[10], GroupsColumns[113]},
+				Columns: []*schema.Column{GroupsColumns[10], GroupsColumns[114]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8220,6 +8300,7 @@ var (
 		{Name: "notify_subscribers_on_subprocessor_change", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "hero_image_local_file_id", Type: field.TypeString, Nullable: true},
@@ -8233,25 +8314,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_files_logo_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[32]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[33]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_settings_files_hero_image_file",
+				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[34]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Symbol:     "trust_center_settings_files_hero_image_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[35]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[36]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8260,22 +8341,22 @@ var (
 			{
 				Name:    "trust_center_setting_logo_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[32]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[33]},
 			},
 			{
 				Name:    "trust_center_setting_favicon_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[33]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[34]},
 			},
 			{
 				Name:    "trust_center_setting_hero_image_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[34]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
 			},
 			{
 				Name:    "trust_center_setting_nda_approver_group_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[36]},
 			},
 			{
 				Name:    "trustcentersetting_trust_center_id_environment",
@@ -15661,6 +15742,7 @@ var (
 		APITokensTable,
 		ActionPlansTable,
 		AssessmentsTable,
+		AssessmentPoliciesTable,
 		AssessmentResponsesTable,
 		AssetsTable,
 		CampaignsTable,
@@ -16000,6 +16082,9 @@ func init() {
 	ActionPlansTable.ForeignKeys[7].RefTable = UsersTable
 	AssessmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	AssessmentsTable.ForeignKeys[1].RefTable = TemplatesTable
+	AssessmentPoliciesTable.ForeignKeys[0].RefTable = AssessmentsTable
+	AssessmentPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
+	AssessmentPoliciesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	AssessmentResponsesTable.ForeignKeys[0].RefTable = AssessmentsTable
 	AssessmentResponsesTable.ForeignKeys[1].RefTable = DocumentDataTable
 	AssessmentResponsesTable.ForeignKeys[2].RefTable = CampaignsTable
@@ -16101,16 +16186,17 @@ func init() {
 	EntitiesTable.ForeignKeys[3].RefTable = UsersTable
 	EntitiesTable.ForeignKeys[4].RefTable = GroupsTable
 	EntitiesTable.ForeignKeys[5].RefTable = IdentityHoldersTable
-	EntitiesTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
+	EntitiesTable.ForeignKeys[6].RefTable = EntitiesTable
 	EntitiesTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
-	EntitiesTable.ForeignKeys[11].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[12].RefTable = FilesTable
-	EntitiesTable.ForeignKeys[13].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[14].RefTable = OrganizationsTable
-	EntitiesTable.ForeignKeys[15].RefTable = RisksTable
+	EntitiesTable.ForeignKeys[11].RefTable = CustomTypeEnumsTable
+	EntitiesTable.ForeignKeys[12].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[13].RefTable = FilesTable
+	EntitiesTable.ForeignKeys[14].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[15].RefTable = OrganizationsTable
+	EntitiesTable.ForeignKeys[16].RefTable = RisksTable
 	EntityTypesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EventsTable.ForeignKeys[0].RefTable = DirectoryMembershipsTable
 	EventsTable.ForeignKeys[1].RefTable = ExportsTable
@@ -16241,33 +16327,34 @@ func init() {
 	GroupsTable.ForeignKeys[88].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[89].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[90].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[91].RefTable = SLADefinitionsTable
+	GroupsTable.ForeignKeys[91].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[92].RefTable = SLADefinitionsTable
-	GroupsTable.ForeignKeys[93].RefTable = TrustCentersTable
+	GroupsTable.ForeignKeys[93].RefTable = SLADefinitionsTable
 	GroupsTable.ForeignKeys[94].RefTable = TrustCentersTable
-	GroupsTable.ForeignKeys[95].RefTable = TrustCenterCompliancesTable
+	GroupsTable.ForeignKeys[95].RefTable = TrustCentersTable
 	GroupsTable.ForeignKeys[96].RefTable = TrustCenterCompliancesTable
-	GroupsTable.ForeignKeys[97].RefTable = TrustCenterDocsTable
+	GroupsTable.ForeignKeys[97].RefTable = TrustCenterCompliancesTable
 	GroupsTable.ForeignKeys[98].RefTable = TrustCenterDocsTable
-	GroupsTable.ForeignKeys[99].RefTable = TrustCenterEntitiesTable
+	GroupsTable.ForeignKeys[99].RefTable = TrustCenterDocsTable
 	GroupsTable.ForeignKeys[100].RefTable = TrustCenterEntitiesTable
-	GroupsTable.ForeignKeys[101].RefTable = TrustCenterFaqsTable
+	GroupsTable.ForeignKeys[101].RefTable = TrustCenterEntitiesTable
 	GroupsTable.ForeignKeys[102].RefTable = TrustCenterFaqsTable
-	GroupsTable.ForeignKeys[103].RefTable = TrustCenterNdaRequestsTable
+	GroupsTable.ForeignKeys[103].RefTable = TrustCenterFaqsTable
 	GroupsTable.ForeignKeys[104].RefTable = TrustCenterNdaRequestsTable
-	GroupsTable.ForeignKeys[105].RefTable = TrustCenterSettingsTable
+	GroupsTable.ForeignKeys[105].RefTable = TrustCenterNdaRequestsTable
 	GroupsTable.ForeignKeys[106].RefTable = TrustCenterSettingsTable
-	GroupsTable.ForeignKeys[107].RefTable = TrustCenterSubprocessorsTable
+	GroupsTable.ForeignKeys[107].RefTable = TrustCenterSettingsTable
 	GroupsTable.ForeignKeys[108].RefTable = TrustCenterSubprocessorsTable
-	GroupsTable.ForeignKeys[109].RefTable = TrustCenterWatermarkConfigsTable
+	GroupsTable.ForeignKeys[109].RefTable = TrustCenterSubprocessorsTable
 	GroupsTable.ForeignKeys[110].RefTable = TrustCenterWatermarkConfigsTable
-	GroupsTable.ForeignKeys[111].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[111].RefTable = TrustCenterWatermarkConfigsTable
 	GroupsTable.ForeignKeys[112].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[113].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[114].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[114].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[115].RefTable = WorkflowDefinitionsTable
 	GroupsTable.ForeignKeys[116].RefTable = WorkflowDefinitionsTable
 	GroupsTable.ForeignKeys[117].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[118].RefTable = WorkflowDefinitionsTable
 	GroupMembershipsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	GroupMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable

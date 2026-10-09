@@ -16,7 +16,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -368,7 +367,7 @@ func TestSubprocessorNotifyWatermarkInitialized(t *testing.T) {
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
-	dbCtx := privacy.DecisionContext(th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 
 	setting, err := suite.Client.DB.TrustCenterSetting.Get(dbCtx, settingID)
 	assert.NilError(t, err)

@@ -47,10 +47,7 @@ func (r *mutationResolver) validateAssignmentDecision(ctx context.Context, id st
 		return nil, rout.ErrPermissionDenied
 	}
 
-	var userID string
-	if assignCaller, ok := auth.CallerFromContext(ctx); ok && assignCaller != nil {
-		userID = assignCaller.SubjectID
-	}
+	userID, _ := auth.GetSubjectIDFromContext(ctx)
 
 	return &AssignmentDecisionContext{
 		Assignment: assignment,
@@ -61,11 +58,10 @@ func (r *mutationResolver) validateAssignmentDecision(ctx context.Context, id st
 
 // assertAssignmentActor checks that the user in the context is a valid actor for the given assignment
 func (r *mutationResolver) assertAssignmentActor(ctx context.Context, assignment *generated.WorkflowAssignment) error {
-	actorCaller, ok := auth.CallerFromContext(ctx)
-	if !ok || actorCaller == nil || actorCaller.SubjectID == "" {
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
 		return rout.ErrPermissionDenied
 	}
-	userID := actorCaller.SubjectID
 
 	directTarget, err := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Query().
 		Where(
@@ -85,7 +81,7 @@ func (r *mutationResolver) assertAssignmentActor(ctx context.Context, assignment
 		Select(groupmembership.FieldGroupID).
 		Strings(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("user_id", userID).Msg("failed to query group memberships for assignment actor check")
+		logx.FromContext(ctx).Warn().Err(err).Msg("failed to query group memberships for assignment actor check")
 	}
 	if len(groupIDs) == 0 {
 		return rout.ErrPermissionDenied

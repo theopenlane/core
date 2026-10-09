@@ -7,11 +7,11 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ssoenforcement"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -38,16 +38,16 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 	case strings.HasPrefix(in.Resource, "acct:"):
 		email := strings.TrimPrefix(in.Resource, "acct:")
 
-		allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+		internalCtx := auth.WithInternalReadContext(reqCtx)
 
-		user, err := h.getUserByEmail(allowCtx, email)
+		user, err := h.getUserByEmail(reqCtx, email)
 		if err != nil {
 			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger user lookup failed")
 
 			return h.NotFound(ctx, ErrNotFound)
 		}
 
-		orgID, err = h.getUserDefaultOrgID(allowCtx, user.ID)
+		orgID, err = h.getUserDefaultOrgID(internalCtx, user.ID)
 		if err != nil {
 			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger org lookup failed")
 

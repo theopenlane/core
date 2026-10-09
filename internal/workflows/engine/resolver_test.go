@@ -7,9 +7,9 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/iam/auth"
 )
 
 // TestResolveTargetsRequiresEngine verifies the target resolver is properly initialized
@@ -49,7 +49,7 @@ func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
 
 	wfEngine := s.Engine()
 
-	internalCtx := generated.NewContext(rule.WithInternalContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 	user, err := s.client.User.Create().
 		SetEmail("test-" + ulid.Make().String() + "@example.com").
 		SetLastLoginProvider(enums.AuthProviderCredentials).

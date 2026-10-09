@@ -37,21 +37,19 @@ func AllowIfSelf() privacy.QueryMutationRule {
 			return privacy.Allow
 		}
 
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil || caller.SubjectID == "" {
+		subjectID, err := auth.GetSubjectIDFromContext(ctx)
+		if err != nil || subjectID == "" {
 			return privacy.Skipf("anonymous viewer")
 		}
 
-		userID := caller.SubjectID
-
 		switch actualFilter := f.(type) {
 		case UserIDFilter:
-			actualFilter.WhereUserID(entql.StringEQ(userID))
+			actualFilter.WhereUserID(entql.StringEQ(subjectID))
 		case OwnerIDFilter:
-			actualFilter.WhereOwnerID(entql.StringEQ(userID))
+			actualFilter.WhereOwnerID(entql.StringEQ(subjectID))
 			// always check this at the end because every schema has an ID field
 		case IDFilter:
-			actualFilter.WhereID(entql.StringEQ(userID))
+			actualFilter.WhereID(entql.StringEQ(subjectID))
 		default:
 			return privacy.Denyf("unexpected filter type %T", f)
 		}

@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	controlgen "github.com/theopenlane/core/v2/internal/ent/generated/control"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 )
 
@@ -88,7 +87,7 @@ func (suite *HookTestSuite) TestHookControlTrustCenterVisibility_UpdateOpsParity
 
 	ctx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)
 	ctx = generated.NewContext(ctx, suite.client)
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	checkWildcardViewerAccess := func(tb testing.TB, controlID string) bool {
 		tb.Helper()
@@ -147,16 +146,16 @@ func (suite *HookTestSuite) TestHookControlTrustCenterVisibility_UpdateOpsParity
 				SetOwnerID(orgID).
 				SetIsTrustCenterControl(true).
 				SetTrustCenterVisibility(enums.TrustCenterControlVisibilityNotVisible).
-				Save(allowCtx)
+				Save(internalCtx)
 			require.NoError(t, err)
 
 			assert.False(t, checkWildcardViewerAccess(t, ctrl.ID))
 
-			err = tt.setPublic(allowCtx, ctrl.ID)
+			err = tt.setPublic(internalCtx, ctrl.ID)
 			require.NoError(t, err)
 			assert.True(t, checkWildcardViewerAccess(t, ctrl.ID))
 
-			err = tt.setNotVisible(allowCtx, ctrl.ID)
+			err = tt.setNotVisible(internalCtx, ctrl.ID)
 			require.NoError(t, err)
 			assert.False(t, checkWildcardViewerAccess(t, ctrl.ID))
 		})

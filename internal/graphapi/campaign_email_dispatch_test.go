@@ -29,7 +29,7 @@ import (
 // campaign emails with the correct branding, template variables, and
 // metadata, then sends one email per target via the mock sender
 func TestCampaignEmailDispatch(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	// --- fixtures ---
 
@@ -195,7 +195,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 // TestCampaignEmailDispatchSkipsSentTargets verifies that targets with
 // sent_at already set are not re-dispatched
 func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate, err := suite.Client.DB.EmailTemplate.Create().
 		SetName("Skip Sent Test Template").
@@ -287,7 +287,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 // TestCampaignEmailDispatchNoBranding verifies dispatch works without
 // an EmailBranding record attached to the campaign
 func TestCampaignEmailDispatchNoBranding(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate, err := suite.Client.DB.EmailTemplate.Create().
 		SetName("No Branding Test Template").
@@ -366,7 +366,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 // TestCampaignEmailDispatchNoTemplate verifies dispatch is a no-op
 // when no email template is linked to the campaign
 func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("No Template Campaign").
@@ -426,7 +426,7 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 // TestQuestionnaireTestEmailDispatch verifies the questionnaire test-send
 // operation creates a test assessment response and sends one auth email.
 func TestQuestionnaireTestEmailDispatch(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	assessmentObj := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
@@ -517,7 +517,7 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 // TestCustomCampaignCompletesWhenAllSent verifies a custom campaign is marked completed
 // once every target has been emailed, and that other campaign types are left alone
 func TestCustomCampaignCompletesWhenAllSent(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate := (&th.EmailTemplateBuilder{Client: suite.Client}).MustNew(ctx, t)
 
@@ -656,7 +656,7 @@ func TestCustomCampaignCompletesWhenAllSent(t *testing.T) {
 
 func TestCampaignEmailDispatchWithoutTrustCenterModule(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	emailTemplate, err := suite.Client.DB.EmailTemplate.Create().
 		SetName("No Trust Center Module Template").

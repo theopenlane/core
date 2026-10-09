@@ -8,7 +8,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -61,9 +60,9 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 	// get the first standard, this will be the most recent revision if multiple revisions exist
 	std := stds[0]
 
-	// if we get the standard back, all controls should be accessible so we can allow context to skip checks
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	where, err := ControlFilterByStandard(allowCtx, trustCenterStandardFilter, std)
+	// if we get the standard back, all controls should be accessible so we can run as an internal read to skip checks
+	internalCtx := auth.WithInternalReadContext(ctx)
+	where, err := ControlFilterByStandard(internalCtx, trustCenterStandardFilter, std)
 	if err != nil {
 
 		return nil, err
@@ -74,7 +73,7 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 			where...,
 		).
 		WithStandard().
-		All(allowCtx)
+		All(internalCtx)
 	if err != nil {
 		return nil, err
 	}
@@ -85,12 +84,10 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 // CloneTrustCenterControl clones the trust center controls and assumes the the user has the trust center module already
 // this is intended to be called from an internal-hook when a trust center is created
 func CloneTrustCenterControls(ctx context.Context, m *generated.TrustCenterMutation) error {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return rout.NewMissingRequiredFieldError("owner_id")
 	}
-
-	orgID := caller.OrganizationID
 
 	controls, err := getTrustCenterControls(ctx, m.Client())
 	if err != nil {

@@ -60,6 +60,9 @@ type Definition[T any] struct {
 	// Operations optionally scopes listener interest to specific mutation operations
 	// Empty means the listener accepts all operations for the topic
 	Operations []string
+	// Priority orders listeners sharing a topic, lowest first; equal values keep
+	// registration order. Listeners on a topic run sequentially in one dispatch
+	Priority int
 	// Gate optionally drops the event silently when it returns false; it receives the
 	// restored context before any caller or context-key mutation
 	Gate func(context.Context, T) bool

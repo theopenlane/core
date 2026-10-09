@@ -18,7 +18,7 @@ import (
 // TestInternalPolicyEdgeOnlyUpdateDoesNotBumpRevision proves HookRevisionUpdate does not bump the revision for an edge-only mutation
 func TestInternalPolicyEdgeOnlyUpdateDoesNotBumpRevision(t *testing.T) {
 	docUser := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(docUser.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(docUser.UserCtx, suite.Client.DB)
 
 	integration, err := suite.Client.DB.Integration.Create().
 		SetName("Revision Edge Test").

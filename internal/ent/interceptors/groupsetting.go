@@ -31,14 +31,12 @@ func InterceptorGroupSetting() ent.Interceptor {
 			return nil
 		}
 
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+		if err != nil {
 			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing group settings")
 
 			return auth.ErrNoAuthUser
 		}
-
-		orgIDs := caller.OrgIDs()
 
 		q.WhereP(
 			groupsetting.Or(

@@ -710,7 +710,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateInternalPolicy.InternalPolicy.Status))
 			}
 
-			assert.Check(t, is.Equal(*&tc.expectedRevision, *resp.UpdateInternalPolicy.InternalPolicy.Revision))
+			assert.Check(t, is.Equal(tc.expectedRevision, *resp.UpdateInternalPolicy.InternalPolicy.Revision))
 
 			if tc.request.RevisionBump == &models.Major {
 				assert.Check(t, is.Equal("v1.0.0", *resp.UpdateInternalPolicy.InternalPolicy.Revision))

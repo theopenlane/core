@@ -493,7 +493,7 @@ func TestOrgDeletionNoticeContent(t *testing.T) {
 	assert.Equal(t, "July 1, 2025", body.Dictionary.Cells[0].Value)
 
 	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/billing", body.Actions[0].Button.Link)
+	assert.Equal(t, "https://app.testco.com"+billingPath, body.Actions[0].Button.Link)
 	assert.Equal(t, "Add Payment Method", body.Actions[0].Button.Text)
 	// matches the questionnaire email treatment: trust center teal button on the base theme
 	assert.Equal(t, tcButtonColor, body.Actions[0].Button.Color)

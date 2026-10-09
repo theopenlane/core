@@ -2,10 +2,15 @@ package resolver
 
 import (
 	"context"
+	"os"
+	"path/filepath"
 	"testing"
 
+	"github.com/knadh/koanf/parsers/yaml"
+	"github.com/knadh/koanf/providers/file"
+	"github.com/knadh/koanf/v2"
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/yaml.v3"
+	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -43,7 +48,7 @@ func TestConfigureProviderRulesDevMode(t *testing.T) {
 		DevMode: true,
 		Providers: storage.Providers{
 			// we build the disk provider even if disabled to ensure dev mode works - so test ensures the builder still constructs
-			Disk: storage.ProviderConfigs{Enabled: false},
+			Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: false}},
 		},
 	}
 
@@ -66,7 +71,6 @@ func TestConfigureProviderRulesDevMode(t *testing.T) {
 	assert.Equal(t, diskBuilder, result.Builder, "expected disk builder for dev mode")
 	assert.NotNil(t, result.Config)
 	assert.Equal(t, objects.DefaultDevStorageBucket, result.Config.Bucket)
-	assert.Equal(t, objects.DefaultDevStorageBucket, result.Config.BasePath)
 	extra, ok := result.Config.Extra("dev_mode")
 	assert.True(t, ok)
 	assert.Equal(t, true, extra)
@@ -79,9 +83,11 @@ func TestKnownProviderRule(t *testing.T) {
 	diskBuilder := &stubBuilder{providerType: "disk"}
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			Disk: storage.ProviderConfigs{
-				Enabled:  true,
-				Bucket:   "/mnt/storage",
+			Disk: storage.DiskConfig{
+				ProviderCommon: storage.ProviderCommon{
+					Enabled: true,
+					Bucket:  "/mnt/storage",
+				},
 				Endpoint: "http://local",
 			},
 		},
@@ -105,7 +111,6 @@ func TestKnownProviderRule(t *testing.T) {
 	result := option.MustGet()
 	assert.Equal(t, diskBuilder, result.Builder)
 	assert.Equal(t, "/mnt/storage", result.Config.Bucket)
-	assert.Equal(t, "/mnt/storage", result.Config.BasePath)
 	assert.Equal(t, "http://local", result.Config.LocalURL)
 }
 
@@ -116,10 +121,10 @@ func TestModuleRules(t *testing.T) {
 	r2Builder := &stubBuilder{providerType: "r2"}
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			R2: storage.ProviderConfigs{
+			R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{
 				Enabled: true,
 				Bucket:  "tc-bucket",
-			},
+			}},
 		},
 	}
 
@@ -150,10 +155,10 @@ func TestTemplateKindRule(t *testing.T) {
 	r2Builder := &stubBuilder{providerType: "r2"}
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			R2: storage.ProviderConfigs{
+			R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{
 				Enabled: true,
 				Bucket:  "nda-bucket",
-			},
+			}},
 		},
 	}
 
@@ -185,13 +190,13 @@ func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
 
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			S3: storage.ProviderConfigs{
+			S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{
 				Enabled: false,
-			},
-			R2: storage.ProviderConfigs{
+			}},
+			R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{
 				Enabled: true,
 				Bucket:  "r2-bucket",
-			},
+			}},
 		},
 	}
 
@@ -221,10 +226,10 @@ func TestDefaultRuleUsesS3WhenEnabled(t *testing.T) {
 	s3Builder := &stubBuilder{providerType: "s3"}
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			S3: storage.ProviderConfigs{
+			S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{
 				Enabled: true,
 				Bucket:  "default-bucket",
-			},
+			}},
 		},
 	}
 
@@ -252,8 +257,8 @@ func TestProviderEnabledChecksConfig(t *testing.T) {
 	rc := &ruleCoordinator{
 		config: storage.ProviderConfig{
 			Providers: storage.Providers{
-				S3:   storage.ProviderConfigs{Enabled: true},
-				Disk: storage.ProviderConfigs{Enabled: false},
+				S3:   storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: true}},
+				Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: false}},
 			},
 		},
 	}
@@ -281,10 +286,12 @@ func TestResolveProviderFromConfigCopiesOptions(t *testing.T) {
 		resolver,
 		WithProviderConfig(storage.ProviderConfig{
 			Providers: storage.Providers{
-				S3: storage.ProviderConfigs{
-					Enabled: true,
-					Bucket:  "bucket",
-					Region:  "us-east-1",
+				S3: storage.S3Config{
+					ProviderCommon: storage.ProviderCommon{
+						Enabled: true,
+						Bucket:  "bucket",
+					},
+					Region: "us-east-1",
 				},
 			},
 		}),
@@ -302,7 +309,7 @@ func TestResolveProviderFromConfigCopiesOptions(t *testing.T) {
 func TestProviderResolveFromConfigDisabled(t *testing.T) {
 	_, err := resolveProviderFromConfig(storage.S3Provider, storage.ProviderConfig{
 		Providers: storage.Providers{
-			S3: storage.ProviderConfigs{Enabled: false},
+			S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: false}},
 		},
 	}, serviceOptions{})
 	assert.Error(t, err)
@@ -316,7 +323,7 @@ func TestHandleDevModeOptionClone(t *testing.T) {
 		WithProviderConfig(storage.ProviderConfig{
 			DevMode: true,
 			Providers: storage.Providers{
-				Disk: storage.ProviderConfigs{Enabled: false},
+				Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: false}},
 			},
 		}),
 		WithProviderBuilders(providerBuilders{
@@ -346,8 +353,8 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 		resolver,
 		WithProviderConfig(storage.ProviderConfig{
 			Providers: storage.Providers{
-				S3: storage.ProviderConfigs{Enabled: false},
-				R2: storage.ProviderConfigs{Enabled: true},
+				S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: false}},
+				R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{Enabled: true}},
 			},
 		}),
 		WithProviderBuilders(providerBuilders{
@@ -364,10 +371,10 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 }
 
 type oldProvidersStructWithCloudflareR2 struct {
-	S3           storage.ProviderConfigs `json:"s3" koanf:"s3"`
-	CloudflareR2 storage.ProviderConfigs `json:"cloudflarer2" koanf:"cloudflarer2"`
-	Disk         storage.ProviderConfigs `json:"disk" koanf:"disk"`
-	Database     storage.ProviderConfigs `json:"database" koanf:"database"`
+	S3           storage.S3Config       `json:"s3" koanf:"s3"`
+	CloudflareR2 storage.R2Config       `json:"cloudflarer2" koanf:"cloudflarer2"`
+	Disk         storage.DiskConfig     `json:"disk" koanf:"disk"`
+	Database     storage.DatabaseConfig `json:"database" koanf:"database"`
 }
 
 type oldProviderConfigWithCloudflareR2 struct {
@@ -395,12 +402,16 @@ providers:
   cloudflarer2:
     enabled: true
     bucket: "ol-trust-center"
-    region: "WNAM"
 `
 
+	path := filepath.Join(t.TempDir(), "config.yaml")
+	require.NoError(t, os.WriteFile(path, []byte(yamlConfig), 0o600))
+
+	k := koanf.New(".")
+	require.NoError(t, k.Load(file.Provider(path), yaml.Parser()))
+
 	var oldStyleConfig oldProviderConfigWithCloudflareR2
-	err := yaml.Unmarshal([]byte(yamlConfig), &oldStyleConfig)
-	assert.NoError(t, err)
+	require.NoError(t, k.Unmarshal("", &oldStyleConfig))
 
 	assert.True(t, oldStyleConfig.Providers.CloudflareR2.Enabled, "CloudflareR2 config populated from YAML")
 	assert.Equal(t, "ol-trust-center", oldStyleConfig.Providers.CloudflareR2.Bucket)
@@ -461,20 +472,21 @@ func TestBackupRuleResolvesDifferentProvider(t *testing.T) {
 	r2Builder := &stubBuilder{providerType: "r2"}
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			S3: storage.ProviderConfigs{
-				Enabled: true,
-				Bucket:  "live-bucket",
-				Region:  "us-east-1",
-				Backup: &storage.BackupConfig{
-					Enabled:  true,
-					Provider: storage.R2Provider,
+			S3: storage.S3Config{
+				ProviderCommon: storage.ProviderCommon{
+					Enabled: true,
+					Bucket:  "live-bucket",
+					Backup: &storage.BackupConfig{
+						Enabled:  true,
+						Provider: storage.R2Provider,
+					},
 				},
+				Region: "us-east-1",
 			},
-			R2: storage.ProviderConfigs{
+			R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{
 				Enabled: true,
 				Bucket:  "r2-bucket",
-				Region:  "auto",
-			},
+			}},
 		},
 	}
 
@@ -503,14 +515,16 @@ func TestBackupRuleResolvesDifferentRegionOnSameProvider(t *testing.T) {
 	s3Builder := &stubBuilder{providerType: "s3"}
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			S3: storage.ProviderConfigs{
-				Enabled: true,
-				Bucket:  "live-bucket",
-				Region:  "us-east-1",
-				Backup: &storage.BackupConfig{
+			S3: storage.S3Config{
+				ProviderCommon: storage.ProviderCommon{
 					Enabled: true,
-					Region:  "us-west-2",
+					Bucket:  "live-bucket",
+					Backup: &storage.BackupConfig{
+						Enabled: true,
+						Region:  "us-west-2",
+					},
 				},
+				Region: "us-east-1",
 			},
 		},
 	}
@@ -542,7 +556,7 @@ func TestBackupRuleResolvesDifferentRegionOnSameProvider(t *testing.T) {
 func TestBackupRuleAbsentWithoutBackupConfig(t *testing.T) {
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			S3: storage.ProviderConfigs{Enabled: true, Bucket: "live-bucket"},
+			S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "live-bucket"}},
 		},
 	}
 
@@ -561,4 +575,63 @@ func TestBackupRuleAbsentWithoutBackupConfig(t *testing.T) {
 	_, ok := result.Config.Extra(storage.BackupTargetExtraKey)
 	assert.False(t, ok)
 	assert.Equal(t, "live-bucket", result.Config.Bucket)
+}
+
+func TestBackupRuleSuffixesDefaultDiskBucket(t *testing.T) {
+	diskBuilder := &stubBuilder{providerType: "disk"}
+	config := storage.ProviderConfig{
+		Providers: storage.Providers{
+			Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{
+				Enabled: true,
+				Backup:  &storage.BackupConfig{Enabled: true},
+			}},
+		},
+	}
+
+	resolver := backupRuleResolver(config, providerBuilders{
+		s3:   &stubBuilder{providerType: "s3"},
+		r2:   &stubBuilder{providerType: "r2"},
+		disk: diskBuilder,
+		db:   &stubBuilder{providerType: "db"},
+	})
+
+	ctx := objects.WithBackupSourceHint(context.Background(), storage.DiskProvider)
+
+	option := resolver.Resolve(ctx)
+	assert.True(t, option.IsPresent(), "expected backup rule to resolve")
+
+	result := option.MustGet()
+	assert.Equal(t, diskBuilder, result.Builder)
+	assert.Equal(t, objects.DefaultDevStorageBucket+storage.BackupBucketSuffix, result.Config.Bucket)
+}
+
+func TestDatabaseOptionsForceProxyPresign(t *testing.T) {
+	ctx := objects.WithKnownProviderHint(context.Background(), storage.DatabaseProvider)
+	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+
+	dbBuilder := &stubBuilder{providerType: "db"}
+	config := storage.ProviderConfig{
+		Providers: storage.Providers{
+			Database: storage.DatabaseConfig{ProviderCommon: storage.ProviderCommon{Enabled: true}},
+		},
+	}
+
+	configureProviderRules(
+		resolver,
+		WithProviderConfig(config),
+		WithProviderBuilders(providerBuilders{
+			s3:   &stubBuilder{providerType: "s3"},
+			r2:   &stubBuilder{providerType: "r2"},
+			disk: &stubBuilder{providerType: "disk"},
+			db:   dbBuilder,
+		}),
+		WithRuntimeOptions(serviceOptions{}),
+	)
+
+	option := resolver.Resolve(ctx)
+	assert.True(t, option.IsPresent(), "expected known provider rule to resolve")
+
+	result := option.MustGet()
+	assert.Equal(t, dbBuilder, result.Builder)
+	assert.True(t, result.Config.ProxyPresignEnabled)
 }

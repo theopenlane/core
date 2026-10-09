@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
@@ -1223,6 +1225,21 @@ func (_u *InternalPolicyUpdate) AddReviews(v ...*Review) *InternalPolicyUpdate {
 	return _u.AddReviewIDs(ids...)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (_u *InternalPolicyUpdate) AddAssessmentIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddAssessmentIDs(ids...)
+	return _u
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (_u *InternalPolicyUpdate) AddAssessments(v ...*Assessment) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentIDs(ids...)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_u *InternalPolicyUpdate) AddIntegrationIDs(ids ...string) *InternalPolicyUpdate {
 	_u.mutation.AddIntegrationIDs(ids...)
@@ -1236,6 +1253,21 @@ func (_u *InternalPolicyUpdate) AddIntegrations(v ...*Integration) *InternalPoli
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddPolicyAttestationIDs adds the "policy_attestations" edge to the AssessmentPolicy entity by IDs.
+func (_u *InternalPolicyUpdate) AddPolicyAttestationIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddPolicyAttestationIDs(ids...)
+	return _u
+}
+
+// AddPolicyAttestations adds the "policy_attestations" edges to the AssessmentPolicy entity.
+func (_u *InternalPolicyUpdate) AddPolicyAttestations(v ...*AssessmentPolicy) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPolicyAttestationIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -1684,6 +1716,27 @@ func (_u *InternalPolicyUpdate) RemoveReviews(v ...*Review) *InternalPolicyUpdat
 	return _u.RemoveReviewIDs(ids...)
 }
 
+// ClearAssessments clears all "assessments" edges to the Assessment entity.
+func (_u *InternalPolicyUpdate) ClearAssessments() *InternalPolicyUpdate {
+	_u.mutation.ClearAssessments()
+	return _u
+}
+
+// RemoveAssessmentIDs removes the "assessments" edge to Assessment entities by IDs.
+func (_u *InternalPolicyUpdate) RemoveAssessmentIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveAssessmentIDs(ids...)
+	return _u
+}
+
+// RemoveAssessments removes "assessments" edges to Assessment entities.
+func (_u *InternalPolicyUpdate) RemoveAssessments(v ...*Assessment) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentIDs(ids...)
+}
+
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
 func (_u *InternalPolicyUpdate) ClearIntegrations() *InternalPolicyUpdate {
 	_u.mutation.ClearIntegrations()
@@ -1703,6 +1756,27 @@ func (_u *InternalPolicyUpdate) RemoveIntegrations(v ...*Integration) *InternalP
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearPolicyAttestations clears all "policy_attestations" edges to the AssessmentPolicy entity.
+func (_u *InternalPolicyUpdate) ClearPolicyAttestations() *InternalPolicyUpdate {
+	_u.mutation.ClearPolicyAttestations()
+	return _u
+}
+
+// RemovePolicyAttestationIDs removes the "policy_attestations" edge to AssessmentPolicy entities by IDs.
+func (_u *InternalPolicyUpdate) RemovePolicyAttestationIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemovePolicyAttestationIDs(ids...)
+	return _u
+}
+
+// RemovePolicyAttestations removes "policy_attestations" edges to AssessmentPolicy entities.
+func (_u *InternalPolicyUpdate) RemovePolicyAttestations(v ...*AssessmentPolicy) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePolicyAttestationIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -3126,6 +3200,72 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.AssessmentsTable,
+			Columns: internalpolicy.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		createE := &AssessmentPolicyCreate{config: _u.config, mutation: newAssessmentPolicyMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.AssessmentsTable,
+			Columns: internalpolicy.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &AssessmentPolicyCreate{config: _u.config, mutation: newAssessmentPolicyMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.AssessmentsTable,
+			Columns: internalpolicy.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &AssessmentPolicyCreate{config: _u.config, mutation: newAssessmentPolicyMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3164,6 +3304,51 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PolicyAttestationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   internalpolicy.PolicyAttestationsTable,
+			Columns: []string{internalpolicy.PolicyAttestationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPolicyAttestationsIDs(); len(nodes) > 0 && !_u.mutation.PolicyAttestationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   internalpolicy.PolicyAttestationsTable,
+			Columns: []string{internalpolicy.PolicyAttestationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PolicyAttestationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   internalpolicy.PolicyAttestationsTable,
+			Columns: []string{internalpolicy.PolicyAttestationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -4363,6 +4548,21 @@ func (_u *InternalPolicyUpdateOne) AddReviews(v ...*Review) *InternalPolicyUpdat
 	return _u.AddReviewIDs(ids...)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddAssessmentIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddAssessmentIDs(ids...)
+	return _u
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (_u *InternalPolicyUpdateOne) AddAssessments(v ...*Assessment) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentIDs(ids...)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_u *InternalPolicyUpdateOne) AddIntegrationIDs(ids ...string) *InternalPolicyUpdateOne {
 	_u.mutation.AddIntegrationIDs(ids...)
@@ -4376,6 +4576,21 @@ func (_u *InternalPolicyUpdateOne) AddIntegrations(v ...*Integration) *InternalP
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddPolicyAttestationIDs adds the "policy_attestations" edge to the AssessmentPolicy entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddPolicyAttestationIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddPolicyAttestationIDs(ids...)
+	return _u
+}
+
+// AddPolicyAttestations adds the "policy_attestations" edges to the AssessmentPolicy entity.
+func (_u *InternalPolicyUpdateOne) AddPolicyAttestations(v ...*AssessmentPolicy) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPolicyAttestationIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -4824,6 +5039,27 @@ func (_u *InternalPolicyUpdateOne) RemoveReviews(v ...*Review) *InternalPolicyUp
 	return _u.RemoveReviewIDs(ids...)
 }
 
+// ClearAssessments clears all "assessments" edges to the Assessment entity.
+func (_u *InternalPolicyUpdateOne) ClearAssessments() *InternalPolicyUpdateOne {
+	_u.mutation.ClearAssessments()
+	return _u
+}
+
+// RemoveAssessmentIDs removes the "assessments" edge to Assessment entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemoveAssessmentIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveAssessmentIDs(ids...)
+	return _u
+}
+
+// RemoveAssessments removes "assessments" edges to Assessment entities.
+func (_u *InternalPolicyUpdateOne) RemoveAssessments(v ...*Assessment) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentIDs(ids...)
+}
+
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
 func (_u *InternalPolicyUpdateOne) ClearIntegrations() *InternalPolicyUpdateOne {
 	_u.mutation.ClearIntegrations()
@@ -4843,6 +5079,27 @@ func (_u *InternalPolicyUpdateOne) RemoveIntegrations(v ...*Integration) *Intern
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearPolicyAttestations clears all "policy_attestations" edges to the AssessmentPolicy entity.
+func (_u *InternalPolicyUpdateOne) ClearPolicyAttestations() *InternalPolicyUpdateOne {
+	_u.mutation.ClearPolicyAttestations()
+	return _u
+}
+
+// RemovePolicyAttestationIDs removes the "policy_attestations" edge to AssessmentPolicy entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemovePolicyAttestationIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemovePolicyAttestationIDs(ids...)
+	return _u
+}
+
+// RemovePolicyAttestations removes "policy_attestations" edges to AssessmentPolicy entities.
+func (_u *InternalPolicyUpdateOne) RemovePolicyAttestations(v ...*AssessmentPolicy) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePolicyAttestationIDs(ids...)
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
@@ -6296,6 +6553,72 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.AssessmentsTable,
+			Columns: internalpolicy.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		createE := &AssessmentPolicyCreate{config: _u.config, mutation: newAssessmentPolicyMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.AssessmentsTable,
+			Columns: internalpolicy.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &AssessmentPolicyCreate{config: _u.config, mutation: newAssessmentPolicyMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.AssessmentsTable,
+			Columns: internalpolicy.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &AssessmentPolicyCreate{config: _u.config, mutation: newAssessmentPolicyMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -6334,6 +6657,51 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PolicyAttestationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   internalpolicy.PolicyAttestationsTable,
+			Columns: []string{internalpolicy.PolicyAttestationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPolicyAttestationsIDs(); len(nodes) > 0 && !_u.mutation.PolicyAttestationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   internalpolicy.PolicyAttestationsTable,
+			Columns: []string{internalpolicy.PolicyAttestationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PolicyAttestationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   internalpolicy.PolicyAttestationsTable,
+			Columns: []string{internalpolicy.PolicyAttestationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

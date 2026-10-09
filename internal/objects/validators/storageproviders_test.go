@@ -8,8 +8,11 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/knadh/koanf/parsers/yaml"
+	"github.com/knadh/koanf/providers/file"
+	"github.com/knadh/koanf/v2"
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/yaml.v3"
+	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/objects"
@@ -26,10 +29,10 @@ func TestValidateConfiguredStorageProvidersDevModeDisk(t *testing.T) {
 		Enabled: true,
 		DevMode: true,
 		Providers: storage.Providers{
-			Disk: storage.ProviderConfigs{
+			Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{
 				Enabled: false,
 				Bucket:  bucket,
-			},
+			}},
 		},
 	}
 
@@ -47,10 +50,10 @@ func TestValidateAvailabilityByProviderDevMode(t *testing.T) {
 		DevMode: true,
 		Providers: storage.Providers{
 			// devmode should work regardless of individual disk configuration being on / off
-			Disk: storage.ProviderConfigs{
+			Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{
 				Enabled:         false,
 				EnsureAvailable: false,
-			},
+			}},
 		},
 	}
 
@@ -67,11 +70,11 @@ func TestValidateAvailabilityByProviderDisk(t *testing.T) {
 	cfg := storage.ProviderConfig{
 		Enabled: true,
 		Providers: storage.Providers{
-			Disk: storage.ProviderConfigs{
+			Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{
 				Enabled:         true,
 				EnsureAvailable: true,
 				Bucket:          bucket,
-			},
+			}},
 		},
 	}
 
@@ -158,6 +161,10 @@ func (s *stubProvider) GetScheme() *string {
 	return nil
 }
 
+func (s *stubProvider) ListObjects(context.Context, string, int) ([]string, error) {
+	return nil, nil
+}
+
 func (s *stubProvider) ListBuckets() ([]string, error) {
 	if s.listErr != nil {
 		return nil, s.listErr
@@ -192,6 +199,22 @@ func TestValidateProviderType(t *testing.T) {
 	})
 }
 
+// loadProviderConfig unmarshals YAML into a ProviderConfig through koanf, the same decoder the server uses
+func loadProviderConfig(t *testing.T, yamlConfig string) storage.ProviderConfig {
+	t.Helper()
+
+	path := filepath.Join(t.TempDir(), "config.yaml")
+	require.NoError(t, os.WriteFile(path, []byte(yamlConfig), 0o600))
+
+	k := koanf.New(".")
+	require.NoError(t, k.Load(file.Provider(path), yaml.Parser()))
+
+	var cfg storage.ProviderConfig
+	require.NoError(t, k.Unmarshal("", &cfg))
+
+	return cfg
+}
+
 func TestConfigKeyMismatchLeavesR2Unpopulated(t *testing.T) {
 	yamlWithCloudflareR2Key := `
 enabled: true
@@ -203,7 +226,6 @@ providers:
   cloudflarer2:
     enabled: true
     bucket: "ol-trust-center"
-    region: "WNAM"
 `
 
 	yamlWithCorrectR2Key := `
@@ -216,13 +238,10 @@ providers:
   r2:
     enabled: true
     bucket: "ol-trust-center"
-    region: "WNAM"
 `
 
 	t.Run("cloudflarer2 YAML key does not populate R2 struct field with r2 koanf tag", func(t *testing.T) {
-		var cfg storage.ProviderConfig
-		err := yaml.Unmarshal([]byte(yamlWithCloudflareR2Key), &cfg)
-		assert.NoError(t, err)
+		cfg := loadProviderConfig(t, yamlWithCloudflareR2Key)
 
 		assert.True(t, cfg.Providers.S3.Enabled, "S3 config should be populated")
 		assert.Equal(t, "opln", cfg.Providers.S3.Bucket)
@@ -230,19 +249,16 @@ providers:
 
 		assert.False(t, cfg.Providers.R2.Enabled, "R2.Enabled defaults to false when YAML uses cloudflarer2 key but struct expects r2")
 		assert.Empty(t, cfg.Providers.R2.Bucket, "R2.Bucket empty when YAML key mismatch")
-		assert.Empty(t, cfg.Providers.R2.Region, "R2.Region empty when YAML key mismatch")
 	})
 
 	t.Run("r2 YAML key correctly populates R2 struct field with r2 koanf tag", func(t *testing.T) {
-		var cfg storage.ProviderConfig
-		err := yaml.Unmarshal([]byte(yamlWithCorrectR2Key), &cfg)
-		assert.NoError(t, err)
+		cfg := loadProviderConfig(t, yamlWithCorrectR2Key)
 
 		assert.True(t, cfg.Providers.S3.Enabled)
 		assert.Equal(t, "opln", cfg.Providers.S3.Bucket)
+		assert.Equal(t, "us-east-2", cfg.Providers.S3.Region)
 
 		assert.True(t, cfg.Providers.R2.Enabled, "R2.Enabled true when YAML r2 key matches struct r2 koanf tag")
 		assert.Equal(t, "ol-trust-center", cfg.Providers.R2.Bucket, "R2.Bucket populated when keys match")
-		assert.Equal(t, "WNAM", cfg.Providers.R2.Region, "R2.Region populated when keys match")
 	})
 }

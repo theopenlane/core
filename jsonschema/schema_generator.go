@@ -35,6 +35,7 @@ const (
 	externalSecretsDir      = "./config/external-secrets" // #nosec G101 - this is a directory path, not a secret
 	helmValuesPath          = "./config/helm-values.yaml"
 	sensitiveTag            = "sensitive"
+	squashTagOption         = "squash"
 	varPrefix               = "CORE"
 	ownerReadWrite          = 0600
 	dirPermission           = 0755
@@ -243,18 +244,13 @@ func structToKoanfMap(val reflect.Value) map[string]any {
 
 	result := make(map[string]any)
 
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-
+	for _, field := range promotedFields(t) {
 		tag := field.Tag.Get(tagName)
 		if tag == "" || tag == skipper {
 			continue
 		}
 
-		fieldValue := val.Field(i)
+		fieldValue := val.FieldByIndex(field.Index)
 		for fieldValue.Kind() == reflect.Ptr {
 			if fieldValue.IsNil() {
 				break
@@ -293,12 +289,7 @@ func structToKoanfMap(val reflect.Value) map[string]any {
 // non-empty, non-skipper koanf tag. Structs from external packages that don't use koanf
 // will return false, signaling that all their fields should be rendered as-is
 func hasKoanfFields(t reflect.Type) bool {
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-
+	for _, field := range promotedFields(t) {
 		tag := field.Tag.Get(tagName)
 		if tag != "" && tag != skipper {
 			return true
@@ -306,6 +297,41 @@ func hasKoanfFields(t reflect.Type) bool {
 	}
 
 	return false
+}
+
+// promotedFields returns the exported fields of a struct type, flattening embedded structs tagged
+// koanf:",squash" so their fields render at the parent's level the same way koanf loads them
+func promotedFields(t reflect.Type) []reflect.StructField {
+	var fields []reflect.StructField
+
+	for i := range t.NumField() {
+		field := t.Field(i)
+		if !field.IsExported() {
+			continue
+		}
+
+		if !field.Anonymous || field.Type.Kind() != reflect.Struct || !strings.Contains(field.Tag.Get(tagName), squashTagOption) {
+			fields = append(fields, field)
+			continue
+		}
+
+		for _, promoted := range promotedFields(field.Type) {
+			promoted.Index = append([]int{i}, promoted.Index...)
+			fields = append(fields, promoted)
+		}
+	}
+
+	return fields
+}
+
+// fieldOwner returns the struct type that declares a field, which for a promoted field is the
+// embedded struct rather than the parent
+func fieldOwner(t reflect.Type, field reflect.StructField) reflect.Type {
+	if len(field.Index) == 1 {
+		return t
+	}
+
+	return t.FieldByIndex(field.Index[:len(field.Index)-1]).Type
 }
 
 // buildDefaultConfig returns a config struct populated with default and example values.
@@ -413,18 +439,13 @@ func indexCollections(val reflect.Value, prefix string, index *collectionIndex) 
 	}
 
 	t := val.Type()
-	for i := 0; i < val.NumField(); i++ {
-		field := t.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-
+	for _, field := range promotedFields(t) {
 		tag := field.Tag.Get(tagName)
 		if tag == "" || tag == skipper {
 			continue
 		}
 
-		fieldValue := val.Field(i)
+		fieldValue := val.FieldByIndex(field.Index)
 		for fieldValue.Kind() == reflect.Ptr {
 			if fieldValue.IsNil() {
 				fieldValue = reflect.Value{}
@@ -512,10 +533,9 @@ func getMapEntriesForPath(cfg *config.Config, fullPath string) ([]mapEntry, erro
 		switch current.Kind() {
 		case reflect.Struct:
 			found := false
-			for i := 0; i < current.NumField(); i++ {
-				field := current.Type().Field(i)
+			for _, field := range promotedFields(current.Type()) {
 				if field.Tag.Get(tagName) == part {
-					current = current.Field(i)
+					current = current.FieldByIndex(field.Index)
 					if current.Kind() == reflect.Ptr && !current.IsNil() {
 						current = current.Elem()
 					}
@@ -582,10 +602,9 @@ func getSliceValuesForPath(cfg *config.Config, fullPath string) ([]reflect.Value
 		switch current.Kind() {
 		case reflect.Struct:
 			found := false
-			for i := 0; i < current.NumField(); i++ {
-				field := current.Type().Field(i)
+			for _, field := range promotedFields(current.Type()) {
 				if field.Tag.Get(tagName) == part {
-					current = current.Field(i)
+					current = current.FieldByIndex(field.Index)
 					if current.Kind() == reflect.Ptr && !current.IsNil() {
 						current = current.Elem()
 					}
@@ -730,18 +749,13 @@ func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, v
 // appendStructEnvVars processes a struct value and appends its fields to the environment variables
 func appendStructEnvVars(envVars *strings.Builder, baseKey, basePath string, val reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
 	typeInfo := val.Type()
-	for i := 0; i < val.NumField(); i++ {
-		field := typeInfo.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-
+	for _, field := range promotedFields(typeInfo) {
 		tag := field.Tag.Get(tagName)
 		if tag == "" || tag == skipper {
 			continue
 		}
 
-		subValue := val.Field(i)
+		subValue := val.FieldByIndex(field.Index)
 		subKey := fmt.Sprintf("%s_%s", baseKey, sanitizeMapKeyForEnv(tag))
 		subPath := fmt.Sprintf("%s.%s", basePath, tag)
 		fieldSecret := parentSecret || field.Tag.Get(sensitiveTag) == "true" || isExternalSensitiveField(subPath)
@@ -795,12 +809,7 @@ func structValueToMap(val reflect.Value) map[string]any {
 	val = reflect.Indirect(val)
 	result := make(map[string]any)
 	t := val.Type()
-	for i := 0; i < val.NumField(); i++ {
-		field := t.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-
+	for _, field := range promotedFields(t) {
 		if isUnsupportedKind(field.Type.Kind()) {
 			continue
 		}
@@ -811,7 +820,7 @@ func structValueToMap(val reflect.Value) map[string]any {
 			name = strings.ToLower(field.Name)
 		}
 
-		fieldValue := val.Field(i)
+		fieldValue := val.FieldByIndex(field.Index)
 		result[name] = convertValueForYAML(fieldValue)
 	}
 	return result
@@ -975,12 +984,7 @@ func writeConfigYAML(builder *strings.Builder, val reflect.Value, path []string,
 	}
 
 	t := val.Type()
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		if !field.IsExported() {
-			continue
-		}
-
+	for _, field := range promotedFields(t) {
 		key := field.Tag.Get(tagName)
 		if key == "" || key == skipper {
 			continue
@@ -992,7 +996,7 @@ func writeConfigYAML(builder *strings.Builder, val reflect.Value, path []string,
 			continue
 		}
 
-		fieldValue := unwrapValue(val.Field(i))
+		fieldValue := unwrapValue(val.FieldByIndex(field.Index))
 		helmRef := buildHelmValueReference(prefixedPath)
 
 		if field.Tag.Get("domain") == "inherit" {
@@ -1434,14 +1438,8 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 	t := v.Type()
 	indentStr := strings.Repeat("  ", indent)
 
-	for i := 0; i < v.NumField(); i++ {
-		field := t.Field(i)
-		fieldValue := v.Field(i)
-
-		// Skip unexported fields
-		if !field.IsExported() {
-			continue
-		}
+	for _, field := range promotedFields(t) {
+		fieldValue := v.FieldByIndex(field.Index)
 
 		// Only emit fields addressable via koanf configuration
 		koanfTag := field.Tag.Get(tagName)
@@ -1473,7 +1471,7 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 		}
 
 		// Get field description from tags and comment map
-		description := fieldDescription(field, t, commentMap)
+		description := fieldDescription(field, fieldOwner(t, field), commentMap)
 
 		// Get default value from struct tag
 		defaultTag := field.Tag.Get("default")
@@ -1521,13 +1519,8 @@ func generateYAMLWithCommentsAllFields(result *strings.Builder, prefix string, v
 	t := v.Type()
 	indentStr := strings.Repeat("  ", indent)
 
-	for i := 0; i < v.NumField(); i++ {
-		field := t.Field(i)
-		fieldValue := v.Field(i)
-
-		if !field.IsExported() {
-			continue
-		}
+	for _, field := range promotedFields(t) {
+		fieldValue := v.FieldByIndex(field.Index)
 
 		jsonTag := field.Tag.Get("json")
 		if jsonTag == "" || jsonTag == "-" {
@@ -1550,7 +1543,7 @@ func generateYAMLWithCommentsAllFields(result *strings.Builder, prefix string, v
 			continue
 		}
 
-		description := fieldDescription(field, t, commentMap)
+		description := fieldDescription(field, fieldOwner(t, field), commentMap)
 		defaultTag := field.Tag.Get("default")
 
 		WriteFieldDescription(result, description, indentStr)
@@ -1697,14 +1690,8 @@ func hasSecretChildren(v reflect.Value, prefix string) bool {
 	}
 
 	t := v.Type()
-	for i := 0; i < v.NumField(); i++ {
-		field := t.Field(i)
-		fieldValue := v.Field(i)
-
-		// Skip unexported fields
-		if !field.IsExported() {
-			continue
-		}
+	for _, field := range promotedFields(t) {
+		fieldValue := v.FieldByIndex(field.Index)
 
 		// Get field name from json tag
 		jsonTag := field.Tag.Get("json")
@@ -1741,14 +1728,8 @@ func hasNonSecretChildren(v reflect.Value, prefix string) bool {
 	}
 
 	t := v.Type()
-	for i := 0; i < v.NumField(); i++ {
-		field := t.Field(i)
-		fieldValue := v.Field(i)
-
-		// Skip unexported fields
-		if !field.IsExported() {
-			continue
-		}
+	for _, field := range promotedFields(t) {
+		fieldValue := v.FieldByIndex(field.Index)
 
 		// Get field name from json tag
 		jsonTag := field.Tag.Get("json")
@@ -1853,14 +1834,8 @@ func findSensitiveFields(v reflect.Value, prefix string) []SensitiveField {
 	}
 
 	t := v.Type()
-	for i := 0; i < v.NumField(); i++ {
-		field := t.Field(i)
-		fieldValue := v.Field(i)
-
-		// Skip unexported fields
-		if !field.IsExported() {
-			continue
-		}
+	for _, field := range promotedFields(t) {
+		fieldValue := v.FieldByIndex(field.Index)
 
 		jsonTag := field.Tag.Get("json")
 		if jsonTag == "" || jsonTag == "-" {

@@ -18,7 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestResendHandler() {
@@ -29,7 +29,7 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(ec)
 
 	// create user in the database
 	userSetting := suite.db.UserSetting.Create().

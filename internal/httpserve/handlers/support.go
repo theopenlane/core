@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"crypto/subtle"
+	"net/url"
 	"strings"
 	"time"
 
@@ -17,8 +18,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	apimodels "github.com/theopenlane/core/common/openapi"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
@@ -55,9 +56,9 @@ func (h *Handler) supportFirstFactor(ctx echo.Context, req *apimodels.LoginReque
 	}
 
 	// the target organization must have consented to support access
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
 
-	setting, err := h.getOrganizationSettingByOrgID(allowCtx, req.TargetOrganizationID)
+	setting, err := h.getOrganizationSettingByOrgID(internalCtx, req.TargetOrganizationID)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return h.NotFound(ctx, ErrNotFound)
@@ -144,15 +145,15 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 	}
 
 	// re-confirm the organization still consents to support access
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(reqCtx)
 
-	setting, err := h.getOrganizationSettingByOrgID(allowCtx, orgCookie.Value)
+	setting, err := h.getOrganizationSettingByOrgID(internalCtx, orgCookie.Value)
 	if err != nil || !setting.AllowSupportAccess {
 		return h.Forbidden(ctx, ErrSupportAccessNotConsented)
 	}
 
 	individualID := ""
-	supportUser, err := h.getUserByEmail(allowCtx, individualEmail)
+	supportUser, err := h.getUserByEmail(reqCtx, individualEmail)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("email", individualEmail).Msg("failed to look up support user by email, session will not be logged")
 	} else {
@@ -161,7 +162,10 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 
 	reason := ""
 	if c, cErr := sessions.GetCookie(ctx.Request(), supportReasonCookie); cErr == nil {
-		reason = c.Value
+		reason, err = url.QueryUnescape(c.Value)
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
 	}
 
 	duration := time.Duration(supportSessionDefaultHours) * time.Hour
@@ -174,7 +178,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 
 	// mint the support session token targeting the virtual support identity, attributed to the individual
 	token, err := h.TokenManager.CreateImpersonationToken(reqCtx, tokens.CreateImpersonationTokenOptions{
-		ImpersonatorID:    individualEmail,
+		ImpersonatorID:    individualID,
 		ImpersonatorEmail: individualEmail,
 		TargetUserID:      cfg.SubjectID,
 		TargetUserEmail:   cfg.Email,
@@ -224,7 +228,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 		OrganizationID:    orgCookie.Value,
 	}
 
-	if err := h.logImpersonationEvent(reqCtx, "start", auditLog); err != nil {
+	if err := h.logImpersonationEvent(reqCtx, enums.ImpersonationActionStart, auditLog); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log support access event")
 	}
 

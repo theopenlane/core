@@ -6,8 +6,10 @@ import (
 	"strings"
 
 	"entgo.io/ent"
+	openfga "github.com/openfga/go-sdk"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 
 	features "github.com/theopenlane/core/v2/internal/entitlements/features"
 
@@ -29,22 +31,54 @@ func HasFeature(ctx context.Context, feature string) (bool, error) {
 		return true, nil
 	}
 
+	ok, err := hasFeature(ctx, feature)
+	if err != nil || ok || isFreshFeatureRead(ctx) {
+		return ok, err
+	}
+
+	// cached lookups can lag a tuple write, so verify once against openfga before denying
+	return hasFeature(withFreshFeatureRead(ctx), feature)
+}
+
+func hasFeature(ctx context.Context, feature string) (bool, error) {
 	feats, err := GetOrgFeatures(ctx)
 	if err != nil {
 		return false, err
 	}
 
-	if slices.Contains(feats, feature) {
-		return true, nil
+	if feature == models.CatalogAnyModule.String() {
+		return hasNonBaseModule(feats), nil
 	}
 
-	return false, nil
+	return slices.Contains(feats, feature), nil
+}
+
+// hasNonBaseModule reports whether any enabled feature is a module other than the base module
+func hasNonBaseModule(enabled []string) bool {
+	return slices.ContainsFunc(enabled, func(f string) bool {
+		return f != models.CatalogBaseModule.String()
+	})
+}
+
+var freshFeatureReadKey = contextx.NewKey[struct{}]()
+
+// withFreshFeatureRead marks the context so feature lookups bypass the permission cache and openfga caches
+func withFreshFeatureRead(ctx context.Context) context.Context {
+	return freshFeatureReadKey.Set(ctx, struct{}{})
+}
+
+func isFreshFeatureRead(ctx context.Context) bool {
+	_, fresh := freshFeatureReadKey.Get(ctx)
+
+	return fresh
 }
 
 // GetFeaturesForSpecificOrganization returns the enabled features for a specific organization
 func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]string, error) {
+	fresh := isFreshFeatureRead(ctx)
+
 	// try feature cache first
-	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+	if cache, ok := permissioncache.CacheFromContext(ctx); ok && !fresh {
 		moduleFeats, err := cache.GetFeatures(ctx, orgID)
 		if err != nil {
 			logx.FromContext(ctx).Err(err).Msg("failed to get feature cache")
@@ -70,7 +104,12 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 		Relation:    entitlements.TupleRelation,
 	}
 
-	resp, err := ac.ListObjectsRequest(ctx, req)
+	consistency := openfga.CONSISTENCYPREFERENCE_MINIMIZE_LATENCY
+	if fresh {
+		consistency = openfga.CONSISTENCYPREFERENCE_HIGHER_CONSISTENCY
+	}
+
+	resp, err := ac.ListObjectsRequestWithConsistency(ctx, req, consistency)
 	if err != nil {
 		return nil, err
 	}
@@ -103,20 +142,12 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 
 // GetOrgFeatures returns the enabled features for the authenticated organization
 func GetOrgFeatures(ctx context.Context) ([]string, error) {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		// this intentionally returns nil for the error
 		// this is so requests that aren't yet authenticated, but only require the base module
 		// e.g. sso login, will continue
 		return nil, nil
-	}
-
-	orgID := caller.OrganizationID
-
-	// if there is only one authorized org on the pat, set it as the authorized organization
-	// more organizations require using the X-Organization-ID header
-	if orgID == "" && len(caller.OrgIDs()) == 1 {
-		orgID = caller.OrgIDs()[0]
 	}
 
 	return GetFeaturesForSpecificOrganization(ctx, orgID)
@@ -154,17 +185,36 @@ func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, *mode
 //
 // If false, at least one must be enabled.
 func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgModule) (bool, *models.OrgModule, error) {
+	ok, missing, err := evaluateFeatures(ctx, requireAll, modules...)
+	if err != nil || ok || isFreshFeatureRead(ctx) {
+		return ok, missing, err
+	}
+
+	// cached lookups can lag a tuple write, so verify once against openfga before denying
+	return evaluateFeatures(withFreshFeatureRead(ctx), requireAll, modules...)
+}
+
+func evaluateFeatures(ctx context.Context, requireAll bool, modules ...models.OrgModule) (bool, *models.OrgModule, error) {
 	enabled, err := GetOrgFeatures(ctx)
 	if err != nil {
 		return false, nil, err
 	}
 
 	enabledSet := mapx.MapSetFromSlice(enabled)
+	anyModule := hasNonBaseModule(enabled)
 
 	if requireAll {
 		// all features must be enabled
 		for _, f := range modules {
 			if f == models.CatalogBaseModule {
+				continue
+			}
+
+			if f == models.CatalogAnyModule {
+				if !anyModule {
+					return false, &f, nil
+				}
+
 				continue
 			}
 
@@ -178,8 +228,18 @@ func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgMo
 
 	// at least one feature must be enabled
 	for _, f := range modules {
+		// only requires base module, which all should satisfy
 		if f == models.CatalogBaseModule {
 			return true, nil, nil
+		}
+
+		// requires a module other than base module, this could be any of supported modules
+		if f == models.CatalogAnyModule {
+			if anyModule {
+				return true, nil, nil
+			}
+
+			continue
 		}
 
 		if _, ok := enabledSet[f.String()]; ok {
@@ -226,17 +286,7 @@ func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRu
 // ShouldSkipFeatureCheck determines if module access checks should be bypassed based
 // on the available context
 func ShouldSkipFeatureCheck(ctx context.Context) bool {
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
-		if caller.Has(auth.CapSystemAdmin) {
-			return true
-		}
-
-		if caller.Has(auth.CapInternalOperation) || caller.Has(auth.CapBypassFeatureCheck) || caller.OrganizationRole == auth.AnonymousRole {
-			return true
-		}
-	}
-
-	if _, allowCtx := privacy.DecisionFromContext(ctx); allowCtx {
+	if auth.HasAnyInContextCaller(ctx, auth.CapInternalOperation|auth.CapInternalRead|auth.CapBypassFeatureCheck) {
 		return true
 	}
 
@@ -244,20 +294,7 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 		return true
 	}
 
-	// bypass module checks on anonymous trust center and questionnaire users
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.IsAnonymous() {
-		return true
-	}
-
-	skipTokenType := []token.PrivacyToken{
-		&token.OauthTooToken{},
-		&token.VerifyToken{},
-		&token.SignUpToken{},
-		&token.OrgInviteToken{},
-		&token.ResetToken{},
-	}
-
-	return SkipTokenInContext(ctx, skipTokenType)
+	return HasPublicFlowToken(ctx)
 }
 
 // DenyIfMissingAllModules acts as a prerequisite check - denies if features missing, Allows if present
@@ -286,7 +323,7 @@ func DenyIfMissingAllModules() privacy.MutationRule {
 		}
 
 		if !ok {
-			return privacy.Denyf("features are not enabled")
+			return privacy.Denyf("%w", ErrFeaturesNotEnabled)
 		}
 
 		return privacy.Skip

@@ -34,6 +34,8 @@ type Config struct {
 	ClientSecret string `json:"clientsecret" koanf:"clientsecret" default:"" sensitive:"true"`
 	// EndpointURL is the shortlink service API endpoint
 	EndpointURL string `json:"endpointurl" koanf:"endpointurl" default:"https://admin.s.theopenlane.io/api/links"`
+	// LinkTTL is how long a created link stays resolvable when the caller sets no expiration
+	LinkTTL time.Duration `json:"linkttl" koanf:"linkttl" default:"2160h"`
 }
 
 // Client wraps the shortlink service credentials and provides methods for creating short URLs
@@ -41,6 +43,7 @@ type Client struct {
 	clientID     string
 	clientSecret string
 	endpointURL  string
+	linkTTL      time.Duration
 }
 
 // Option is a functional option for configuring the Client
@@ -51,6 +54,15 @@ func WithEndpointURL(url string) Option {
 	return func(c *Client) {
 		if url != "" {
 			c.endpointURL = url
+		}
+	}
+}
+
+// WithLinkTTL sets the default lifetime applied to links created without an explicit expiration
+func WithLinkTTL(ttl time.Duration) Option {
+	return func(c *Client) {
+		if ttl > 0 {
+			c.linkTTL = ttl
 		}
 	}
 }
@@ -82,15 +94,22 @@ func NewClientFromConfig(cfg Config) (*Client, error) {
 		opts = append(opts, WithEndpointURL(cfg.EndpointURL))
 	}
 
+	opts = append(opts, WithLinkTTL(cfg.LinkTTL))
+
 	return NewClient(cfg.ClientID, cfg.ClientSecret, opts...)
 }
 
-// createLinkRequest represents the payload for creating a shortlink
-type createLinkRequest struct {
+// CreateRequest describes the shortlink to create
+type CreateRequest struct {
 	// URL is the original URL to shorten (the target URL)
 	URL string `json:"url"`
 	// Slug is an optional custom slug for the shortlink
 	Slug string `json:"slug,omitempty"`
+	// Expiration is the unix timestamp after which the link stops resolving; zero applies the
+	// client's LinkTTL so every link the service holds eventually expires
+	Expiration int64 `json:"expiration,omitempty"`
+	// Metadata is recorded on every click of the link
+	Metadata Metadata `json:"metadata,omitzero"`
 }
 
 // responseError represents an error response from the shortlinks API
@@ -111,19 +130,19 @@ func (e *responseError) Error() string {
 }
 
 // Create issues a POST to the hosted shortlink API and returns the short URL
-func (c *Client) Create(ctx context.Context, url, slug string) (string, error) {
-	if url == "" {
+func (c *Client) Create(ctx context.Context, req CreateRequest) (string, error) {
+	if req.URL == "" {
 		return "", ErrMissingURL
 	}
 
-	payload := createLinkRequest{
-		URL:  url,
-		Slug: strings.TrimSpace(slug),
+	req.Slug = strings.TrimSpace(req.Slug)
+	if req.Expiration == 0 && c.linkTTL > 0 {
+		req.Expiration = time.Now().Add(c.linkTTL).Unix()
 	}
 
 	opts := []httpsling.Option{
 		httpsling.Post(c.endpointURL),
-		httpsling.Body(payload),
+		httpsling.Body(req),
 		httpsling.ContentType(httpsling.ContentTypeJSON),
 		httpsling.Accept(httpsling.ContentTypeJSON),
 		httpsling.Header(headerAccessClientID, c.clientID),

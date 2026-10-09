@@ -12,7 +12,6 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 )
 
@@ -23,7 +22,7 @@ func (suite *HookTestSuite) TestHookTags_SlugCollisionInTransaction() {
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 
 	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.client)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(ctx)
 
 	suffix := strings.ToLower(gofakeit.LetterN(6))
 	existingTag := "aws-marketplace-" + suffix

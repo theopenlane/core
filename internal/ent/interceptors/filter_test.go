@@ -11,20 +11,21 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 type mockQuery struct {
-	typ string
+	typ        string
+	predicates []func(*sql.Selector)
 }
 
-func (m *mockQuery) Type() string                  { return m.typ }
-func (m *mockQuery) Limit(int)                     {}
-func (m *mockQuery) Offset(int)                    {}
-func (m *mockQuery) Unique(bool)                   {}
-func (m *mockQuery) Order(...func(*sql.Selector))  {}
-func (m *mockQuery) WhereP(...func(*sql.Selector)) {}
+func (m *mockQuery) Type() string                 { return m.typ }
+func (m *mockQuery) Limit(int)                    {}
+func (m *mockQuery) Offset(int)                   {}
+func (m *mockQuery) Unique(bool)                  {}
+func (m *mockQuery) Order(...func(*sql.Selector)) {}
+func (m *mockQuery) WhereP(ps ...func(*sql.Selector)) {
+	m.predicates = append(m.predicates, ps...)
+}
 
 func orgQuery() intercept.Query { return &mockQuery{typ: "Organization"} }
 
@@ -42,14 +43,8 @@ func TestSkipFilter(t *testing.T) {
 		want        bool
 	}{
 		{
-			name:        "privacy allow context skips regardless of forceFilter",
-			ctx:         privacy.DecisionContext(context.Background(), privacy.Allow),
-			forceFilter: alwaysForce,
-			want:        true,
-		},
-		{
 			name:        "internal request context skips regardless of forceFilter",
-			ctx:         rule.WithInternalContext(context.Background()),
+			ctx:         auth.WithInternalCrossOrgContext(context.Background()),
 			forceFilter: alwaysForce,
 			want:        true,
 		},

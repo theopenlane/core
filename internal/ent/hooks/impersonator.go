@@ -28,8 +28,8 @@ func HookImpersonatorAttribution() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if caller, hasCaller := auth.CallerFromContext(ctx); hasCaller && caller != nil && caller.IsImpersonated() {
-				obj.SetUpdatedByImpersonator(caller.Impersonation.ImpersonatorID)
+			if id, ok := auth.IsImpersonatedCallerContext(ctx); ok {
+				obj.SetUpdatedByImpersonator(id)
 			} else {
 				obj.ClearUpdatedByImpersonator()
 			}

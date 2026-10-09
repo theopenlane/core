@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	systemdef "github.com/theopenlane/core/v2/internal/integrations/definitions/system"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
@@ -66,75 +65,75 @@ func installationCredentialIDs(t *testing.T, ctx context.Context, integrationID 
 func TestIntegrationLifecycleSweep(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
-	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
+	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
-	expiredPending, _ := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
-	expiredCredentialIDs := installationCredentialIDs(t, allowCtx, expiredPending.ID)
+	expiredPending, _ := newHarnessInstallation(t, internalCtx, testint.ModeRecurring)
+	expiredCredentialIDs := installationCredentialIDs(t, internalCtx, expiredPending.ID)
 	require.NotEmpty(t, expiredCredentialIDs)
 	require.NoError(t, suite.Client.DB.Integration.UpdateOneID(expiredPending.ID).
 		SetStatus(enums.IntegrationStatusPending).
 		SetExpiresAt(time.Now().Add(-time.Hour)).
-		Exec(allowCtx))
+		Exec(internalCtx))
 
 	freshPending, err := suite.Client.DB.Integration.Create().
 		SetName(th.RandomName(t)).
 		SetKind("testintegration").
 		SetDefinitionID(testint.DefinitionID.ID()).
 		SetExpiresAt(time.Now().Add(time.Hour)).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
-	connected, connectedFragment := seedHarnessLoop(t, allowCtx)
+	connected, connectedFragment := seedHarnessLoop(t, internalCtx)
 
-	errored, _ := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
-	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, errored, "credentials revoked"))
+	errored, _ := newHarnessInstallation(t, internalCtx, testint.ModeRecurring)
+	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, errored, "credentials revoked"))
 
-	erroredStray, _ := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
-	strayCredentialIDs := installationCredentialIDs(t, allowCtx, erroredStray.ID)
+	erroredStray, _ := newHarnessInstallation(t, internalCtx, testint.ModeRecurring)
+	strayCredentialIDs := installationCredentialIDs(t, internalCtx, erroredStray.ID)
 	require.NotEmpty(t, strayCredentialIDs)
 	require.NoError(t, suite.Client.DB.Integration.UpdateOneID(erroredStray.ID).
 		SetStatus(enums.IntegrationStatusPending).
 		SetExpiresAt(time.Now().Add(-time.Hour)).
-		Exec(allowCtx))
-	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, reloadIntegration(t, allowCtx, erroredStray.ID), "connection check failed"))
+		Exec(internalCtx))
+	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, reloadIntegration(t, internalCtx, erroredStray.ID), "connection check failed"))
 
-	flippedStray := reloadIntegration(t, allowCtx, erroredStray.ID)
+	flippedStray := reloadIntegration(t, internalCtx, erroredStray.ID)
 	require.Equal(t, enums.IntegrationStatusErrored, flippedStray.Status)
 	require.NotNil(t, flippedStray.ExpiresAt)
 
 	waitForEvents()
 
 	t.Run("dry run dispatches nothing", func(t *testing.T) {
-		processed := runLifecycleSweep(t, allowCtx, json.RawMessage(`{"dryRun":true}`))
+		processed := runLifecycleSweep(t, internalCtx, json.RawMessage(`{"dryRun":true}`))
 		require.GreaterOrEqual(t, processed, 2)
 
-		require.True(t, integrationVisible(t, allowCtx, expiredPending.ID))
-		require.True(t, integrationVisible(t, allowCtx, erroredStray.ID))
+		require.True(t, integrationVisible(t, internalCtx, expiredPending.ID))
+		require.True(t, integrationVisible(t, internalCtx, erroredStray.ID))
 	})
 
 	t.Run("sweep reaps expired never-connected only", func(t *testing.T) {
-		processed := runLifecycleSweep(t, allowCtx, nil)
+		processed := runLifecycleSweep(t, internalCtx, nil)
 		require.GreaterOrEqual(t, processed, 2)
 
 		waitForEvents()
 
-		require.False(t, integrationVisible(t, allowCtx, expiredPending.ID))
-		require.False(t, integrationVisible(t, allowCtx, erroredStray.ID))
+		require.False(t, integrationVisible(t, internalCtx, expiredPending.ID))
+		require.False(t, integrationVisible(t, internalCtx, erroredStray.ID))
 
 		credentialCount, err := suite.Client.DB.Hush.Query().
 			Where(hush.IDIn(append(expiredCredentialIDs, strayCredentialIDs...)...)).
-			Count(allowCtx)
+			Count(internalCtx)
 		require.NoError(t, err)
 		require.Zero(t, credentialCount)
 
-		require.True(t, integrationVisible(t, allowCtx, freshPending.ID))
-		require.Equal(t, enums.IntegrationStatusPending, reloadIntegration(t, allowCtx, freshPending.ID).Status)
+		require.True(t, integrationVisible(t, internalCtx, freshPending.ID))
+		require.Equal(t, enums.IntegrationStatusPending, reloadIntegration(t, internalCtx, freshPending.ID).Status)
 
-		require.Equal(t, enums.IntegrationStatusConnected, reloadIntegration(t, allowCtx, connected.ID).Status)
+		require.Equal(t, enums.IntegrationStatusConnected, reloadIntegration(t, internalCtx, connected.ID).Status)
 		require.Equal(t, 1, activeReconcileJobs(t, connectedFragment))
 
-		require.Equal(t, enums.IntegrationStatusErrored, reloadIntegration(t, allowCtx, errored.ID).Status)
+		require.Equal(t, enums.IntegrationStatusErrored, reloadIntegration(t, internalCtx, errored.ID).Status)
 		require.Equal(t, 0, integrationNotificationCount(t, ownerCtx, errored.OwnerID, integrationReconnectedObjectType))
 	})
 }

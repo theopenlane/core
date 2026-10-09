@@ -9,6 +9,8 @@
 {{ template "header" $ }}
 
 import (
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 )
 
@@ -16,7 +18,8 @@ import (
 	{{- range $node := $.Nodes }}
 			{{/* create an EdgeCleanup function accepting an ID */}}
 				func {{ $node.Name }}EdgeCleanup(ctx context.Context, id string) error {
-					ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")))
+					// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+					ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
 			{{- if eq $node.Name "Organization" }}
 				ctx = contextx.WithSkipEnumInUseCheck(ctx)

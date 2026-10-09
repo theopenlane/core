@@ -103,11 +103,24 @@ func (m mixinConfig) getMixins(s ent.Interface) []ent.Mixin {
 	}
 
 	if autoSetSkipForSystemAdmin(&m) {
+		ownerField := ""
+
 		// if both SystemOwnedMixin and ObjectOwnedMixin are present, set skip for system admin to true
 		for i, mixin := range m.additionalMixins {
 			if o, ok := mixin.(ObjectOwnedMixin); ok {
 				o.AllowEmptyForSystemAdmin = true
 				m.additionalMixins[i] = o
+				ownerField = o.OwnerFieldName
+
+				break
+			}
+		}
+
+		// hand the owner field to the SystemOwnedMixin so its catalog index uses it
+		for i, mx := range m.additionalMixins {
+			if so, ok := mx.(mixin.SystemOwnedMixin); ok {
+				mixin.WithOwnerField(ownerField)(&so)
+				m.additionalMixins[i] = so
 
 				break
 			}
@@ -234,6 +247,18 @@ func defaultEdgeToWithPagination(from any, edgeSchema any) ent.Edge {
 	return edgeToWithPagination(&edgeDefinition{
 		edgeSchema: edgeSchema,
 		fromSchema: from,
+	})
+}
+
+// hiddenOwnerEdge creates the owner edge for an org-owned schema without exposing it in graphql
+func hiddenOwnerEdge(org any, edgeSchema any) ent.Edge {
+	return edgeToWithPagination(&edgeDefinition{
+		fromSchema:         org,
+		edgeSchema:         edgeSchema,
+		cascadeDeleteOwner: true,
+		annotations: []schema.Annotation{
+			entgql.Skip(entgql.SkipAll),
+		},
 	})
 }
 

@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/pkg/middleware/impersonation"
@@ -92,16 +91,17 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 			oidc := newMockOIDCServer(t,
 				withExpectedCode("code123"),
 				withClientSecret("secret"),
-				withUserInfo("engineer@theopenlane.io", "Support Engineer", ""),
+				withUserInfo(testUser1.UserInfo.Email, "Support Engineer", ""),
 			)
 			defer oidc.Close()
 
 			// configure support access on the handler and restore afterwards so other tests are unaffected
 			original := suite.h.SupportAccessConfig
 			suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
+			suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(testUser1.UserInfo.Email, "@", 2)[1]
 			defer func() { suite.h.SupportAccessConfig = original }()
 
-			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+			ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 			ctx = ent.NewContext(ctx, suite.db)
 
 			org := suite.createConsentingOrg(ctx)
@@ -156,13 +156,13 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 			assert.True(t, cbOut.Success)
 			assert.NotEmpty(t, cbOut.Token)
 			assert.Equal(t, org.ID, cbOut.OrganizationID)
-			assert.Equal(t, "engineer@theopenlane.io", cbOut.Impersonator)
+			assert.Equal(t, testUser1.UserInfo.Email, cbOut.Impersonator)
 
 			// the minted token must carry both identities: the virtual support user and the individual
 			claims, err := suite.h.TokenManager.ValidateImpersonationToken(context.Background(), cbOut.Token)
 			require.NoError(t, err)
 			assert.Equal(t, auth.SupportSubjectID, claims.UserID, "target is the virtual support identity")
-			assert.Equal(t, "engineer@theopenlane.io", claims.ImpersonatorID, "impersonator is the individual from the IdP")
+			assert.Equal(t, testUser1.ID, claims.ImpersonatorID, "impersonator is the individual from the IdP")
 			assert.Equal(t, "support", claims.Type)
 			assert.Equal(t, org.ID, claims.OrgID)
 			assert.Equal(t, tc.expectedReason, claims.Reason)
@@ -182,7 +182,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsWrongPassword() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -213,7 +213,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsNonConsentingOrg() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	// org that has NOT consented to support access
@@ -263,7 +263,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsDomainMismatch() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -331,13 +331,14 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 	oidc := newMockOIDCServer(t,
 		withExpectedCode("code123"),
 		withClientSecret("secret"),
-		withUserInfo("engineer@theopenlane.io", "Support Engineer", ""),
+		withUserInfo(testUser1.UserInfo.Email, "Support Engineer", ""),
 	)
 	defer oidc.Close()
 
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
+	suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(testUser1.UserInfo.Email, "@", 2)[1]
 
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 

@@ -27,7 +27,7 @@ import (
 func createBrandedTestCampaign(t *testing.T, name string) *generated.Campaign {
 	t.Helper()
 
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	emailTemplate := suite.Client.DB.EmailTemplate.Create().
 		SetName(name + " Template").
@@ -84,7 +84,7 @@ func TestSendCampaignTestEmailAssessmentBackfill(t *testing.T) {
 	var assessmentID string
 
 	t.Cleanup(func() {
-		allowCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+		allowCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 		responses := suite.Client.DB.AssessmentResponse.Query().
 			Where(assessmentresponse.CampaignIDEQ(campaignID)).
@@ -113,7 +113,7 @@ func TestSendCampaignTestEmailAssessmentBackfill(t *testing.T) {
 	assessmentID = lo.FromPtr(sendResp.SendCampaignTestEmail.Campaign.AssessmentID)
 	assert.Assert(t, assessmentID != "", "expected assessment to be backfilled from the questionnaire template")
 
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 	assessmentObj := suite.Client.DB.Assessment.GetX(ctx, assessmentID)
 	assert.Check(t, is.Equal(template.ID, assessmentObj.TemplateID))
 	assert.Check(t, is.Equal(template.Name, assessmentObj.Name))
@@ -145,7 +145,7 @@ func TestSendCampaignTestEmailBrandedCampaign(t *testing.T) {
 // TestSendCampaignTestEmailMissingEmailTemplate verifies a non-questionnaire campaign without a
 // linked email template is rejected
 func TestSendCampaignTestEmailMissingEmailTemplate(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	campaignObj := suite.Client.DB.Campaign.Create().
 		SetName("Missing Email Template Test Campaign").

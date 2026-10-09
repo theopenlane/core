@@ -17,94 +17,9 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
-
-const (
-	operationTestDefinitionID       = "def_01K0TESTOPS00000000000001"
-	operationTestInlineDefinitionID = "def_01K0TESTOPS00000000000002"
-	operationTestPath               = "/v1/integrations/:definitionID/operations"
-)
-
-// OperationTestHealthCheck is the config type for the test health check operation
-type OperationTestHealthCheck struct{}
-
-// OperationTestRepoSync is the config type for the test repository sync operation
-type OperationTestRepoSync struct{}
-
-// OperationTestValidated is the config type for the test validated operation
-type OperationTestValidated struct {
-	// Target is the required target field
-	Target string `json:"target" jsonschema:"required"`
-}
-
-var (
-	operationTestCredentialRef                      = types.NewCredentialSlotID("op_test")
-	opTestHealthSchema, opTestHealthCheckOperation  = providerkit.OperationSchema[OperationTestHealthCheck]()
-	opTestRepoSyncSchema, opTestRepoSyncOperation   = providerkit.OperationSchema[OperationTestRepoSync]()
-	opTestValidatedSchema, opTestValidatedOperation = providerkit.OperationSchema[OperationTestValidated]()
-)
-
-func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
-	return registry.Builder(func() (types.Definition, error) {
-		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Operation Test",
-				Active:      true,
-				Visible:     true,
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:    operationTestCredentialRef,
-					Name:   "Op Test Credential",
-					Schema: json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  operationTestCredentialRef,
-					Name:           "Op Test Connection",
-					CredentialRefs: []types.CredentialSlotID{operationTestCredentialRef},
-				},
-			},
-			Operations: []types.OperationRegistration{
-				{
-					Name:         opTestHealthCheckOperation.Name(),
-					Description:  "Validate the test credential",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestHealthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: opTestHealthSchema,
-					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-						return json.RawMessage(`{"ok":true}`), nil
-					},
-				},
-				{
-					Name:         opTestRepoSyncOperation.Name(),
-					Description:  "Sync repositories",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestRepoSyncOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: inlineNonHealth},
-					ConfigSchema: opTestRepoSyncSchema,
-					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-						return json.RawMessage(`{"synced":true}`), nil
-					},
-				},
-				{
-					Name:         opTestValidatedOperation.Name(),
-					Description:  "Operation with config schema",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestValidatedOperation.Name()),
-					ConfigSchema: opTestValidatedSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-						return json.RawMessage(`{"validated":true}`), nil
-					},
-				},
-			},
-		}, nil
-	})
-}
 
 func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 	t := suite.T()

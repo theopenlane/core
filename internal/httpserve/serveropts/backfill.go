@@ -15,7 +15,7 @@ import (
 )
 
 // backfillBypassCaps are the capabilities backfill routines run with
-const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
+const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapSystemSweep | auth.CapInternalOperation | auth.CapBypassManagedGroup
 
 // backfillRoutineTopicName is the topic suffix and key namespace for backfill routines
 const backfillRoutineTopicName = "startup.backfill.routine"
@@ -58,12 +58,13 @@ type backfillRoutine struct {
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
 	{
-		Name:    "backfill-schema-responsibilities",
-		Version: "v1",
-		Enabled: true,
-		Run: func(ctx context.Context, deps backfillDeps) error {
-			return backfillSchemaResponsibilities(ctx, deps.Client)
-		},
+		// example registration
+		// Name:    "backfill-x",
+		// Version: "v1",
+		// Enabled: true,
+		// Run: func(ctx context.Context, deps backfillDeps) error {
+		// 	return backfillX(ctx, deps.Client)
+		// },
 	},
 }
 

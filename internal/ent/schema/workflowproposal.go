@@ -125,13 +125,13 @@ func (WorkflowProposal) Indexes() []ent.Index {
 	}
 }
 
-// Mixin of the Integration
+// Mixin of the WorkflowProposal
 func (w WorkflowProposal) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeAnnotations: true,
 		excludeSoftDelete:  true,
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
+			newObjectOwnedMixin[generated.WorkflowProposal](w,
 				withParents(WorkflowObjectRef{}),
 				withOrganizationOwnerServiceOnly(),
 				withSkipForSystemAdmin(),
@@ -142,7 +142,7 @@ func (w WorkflowProposal) Mixin() []ent.Mixin {
 
 // Modules this schema has access to.
 func (WorkflowProposal) Modules() []models.OrgModule {
-	return []models.OrgModule{models.CatalogBaseModule}
+	return []models.OrgModule{models.CatalogAnyModule}
 }
 
 // Hooks returns the hooks for the WorkflowProposal schema

@@ -132,7 +132,7 @@ func (a APIToken) Mixin() []ent.Mixin {
 
 func (APIToken) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 
@@ -165,7 +165,6 @@ func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.RequirePaymentMethod(),
-			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

@@ -22,11 +22,9 @@ func (token *DownloadToken) SetToken(t string) {
 
 // NewContextWithDownloadToken returns a new context with the verify token inside
 func NewContextWithDownloadToken(parent context.Context, downloadToken string) context.Context {
-	ctx := downloadTokenContextKey.Set(parent, &DownloadToken{
+	return downloadTokenContextKey.Set(parent, &DownloadToken{
 		token: downloadToken,
 	})
-
-	return withTokenContextBypassCaller(ctx)
 }
 
 // DownloadTokenFromContext parses a context for a verify token and returns the token

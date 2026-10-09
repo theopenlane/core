@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -193,7 +194,6 @@ func TestMutationCreateAssessment(t *testing.T) {
 			request: testclient.CreateAssessmentInput{
 				Name:                gofakeit.Company(),
 				TemplateID:          lo.ToPtr(template.ID),
-				OwnerID:             &th.SharedTestUser1.OrganizationID,
 				AssessmentType:      lo.ToPtr(enums.AssessmentTypeInternal),
 				Tags:                []string{"tag1", "tag2"},
 				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day
@@ -387,6 +387,10 @@ func TestMutationUpdateAssessment(t *testing.T) {
 	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	templateIDPtr := lo.ToPtr(assessment.TemplateID)
 
+	systemAssessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+
+	group := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
 	testCases := []struct {
 		name     string
 		id       string
@@ -472,6 +476,26 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			ctx:      th.SharedTestUser2.UserCtx,
 			errorMsg: th.NotFoundErrorMsg,
 		},
+		{
+			name: "not authorized, adding editor group permission to system owned assessment",
+			id:   systemAssessment.ID,
+			request: testclient.UpdateAssessmentInput{
+				AddEditorIDs: []string{group.ID},
+			},
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name: "not authorized, adding viewer group permission to system owned assessment",
+			id:   systemAssessment.ID,
+			request: testclient.UpdateAssessmentInput{
+				AddViewerIDs: []string{group.ID},
+			},
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotAuthorizedErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -508,6 +532,10 @@ func TestMutationUpdateAssessment(t *testing.T) {
 
 	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: systemAssessment.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: systemAssessment.TemplateID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, ID: group.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteAssessment(t *testing.T) {

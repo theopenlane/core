@@ -90,7 +90,7 @@ func findingControls(ctx context.Context, t *testing.T, externalID string) (*ent
 }
 
 func TestIntegrationCrossObjectLinking(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	// seed link targets with stable ref codes; other tests' controls use random UUID ref codes
 	controlIDs := make([]string, 0, 4)

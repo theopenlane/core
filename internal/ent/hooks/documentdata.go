@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -45,15 +44,16 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			tcID, hasTCID := auth.ActiveTrustCenterIDKey.Get(ctx)
-			caller, hasCaller := auth.CallerFromContext(ctx)
-			if !hasTCID || tcID == "" || !hasCaller || caller == nil || caller.SubjectEmail == "" || caller.OrganizationID == "" {
+			caller, ok := auth.GetVerifiedTrustCenterUserCaller(ctx, docTemplate.TrustCenterID)
+			if !ok {
 				return nil, errMustBeAnonymousUser
 			}
 
-			if docTemplate.TrustCenterID != tcID {
-				return nil, errNDATemplateDoesNotMatchTrustCenter
-			}
+			// the above verified the trust center ID matched so we can continue with this id
+			verifiedTCID := docTemplate.TrustCenterID
+
+			// add the validated fields to the log context now
+			ctx = logx.WithFields(ctx, map[string]any{"trust_center_id": verifiedTCID, "email": caller.SubjectEmail})
 
 			response, ok := m.Data()
 			if !ok {
@@ -62,7 +62,7 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 
 			signedID, err := m.Client().TrustCenterNDARequest.Query().Where(
 				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
-				trustcenterndarequest.TrustCenterID(tcID),
+				trustcenterndarequest.TrustCenterID(verifiedTCID),
 				trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
 			).FirstID(ctx)
 			if err == nil && signedID != "" {
@@ -74,11 +74,11 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, err
 			}
 
-			if err = validateTrustCenterNDAJSON(response, tcID, caller.SubjectEmail, caller.SubjectID, f); err != nil {
+			if err = validateTrustCenterNDAJSON(ctx, response, verifiedTCID, caller.SubjectEmail, caller.SubjectID, f); err != nil {
 				return nil, err
 			}
 
-			response["trust_center_id"] = tcID
+			response["trust_center_id"] = verifiedTCID
 			response["pdf_file_id"] = f.ID
 
 			if metadata, ok := response["signature_metadata"].(map[string]any); ok {
@@ -98,15 +98,15 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 
 			if err := m.Client().TrustCenterNDARequest.Update().Where(
 				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
-				trustcenterndarequest.TrustCenterID(tcID),
+				trustcenterndarequest.TrustCenterID(verifiedTCID),
 				trustcenterndarequest.StatusNEQ(enums.TrustCenterNDARequestStatusSigned),
 			).SetStatus(enums.TrustCenterNDARequestStatusSigned).SetDocumentDataID(createdDocData.ID).Exec(ctx); err != nil {
 				if !generated.IsNotFound(err) {
-					logx.FromContext(ctx).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("failed to mark nda request signed status")
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to mark nda request signed status")
 					return nil, err
 				}
 
-				logx.FromContext(ctx).Error().Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("no existing nda request to mark signed status")
+				logx.FromContext(ctx).Error().Msg("no existing nda request to mark signed status")
 			}
 
 			return v, nil
@@ -129,10 +129,7 @@ func HookDocumentDataFile() ent.Hook {
 				return nil, errOnlyOneDocumentData
 			}
 
-			caller, callerOK := auth.CallerFromContext(ctx)
-			isSystemAdmin := callerOK && caller != nil && caller.HasInLineage(auth.CapSystemAdmin)
-
-			if !isSystemAdmin {
+			if !auth.HasInLineageContextCaller(ctx, auth.CapSystemAdmin) {
 				return nil, generated.ErrPermissionDenied
 			}
 
@@ -167,17 +164,12 @@ func HookDocumentDataFile() ent.Hook {
 
 // validateTrustCenterNDAJSON validates the document against the struct-derived schema
 // and checks the trust center id, email, user id, PDF file attached to the response
-func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectEmail, subjectID string, templateFile *generated.File) error {
+func validateTrustCenterNDAJSON(ctx context.Context, document map[string]any, trustCenterID, subjectEmail, subjectID string, templateFile *generated.File) error {
 	schema := jsonx.SchemaFrom[signedNDADocumentData]()
-
-	logger := log.With().
-		Str("trust_center_id", trustCenterID).
-		Str("subject_id", subjectID).
-		Logger()
 
 	result, err := jsonx.ValidateSchema(schema, document)
 	if err != nil {
-		logger.Error().Err(err).
+		logx.FromContext(ctx).Error().Err(err).
 			Msg("failed to validate trust center nda json schema")
 
 		return err
@@ -185,7 +177,7 @@ func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectE
 
 	if !result.Valid() {
 		errs := jsonx.ValidationErrorStrings(result)
-		logger.Error().
+		logx.FromContext(ctx).Error().
 			Strs("validation_errors", errs).
 			Msg("trust center nda json failed schema validation")
 
@@ -194,7 +186,7 @@ func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectE
 
 	var doc signedNDADocumentData
 	if err := jsonx.RoundTrip(document, &doc); err != nil {
-		logger.Error().Err(err).
+		logx.FromContext(ctx).Error().Err(err).
 			Msg("failed to decode trust center nda json")
 
 		return fmt.Errorf("%w: %v", errValidationFailed, err)
@@ -204,7 +196,7 @@ func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectE
 		doc.SignatoryInfo.Email != subjectEmail ||
 		doc.SignatureMetadata.UserID != subjectID {
 
-		logger.Error().
+		logx.FromContext(ctx).Error().
 			Str("expected_trust_center_id", trustCenterID).
 			Str("document_trust_center_id", doc.TrustCenterID).
 			Str("expected_subject_id", subjectID).
@@ -215,14 +207,14 @@ func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectE
 	}
 
 	if templateFile == nil || templateFile.ID == "" {
-		logger.Error().
+		logx.FromContext(ctx).Error().
 			Msg("trust center nda template file is missing")
 
 		return ErrMissingNDATemplateFile
 	}
 
 	if doc.PDFFileID != templateFile.ID {
-		logger.Error().
+		logx.FromContext(ctx).Error().
 			Str("document_pdf_file_id", doc.PDFFileID).
 			Str("template_file_id", templateFile.ID).
 			Msg("trust center nda pdf file does not match template")
@@ -231,7 +223,7 @@ func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectE
 	}
 
 	if templateFile.Md5Hash == "" {
-		logger.Error().
+		logx.FromContext(ctx).Error().
 			Str("template_file_id", templateFile.ID).
 			Msg("trust center nda template file is missing md5 hash")
 
@@ -239,7 +231,7 @@ func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectE
 	}
 
 	if !strings.EqualFold(doc.SignatureMetadata.PDFHash, templateFile.Md5Hash) {
-		logger.Error().
+		logx.FromContext(ctx).Error().
 			Str("template_file_id", templateFile.ID).
 			Str("document_pdf_hash", doc.SignatureMetadata.PDFHash).
 			Str("template_pdf_hash", templateFile.Md5Hash).

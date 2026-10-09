@@ -74,8 +74,12 @@ const (
 	EdgeAssessmentResponses = "assessment_responses"
 	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
 	EdgeCampaigns = "campaigns"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
+	// EdgePolicyAttestations holds the string denoting the policy_attestations edge name in mutations.
+	EdgePolicyAttestations = "policy_attestations"
 	// Table holds the table name of the assessment in the database.
 	Table = "assessments"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -137,6 +141,11 @@ const (
 	CampaignsInverseTable = "campaigns"
 	// CampaignsColumn is the table column denoting the campaigns relation/edge.
 	CampaignsColumn = "assessment_id"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "assessment_policies"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPoliciesInverseTable = "internal_policies"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -144,6 +153,13 @@ const (
 	WorkflowObjectRefsInverseTable = "workflow_object_refs"
 	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
 	WorkflowObjectRefsColumn = "assessment_id"
+	// PolicyAttestationsTable is the table that holds the policy_attestations relation/edge.
+	PolicyAttestationsTable = "assessment_policies"
+	// PolicyAttestationsInverseTable is the table name for the AssessmentPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "assessmentpolicy" package.
+	PolicyAttestationsInverseTable = "assessment_policies"
+	// PolicyAttestationsColumn is the table column denoting the policy_attestations relation/edge.
+	PolicyAttestationsColumn = "assessment_id"
 )
 
 // Columns holds all SQL columns for assessment fields.
@@ -177,6 +193,9 @@ var (
 	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
 	// primary key for the identity_holders relation (M2M).
 	IdentityHoldersPrimaryKey = []string{"identity_holder_id", "assessment_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"assessment_id", "internal_policy_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -430,6 +449,20 @@ func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
+	}
+}
+
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
 func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -441,6 +474,20 @@ func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPolicyAttestationsCount orders the results by policy_attestations count.
+func ByPolicyAttestationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPolicyAttestationsStep(), opts...)
+	}
+}
+
+// ByPolicyAttestations orders the results by policy_attestations terms.
+func ByPolicyAttestations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPolicyAttestationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -506,11 +553,25 @@ func newCampaignsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
 	)
 }
+func newInternalPoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
+	)
+}
 func newWorkflowObjectRefsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+	)
+}
+func newPolicyAttestationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PolicyAttestationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, PolicyAttestationsTable, PolicyAttestationsColumn),
 	)
 }
 

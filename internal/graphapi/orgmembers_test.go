@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
@@ -349,7 +348,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			userID: th.SharedTestUser2.ID,
 			role:   enums.RoleMember,
 			ctx:    th.SharedTestUser2.UserCtx,
-			errMsg: th.NotFoundErrorMsg, // organization is not found because user does not have access to it
+			errMsg: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:   "add user to personal org not allowed",
@@ -415,6 +414,116 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 	// delete created org and users
 	th.CleanupOrganizationDataWithContext(otherOrgCtx, t)
 	th.CleanupOrganizationDataWithContext(localTestOrg.UserCtx, t)
+}
+
+func TestMutationCreateOrgMemberRoleCeiling(t *testing.T) {
+	t.Parallel()
+
+	org := suite.SeedFreshOrgUsers(t)
+	t.Cleanup(func() { th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t) })
+
+	testCases := []struct {
+		name   string
+		ctx    context.Context
+		role   enums.Role
+		errMsg string
+	}{
+		{
+			name: "admin can add admin",
+			ctx:  org.Admin.UserCtx,
+			role: enums.RoleAdmin,
+		},
+		{
+			name: "super admin can add super admin",
+			ctx:  org.SuperAdmin.UserCtx,
+			role: enums.RoleSuperAdmin,
+		},
+		{
+			name: "owner can add super admin",
+			ctx:  org.Owner.UserCtx,
+			role: enums.RoleSuperAdmin,
+		},
+		{
+			name:   "admin cannot add super admin",
+			ctx:    org.Admin.UserCtx,
+			role:   enums.RoleSuperAdmin,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:   "admin cannot add owner",
+			ctx:    org.Admin.UserCtx,
+			role:   enums.RoleOwner,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:   "super admin cannot add owner",
+			ctx:    org.SuperAdmin.UserCtx,
+			role:   enums.RoleOwner,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:   "owner cannot add another owner",
+			ctx:    org.Owner.UserCtx,
+			role:   enums.RoleOwner,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:   "member cannot add admin",
+			ctx:    org.Member.UserCtx,
+			role:   enums.RoleAdmin,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			target := (&th.UserBuilder{Client: suite.Client}).MustNew(org.Owner.UserCtx, t)
+
+			input := testclient.CreateOrgMembershipInput{
+				OrganizationID: org.Owner.OrganizationID,
+				UserID:         target.ID,
+				Role:           &tc.role,
+			}
+
+			resp, err := suite.Client.API.AddUserToOrgWithRole(tc.ctx, input)
+
+			if tc.errMsg != "" {
+				assert.ErrorContains(t, err, tc.errMsg)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.role, resp.CreateOrgMembership.OrgMembership.Role))
+		})
+	}
+
+	for _, role := range []enums.Role{enums.RoleOwner, enums.RoleSuperAdmin} {
+		t.Run("bulk, admin cannot add "+role.String(), func(t *testing.T) {
+			target := (&th.UserBuilder{Client: suite.Client}).MustNew(org.Owner.UserCtx, t)
+
+			input := []*testclient.CreateOrgMembershipInput{
+				{
+					OrganizationID: org.Owner.OrganizationID,
+					UserID:         target.ID,
+					Role:           &role,
+				},
+			}
+
+			_, err := suite.Client.API.CreateBulkOrgMembers(org.Admin.UserCtx, input)
+			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+		})
+	}
+
+	owners, err := suite.Client.DB.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(org.Owner.OrganizationID),
+			orgmembership.RoleEQ(enums.RoleOwner),
+		).
+		All(auth.WithInternalCrossOrgContext(context.Background()))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(owners, 1))
+	assert.Check(t, is.Equal(org.Owner.ID, owners[0].UserID))
 }
 
 func TestMutationUpdateOrgMembers(t *testing.T) {
@@ -502,7 +611,6 @@ func TestMutationUpdateOrgMemberRole(t *testing.T) {
 	t.Parallel()
 
 	org := suite.SeedFreshOrgUsers(t)
-	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
 
 	user := suite.UserBuilder(context.Background(), t)
 	suite.AddUserToOrganization(org.Owner.UserCtx, t, &user, enums.RoleMember, org.Owner.OrganizationID)
@@ -512,7 +620,7 @@ func TestMutationUpdateOrgMemberRole(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.UserID(user.ID),
 		).
-		Only(allowCtx)
+		Only(auth.WithInternalCrossOrgContext(context.Background()))
 	assert.NilError(t, err)
 
 	ownerMember, err := suite.Client.DB.OrgMembership.Query().
@@ -520,7 +628,7 @@ func TestMutationUpdateOrgMemberRole(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.UserID(org.Owner.ID),
 		).
-		Only(allowCtx)
+		Only(auth.WithInternalCrossOrgContext(context.Background()))
 	assert.NilError(t, err)
 
 	cases := []struct {
@@ -592,7 +700,6 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 	t.Parallel()
 
 	org := suite.SeedFreshOrgUsers(t)
-	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
 
 	user1 := suite.UserBuilder(context.Background(), t)
 	user2 := suite.UserBuilder(context.Background(), t)
@@ -605,7 +712,7 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.UserIDIn(user1.ID, user2.ID),
 		).
-		All(allowCtx)
+		All(auth.WithInternalCrossOrgContext(context.Background()))
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(currentMembers, 2))
 
@@ -628,7 +735,7 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 
 	updatedMembers, err := suite.Client.DB.OrgMembership.Query().
 		Where(orgmembership.IDIn(ids...)).
-		All(allowCtx)
+		All(auth.WithInternalCrossOrgContext(context.Background()))
 	assert.NilError(t, err)
 
 	for _, member := range updatedMembers {
@@ -640,7 +747,7 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 			orgmembership.OrganizationID(org.Owner.OrganizationID),
 			orgmembership.UserID(org.Owner.ID),
 		).
-		Only(allowCtx)
+		Only(auth.WithInternalCrossOrgContext(context.Background()))
 	assert.NilError(t, err)
 
 	memberRole := enums.RoleMember
@@ -654,7 +761,7 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 
 	ownerMember, err = suite.Client.DB.OrgMembership.Query().
 		Where(orgmembership.ID(ownerMember.ID)).
-		Only(allowCtx)
+		Only(auth.WithInternalCrossOrgContext(context.Background()))
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(enums.RoleOwner, ownerMember.Role))
 
@@ -893,13 +1000,12 @@ func TestMutationDeleteBulkOrgMembers(t *testing.T) {
 
 	otherMember := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(bulkOrg.Owner.UserCtx, t)
 
-	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	ownerMembershipID, err := suite.Client.DB.OrgMembership.Query().
 		Where(
 			orgmembership.OrganizationID(bulkOrg.Owner.OrganizationID),
 			orgmembership.UserID(bulkOrg.Owner.ID),
 		).
-		OnlyID(allowCtx)
+		OnlyID(auth.WithInternalCrossOrgContext(context.Background()))
 	assert.NilError(t, err)
 
 	homeGroupsBefore := suite.countOrgScopedGroupMemberships(t, crossOrgUserID, homeOrg.Owner.OrganizationID)
@@ -957,11 +1063,11 @@ func TestMutationLeaveOrganizationReassignsDefaultOrgToMemberOrg(t *testing.T) {
 	assert.Assert(t, member != nil)
 
 	// make the org they are about to leave their default org
-	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	internalCtx := auth.WithInternalCrossOrgContext(context.Background())
 	_, err = suite.Client.DB.UserSetting.Update().
 		Where(usersetting.UserID(userID)).
 		SetDefaultOrgID(orgToLeave.Owner.OrganizationID).
-		Save(allowCtx)
+		Save(internalCtx)
 	assert.NilError(t, err)
 
 	resp, err := suite.Client.API.LeaveOrganization(user.Owner.UserCtx, orgToLeave.Owner.OrganizationID)
@@ -973,7 +1079,7 @@ func TestMutationLeaveOrganizationReassignsDefaultOrgToMemberOrg(t *testing.T) {
 	setting, err := suite.Client.DB.UserSetting.Query().
 		Where(usersetting.UserID(userID)).
 		WithDefaultOrg().
-		Only(allowCtx)
+		Only(internalCtx)
 	assert.NilError(t, err)
 	assert.Assert(t, setting.Edges.DefaultOrg != nil)
 
@@ -985,7 +1091,7 @@ func TestMutationLeaveOrganizationReassignsDefaultOrgToMemberOrg(t *testing.T) {
 			orgmembership.UserID(userID),
 			orgmembership.OrganizationID(newDefaultOrgID),
 		).
-		Exist(allowCtx)
+		Exist(auth.WithInternalCrossOrgContext(context.Background()))
 	assert.NilError(t, err)
 	assert.Check(t, isMember, "default org %s was reassigned to an org the user is not a member of", newDefaultOrgID)
 
@@ -996,7 +1102,7 @@ func TestMutationLeaveOrganizationReassignsDefaultOrgToMemberOrg(t *testing.T) {
 func (suite *graphTestSuite) countOrgScopedGroupMemberships(t *testing.T, userID, orgID string) int {
 	t.Helper()
 
-	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(context.Background())
 
 	count, err := suite.Client.DB.GroupMembership.Query().
 		Where(
@@ -1006,7 +1112,7 @@ func (suite *graphTestSuite) countOrgScopedGroupMemberships(t *testing.T, userID
 				group.DeletedAtIsNil(),
 			),
 		).
-		Count(allowCtx)
+		Count(internalCtx)
 	assert.NilError(t, err)
 
 	return count
@@ -1015,14 +1121,14 @@ func (suite *graphTestSuite) countOrgScopedGroupMemberships(t *testing.T, userID
 func (suite *graphTestSuite) countOrgScopedProgramMemberships(t *testing.T, userID, orgID string) int {
 	t.Helper()
 
-	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(context.Background())
 
 	count, err := suite.Client.DB.ProgramMembership.Query().
 		Where(
 			programmembership.UserID(userID),
 			programmembership.HasProgramWith(program.OwnerID(orgID)),
 		).
-		Count(allowCtx)
+		Count(internalCtx)
 	assert.NilError(t, err)
 
 	return count
@@ -1031,7 +1137,7 @@ func (suite *graphTestSuite) countOrgScopedProgramMemberships(t *testing.T, user
 func (suite *graphTestSuite) assertManagedGroupMembership(t *testing.T, userID, orgID, groupName string) {
 	t.Helper()
 
-	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(context.Background())
 
 	exists, err := suite.Client.DB.GroupMembership.Query().
 		Where(
@@ -1042,21 +1148,21 @@ func (suite *graphTestSuite) assertManagedGroupMembership(t *testing.T, userID, 
 				group.Name(groupName),
 			),
 		).
-		Exist(allowCtx)
+		Exist(internalCtx)
 	assert.NilError(t, err)
 	assert.Check(t, exists, "expected user %s to be in managed group %q of org %s", userID, groupName, orgID)
 }
 
 func (suite *graphTestSuite) assertDefaultOrgUpdate(ctx context.Context, t *testing.T, userID, orgID string, isEqual bool) {
 	// when an org membership is deleted, the user default org should be updated
-	// we need to allow the request because this is not for the user making the request
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	// this runs as an internal operation because this is not for the user making the request
+	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	where := testclient.UserSettingWhereInput{
 		UserID: &userID,
 	}
 
-	userSettingResp, err := suite.Client.API.GetUserSettings(allowCtx, where)
+	userSettingResp, err := suite.Client.API.GetUserSettings(internalCtx, where)
 	assert.NilError(t, err)
 	assert.Assert(t, userSettingResp != nil)
 	assert.Check(t, is.Len(userSettingResp.UserSettings.Edges, 1))

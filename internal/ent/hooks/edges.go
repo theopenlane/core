@@ -5,9 +5,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -32,7 +30,7 @@ func HookEdgePermissions() ent.Hook {
 // skipperEdgePermissionChecks checks if the current context should skip edge permission checks
 // this is used for internal requests made by the system or when the user is a system admin
 func skipperEdgePermissionChecks(ctx context.Context) bool {
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
+	if auth.IsInternalRequest(ctx) {
 		return true
 	}
 
@@ -40,17 +38,5 @@ func skipperEdgePermissionChecks(ctx context.Context) bool {
 		return true
 	}
 
-	skipTokenType := []token.PrivacyToken{
-		&token.OauthTooToken{},
-		&token.VerifyToken{},
-		&token.SignUpToken{},
-		&token.OrgInviteToken{},
-		&token.ResetToken{},
-	}
-
-	if skip := rule.SkipTokenInContext(ctx, skipTokenType); skip {
-		return true
-	}
-
-	return false
+	return rule.HasPublicFlowToken(ctx)
 }

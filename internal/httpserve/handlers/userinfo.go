@@ -16,7 +16,7 @@ func (h *Handler) UserInfo(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(reqCtx)
-	if !ok || caller == nil || caller.SubjectID == "" {
+	if !ok || caller.SubjectID == "" {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)

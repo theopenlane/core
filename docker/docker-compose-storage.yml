@@ -1,6 +1,6 @@
 services:
   s3:
-    image: quay.io/minio/minio:latest
+    image: pgsty/silo:latest
     ports:
       - "9000:9000"
       - "9001:9001"

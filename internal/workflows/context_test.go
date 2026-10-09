@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"entgo.io/ent/privacy"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/iam/auth"
@@ -17,9 +16,7 @@ func TestWorkflowContexts(t *testing.T) {
 	bypass := WithContext(base)
 	assert.True(t, IsWorkflowBypass(bypass))
 
-	decision, ok := privacy.DecisionFromContext(AllowContext(base))
-	assert.True(t, ok)
-	assert.NoError(t, decision)
+	assert.True(t, auth.IsInternalRequest(auth.WithInternalCrossOrgContext(base)))
 
 	orgID := ulids.New().String()
 	orgCtx := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)
@@ -27,17 +24,13 @@ func TestWorkflowContexts(t *testing.T) {
 	allowCtx, resolvedOrg, err := AllowContextWithOrg(orgCtx)
 	assert.NoError(t, err)
 	assert.Equal(t, orgID, resolvedOrg)
-	decision, ok = privacy.DecisionFromContext(allowCtx)
-	assert.True(t, ok)
-	assert.NoError(t, decision)
+	assert.True(t, auth.IsInternalRequest(allowCtx))
 
 	bypassCtx, resolvedOrg, err := AllowBypassContextWithOrg(orgCtx)
 	assert.NoError(t, err)
 	assert.Equal(t, orgID, resolvedOrg)
 	assert.True(t, IsWorkflowBypass(bypassCtx))
-	decision, ok = privacy.DecisionFromContext(bypassCtx)
-	assert.True(t, ok)
-	assert.NoError(t, decision)
+	assert.True(t, auth.IsInternalRequest(bypassCtx))
 
 	_, _, err = AllowContextWithOrg(base)
 	assert.Error(t, err)
@@ -53,10 +46,7 @@ func TestAllowContextWithOrg_SingleAuthorizedOrgFallback(t *testing.T) {
 	allowCtx, resolvedOrg, err := AllowContextWithOrg(ctx)
 	assert.NoError(t, err)
 	assert.Equal(t, orgID, resolvedOrg)
-
-	decision, ok := privacy.DecisionFromContext(allowCtx)
-	assert.True(t, ok)
-	assert.NoError(t, decision)
+	assert.True(t, auth.IsInternalRequest(allowCtx))
 }
 
 func TestAllowContextWithOrg_MultipleAuthorizedOrgsWithoutSelection(t *testing.T) {
@@ -90,8 +80,4 @@ func TestAllowContextForOrgSeedsCaller(t *testing.T) {
 	assert.Equal(t, orgID, caller.OrganizationID)
 	assert.Contains(t, caller.OrganizationIDs, orgID)
 	assert.True(t, caller.Has(auth.CapInternalOperation))
-
-	decision, decisionOK := privacy.DecisionFromContext(allowCtx)
-	assert.True(t, decisionOK)
-	assert.NoError(t, decision)
 }

@@ -3,13 +3,16 @@
 package hooks_test
 
 import (
+	"context"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
@@ -20,6 +23,10 @@ func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
 
 	orgID := systemAdmin.Edges.OrgMemberships[0].OrganizationID
 
+	err := entitlements.CreateFeatureTuples(context.Background(), &suite.client.Authz, orgID,
+		[]models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
+	require.NoError(t, err)
+
 	// system admin context — used to create system-owned enums
 	sysCtx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)
 	sysCtx = generated.NewContext(sysCtx, suite.client)
@@ -28,8 +35,8 @@ func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
 	userCtx := auth.NewTestContextWithOrgID(systemAdmin.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
 
-	allowSysCtx := privacy.DecisionContext(sysCtx, privacy.Allow)
-	allowUserCtx := privacy.DecisionContext(userCtx, privacy.Allow)
+	internalSysCtx := auth.WithInternalOperationContext(sysCtx)
+	internalUserCtx := auth.WithInternalOperationContext(userCtx)
 
 	enumName := "TestEnum-" + gofakeit.UUID()
 
@@ -38,7 +45,7 @@ func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
 		SetName(enumName).
 		SetObjectType("task").
 		SetField("kind").
-		Save(allowSysCtx)
+		Save(internalSysCtx)
 	require.NoError(t, err)
 	assert.True(t, sysEnum.SystemOwned)
 
@@ -48,7 +55,7 @@ func (suite *HookTestSuite) TestHookCustomEnums_DuplicateSystemAndOrgEnum() {
 		SetObjectType("task").
 		SetField("kind").
 		SetOwnerID(orgID).
-		Save(allowUserCtx)
+		Save(internalUserCtx)
 	require.NoError(t, err)
 	assert.False(t, orgEnum.SystemOwned)
 

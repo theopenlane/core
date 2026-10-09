@@ -1,0 +1,24 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to sla definitions
+############################################
+
+# users granted view access to a single exposure type in the openlane organization
+- user: user:ulid-risk-viewer
+  relation: member
+  object: organization:openlane
+- user: user:ulid-risk-viewer
+  relation: can_view_risk
+  object: organization:openlane
+- user: user:ulid-finding-viewer
+  relation: member
+  object: organization:openlane
+- user: user:ulid-finding-viewer
+  relation: can_view_finding
+  object: organization:openlane
+- user: user:ulid-vulnerability-viewer
+  relation: member
+  object: organization:openlane
+- user: user:ulid-vulnerability-viewer
+  relation: can_view_vulnerability
+  object: organization:openlane

@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 )
 
@@ -31,7 +30,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 	// bypass auth
 	ctx := context.Background()
-	ctx = privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(testUser1.UserCtx)
 
 	group, err := suite.db.Group.Create().
 		SetName("Test Group").
@@ -93,7 +92,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			suite.ClearTestData()
 
-			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+			ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 
 			target := "/invite"
 			if tc.tokenSet {
@@ -201,7 +200,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 
 	// bypass auth
 	ctx := context.Background()
-	ctx = privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+	ctx = auth.WithInternalOperationContext(testUser.UserCtx)
 
 	var groot = "groot2@theopenlane.io"
 
@@ -255,7 +254,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperA
 
 	suite.registerTestHandler(http.MethodGet, "invite", suite.h.OrganizationInviteAccept)
 
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
 
 	email := "newowner@theopenlane.io"
 
@@ -266,10 +265,10 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperA
 		SetAuthProvider(enums.AuthProviderCredentials).
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
-	setting, err := recipient.Setting(allowCtx)
+	setting, err := recipient.Setting(internalCtx)
 	require.NoError(t, err)
 
 	ctx := auth.NewTestContextWithOrgID(recipient.ID, setting.Edges.DefaultOrg.ID)
@@ -281,7 +280,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperA
 		SetRecipient(email).
 		SetRole(enums.RoleOwner).
 		SetOwnershipTransfer(true).
-		Save(allowCtx)
+		Save(internalCtx)
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/invite?token=%s", invite.Token), nil)
@@ -298,7 +297,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperA
 			orgmembership.OrganizationID(testUser1.OrganizationID),
 			orgmembership.UserID(testUser1.ID),
 		).
-		Only(allowCtx)
+		Only(internalCtx)
 	require.NoError(t, err)
 	assert.Equal(t, enums.RoleSuperAdmin, membership.Role)
 
@@ -307,7 +306,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperA
 			orgmembership.OrganizationID(testUser1.OrganizationID),
 			orgmembership.UserID(recipient.ID),
 		).
-		Only(allowCtx)
+		Only(internalCtx)
 	require.NoError(t, err)
 	assert.Equal(t, enums.RoleOwner, newOwner.Role)
 }

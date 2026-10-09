@@ -12,6 +12,7 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/stretchr/testify/mock"
+	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -19,7 +20,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 var (
@@ -46,18 +46,18 @@ func fakeStripeCustomerID() string {
 
 func TestEntitlementListenerOrganizationCreated(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	// the suite's search mock resolves every org to the one shared cus_test_customer, which
 	// the first seeded org claims; reconcile for every later org hits the unique constraint
 	// and must terminally ack — WaitForEvents returning proves no parked retry
 	waitForEvents()
 
-	org, err := suite.Client.DB.Organization.Get(allowCtx, user.OrganizationID)
+	org, err := suite.Client.DB.Organization.Get(internalCtx, user.OrganizationID)
 	assert.NilError(t, err)
 	assert.Check(t, org.StripeCustomerID == nil)
 
-	personalOrg, err := suite.Client.DB.Organization.Get(allowCtx, user.PersonalOrgID)
+	personalOrg, err := suite.Client.DB.Organization.Get(internalCtx, user.PersonalOrgID)
 	assert.NilError(t, err)
 	assert.Check(t, personalOrg.StripeCustomerID == nil)
 }
@@ -66,12 +66,12 @@ func TestEntitlementListenerOrganizationDeleted(t *testing.T) {
 	ensureStripeSubscriptionCancelMock()
 
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	waitForEvents()
 
 	customerID := fakeStripeCustomerID()
-	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).SetStripeCustomerID(customerID).Exec(allowCtx))
+	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).SetStripeCustomerID(customerID).Exec(internalCtx))
 
 	before := stripeSubscriptionCancelCalls.Load()
 
@@ -83,7 +83,7 @@ func TestEntitlementListenerOrganizationDeleted(t *testing.T) {
 		return stripeSubscriptionCancelCalls.Load() > before
 	}, "organization delete should deactivate the stripe subscription")
 
-	purgedCtx := entx.SkipSoftDelete(allowCtx)
+	purgedCtx := entx.SkipSoftDelete(internalCtx)
 
 	waitForCondition(t, func() bool {
 		exists, err := suite.Client.DB.Organization.Query().Where(organization.ID(user.OrganizationID)).Exist(purgedCtx)
@@ -93,11 +93,11 @@ func TestEntitlementListenerOrganizationDeleted(t *testing.T) {
 
 func TestEntitlementListenerOrganizationDeletedWithoutCustomer(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	waitForEvents()
 
-	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).ClearStripeCustomerID().Exec(allowCtx))
+	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).ClearStripeCustomerID().Exec(internalCtx))
 
 	resp, err := suite.Client.API.DeleteOrganization(user.UserCtx, user.OrganizationID)
 	assert.NilError(t, err)
@@ -105,7 +105,7 @@ func TestEntitlementListenerOrganizationDeletedWithoutCustomer(t *testing.T) {
 
 	waitForEvents()
 
-	purgedCtx := entx.SkipSoftDelete(allowCtx)
+	purgedCtx := entx.SkipSoftDelete(internalCtx)
 
 	waitForCondition(t, func() bool {
 		exists, err := suite.Client.DB.Organization.Query().Where(organization.ID(user.OrganizationID)).Exist(purgedCtx)
@@ -115,25 +115,35 @@ func TestEntitlementListenerOrganizationDeletedWithoutCustomer(t *testing.T) {
 
 func TestEntitlementListenerBillingUpdate(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
+	internalCtx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	waitForEvents()
 
 	customerID := fakeStripeCustomerID()
-	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).SetStripeCustomerID(customerID).Exec(allowCtx))
+	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).SetStripeCustomerID(customerID).Exec(internalCtx))
 
 	setting, err := suite.Client.DB.OrganizationSetting.Query().
 		Where(organizationsetting.OrganizationID(user.OrganizationID)).
-		Only(allowCtx)
+		Only(internalCtx)
 	assert.NilError(t, err)
 
-	assert.NilError(t, suite.Client.DB.OrganizationSetting.UpdateOneID(setting.ID).SetBillingEmail("billing@theopenlane.io").Exec(allowCtx))
+	billingEmail := "billing-" + strings.ToLower(ulids.New().String()) + "@theopenlane.io"
+
+	assert.NilError(t, suite.Client.DB.OrganizationSetting.UpdateOneID(setting.ID).SetBillingEmail(billingEmail).Exec(internalCtx))
 
 	// the billing listener pushes the change through the mocked CustomerUpdate then
 	// reconciles; the drain proves neither call parked a retrying job
 	waitForEvents()
 
-	org, err := suite.Client.DB.Organization.Get(allowCtx, user.OrganizationID)
+	suite.StripeMockBackend.AssertCalled(t, "Call", mock.Anything,
+		mock.MatchedBy(func(path string) bool { return strings.HasSuffix(path, customerID) }),
+		mock.Anything,
+		mock.MatchedBy(func(params *stripe.CustomerUpdateParams) bool {
+			return params.Email != nil && *params.Email == billingEmail
+		}),
+		mock.Anything)
+
+	org, err := suite.Client.DB.Organization.Get(internalCtx, user.OrganizationID)
 	assert.NilError(t, err)
 	assert.Assert(t, org.StripeCustomerID != nil)
 	assert.Check(t, is.Equal(customerID, *org.StripeCustomerID))

@@ -7,13 +7,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // AllowMutationIfSystemAdmin determines whether a mutation operation should be allowed based on whether the user is a system admin
 func AllowMutationIfSystemAdmin() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
-		logx.FromContext(ctx).Debug().Msg("checking if user is system admin")
 		return systemAdminCheck(ctx)
 	})
 }
@@ -29,8 +27,7 @@ func AllowQueryIfSystemAdmin() privacy.QueryRule {
 // it uses the context, instead of checking the authz client directly
 // this value will be set my the auth middleware
 func systemAdminCheck(ctx context.Context) error {
-	caller, ok := auth.CallerFromContext(ctx)
-	if ok && caller != nil && caller.HasInLineage(auth.CapSystemAdmin) {
+	if auth.HasInLineageContextCaller(ctx, auth.CapSystemAdmin) {
 		return privacy.Allow
 	}
 

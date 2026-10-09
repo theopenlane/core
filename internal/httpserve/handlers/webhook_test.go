@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -16,11 +17,17 @@ import (
 	"github.com/stripe/stripe-go/v86"
 	"github.com/stripe/stripe-go/v86/webhook"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/ulids"
 
+	coremodels "github.com/theopenlane/core/common/models"
 	models "github.com/theopenlane/core/common/openapi"
 	entEvent "github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/iam/auth"
 )
 
 type webhookBinder struct {
@@ -62,8 +69,6 @@ func (b *webhookBinder) Bind(c echo.Context, i interface{}) error {
 func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	t := suite.T()
 
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
-
 	ensureSecret := func(version string) {
 		if version == "" {
 			return
@@ -80,6 +85,78 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		SetOwnerID(testUser1.OrganizationID).
 		SetStripeSubscriptionID(seedStripeSubscriptionID).
 		ExecX(testUser1.UserCtx)
+
+	moduleUser := suite.userBuilderWithInput(context.Background(), &userInput{
+		confirmedUser: true,
+		features:      []coremodels.OrgModule{coremodels.CatalogBaseModule},
+	})
+	syncedModule := coremodels.CatalogEntityManagementModule
+	moduleSubscriptionID := "sub_module_sync_" + ulids.New().String()
+
+	moduleOrgSub, err := suite.db.OrgSubscription.Create().
+		SetStripeSubscriptionStatus("active").
+		SetOwnerID(moduleUser.OrganizationID).
+		SetStripeSubscriptionID(moduleSubscriptionID).
+		Save(moduleUser.UserCtx)
+	require.NoError(t, err)
+
+	moduleItemSub := &stripe.Subscription{
+		ID:       moduleSubscriptionID,
+		Customer: &stripe.Customer{ID: "cus_module_sync"},
+		Status:   stripe.SubscriptionStatusActive,
+		Items: &stripe.SubscriptionItemList{
+			Data: []*stripe.SubscriptionItem{
+				{
+					Price: &stripe.Price{
+						ID:         "price_module_sync",
+						Currency:   "usd",
+						UnitAmount: 1000,
+						Recurring:  &stripe.PriceRecurring{Interval: "month"},
+						Product: &stripe.Product{
+							ID:       "prod_module_sync",
+							Name:     "Module Sync",
+							Metadata: map[string]string{"module": syncedModule.String()},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	jsonModuleItemSub, err := json.Marshal(moduleItemSub)
+	require.NoError(t, err)
+
+	jsonTrustCenterModuleSub, err := json.Marshal(&stripe.Subscription{
+		ID:       moduleSubscriptionID,
+		Customer: &stripe.Customer{ID: "cus_module_sync"},
+		Status:   stripe.SubscriptionStatusActive,
+		Items: &stripe.SubscriptionItemList{
+			Data: []*stripe.SubscriptionItem{
+				{
+					Price: &stripe.Price{
+						ID:         "price_trust_center_sync",
+						Currency:   "usd",
+						UnitAmount: 1000,
+						Recurring:  &stripe.PriceRecurring{Interval: "month"},
+						Product: &stripe.Product{
+							ID:       "prod_trust_center_sync",
+							Name:     "Trust Center Sync",
+							Metadata: map[string]string{"module": coremodels.CatalogTrustCenterModule.String()},
+						},
+					},
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+
+	jsonEmptyModuleSub, err := json.Marshal(&stripe.Subscription{
+		ID:       moduleSubscriptionID,
+		Customer: &stripe.Customer{ID: "cus_module_sync"},
+		Status:   stripe.SubscriptionStatusActive,
+		Items:    &stripe.SubscriptionItemList{},
+	})
+	require.NoError(t, err)
 
 	suite.registerTestHandler(http.MethodPost, "/webhook", suite.h.WebhookReceiverHandler)
 
@@ -140,6 +217,8 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		signatureOverride       string
 		expectRevocation        bool
 		expectProcessed         *bool
+		expectModuleEnabled     *bool
+		expectTrustCenter       bool
 	}{
 		{
 			name: "valid payload - paused subscription",
@@ -346,6 +425,54 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			configDiscardAPIVersion: strPtr(discardAPIVersion),
 			expectProcessed:         boolPtr(false),
 		},
+		{
+			name: "subscription with a module item enables the module and its feature tuple",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_module_enabled",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: currentAPIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonModuleItemSub),
+				},
+			},
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
+			expectModuleEnabled:     boolPtr(true),
+		},
+		{
+			name: "subscription without the module item removes the module and its feature tuple",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_module_removed",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: currentAPIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonEmptyModuleSub),
+				},
+			},
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
+			expectModuleEnabled:     boolPtr(false),
+		},
+		{
+			name: "subscription with the trust center module creates the trust center",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_trust_center_module",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionUpdated,
+				APIVersion: currentAPIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonTrustCenterModuleSub),
+				},
+			},
+			expectedStatus:          http.StatusOK,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
+			expectTrustCenter:       true,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -355,11 +482,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			suite.stripeMockBackend.ExpectedCalls = suite.stripeMockBackend.ExpectedCalls[:0]
 			suite.orgSubscriptionMocks()
 
+			// internalCtx to skip checks on updating subs
+			internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+
 			suite.db.OrgSubscription.Update().
 				Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
 				SetActive(true).
 				SetStripeSubscriptionStatus("active").
-				ExecX(allowCtx)
+				ExecX(internalCtx)
 
 			var (
 				apiTokenID string
@@ -370,19 +500,19 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				apiToken := suite.db.APIToken.Create().
 					SetOwnerID(testUser1.OrganizationID).
 					SetName("test_token").
-					SaveX(allowCtx)
+					SaveX(internalCtx)
 				apiTokenID = apiToken.ID
 
 				pat := suite.db.PersonalAccessToken.Create().
 					SetOwnerID(testUser1.ID).
 					AddOrganizationIDs(testUser1.OrganizationID).
 					SetName("test_token").
-					SaveX(allowCtx)
+					SaveX(internalCtx)
 				patID = pat.ID
 
 				t.Cleanup(func() {
-					_ = suite.db.APIToken.DeleteOneID(apiTokenID).Exec(allowCtx)
-					_ = suite.db.PersonalAccessToken.DeleteOneID(patID).Exec(allowCtx)
+					_ = suite.db.APIToken.DeleteOneID(apiTokenID).Exec(internalCtx)
+					_ = suite.db.PersonalAccessToken.DeleteOneID(patID).Exec(internalCtx)
 				})
 			}
 
@@ -482,6 +612,36 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					Exist(testUser1.UserCtx)
 				require.NoError(t, err)
 				assert.Equal(t, *tc.expectProcessed, exists)
+			}
+
+			if tc.expectModuleEnabled != nil {
+				moduleExists, err := suite.db.OrgModule.Query().
+					Where(
+						orgmodule.OwnerID(moduleUser.OrganizationID),
+						orgmodule.SubscriptionID(moduleOrgSub.ID),
+						orgmodule.ModuleEQ(syncedModule),
+					).
+					Exist(moduleUser.UserCtx)
+				require.NoError(t, err)
+				assert.Equal(t, *tc.expectModuleEnabled, moduleExists)
+
+				tupleExists, err := suite.sharedFGAClient.CheckAccess(context.Background(), fgax.AccessCheck{
+					SubjectID:   moduleUser.OrganizationID,
+					SubjectType: "organization",
+					ObjectType:  fgax.Kind(entitlements.TupleObjectType),
+					ObjectID:    syncedModule.String(),
+					Relation:    entitlements.TupleRelation,
+				})
+				require.NoError(t, err)
+				assert.Equal(t, *tc.expectModuleEnabled, tupleExists)
+			}
+
+			if tc.expectTrustCenter {
+				trustCenterExists, err := suite.db.TrustCenter.Query().
+					Where(trustcenter.OwnerID(moduleUser.OrganizationID)).
+					Exist(moduleUser.UserCtx)
+				require.NoError(t, err)
+				assert.True(t, trustCenterExists)
 			}
 		})
 	}

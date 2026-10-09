@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/mapx"
@@ -334,7 +333,8 @@ func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 		edgePredicates = append(edgePredicates, evidence.HasSubcontrolsWith(subcontrol.IDIn(subcontrolIDs...)))
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	// the report only exposes aggregate counts and statuses, so it covers all evidence linked to the controls
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	evidenceList, err := withTransactionalMutation(ctx).Evidence.Query().Where(
 		evidence.OwnerIDIn(orgIDs...),
@@ -343,7 +343,7 @@ func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 		q.Where(control.IDIn(controlIDs...)).Select(control.FieldID)
 	}).WithSubcontrols(func(q *generated.SubcontrolQuery) {
 		q.Where(subcontrol.IDIn(subcontrolIDs...)).Select(subcontrol.FieldID)
-	}).All(allowCtx)
+	}).All(internalCtx)
 	if err != nil {
 		return nil, err
 	}
@@ -381,7 +381,7 @@ func buildPoliciesMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 		edgePredicates = append(edgePredicates, internalpolicy.HasSubcontrolsWith(subcontrol.IDIn(subcontrolIDs...)))
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 
 	policies, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(
 		internalpolicy.OwnerIDIn(orgIDs...),
@@ -390,7 +390,7 @@ func buildPoliciesMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 		q.Where(control.IDIn(controlIDs...)).Select(control.FieldID)
 	}).WithSubcontrols(func(q *generated.SubcontrolQuery) {
 		q.Where(subcontrol.IDIn(subcontrolIDs...)).Select(subcontrol.FieldID)
-	}).Select("id", "name", "status").All(allowCtx)
+	}).Select("id", "name", "status").All(internalCtx)
 	if err != nil {
 		return nil, err
 	}
@@ -952,10 +952,10 @@ func buildMappingsMap(ctx context.Context, controls []*model.ControlReport, scID
 		return map[string][]*model.ControlInfo{}, nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	mcs, err := withTransactionalMutation(ctx).MappedControl.Query().Where(
 		mappedcontrol.Or(where...),
-	).WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().All(allowCtx)
+	).WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().All(internalCtx)
 	if err != nil {
 		return nil, err
 	}
@@ -1063,13 +1063,13 @@ func relatedControlsFromSubcontrols(ctx context.Context, controlID string, frame
 		return nil, err
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	internalCtx := auth.WithInternalReadContext(ctx)
 	scIDs, err := withTransactionalMutation(ctx).Subcontrol.Query().
 		Where(
 			subcontrol.ControlID(controlID),
 			subcontrol.Or(subcontrol.SystemOwned(true), subcontrol.OwnerIDIn(orgIDs...)),
 		).
-		IDs(allowCtx)
+		IDs(internalCtx)
 	if err != nil {
 		return nil, err
 	}

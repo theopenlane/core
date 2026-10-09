@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -41,7 +42,9 @@ func QuestionnaireTransformListeners() []gala.Registration {
 			assessmentresponse.FieldCompletedAt,
 			assessmentresponse.FieldIsDraft,
 		},
-		Caller: internalOperationBypassCaller,
+		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+			return restored.WithCapabilities(auth.CapInternalOperation)
+		},
 		Handle: handleAssessmentResponse,
 	}}
 }

@@ -1079,7 +1079,7 @@ func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
 
 	clonedControlID := resp.CreateControlsByClone.Controls[0].ID
 
-	dbCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	control, err := suite.Client.DB.Control.Query().
 		Where(controlgen.ID(clonedControlID)).
@@ -1589,7 +1589,7 @@ func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
 		},
 	}
 
-	dbCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	err = suite.Client.DB.Control.UpdateOneID(clonedControl.ID).
 		SetDescriptionJSON(comment).
@@ -1656,6 +1656,8 @@ func TestMutationUpdateControl(t *testing.T) {
 	// create system owned control kind
 	kind := (&th.CustomTypeEnumBuilder{Client: suite.Client, Name: "Detective", ObjectType: "control"}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 	kindCustom := (&th.CustomTypeEnumBuilder{Client: suite.Client, Name: "Custom Control Kind", ObjectType: "control"}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	systemControl := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -1800,6 +1802,16 @@ func TestMutationUpdateControl(t *testing.T) {
 			ctx:         th.SharedTestUser2.UserCtx,
 			expectedErr: th.NotFoundErrorMsg,
 		},
+		{
+			name:      "not authorized, adding editor group permision to system owned control",
+			controlID: systemControl.ID,
+			request: testclient.UpdateControlInput{
+				AddEditorIDs: []string{groupMember.GroupID},
+			},
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -1938,6 +1950,8 @@ func TestMutationUpdateControl(t *testing.T) {
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: controlAnotherOrg.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 	(&th.Cleanup[*generated.CustomTypeEnumDeleteOne]{Client: suite.Client.DB.CustomTypeEnum, IDs: []string{kind.ID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 	(&th.Cleanup[*generated.CustomTypeEnumDeleteOne]{Client: suite.Client.DB.CustomTypeEnum, IDs: []string{kindCustom.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: systemControl.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateControlDescription(t *testing.T) {
@@ -2086,6 +2100,7 @@ func TestMutationDeleteControl(t *testing.T) {
 	// create objects to be deleted
 	control1 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	control2 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	control3 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	controlSystem := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
@@ -2142,6 +2157,12 @@ func TestMutationDeleteControl(t *testing.T) {
 			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: th.NotFoundErrorMsg,
 		},
+		{
+			name:       "support user can delete control",
+			idToDelete: control3.ID,
+			client:     suite.Client.API,
+			ctx:        th.NewSupportCtx(th.SharedTestUser2.UserCtx, th.SharedTestUser1.OrganizationID),
+		},
 	}
 
 	for _, tc := range testCases {
@@ -2171,6 +2192,9 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 
 	controlAnotherUser := (&th.ControlBuilder{Client: suite.Client}).MustNew(anotherUser.UserCtx, t)
 
+	supportControl1 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	supportControl2 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
 	testCases := []struct {
 		name                 string
 		idsToDelete          []string
@@ -2192,6 +2216,13 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 			client:               suite.Client.API,
 			ctx:                  anotherUser.UserCtx,
 			expectedDeletedCount: 1,
+		},
+		{
+			name:                 "support user can delete multiple controls",
+			idsToDelete:          []string{supportControl1.ID, supportControl2.ID},
+			client:               suite.Client.API,
+			ctx:                  th.NewSupportCtx(th.SharedTestUser2.UserCtx, th.SharedTestUser1.OrganizationID),
+			expectedDeletedCount: 2,
 		},
 	}
 
@@ -3052,7 +3083,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	// create a trust center for the anonymous context
 	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	dbCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	dbCtx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	// create a trust center control with default (not visible) visibility
 	publicControl, err := suite.Client.DB.Control.Create().
@@ -3149,6 +3180,19 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		assert.Check(t, resp != nil)
 		assert.Check(t, is.Equal(1, len(resp.Controls.Edges)))
 		assert.Check(t, is.Equal(publicControl.ID, resp.Controls.Edges[0].Node.ID))
+	})
+
+	t.Run("anonymous user list query with modules disabled returns only public trust center controls", func(t *testing.T) {
+		entCfg := *suite.Client.DB.EntConfig
+		entCfg.Modules.Enabled = false
+
+		modulesDisabledClient := *suite.Client.DB
+		modulesDisabledClient.EntConfig = &entCfg
+
+		controls, err := suite.Client.DB.Control.Query().All(generated.NewContext(anonCtx, &modulesDisabledClient))
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(controls, 1))
+		assert.Check(t, is.Equal(publicControl.ID, controls[0].ID))
 	})
 
 	// cleanup

@@ -6,17 +6,21 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
@@ -26,12 +30,239 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-const (
-	configTestProviderID           = "def_01K0TESTCFG00000000000001"
-	configTestFailHealthProviderID = "def_01K0TESTCFG00000000000002"
-)
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRequiresOrgEdit() {
+	t := suite.T()
 
-var configTestCredentialRef = types.NewCredentialSlotID("config_test")
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
+	t.Cleanup(restore)
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+	admin := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+	member := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	memberships := []struct {
+		userID string
+		role   enums.Role
+	}{
+		{userID: admin.ID, role: enums.RoleAdmin},
+		{userID: member.ID, role: enums.RoleMember},
+	}
+
+	for _, m := range memberships {
+		err := suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+			OrganizationID: owner.OrganizationID,
+			UserID:         m.userID,
+			Role:           &m.role,
+		}).Exec(owner.UserCtx)
+		require.NoError(t, err)
+	}
+
+	testCases := []struct {
+		name           string
+		userID         string
+		expectedStatus int
+		expectStored   bool
+	}{
+		{
+			name:           "member cannot configure an integration",
+			userID:         member.ID,
+			expectedStatus: http.StatusBadRequest,
+			expectStored:   false,
+		},
+		{
+			name:           "admin can configure an integration",
+			userID:         admin.ID,
+			expectedStatus: http.StatusOK,
+			expectStored:   true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			rec := sendIntegrationConfigRequest(t, suite, auth.NewTestContextWithOrgID(tc.userID, owner.OrganizationID), configTestProviderID, handlers.ConfigureIntegrationRequest{
+				DefinitionID:  configTestProviderID,
+				CredentialRef: configTestCredentialRef.String(),
+				Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+			})
+
+			assert.Equal(t, tc.expectedStatus, rec.Code)
+
+			stored, err := suite.db.Integration.Query().
+				Where(
+					integration.OwnerIDEQ(owner.OrganizationID),
+					integration.DefinitionIDEQ(configTestProviderID),
+				).
+				Exist(owner.UserCtx)
+			require.NoError(t, err)
+			assert.Equal(t, tc.expectStored, stored)
+		})
+	}
+
+	t.Run("member cannot replace credentials on an existing integration", func(t *testing.T) {
+		installation, err := suite.db.Integration.Query().
+			Where(
+				integration.OwnerIDEQ(owner.OrganizationID),
+				integration.DefinitionIDEQ(configTestProviderID),
+			).
+			Only(owner.UserCtx)
+		require.NoError(t, err)
+
+		rec := sendIntegrationConfigRequest(t, suite, auth.NewTestContextWithOrgID(member.ID, owner.OrganizationID), configTestProviderID, handlers.ConfigureIntegrationRequest{
+			DefinitionID:  configTestProviderID,
+			IntegrationID: installation.ID,
+			CredentialRef: configTestCredentialRef.String(),
+			Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "member-project", "serviceAccountEmail": "member@example.iam.gserviceaccount.com"})),
+		})
+
+		assert.NotEqual(t, http.StatusOK, rec.Code)
+
+		credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(owner.UserCtx, installation, configTestCredentialRef)
+		require.NoError(t, err)
+		require.True(t, ok)
+		assert.Contains(t, string(credential.Data), "sample-project")
+		assert.NotContains(t, string(credential.Data), "member-project")
+	})
+}
+
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderLinksExistingVendor() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	vendor, err := suite.db.Entity.Create().
+		SetName(configTestVendorFamily).
+		SetOwnerID(owner.OrganizationID).
+		Save(owner.UserCtx)
+	require.NoError(t, err)
+
+	rec := sendIntegrationConfigRequest(t, suite, auth.NewTestContextWithOrgID(owner.ID, owner.OrganizationID), configTestVendorProviderID, handlers.ConfigureIntegrationRequest{
+		DefinitionID:  configTestVendorProviderID,
+		CredentialRef: configTestCredentialRef.String(),
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "vendor-project", "serviceAccountEmail": "vendor@example.iam.gserviceaccount.com"})),
+	})
+
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	linked, err := suite.db.Entity.Query().
+		Where(
+			entity.IDEQ(vendor.ID),
+			entity.HasIntegrationsWith(integration.DefinitionIDEQ(configTestVendorProviderID)),
+		).
+		Exist(owner.UserCtx)
+	require.NoError(t, err)
+	assert.True(t, linked)
+}
+
+func (suite *HandlerTestSuite) TestCheckIntegrationHealth() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:integrationID/health", suite.h.CheckIntegrationHealth)
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	testCases := []struct {
+		name               string
+		definitionID       string
+		startErrored       bool
+		expectedStatus     enums.IntegrationStatus
+		expectProbe        bool
+		expectProbeHealthy bool
+		expectProbeReason  string
+	}{
+		{
+			name:           "errored installation recovers to connected",
+			definitionID:   configTestProviderID,
+			startErrored:   true,
+			expectedStatus: enums.IntegrationStatusConnected,
+		},
+		{
+			name:               "passing operation probe keeps the installation connected",
+			definitionID:       configTestProbeProviderID,
+			expectedStatus:     enums.IntegrationStatusConnected,
+			expectProbe:        true,
+			expectProbeHealthy: true,
+		},
+		{
+			name:              "failing operation probe degrades the installation",
+			definitionID:      configTestProbeFailProviderID,
+			expectedStatus:    enums.IntegrationStatusDegraded,
+			expectProbe:       true,
+			expectProbeReason: errConfigTestProbeFailed.Error(),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			installation := suite.configureIntegrationAsUser(t, owner, tc.definitionID)
+
+			if tc.startErrored {
+				require.NoError(t, suite.db.Integration.UpdateOneID(installation.ID).SetStatus(enums.IntegrationStatusErrored).Exec(owner.UserCtx))
+			}
+
+			resp := suite.checkIntegrationHealthAsUser(t, owner, installation.ID)
+
+			updated, err := suite.db.Integration.Get(owner.UserCtx, installation.ID)
+			require.NoError(t, err)
+			assert.Equal(t, tc.expectedStatus, updated.Status)
+
+			if !tc.expectProbe {
+				assert.NotNil(t, updated.Health.LastSuccessfulHealthCheck)
+
+				return
+			}
+
+			probe, ok := lo.Find(resp.Operations, func(op handlers.IntegrationOperationHealth) bool { return op.Name == configTestProbeOperation })
+			require.True(t, ok)
+			assert.Equal(t, tc.expectProbeHealthy, probe.Healthy)
+			assert.Contains(t, probe.Reason, tc.expectProbeReason)
+		})
+	}
+}
+
+func (suite *HandlerTestSuite) configureIntegrationAsUser(t *testing.T, user testUserDetails, definitionID string) *generated.Integration {
+	t.Helper()
+
+	rec := sendIntegrationConfigRequest(t, suite, auth.NewTestContextWithOrgID(user.ID, user.OrganizationID), definitionID, handlers.ConfigureIntegrationRequest{
+		DefinitionID:  definitionID,
+		CredentialRef: configTestCredentialRef.String(),
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "health-project", "serviceAccountEmail": "health@example.iam.gserviceaccount.com"})),
+	})
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	installation, err := suite.db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(user.OrganizationID),
+			integration.DefinitionIDEQ(definitionID),
+		).
+		Only(user.UserCtx)
+	require.NoError(t, err)
+
+	return installation
+}
+
+func (suite *HandlerTestSuite) checkIntegrationHealthAsUser(t *testing.T, user testUserDetails, integrationID string) handlers.IntegrationHealthResponse {
+	t.Helper()
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+integrationID+"/health", strings.NewReader("{}"))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(auth.NewTestContextWithOrgID(user.ID, user.OrganizationID)))
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp handlers.IntegrationHealthResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+
+	return resp
+}
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	t := suite.T()
@@ -44,7 +275,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
 		CredentialRef: configTestCredentialRef.String(),
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
@@ -52,11 +283,6 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 			mustMarshalJSON(t, map[string]any{"filterExpr": "payload.severity == \"HIGH\""}),
 		),
 	})
-
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	assert.Equal(t, http.StatusOK, rec.Code)
 
@@ -90,15 +316,10 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderReturnsSCIMEndpoi
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, definitionscim.DefinitionID.ID(), handlers.ConfigureIntegrationRequest{
 		DefinitionID: definitionscim.DefinitionID.ID(),
 		UserInput:    json.RawMessage(mustMarshalJSON(t, map[string]any{"name": "Okta Production"})),
 	})
-
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+definitionscim.DefinitionID.ID()+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	assert.Equal(t, http.StatusOK, rec.Code)
 
@@ -142,16 +363,11 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
 		CredentialRef: configTestCredentialRef.String(),
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
-
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	assert.Equal(t, http.StatusOK, rec.Code)
 }
@@ -167,16 +383,11 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
 		CredentialRef: configTestCredentialRef.String(),
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
-
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
@@ -192,16 +403,11 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectP
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
 		CredentialRef: configTestCredentialRef.String(),
 		Body:          json.RawMessage(`["not","an","object"]`),
 	})
-
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
@@ -214,16 +420,11 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	rec := sendIntegrationConfigRequest(t, suite, context.Background(), configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
 		CredentialRef: configTestCredentialRef.String(),
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
-
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusUnauthorized, rec.Code)
 }
@@ -364,16 +565,11 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOn
 		SetStatus(enums.IntegrationStatusConnected).
 		SaveX(testUser.UserCtx)
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	httpRec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, definitionID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  definitionID,
 		IntegrationID: rec.ID,
 		UserInput:     json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.actor == \"service-account\""})),
 	})
-
-	httpRec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+definitionID+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(httpRec, req.WithContext(testUser.UserCtx))
 
 	assert.Equal(t, http.StatusOK, httpRec.Code)
 
@@ -402,17 +598,12 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "other-project", "serviceAccountEmail": "other@example.iam.gserviceaccount.com"})),
 	})
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestProviderID,
 		CredentialRef: configTestCredentialRef.String(),
 		IntegrationID: other.IntegrationID,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
-
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
@@ -428,16 +619,11 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body := mustMarshalConfigPayload(t, handlers.ConfigureIntegrationRequest{
+	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestFailHealthProviderID, handlers.ConfigureIntegrationRequest{
 		DefinitionID:  configTestFailHealthProviderID,
 		CredentialRef: configTestCredentialRef.String(),
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
-
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestFailHealthProviderID+"/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 
@@ -458,74 +644,21 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	assert.False(t, credOk, "credential must not be stored after a failed health check")
 }
 
-func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.Builder {
-	return registry.Builder(func() (types.Definition, error) {
-		healthHandler := func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-			if failHealth {
-				return nil, errors.New("health failed")
-			}
-
-			return json.RawMessage(`{"ok":true}`), nil
-		}
-
-		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Config Test",
-				Active:      true,
-				Visible:     true,
-			},
-			UserInput: &types.UserInputRegistration{
-				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         configTestCredentialRef,
-					Name:        "Config Test Credential",
-					Description: "Credential slot used by the config test definition.",
-					Schema:      json.RawMessage(`{"type":"object","required":["projectId","serviceAccountEmail"],"properties":{"projectId":{"type":"string"},"serviceAccountEmail":{"type":"string"}}}`),
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  configTestCredentialRef,
-					Name:           "Config Test Connection",
-					Description:    "Connect the config test definition using the configured credential payload.",
-					CredentialRefs: []types.CredentialSlotID{configTestCredentialRef},
-					HealthCheck:    &types.HealthCheckRegistration{Handle: healthHandler},
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: configTestCredentialRef,
-						Description:   "Remove the persisted config test credential and disconnect this installation.",
-					},
-				},
-			},
-		}, nil
-	})
-}
-
-func userInputOnlyTestDefinitionBuilder(definitionID string) registry.Builder {
-	return registry.Builder(func() (types.Definition, error) {
-		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "User Input Test",
-				Active:      true,
-				Visible:     true,
-			},
-			UserInput: &types.UserInputRegistration{
-				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
-			},
-		}, nil
-	})
-}
-
-func performIntegrationConfigRequest(t *testing.T, suite *HandlerTestSuite, ctx context.Context, provider string, payload handlers.ConfigureIntegrationRequest) handlers.ConfigureIntegrationResponse {
+func sendIntegrationConfigRequest(t *testing.T, suite *HandlerTestSuite, ctx context.Context, provider string, payload handlers.ConfigureIntegrationRequest) *httptest.ResponseRecorder {
 	t.Helper()
 
 	rec := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+provider+"/config", bytes.NewReader(mustMarshalConfigPayload(t, payload)))
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(ctx))
+
+	return rec
+}
+
+func performIntegrationConfigRequest(t *testing.T, suite *HandlerTestSuite, ctx context.Context, provider string, payload handlers.ConfigureIntegrationRequest) handlers.ConfigureIntegrationResponse {
+	t.Helper()
+
+	rec := sendIntegrationConfigRequest(t, suite, ctx, provider, payload)
 	assert.Equal(t, http.StatusOK, rec.Code)
 
 	var resp handlers.ConfigureIntegrationResponse

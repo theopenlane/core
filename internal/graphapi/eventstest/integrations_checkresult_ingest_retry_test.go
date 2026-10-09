@@ -80,7 +80,7 @@ func trackedFailedRecord(health models.IntegrationHealth, key string) (models.Fa
 // from exclusion once a durable per-record retry has independently written the row at or after the
 // tracked run, and stays excluded when the row on hand predates the tracked run
 func TestCheckResultTrackedFailureResolvedByDurableRetry(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("CheckResult Retry Resolution Test").

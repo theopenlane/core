@@ -225,7 +225,6 @@ func createMultiProviderResolver() *eddy.Resolver[*multiProviderStorageClient, s
 				Output:  storage.ProviderCredentials{},
 				Config: storage.NewProviderOptions(
 					storage.WithBucket("./tmp/disk-storage"),
-					storage.WithBasePath("./tmp/disk-storage"),
 					storage.WithLocalURL("http://localhost:8080/files"),
 				),
 			}, nil
@@ -406,7 +405,7 @@ func (b *multiProviderDiskBuilder) Build(_ context.Context, _ storage.ProviderCr
 	if options != nil {
 		opts = options.Clone()
 	} else {
-		opts = storage.NewProviderOptions(storage.WithBucket("./tmp/disk-storage"), storage.WithBasePath("./tmp/disk-storage"))
+		opts = storage.NewProviderOptions(storage.WithBucket("./tmp/disk-storage"))
 	}
 	if err := os.MkdirAll(opts.Bucket, 0o755); err != nil {
 		return nil, err

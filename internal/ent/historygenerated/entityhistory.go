@@ -81,6 +81,12 @@ type EntityHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the system-owned catalog entity this entity was adopted from
+	CatalogEntityID string `json:"catalog_entity_id,omitempty"`
+	// whether this system-owned row is published for organizations to adopt
+	ExternallyVisible bool `json:"externally_visible,omitempty"`
+	// the lookup key of the catalog entity this entity was adopted from
+	CatalogEntityKey string `json:"catalog_entity_key,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName string `json:"entity_relationship_state_name,omitempty"`
 	// the relationship_state of the entity
@@ -189,13 +195,13 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case entityhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case entityhistory.FieldSystemOwned, entityhistory.FieldApprovedForUse, entityhistory.FieldHasSoc2, entityhistory.FieldAutoRenews, entityhistory.FieldSSOEnforced, entityhistory.FieldMfaSupported, entityhistory.FieldMfaEnforced:
+		case entityhistory.FieldSystemOwned, entityhistory.FieldExternallyVisible, entityhistory.FieldApprovedForUse, entityhistory.FieldHasSoc2, entityhistory.FieldAutoRenews, entityhistory.FieldSSOEnforced, entityhistory.FieldMfaSupported, entityhistory.FieldMfaEnforced:
 			values[i] = new(sql.NullBool)
 		case entityhistory.FieldAnnualSpend:
 			values[i] = new(sql.NullFloat64)
 		case entityhistory.FieldTerminationNoticeDays, entityhistory.FieldRiskScore, entityhistory.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldUpdatedByImpersonator, entityhistory.FieldDeletedBy, entityhistory.FieldSourceDefinitionID, entityhistory.FieldSourceDefinitionVersion, entityhistory.FieldSourceInstanceID, entityhistory.FieldManagedBy, entityhistory.FieldIntegrationRunID, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldInternalOwnerIdentityHolderID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldReviewedByIdentityHolderID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoRemoteURL, entityhistory.FieldLogoFileID, entityhistory.FieldExternalID:
+		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldUpdatedByImpersonator, entityhistory.FieldDeletedBy, entityhistory.FieldSourceDefinitionID, entityhistory.FieldSourceDefinitionVersion, entityhistory.FieldSourceInstanceID, entityhistory.FieldManagedBy, entityhistory.FieldIntegrationRunID, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldInternalOwnerIdentityHolderID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldReviewedByIdentityHolderID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldCatalogEntityID, entityhistory.FieldCatalogEntityKey, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoRemoteURL, entityhistory.FieldLogoFileID, entityhistory.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case entityhistory.FieldHistoryTime, entityhistory.FieldCreatedAt, entityhistory.FieldUpdatedAt, entityhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -399,6 +405,24 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case entityhistory.FieldCatalogEntityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field catalog_entity_id", values[i])
+			} else if value.Valid {
+				_m.CatalogEntityID = value.String
+			}
+		case entityhistory.FieldExternallyVisible:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field externally_visible", values[i])
+			} else if value.Valid {
+				_m.ExternallyVisible = value.Bool
+			}
+		case entityhistory.FieldCatalogEntityKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field catalog_entity_key", values[i])
+			} else if value.Valid {
+				_m.CatalogEntityKey = value.String
 			}
 		case entityhistory.FieldEntityRelationshipStateName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -832,6 +856,15 @@ func (_m *EntityHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("catalog_entity_id=")
+	builder.WriteString(_m.CatalogEntityID)
+	builder.WriteString(", ")
+	builder.WriteString("externally_visible=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ExternallyVisible))
+	builder.WriteString(", ")
+	builder.WriteString("catalog_entity_key=")
+	builder.WriteString(_m.CatalogEntityKey)
 	builder.WriteString(", ")
 	builder.WriteString("entity_relationship_state_name=")
 	builder.WriteString(_m.EntityRelationshipStateName)

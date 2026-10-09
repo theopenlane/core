@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/v2/internal/consts"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
@@ -301,15 +300,8 @@ func (s *Service) resolveUploadProvider(ctx context.Context, opts *storage.Uploa
 	}
 
 	// Get organization ID from auth context
-	var orgID string
-	if svcCaller, svcOk := auth.CallerFromContext(ctx); svcOk && svcCaller != nil {
-		orgID = svcCaller.OrganizationID
-		if orgID == "" && svcCaller.Has(auth.CapSystemAdmin) {
-			orgID = consts.SystemAdminOrgID
-		}
-	}
-
-	if orgID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return nil, ErrNoOrganizationID
 	}
 
@@ -339,10 +331,7 @@ func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetype
 	}
 
 	// Build ProviderCacheKey using file metadata with auth context as backup
-	var orgID string
-	if dlCaller, dlOk := auth.CallerFromContext(ctx); dlOk && dlCaller != nil {
-		orgID = dlCaller.OrganizationID
-	}
+	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 
 	cacheKey := ProviderCacheKey{
 		TenantID:        orgID,

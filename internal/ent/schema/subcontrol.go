@@ -222,7 +222,6 @@ func (Subcontrol) Interceptors() []ent.Interceptor {
 func (s Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.AllowIfContextAllowRule(),
 			policy.CanCreateObjectsUnderParents([]string{
 				Control{}.Name(),
 			}),
@@ -265,7 +264,7 @@ func parentBlockedGroupsInterceptor(parentType string) ent.Interceptor {
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
+		if !ok {
 			return auth.ErrNoAuthUser
 		}
 

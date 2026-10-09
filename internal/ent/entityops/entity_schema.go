@@ -114,6 +114,8 @@ type FieldDescriptor struct {
 	WebhookPayload bool `json:"webhookPayload,omitempty"`
 	// SystemControlled excludes the field from provider mappings
 	SystemControlled bool `json:"systemControlled,omitempty"`
+	// SourceManaged reports whether the upstream source owns the value and overwrites it on refresh or reconcile
+	SourceManaged bool `json:"sourceManaged,omitempty"`
 	// Volatile excludes the field from triggering an ingest change
 	Volatile bool `json:"volatile,omitempty"`
 	// CaseInsensitive compares the field case-insensitively in ingest change detection

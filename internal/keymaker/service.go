@@ -205,12 +205,12 @@ func (s *Service) validateInstallation(ctx context.Context, installationID strin
 		return ErrInstallationDefinitionMismatch
 	}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return nil
 	}
 
-	if installation.OwnerID != caller.OrganizationID {
+	if installation.OwnerID != orgID {
 		return ErrInstallationOwnerMismatch
 	}
 

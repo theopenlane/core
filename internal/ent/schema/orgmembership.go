@@ -185,6 +185,10 @@ func (OrgMembership) Policy() ent.Policy {
 			ent.OpUpdate|ent.OpUpdateOne,
 			rule.AllowOrgMemberRoleUpdate(),
 		),
+		policy.WithOnMutationRulesBeforeScope(
+			ent.OpCreate,
+			rule.DenyOrgMemberRoleAboveCeiling(),
+		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			entfga.CheckEditAccess[*generated.OrgMembershipMutation](),

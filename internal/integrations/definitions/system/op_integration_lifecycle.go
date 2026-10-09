@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // Handle adapts the integration lifecycle sweep to the generic operation registration boundary;
@@ -37,7 +38,7 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 		s.MaxPerRun = DefaultIntegrationLifecycleMaxPerRun
 	}
 
-	systemCtx := systemSweepContext(ctx)
+	systemCtx := auth.WithSystemSweepContext(ctx)
 
 	ids, err := req.DB.Integration.Query().
 		Where(integration.ExpiresAtLTE(time.Now())).

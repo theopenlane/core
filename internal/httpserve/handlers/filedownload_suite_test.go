@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/filedownloadtoken"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	handlerpkg "github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/internal/objects/resolver"
@@ -34,7 +33,7 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_Success() {
 	user := suite.userBuilder(context.Background())
 
 	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID)
-	uploadCtx = privacy.DecisionContext(uploadCtx, privacy.Allow)
+	uploadCtx = auth.WithInternalOperationContext(uploadCtx)
 	uploadCtx = ent.NewContext(uploadCtx, suite.db)
 
 	fileContent := []byte("test file content for download")
@@ -101,7 +100,7 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_WithUserID() {
 	user := suite.userBuilder(context.Background())
 
 	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID)
-	uploadCtx = privacy.DecisionContext(uploadCtx, privacy.Allow)
+	uploadCtx = auth.WithInternalOperationContext(uploadCtx)
 	uploadCtx = ent.NewContext(uploadCtx, suite.db)
 
 	fileContent := []byte("user specific download test")
@@ -171,7 +170,7 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_PresignedURLGener
 	cfg := storage.ProviderConfig{
 		Enabled: true,
 		Providers: storage.Providers{
-			Database: storage.ProviderConfigs{Enabled: true},
+			Database: storage.DatabaseConfig{ProviderCommon: storage.ProviderCommon{Enabled: true}},
 		},
 	}
 
@@ -191,7 +190,7 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_PresignedURLGener
 	user := suite.userBuilder(context.Background())
 
 	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID)
-	uploadCtx = privacy.DecisionContext(uploadCtx, privacy.Allow)
+	uploadCtx = auth.WithInternalOperationContext(uploadCtx)
 	uploadCtx = ent.NewContext(uploadCtx, suite.db)
 
 	fileContent := []byte("presigned url test")
@@ -240,7 +239,7 @@ func (suite *HandlerTestSuite) swapObjectStoreToDatabase() func() {
 	cfg := storage.ProviderConfig{
 		Enabled: true,
 		Providers: storage.Providers{
-			Database: storage.ProviderConfigs{Enabled: true},
+			Database: storage.DatabaseConfig{ProviderCommon: storage.ProviderCommon{Enabled: true}},
 		},
 	}
 
