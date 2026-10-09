@@ -83268,6 +83268,11 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldApprovedByUserID)
 				fieldSeen[trustcenterndarequest.FieldApprovedByUserID] = struct{}{}
 			}
+		case "autoApproved":
+			if _, ok := fieldSeen[trustcenterndarequest.FieldAutoApproved]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldAutoApproved)
+				fieldSeen[trustcenterndarequest.FieldAutoApproved] = struct{}{}
+			}
 		case "signedAt":
 			if _, ok := fieldSeen[trustcenterndarequest.FieldSignedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldSignedAt)
@@ -83780,6 +83785,16 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcentersetting.FieldNoindexDefaultDomain]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldNoindexDefaultDomain)
 				fieldSeen[trustcentersetting.FieldNoindexDefaultDomain] = struct{}{}
+			}
+		case "enableAutoApproval":
+			if _, ok := fieldSeen[trustcentersetting.FieldEnableAutoApproval]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldEnableAutoApproval)
+				fieldSeen[trustcentersetting.FieldEnableAutoApproval] = struct{}{}
+			}
+		case "autoApprovalRules":
+			if _, ok := fieldSeen[trustcentersetting.FieldAutoApprovalRules]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldAutoApprovalRules)
+				fieldSeen[trustcentersetting.FieldAutoApprovalRules] = struct{}{}
 			}
 		case "id":
 		case "__typename":

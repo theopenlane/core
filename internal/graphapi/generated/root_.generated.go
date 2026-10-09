@@ -6987,6 +6987,7 @@ type ComplexityRoot struct {
 		ApprovedAt            func(childComplexity int) int
 		ApprovedByUser        func(childComplexity int) int
 		ApprovedByUserID      func(childComplexity int) int
+		AutoApproved          func(childComplexity int) int
 		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CompanyName           func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -7056,6 +7057,7 @@ type ComplexityRoot struct {
 	TrustCenterSetting struct {
 		AccentColor                           func(childComplexity int) int
 		AllowSubscribers                      func(childComplexity int) int
+		AutoApprovalRules                     func(childComplexity int) int
 		BackgroundColor                       func(childComplexity int) int
 		BlockedGroups                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CompanyDescription                    func(childComplexity int) int
@@ -7064,6 +7066,7 @@ type ComplexityRoot struct {
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
 		Editors                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EnableAutoApproval                    func(childComplexity int) int
 		Environment                           func(childComplexity int) int
 		FaviconFile                           func(childComplexity int) int
 		FaviconLocalFileID                    func(childComplexity int) int
@@ -46174,6 +46177,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterNDARequest.ApprovedByUserID(childComplexity), true
+	case "TrustCenterNDARequest.autoApproved":
+		if e.ComplexityRoot.TrustCenterNDARequest.AutoApproved == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequest.AutoApproved(childComplexity), true
 	case "TrustCenterNDARequest.blockedGroups":
 		if e.ComplexityRoot.TrustCenterNDARequest.BlockedGroups == nil {
 			break
@@ -46433,6 +46442,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.AllowSubscribers(childComplexity), true
+	case "TrustCenterSetting.autoApprovalRules":
+		if e.ComplexityRoot.TrustCenterSetting.AutoApprovalRules == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.AutoApprovalRules(childComplexity), true
 	case "TrustCenterSetting.backgroundColor":
 		if e.ComplexityRoot.TrustCenterSetting.BackgroundColor == nil {
 			break
@@ -46491,6 +46506,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "TrustCenterSetting.enableAutoApproval":
+		if e.ComplexityRoot.TrustCenterSetting.EnableAutoApproval == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.EnableAutoApproval(childComplexity), true
 	case "TrustCenterSetting.environment":
 		if e.ComplexityRoot.TrustCenterSetting.Environment == nil {
 			break
@@ -51795,6 +51816,8 @@ scalar RiskThresholdsConfig
 The ` + "`" + `IntegrationHealth` + "`" + ` scalar type records the runtime health state of an installed integration, including the unhealthy reason, per-operation failure reasons, and the last successful health check time
 """
 scalar IntegrationHealth
+
+scalar TrustCenterNDARequestSetting
 `, BuiltIn: false},
 	{Name: "../schema/actionplan.graphql", Input: `extend type ActionPlan {
     """
@@ -72710,6 +72733,14 @@ input CreateTrustCenterSettingInput {
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -123828,6 +123859,7 @@ type TrustCenterNDARequest implements Node @modules(names: ["trust_center_module
   ID of the user who approved the request
   """
   approvedByUserID: ID
+  autoApproved: Boolean
   """
   timestamp when the NDA was signed
   """
@@ -124211,6 +124243,13 @@ input TrustCenterNDARequestWhereInput {
   approvedByUserIDEqualFold: ID
   approvedByUserIDContainsFold: ID
   """
+  auto_approved field predicates
+  """
+  autoApproved: Boolean
+  autoApprovedNEQ: Boolean
+  autoApprovedIsNil: Boolean
+  autoApprovedNotNil: Boolean
+  """
   signed_at field predicates
   """
   signedAt: DateTime
@@ -124434,6 +124473,14 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -125001,6 +125048,13 @@ input TrustCenterSettingWhereInput {
   noindexDefaultDomainNEQ: Boolean
   noindexDefaultDomainIsNil: Boolean
   noindexDefaultDomainNotNil: Boolean
+  """
+  enable_auto_approval field predicates
+  """
+  enableAutoApproval: Boolean
+  enableAutoApprovalNEQ: Boolean
+  enableAutoApprovalIsNil: Boolean
+  enableAutoApprovalNotNil: Boolean
   """
   blocked_groups edge predicates
   """
@@ -133598,6 +133652,16 @@ input UpdateTrustCenterSettingInput {
   """
   noindexDefaultDomain: Boolean
   clearNoindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  clearEnableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
+  clearAutoApprovalRules: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -166452,6 +166516,8 @@ func (ec *executionContext) childFields_TrustCenterNDARequest(ctx context.Contex
 		return ec.fieldContext_TrustCenterNDARequest_approvedAt(ctx, field)
 	case "approvedByUserID":
 		return ec.fieldContext_TrustCenterNDARequest_approvedByUserID(ctx, field)
+	case "autoApproved":
+		return ec.fieldContext_TrustCenterNDARequest_autoApproved(ctx, field)
 	case "signedAt":
 		return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
 	case "documentDataID":
@@ -166630,6 +166696,10 @@ func (ec *executionContext) childFields_TrustCenterSetting(ctx context.Context, 
 		return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
 	case "noindexDefaultDomain":
 		return ec.fieldContext_TrustCenterSetting_noindexDefaultDomain(ctx, field)
+	case "enableAutoApproval":
+		return ec.fieldContext_TrustCenterSetting_enableAutoApproval(ctx, field)
+	case "autoApprovalRules":
+		return ec.fieldContext_TrustCenterSetting_autoApprovalRules(ctx, field)
 	case "blockedGroups":
 		return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 	case "editors":

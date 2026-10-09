@@ -8116,6 +8116,7 @@ func init() {
 		{Name: "access_level", Label: "AccessLevel", Type: "enums.TrustCenterNDARequestAccessLevel", Clearable: true},
 		{Name: "approved_at", Label: "ApprovedAt", Type: "models.DateTime", Clearable: true},
 		{Name: "approved_by_user_id", Label: "ApprovedByUserID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "auto_approved", Label: "AutoApproved", Type: "bool", Clearable: true},
 		{Name: "company_name", Label: "CompanyName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -8138,6 +8139,7 @@ func init() {
 	SchemaTrustCenterSetting.Fields = []FieldDescriptor{
 		{Name: "accent_color", Label: "AccentColor", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "allow_subscribers", Label: "AllowSubscribers", Type: "bool", Clearable: true},
+		{Name: "auto_approval_rules", Label: "AutoApprovalRules", Type: "models.TrustCenterNDARequestSetting", Clearable: true},
 		{Name: "background_color", Label: "BackgroundColor", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "company_description", Label: "CompanyDescription", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "company_domain", Label: "CompanyDomain", Type: "string", MatchKey: true, Clearable: true},
@@ -8146,6 +8148,7 @@ func init() {
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "enable_auto_approval", Label: "EnableAutoApproval", Type: "bool", Clearable: true},
 		{Name: "environment", Label: "Environment", Type: "enums.TrustCenterEnvironment", Clearable: true},
 		{Name: "favicon_local_file_id", Label: "FaviconLocalFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "favicon_remote_url", Label: "FaviconRemoteURL", Type: "string", MatchKey: true, Clearable: true},

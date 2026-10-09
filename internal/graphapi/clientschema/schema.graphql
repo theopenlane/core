@@ -18030,6 +18030,14 @@ input CreateTrustCenterSettingInput {
 	allow trustcenter to be indexed on google
 	"""
 	noindexDefaultDomain: Boolean
+	"""
+	enable auto approval rules provides configurable settings to skip manual approvals
+	"""
+	enableAutoApproval: Boolean
+	"""
+	rules for approving trust center NDA requests
+	"""
+	autoApprovalRules: TrustCenterNDARequestSetting
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	logoFileID: ID
@@ -82169,6 +82177,7 @@ type TrustCenterNDARequest implements Node @modules(names: ["trust_center_module
 	ID of the user who approved the request
 	"""
 	approvedByUserID: ID
+	autoApproved: Boolean
 	"""
 	timestamp when the NDA was signed
 	"""
@@ -82379,6 +82388,7 @@ enum TrustCenterNDARequestOrderField {
 	created_at
 	updated_at
 }
+scalar TrustCenterNDARequestSetting
 """
 TrustCenterNDARequestTrustCenterNDARequestAccessLevel is enum for the field access_level
 """
@@ -82604,6 +82614,13 @@ input TrustCenterNDARequestWhereInput {
 	approvedByUserIDNotNil: Boolean
 	approvedByUserIDEqualFold: ID
 	approvedByUserIDContainsFold: ID
+	"""
+	auto_approved field predicates
+	"""
+	autoApproved: Boolean
+	autoApprovedNEQ: Boolean
+	autoApprovedIsNil: Boolean
+	autoApprovedNotNil: Boolean
 	"""
 	signed_at field predicates
 	"""
@@ -82840,6 +82857,14 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
 	allow trustcenter to be indexed on google
 	"""
 	noindexDefaultDomain: Boolean
+	"""
+	enable auto approval rules provides configurable settings to skip manual approvals
+	"""
+	enableAutoApproval: Boolean
+	"""
+	rules for approving trust center NDA requests
+	"""
+	autoApprovalRules: TrustCenterNDARequestSetting
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -83443,6 +83468,13 @@ input TrustCenterSettingWhereInput {
 	noindexDefaultDomainNEQ: Boolean
 	noindexDefaultDomainIsNil: Boolean
 	noindexDefaultDomainNotNil: Boolean
+	"""
+	enable_auto_approval field predicates
+	"""
+	enableAutoApproval: Boolean
+	enableAutoApprovalNEQ: Boolean
+	enableAutoApprovalIsNil: Boolean
+	enableAutoApprovalNotNil: Boolean
 	"""
 	blocked_groups edge predicates
 	"""
@@ -92236,6 +92268,16 @@ input UpdateTrustCenterSettingInput {
 	"""
 	noindexDefaultDomain: Boolean
 	clearNoindexDefaultDomain: Boolean
+	"""
+	enable auto approval rules provides configurable settings to skip manual approvals
+	"""
+	enableAutoApproval: Boolean
+	clearEnableAutoApproval: Boolean
+	"""
+	rules for approving trust center NDA requests
+	"""
+	autoApprovalRules: TrustCenterNDARequestSetting
+	clearAutoApprovalRules: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean

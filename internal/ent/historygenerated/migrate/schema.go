@@ -2674,6 +2674,7 @@ var (
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
 		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
 		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "auto_approved", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
@@ -2733,6 +2734,8 @@ var (
 		{Name: "nda_approver_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "enable_auto_approval", Type: field.TypeBool, Nullable: true},
+		{Name: "auto_approval_rules", Type: field.TypeJSON, Nullable: true},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{

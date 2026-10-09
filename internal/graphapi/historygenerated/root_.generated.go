@@ -2537,6 +2537,7 @@ type ComplexityRoot struct {
 		AccessLevel           func(childComplexity int) int
 		ApprovedAt            func(childComplexity int) int
 		ApprovedByUserID      func(childComplexity int) int
+		AutoApproved          func(childComplexity int) int
 		CompanyName           func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -2573,12 +2574,14 @@ type ComplexityRoot struct {
 	TrustCenterSettingHistory struct {
 		AccentColor                           func(childComplexity int) int
 		AllowSubscribers                      func(childComplexity int) int
+		AutoApprovalRules                     func(childComplexity int) int
 		BackgroundColor                       func(childComplexity int) int
 		CompanyDescription                    func(childComplexity int) int
 		CompanyDomain                         func(childComplexity int) int
 		CompanyName                           func(childComplexity int) int
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
+		EnableAutoApproval                    func(childComplexity int) int
 		Environment                           func(childComplexity int) int
 		FaviconLocalFileID                    func(childComplexity int) int
 		FaviconRemoteURL                      func(childComplexity int) int
@@ -15562,6 +15565,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterNDARequestHistory.ApprovedByUserID(childComplexity), true
+	case "TrustCenterNDARequestHistory.autoApproved":
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.AutoApproved == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.AutoApproved(childComplexity), true
 	case "TrustCenterNDARequestHistory.companyName":
 		if e.ComplexityRoot.TrustCenterNDARequestHistory.CompanyName == nil {
 			break
@@ -15727,6 +15736,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.AllowSubscribers(childComplexity), true
+	case "TrustCenterSettingHistory.autoApprovalRules":
+		if e.ComplexityRoot.TrustCenterSettingHistory.AutoApprovalRules == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.AutoApprovalRules(childComplexity), true
 	case "TrustCenterSettingHistory.backgroundColor":
 		if e.ComplexityRoot.TrustCenterSettingHistory.BackgroundColor == nil {
 			break
@@ -15763,6 +15778,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.CreatedBy(childComplexity), true
+	case "TrustCenterSettingHistory.enableAutoApproval":
+		if e.ComplexityRoot.TrustCenterSettingHistory.EnableAutoApproval == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.EnableAutoApproval(childComplexity), true
 	case "TrustCenterSettingHistory.environment":
 		if e.ComplexityRoot.TrustCenterSettingHistory.Environment == nil {
 			break
@@ -18312,6 +18333,8 @@ scalar RiskThresholdsConfig
 The ` + "`" + `IntegrationHealth` + "`" + ` scalar type records the runtime health state of an installed integration, including the unhealthy reason, per-operation failure reasons, and the last successful health check time
 """
 scalar IntegrationHealth
+
+scalar TrustCenterNDARequestSetting
 `, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
@@ -48315,6 +48338,7 @@ type TrustCenterNDARequestHistory implements Node {
   ID of the user who approved the request
   """
   approvedByUserID: String
+  autoApproved: Boolean
   """
   timestamp when the NDA was signed
   """
@@ -48633,6 +48657,13 @@ input TrustCenterNDARequestHistoryWhereInput {
   approvedByUserIDEqualFold: String
   approvedByUserIDContainsFold: String
   """
+  auto_approved field predicates
+  """
+  autoApproved: Boolean
+  autoApprovedNEQ: Boolean
+  autoApprovedIsNil: Boolean
+  autoApprovedNotNil: Boolean
+  """
   signed_at field predicates
   """
   signedAt: DateTime
@@ -48800,6 +48831,14 @@ type TrustCenterSettingHistory implements Node {
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
 }
 """
 A connection to a list of items.
@@ -49339,6 +49378,13 @@ input TrustCenterSettingHistoryWhereInput {
   noindexDefaultDomainNEQ: Boolean
   noindexDefaultDomainIsNil: Boolean
   noindexDefaultDomainNotNil: Boolean
+  """
+  enable_auto_approval field predicates
+  """
+  enableAutoApproval: Boolean
+  enableAutoApprovalNEQ: Boolean
+  enableAutoApprovalIsNil: Boolean
+  enableAutoApprovalNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!
@@ -58805,6 +58851,8 @@ func (ec *executionContext) childFields_TrustCenterNDARequestHistory(ctx context
 		return ec.fieldContext_TrustCenterNDARequestHistory_approvedAt(ctx, field)
 	case "approvedByUserID":
 		return ec.fieldContext_TrustCenterNDARequestHistory_approvedByUserID(ctx, field)
+	case "autoApproved":
+		return ec.fieldContext_TrustCenterNDARequestHistory_autoApproved(ctx, field)
 	case "signedAt":
 		return ec.fieldContext_TrustCenterNDARequestHistory_signedAt(ctx, field)
 	case "documentDataID":
@@ -58915,6 +58963,10 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_statusPageURL(ctx, field)
 	case "noindexDefaultDomain":
 		return ec.fieldContext_TrustCenterSettingHistory_noindexDefaultDomain(ctx, field)
+	case "enableAutoApproval":
+		return ec.fieldContext_TrustCenterSettingHistory_enableAutoApproval(ctx, field)
+	case "autoApprovalRules":
+		return ec.fieldContext_TrustCenterSettingHistory_autoApprovalRules(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistory", field.Name)
 }

@@ -3316,6 +3316,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequest.FieldStatus:                {Type: field.TypeEnum, Column: trustcenterndarequest.FieldStatus},
 			trustcenterndarequest.FieldApprovedAt:            {Type: field.TypeTime, Column: trustcenterndarequest.FieldApprovedAt},
 			trustcenterndarequest.FieldApprovedByUserID:      {Type: field.TypeString, Column: trustcenterndarequest.FieldApprovedByUserID},
+			trustcenterndarequest.FieldAutoApproved:          {Type: field.TypeBool, Column: trustcenterndarequest.FieldAutoApproved},
 			trustcenterndarequest.FieldSignedAt:              {Type: field.TypeTime, Column: trustcenterndarequest.FieldSignedAt},
 			trustcenterndarequest.FieldDocumentDataID:        {Type: field.TypeString, Column: trustcenterndarequest.FieldDocumentDataID},
 			trustcenterndarequest.FieldFileID:                {Type: field.TypeString, Column: trustcenterndarequest.FieldFileID},
@@ -3368,6 +3369,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
 			trustcentersetting.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
 			trustcentersetting.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersetting.FieldNoindexDefaultDomain},
+			trustcentersetting.FieldEnableAutoApproval:                    {Type: field.TypeBool, Column: trustcentersetting.FieldEnableAutoApproval},
+			trustcentersetting.FieldAutoApprovalRules:                     {Type: field.TypeJSON, Column: trustcentersetting.FieldAutoApprovalRules},
 		},
 	}
 	graph.Nodes[85] = &sqlgraph.Node{
@@ -48664,6 +48667,11 @@ func (f *TrustCenterNDARequestFilter) WhereApprovedByUserID(p entql.StringP) {
 	f.Where(p.Field(trustcenterndarequest.FieldApprovedByUserID))
 }
 
+// WhereAutoApproved applies the entql bool predicate on the auto_approved field.
+func (f *TrustCenterNDARequestFilter) WhereAutoApproved(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequest.FieldAutoApproved))
+}
+
 // WhereSignedAt applies the entql time.Time predicate on the signed_at field.
 func (f *TrustCenterNDARequestFilter) WhereSignedAt(p entql.TimeP) {
 	f.Where(p.Field(trustcenterndarequest.FieldSignedAt))
@@ -48995,6 +49003,16 @@ func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
 // WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
 func (f *TrustCenterSettingFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldNoindexDefaultDomain))
+}
+
+// WhereEnableAutoApproval applies the entql bool predicate on the enable_auto_approval field.
+func (f *TrustCenterSettingFilter) WhereEnableAutoApproval(p entql.BoolP) {
+	f.Where(p.Field(trustcentersetting.FieldEnableAutoApproval))
+}
+
+// WhereAutoApprovalRules applies the entql json.RawMessage predicate on the auto_approval_rules field.
+func (f *TrustCenterSettingFilter) WhereAutoApprovalRules(p entql.BytesP) {
+	f.Where(p.Field(trustcentersetting.FieldAutoApprovalRules))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.

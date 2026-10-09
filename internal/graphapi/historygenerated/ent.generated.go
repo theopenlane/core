@@ -54406,6 +54406,29 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestHistory_approvedBy
 	return graphql.NewScalarFieldContext("TrustCenterNDARequestHistory", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
+func (ec *executionContext) _TrustCenterNDARequestHistory_autoApproved(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestHistory_autoApproved(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AutoApproved, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestHistory_autoApproved(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
 func (ec *executionContext) _TrustCenterNDARequestHistory_signedAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -55489,6 +55512,52 @@ func (ec *executionContext) _TrustCenterSettingHistory_noindexDefaultDomain(ctx 
 }
 func (ec *executionContext) fieldContext_TrustCenterSettingHistory_noindexDefaultDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterSettingHistory_enableAutoApproval(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingHistory_enableAutoApproval(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.EnableAutoApproval, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterSettingHistory_enableAutoApproval(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterSettingHistory_autoApprovalRules(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingHistory_autoApprovalRules(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AutoApprovalRules, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v models.TrustCenterNDARequestSetting) graphql.Marshaler {
+			return ec.marshalOTrustCenterNDARequestSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterSettingHistory_autoApprovalRules(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type TrustCenterNDARequestSetting does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterSettingHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistoryConnection) (ret graphql.Marshaler) {
@@ -160722,7 +160791,7 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "firstName", "firstNameNEQ", "firstNameIn", "firstNameNotIn", "firstNameContains", "firstNameHasPrefix", "firstNameHasSuffix", "firstNameEqualFold", "firstNameContainsFold", "lastName", "lastNameNEQ", "lastNameIn", "lastNameNotIn", "lastNameContains", "lastNameHasPrefix", "lastNameHasSuffix", "lastNameEqualFold", "lastNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "reason", "reasonNEQ", "reasonIn", "reasonNotIn", "reasonContains", "reasonHasPrefix", "reasonHasSuffix", "reasonIsNil", "reasonNotNil", "reasonEqualFold", "reasonContainsFold", "accessLevel", "accessLevelNEQ", "accessLevelIn", "accessLevelNotIn", "accessLevelIsNil", "accessLevelNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedAt", "approvedAtGT", "approvedAtGTE", "approvedAtLT", "approvedAtLTE", "approvedAtIsNil", "approvedAtNotNil", "approvedByUserID", "approvedByUserIDNEQ", "approvedByUserIDIn", "approvedByUserIDNotIn", "approvedByUserIDContains", "approvedByUserIDHasPrefix", "approvedByUserIDHasSuffix", "approvedByUserIDIsNil", "approvedByUserIDNotNil", "approvedByUserIDEqualFold", "approvedByUserIDContainsFold", "signedAt", "signedAtGT", "signedAtGTE", "signedAtLT", "signedAtLTE", "signedAtIsNil", "signedAtNotNil", "documentDataID", "documentDataIDNEQ", "documentDataIDIn", "documentDataIDNotIn", "documentDataIDContains", "documentDataIDHasPrefix", "documentDataIDHasSuffix", "documentDataIDIsNil", "documentDataIDNotNil", "documentDataIDEqualFold", "documentDataIDContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "firstName", "firstNameNEQ", "firstNameIn", "firstNameNotIn", "firstNameContains", "firstNameHasPrefix", "firstNameHasSuffix", "firstNameEqualFold", "firstNameContainsFold", "lastName", "lastNameNEQ", "lastNameIn", "lastNameNotIn", "lastNameContains", "lastNameHasPrefix", "lastNameHasSuffix", "lastNameEqualFold", "lastNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "reason", "reasonNEQ", "reasonIn", "reasonNotIn", "reasonContains", "reasonHasPrefix", "reasonHasSuffix", "reasonIsNil", "reasonNotNil", "reasonEqualFold", "reasonContainsFold", "accessLevel", "accessLevelNEQ", "accessLevelIn", "accessLevelNotIn", "accessLevelIsNil", "accessLevelNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedAt", "approvedAtGT", "approvedAtGTE", "approvedAtLT", "approvedAtLTE", "approvedAtIsNil", "approvedAtNotNil", "approvedByUserID", "approvedByUserIDNEQ", "approvedByUserIDIn", "approvedByUserIDNotIn", "approvedByUserIDContains", "approvedByUserIDHasPrefix", "approvedByUserIDHasSuffix", "approvedByUserIDIsNil", "approvedByUserIDNotNil", "approvedByUserIDEqualFold", "approvedByUserIDContainsFold", "autoApproved", "autoApprovedNEQ", "autoApprovedIsNil", "autoApprovedNotNil", "signedAt", "signedAtGT", "signedAtGTE", "signedAtLT", "signedAtLTE", "signedAtIsNil", "signedAtNotNil", "documentDataID", "documentDataIDNEQ", "documentDataIDIn", "documentDataIDNotIn", "documentDataIDContains", "documentDataIDHasPrefix", "documentDataIDHasSuffix", "documentDataIDIsNil", "documentDataIDNotNil", "documentDataIDEqualFold", "documentDataIDContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -161891,6 +161960,34 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 				return it, err
 			}
 			it.ApprovedByUserIDContainsFold = data
+		case "autoApproved":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApproved"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApproved = data
+		case "autoApprovedNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprovedNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprovedNEQ = data
+		case "autoApprovedIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprovedIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprovedIsNil = data
+		case "autoApprovedNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprovedNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprovedNotNil = data
 		case "signedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("signedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -162151,7 +162248,7 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "companyDescription", "companyDescriptionNEQ", "companyDescriptionIn", "companyDescriptionNotIn", "companyDescriptionContains", "companyDescriptionHasPrefix", "companyDescriptionHasSuffix", "companyDescriptionIsNil", "companyDescriptionNotNil", "companyDescriptionEqualFold", "companyDescriptionContainsFold", "overview", "overviewNEQ", "overviewIn", "overviewNotIn", "overviewContains", "overviewHasPrefix", "overviewHasSuffix", "overviewIsNil", "overviewNotNil", "overviewEqualFold", "overviewContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold", "faviconRemoteURL", "faviconRemoteURLNEQ", "faviconRemoteURLIn", "faviconRemoteURLNotIn", "faviconRemoteURLContains", "faviconRemoteURLHasPrefix", "faviconRemoteURLHasSuffix", "faviconRemoteURLIsNil", "faviconRemoteURLNotNil", "faviconRemoteURLEqualFold", "faviconRemoteURLContainsFold", "faviconLocalFileID", "faviconLocalFileIDNEQ", "faviconLocalFileIDIn", "faviconLocalFileIDNotIn", "faviconLocalFileIDContains", "faviconLocalFileIDHasPrefix", "faviconLocalFileIDHasSuffix", "faviconLocalFileIDIsNil", "faviconLocalFileIDNotNil", "faviconLocalFileIDEqualFold", "faviconLocalFileIDContainsFold", "heroImageLocalFileID", "heroImageLocalFileIDNEQ", "heroImageLocalFileIDIn", "heroImageLocalFileIDNotIn", "heroImageLocalFileIDContains", "heroImageLocalFileIDHasPrefix", "heroImageLocalFileIDHasSuffix", "heroImageLocalFileIDIsNil", "heroImageLocalFileIDNotNil", "heroImageLocalFileIDEqualFold", "heroImageLocalFileIDContainsFold", "themeMode", "themeModeNEQ", "themeModeIn", "themeModeNotIn", "themeModeIsNil", "themeModeNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "font", "fontNEQ", "fontIn", "fontNotIn", "fontContains", "fontHasPrefix", "fontHasSuffix", "fontIsNil", "fontNotNil", "fontEqualFold", "fontContainsFold", "foregroundColor", "foregroundColorNEQ", "foregroundColorIn", "foregroundColorNotIn", "foregroundColorContains", "foregroundColorHasPrefix", "foregroundColorHasSuffix", "foregroundColorIsNil", "foregroundColorNotNil", "foregroundColorEqualFold", "foregroundColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "accentColor", "accentColorNEQ", "accentColorIn", "accentColorNotIn", "accentColorContains", "accentColorHasPrefix", "accentColorHasSuffix", "accentColorIsNil", "accentColorNotNil", "accentColorEqualFold", "accentColorContainsFold", "secondaryBackgroundColor", "secondaryBackgroundColorNEQ", "secondaryBackgroundColorIn", "secondaryBackgroundColorNotIn", "secondaryBackgroundColorContains", "secondaryBackgroundColorHasPrefix", "secondaryBackgroundColorHasSuffix", "secondaryBackgroundColorIsNil", "secondaryBackgroundColorNotNil", "secondaryBackgroundColorEqualFold", "secondaryBackgroundColorContainsFold", "secondaryForegroundColor", "secondaryForegroundColorNEQ", "secondaryForegroundColorIn", "secondaryForegroundColorNotIn", "secondaryForegroundColorContains", "secondaryForegroundColorHasPrefix", "secondaryForegroundColorHasSuffix", "secondaryForegroundColorIsNil", "secondaryForegroundColorNotNil", "secondaryForegroundColorEqualFold", "secondaryForegroundColorContainsFold", "environment", "environmentNEQ", "environmentIn", "environmentNotIn", "environmentIsNil", "environmentNotNil", "removeBranding", "removeBrandingNEQ", "removeBrandingIsNil", "removeBrandingNotNil", "companyDomain", "companyDomainNEQ", "companyDomainIn", "companyDomainNotIn", "companyDomainContains", "companyDomainHasPrefix", "companyDomainHasSuffix", "companyDomainIsNil", "companyDomainNotNil", "companyDomainEqualFold", "companyDomainContainsFold", "securityContact", "securityContactNEQ", "securityContactIn", "securityContactNotIn", "securityContactContains", "securityContactHasPrefix", "securityContactHasSuffix", "securityContactIsNil", "securityContactNotNil", "securityContactEqualFold", "securityContactContainsFold", "ndaApprovalRequired", "ndaApprovalRequiredNEQ", "ndaApprovalRequiredIsNil", "ndaApprovalRequiredNotNil", "allowSubscribers", "allowSubscribersNEQ", "allowSubscribersIsNil", "allowSubscribersNotNil", "notifySubscribersOnSubprocessorChange", "notifySubscribersOnSubprocessorChangeNEQ", "notifySubscribersOnSubprocessorChangeIsNil", "notifySubscribersOnSubprocessorChangeNotNil", "subprocessorsNotifiedAt", "subprocessorsNotifiedAtGT", "subprocessorsNotifiedAtGTE", "subprocessorsNotifiedAtLT", "subprocessorsNotifiedAtLTE", "subprocessorsNotifiedAtIsNil", "subprocessorsNotifiedAtNotNil", "ndaApproverGroupID", "ndaApproverGroupIDNEQ", "ndaApproverGroupIDIn", "ndaApproverGroupIDNotIn", "ndaApproverGroupIDContains", "ndaApproverGroupIDHasPrefix", "ndaApproverGroupIDHasSuffix", "ndaApproverGroupIDIsNil", "ndaApproverGroupIDNotNil", "ndaApproverGroupIDEqualFold", "ndaApproverGroupIDContainsFold", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "noindexDefaultDomain", "noindexDefaultDomainNEQ", "noindexDefaultDomainIsNil", "noindexDefaultDomainNotNil"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "companyDescription", "companyDescriptionNEQ", "companyDescriptionIn", "companyDescriptionNotIn", "companyDescriptionContains", "companyDescriptionHasPrefix", "companyDescriptionHasSuffix", "companyDescriptionIsNil", "companyDescriptionNotNil", "companyDescriptionEqualFold", "companyDescriptionContainsFold", "overview", "overviewNEQ", "overviewIn", "overviewNotIn", "overviewContains", "overviewHasPrefix", "overviewHasSuffix", "overviewIsNil", "overviewNotNil", "overviewEqualFold", "overviewContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold", "faviconRemoteURL", "faviconRemoteURLNEQ", "faviconRemoteURLIn", "faviconRemoteURLNotIn", "faviconRemoteURLContains", "faviconRemoteURLHasPrefix", "faviconRemoteURLHasSuffix", "faviconRemoteURLIsNil", "faviconRemoteURLNotNil", "faviconRemoteURLEqualFold", "faviconRemoteURLContainsFold", "faviconLocalFileID", "faviconLocalFileIDNEQ", "faviconLocalFileIDIn", "faviconLocalFileIDNotIn", "faviconLocalFileIDContains", "faviconLocalFileIDHasPrefix", "faviconLocalFileIDHasSuffix", "faviconLocalFileIDIsNil", "faviconLocalFileIDNotNil", "faviconLocalFileIDEqualFold", "faviconLocalFileIDContainsFold", "heroImageLocalFileID", "heroImageLocalFileIDNEQ", "heroImageLocalFileIDIn", "heroImageLocalFileIDNotIn", "heroImageLocalFileIDContains", "heroImageLocalFileIDHasPrefix", "heroImageLocalFileIDHasSuffix", "heroImageLocalFileIDIsNil", "heroImageLocalFileIDNotNil", "heroImageLocalFileIDEqualFold", "heroImageLocalFileIDContainsFold", "themeMode", "themeModeNEQ", "themeModeIn", "themeModeNotIn", "themeModeIsNil", "themeModeNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "font", "fontNEQ", "fontIn", "fontNotIn", "fontContains", "fontHasPrefix", "fontHasSuffix", "fontIsNil", "fontNotNil", "fontEqualFold", "fontContainsFold", "foregroundColor", "foregroundColorNEQ", "foregroundColorIn", "foregroundColorNotIn", "foregroundColorContains", "foregroundColorHasPrefix", "foregroundColorHasSuffix", "foregroundColorIsNil", "foregroundColorNotNil", "foregroundColorEqualFold", "foregroundColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "accentColor", "accentColorNEQ", "accentColorIn", "accentColorNotIn", "accentColorContains", "accentColorHasPrefix", "accentColorHasSuffix", "accentColorIsNil", "accentColorNotNil", "accentColorEqualFold", "accentColorContainsFold", "secondaryBackgroundColor", "secondaryBackgroundColorNEQ", "secondaryBackgroundColorIn", "secondaryBackgroundColorNotIn", "secondaryBackgroundColorContains", "secondaryBackgroundColorHasPrefix", "secondaryBackgroundColorHasSuffix", "secondaryBackgroundColorIsNil", "secondaryBackgroundColorNotNil", "secondaryBackgroundColorEqualFold", "secondaryBackgroundColorContainsFold", "secondaryForegroundColor", "secondaryForegroundColorNEQ", "secondaryForegroundColorIn", "secondaryForegroundColorNotIn", "secondaryForegroundColorContains", "secondaryForegroundColorHasPrefix", "secondaryForegroundColorHasSuffix", "secondaryForegroundColorIsNil", "secondaryForegroundColorNotNil", "secondaryForegroundColorEqualFold", "secondaryForegroundColorContainsFold", "environment", "environmentNEQ", "environmentIn", "environmentNotIn", "environmentIsNil", "environmentNotNil", "removeBranding", "removeBrandingNEQ", "removeBrandingIsNil", "removeBrandingNotNil", "companyDomain", "companyDomainNEQ", "companyDomainIn", "companyDomainNotIn", "companyDomainContains", "companyDomainHasPrefix", "companyDomainHasSuffix", "companyDomainIsNil", "companyDomainNotNil", "companyDomainEqualFold", "companyDomainContainsFold", "securityContact", "securityContactNEQ", "securityContactIn", "securityContactNotIn", "securityContactContains", "securityContactHasPrefix", "securityContactHasSuffix", "securityContactIsNil", "securityContactNotNil", "securityContactEqualFold", "securityContactContainsFold", "ndaApprovalRequired", "ndaApprovalRequiredNEQ", "ndaApprovalRequiredIsNil", "ndaApprovalRequiredNotNil", "allowSubscribers", "allowSubscribersNEQ", "allowSubscribersIsNil", "allowSubscribersNotNil", "notifySubscribersOnSubprocessorChange", "notifySubscribersOnSubprocessorChangeNEQ", "notifySubscribersOnSubprocessorChangeIsNil", "notifySubscribersOnSubprocessorChangeNotNil", "subprocessorsNotifiedAt", "subprocessorsNotifiedAtGT", "subprocessorsNotifiedAtGTE", "subprocessorsNotifiedAtLT", "subprocessorsNotifiedAtLTE", "subprocessorsNotifiedAtIsNil", "subprocessorsNotifiedAtNotNil", "ndaApproverGroupID", "ndaApproverGroupIDNEQ", "ndaApproverGroupIDIn", "ndaApproverGroupIDNotIn", "ndaApproverGroupIDContains", "ndaApproverGroupIDHasPrefix", "ndaApproverGroupIDHasSuffix", "ndaApproverGroupIDIsNil", "ndaApproverGroupIDNotNil", "ndaApproverGroupIDEqualFold", "ndaApproverGroupIDContainsFold", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "noindexDefaultDomain", "noindexDefaultDomainNEQ", "noindexDefaultDomainIsNil", "noindexDefaultDomainNotNil", "enableAutoApproval", "enableAutoApprovalNEQ", "enableAutoApprovalIsNil", "enableAutoApprovalNotNil"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -164580,6 +164677,34 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 				return it, err
 			}
 			it.NoindexDefaultDomainNotNil = data
+		case "enableAutoApproval":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("enableAutoApproval"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EnableAutoApproval = data
+		case "enableAutoApprovalNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("enableAutoApprovalNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EnableAutoApprovalNEQ = data
+		case "enableAutoApprovalIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("enableAutoApprovalIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EnableAutoApprovalIsNil = data
+		case "enableAutoApprovalNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("enableAutoApprovalNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EnableAutoApprovalNotNil = data
 		}
 	}
 	return it, nil
@@ -197448,6 +197573,11 @@ func (ec *executionContext) _TrustCenterNDARequestHistory(ctx context.Context, s
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "autoApproved":
+			out.Values[i] = ec._TrustCenterNDARequestHistory_autoApproved(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "signedAt":
 			out.Values[i] = ec._TrustCenterNDARequestHistory_signedAt(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -197774,6 +197904,16 @@ func (ec *executionContext) _TrustCenterSettingHistory(ctx context.Context, sel 
 			}
 		case "noindexDefaultDomain":
 			out.Values[i] = ec._TrustCenterSettingHistory_noindexDefaultDomain(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "enableAutoApproval":
+			out.Values[i] = ec._TrustCenterSettingHistory_enableAutoApproval(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "autoApprovalRules":
+			out.Values[i] = ec._TrustCenterSettingHistory_autoApprovalRules(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

@@ -95205,6 +95205,12 @@ type TrustCenterNDARequestWhereInput struct {
 	ApprovedByUserIDEqualFold    *string  `json:"approvedByUserIDEqualFold,omitempty"`
 	ApprovedByUserIDContainsFold *string  `json:"approvedByUserIDContainsFold,omitempty"`
 
+	// "auto_approved" field predicates.
+	AutoApproved       *bool `json:"autoApproved,omitempty"`
+	AutoApprovedNEQ    *bool `json:"autoApprovedNEQ,omitempty"`
+	AutoApprovedIsNil  bool  `json:"autoApprovedIsNil,omitempty"`
+	AutoApprovedNotNil bool  `json:"autoApprovedNotNil,omitempty"`
+
 	// "signed_at" field predicates.
 	SignedAt       *models.DateTime `json:"signedAt,omitempty"`
 	SignedAtGT     *models.DateTime `json:"signedAtGT,omitempty"`
@@ -95771,6 +95777,18 @@ func (i *TrustCenterNDARequestWhereInput) P() (predicate.TrustCenterNDARequest, 
 	}
 	if i.ApprovedByUserIDContainsFold != nil {
 		predicates = append(predicates, trustcenterndarequest.ApprovedByUserIDContainsFold(*i.ApprovedByUserIDContainsFold))
+	}
+	if i.AutoApproved != nil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedEQ(*i.AutoApproved))
+	}
+	if i.AutoApprovedNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedNEQ(*i.AutoApprovedNEQ))
+	}
+	if i.AutoApprovedIsNil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedIsNil())
+	}
+	if i.AutoApprovedNotNil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedNotNil())
 	}
 	if i.SignedAt != nil {
 		predicates = append(predicates, trustcenterndarequest.SignedAtEQ(*i.SignedAt))
@@ -96412,6 +96430,12 @@ type TrustCenterSettingWhereInput struct {
 	NoindexDefaultDomainNEQ    *bool `json:"noindexDefaultDomainNEQ,omitempty"`
 	NoindexDefaultDomainIsNil  bool  `json:"noindexDefaultDomainIsNil,omitempty"`
 	NoindexDefaultDomainNotNil bool  `json:"noindexDefaultDomainNotNil,omitempty"`
+
+	// "enable_auto_approval" field predicates.
+	EnableAutoApproval       *bool `json:"enableAutoApproval,omitempty"`
+	EnableAutoApprovalNEQ    *bool `json:"enableAutoApprovalNEQ,omitempty"`
+	EnableAutoApprovalIsNil  bool  `json:"enableAutoApprovalIsNil,omitempty"`
+	EnableAutoApprovalNotNil bool  `json:"enableAutoApprovalNotNil,omitempty"`
 
 	// "blocked_groups" edge predicates.
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
@@ -97477,6 +97501,18 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	}
 	if i.NoindexDefaultDomainNotNil {
 		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainNotNil())
+	}
+	if i.EnableAutoApproval != nil {
+		predicates = append(predicates, trustcentersetting.EnableAutoApprovalEQ(*i.EnableAutoApproval))
+	}
+	if i.EnableAutoApprovalNEQ != nil {
+		predicates = append(predicates, trustcentersetting.EnableAutoApprovalNEQ(*i.EnableAutoApprovalNEQ))
+	}
+	if i.EnableAutoApprovalIsNil {
+		predicates = append(predicates, trustcentersetting.EnableAutoApprovalIsNil())
+	}
+	if i.EnableAutoApprovalNotNil {
+		predicates = append(predicates, trustcentersetting.EnableAutoApprovalNotNil())
 	}
 
 	if i.HasBlockedGroups != nil {

@@ -14,16 +14,32 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 const signedNDAAttachmentName = "signed_nda_file.pdf"
 
 func TestNDAAttestationListener(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
 	t.Run("signed nda stamps file on the signed request and emails the signer", func(t *testing.T) {
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 		trustCenter := tcOrg.TrustCenter
+
+		_, err := suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+			UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+				EnableAutoApproval: lo.ToPtr(true),
+			},
+		})
+		assert.NilError(t, err)
+
 		internalCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 
 		signerEmail := "nda-signer@listenerpin.io"
@@ -38,7 +54,7 @@ func TestNDAAttestationListener(t *testing.T) {
 		signerCtx, signerCaller := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, signerEmail)
 		bystanderCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, bystanderEmail)
 
-		_, err := suite.Client.API.CreateTrustCenterNDARequest(signerCtx, testclient.CreateTrustCenterNDARequestInput{
+		_, err = suite.Client.API.CreateTrustCenterNDARequest(signerCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     "Signer",
 			LastName:      "User",
 			CompanyName:   lo.ToPtr("Signer Co"),
@@ -103,7 +119,7 @@ func TestNDAAttestationListener(t *testing.T) {
 			trustcenterndarequest.TrustCenterID(trustCenter.ID),
 		).Only(internalCtx)
 		assert.NilError(t, err)
-		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, bystander.Status))
+		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusApproved, bystander.Status))
 		assert.Check(t, bystander.FileID == nil)
 
 		docData, err := suite.Client.DB.DocumentData.Get(internalCtx, docDataID)

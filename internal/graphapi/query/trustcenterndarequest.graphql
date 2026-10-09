@@ -4,6 +4,7 @@ mutation CreateBulkCSVTrustCenterNDARequest ($input: Upload!) {
 			accessLevel
 			approvedAt
 			approvedByUserID
+			autoApproved
 			companyName
 			createdAt
 			createdBy
@@ -30,6 +31,7 @@ mutation CreateBulkTrustCenterNDARequest ($input: [CreateTrustCenterNDARequestIn
 			accessLevel
 			approvedAt
 			approvedByUserID
+			autoApproved
 			companyName
 			createdAt
 			createdBy
@@ -56,6 +58,7 @@ mutation CreateTrustCenterNDARequest ($input: CreateTrustCenterNDARequestInput!)
 			accessLevel
 			approvedAt
 			approvedByUserID
+			autoApproved
 			companyName
 			createdAt
 			createdBy
@@ -102,6 +105,7 @@ query GetAllTrustCenterNDARequests ($first: Int, $last: Int, $after: Cursor, $be
 				accessLevel
 				approvedAt
 				approvedByUserID
+				autoApproved
 				companyName
 				createdAt
 				createdBy
@@ -128,6 +132,7 @@ query GetTrustCenterNDARequestByID ($trustCenterNDARequestId: ID!) {
 		accessLevel
 		approvedAt
 		approvedByUserID
+		autoApproved
 		companyName
 		createdAt
 		createdBy
@@ -161,6 +166,7 @@ query GetTrustCenterNDARequests ($first: Int, $last: Int, $after: Cursor, $befor
 				accessLevel
 				approvedAt
 				approvedByUserID
+				autoApproved
 				companyName
 				createdAt
 				createdBy
@@ -193,6 +199,7 @@ mutation UpdateTrustCenterNDARequest ($updateTrustCenterNDARequestId: ID!, $inpu
 			accessLevel
 			approvedAt
 			approvedByUserID
+			autoApproved
 			companyName
 			createdAt
 			createdBy

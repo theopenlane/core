@@ -138479,6 +138479,7 @@ type CreateBulkCSVTrustCenterNDARequest_CreateBulkCSVTrustCenterNDARequest_Trust
 	AccessLevel           *enums.TrustCenterNDARequestAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
 	ApprovedAt            *models.DateTime                        "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
 	ApprovedByUserID      *string                                 "json:\"approvedByUserID,omitempty\" graphql:\"approvedByUserID\""
+	AutoApproved          *bool                                   "json:\"autoApproved,omitempty\" graphql:\"autoApproved\""
 	CompanyName           *string                                 "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -138515,6 +138516,12 @@ func (t *CreateBulkCSVTrustCenterNDARequest_CreateBulkCSVTrustCenterNDARequest_T
 		t = &CreateBulkCSVTrustCenterNDARequest_CreateBulkCSVTrustCenterNDARequest_TrustCenterNDARequests{}
 	}
 	return t.ApprovedByUserID
+}
+func (t *CreateBulkCSVTrustCenterNDARequest_CreateBulkCSVTrustCenterNDARequest_TrustCenterNDARequests) GetAutoApproved() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequest_CreateBulkCSVTrustCenterNDARequest_TrustCenterNDARequests{}
+	}
+	return t.AutoApproved
 }
 func (t *CreateBulkCSVTrustCenterNDARequest_CreateBulkCSVTrustCenterNDARequest_TrustCenterNDARequests) GetCompanyName() *string {
 	if t == nil {
@@ -138634,6 +138641,7 @@ type CreateBulkTrustCenterNDARequest_CreateBulkTrustCenterNDARequest_TrustCenter
 	AccessLevel           *enums.TrustCenterNDARequestAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
 	ApprovedAt            *models.DateTime                        "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
 	ApprovedByUserID      *string                                 "json:\"approvedByUserID,omitempty\" graphql:\"approvedByUserID\""
+	AutoApproved          *bool                                   "json:\"autoApproved,omitempty\" graphql:\"autoApproved\""
 	CompanyName           *string                                 "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -138670,6 +138678,12 @@ func (t *CreateBulkTrustCenterNDARequest_CreateBulkTrustCenterNDARequest_TrustCe
 		t = &CreateBulkTrustCenterNDARequest_CreateBulkTrustCenterNDARequest_TrustCenterNDARequests{}
 	}
 	return t.ApprovedByUserID
+}
+func (t *CreateBulkTrustCenterNDARequest_CreateBulkTrustCenterNDARequest_TrustCenterNDARequests) GetAutoApproved() *bool {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequest_CreateBulkTrustCenterNDARequest_TrustCenterNDARequests{}
+	}
+	return t.AutoApproved
 }
 func (t *CreateBulkTrustCenterNDARequest_CreateBulkTrustCenterNDARequest_TrustCenterNDARequests) GetCompanyName() *string {
 	if t == nil {
@@ -138789,6 +138803,7 @@ type CreateTrustCenterNDARequest_CreateTrustCenterNDARequest_TrustCenterNDAReque
 	AccessLevel           *enums.TrustCenterNDARequestAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
 	ApprovedAt            *models.DateTime                        "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
 	ApprovedByUserID      *string                                 "json:\"approvedByUserID,omitempty\" graphql:\"approvedByUserID\""
+	AutoApproved          *bool                                   "json:\"autoApproved,omitempty\" graphql:\"autoApproved\""
 	CompanyName           *string                                 "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -138825,6 +138840,12 @@ func (t *CreateTrustCenterNDARequest_CreateTrustCenterNDARequest_TrustCenterNDAR
 		t = &CreateTrustCenterNDARequest_CreateTrustCenterNDARequest_TrustCenterNDARequest{}
 	}
 	return t.ApprovedByUserID
+}
+func (t *CreateTrustCenterNDARequest_CreateTrustCenterNDARequest_TrustCenterNDARequest) GetAutoApproved() *bool {
+	if t == nil {
+		t = &CreateTrustCenterNDARequest_CreateTrustCenterNDARequest_TrustCenterNDARequest{}
+	}
+	return t.AutoApproved
 }
 func (t *CreateTrustCenterNDARequest_CreateTrustCenterNDARequest_TrustCenterNDARequest) GetCompanyName() *string {
 	if t == nil {
@@ -139012,6 +139033,7 @@ type GetAllTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node struct {
 	AccessLevel           *enums.TrustCenterNDARequestAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
 	ApprovedAt            *models.DateTime                        "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
 	ApprovedByUserID      *string                                 "json:\"approvedByUserID,omitempty\" graphql:\"approvedByUserID\""
+	AutoApproved          *bool                                   "json:\"autoApproved,omitempty\" graphql:\"autoApproved\""
 	CompanyName           *string                                 "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -139048,6 +139070,12 @@ func (t *GetAllTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node) GetAppr
 		t = &GetAllTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node{}
 	}
 	return t.ApprovedByUserID
+}
+func (t *GetAllTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node) GetAutoApproved() *bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node{}
+	}
+	return t.AutoApproved
 }
 func (t *GetAllTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node) GetCompanyName() *string {
 	if t == nil {
@@ -139192,6 +139220,7 @@ type GetTrustCenterNDARequestByID_TrustCenterNDARequest struct {
 	AccessLevel           *enums.TrustCenterNDARequestAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
 	ApprovedAt            *models.DateTime                        "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
 	ApprovedByUserID      *string                                 "json:\"approvedByUserID,omitempty\" graphql:\"approvedByUserID\""
+	AutoApproved          *bool                                   "json:\"autoApproved,omitempty\" graphql:\"autoApproved\""
 	CompanyName           *string                                 "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -139228,6 +139257,12 @@ func (t *GetTrustCenterNDARequestByID_TrustCenterNDARequest) GetApprovedByUserID
 		t = &GetTrustCenterNDARequestByID_TrustCenterNDARequest{}
 	}
 	return t.ApprovedByUserID
+}
+func (t *GetTrustCenterNDARequestByID_TrustCenterNDARequest) GetAutoApproved() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestByID_TrustCenterNDARequest{}
+	}
+	return t.AutoApproved
 }
 func (t *GetTrustCenterNDARequestByID_TrustCenterNDARequest) GetCompanyName() *string {
 	if t == nil {
@@ -139368,6 +139403,7 @@ type GetTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node struct {
 	AccessLevel           *enums.TrustCenterNDARequestAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
 	ApprovedAt            *models.DateTime                        "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
 	ApprovedByUserID      *string                                 "json:\"approvedByUserID,omitempty\" graphql:\"approvedByUserID\""
+	AutoApproved          *bool                                   "json:\"autoApproved,omitempty\" graphql:\"autoApproved\""
 	CompanyName           *string                                 "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -139404,6 +139440,12 @@ func (t *GetTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node) GetApprove
 		t = &GetTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node{}
 	}
 	return t.ApprovedByUserID
+}
+func (t *GetTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node) GetAutoApproved() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node{}
+	}
+	return t.AutoApproved
 }
 func (t *GetTrustCenterNDARequests_TrustCenterNdaRequests_Edges_Node) GetCompanyName() *string {
 	if t == nil {
@@ -139559,6 +139601,7 @@ type UpdateTrustCenterNDARequest_UpdateTrustCenterNDARequest_TrustCenterNDAReque
 	AccessLevel           *enums.TrustCenterNDARequestAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
 	ApprovedAt            *models.DateTime                        "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
 	ApprovedByUserID      *string                                 "json:\"approvedByUserID,omitempty\" graphql:\"approvedByUserID\""
+	AutoApproved          *bool                                   "json:\"autoApproved,omitempty\" graphql:\"autoApproved\""
 	CompanyName           *string                                 "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -139595,6 +139638,12 @@ func (t *UpdateTrustCenterNDARequest_UpdateTrustCenterNDARequest_TrustCenterNDAR
 		t = &UpdateTrustCenterNDARequest_UpdateTrustCenterNDARequest_TrustCenterNDARequest{}
 	}
 	return t.ApprovedByUserID
+}
+func (t *UpdateTrustCenterNDARequest_UpdateTrustCenterNDARequest_TrustCenterNDARequest) GetAutoApproved() *bool {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequest_UpdateTrustCenterNDARequest_TrustCenterNDARequest{}
+	}
+	return t.AutoApproved
 }
 func (t *UpdateTrustCenterNDARequest_UpdateTrustCenterNDARequest_TrustCenterNDARequest) GetCompanyName() *string {
 	if t == nil {
@@ -140492,12 +140541,14 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting_HeroImageFile) GetPresigne
 type GetTrustCenterSettingByID_TrustCenterSetting struct {
 	AccentColor                           *string                                                     "json:\"accentColor,omitempty\" graphql:\"accentColor\""
 	AllowSubscribers                      *bool                                                       "json:\"allowSubscribers,omitempty\" graphql:\"allowSubscribers\""
+	AutoApprovalRules                     *models.TrustCenterNDARequestSetting                        "json:\"autoApprovalRules,omitempty\" graphql:\"autoApprovalRules\""
 	BackgroundColor                       *string                                                     "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
 	CompanyDescription                    *string                                                     "json:\"companyDescription,omitempty\" graphql:\"companyDescription\""
 	CompanyDomain                         *string                                                     "json:\"companyDomain,omitempty\" graphql:\"companyDomain\""
 	CompanyName                           *string                                                     "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt                             *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                             *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EnableAutoApproval                    *bool                                                       "json:\"enableAutoApproval,omitempty\" graphql:\"enableAutoApproval\""
 	Environment                           *enums.TrustCenterEnvironment                               "json:\"environment,omitempty\" graphql:\"environment\""
 	FaviconFile                           *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile   "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
 	FaviconLocalFileID                    *string                                                     "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
@@ -140542,6 +140593,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetAllowSubscribers() *bo
 	}
 	return t.AllowSubscribers
 }
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetAutoApprovalRules() *models.TrustCenterNDARequestSetting {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.AutoApprovalRules
+}
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetBackgroundColor() *string {
 	if t == nil {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
@@ -140577,6 +140634,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedBy() *string {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetEnableAutoApproval() *bool {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.EnableAutoApproval
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetEnvironment() *enums.TrustCenterEnvironment {
 	if t == nil {
@@ -209511,6 +209574,7 @@ const CreateBulkCSVTrustCenterNDARequestDocument = `mutation CreateBulkCSVTrustC
 			accessLevel
 			approvedAt
 			approvedByUserID
+			autoApproved
 			companyName
 			createdAt
 			createdBy
@@ -209556,6 +209620,7 @@ const CreateBulkTrustCenterNDARequestDocument = `mutation CreateBulkTrustCenterN
 			accessLevel
 			approvedAt
 			approvedByUserID
+			autoApproved
 			companyName
 			createdAt
 			createdBy
@@ -209601,6 +209666,7 @@ const CreateTrustCenterNDARequestDocument = `mutation CreateTrustCenterNDAReques
 			accessLevel
 			approvedAt
 			approvedByUserID
+			autoApproved
 			companyName
 			createdAt
 			createdBy
@@ -209704,6 +209770,7 @@ const GetAllTrustCenterNDARequestsDocument = `query GetAllTrustCenterNDARequests
 				accessLevel
 				approvedAt
 				approvedByUserID
+				autoApproved
 				companyName
 				createdAt
 				createdBy
@@ -209753,6 +209820,7 @@ const GetTrustCenterNDARequestByIDDocument = `query GetTrustCenterNDARequestByID
 		accessLevel
 		approvedAt
 		approvedByUserID
+		autoApproved
 		companyName
 		createdAt
 		createdBy
@@ -209805,6 +209873,7 @@ const GetTrustCenterNDARequestsDocument = `query GetTrustCenterNDARequests ($fir
 				accessLevel
 				approvedAt
 				approvedByUserID
+				autoApproved
 				companyName
 				createdAt
 				createdBy
@@ -209880,6 +209949,7 @@ const UpdateTrustCenterNDARequestDocument = `mutation UpdateTrustCenterNDAReques
 			accessLevel
 			approvedAt
 			approvedByUserID
+			autoApproved
 			companyName
 			createdAt
 			createdBy
@@ -210127,12 +210197,14 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 	trustCenterSetting(id: $trustCenterSettingId) {
 		accentColor
 		allowSubscribers
+		autoApprovalRules
 		backgroundColor
 		companyDescription
 		companyDomain
 		companyName
 		createdAt
 		createdBy
+		enableAutoApproval
 		environment
 		faviconLocalFileID
 		faviconRemoteURL
