@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/storagetypes"
+
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -280,8 +281,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// assign values
 	c.DB = db
-	c.API, err = coreutils.TestClient(c.DB, c.ObjectStore)
-	RequireNoError(t, err)
 
 	// durable gala runtime for integration dispatch
 	galaInstance, err := gala.NewGala(ctx, gala.Config{
@@ -308,6 +307,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		// without the restored ent client every durable mutation listener fails
 		gala.WithRestoredValue("ent_client", ent.NewContext),
 	))
+
+	_, err = gala.Register(galaInstance, hooks.TemplateMappingListeners()...)
+	RequireNoError(t, err)
 
 	_, err = gala.Register(galaInstance, hooks.EntitlementListeners()...)
 	RequireNoError(t, err)
@@ -346,6 +348,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	intruntime.SetDefault(rt)
 	suite.IntegrationsRT = rt
+
+	c.API, err = coreutils.TestClient(c.DB, c.ObjectStore)
+	RequireNoError(t, err)
 
 	// cleanup/reseed listeners resolve the runtime from the gala injector as in production
 	RequireNoError(t, galaInstance.Attach(gala.WithValue(rt)))
@@ -428,7 +433,8 @@ func NewTestGraphServer(t *testing.T) http.Handler {
 		WithExtensions(true).
 		WithDevelopment(true).
 		WithSubscriptions(true, nil).
-		WithAuthOptions(&authOptions)
+		WithAuthOptions(&authOptions).
+		WithIntegrationsRuntime(Suite.IntegrationsRT)
 
 	r.WithPool(10)
 
