@@ -2,144 +2,45 @@ package hooks
 
 import (
 	"context"
-	"strings"
 
 	"entgo.io/ent"
-	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
-// skipOpenlaneUserAssignmentKey is used to denote a marker to skip processing in the
-// hook and just return immediately. this is only used because we update the identity holder
-// while inside the hook still
-type skipOpenlaneUserAssignmentKey struct{}
-
 // HookAssignOpenlaneUser automatically (un)sets the is_openlane_user based off
-// the existence of the user in the org.
-// this hook only really exists as a form of support for existing org members so that when new identity holders
-// are created/updated for existing org members, we add them in correctly
+// the existence of an org member with the same email address.
 func HookAssignOpenlaneUser() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.IdentityHolderFunc(func(ctx context.Context, m *generated.IdentityHolderMutation) (generated.Value, error) {
-
-			if shouldSkip, _ := ctx.Value(skipOpenlaneUserAssignmentKey{}).(bool); shouldSkip {
+			email, ok := m.Email()
+			if !ok {
 				return next.Mutate(ctx, m)
 			}
 
-			var emails []string
-			var ids []string
+			internalCtx := auth.WithInternalOperationContext(ctx)
 
-			email, _ := m.Email()
-
-			switch m.Op() {
-			case ent.OpCreate:
-				emails = append(emails, email)
-
-			case ent.OpUpdateOne:
-
-				if strings.TrimSpace(email) == "" {
-
-					var err error
-					email, err = m.OldEmail(ctx)
-					if err != nil {
-						return nil, err
-					}
-				}
-
-				emails = append(emails, email)
-
-				id, _ := m.ID()
-				ids = append(ids, id)
-
-			case ent.OpUpdate:
-
-				var err error
-
-				ids, err = m.IDs(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				holders, err := m.Client().IdentityHolder.Query().
-					Where(identityholder.IDIn(ids...)).
-					Select(identityholder.FieldEmail).
-					All(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				emails = lo.Map(holders, func(u *generated.IdentityHolder, _ int) string {
-					return u.Email
-				})
-			}
-
-			v, err := next.Mutate(ctx, m)
+			exists, err := m.Client().OrgMembership.Query().Where(
+				orgmembership.HasUserWith(user.Email(email)),
+			).
+				Exist(internalCtx)
 			if err != nil {
 				return nil, err
 			}
 
-			if m.Op().Is(ent.OpCreate) {
-				ids = []string{v.(*generated.IdentityHolder).ID}
-			}
+			m.SetIsOpenlaneUser(exists)
 
-			if len(ids) == 0 {
-				return v, nil
-			}
-
-			ctx = context.WithValue(ctx, skipOpenlaneUserAssignmentKey{}, true)
-
-			userMatchingEmails, err := m.Client().OrgMembership.Query().
-				Where(
-					orgmembership.HasUserWith(user.EmailIn(emails...))).
-				QueryUser().
-				Select(user.FieldEmail).
-				Strings(ctx)
-			if err != nil {
-				return nil, err
-			}
-
-			if len(userMatchingEmails) > 0 {
-
-				err := m.Client().IdentityHolder.Update().
-					Where(identityholder.IDIn(ids...),
-						identityholder.EmailIn(userMatchingEmails...)).
-					SetIsOpenlaneUser(true).
-					Exec(ctx)
-
-				if err != nil {
-					return nil, err
-				}
-			}
-
-			err = m.Client().IdentityHolder.Update().
-				Where(identityholder.IDIn(ids...),
-					identityholder.EmailNotIn(userMatchingEmails...)).
-				SetIsOpenlaneUser(false).
-				Exec(ctx)
-			if err != nil {
-				return nil, err
-			}
-
-			if val, ok := v.(*generated.IdentityHolder); ok {
-				_, exists := lo.Find(userMatchingEmails, func(e string) bool {
-					return e == val.Email
-				})
-
-				val.IsOpenlaneUser = exists
-			}
-
-			return v, nil
+			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
 // HookIdentityHolderFiles runs on identity holder mutations to check for uploaded files

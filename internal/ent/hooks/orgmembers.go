@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
-	"github.com/theopenlane/core/v2/internal/ent/historygenerated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -87,7 +86,9 @@ func HookOrgMembers() ent.Hook {
 				return nil, err
 			}
 
-			if err := updateIdentityHolder(privacy.DecisionContext(ctx, privacy.Allow), m.Client(), orgMember.UserID, true); err != nil {
+			internalCtx := auth.WithInternalOperationContext(ctx)
+
+			if err := updateIdentityHolder(internalCtx, m.Client(), orgMember.UserID, true); err != nil {
 				return nil, err
 			}
 
