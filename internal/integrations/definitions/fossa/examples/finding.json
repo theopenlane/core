@@ -1,0 +1,39 @@
+{
+  "id": 20012351,
+  "type": "policy_flag",
+  "createdAt": "2026-08-16T03:49:42.532Z",
+  "source": {
+    "id": "go+github.com/fumiama/go-docx$v0.0.0-20250506085032-0c30fd09304b",
+    "name": "github.com/fumiama/go-docx",
+    "url": "https://github.com/fumiama/go-docx",
+    "version": "v0.0.0-20250506085032-0c30fd09304b",
+    "packageManager": "go"
+  },
+  "depths": {
+    "direct": 1,
+    "deep": 0
+  },
+  "statuses": {
+    "active": 1,
+    "ignored": 0
+  },
+  "projects": [
+    {
+      "id": "git+github.com/example-org/example-repo",
+      "status": "active",
+      "depth": 1,
+      "title": "example-repo",
+      "scannedAt": "2026-08-16T03:49:43.482762+00:00",
+      "analyzedAt": "2026-08-16T03:46:43.398Z",
+      "url": "https://app.fossa.com/projects/git%2Bgithub.com%2Fexample-org%2Fexample-repo",
+      "firstFoundAt": "2026-08-16T03:49:42.532+00:00",
+      "defaultBranch": "main",
+      "latest": true,
+      "revisionId": "git+github.com/example-org/example-repo$0000000000000000000000000000000000000000",
+      "revisionScanId": 117041474
+    }
+  ],
+  "url": "https://app.fossa.com/issues/licensing/20012351",
+  "details": "These packages contain code files that may require you to disclose your source code under a compatible license, unless they're distributed and run as completely separate processes & packages.",
+  "license": "AGPL-3.0-only"
+}

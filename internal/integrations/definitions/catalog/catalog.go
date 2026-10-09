@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/fossa"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/gcpscc"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
@@ -37,6 +38,7 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		azuresecuritycenter.Builder(),
 		cloudflare.Builder(&cfg.CloudflareRuntime),
 		email.Builder(&cfg.Email, devMode),
+		fossa.Builder(),
 		gcpscc.Builder(federationIssuer),
 		githubapp.Builder(cfg.GitHubApp),
 		googledrive.Builder(cfg.GoogleDrive),
