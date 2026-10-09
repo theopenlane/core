@@ -43,7 +43,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 			cf.StandardVersion = input.StandardVersion
 		}
 
-		bulkControls, err := r.cloneControlsFromStandard(ctx, cf, nil)
+		bulkControls, err := r.cloneControlsFromStandard(ctx, cf, nil, false)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
 		}
@@ -108,7 +108,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	createdProgram := withTransactionalMutation(ctx).Program.Create()
 
 	if hasStandardFilter(input) {
-		bulkControls, err := r.cloneControlsFromStandard(ctx, controls.CloneFilterOptions{StandardID: input.StandardID}, nil)
+		bulkControls, err := r.cloneControlsFromStandard(ctx, controls.CloneFilterOptions{StandardID: input.StandardID}, nil, false)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
 		}

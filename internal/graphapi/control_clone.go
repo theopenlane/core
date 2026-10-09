@@ -52,7 +52,7 @@ func hasStandardFilter[T createProgramRequest](value T) bool {
 
 // cloneControlsFromStandard clones all controls from a standard into an organization
 // if the controls already exist in the organization, they will not be cloned again
-func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filters controls.CloneFilterOptions, programID *string) ([]*generated.Control, error) {
+func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filters controls.CloneFilterOptions, programID *string, cloneTemplateMappings bool) ([]*generated.Control, error) {
 	logger := logx.FromContext(ctx)
 	// first check if the standard exists
 	stdWhereFilter := controls.StandardFilter(filters)
@@ -99,14 +99,16 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		return nil, err
 	}
 
-	return r.cloneControls(ctx, controls, programID)
+	return r.cloneControls(ctx, controls, programID, cloneTemplateMappings)
 }
 
 // cloneControls clones the given controls into the organization in the context
 // and optionally links them to a program if programID is given
 // if the controls already exist in the organization, they will not be cloned again
 // but will be updated to link to the program if needed
-func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []*generated.Control, programID *string) ([]*generated.Control, error) {
+func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []*generated.Control, programID *string,
+	cloneTemplateMappings bool) ([]*generated.Control, error) {
+
 	logger := logx.FromContext(ctx)
 	// keep track of the control IDs that already exist in the org to be updated to link to the program if needed
 	existingControlIDs := []string{}
@@ -138,7 +140,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 	}
 
-	if len(templateControlIDs) > 0 {
+	if len(templateControlIDs) > 0 && cloneTemplateMappings {
 
 		oc, _ := gala.OperationContextFromContext(ctx)
 
