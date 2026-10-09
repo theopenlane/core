@@ -48354,7 +48354,6 @@ enum TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel @goModel(model
 TrustCenterNDARequestHistoryTrustCenterNDARequestStatus is enum for the field status
 """
 enum TrustCenterNDARequestHistoryTrustCenterNDARequestStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestStatus") {
-  PENDING_APPROVAL
   REQUESTED
   NEEDS_APPROVAL
   APPROVED

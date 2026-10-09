@@ -164,7 +164,7 @@ const DefaultStatus enums.TrustCenterNDARequestStatus = "REQUESTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.TrustCenterNDARequestStatus) error {
 	switch s.String() {
-	case "PENDING_APPROVAL", "REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED":
+	case "REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED":
 		return nil
 	default:
 		return fmt.Errorf("trustcenterndarequesthistory: invalid enum value for status field: %q", s)

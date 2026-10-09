@@ -534,7 +534,7 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 		})
 	}
 
-	t.Run("anonymous caller gets the default pending approval status", func(t *testing.T) {
+	t.Run("anonymous caller gets the default requested status", func(t *testing.T) {
 		anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
 
 		resp, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
@@ -547,7 +547,7 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 
 		request := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
 		assert.Assert(t, request.Status != nil)
-		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusPendingApproval, *request.Status))
+		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, *request.Status))
 	})
 
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)

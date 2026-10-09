@@ -30,11 +30,19 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	trustCenterNoApproval := tcOrg.TrustCenter
 
+	_, err = suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenterNoApproval.ID, testclient.UpdateTrustCenterInput{
+		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+			EnableAutoApproval: lo.ToPtr(true),
+		},
+	})
+	assert.NilError(t, err)
+
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
 	trustCenterWithApproval := tcOrg2.TrustCenter
 
 	_, err = suite.Client.API.UpdateTrustCenter(tcOrg2.Admin.UserCtx, trustCenterWithApproval.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+			EnableAutoApproval:  lo.ToPtr(true),
 			NdaApprovalRequired: lo.ToPtr(true),
 			AutoApprovalRules: &models.TrustCenterNDARequestSetting{
 				UseDomainAllowlist:      true,
@@ -91,13 +99,14 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			expectEmailSent: ndaEmail,
 		},
 		{
-			name:            "happy path - resend request with no approval required, status should be APPROVED",
-			input:           noApprovalRequiredRequest,
-			client:          suite.Client.API,
-			ctx:             tcOrg.Owner.UserCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
-			expectEmailSent: ndaEmail,
-			setStatus:       &enums.TrustCenterNDARequestStatusSigned,
+			name:                   "happy path - resend request with no approval required, status should be APPROVED",
+			input:                  noApprovalRequiredRequest,
+			client:                 suite.Client.API,
+			ctx:                    tcOrg.Owner.UserCtx,
+			expectedStatus:         enums.TrustCenterNDARequestStatusApproved,
+			expectEmailSent:        ndaEmail,
+			setStatus:              &enums.TrustCenterNDARequestStatusSigned,
+			expectedSecondaryEmail: authEmail,
 		},
 		{
 			name:                   "happy path - approval required, status should be NEEDS_APPROVAL, set to approved",
@@ -110,13 +119,14 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			expectedSecondaryEmail: ndaEmail, // should get nda email
 		},
 		{
-			name:            "happy path - sign after approval",
-			input:           emailApprovedRequest,
-			client:          suite.Client.API,
-			ctx:             tcOrg2.Admin.UserCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
-			expectEmailSent: ndaEmail,
-			setStatus:       &enums.TrustCenterNDARequestStatusSigned,
+			name:                   "happy path - sign after approval",
+			input:                  emailApprovedRequest,
+			client:                 suite.Client.API,
+			ctx:                    tcOrg2.Admin.UserCtx,
+			expectedStatus:         enums.TrustCenterNDARequestStatusApproved,
+			expectEmailSent:        ndaEmail,
+			setStatus:              &enums.TrustCenterNDARequestStatusSigned,
+			expectedSecondaryEmail: authEmail,
 		},
 		{
 			name:            "happy path - re-request after approval",
@@ -313,6 +323,7 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 
 	_, err = suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+			EnableAutoApproval:  lo.ToPtr(true),
 			NdaApprovalRequired: lo.ToPtr(true),
 			AutoApprovalRules: &models.TrustCenterNDARequestSetting{
 				UseDomainAllowlist:      true,
@@ -329,7 +340,7 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, enums.TrustCenterNDARequestStatusPendingApproval, *ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusRequested, *ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 	waitForEvents()
 
@@ -444,6 +455,7 @@ func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testin
 
 	_, err = suite.Client.API.UpdateTrustCenter(trustcenterOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+			EnableAutoApproval:  lo.ToPtr(true),
 			NdaApprovalRequired: lo.ToPtr(true),
 			NdaApproverGroupID:  &group.ID,
 			AutoApprovalRules: &models.TrustCenterNDARequestSetting{
@@ -465,7 +477,7 @@ func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testin
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, enums.TrustCenterNDARequestStatusPendingApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusRequested, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 	waitForEvents()
 
@@ -494,6 +506,7 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 
 	_, err = suite.Client.API.UpdateTrustCenter(trustcenterOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+			EnableAutoApproval:  lo.ToPtr(true),
 			NdaApprovalRequired: lo.ToPtr(true),
 			AutoApprovalRules: &models.TrustCenterNDARequestSetting{
 				UseDomainAllowlist:      true,
@@ -514,7 +527,7 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, enums.TrustCenterNDARequestStatusPendingApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusRequested, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 	waitForEvents()
 
@@ -540,6 +553,14 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	trustCenter := tcOrg.TrustCenter
+
+	_, err = suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+			EnableAutoApproval: lo.ToPtr(true),
+		},
+	})
+	assert.NilError(t, err)
+
 	pdfHash := th.GetMD5Hash(t, th.PdfFilePath)
 
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())

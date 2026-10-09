@@ -32,6 +32,14 @@ func TestNDAAttestationListener(t *testing.T) {
 	t.Run("signed nda stamps file on the signed request and emails the signer", func(t *testing.T) {
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 		trustCenter := tcOrg.TrustCenter
+
+		_, err := suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+			UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+				EnableAutoApproval: lo.ToPtr(true),
+			},
+		})
+		assert.NilError(t, err)
+
 		internalCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 
 		signerEmail := "nda-signer@listenerpin.io"
@@ -46,7 +54,7 @@ func TestNDAAttestationListener(t *testing.T) {
 		signerCtx, signerCaller := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, signerEmail)
 		bystanderCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, bystanderEmail)
 
-		_, err := suite.Client.API.CreateTrustCenterNDARequest(signerCtx, testclient.CreateTrustCenterNDARequestInput{
+		_, err = suite.Client.API.CreateTrustCenterNDARequest(signerCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     "Signer",
 			LastName:      "User",
 			CompanyName:   lo.ToPtr("Signer Co"),

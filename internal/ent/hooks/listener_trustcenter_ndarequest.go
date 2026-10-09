@@ -65,6 +65,8 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 		return nil
 	}
 
+	// updating may contain either email or status but both are not required to be avaialble at the same time
+	// so we need to fetch the actual data and cannot rely on just status from the payload
 	req, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.TrustCenterNDARequest.Get)
 	if err != nil {
 		return err
@@ -74,16 +76,11 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 		return nil
 	}
 
-	if payload.Operation != entityops.OpCreate {
-		proposedStatus, ok := payload.StringValue(trustcenterndarequest.FieldStatus)
-
-		// for resolved requests, only notify on a status change
-		if req.Status != enums.TrustCenterNDARequestStatusPendingApproval && (!ok || proposedStatus != req.Status.String()) {
-			return nil
-		}
+	if payload.Operation != entityops.OpCreate && !payload.FieldChanged(trustcenterndarequest.FieldStatus) {
+		return nil
 	}
 
-	if req.Status == enums.TrustCenterNDARequestStatusPendingApproval {
+	if payload.Operation == entityops.OpCreate && req.Status == enums.TrustCenterNDARequestStatusRequested {
 		req, err = processApproval(inv.Context, inv.Client, req)
 		if err != nil {
 			return err
@@ -91,8 +88,6 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 	}
 
 	switch req.Status {
-	// we have requested here because that will be the state still if auto approval rules not enabled
-	// so user will always get the email if org has no auto approval set up or if it was auto approved
 	case enums.TrustCenterNDARequestStatusRequested, enums.TrustCenterNDARequestStatusApproved:
 
 		err := sendSystemEmail(inv.Context, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
@@ -146,7 +141,9 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 func processApproval(ctx context.Context, client *generated.Client, request *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
 	tc, err := client.TrustCenter.Query().
 		Where(trustcenter.ID(request.TrustCenterID)).
-		WithSetting().
+		WithSetting(func(q *generated.TrustCenterSettingQuery) {
+			q.Where(trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive))
+		}).
 		Only(ctx)
 	if err != nil {
 		return nil, err
@@ -157,15 +154,18 @@ func processApproval(ctx context.Context, client *generated.Client, request *gen
 		return nil, err
 	}
 
-	approvalRules := settings.AutoApprovalRules
+	if !settings.EnableAutoApproval {
+		return request, nil
+	}
+
+	rules := settings.AutoApprovalRules
 
 	ok := !settings.NdaApprovalRequired
 
-	// fine to do this as we auto set all to pending approval in the hook
 	status := enums.TrustCenterNDARequestStatusNeedsApproval
 
-	if settings.NdaApprovalRequired && settings.EnableAutoApproval {
-		ok, err = evaluateRules(ctx, client, request, &approvalRules)
+	if settings.NdaApprovalRequired {
+		ok, err = evaluateRules(ctx, client, request, rules)
 		if err != nil {
 			return nil, err
 		}
@@ -174,10 +174,12 @@ func processApproval(ctx context.Context, client *generated.Client, request *gen
 		case ok:
 			status = enums.TrustCenterNDARequestStatusApproved
 
-		case !approvalRules.ManualApprovalOnFailure:
+		case !rules.ManualApprovalOnFailure:
 
 			status = enums.TrustCenterNDARequestStatusDeclined
 		}
+	} else {
+		status = enums.TrustCenterNDARequestStatusApproved
 	}
 
 	// saving this will retrigger the listener, so be sure to skip it
@@ -193,7 +195,7 @@ func processApproval(ctx context.Context, client *generated.Client, request *gen
 
 	return client.TrustCenterNDARequest.UpdateOneID(request.ID).
 		Where(
-			trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusPendingApproval),
+			trustcenterndarequest.StatusEQ(request.Status),
 			trustcenterndarequest.EmailEQ(request.Email),
 		).
 		SetStatus(status).
@@ -202,27 +204,28 @@ func processApproval(ctx context.Context, client *generated.Client, request *gen
 		Save(ctx)
 }
 
-func evaluateRules(ctx context.Context, client *generated.Client, request *generated.TrustCenterNDARequest, setting *models.TrustCenterNDARequestSetting) (bool, error) {
-	domain := ssoutils.EmailDomain(request.Email)
+func evaluateRules(ctx context.Context, client *generated.Client, req *generated.TrustCenterNDARequest, rules models.TrustCenterNDARequestSetting) (bool, error) {
+
+	domain := ssoutils.EmailDomain(req.Email)
 
 	if err := validator.ValidateDomains()([]string{domain}); err != nil {
 		return false, nil
 	}
 
-	approvedByList, matchedList := validateDomainList(domain, setting)
+	approvedByList, matchedList := validateDomainList(domain, rules)
 	if matchedList {
 		return approvedByList, nil
 	}
 
-	if ok, err := validateContact(ctx, client, request.Email, setting); err != nil || ok {
+	if ok, err := validateContact(ctx, client, req.Email, rules); err != nil || ok {
 		return ok, err
 	}
 
-	if ok, err := validateDomainFromNDARequest(ctx, client, request, domain, setting); err != nil || ok {
+	if ok, err := validateDomainFromNDARequest(ctx, client, req, domain, rules); err != nil || ok {
 		return ok, err
 	}
 
-	if ok, err := validateContactDomain(ctx, client, domain, setting); err != nil || ok {
+	if ok, err := validateContactDomain(ctx, client, domain, rules); err != nil || ok {
 		return ok, err
 	}
 
@@ -230,22 +233,22 @@ func evaluateRules(ctx context.Context, client *generated.Client, request *gener
 	if client.EmailVerifier != nil {
 
 		var err error
-		result, err = client.EmailVerifier.Client.Verify(request.Email)
+		result, err = client.EmailVerifier.Client.Verify(req.Email)
 		if err != nil {
 
 			// we do not want to fail the job. Instead log and return here
 			logx.FromContext(ctx).Error().Err(err).
-				Str("email", request.Email).
+				Str("email", req.Email).
 				Msg("could not verify email")
 
 			return false, nil
 		}
 	}
 
-	return validateEmailRules(result, setting), nil
+	return validateEmailRules(result, rules), nil
 }
 
-func validateEmailRules(result *emailverifier.Result, setting *models.TrustCenterNDARequestSetting) bool {
+func validateEmailRules(result *emailverifier.Result, setting models.TrustCenterNDARequestSetting) bool {
 	if result == nil || !result.Syntax.Valid {
 		return false
 	}
@@ -265,20 +268,20 @@ func validateEmailRules(result *emailverifier.Result, setting *models.TrustCente
 	return false
 }
 
-func validateDomainList(domain string, setting *models.TrustCenterNDARequestSetting) (isApproved, didMatch bool) {
-	if setting.UseDomainBlocklist && slices.Contains(setting.DomainBlocklist, domain) {
+func validateDomainList(domain string, rules models.TrustCenterNDARequestSetting) (isApproved, didMatch bool) {
+	if rules.UseDomainBlocklist && slices.Contains(rules.DomainBlocklist, domain) {
 		return false, true
 	}
 
-	if setting.UseDomainAllowlist && slices.Contains(setting.DomainAllowlist, domain) {
+	if rules.UseDomainAllowlist && slices.Contains(rules.DomainAllowlist, domain) {
 		return true, true
 	}
 
 	return false, false
 }
 
-func validateContact(ctx context.Context, client *generated.Client, email string, setting *models.TrustCenterNDARequestSetting) (bool, error) {
-	if !setting.ApproveIfContactExists {
+func validateContact(ctx context.Context, client *generated.Client, email string, rules models.TrustCenterNDARequestSetting) (bool, error) {
+	if !rules.ApproveIfContactExists {
 		return false, nil
 	}
 
@@ -290,23 +293,25 @@ func validateContact(ctx context.Context, client *generated.Client, email string
 		Exist(ctx)
 }
 
-func validateDomainFromNDARequest(ctx context.Context, client *generated.Client, request *generated.TrustCenterNDARequest, domain string, setting *models.TrustCenterNDARequestSetting) (bool, error) {
-	if !setting.ApproveFromExistingRequestDomain {
+func validateDomainFromNDARequest(ctx context.Context, client *generated.Client, req *generated.TrustCenterNDARequest,
+	domain string, rules models.TrustCenterNDARequestSetting) (bool, error) {
+
+	if !rules.ApproveFromExistingRequestDomain {
 		return false, nil
 	}
 
 	return client.TrustCenterNDARequest.Query().
 		Where(
-			trustcenterndarequest.TrustCenterID(request.TrustCenterID),
-			trustcenterndarequest.IDNEQ(request.ID),
+			trustcenterndarequest.TrustCenterID(req.TrustCenterID),
+			trustcenterndarequest.IDNEQ(req.ID),
 			trustcenterndarequest.StatusIn(enums.TrustCenterNDARequestStatusApproved, enums.TrustCenterNDARequestStatusSigned),
 			sql.FieldHasSuffixFold(trustcenterndarequest.FieldEmail, domain),
 		).
 		Exist(ctx)
 }
 
-func validateContactDomain(ctx context.Context, client *generated.Client, domain string, setting *models.TrustCenterNDARequestSetting) (bool, error) {
-	if !setting.ApproveFromContactDomain {
+func validateContactDomain(ctx context.Context, client *generated.Client, domain string, rules models.TrustCenterNDARequestSetting) (bool, error) {
+	if !rules.ApproveFromContactDomain {
 		return false, nil
 	}
 
@@ -318,16 +323,16 @@ func validateContactDomain(ctx context.Context, client *generated.Client, domain
 		Exist(ctx)
 }
 
-func createNDARequestMutationNotification(ctx context.Context, client *generated.Client, ndaRequest *generated.TrustCenterNDARequest, ownerID, notificationID string) error {
+func createNDARequestMutationNotification(ctx context.Context, client *generated.Client, req *generated.TrustCenterNDARequest, ownerID, notificationID string) error {
 	if _, err := client.Notification.Get(ctx, notificationID); err == nil {
 		return nil
 	} else if !generated.IsNotFound(err) {
 		return err
 	}
 
-	name := fmt.Sprintf("%s %s", ndaRequest.FirstName, ndaRequest.LastName)
+	name := fmt.Sprintf("%s %s", req.FirstName, req.LastName)
 	if name == " " {
-		name = ndaRequest.Email
+		name = req.Email
 	}
 
 	topic := enums.NotificationTopicApproval
@@ -340,9 +345,9 @@ func createNDARequestMutationNotification(ctx context.Context, client *generated
 		OwnerID:          &ownerID,
 		Topic:            &topic,
 		Data: map[string]any{
-			"nda_request_id":  ndaRequest.ID,
-			"trust_center_id": ndaRequest.TrustCenterID,
-			"email":           ndaRequest.Email,
+			"nda_request_id":  req.ID,
+			"trust_center_id": req.TrustCenterID,
+			"email":           req.Email,
 			"url":             entityops.ConsoleLanding(generated.TypeTrustCenterNDARequest),
 		},
 	}

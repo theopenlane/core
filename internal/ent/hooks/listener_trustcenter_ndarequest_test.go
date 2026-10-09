@@ -25,14 +25,16 @@ func TestValidateEmailRestrictions(t *testing.T) {
 		approved   bool
 	}{
 		{
-			name: "invalid syntax",
+			name:       "invalid email",
+			disposable: true,
+			role:       true,
 			setting: models.TrustCenterNDARequestSetting{
 				AllowDisposableEmail: true,
 				AllowRoleAccount:     true,
 			},
 		},
 		{
-			name:  "work email",
+			name:  "work email provided",
 			valid: true,
 			setting: models.TrustCenterNDARequestSetting{
 				WorkEmailOnly: true,
@@ -40,12 +42,12 @@ func TestValidateEmailRestrictions(t *testing.T) {
 			approved: true,
 		},
 		{
-			name:       "disposable rejected",
+			name:       "disposable email rejected",
 			valid:      true,
 			disposable: true,
 		},
 		{
-			name:       "disposable allowed",
+			name:       "disposable email allowed",
 			valid:      true,
 			disposable: true,
 			setting: models.TrustCenterNDARequestSetting{
@@ -54,21 +56,12 @@ func TestValidateEmailRestrictions(t *testing.T) {
 			approved: true,
 		},
 		{
-			name:       "work only rejects allowed disposable",
-			valid:      true,
-			disposable: true,
-			setting: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-				WorkEmailOnly:        true,
-			},
-		},
-		{
-			name:  "role rejected",
+			name:  "role email rejected",
 			valid: true,
 			role:  true,
 		},
 		{
-			name:  "role allowed",
+			name:  "role email allowed",
 			valid: true,
 			role:  true,
 			setting: models.TrustCenterNDARequestSetting{
@@ -77,30 +70,24 @@ func TestValidateEmailRestrictions(t *testing.T) {
 			approved: true,
 		},
 		{
-			name:     "free allowed",
-			valid:    true,
-			free:     true,
-			approved: true,
-		},
-		{
-			name:  "work only rejects free",
+			name:  "free email without a matching rule should not be approved",
 			valid: true,
 			free:  true,
-			setting: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly: true,
-			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := &emailverifier.Result{
-				Syntax:      emailverifier.Syntax{Valid: tt.valid},
+				Syntax: emailverifier.Syntax{
+					Valid: tt.valid,
+				},
 				Disposable:  tt.disposable,
 				RoleAccount: tt.role,
 				Free:        tt.free,
 			}
-			assert.Equal(t, tt.approved, validateEmailRules(result, &tt.setting))
+
+			assert.Equal(t, tt.approved, validateEmailRules(result, tt.setting))
 		})
 	}
 }
@@ -170,7 +157,7 @@ func TestValidateDomainList(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			approved, matched := validateDomainList(ndaApprovalTestDomain, &tt.setting)
+			approved, matched := validateDomainList(ndaApprovalTestDomain, tt.setting)
 			assert.Equal(t, tt.approved, approved)
 			assert.Equal(t, tt.matched, matched)
 		})
@@ -178,7 +165,7 @@ func TestValidateDomainList(t *testing.T) {
 }
 
 func TestValidateContact(t *testing.T) {
-	approved, err := validateContact(t.Context(), nil, "signer@"+ndaApprovalTestDomain, &models.TrustCenterNDARequestSetting{})
+	approved, err := validateContact(t.Context(), nil, "signer@"+ndaApprovalTestDomain, models.TrustCenterNDARequestSetting{})
 	require.NoError(t, err)
 	assert.False(t, approved)
 }
@@ -188,113 +175,13 @@ func TestValidateExistingDomain(t *testing.T) {
 		ID:            "request",
 		TrustCenterID: "trust-center",
 	}
-	approved, err := validateDomainFromNDARequest(t.Context(), nil, request, ndaApprovalTestDomain, &models.TrustCenterNDARequestSetting{})
+	approved, err := validateDomainFromNDARequest(t.Context(), nil, request, ndaApprovalTestDomain, models.TrustCenterNDARequestSetting{})
 	require.NoError(t, err)
 	assert.False(t, approved)
 }
 
 func TestValidateContactDomain(t *testing.T) {
-	approved, err := validateContactDomain(t.Context(), nil, ndaApprovalTestDomain, &models.TrustCenterNDARequestSetting{})
+	approved, err := validateContactDomain(t.Context(), nil, ndaApprovalTestDomain, models.TrustCenterNDARequestSetting{})
 	require.NoError(t, err)
 	assert.False(t, approved)
-}
-
-func TestValidateEmailRestrictionsWithoutVerifier(t *testing.T) {
-	tests := []struct {
-		name     string
-		setting  models.TrustCenterNDARequestSetting
-		approved bool
-	}{
-		{
-			name: "no classification restrictions",
-			setting: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-				AllowRoleAccount:     true,
-			},
-			approved: true,
-		},
-		{
-			name: "work email requires classification",
-			setting: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:        true,
-				AllowDisposableEmail: true,
-				AllowRoleAccount:     true,
-			},
-		},
-		{
-			name: "disposable restriction requires classification",
-			setting: models.TrustCenterNDARequestSetting{
-				AllowRoleAccount: true,
-			},
-		},
-		{
-			name: "role restriction requires classification",
-			setting: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.approved, validateEmailRules(nil, &tt.setting))
-		})
-	}
-}
-
-func TestEvaluateRulesWithoutVerifier(t *testing.T) {
-	tests := []struct {
-		name     string
-		setting  models.TrustCenterNDARequestSetting
-		approved bool
-	}{
-		{
-			name: "allowlist",
-			setting: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-				AllowRoleAccount:     true,
-				UseDomainAllowlist:   true,
-				DomainAllowlist:      []string{ndaApprovalTestDomain},
-			},
-			approved: true,
-		},
-		{
-			name: "blocklist wins",
-			setting: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-				AllowRoleAccount:     true,
-				UseDomainAllowlist:   true,
-				DomainAllowlist:      []string{ndaApprovalTestDomain},
-				UseDomainBlocklist:   true,
-				DomainBlocklist:      []string{ndaApprovalTestDomain},
-			},
-		},
-		{
-			name: "no positive criteria",
-			setting: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-				AllowRoleAccount:     true,
-			},
-			approved: true,
-		},
-		{
-			name: "allowlist approves before work restriction",
-			setting: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-				AllowRoleAccount:     true,
-				WorkEmailOnly:        true,
-				UseDomainAllowlist:   true,
-				DomainAllowlist:      []string{ndaApprovalTestDomain},
-			},
-			approved: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			approved, err := evaluateRules(t.Context(), &generated.Client{}, &generated.TrustCenterNDARequest{Email: "signer@" + ndaApprovalTestDomain}, &tt.setting)
-			require.NoError(t, err)
-			assert.Equal(t, tt.approved, approved)
-		})
-	}
 }

@@ -6,7 +6,6 @@ import "io"
 type TrustCenterNDARequestStatus string
 
 var (
-	TrustCenterNDARequestStatusPendingApproval TrustCenterNDARequestStatus = "PENDING_APPROVAL"
 	// TrustCenterNDARequestStatusRequested indicates the NDA has been requested
 	TrustCenterNDARequestStatusRequested TrustCenterNDARequestStatus = "REQUESTED"
 	// TrustCenterNDARequestStatusNeedsApproval indicates the NDA request needs approval
@@ -22,7 +21,6 @@ var (
 )
 
 var trustCenterNDARequestStatusValues = []TrustCenterNDARequestStatus{
-	TrustCenterNDARequestStatusPendingApproval,
 	TrustCenterNDARequestStatusRequested,
 	TrustCenterNDARequestStatusNeedsApproval,
 	TrustCenterNDARequestStatusApproved,

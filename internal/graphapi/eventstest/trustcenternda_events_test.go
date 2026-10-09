@@ -2,6 +2,7 @@ package eventstest_test
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -9,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/newman"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 
@@ -28,6 +30,13 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
+
+	_, err = suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
+			EnableAutoApproval: lo.ToPtr(true),
+		},
+	})
+	assert.NilError(t, err)
 
 	trustCenterDocProtected := (&th.TrustCenterDocBuilder{Client: suite.Client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg.Owner.UserCtx, t)
 
@@ -60,7 +69,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.NilError(t, err)
 
 	assert.Assert(t, ndaCreateResp != nil)
-	assert.Check(t, *ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status == enums.TrustCenterNDARequestStatusPendingApproval)
+	assert.Check(t, *ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status == enums.TrustCenterNDARequestStatusRequested)
 
 	// the access email mints the signing identity from the request id, not the browsing session
 	ndaRequestID := ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID
@@ -121,10 +130,18 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	// verify the signed NDA email was sent with the attested PDF attached
 	msgs := mockEmailSender().Messages()
-	assert.Assert(t, len(msgs) == 1, "expected 1 email after NDA signing, got %d", len(msgs))
-	assert.Assert(t, len(msgs[0].Attachments) == 1, "expected signed PDF attachment")
-	assert.Equal(t, "signed_nda_file.pdf", msgs[0].Attachments[0].Filename)
-	assert.Assert(t, len(msgs[0].Attachments[0].Content) > 0, "expected non-empty PDF content in attachment")
+	assert.Assert(t, len(msgs) == 2, "expected access and signed NDA emails, got %d", len(msgs))
+	accessEmails := lo.Filter(msgs, func(msg *newman.EmailMessage, _ int) bool {
+		return lo.Contains(msg.To, email) && strings.HasPrefix(msg.Subject, "Access ")
+	})
+	assert.Assert(t, len(accessEmails) == 1, "expected one access email")
+	signedEmails := lo.Filter(msgs, func(msg *newman.EmailMessage, _ int) bool {
+		return lo.Contains(msg.To, email) &&
+			len(msg.Attachments) == 1 &&
+			msg.Attachments[0].Filename == signedNDAAttachmentName
+	})
+	assert.Assert(t, len(signedEmails) == 1, "expected one email with the signed PDF attachment")
+	assert.Assert(t, len(signedEmails[0].Attachments[0].Content) > 0, "expected non-empty PDF content in attachment")
 
 	// now, check that the anonymous user can query the protected doc's files
 	getTrustCenterDocResp, err = suite.Client.API.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)

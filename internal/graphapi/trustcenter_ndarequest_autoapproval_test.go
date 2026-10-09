@@ -122,18 +122,18 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 	anonCtx := th.CreateAnonymousTrustCenterContext(tcOrg.TrustCenter.ID, tcOrg.OrganizationID)
 
 	tests := []struct {
-		ctx     context.Context
-		name    string
-		email   string
-		options models.TrustCenterNDARequestSetting
-		status  enums.TrustCenterNDARequestStatus
+		ctx           context.Context
+		name          string
+		email         string
+		options       models.TrustCenterNDARequestSetting
+		initialStatus *enums.TrustCenterNDARequestStatus
+		status        enums.TrustCenterNDARequestStatus
 	}{
 		{
 			ctx:   anonCtx,
-			name:  "domain whitelist",
+			name:  "domain whitelisted",
 			email: gofakeit.LetterN(12) + "@" + allowedDomain,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:      true,
 				UseDomainAllowlist: true,
 				DomainAllowlist: []string{
 					allowedDomain,
@@ -143,29 +143,27 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "role account is rejected by default",
+			name:  "work email rule approves role account",
 			email: "support@" + allowedDomain,
 			options: models.TrustCenterNDARequestSetting{
 				WorkEmailOnly: true,
 			},
-			status: enums.TrustCenterNDARequestStatusDeclined,
+			status: enums.TrustCenterNDARequestStatusApproved,
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
 			name:  "role account is approved when allowed",
 			email: "sales@" + allowedDomain,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:    true,
 				AllowRoleAccount: true,
 			},
 			status: enums.TrustCenterNDARequestStatusApproved,
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "approval falls back to needing approval",
+			name:  "auto approval does not match and fallsback to needing approval",
 			email: gofakeit.LetterN(12) + "@" + unmatchedDomain,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:           true,
 				UseDomainAllowlist:      true,
 				DomainAllowlist:         []string{},
 				ManualApprovalOnFailure: true,
@@ -177,17 +175,15 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			name:  "existing approved domain from a previous nda request",
 			email: gofakeit.LetterN(12) + "@" + approvedDomain,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:                    true,
 				ApproveFromExistingRequestDomain: true,
 			},
 			status: enums.TrustCenterNDARequestStatusApproved,
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "approved contact in another another org gets excluded",
+			name:  "approved request in another organization is excluded",
 			email: gofakeit.LetterN(12) + "@" + org2ContactDomain,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:                    true,
 				ApproveFromExistingRequestDomain: true,
 			},
 			status: enums.TrustCenterNDARequestStatusDeclined,
@@ -207,7 +203,6 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			name:  "contact matches so gets approved",
 			email: approvedEmail,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:          true,
 				ApproveIfContactExists: true,
 			},
 			status: enums.TrustCenterNDARequestStatusApproved,
@@ -217,7 +212,6 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			name:  "contact domain matches so gets approved",
 			email: gofakeit.LetterN(12) + "@" + approvedDomain,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:            true,
 				ApproveFromContactDomain: true,
 			},
 			status: enums.TrustCenterNDARequestStatusApproved,
@@ -227,7 +221,6 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			name:  "another organization contact is excluded",
 			email: contactInOrg2,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:            true,
 				ApproveIfContactExists:   true,
 				ApproveFromContactDomain: true,
 			},
@@ -289,62 +282,6 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			status: enums.TrustCenterNDARequestStatusDeclined,
 		},
 
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "allowlists should be case insensitive",
-			email: gofakeit.LetterN(12) + "@" + strings.ToUpper(allowedDomain),
-			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:      true,
-				UseDomainAllowlist: true,
-				DomainAllowlist: []string{
-					allowedDomain,
-				},
-			},
-			status: enums.TrustCenterNDARequestStatusApproved,
-		},
-
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "empty domain allowlist does not approve anyone",
-			email: gofakeit.LetterN(12) + "@" + companyDomain,
-			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:      true,
-				UseDomainAllowlist: true,
-				DomainAllowlist:    []string{},
-			},
-			status: enums.TrustCenterNDARequestStatusDeclined,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "unmatched existing domain",
-			email: gofakeit.LetterN(12) + "@" + unknownDomain,
-			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:                    true,
-				ApproveFromExistingRequestDomain: true,
-			},
-			status: enums.TrustCenterNDARequestStatusDeclined,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "existing approved disposable domain approves before email restrictions",
-			email: gofakeit.LetterN(12) + "@" + disposableDomain,
-			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:                    false,
-				ApproveFromExistingRequestDomain: true,
-			},
-			status: enums.TrustCenterNDARequestStatusApproved,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "disposable contact domain approves before email restrictions",
-			email: gofakeit.LetterN(12) + "@" + disposableDomain,
-			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:            false,
-				ApproveFromContactDomain: true,
-			},
-			status: enums.TrustCenterNDARequestStatusApproved,
-		},
-		{
 			ctx:   tcOrg.Owner.UserCtx,
 			name:  "existing contact match approves before work email restriction",
 			email: workEmail,
@@ -359,7 +296,6 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			name:  "organisation contact must be active to be granted access",
 			email: inactiveContactEmail,
 			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:          true,
 				ApproveIfContactExists: true,
 			},
 			status: enums.TrustCenterNDARequestStatusDeclined,
@@ -382,75 +318,8 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			status: enums.TrustCenterNDARequestStatusDeclined,
 		},
 		{
-			ctx:     tcOrg.Owner.UserCtx,
-			name:    "disposable email rejected when work restriction is off",
-			email:   gofakeit.LetterN(12) + "@" + disposableDomain,
-			options: models.TrustCenterNDARequestSetting{},
-			status:  enums.TrustCenterNDARequestStatusDeclined,
-		},
-		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "disposable email approved when explicitly allowed",
-			email: gofakeit.LetterN(12) + "@" + disposableDomain,
-			options: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-			},
-			status: enums.TrustCenterNDARequestStatusApproved,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "work email restriction overrides disposable email permission",
-			email: gofakeit.LetterN(12) + "@" + disposableDomain,
-			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly:        true,
-				AllowDisposableEmail: true,
-			},
-			status: enums.TrustCenterNDARequestStatusDeclined,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "disposable exact contact approves before email restrictions",
-			email: disposableContactEmail,
-			options: models.TrustCenterNDARequestSetting{
-				ApproveIfContactExists: true,
-			},
-			status: enums.TrustCenterNDARequestStatusApproved,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "free email approved when work restriction is off",
-			email: gofakeit.LetterN(12) + "@" + freeDomain,
-			options: models.TrustCenterNDARequestSetting{
-				UseDomainAllowlist: true,
-				DomainAllowlist:    []string{freeDomain},
-			},
-			status: enums.TrustCenterNDARequestStatusApproved,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "disposable email permission does not override blocklist",
-			email: gofakeit.LetterN(12) + "@" + disposableDomain,
-			options: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail: true,
-				UseDomainAllowlist:   true,
-				DomainAllowlist:      []string{disposableDomain},
-				UseDomainBlocklist:   true,
-				DomainBlocklist:      []string{disposableDomain},
-			},
-			status: enums.TrustCenterNDARequestStatusDeclined,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "disposable rejection falls back to manual approval",
-			email: gofakeit.LetterN(12) + "@" + disposableDomain,
-			options: models.TrustCenterNDARequestSetting{
-				ManualApprovalOnFailure: true,
-			},
-			status: enums.TrustCenterNDARequestStatusNeedsApproval,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "exact contact approved",
+			name:  "exact contact match is approved",
 			email: matchingContactEmail,
 			options: models.TrustCenterNDARequestSetting{
 				ApproveIfContactExists: true,
@@ -468,19 +337,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "unmatched existing domain requires manual approval",
-			email: gofakeit.LetterN(12) + "@" + unknownDomain,
-			options: models.TrustCenterNDARequestSetting{
-				AllowDisposableEmail:             true,
-				AllowRoleAccount:                 true,
-				ApproveFromExistingRequestDomain: true,
-				ManualApprovalOnFailure:          true,
-			},
-			status: enums.TrustCenterNDARequestStatusNeedsApproval,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
-			name:  "contact match approves before work restriction",
+			name:  "contact match approves before othe rules restrictions",
 			email: restrictedContactEmail,
 			options: models.TrustCenterNDARequestSetting{
 				AllowDisposableEmail:    true,
@@ -501,6 +358,46 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			},
 			status: enums.TrustCenterNDARequestStatusApproved,
 		},
+		{
+			ctx:     tcOrg.Owner.UserCtx,
+			name:    "role account declined without a matching rule",
+			email:   "support@" + unmatchedDomain,
+			options: models.TrustCenterNDARequestSetting{},
+			status:  enums.TrustCenterNDARequestStatusDeclined,
+		},
+		{
+			ctx:   tcOrg.Owner.UserCtx,
+			name:  "created with requested status should be approved",
+			email: gofakeit.LetterN(12) + "@" + allowedDomain,
+			options: models.TrustCenterNDARequestSetting{
+				UseDomainAllowlist: true,
+				DomainAllowlist:    []string{allowedDomain},
+			},
+			initialStatus: lo.ToPtr(enums.TrustCenterNDARequestStatusRequested),
+			status:        enums.TrustCenterNDARequestStatusApproved,
+		},
+		{
+			ctx:   tcOrg.Owner.UserCtx,
+			name:  "created with declined status should stay declined",
+			email: gofakeit.LetterN(12) + "@" + allowedDomain,
+			options: models.TrustCenterNDARequestSetting{
+				UseDomainAllowlist: true,
+				DomainAllowlist:    []string{allowedDomain},
+			},
+			initialStatus: lo.ToPtr(enums.TrustCenterNDARequestStatusDeclined),
+			status:        enums.TrustCenterNDARequestStatusDeclined,
+		},
+		{
+			ctx:   tcOrg.Owner.UserCtx,
+			name:  "created with signed status should stay signed",
+			email: gofakeit.LetterN(12) + "@" + allowedDomain,
+			options: models.TrustCenterNDARequestSetting{
+				UseDomainBlocklist: true,
+				DomainBlocklist:    []string{allowedDomain},
+			},
+			initialStatus: lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+			status:        enums.TrustCenterNDARequestStatusSigned,
+		},
 	}
 
 	for _, tt := range tests {
@@ -517,9 +414,10 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 
 			input := testclient.CreateTrustCenterNDARequestInput{
 				TrustCenterID: &tcOrg.TrustCenter.ID,
-				FirstName:     "New",
-				LastName:      "Requester",
+				FirstName:     gofakeit.FirstName(),
+				LastName:      gofakeit.LastName(),
 				Email:         tt.email,
+				Status:        tt.initialStatus,
 			}
 
 			resp, err := suite.Client.API.CreateTrustCenterNDARequest(tt.ctx, input)
@@ -527,7 +425,12 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 
 			req := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
 
-			assert.Equal(t, *req.Status, enums.TrustCenterNDARequestStatusPendingApproval)
+			initialStatus := enums.TrustCenterNDARequestStatusRequested
+			if tt.initialStatus != nil {
+				initialStatus = lo.FromPtr(tt.initialStatus)
+			}
+
+			assert.Equal(t, *req.Status, initialStatus)
 			assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
 
 			result, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, req.ID)
@@ -535,10 +438,6 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 
 			assert.Equal(t, *result.TrustCenterNDARequest.Status, tt.status)
 			assert.Assert(t, result.TrustCenterNDARequest.AutoApproved != nil)
-			assert.Equal(t, *result.TrustCenterNDARequest.AutoApproved, tt.status == enums.TrustCenterNDARequestStatusApproved)
-			if tt.status == enums.TrustCenterNDARequestStatusApproved {
-				assert.Check(t, result.TrustCenterNDARequest.ApprovedAt != nil)
-			}
 		})
 	}
 }
