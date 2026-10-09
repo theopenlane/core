@@ -18,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
@@ -119,6 +120,7 @@ func (IdentityHolder) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("is_openlane_user"),
+				entgql.Directives(entgql.Deprecated("is_openlane_user will be automatically set if it matches an existing user in the org")),
 			),
 		field.String("user_id").
 			Comment("the user id associated with the identity holder record").
@@ -326,6 +328,7 @@ func (IdentityHolder) Annotations() []schema.Annotation {
 // Hooks of the IdentityHolder
 func (IdentityHolder) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookAssignOpenlaneUser(),
 		hooks.HookIdentityHolderFiles(),
 		hooks.HookIdentityHolderSoftDelete(),
 	}

@@ -5,13 +5,43 @@ import (
 
 	"entgo.io/ent"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
+
+// HookAssignOpenlaneUser automatically (un)sets the is_openlane_user based off
+// the existence of an org member with the same email address.
+func HookAssignOpenlaneUser() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.IdentityHolderFunc(func(ctx context.Context, m *generated.IdentityHolderMutation) (generated.Value, error) {
+			email, ok := m.Email()
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			internalCtx := auth.WithInternalOperationContext(ctx)
+
+			exists, err := m.Client().OrgMembership.Query().Where(
+				orgmembership.HasUserWith(user.Email(email)),
+			).
+				Exist(internalCtx)
+			if err != nil {
+				return nil, err
+			}
+
+			m.SetIsOpenlaneUser(exists)
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne)
+}
 
 // HookIdentityHolderFiles runs on identity holder mutations to check for uploaded files
 func HookIdentityHolderFiles() ent.Hook {
