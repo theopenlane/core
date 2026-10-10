@@ -1,0 +1,17 @@
+package {{ name }}
+
+import (
+	"context"
+
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+)
+
+// verify probes {{ display }} under the client and derives the installation metadata
+func verify(_ context.Context, req types.ConnectionRequest[CredentialSchema], c *APIClient) (InstallationMetadata, error) {
+	if c.Credential.APIToken == "" || req.Credential.AccountID == "" {
+		return InstallationMetadata{}, ErrVerifyFailed
+	}
+
+	// swap the placeholder for a provider call that confirms the token, e.g. c.Accounts().Get(ctx, req.Credential.AccountID)
+	return InstallationMetadata{AccountID: req.Credential.AccountID}, nil
+}

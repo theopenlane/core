@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
@@ -30,17 +29,13 @@ type SendQuestionnaireCampaignRequest struct {
 	TestEmail string `json:"testEmail,omitempty" jsonschema:"description=Recipient email for a test questionnaire send"`
 }
 
-// SendQuestionnaireCampaign dispatches questionnaire access emails to all pending campaign targets,
-// creating assessment responses and generating anonymous access tokens for each recipient
+// SendQuestionnaireCampaign dispatches questionnaire access emails to all pending campaign targets, creating assessment responses and generating anonymous access tokens for each recipient
 type SendQuestionnaireCampaign struct{}
 
-// Handle returns the typed operation handler for builder registration
-func (s SendQuestionnaireCampaign) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(emailClientRef, SendQuestionnaireCampaignOp, ErrCampaignNotFound, s.Run)
-}
+// SendQuestionnaireCampaignOp is the operation ref for the questionnaire campaign dispatch operation
+var SendQuestionnaireCampaignOp = types.OperationPayloadOf[SendQuestionnaireCampaignRequest]().Handles(SendQuestionnaireCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
 
-// Run loads the campaign and its assessment, iterates pending targets, creates assessment
-// responses, generates anonymous JWT access tokens, and sends questionnaire access emails
+// Run loads the campaign and its assessment, iterates pending targets, creates assessment responses, generates anonymous JWT access tokens, and sends questionnaire access emails
 func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {
 	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput)
 	if err != nil {
@@ -76,9 +71,7 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 	})
 }
 
-// sendQuestionnaireToRecipient creates an assessment response, generates an anonymous access
-// token URL, dispatches the questionnaire access email through the questionnaireAuthEmail
-// operation, and marks campaign targets as sent for non-test dispatches
+// sendQuestionnaireToRecipient creates an assessment response, generates an anonymous access token URL, dispatches the questionnaire access email through the questionnaireAuthEmail operation, and marks campaign targets as sent for non-test dispatches
 func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationRequest, db *generated.Client, client *Client, camp *generated.Campaign, assessmentName string, email string, campaignTargetID string, isTest bool) error {
 	if strings.TrimSpace(email) == "" {
 		return nil
@@ -128,9 +121,7 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 // questionnairePath is the product route serving questionnaire access links
 const questionnairePath = "questionnaire"
 
-// QuestionnaireAuthURL generates an anonymous access token URL for questionnaire access.
-// When isTest is true the token is marked as a sender preview so the questionnaire resolves
-// to the test response rather than a real recipient's response
+// QuestionnaireAuthURL generates an anonymous access token URL for questionnaire access
 func QuestionnaireAuthURL(ctx context.Context, db *generated.Client, assessmentID, ownerID, recipientEmail, campaignID string, isTest bool) (string, error) {
 	productURL, err := urlx.ParseAbsolute(db.EntConfig.QuestionnaireProductURL)
 	if err != nil {

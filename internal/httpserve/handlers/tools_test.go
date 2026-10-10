@@ -87,6 +87,7 @@ type HandlerTestSuite struct {
 	db                   *ent.Client
 	galaDB               *ent.Client
 	sharedIntegrationsRT *runtime.Runtime
+	keystore             *keystore.Store
 	api                  *testclient.TestClient
 	h                    *handlers.Handler
 	router               *route.Router
@@ -240,6 +241,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	credStore, err := keystore.NewStore(suite.galaDB)
 	require.NoError(suite.T(), err)
 
+	suite.keystore = credStore
 	suite.sharedSlackRecorder = newSlackWebhookRecorder(suite.T())
 
 	rt, err := runtime.New(runtime.Config{
@@ -486,7 +488,21 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 // testAuthDefinitionID is the canonical ID for the test OAuth definition.
 const testAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
 
-var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
+// testOAuthCredential is the credential type the test OAuth flow stores
+type testOAuthCredential struct {
+	// AccessToken is the issued access token
+	AccessToken string `json:"access_token"`
+	// RefreshToken is the issued refresh token
+	RefreshToken string `json:"refresh_token"`
+}
+
+// testOAuthClient is the client the test OAuth connection provides
+type testOAuthClient struct{}
+
+// testOAuthInstallation is the installation metadata layout of the test OAuth definition
+type testOAuthInstallation struct{}
+
+var testAuthCredentialRef = types.ConnectionOf[testOAuthCredential]().Connection().Credential.Name
 
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
@@ -505,36 +521,26 @@ func (suite *HandlerTestSuite) mockEmailSender() *mockprovider.EmailSender {
 }
 
 func buildTestOAuthDefinition() (types.Definition, error) {
+	connection := types.ConnectionOf[testOAuthCredential]().
+		Name("Test OAuth").
+		Description("Authenticate the test definition using the OAuth callback fixture.").
+		Authenticates(types.NewAuthFlow[testOAuthCredential](testAuthStart, testAuthComplete)).
+		Provides(func(context.Context, types.ConnectionRequest[testOAuthCredential]) (*testOAuthClient, error) {
+			return &testOAuthClient{}, nil
+		}).
+		Verified(func(context.Context, types.ConnectionRequest[testOAuthCredential], *testOAuthClient) (testOAuthInstallation, error) {
+			return testOAuthInstallation{}, nil
+		}).
+		Disconnects("Remove the persisted test OAuth credential and disconnect this installation.", nil)
+
 	return types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          testAuthDefinitionID,
 			DisplayName: "Test OAuth",
 			Active:      true,
 		},
-		CredentialRegistrations: []types.CredentialRegistration{
-			{
-				Ref:         testAuthCredentialRef,
-				Name:        "Test OAuth Credential",
-				Description: "Auth-managed credential slot used by the test OAuth definition.",
-			},
-		},
-		Connections: []types.ConnectionRegistration{
-			{
-				CredentialRef:  testAuthCredentialRef,
-				Name:           "Test OAuth",
-				Description:    "Authenticate the test definition using the OAuth callback fixture.",
-				CredentialRefs: []types.CredentialSlotID{testAuthCredentialRef},
-				Auth: &types.AuthRegistration{
-					CredentialRef: testAuthCredentialRef,
-					Start:         testAuthStart,
-					Complete:      testAuthComplete,
-				},
-				Disconnect: &types.DisconnectRegistration{
-					CredentialRef: testAuthCredentialRef,
-					Description:   "Remove the persisted test OAuth credential and disconnect this installation.",
-				},
-			},
-		},
+		Installation: types.InstallationOf[testOAuthInstallation]().Registration(),
+		Connections:  []types.Connector{connection},
 	}, nil
 }
 

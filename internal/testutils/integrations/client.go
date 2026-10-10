@@ -8,18 +8,20 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Client is the functional test client built from the stored token credential
+// Client is the functional test client built from a stored token credential
 type Client struct {
 	// Token is the resolved API token
 	Token string
 }
 
-// buildClient constructs the client from the stored token credential
-func buildClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	cred, ok, err := TokenCredential.Resolve(req.Credentials)
-	if err != nil || !ok || cred.Token == "" {
-		return nil, ErrTokenMissing
-	}
+// tokenClient returns a client builder reading the token from the decoded credential
+func tokenClient[T any](token func(T) string) func(context.Context, types.ConnectionRequest[T]) (*Client, error) {
+	return func(_ context.Context, req types.ConnectionRequest[T]) (*Client, error) {
+		value := token(req.Credential)
+		if value == "" {
+			return nil, ErrTokenMissing
+		}
 
-	return &Client{Token: cred.Token}, nil
+		return &Client{Token: value}, nil
+	}
 }

@@ -2,6 +2,7 @@ package serveropts
 
 import (
 	"context"
+	"errors"
 
 	"github.com/rs/zerolog/log"
 
@@ -64,9 +65,7 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 		if _, err := gala.Register(galaInstance, gala.Definition[integrationSeedRequest]{
 			Topic: integrationSeedTopic,
 			Handle: func(handlerCtx gala.HandlerContext, _ integrationSeedRequest) error {
-				seedIntegrationLoops(handlerCtx.Context, rt)
-
-				return nil
+				return seedIntegrationLoops(handlerCtx.Context, rt)
 			},
 		}); err != nil {
 			log.Panic().Err(err).Msg("failed to register integration loop seeding listener")
@@ -91,8 +90,19 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 	})
 }
 
-// seedIntegrationLoops ensures every reconcilable and scheduled operation has a live loop
-func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) {
+// integrationQueues are the integration job kinds paused during the startup sweep
+var integrationQueues = []gala.Namespace{gala.IntegrationReconcile, gala.IntegrationRun, gala.IntegrationWebhook, gala.IntegrationIngest}
+
+// seedIntegrationLoops upgrades installations and seeds loops with the integration queues paused
+func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) error {
+	if err := rt.Gala().PauseQueues(ctx, integrationQueues...); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to pause integration queues, upgrading installations with them running")
+	}
+
+	if err := rt.UpgradeInstallations(ctx); err != nil {
+		return errors.Join(err, rt.Gala().ResumeQueues(ctx, integrationQueues...))
+	}
+
 	if err := rt.SeedReconcileJobs(ctx); err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("failed to seed one or more missing reconcile jobs")
 	}
@@ -100,4 +110,6 @@ func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) {
 	if err := rt.SeedScheduledOperations(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to seed one or more scheduled operation listeners")
 	}
+
+	return rt.Gala().ResumeQueues(ctx, integrationQueues...)
 }

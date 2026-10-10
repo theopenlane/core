@@ -31,7 +31,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
 
 	// Use initiator's context for creating workflow definitions (has user + org)
-	// Then use th.SetContext for bypassing privacy on engine operations
+	// Then use th.SetInternalContext for internal engine operations
 	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)
@@ -217,7 +217,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver2, enums.RoleAdmin, initiator.OrganizationID)
 
 	// Use initiator's context for creating workflow definitions (has user + org)
-	// Then use th.SetContext for bypassing privacy on engine operations
+	// Then use th.SetInternalContext for internal engine operations
 	ctx := th.SetInternalContext(initiator.UserCtx, suite.Client.DB)
 
 	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)

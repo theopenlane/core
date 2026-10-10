@@ -1,123 +1,43 @@
 package authentik
 
 import (
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Authentik definition builder
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Authentik",
-				DisplayName: "Authentik",
-				Description: "Collect Authentik directory users, groups, and memberships for identity posture and access governance.",
-				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/authentik",
-				Tags:        []string{"directory"},
-				Active:      true,
-				Visible:     true,
-			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         authentikCredential.ID(),
-					Name:        "Authentik Credential",
-					Description: "API token used to access Authentik instance data.",
-					Schema:      authentikCredentialSchema,
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  authentikCredential.ID(),
-					Name:           "Authentik API Token",
-					Description:    "Configure Authentik access using an API token from your instance.",
-					CredentialRefs: []types.CredentialSlotID{authentikCredential.ID()},
-					ClientRefs:     []types.ClientID{authentikClient.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: authentikClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: integration.Registration(),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: authentikCredential.ID(),
-						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				{
-					Ref:            authentikClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{authentikCredential.ID()},
-					Description:    "Authentik API client",
-					Build:          Client{}.Build,
-				},
+			ID:           definitionID.ID(),
+			Family:       "Authentik",
+			DisplayName:  "Authentik",
+			Description:  "Collect Authentik directory users, groups, and memberships for identity posture and access governance.",
+			Category:     "identity",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/authentik",
+			Tags:         []string{"directory"},
+			Active:       true,
+			Visible:      true,
+			UserInput:    userInput.Registration(),
+			Installation: installation.Registration(),
+			Connections: []types.Connector{
+				authentikConnection.
+					Name("Authentik API Token").
+					Description("Configure Authentik access using an API token from your instance.").
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect Authentik directory users, groups, and memberships as directory accounts",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    authentikClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaDirectoryAccount.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryGroup.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryMembership.Name,
-						},
-					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
-				},
+				types.OperationRefOf[providerkit.DirectorySync]().
+					Ingests(runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Description("Collect Authentik directory users, groups, and memberships as directory accounts").
+					Registration(),
 			},
-			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaDirectoryAccount.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryAccount,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryGroup.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryGroup,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryMembership.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryMembership,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaDirectoryAccount.Name,
-								TargetField:  directoryaccount.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
-							},
-							{
-								TargetSchema: entityops.SchemaDirectoryGroup.Name,
-								TargetField:  directorygroup.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
-							},
-						},
-					},
-				},
-			},
+			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil
 	})
 }

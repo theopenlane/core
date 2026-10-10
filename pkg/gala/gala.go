@@ -703,6 +703,32 @@ func (g *Gala) CountActiveJobsWithMetadata(ctx context.Context, metadataFragment
 	return len(jobs), nil
 }
 
+// PauseQueues pauses the queues of the namespaces' job kinds on every pod
+func (g *Gala) PauseQueues(ctx context.Context, namespaces ...Namespace) error {
+	return g.eachQueue(namespaces, func(queue string) error { return g.jobController.QueuePause(ctx, queue, nil) })
+}
+
+// ResumeQueues resumes the queues of the namespaces' job kinds
+func (g *Gala) ResumeQueues(ctx context.Context, namespaces ...Namespace) error {
+	return g.eachQueue(namespaces, func(queue string) error { return g.jobController.QueueResume(ctx, queue, nil) })
+}
+
+// eachQueue applies fn to each namespace's registered queue
+func (g *Gala) eachQueue(namespaces []Namespace, fn func(queue string) error) error {
+	if g.jobController == nil {
+		return nil
+	}
+
+	return errors.Join(lo.FilterMap(namespaces, func(namespace Namespace, _ int) (error, bool) {
+		queue, registered := g.kindQueues[namespace.Kind()]
+		if !registered {
+			return nil, false
+		}
+
+		return fn(queue), true
+	})...)
+}
+
 // PurgeActiveJobsWithMetadata deletes live River jobs matching a JSONB metadata fragment
 // Running jobs are cancelled before deletion and rescanned for recurring successors
 func (g *Gala) PurgeActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {

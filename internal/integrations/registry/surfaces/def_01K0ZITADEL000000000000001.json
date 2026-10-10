@@ -1,0 +1,145 @@
+{
+  "hash": "ce9ed92359d45925e93a135328330dda99b6931b6d7df2062a8c1093d52c252b",
+  "version": "01M49CHH2PQ6VZ1EN88CWSVJV2",
+  "surface": {
+    "id": "def_01K0ZITADEL000000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "domain": {
+                  "type": "string",
+                  "title": "Domain",
+                  "description": "Zitadel instance domain (e.g. my-instance.zitadel.cloud). Uses TLS by default; prefix with http:// for a non-TLS self-hosted instance."
+                },
+                "token": {
+                  "type": "string",
+                  "title": "Personal Access Token"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "domain",
+                "token"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ref": "OAuthCredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/o-auth-credential-schema",
+          "$ref": "#/$defs/OAuthCredentialSchema",
+          "$defs": {
+            "OAuthCredentialSchema": {
+              "properties": {
+                "domain": {
+                  "type": "string",
+                  "title": "Domain",
+                  "description": "Zitadel instance domain (e.g. my-instance.zitadel.cloud). Uses TLS by default; prefix with http:// for a non-TLS self-hosted instance."
+                },
+                "clientId": {
+                  "type": "string",
+                  "title": "Client ID"
+                },
+                "clientSecret": {
+                  "type": "string",
+                  "title": "Client Secret"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "domain",
+                "clientId",
+                "clientSecret"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "primaryDirectory": {
+                "type": "boolean",
+                "title": "Primary Directory",
+                "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "domain": {
+                "type": "string"
+              },
+              "instanceId": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema",
+      "OAuthCredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

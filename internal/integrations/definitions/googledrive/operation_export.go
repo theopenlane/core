@@ -11,12 +11,12 @@ import (
 
 const exportMIMEType = "text/html"
 
-// Handle adapts the document export to the generic operation registration boundary
-func Handle() types.OperationHandler {
-	return operations.Handle(driveClient, documentExportOperation)
-}
+// documentExportOperation is the operation ref for the document export operation
+var documentExportOperation = types.OperationPayloadOf[operations.DocumentExport]().
+	Handles(operations.ExportDocument[DriveClient]).
+	Policy(types.ExecutionPolicy{Inline: true})
 
-// Export fetches OneDrive item metadata and returns either an iframe embed or PDF bytes
+// Export fetches Google Drive file metadata and returns either an iframe embed or PDF bytes
 func (c DriveClient) Export(ctx context.Context, cfg *operations.DocumentExport) error {
 	resp, err := c.Svc.Files.Export(cfg.FileID, exportMIMEType).Context(ctx).Download()
 	if err != nil {

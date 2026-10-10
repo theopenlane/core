@@ -19403,6 +19403,7 @@ type Integration struct {
 	WebhookURLs           map[string]any                  `json:"webhookURLs,omitempty"`
 	Credentials           jsontext.Value                  `json:"credentials,omitempty"`
 	Config                jsontext.Value                  `json:"config,omitempty"`
+	OperationConfig       jsontext.Value                  `json:"operationConfig,omitempty"`
 }
 
 func (Integration) IsNode() {}

@@ -10,20 +10,19 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/iam/tokens"
-
-	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 const (
+	// testOrganizationID is a representative Openlane organization id
+	testOrganizationID = "01JQZX9K8N7M6P5R4T3V2W1Y0Z"
 	// testProjectNumber is a representative numeric GCP project number hosting the workload identity pool
 	testProjectNumber = "123456789"
 	// testRSAKeySize is the smallest RSA key size the signing key loader accepts
 	testRSAKeySize = 2048
 )
 
-// testBuildRequest builds a client build request with a signing token manager
-func testBuildRequest(t *testing.T) types.ClientBuildRequest {
+// testTokenManager builds a signing token manager
+func testTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 
 	key, err := rsa.GenerateKey(rand.Reader, testRSAKeySize)
@@ -38,10 +37,7 @@ func testBuildRequest(t *testing.T) types.ClientBuildRequest {
 	})
 	require.NoError(t, err)
 
-	return types.ClientBuildRequest{
-		Integration:  &ent.Integration{OwnerID: "01JQZX9K8N7M6P5R4T3V2W1Y0Z"},
-		TokenManager: manager,
-	}
+	return manager
 }
 
 // TestWorkloadIdentityAudience verifies the provider resource name construction
@@ -55,7 +51,7 @@ func TestWorkloadIdentityAudience(t *testing.T) {
 // TestFederationSource verifies the workload identity token source construction
 func TestFederationSource(t *testing.T) {
 	t.Run("builds a federated source without impersonation", func(t *testing.T) {
-		source, err := federationSource(context.Background(), testBuildRequest(t), WorkloadIdentityCredentialSchema{
+		source, err := federationSource(context.Background(), testTokenManager(t), testOrganizationID, WorkloadIdentityCredentialSchema{
 			ProjectNumber: testProjectNumber,
 		})
 		require.NoError(t, err)
@@ -63,7 +59,7 @@ func TestFederationSource(t *testing.T) {
 	})
 
 	t.Run("builds an impersonated source when a service account is configured", func(t *testing.T) {
-		source, err := federationSource(context.Background(), testBuildRequest(t), WorkloadIdentityCredentialSchema{
+		source, err := federationSource(context.Background(), testTokenManager(t), testOrganizationID, WorkloadIdentityCredentialSchema{
 			ProjectNumber:       testProjectNumber,
 			ServiceAccountEmail: "collector@project-123.iam.gserviceaccount.com",
 		})
@@ -72,7 +68,7 @@ func TestFederationSource(t *testing.T) {
 	})
 
 	t.Run("requires a project number", func(t *testing.T) {
-		_, err := federationSource(context.Background(), testBuildRequest(t), WorkloadIdentityCredentialSchema{})
+		_, err := federationSource(context.Background(), testTokenManager(t), testOrganizationID, WorkloadIdentityCredentialSchema{})
 		require.ErrorIs(t, err, ErrProjectNumberRequired)
 	})
 }

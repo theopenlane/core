@@ -16,48 +16,23 @@ const (
 	keycloakDefaultPageSize = 100
 )
 
-// Client builds Keycloak API clients for one installation
-type Client struct{}
+// buildClient constructs the Keycloak API client for one installation
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (Client, error) {
+	cred := req.Credential
 
-// Build constructs the Keycloak API client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	cred, err := resolveCredential(req.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if cred.BaseURL == "" {
-		return nil, ErrBaseURLMissing
-	}
-
-	if cred.Realm == "" {
-		return nil, ErrRealmMissing
-	}
-
-	if cred.ClientID == "" {
-		return nil, ErrClientIDMissing
-	}
-
-	if cred.ClientSecret == "" {
-		return nil, ErrClientSecretMissing
+	switch {
+	case cred.BaseURL == "":
+		return Client{}, ErrBaseURLMissing
+	case cred.Realm == "":
+		return Client{}, ErrRealmMissing
+	case cred.ClientID == "":
+		return Client{}, ErrClientIDMissing
+	case cred.ClientSecret == "":
+		return Client{}, ErrClientSecretMissing
 	}
 
 	gc := gocloak.NewClient(cred.BaseURL)
 	gc.RestyClient().SetTimeout(keycloakRequestTimeout)
 
-	return gc, nil
-}
-
-// resolveCredential extracts the CredentialSchema from the provided credential bindings
-func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
-	cred, ok, err := keycloakCredential.Resolve(bindings)
-	if err != nil {
-		return CredentialSchema{}, ErrCredentialDecode
-	}
-
-	if !ok {
-		return CredentialSchema{}, ErrCredentialDecode
-	}
-
-	return cred, nil
+	return Client{GoCloak: gc, Realm: cred.Realm, ClientID: cred.ClientID, ClientSecret: cred.ClientSecret}, nil
 }

@@ -2,7 +2,6 @@ package system
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -10,31 +9,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/consts"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
-
-// Handle adapts the organization deletion sweep to the generic operation registration boundary;
-// the receiver carries the operator defaults and request config overlays a copy
-func (o OrganizationDeleteSweep) Handle() types.OperationHandler {
-	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-		sweep := o
-
-		if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
-			return nil, ErrOperationConfigInvalid
-		}
-
-		processed, err := sweep.Run(ctx, req)
-		if err != nil {
-			return nil, err
-		}
-
-		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
-	}
-}
 
 // Run executes one organization deletion sweep and returns the number of deleted organizations
 func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
@@ -115,8 +93,7 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 	return len(deletedOrgs), nil
 }
 
-// clearRecoveredOrganizationDeletions clears pending deletion markers on organizations whose
-// billing status recovered since being marked
+// clearRecoveredOrganizationDeletions clears pending deletion markers after billing recovers
 func clearRecoveredOrganizationDeletions(ctx context.Context, req types.OperationRequest) error {
 	db := req.DB
 	logger := logx.FromContext(ctx)

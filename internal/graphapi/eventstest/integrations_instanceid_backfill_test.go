@@ -52,11 +52,11 @@ func connectMockInstall(ctx context.Context, t *testing.T, server *testint.MockH
 	def, ok := suite.IntegrationsRT.Registry().Definition(testint.MockHTTPDefinitionID.ID())
 	assert.Assert(t, ok, "mock provider definition must be registered on the runtime")
 
-	install, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, th.SharedTestUser1.OrganizationID, "", def)
+	install, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, th.SharedTestUser1.OrganizationID, "", def, nil, nil)
 	th.RequireNoError(t, err)
 
 	credential := testint.MockHTTPCredentialSet(mockProviderToken, server.URL())
-	th.RequireNoError(t, suite.IntegrationsRT.Reconcile(ctx, install, nil, testint.MockHTTPCredential.ID(), &credential, nil))
+	th.RequireNoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, install, testint.MockHTTPConnection.Connection().Credential.Name, credential))
 
 	return reloadIntegration(t, ctx, install.ID)
 }
@@ -69,7 +69,7 @@ func executeMockSync(ctx context.Context, t *testing.T, install *ent.Integration
 	operation, err := suite.IntegrationsRT.Registry().Operation(install.DefinitionID, testint.MockHTTPSyncOperation)
 	th.RequireNoError(t, err)
 
-	_, err = suite.IntegrationsRT.ExecuteOperation(ctx, install, operation, nil, nil)
+	_, err = suite.IntegrationsRT.ExecuteOperation(ctx, install, operation, nil)
 	th.RequireNoError(t, err)
 }
 
@@ -175,10 +175,11 @@ func TestInstanceIDGatesIngest(t *testing.T) {
 	operation, err := suite.IntegrationsRT.Registry().Operation(install.DefinitionID, testint.MockHTTPSyncOperation)
 	th.RequireNoError(t, err)
 
-	_, err = suite.IntegrationsRT.ExecuteOperation(ctx, reloadIntegration(t, ctx, install.ID), operation, nil, nil)
+	_, err = suite.IntegrationsRT.ExecuteOperation(ctx, reloadIntegration(t, ctx, install.ID), operation, nil)
 	assert.Check(t, errors.Is(err, operations.ErrIngestInstanceIDRequired), "ingest is gated for an installation with no instance id")
 
-	th.RequireNoError(t, suite.IntegrationsRT.BackfillInstallationInstanceID(ctx, reloadIntegration(t, ctx, install.ID)))
+	_, err = suite.IntegrationsRT.RunHealthAssessment(ctx, reloadIntegration(t, ctx, install.ID))
+	th.RequireNoError(t, err)
 
 	executeMockSync(ctx, t, reloadIntegration(t, ctx, install.ID))
 
@@ -229,7 +230,7 @@ func TestReconnectRefreshesChangedInstanceID(t *testing.T) {
 	server.SetInstanceID("tenant-v2")
 
 	credential := testint.MockHTTPCredentialSet(mockProviderToken, server.URL())
-	th.RequireNoError(t, suite.IntegrationsRT.Reconcile(ctx, reloadIntegration(t, ctx, install.ID), nil, testint.MockHTTPCredential.ID(), &credential, nil))
+	th.RequireNoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, reloadIntegration(t, ctx, install.ID), testint.MockHTTPConnection.Connection().Credential.Name, credential))
 
 	assert.Check(t, is.Equal("tenant-v2", reloadIntegration(t, ctx, install.ID).InstallationMetadata.Display.ExternalID), "reconnect refreshes the changed instance id instead of rejecting it as a mismatch")
 }

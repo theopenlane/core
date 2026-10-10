@@ -8,13 +8,80 @@ import (
 
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// testCredentialSlot is a reusable credential slot for tests
-var testCredentialSlot = integrationtypes.NewCredentialSlotID("api_key")
+// testCredential is the credential type behind the reusable test slot
+type testCredential struct{}
 
-// testCredentialSchema is a minimal valid JSON schema for credential registration
-var testCredentialSchema = json.RawMessage(`{"type":"object"}`)
+// testAuthCredential is the credential type behind the auth-managed test slot
+type testAuthCredential struct{}
+
+// testRuntimeConfig is the runtime config type behind the runtime integration tests
+type testRuntimeConfig struct {
+	Key string `json:"key"`
+}
+
+// testClient is the client type every test connection provides
+type testClient struct{}
+
+// testSecondClient is a client type a test connection may leave unprovided
+type testSecondClient struct{}
+
+// testMetadata is the installation metadata type every test connection verifies to
+type testMetadata struct {
+	Tenant string `json:"tenant"`
+}
+
+// testOtherMetadata is an installation metadata type differing from the definition's
+type testOtherMetadata struct {
+	Zone string `json:"zone"`
+}
+
+// testConnector yields a fixed connection value
+type testConnector integrationtypes.Connection
+
+// Connection returns the fixed connection
+func (c testConnector) Connection() integrationtypes.Connection {
+	return integrationtypes.Connection(c)
+}
+
+var (
+	// testRuntimeSchema is the reflected runtime config schema behind the runtime integration tests
+	testRuntimeSchema = jsonx.SchemaFrom[testRuntimeConfig]()
+	// testClientRef is the name of the client every test connection provides
+	testClientRef = testConnectionOf[testCredential]().Connection().Verify.ClientRef
+)
+
+// testConnectionOf returns a connection over credential T that provides and verifies the test client
+func testConnectionOf[T any]() integrationtypes.ConnectionRef[T] {
+	return integrationtypes.ConnectionOf[T]().
+		Provides(func(context.Context, integrationtypes.ConnectionRequest[T]) (*testClient, error) {
+			return &testClient{}, nil
+		}).
+		Verified(func(context.Context, integrationtypes.ConnectionRequest[T], *testClient) (testMetadata, error) {
+			return testMetadata{}, nil
+		})
+}
+
+// newTestInstallation returns the installation metadata layout every test connection verifies to
+func newTestInstallation() *integrationtypes.InstallationRegistration {
+	return integrationtypes.InstallationOf[testMetadata]().Registration()
+}
+
+// connectionDefinition returns a definition declaring the given connections beside the test installation layout
+func connectionDefinition(id string, connections ...integrationtypes.Connector) integrationtypes.Definition {
+	return integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: id},
+		Connections:    connections,
+		Installation:   newTestInstallation(),
+	}
+}
+
+// testUserInput is the user input type behind the typed user input ref tests
+type testUserInput struct {
+	Region string `json:"region"`
+}
 
 // newTestHandler returns a no-op operation handler
 func newTestHandler() integrationtypes.OperationHandler {
@@ -30,10 +97,8 @@ func newTestIngestHandler() integrationtypes.IngestHandler {
 	}
 }
 
-// minimalDefinition returns a valid definition with one credential, client, and operation
-func minimalDefinition(id string) (integrationtypes.Definition, integrationtypes.ClientRef[string]) {
-	clientRef := integrationtypes.NewClientRef[string]()
-
+// minimalDefinition returns a valid definition with one connection, installation layout, and operation
+func minimalDefinition(id string) integrationtypes.Definition {
 	return integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          id,
@@ -41,27 +106,17 @@ func minimalDefinition(id string) (integrationtypes.Definition, integrationtypes
 			Active:      true,
 			Visible:     true,
 		},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialSlot, Schema: testCredentialSchema},
-		},
-		Clients: []integrationtypes.ClientRegistration{
-			{
-				Ref:            clientRef.ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialSlot},
-				Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) {
-					return "ok", nil
-				},
-			},
-		},
+		Connections:  []integrationtypes.Connector{testConnectionOf[testCredential]()},
+		Installation: newTestInstallation(),
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:      "health.default",
 				Topic:     gala.TopicName("integration." + id + ".health.default"),
-				ClientRef: clientRef.ID(),
+				ClientRef: testClientRef,
 				Handle:    newTestHandler(),
 			},
 		},
-	}, clientRef
+	}
 }
 
 // TestRegistryRegisterAndResolveDefinition verifies one definition can be registered and resolved
@@ -69,7 +124,7 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	def, clientRef := minimalDefinition("def_resolve")
+	def := minimalDefinition("def_resolve")
 
 	if err := reg.Register(def); err != nil {
 		t.Fatalf("Register() error = %v", err)
@@ -84,21 +139,12 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 		t.Fatalf("Definition() display name = %q, want %q", byID.DisplayName, def.DisplayName)
 	}
 
-	client, err := reg.Client(def.ID, clientRef.ID())
-	if err != nil {
-		t.Fatalf("Client() error = %v", err)
-	}
-
-	if client.Ref != clientRef.ID() {
-		t.Fatalf("Client() ref mismatch")
-	}
-
 	operation, err := reg.Operation(def.ID, "health.default")
 	if err != nil {
 		t.Fatalf("Operation() error = %v", err)
 	}
 
-	if operation.Topic != gala.TopicName("integration.def_resolve.health.default") {
+	if operation.Topic != gala.TopicName("integration.run.def_resolve.health.default") {
 		t.Fatalf("Operation() topic = %q", operation.Topic)
 	}
 
@@ -111,71 +157,38 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 	}
 }
 
-// TestRegistrySupportsMultipleClientsPerDefinition verifies a definition can register more than one client
-func TestRegistrySupportsMultipleClientsPerDefinition(t *testing.T) {
+// secondClientOperation returns an operation running under the second test client
+func secondClientOperation(name string) integrationtypes.OperationRegistration {
+	return integrationtypes.NewOperationPayload[finalizePayload](name).
+		Handles(func(context.Context, integrationtypes.OperationRequest, *testSecondClient, finalizePayload) (json.RawMessage, error) {
+			return nil, nil
+		}).
+		Registration()
+}
+
+// TestRegistrySupportsMultipleClientsPerConnection verifies a connection providing several clients serves operations under each
+func TestRegistrySupportsMultipleClientsPerConnection(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	firstClient := integrationtypes.NewClientRef[string]()
-	secondClient := integrationtypes.NewClientRef[int]()
 
-	definition := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          "def_multi_client",
-			DisplayName: "Multi Client",
-			Active:      true,
-			Visible:     true,
-		},
-		Clients: []integrationtypes.ClientRegistration{
-			{
-				Ref: firstClient.ID(),
-				Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) {
-					return "first", nil
-				},
-			},
-			{
-				Ref: secondClient.ID(),
-				Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) {
-					return 2, nil
-				},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{
-				Name:      "first.inspect",
-				Topic:     gala.TopicName("integration.multi_client.first.inspect"),
-				ClientRef: firstClient.ID(),
-				Handle:    newTestHandler(),
-			},
-			{
-				Name:      "second.inspect",
-				Topic:     gala.TopicName("integration.multi_client.second.inspect"),
-				ClientRef: secondClient.ID(),
-				Handle:    newTestHandler(),
-			},
-		},
-	}
+	connection := testConnectionOf[testCredential]().
+		Provides(func(context.Context, integrationtypes.ConnectionRequest[testCredential]) (*testSecondClient, error) {
+			return &testSecondClient{}, nil
+		})
+
+	definition := minimalDefinition("def_multi_client")
+	definition.Connections = []integrationtypes.Connector{connection}
+	definition.Operations = append(definition.Operations, secondClientOperation("second.inspect"))
 
 	if err := reg.Register(definition); err != nil {
 		t.Fatalf("Register() error = %v", err)
 	}
 
-	firstRegistration, err := reg.Client(definition.ID, firstClient.ID())
-	if err != nil {
-		t.Fatalf("Client(first) error = %v", err)
-	}
-
-	secondRegistration, err := reg.Client(definition.ID, secondClient.ID())
-	if err != nil {
-		t.Fatalf("Client(second) error = %v", err)
-	}
-
-	if firstRegistration.Ref != firstClient.ID() {
-		t.Fatalf("Client(first) ref mismatch")
-	}
-
-	if secondRegistration.Ref != secondClient.ID() {
-		t.Fatalf("Client(second) ref mismatch")
+	for _, name := range []string{"health.default", "second.inspect"} {
+		if _, err := reg.Operation(definition.ID, name); err != nil {
+			t.Fatalf("Operation(%s) error = %v", name, err)
+		}
 	}
 }
 
@@ -197,7 +210,7 @@ func TestValidateDefinitionAlreadyRegistered(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	def, _ := minimalDefinition("def_dup")
+	def := minimalDefinition("def_dup")
 
 	if err := reg.Register(def); err != nil {
 		t.Fatalf("first Register() error = %v", err)
@@ -207,6 +220,88 @@ func TestValidateDefinitionAlreadyRegistered(t *testing.T) {
 	if !errors.Is(err, ErrDefinitionAlreadyRegistered) {
 		t.Fatalf("expected ErrDefinitionAlreadyRegistered, got %v", err)
 	}
+}
+
+// assertDuplicateRejected verifies registration fails with ErrDuplicateRegistration
+func assertDuplicateRejected(t *testing.T, reg *Registry, def integrationtypes.Definition) {
+	t.Helper()
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrDuplicateRegistration) {
+		t.Fatalf("expected ErrDuplicateRegistration, got %v", err)
+	}
+
+	if _, ok := reg.Definition(def.ID); ok {
+		t.Fatalf("Definition(%q) present after rejected registration", def.ID)
+	}
+}
+
+// TestDuplicateConnectionSlotRejected verifies same-slot connections are rejected
+func TestDuplicateConnectionSlotRejected(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := connectionDefinition("def_dup_conn", testConnectionOf[testCredential](), testConnectionOf[testCredential]())
+
+	assertDuplicateRejected(t, reg, def)
+}
+
+// TestDuplicateOperationNameRejected verifies two operations with the same name are rejected
+func TestDuplicateOperationNameRejected(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_dup_op"},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "sync", Topic: gala.TopicName("def_dup_op.sync.a"), Handle: newTestHandler()},
+			{Name: "sync", Topic: gala.TopicName("def_dup_op.sync.b"), Handle: newTestHandler()},
+		},
+	}
+
+	assertDuplicateRejected(t, reg, def)
+}
+
+// TestDuplicateWebhookNameRejected verifies two webhook contracts with the same name are rejected
+func TestDuplicateWebhookNameRejected(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_dup_webhook"},
+		Webhooks: []integrationtypes.WebhookRegistration{
+			{Name: "hooks"},
+			{Name: "hooks"},
+		},
+	}
+
+	assertDuplicateRejected(t, reg, def)
+}
+
+// TestDuplicateWebhookEventNameRejected verifies same-named events in one webhook are rejected
+func TestDuplicateWebhookEventNameRejected(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	handle := func(context.Context, integrationtypes.WebhookHandleRequest) error { return nil }
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_dup_event"},
+		Webhooks: []integrationtypes.WebhookRegistration{
+			{
+				Name: "hooks",
+				Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
+					return integrationtypes.WebhookReceivedEvent{}, nil
+				},
+				Events: []integrationtypes.WebhookEventRegistration{
+					{Name: "push", Topic: gala.TopicName("def_dup_event.push.a"), Handle: handle},
+					{Name: "push", Topic: gala.TopicName("def_dup_event.push.b"), Handle: handle},
+				},
+			},
+		},
+	}
+
+	assertDuplicateRejected(t, reg, def)
 }
 
 // TestValidateOperatorConfigSchemaRequired verifies operator config without schema is rejected
@@ -225,58 +320,20 @@ func TestValidateOperatorConfigSchemaRequired(t *testing.T) {
 	}
 }
 
-// TestValidateCredentialSchemaRequired verifies credential without schema (non-auth-managed) is rejected
+// TestValidateCredentialSchemaRequired verifies a credential without a stored schema is rejected
 func TestValidateCredentialSchemaRequired(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("orphan")
 
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_credschema"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: nil},
-		},
-	}
+	orphan := testConnectionOf[testCredential]().Connection()
+	orphan.Credential.Schema = nil
+
+	def := connectionDefinition("def_credschema", testConnector(orphan))
 
 	err := reg.Register(def)
 	if !errors.Is(err, ErrCredentialSchemaRequired) {
 		t.Fatalf("expected ErrCredentialSchemaRequired, got %v", err)
-	}
-}
-
-// TestValidateCredentialSchemaSkippedForAuthManaged verifies auth-managed credential slots bypass schema requirement
-func TestValidateCredentialSchemaSkippedForAuthManaged(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("oauth_token")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_authmanaged"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				Auth: &integrationtypes.AuthRegistration{
-					CredentialRef: slot,
-				},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{
-				Name:   "health",
-				Topic:  gala.TopicName("integration.def_authmanaged.health"),
-				Handle: newTestHandler(),
-			},
-		},
-	}
-
-	if err := reg.Register(def); err != nil {
-		t.Fatalf("Register() should succeed for auth-managed credential, got %v", err)
 	}
 }
 
@@ -287,55 +344,12 @@ func TestValidateUserInputSchemaRequired(t *testing.T) {
 	reg := New()
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_userinput"},
-		UserInput:      &integrationtypes.UserInputRegistration{Schema: nil},
+		UserInput:      &integrationtypes.InputRegistration{Name: "UserInput"},
 	}
 
 	err := reg.Register(def)
 	if !errors.Is(err, ErrUserInputSchemaRequired) {
 		t.Fatalf("expected ErrUserInputSchemaRequired, got %v", err)
-	}
-}
-
-// TestIndexClientsInvalidRef verifies client with zero-value ref is rejected
-func TestIndexClientsInvalidRef(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badclient"},
-		Clients: []integrationtypes.ClientRegistration{
-			{Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) { return nil, nil }},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrClientRequired) {
-		t.Fatalf("expected ErrClientRequired, got %v", err)
-	}
-}
-
-// TestIndexClientsCredentialRefNotDeclared verifies client referencing undeclared credential is rejected
-func TestIndexClientsCredentialRefNotDeclared(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	clientRef := integrationtypes.NewClientRef[string]()
-	undeclared := integrationtypes.NewCredentialSlotID("ghost")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badcredref"},
-		Clients: []integrationtypes.ClientRegistration{
-			{
-				Ref:            clientRef.ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{undeclared},
-				Build:          func(context.Context, integrationtypes.ClientBuildRequest) (any, error) { return nil, nil },
-			},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrCredentialRefNotDeclared) {
-		t.Fatalf("expected ErrCredentialRefNotDeclared, got %v", err)
 	}
 }
 
@@ -424,7 +438,7 @@ func TestIndexOperationsIngestHandlerWithContracts(t *testing.T) {
 	}
 }
 
-// TestIndexOperationsSnapshotRequiresIngestHandle verifies Policy.Snapshot without an IngestHandle is rejected
+// TestIndexOperationsSnapshotRequiresIngestHandle verifies Snapshot needs an IngestHandle
 func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
 	t.Parallel()
 
@@ -447,7 +461,7 @@ func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
 	}
 }
 
-// TestIndexOperationsSnapshotWithIngestHandle verifies Policy.Snapshot with an IngestHandle succeeds
+// TestIndexOperationsSnapshotWithIngestHandle verifies Snapshot with an IngestHandle succeeds
 func TestIndexOperationsSnapshotWithIngestHandle(t *testing.T) {
 	t.Parallel()
 
@@ -475,7 +489,6 @@ func TestIndexOperationsClientRefNotFound(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	ghost := integrationtypes.NewClientRef[string]()
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_ghostclient"},
@@ -483,7 +496,7 @@ func TestIndexOperationsClientRefNotFound(t *testing.T) {
 			{
 				Name:      "bad",
 				Topic:     gala.TopicName("bad"),
-				ClientRef: ghost.ID(),
+				ClientRef: testClientRef,
 				Handle:    newTestHandler(),
 			},
 		},
@@ -492,6 +505,58 @@ func TestIndexOperationsClientRefNotFound(t *testing.T) {
 	err := reg.Register(def)
 	if !errors.Is(err, ErrClientNotFound) {
 		t.Fatalf("expected ErrClientNotFound, got %v", err)
+	}
+}
+
+// TestIndexOperationsConnectionClientNotProvided verifies an operation's client missing from a connection is rejected
+func TestIndexOperationsConnectionClientNotProvided(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := minimalDefinition("def_unprovided_client")
+	def.Operations = append(def.Operations, secondClientOperation("second.inspect"))
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrConnectionClientNotProvided) {
+		t.Fatalf("expected ErrConnectionClientNotProvided, got %v", err)
+	}
+}
+
+// TestIndexOperationsClientConflict verifies an operation whose handlers bound different clients is rejected
+func TestIndexOperationsClientConflict(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := minimalDefinition("def_client_conflict")
+	def.Operations[0].ClientConflict = "other"
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrOperationClientConflict) {
+		t.Fatalf("expected ErrOperationClientConflict, got %v", err)
+	}
+}
+
+// TestIndexOperationsClientRefWithRuntimeIntegration verifies a runtime integration serves an operation naming a client without connections
+func TestIndexOperationsClientRefWithRuntimeIntegration(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_clientref"},
+		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
+			Schema: testRuntimeSchema,
+			Build:  func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "op", Topic: gala.TopicName("op"), ClientRef: testClientRef, Handle: newTestHandler()},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error = %v", err)
 	}
 }
 
@@ -581,7 +646,6 @@ func TestWebhookRegistrationAndLookup(t *testing.T) {
 		t.Fatalf("Register() error = %v", err)
 	}
 
-	// Webhook lookup
 	wh, err := reg.Webhook(def.ID, "github")
 	if err != nil {
 		t.Fatalf("Webhook() error = %v", err)
@@ -591,7 +655,6 @@ func TestWebhookRegistrationAndLookup(t *testing.T) {
 		t.Fatalf("Webhook() name = %q, want github", wh.Name)
 	}
 
-	// WebhookEvent lookup — happy path
 	evt, err := reg.WebhookEvent(def.ID, "github", "push")
 	if err != nil {
 		t.Fatalf("WebhookEvent() error = %v", err)
@@ -601,25 +664,21 @@ func TestWebhookRegistrationAndLookup(t *testing.T) {
 		t.Fatalf("WebhookEvent() name = %q, want push", evt.Name)
 	}
 
-	// WebhookEvent lookup — unknown event
 	_, err = reg.WebhookEvent(def.ID, "github", "nonexistent")
 	if !errors.Is(err, ErrWebhookNotFound) {
 		t.Fatalf("expected ErrWebhookNotFound for unknown event, got %v", err)
 	}
 
-	// WebhookEvent lookup — unknown webhook name
 	_, err = reg.WebhookEvent(def.ID, "nonexistent", "push")
 	if !errors.Is(err, ErrWebhookNotFound) {
 		t.Fatalf("expected ErrWebhookNotFound for unknown webhook, got %v", err)
 	}
 
-	// WebhookEvent lookup — unknown definition
 	_, err = reg.WebhookEvent("nonexistent", "github", "push")
 	if !errors.Is(err, ErrDefinitionNotFound) {
 		t.Fatalf("expected ErrDefinitionNotFound, got %v", err)
 	}
 
-	// WebhookListeners returns all events indexed by topic
 	listeners := reg.WebhookListeners()
 	if got := len(listeners); got != 2 {
 		t.Fatalf("WebhookListeners() len = %d, want 2", got)
@@ -637,12 +696,7 @@ func TestDefinitionNotFound(t *testing.T) {
 		t.Fatal("Definition() should return false for unknown ID")
 	}
 
-	_, err := reg.Client("nonexistent", integrationtypes.ClientID{})
-	if !errors.Is(err, ErrDefinitionNotFound) {
-		t.Fatalf("Client() expected ErrDefinitionNotFound, got %v", err)
-	}
-
-	_, err = reg.Operation("nonexistent", "op")
+	_, err := reg.Operation("nonexistent", "op")
 	if !errors.Is(err, ErrDefinitionNotFound) {
 		t.Fatalf("Operation() expected ErrDefinitionNotFound, got %v", err)
 	}
@@ -653,31 +707,12 @@ func TestDefinitionNotFound(t *testing.T) {
 	}
 }
 
-// TestClientNotFoundInDefinition verifies client lookup for unknown client ID within a valid definition
-func TestClientNotFoundInDefinition(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	def, _ := minimalDefinition("def_noclient")
-
-	if err := reg.Register(def); err != nil {
-		t.Fatalf("Register() error = %v", err)
-	}
-
-	unknown := integrationtypes.NewClientRef[string]()
-
-	_, err := reg.Client(def.ID, unknown.ID())
-	if !errors.Is(err, ErrClientNotFound) {
-		t.Fatalf("expected ErrClientNotFound, got %v", err)
-	}
-}
-
-// TestOperationNotFoundInDefinition verifies operation lookup for unknown name within a valid definition
+// TestOperationNotFoundInDefinition verifies lookup of an unknown operation name fails
 func TestOperationNotFoundInDefinition(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	def, _ := minimalDefinition("def_noop")
+	def := minimalDefinition("def_noop")
 
 	if err := reg.Register(def); err != nil {
 		t.Fatalf("Register() error = %v", err)
@@ -689,12 +724,12 @@ func TestOperationNotFoundInDefinition(t *testing.T) {
 	}
 }
 
-// TestWebhookNotFoundInDefinition verifies webhook lookup for unknown name within a valid definition
+// TestWebhookNotFoundInDefinition verifies lookup of an unknown webhook name fails
 func TestWebhookNotFoundInDefinition(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	def, _ := minimalDefinition("def_nowh")
+	def := minimalDefinition("def_nowh")
 
 	if err := reg.Register(def); err != nil {
 		t.Fatalf("Register() error = %v", err)
@@ -786,7 +821,7 @@ func TestListenersReturnsSortedByTopic(t *testing.T) {
 		t.Fatalf("Listeners() len = %d, want 2", len(listeners))
 	}
 
-	if listeners[0].Topic != "topic.alpha" || listeners[1].Topic != "topic.bravo" {
+	if listeners[0].Topic != "integration.run.def_listeners.a_op" || listeners[1].Topic != "integration.run.def_listeners.b_op" {
 		t.Fatalf("Listeners() not sorted: %q, %q", listeners[0].Topic, listeners[1].Topic)
 	}
 }
@@ -798,8 +833,7 @@ func TestRegisterAllSuccess(t *testing.T) {
 	reg := New()
 
 	b1 := func() (integrationtypes.Definition, error) {
-		def, _ := minimalDefinition("def_all_1")
-		return def, nil
+		return minimalDefinition("def_all_1"), nil
 	}
 
 	b2 := func() (integrationtypes.Definition, error) {
@@ -865,335 +899,88 @@ func TestRegisterAllRegistrationError(t *testing.T) {
 	}
 }
 
-// TestConnectionCredentialRefRequired verifies connection without credential ref is rejected
-func TestConnectionCredentialRefRequired(t *testing.T) {
+// TestConnectionVerifyRequired verifies a connection without a verification is rejected
+func TestConnectionVerifyRequired(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_nocred"},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
 
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionCredentialRefRequired) {
-		t.Fatalf("expected ErrConnectionCredentialRefRequired, got %v", err)
+	unverified := integrationtypes.ConnectionOf[testCredential]().
+		Provides(func(context.Context, integrationtypes.ConnectionRequest[testCredential]) (*testClient, error) {
+			return &testClient{}, nil
+		})
+
+	err := reg.Register(connectionDefinition("def_conn_noverify", unverified))
+	if !errors.Is(err, ErrConnectionVerifyRequired) {
+		t.Fatalf("expected ErrConnectionVerifyRequired, got %v", err)
 	}
 }
 
-// TestConnectionCredentialRefNotDeclared verifies connection referencing undeclared credential is rejected
-func TestConnectionCredentialRefNotDeclared(t *testing.T) {
+// TestConnectionVerifyClientNotProvided verifies a verification client outside the connection's clients is rejected
+func TestConnectionVerifyClientNotProvided(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	undeclared := integrationtypes.NewCredentialSlotID("ghost")
 
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_undecl"},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{CredentialRef: undeclared},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
+	misrouted := integrationtypes.ConnectionOf[testCredential]().
+		Provides(func(context.Context, integrationtypes.ConnectionRequest[testCredential]) (*testClient, error) {
+			return &testClient{}, nil
+		}).
+		Verified(func(context.Context, integrationtypes.ConnectionRequest[testCredential], *testSecondClient) (testMetadata, error) {
+			return testMetadata{}, nil
+		})
 
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionCredentialRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionCredentialRefNotDeclared, got %v", err)
+	err := reg.Register(connectionDefinition("def_conn_verifyclient", misrouted))
+	if !errors.Is(err, ErrConnectionVerifyClientNotProvided) {
+		t.Fatalf("expected ErrConnectionVerifyClientNotProvided, got %v", err)
 	}
 }
 
-// TestConnectionAdditionalCredentialRefNotDeclared verifies connection with extra undeclared credential ref is rejected
-func TestConnectionAdditionalCredentialRefNotDeclared(t *testing.T) {
+// TestInstallationRequiredWithConnections verifies connections need an installation metadata layout
+func TestInstallationRequiredWithConnections(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("valid")
-	extra := integrationtypes.NewCredentialSlotID("extra_ghost")
 
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_extraref"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot, extra},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
+	def := connectionDefinition("def_conn_noinstallation", testConnectionOf[testCredential]())
+	def.Installation = nil
 
 	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionCredentialRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionCredentialRefNotDeclared, got %v", err)
+	if !errors.Is(err, ErrInstallationRequired) {
+		t.Fatalf("expected ErrInstallationRequired, got %v", err)
 	}
 }
 
-// TestConnectionClientRefNotDeclared verifies connection referencing undeclared client is rejected
-func TestConnectionClientRefNotDeclared(t *testing.T) {
+// TestInstallationSchemaMismatch verifies a verification returning another metadata layout is rejected
+func TestInstallationSchemaMismatch(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
-	ghost := integrationtypes.NewClientRef[string]()
 
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badclient"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				ClientRefs:     []integrationtypes.ClientID{ghost.ID()},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
+	mismatched := integrationtypes.ConnectionOf[testCredential]().
+		Provides(func(context.Context, integrationtypes.ConnectionRequest[testCredential]) (*testClient, error) {
+			return &testClient{}, nil
+		}).
+		Verified(func(context.Context, integrationtypes.ConnectionRequest[testCredential], *testClient) (testOtherMetadata, error) {
+			return testOtherMetadata{}, nil
+		})
 
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionClientRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionClientRefNotDeclared, got %v", err)
+	err := reg.Register(connectionDefinition("def_conn_mismatch", mismatched))
+	if !errors.Is(err, ErrInstallationSchemaMismatch) {
+		t.Fatalf("expected ErrInstallationSchemaMismatch, got %v", err)
 	}
 }
 
-// TestConnectionHealthCheckHandlerRequired verifies a connection health check without a handler is rejected
-func TestConnectionHealthCheckHandlerRequired(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_nohealthhandler"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				HealthCheck:    &integrationtypes.HealthCheckRegistration{},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionHealthCheckHandlerRequired) {
-		t.Fatalf("expected ErrConnectionHealthCheckHandlerRequired, got %v", err)
-	}
-}
-
-// TestConnectionHealthCheckClientNotDeclared verifies a connection health check with an unknown client ref is rejected
-func TestConnectionHealthCheckClientNotDeclared(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
-	unknownClient := integrationtypes.NewClientRef[string]()
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badhealthclient"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				HealthCheck: &integrationtypes.HealthCheckRegistration{
-					ClientRef: unknownClient.ID(),
-					Handle:    newTestHandler(),
-				},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionClientRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionClientRefNotDeclared, got %v", err)
-	}
-}
-
-// TestConnectionAuthCredentialRefNotDeclared verifies connection auth with undeclared credential ref is rejected
-func TestConnectionAuthCredentialRefNotDeclared(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
-	authSlot := integrationtypes.NewCredentialSlotID("auth_ghost")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badauth"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				Auth:           &integrationtypes.AuthRegistration{CredentialRef: authSlot},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionAuthCredentialRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionAuthCredentialRefNotDeclared, got %v", err)
-	}
-}
-
-// TestConnectionAuthCredentialRefEmpty verifies connection auth with zero-value credential ref is rejected
-func TestConnectionAuthCredentialRefEmpty(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_emptyauth"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				Auth:           &integrationtypes.AuthRegistration{},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionAuthCredentialRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionAuthCredentialRefNotDeclared, got %v", err)
-	}
-}
-
-// TestConnectionDisconnectCredentialRefNotDeclared verifies connection disconnect with undeclared credential ref is rejected
-func TestConnectionDisconnectCredentialRefNotDeclared(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
-	discSlot := integrationtypes.NewCredentialSlotID("disc_ghost")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_baddisc"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				Disconnect:     &integrationtypes.DisconnectRegistration{CredentialRef: discSlot},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionDisconnectCredentialRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionDisconnectCredentialRefNotDeclared, got %v", err)
-	}
-}
-
-// TestConnectionDisconnectCredentialRefEmpty verifies connection disconnect with zero-value credential ref is rejected
-func TestConnectionDisconnectCredentialRefEmpty(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_emptydisc"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				Disconnect:     &integrationtypes.DisconnectRegistration{},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionDisconnectCredentialRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionDisconnectCredentialRefNotDeclared, got %v", err)
-	}
-}
-
-// TestConnectionFullyWiredSuccess verifies a fully wired connection with auth, disconnect, validation, and client refs succeeds
+// TestConnectionFullyWiredSuccess verifies a fully wired connection succeeds
 func TestConnectionFullyWiredSuccess(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("primary")
-	authSlot := integrationtypes.NewCredentialSlotID("oauth")
-	clientRef := integrationtypes.NewClientRef[string]()
 
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_full"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-			{Ref: authSlot},
-		},
-		Clients: []integrationtypes.ClientRegistration{
-			{
-				Ref:            clientRef.ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				Build:          func(context.Context, integrationtypes.ClientBuildRequest) (any, error) { return "ok", nil },
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "health", Topic: gala.TopicName("health"), Handle: newTestHandler()},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot, authSlot},
-				ClientRefs:     []integrationtypes.ClientID{clientRef.ID()},
-				HealthCheck: &integrationtypes.HealthCheckRegistration{
-					ClientRef: clientRef.ID(),
-					Handle:    newTestHandler(),
-				},
-				Auth:       &integrationtypes.AuthRegistration{CredentialRef: authSlot},
-				Disconnect: &integrationtypes.DisconnectRegistration{CredentialRef: slot},
-			},
-		},
+	def := minimalDefinition("def_conn_full")
+	def.Connections = []integrationtypes.Connector{
+		testConnectionOf[testCredential]().Disconnects("remove the app", nil),
+		testConnectionOf[testAuthCredential]().Authenticates(integrationtypes.NewAuthFlow[testAuthCredential](nil, nil)),
 	}
 
 	if err := reg.Register(def); err != nil {
@@ -1201,35 +988,7 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 	}
 }
 
-// TestConnectionAutoAppendsCredentialRef verifies CredentialRef is auto-appended to CredentialRefs when not present
-func TestConnectionAutoAppendsCredentialRef(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("auto")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_autoappend"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef: slot,
-				// CredentialRefs intentionally empty — should auto-append slot
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
-
-	if err := reg.Register(def); err != nil {
-		t.Fatalf("Register() error = %v", err)
-	}
-}
-
-// TestRuntimeIntegrationRegistration verifies a definition with RuntimeIntegration can register and cache a client
+// TestRuntimeIntegrationRegistration verifies RuntimeIntegration registers and caches a client
 func TestRuntimeIntegrationRegistration(t *testing.T) {
 	t.Parallel()
 
@@ -1243,8 +1002,7 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 			Visible:     true,
 		},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeRefID("TestRuntimeConfig"),
-			Schema: json.RawMessage(`{"type":"object"}`),
+			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{"key":"val"}`),
 			Build: func(_ context.Context, config json.RawMessage) (any, error) {
 				return "runtime-client-" + string(config), nil
@@ -1274,7 +1032,7 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 	}
 }
 
-// TestRuntimeIntegrationNilConfig verifies a runtime definition with nil config registers but has no cached client
+// TestRuntimeIntegrationNilConfig verifies nil config registers without a cached client
 func TestRuntimeIntegrationNilConfig(t *testing.T) {
 	t.Parallel()
 
@@ -1287,8 +1045,7 @@ func TestRuntimeIntegrationNilConfig(t *testing.T) {
 			Active:      true,
 		},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeRefID("Unconfigured"),
-			Schema: json.RawMessage(`{"type":"object"}`),
+			Schema: testRuntimeSchema,
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
 				return "should-not-be-called", nil
 			},
@@ -1321,32 +1078,16 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_creds", Active: true, Visible: true},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeRefID("WithCreds"),
-			Schema: json.RawMessage(`{"type":"object"}`),
+			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{"key":"val"}`),
 			Build: func(_ context.Context, config json.RawMessage) (any, error) {
 				return "runtime-client", nil
 			},
 		},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialSlot, Schema: testCredentialSchema},
-		},
-		Clients: []integrationtypes.ClientRegistration{
-			{
-				Ref:            integrationtypes.NewClientRef[string]().ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialSlot},
-				Build: func(_ context.Context, _ integrationtypes.ClientBuildRequest) (any, error) {
-					return "customer-client", nil
-				},
-			},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  testCredentialSlot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialSlot},
-			},
-		},
-		UserInput: &integrationtypes.UserInputRegistration{
+		Connections:  []integrationtypes.Connector{testConnectionOf[testCredential]()},
+		Installation: newTestInstallation(),
+		UserInput: &integrationtypes.InputRegistration{
+			Name:   "UserInput",
 			Schema: json.RawMessage(`{"type":"object"}`),
 		},
 		Operations: []integrationtypes.OperationRegistration{
@@ -1373,7 +1114,7 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	}
 }
 
-// TestRuntimeCoexistsWithOperatorConfig verifies a definition can declare both a runtime integration and operator config
+// TestRuntimeCoexistsWithOperatorConfig verifies runtime integration and operator config coexist
 func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
 	t.Parallel()
 
@@ -1382,8 +1123,8 @@ func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_opconf"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:   integrationtypes.NewRuntimeRefID("OpConflict"),
-			Build: func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
+			Schema: testRuntimeSchema,
+			Build:  func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
 		},
 		OperatorConfig: &integrationtypes.OperatorConfigRegistration{Schema: json.RawMessage(`{"type":"object"}`)},
 		Operations: []integrationtypes.OperationRegistration{
@@ -1405,7 +1146,7 @@ func TestRuntimeBuildRequired(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_nobuild"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref: integrationtypes.NewRuntimeRefID("NoBuild"),
+			Schema: testRuntimeSchema,
 		},
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "op", Topic: gala.TopicName("op"), Handle: newTestHandler()},
@@ -1428,7 +1169,7 @@ func TestRuntimeBuildError(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_buildfail"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeRefID("FailBuild"),
+			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{}`),
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
 				return nil, buildErr
@@ -1450,7 +1191,7 @@ func TestRuntimeClientMiss(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	def, _ := minimalDefinition("def_standard")
+	def := minimalDefinition("def_standard")
 
 	if err := reg.Register(def); err != nil {
 		t.Fatalf("Register() error = %v", err)
@@ -1494,7 +1235,7 @@ func TestStaticWebhooks_ReturnsStaticRouteEntries(t *testing.T) {
 
 	reg := New()
 
-	def, _ := minimalDefinition("static-def")
+	def := minimalDefinition("static-def")
 	def.Webhooks = []integrationtypes.WebhookRegistration{
 		{
 			Name:        "delivery",
@@ -1556,7 +1297,7 @@ func TestStaticWebhooks_EmptyWhenNoStaticRoutes(t *testing.T) {
 
 	reg := New()
 
-	def, _ := minimalDefinition("no-static")
+	def := minimalDefinition("no-static")
 	def.Webhooks = []integrationtypes.WebhookRegistration{
 		{
 			Name: "dynamic-only",

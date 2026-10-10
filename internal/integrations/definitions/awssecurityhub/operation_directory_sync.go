@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	iamtypes "github.com/aws/aws-sdk-go-v2/service/iam/types"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -59,21 +58,10 @@ type iamMembershipPayload struct {
 	Member iamEntityRef `json:"member"`
 }
 
-// IngestHandle adapts IAM directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(iamClient, directorySyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *iam.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
-		if cfg.Disable {
-			logx.FromContext(ctx).Debug().Msg("awsiam: directory sync is disabled")
+// runDirectorySync collects AWS IAM users, and optionally groups and memberships
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c Client, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
+	client := c.IAM()
 
-			return nil, nil
-		}
-
-		return d.Run(ctx, client, cfg)
-	})
-}
-
-// Run collects AWS IAM users, and optionally groups and memberships
-func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listIAMUsers(ctx, client)
 	if err != nil {
 		return nil, err
@@ -93,13 +81,7 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 		accountEnvelopes = append(accountEnvelopes, envelope)
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(accountEnvelopes)
 
 	if cfg.DisableGroupSync {
 		logx.FromContext(ctx).Info().Int("user_count", len(accountEnvelopes)).Msg("awsiam: collected IAM users")
@@ -157,20 +139,7 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 
 	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("awsiam: collected IAM users, groups, and memberships")
 
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	)
-
-	return payloadSets, nil
+	return append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // iamUserToPayload maps an IAM User SDK type to a JSON-serializable payload struct
@@ -221,8 +190,7 @@ func arnAccountID(arn string) string {
 	return parts[arnAccountIndex]
 }
 
-// listIAMUsers pages through all IAM users using Marker-based pagination and
-// fetches tags for each user separately
+// listIAMUsers pages through all IAM users and fetches tags for each
 func listIAMUsers(ctx context.Context, client *iam.Client) ([]iamtypes.User, error) {
 	var users []iamtypes.User
 	input := &iam.ListUsersInput{MaxItems: awssdk.Int32(iamPageSize)}

@@ -46,7 +46,6 @@ import (
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	systemdef "github.com/theopenlane/core/v2/internal/integrations/definitions/system"
-	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/internal/objects"
@@ -328,19 +327,22 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	suite.SlackMock = slackdef.NewMockSlackRuntime()
 	suite.CloudflareMock = cloudflaredef.NewMockCloudflareRuntime()
 
+	reg, err := testint.VersionedRegistry(
+		emaildef.Builder(emaildef.MockRuntimeConfig(), false),
+		suite.SlackMock.Builder(),
+		suite.CloudflareMock.Builder(),
+		systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
+		testint.Builder(),
+		testint.MockHTTPBuilder(),
+	)
+	RequireNoError(t, err)
+
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,
 		Gala:        galaInstance,
 		Keystore:    credStore,
 		RedisClient: coreutils.NewRedisClient(),
-		DefinitionBuilders: []registry.Builder{
-			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
-			suite.SlackMock.Builder(),
-			suite.CloudflareMock.Builder(),
-			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
-			testint.Builder(),
-			testint.MockHTTPBuilder(),
-		},
+		Registry:    reg,
 	})
 	RequireNoError(t, err)
 

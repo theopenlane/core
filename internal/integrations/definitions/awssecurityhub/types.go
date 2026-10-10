@@ -1,83 +1,76 @@
 package awssecurityhub
 
 import (
+	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/configservice"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the AWS Security Hub integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
-	// awsAssumeRoleScheme is the cred schema for AWS STS auth
-	awsAssumeRoleSchema, awsAssumeRoleCredential = providerkit.CredentialSchema[AssumeRoleCredentialSchema]()
-	// awsServiceAccountSchema is the cred schema for AWS service account credentials
-	awsServiceAccountSchema, awsServiceAccountCredential = providerkit.CredentialSchema[ServiceAccountCredentialSchema]()
-	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
-	securityHubClient = types.NewClientRef[*securityhub.Client]()
-	// configServiceClient is the client ref for the AWS Config client used by config controls operations
-	configServiceClient = types.NewClientRef[*configservice.Client]()
-	// iamClient is the client ref for the AWS IAM client used by directory sync operations
-	iamClient = types.NewClientRef[*iam.Client]()
-	// findingsCollectSchema is the AWS Security Hub finding and vulnerabilities collection operation
-	findingsCollectSchema, findingsCollectOperation = providerkit.OperationSchema[FindingSync]()
-	// directorySyncSchema is the AWS IAM directory sync operation schema
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
-	// checkSyncSchema is the AWS Config check sync operation schema
-	checkSyncSchema, checkSyncOperation = providerkit.OperationSchema[CheckSync]()
-	// assetSyncSchema is the AWS Config check sync operation schema
-	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
+	// assumeRole is the connection for AWS STS assume-role auth
+	assumeRole = types.ConnectionOf[AssumeRoleCredentialSchema]()
+	// staticCredentials is the connection for static IAM access keys
+	staticCredentials = types.ConnectionOf[ServiceAccountCredentialSchema]()
+	// installation is the typed installation metadata handle for the AWS Security Hub definition
+	installation = types.InstallationOf[InstallationMetadata]()
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// FindingSync includes the configuration for findings from AWS Security Hub
-	FindingSync FindingSyncConfig `json:"findingSync,omitempty" jsonschema:"title=AWS Security Hub Sync"`
-	// DirectorySync includes the configuration for identity accounts from AWS IAM
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
-	// CheckSync includes the configuration for rules from AWS Config
-	CheckSync CheckSync `json:"checkSync,omitempty" jsonschema:"title=AWS Config Rule Sync"`
-	// AssetSync includes the configuration for assets from AWS
-	AssetSync AssetSync `json:"assetSync,omitempty" jsonschema:"title=AWS Asset Sync"`
+// Client is the AWS client every operation of this definition runs against
+type Client struct {
+	// Config is the AWS SDK config the service clients are built from
+	Config awssdk.Config
+	// Scope is the non-secret collection scope of the connection
+	Scope CollectionScope
 }
 
-type DirectorySync struct {
-	// Disable is used to disable the directory sync operation from aws
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from AWS IAM"`
-	// DisableGroupSync will just sync users and no groups or group memberships
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from AWS IAM, disable groups sync operations"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.path.startsWith('/engineering/')"`
+// CollectionScope is the account and region scope the connection collects
+type CollectionScope struct {
+	// AccountID is the primary AWS account identifier
+	AccountID string
+	// AccountScope indicates whether collection targets all delegated accounts or a specific set
+	AccountScope string
+	// AccountIDs lists the explicitly selected AWS account identifiers when account scope is specific
+	AccountIDs []string
+	// LinkedRegions limits collection to the listed AWS source regions when configured
+	LinkedRegions []string
 }
 
-// FindingSyncConfig are configuration settings for the findings sync
-type FindingSyncConfig struct {
-	// Disable will stop any of this type of ingest from being performed
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from AWS Security Hub"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.Severity.Label == 'CRITICAL' || payload.Severity.Label == 'HIGH'"`
+// SecurityHub returns the AWS Security Hub client
+func (c Client) SecurityHub() *securityhub.Client {
+	return securityhub.NewFromConfig(c.Config)
+}
+
+// ConfigService returns the AWS Config client
+func (c Client) ConfigService() *configservice.Client {
+	return configservice.NewFromConfig(c.Config)
+}
+
+// IAM returns the AWS IAM client
+func (c Client) IAM() *iam.Client {
+	return iam.NewFromConfig(c.Config)
+}
+
+// FindingSync are configuration settings for the findings sync
+type FindingSync struct {
+	types.OperationSettings
 }
 
 // CheckSync are the configuration settings for the check sync from AWS Config
 type CheckSync struct {
-	// Disable will stop any of this type of ingest from being performed
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of checks from AWS Config"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.ComplianceType == 'NON_COMPLIANT' || payload.ComplianceType == 'COMPLIANT'"`
+	types.OperationSettings
 }
 
 // AssetSync are the configuration settings for the asset sync
 type AssetSync struct {
-	// Disable will stop any of this type of ingest from being performed
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of assets from AWS"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
+	types.OperationSettings
 }
 
-// AssumeRoleCredentialSchema holds the AWS assume-role and collection-scope inputs shared by the service clients
+// AssumeRoleCredentialSchema holds the AWS assume-role and collection-scope inputs
 type AssumeRoleCredentialSchema struct {
 	// RoleARN is the cross-account IAM role ARN Openlane should assume in the tenant environment
 	RoleARN string `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment.,secret=true"`
@@ -85,7 +78,7 @@ type AssumeRoleCredentialSchema struct {
 	ExternalID string `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy." jsonschema_extras:"generate=true"`
 	// HomeRegion is the AWS region where Security Hub cross-region aggregation is managed
 	HomeRegion string `json:"homeRegion"                jsonschema:"required,title=Home Region,description=AWS region used for Security Hub aggregation and other service API calls (e.g. us-east-1)."`
-	// AccountID is the AWS account ID; when provided it must match the account segment of RoleARN, otherwise the account is derived from RoleARN
+	// AccountID is the AWS account ID, derived from RoleARN when not provided
 	AccountID string `json:"accountId,omitempty"       jsonschema:"title=Account ID,description=Optional AWS account ID for reference in results and reporting."`
 	// AccountScope controls whether collection covers all delegated accounts or a subset
 	AccountScope string `json:"accountScope,omitempty"    jsonschema:"title=Account Scope,description=Collect from all delegated accounts or restrict to specific account IDs.,enum=all,enum=specific"`
@@ -111,7 +104,7 @@ type ServiceAccountCredentialSchema struct {
 	Region string `json:"region" jsonschema:"required,title=Region,description=AWS region used for Security Hub and other service API calls (e.g. us-east-1)."`
 }
 
-// InstallationMetadata holds the non-secret AWS connection attributes persisted for one installation
+// InstallationMetadata holds the non-secret AWS connection attributes for an installation
 type InstallationMetadata struct {
 	// RoleARN is the cross-account IAM role ARN Openlane assumes for this installation
 	RoleARN string `json:"roleArn,omitempty" jsonschema:"title=IAM Role ARN"`

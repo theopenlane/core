@@ -7,7 +7,10 @@ package graphapi
 
 import (
 	"context"
+	"encoding/json"
 	"encoding/json/jsontext"
+
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
@@ -23,7 +26,7 @@ func (r *integrationResolver) WebhookURLs(ctx context.Context, obj *generated.In
 		return nil, nil
 	}
 
-	def, ok := r.integrationsRuntime.Definition(obj.DefinitionID)
+	def, ok := r.integrationsRuntime.Registry().Definition(obj.DefinitionID)
 	if !ok {
 		return nil, nil
 	}
@@ -47,29 +50,24 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 		return nil, nil
 	}
 
-	def, ok := r.integrationsRuntime.Definition(obj.DefinitionID)
+	def, ok := r.integrationsRuntime.Registry().Definition(obj.DefinitionID)
 	if !ok {
 		return nil, nil
 	}
 
-	var credentialType *types.CredentialRegistration
-	for _, credType := range def.CredentialRegistrations {
-		if credType.Ref.String() == obj.InstallationMetadata.Display.CredentialRef {
-			credentialType = &credType
-		}
+	connections := def.ConnectionList()
+	if len(connections) == 0 {
+		return nil, nil
 	}
 
-	if credentialType == nil {
-		if len(def.CredentialRegistrations) > 0 {
-			credentialType = &def.CredentialRegistrations[0]
-		} else {
-			return nil, nil
-		}
+	connection, found := lo.Find(connections, func(c types.Connection) bool {
+		return c.Credential.Name == obj.InstallationMetadata.Display.CredentialRef
+	})
+	if !found {
+		connection = connections[0]
 	}
 
-	// not all schemas have a credential schema, those with oauth like Google Workspace, will
-	// have an empty schema
-	if credentialType.Schema == nil {
+	if len(connection.Form) == 0 {
 		return nil, nil
 	}
 
@@ -77,18 +75,18 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Msg("error getting current credentials, returning full schema")
 
-		return credentialType.Schema, nil
+		return connection.Form, nil
 	}
 
 	if currentCreds == nil {
 		return nil, nil
 	}
 
-	out, err := jsonx.InjectDefaults(credentialType.Schema, currentCreds)
+	out, err := jsonx.InjectDefaults(connection.Form, currentCreds)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Msg("error injecting credential defaults, returning full schema")
 
-		return credentialType.Schema, nil
+		return connection.Form, nil
 	}
 
 	return out, nil
@@ -100,7 +98,7 @@ func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integra
 		return nil, nil
 	}
 
-	def, ok := r.integrationsRuntime.Definition(obj.DefinitionID)
+	def, ok := r.integrationsRuntime.Registry().Definition(obj.DefinitionID)
 	if !ok {
 		return nil, nil
 	}
@@ -109,7 +107,7 @@ func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integra
 		return nil, nil
 	}
 
-	currentConfig, err := jsonx.ToMap(obj.Config.ClientConfig)
+	currentConfig, err := jsonx.ToMap(obj.UserInput.Data)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Msg("error getting current config, returning full schema")
 
@@ -117,4 +115,51 @@ func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integra
 	}
 
 	return jsonx.InjectDefaults(def.UserInput.Schema, currentConfig)
+}
+
+// OperationConfig is the resolver for the operationConfig field.
+func (r *integrationResolver) OperationConfig(ctx context.Context, obj *generated.Integration) (jsontext.Value, error) {
+	if r.integrationsRuntime == nil {
+		return nil, nil
+	}
+
+	def, ok := r.integrationsRuntime.Registry().Definition(obj.DefinitionID)
+	if !ok {
+		return nil, nil
+	}
+
+	schemas := map[string]json.RawMessage{}
+
+	for _, operation := range def.Operations {
+		if !operation.Stored {
+			continue
+		}
+
+		stored, err := jsonx.ToMap(obj.OperationConfig.For(operation.Name))
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Str("operation", operation.Name).Msg("error getting stored operation config, returning full schema")
+
+			schemas[operation.Name] = operation.Input.Schema
+
+			continue
+		}
+
+		schema, err := jsonx.InjectDefaults(operation.Input.Schema, stored)
+		if err != nil {
+			return nil, err
+		}
+
+		schemas[operation.Name] = schema
+	}
+
+	if len(schemas) == 0 {
+		return nil, nil
+	}
+
+	out, err := jsonx.ToRawMessage(schemas)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsontext.Value(out), nil
 }

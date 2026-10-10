@@ -9,7 +9,9 @@ import (
 
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -18,7 +20,7 @@ func TestExecuteOperationNilInstallation(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
-	_, err := rt.ExecuteOperation(context.Background(), nil, types.OperationRegistration{}, nil, nil)
+	_, err := rt.ExecuteOperation(context.Background(), nil, types.OperationRegistration{}, nil)
 	if !errors.Is(err, ErrInstallationRequired) {
 		t.Fatalf("expected ErrInstallationRequired, got %v", err)
 	}
@@ -31,15 +33,15 @@ func TestExecuteOperationInvalidConfig(t *testing.T) {
 	rt := NewForTesting(reg)
 
 	op := types.OperationRegistration{
-		Name:         "test-op",
-		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+		Name:  "test-op",
+		Input: types.InputRegistration{Schema: json.RawMessage(`{"type":"object","required":["url"]}`)},
 	}
 
 	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
-	}, op, nil, json.RawMessage(`{}`))
-	if !errors.Is(err, ErrOperationConfigInvalid) {
+	}, op, json.RawMessage(`{}`))
+	if !errors.Is(err, types.ErrOperationConfigInvalid) {
 		t.Fatalf("expected ErrOperationConfigInvalid, got %v", err)
 	}
 }
@@ -76,7 +78,7 @@ func TestExecuteOperationValidConfigNoSchema(t *testing.T) {
 			called = true
 			return json.RawMessage(`{"ok":true}`), nil
 		},
-	}, nil, nil)
+	}, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -104,7 +106,7 @@ func TestExecuteOperationHandlerError(t *testing.T) {
 		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 			return nil, handlerErr
 		},
-	}, nil, nil)
+	}, nil)
 	if !errors.Is(err, handlerErr) {
 		t.Fatalf("expected handler error, got %v", err)
 	}
@@ -117,8 +119,8 @@ func TestExecuteOperationValidConfigWithSchema(t *testing.T) {
 
 	called := false
 	op := types.OperationRegistration{
-		Name:         "test-op",
-		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+		Name:  "test-op",
+		Input: types.InputRegistration{Schema: json.RawMessage(`{"type":"object","required":["url"]}`)},
 		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 			called = true
 			return json.RawMessage(`{"ok":true}`), nil
@@ -128,7 +130,7 @@ func TestExecuteOperationValidConfigWithSchema(t *testing.T) {
 	result, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
-	}, op, nil, json.RawMessage(`{"url":"https://example.com"}`))
+	}, op, json.RawMessage(`{"url":"https://example.com"}`))
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -149,60 +151,24 @@ func TestExecuteOperationEmptyConfigSkipsValidation(t *testing.T) {
 
 	called := false
 	op := types.OperationRegistration{
-		Name:         "test-op",
-		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+		Name:  "test-op",
+		Input: types.InputRegistration{Schema: json.RawMessage(`{"type":"object","required":["url"]}`)},
 		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 			called = true
 			return nil, nil
 		},
 	}
 
-	// Empty config should skip schema validation even when schema is present
 	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
-	}, op, nil, nil)
+	}, op, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
 
 	if !called {
 		t.Fatal("expected handler to be called with nil config")
-	}
-}
-
-func TestExecuteOperationWithCredentials(t *testing.T) {
-	t.Parallel()
-
-	rt := NewForTesting(registry.New())
-
-	ref := types.NewCredentialSlotID("api-key")
-	credentials := types.CredentialBindings{
-		{Ref: ref, Credential: types.CredentialSet{Data: json.RawMessage(`{"key":"secret"}`)}},
-	}
-
-	var captured types.OperationRequest
-
-	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
-		ID:           "install-1",
-		DefinitionID: "test-def",
-	}, types.OperationRegistration{
-		Name: "test-op",
-		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-			captured = req
-			return nil, nil
-		},
-	}, credentials, nil)
-	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-
-	if len(captured.Credentials) != 1 {
-		t.Fatalf("expected 1 credential binding, got %d", len(captured.Credentials))
-	}
-
-	if captured.Credentials[0].Ref != ref {
-		t.Fatalf("expected credential ref %v, got %v", ref, captured.Credentials[0].Ref)
 	}
 }
 
@@ -223,7 +189,7 @@ func TestExecuteOperationAppliesDefaultLookbackWhenNoLastRun(t *testing.T) {
 			captured = req
 			return nil, nil
 		},
-	}, nil, nil)
+	}, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, captured.LastRunAt != nil, "expected LastRunAt to be set via default lookback")
 
@@ -250,7 +216,7 @@ func TestExecuteOperationSkipDefaultLookbackLeavesLastRunAtNil(t *testing.T) {
 			captured = req
 			return nil, nil
 		},
-	}, nil, nil)
+	}, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, captured.LastRunAt == nil, "expected LastRunAt to be nil when SkipDefaultLookback is set")
 }
@@ -272,7 +238,7 @@ func TestExecuteOperationPassesRequestFields(t *testing.T) {
 			captured = req
 			return nil, nil
 		},
-	}, nil, config)
+	}, config)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -284,4 +250,86 @@ func TestExecuteOperationPassesRequestFields(t *testing.T) {
 	if string(captured.Config) != `{"key":"value"}` {
 		t.Fatalf("expected config to be passed through, got %s", string(captured.Config))
 	}
+}
+
+func TestExecuteOperationResolvesConfigFromInstallation(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"filterExpr":"payload.active"}`)}},
+	}
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil)
+	assert.NilError(t, err)
+	assert.Equal(t, string(captured.Config), `{"filterExpr":"payload.active"}`)
+}
+
+func TestExecuteOperationRefusesDisabledOperation(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"disable":true}`)}},
+	}
+
+	cases := map[string]types.OperationRegistration{
+		"disabled for all": {
+			Name:           "other-op",
+			DisabledForAll: true,
+		},
+		"disabled for the installation": {
+			Name: "test-op",
+		},
+	}
+
+	for name, op := range cases {
+		called := false
+		op.Handle = func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+			called = true
+			return nil, nil
+		}
+
+		_, err := rt.ExecuteOperation(context.Background(), installation, op, nil)
+		if !errors.Is(err, operations.ErrOperationDisabled) {
+			t.Fatalf("%s: expected ErrOperationDisabled, got %v", name, err)
+		}
+
+		if called {
+			t.Fatalf("%s: expected the handler not to run", name)
+		}
+	}
+}
+
+func TestExecuteOperationExplicitConfigWinsOverStored(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"filterExpr":"payload.active"}`)}},
+	}
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, json.RawMessage(`{"key":"value"}`))
+	assert.NilError(t, err)
+	assert.Equal(t, string(captured.Config), `{"key":"value"}`)
 }

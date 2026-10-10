@@ -11,45 +11,25 @@ import (
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "Microsoft",
-				DisplayName: "Microsoft Teams",
-				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
-				Category:    "collaboration",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
-				Tags:        []string{"messaging"},
-				Active:      false,
-				Visible:     true,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "Microsoft",
+			DisplayName: "Microsoft Teams",
+			Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
+			Category:    "collaboration",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
+			Tags:        []string{"messaging"},
+			Active:      false,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         teamsCredential.ID(),
-					Name:        "Microsoft Teams Credential",
-					Description: "OAuth credential used to send messages to Microsoft Teams channels.",
-					Schema:      teamsCredentialSchema,
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  teamsCredential.ID(),
-					Name:           "Microsoft Teams OAuth",
-					Description:    "Connect your Microsoft Teams workspace using OAuth.",
-					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
-					ClientRefs:     []types.ClientID{teamsClient.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: teamsClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
-					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
-						CredentialRef: teamsCredential,
+			UserInput:    userInput.Registration(),
+			Installation: installation.Registration(),
+			Connections: []types.Connector{
+				oauthConnection.
+					Name("Microsoft Teams OAuth").
+					Description("Connect your Microsoft Teams workspace using OAuth.").
+					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
@@ -70,30 +50,16 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,
-					}),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: teamsCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				{
-					Ref:            teamsClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
-					Description:    "Microsoft Graph API client",
-					Build:          Client{}.Build,
-				},
+					})).
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         MessageSendOp.Name(),
-					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        DefinitionID.OperationTopic(MessageSendOp.Name()),
-					ClientRef:    teamsClient.ID(),
-					ConfigSchema: messageSendSchema,
-					Handle:       MessageSend{}.Handle(),
-				},
+				types.OperationPayloadOf[MessageSendOperation]().
+					Handles(MessageSend{}.Run).
+					Description("Send a Teams channel message via Microsoft Graph").
+					Registration(),
 			},
 		}, nil
 	})

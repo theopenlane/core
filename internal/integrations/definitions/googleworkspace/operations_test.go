@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// directorySyncRequest builds an OperationRequest carrying the given installation metadata attributes
+// directorySyncRequest builds an OperationRequest with the given installation metadata
 func directorySyncRequest(attributes string) types.OperationRequest {
 	return types.OperationRequest{
 		Integration: &ent.Integration{
@@ -29,7 +29,7 @@ func directorySyncRequest(attributes string) types.OperationRequest {
 func TestDirectorySyncMissingCustomerIDIsUnhealthy(t *testing.T) {
 	t.Parallel()
 
-	_, err := DirectorySync{}.IngestHandle()(context.Background(), directorySyncRequest(`{"domain":"example.com"}`))
+	_, err := runDirectorySync(context.Background(), directorySyncRequest(`{"domain":"example.com"}`), &admin.Service{}, DirectorySync{})
 	if !errors.Is(err, ErrCustomerIDMissing) {
 		t.Fatalf("expected ErrCustomerIDMissing, got %v", err)
 	}
@@ -47,7 +47,7 @@ func TestDirectorySyncMissingCustomerIDIsUnhealthy(t *testing.T) {
 func TestDirectorySyncInvalidMetadataIsNotUnhealthy(t *testing.T) {
 	t.Parallel()
 
-	_, err := DirectorySync{}.IngestHandle()(context.Background(), directorySyncRequest(`{invalid`))
+	_, err := runDirectorySync(context.Background(), directorySyncRequest(`{invalid`), &admin.Service{}, DirectorySync{})
 	if !errors.Is(err, ErrInstallationMetadataInvalid) {
 		t.Fatalf("expected ErrInstallationMetadataInvalid, got %v", err)
 	}

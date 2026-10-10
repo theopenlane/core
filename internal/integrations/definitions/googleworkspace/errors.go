@@ -5,8 +5,6 @@ import "errors"
 var (
 	// ErrOAuthTokenMissing indicates the OAuth access token is missing
 	ErrOAuthTokenMissing = errors.New("googleworkspace: oauth token missing")
-	// ErrClientType indicates the provided client is not the expected type
-	ErrClientType = errors.New("googleworkspace: unexpected client type")
 	// ErrAdminServiceBuildFailed indicates the Admin SDK client could not be constructed
 	ErrAdminServiceBuildFailed = errors.New("googleworkspace: admin service build failed")
 	// ErrHealthCheckFailed indicates the health check request failed
@@ -19,12 +17,12 @@ var (
 	ErrDirectoryGroupMembersFetchFailed = errors.New("googleworkspace: directory group members fetch failed")
 	// ErrPayloadEncode indicates a provider payload could not be serialized
 	ErrPayloadEncode = errors.New("googleworkspace: payload encode failed")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("googleworkspace: result encode failed")
 	// ErrCredentialEncode indicates the credential could not be serialized
 	ErrCredentialEncode = errors.New("googleworkspace: credential encode failed")
-	// ErrCredentialDecode indicates the credential could not be deserialized
-	ErrCredentialDecode = errors.New("googleworkspace: credential decode failed")
+	// ErrCustomerFetchFailed indicates the customer lookup request failed
+	ErrCustomerFetchFailed = errors.New("googleworkspace: customer fetch failed")
+	// ErrCustomerUnresolved indicates the customer lookup returned neither an id nor a domain
+	ErrCustomerUnresolved = errors.New("googleworkspace: customer unresolved")
 	// ErrInstallationMetadataInvalid indicates stored installation metadata could not be decoded
 	ErrInstallationMetadataInvalid = errors.New("googleworkspace: installation metadata invalid")
 	// ErrCustomerIDMissing indicates installation metadata is missing the required customer identifier

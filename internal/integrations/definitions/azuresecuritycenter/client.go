@@ -15,8 +15,8 @@ const (
 	subscriptionScopeFormat = "/subscriptions/%s"
 )
 
-// azureSecurityClient wraps the armsecurity clients with the installation subscription scope
-type azureSecurityClient struct {
+// SecurityClient wraps the armsecurity clients with the installation subscription scope
+type SecurityClient struct {
 	// assessments is the ARM Security Center assessments client
 	assessments *armsecurity.AssessmentsClient
 	// subassessments is the ARM Security Center sub-assessments client
@@ -26,19 +26,13 @@ type azureSecurityClient struct {
 }
 
 // scope returns the ARM subscription scope string for this installation
-func (c *azureSecurityClient) scope() string {
+func (c *SecurityClient) scope() string {
 	return fmt.Sprintf(subscriptionScopeFormat, c.subscriptionID)
 }
 
-// Client builds Azure Security Center clients for one installation
-type Client struct{}
-
-// Build constructs an Azure Security Center client using client credentials
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	cred, _, err := securityCenterCredential.Resolve(req.Credentials)
-	if err != nil {
-		return nil, ErrCredentialInvalid
-	}
+// buildClient constructs an Azure Security Center client using client credentials
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*SecurityClient, error) {
+	cred := req.Credential
 
 	switch {
 	case cred.TenantID == "":
@@ -66,7 +60,7 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 		return nil, ErrAssessmentsClientBuildFailed
 	}
 
-	return &azureSecurityClient{
+	return &SecurityClient{
 		assessments:    assessments,
 		subassessments: subassessments,
 		subscriptionID: cred.SubscriptionID,

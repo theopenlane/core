@@ -12,6 +12,7 @@ import (
 
 	cf "github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -108,11 +109,18 @@ func (m *MockCloudflareRuntime) Builder() registry.Builder {
 			return types.Definition{}, err
 		}
 
-		for i := range def.Clients {
-			def.Clients[i].Build = func(_ context.Context, _ types.ClientBuildRequest) (any, error) {
-				return mockCloudflareClient(baseURL), nil
+		connections := def.ConnectionList()
+		for i := range connections {
+			for name := range connections[i].Clients {
+				connections[i].Clients[name] = func(context.Context, types.ConnectionInput) (any, error) {
+					return mockCloudflareClient(baseURL), nil
+				}
 			}
 		}
+
+		def.Connections = lo.Map(connections, func(c types.Connection, _ int) types.Connector {
+			return c
+		})
 
 		if def.RuntimeIntegration != nil {
 			def.RuntimeIntegration.Build = func(_ context.Context, _ json.RawMessage) (any, error) {

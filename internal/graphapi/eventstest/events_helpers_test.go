@@ -10,6 +10,7 @@ import (
 
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/iam/auth"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	"github.com/stretchr/testify/require"
@@ -26,6 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keystore"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -55,27 +57,34 @@ func harnessReconcileOperation(t *testing.T, mode string) string {
 	return ""
 }
 
-// newHarnessInstallation installs the test integration in the given mode through the prod
-// connect flow; the unresolvable mode stores a non-token credential so the client cannot build
+// newHarnessInstallation installs the test integration in the given mode through the connect flow; the unresolvable mode then deletes the stored credential so the client cannot build
 func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*ent.Integration, string) {
 	t.Helper()
 
-	installation, err := suite.Client.DB.Integration.Create().
-		SetName(th.RandomName(t)).
-		SetKind("testintegration").
-		SetDefinitionID(testint.DefinitionID.ID()).
-		Save(ctx)
+	def, ok := suite.IntegrationsRT.Registry().Definition(testint.DefinitionID.ID())
+	require.True(t, ok)
+
+	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
 	require.NoError(t, err)
 
-	credentialRef := testint.TokenCredential.ID()
+	installation, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, ownerID, "", def, nil, testint.ModeOperationConfig(mode))
+	require.NoError(t, err)
+
+	credentialRef := testint.Token.Connection().Credential.Name
 	credential := testint.TokenCredentialSet("test-token")
 
 	if mode == testint.ModeUnresolvable {
-		credentialRef = testint.ServiceAccountCredential.ID()
+		credentialRef = testint.ServiceAccount.Connection().Credential.Name
 		credential = testint.ServiceAccountCredentialSet("test-project", "svc@example.com")
 	}
 
-	require.NoError(t, suite.IntegrationsRT.Reconcile(ctx, installation, testint.ModeInput(mode), credentialRef, &credential, nil))
+	require.NoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, installation, credentialRef, credential))
+
+	if mode == testint.ModeUnresolvable {
+		store, err := keystore.NewStore(suite.Client.DB)
+		require.NoError(t, err)
+		require.NoError(t, store.DeleteCredential(ctx, installation.ID))
+	}
 
 	fragment := reconcileLoopFragment(t, installation.ID, harnessReconcileOperation(t, mode))
 

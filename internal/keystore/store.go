@@ -1,12 +1,14 @@
 package keystore
 
 import (
+	"bytes"
 	"context"
-	"encoding/json"
+	"strings"
 	"sync"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/iam/auth"
 
@@ -34,12 +36,13 @@ const defaultClientPoolTTL = 5 * time.Minute
 
 type clientCacheKey struct {
 	integrationID string
-	clientID      types.ClientID
+	connection    string
+	client        string
 	digest        string
 }
 
 func (k clientCacheKey) String() string {
-	return k.integrationID + ":" + k.clientID.String() + ":" + k.digest
+	return strings.Join([]string{k.integrationID, k.connection, k.client, k.digest}, ":")
 }
 
 // NewStore constructs the credential store backed by the supplied Ent client
@@ -55,13 +58,13 @@ func NewStore(db *ent.Client) (*Store, error) {
 	}, nil
 }
 
-// LoadCredential resolves one persisted credential slot for one installation record
-func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.CredentialSet, bool, error) {
-	if credentialRef == (types.CredentialSlotID{}) {
+// LoadCredential resolves the persisted credential of the named connection for one installation record
+func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integration, name string) (types.CredentialSet, bool, error) {
+	if name == "" {
 		return types.CredentialSet{}, false, ErrCredentialNotFound
 	}
 
-	record, ok, err := s.activeCredentialRecord(auth.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, credentialRef)
+	record, ok, err := s.activeCredentialRecord(auth.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, name)
 	if err != nil {
 		return types.CredentialSet{}, false, err
 	}
@@ -72,43 +75,35 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 	return types.CredentialSet(record.CredentialSet), true, nil
 }
 
-// LoadCredentials resolves the requested credential slots for one installation record
-func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
-	records, err := s.activeCredentialRecords(auth.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, credentialRefs)
+// LoadAllCredentials resolves every persisted credential for one installation record keyed by secret name
+func (s *Store) LoadAllCredentials(ctx context.Context, installation *ent.Integration) (map[string]types.CredentialSet, error) {
+	records, err := s.activeCredentialRecords(auth.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	bindings := make(types.CredentialBindings, 0, len(records))
-	for _, ref := range credentialRefs {
-		record, ok := records[ref.String()]
-		if !ok {
-			continue
-		}
-
-		bindings = append(bindings, types.CredentialBinding{
-			Ref:        ref,
-			Credential: cloneCredentialSet(types.CredentialSet(record.CredentialSet)),
-		})
+	out := make(map[string]types.CredentialSet, len(records))
+	for secretName, record := range records {
+		out[secretName] = cloneCredentialSet(types.CredentialSet(record.CredentialSet))
 	}
 
-	return bindings, nil
+	return out, nil
 }
 
-// SaveCredential upserts one credential slot for one installation record
-func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
-	if credentialRef == (types.CredentialSlotID{}) {
+// SaveCredential upserts the credential of the named connection for one installation record
+func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integration, name string, credential types.CredentialSet) error {
+	if name == "" {
 		return ErrCredentialNotFound
 	}
 
-	existing, ok, err := s.activeCredentialRecord(ctx, installation.ID, credentialRef)
+	existing, ok, err := s.activeCredentialRecord(ctx, installation.ID, name)
 	if err != nil {
 		return err
 	}
 
-	secretName := credentialRef.String()
+	secretName := name
 	if !ok {
-		if err := s.db.Hush.Create().
+		if err := s.client(ctx).Hush.Create().
 			SetOwnerID(installation.OwnerID).
 			SetName(secretName).
 			SetSecretName(secretName).
@@ -148,12 +143,60 @@ func (s *Store) DeleteCredential(ctx context.Context, integrationID string) erro
 	return nil
 }
 
-// BuildClient resolves one named client for an installation using explicit credential bundles
-func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, registration types.ClientRegistration, credentials types.CredentialBindings, config json.RawMessage, force bool) (any, error) {
+// ReplaceCredentials reconciles installation credentials keyed by secret name from previous to next
+func (s *Store) ReplaceCredentials(ctx context.Context, installation *ent.Integration, previous, next map[string]types.CredentialSet) error {
+	for slot, credential := range next {
+		existing, tracked := previous[slot]
+
+		if tracked && bytes.Equal(existing.Data, credential.Data) {
+			continue
+		}
+
+		if !tracked {
+			_, exists, err := s.activeCredentialRecord(ctx, installation.ID, slot)
+			if err != nil {
+				return err
+			}
+
+			if exists {
+				continue
+			}
+		}
+
+		if err := s.SaveCredential(ctx, installation, slot, credential); err != nil {
+			return err
+		}
+	}
+
+	removed := lo.FilterMap(lo.Keys(previous), func(slot string, _ int) (string, bool) {
+		_, keep := next[slot]
+
+		return slot, !keep
+	})
+
+	if len(removed) > 0 {
+		if _, err := s.client(ctx).Hush.Delete().
+			Where(
+				enthush.HasIntegrationsWith(entintegration.IDEQ(installation.ID)),
+				enthush.SecretNameIn(removed...),
+			).
+			Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	s.InvalidateClients(installation.ID)
+
+	return nil
+}
+
+// BuildClient resolves one named client of a connection for an installation from its credential
+func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, connection, client string, build types.ClientBuilderFunc, credential types.CredentialSet, force bool) (any, error) {
 	cacheKey := clientCacheKey{
 		integrationID: installation.ID,
-		clientID:      registration.Ref,
-		digest:        clientCacheDigest(credentials, config),
+		connection:    connection,
+		client:        client,
+		digest:        clientCacheDigest(credential),
 	}
 
 	if force {
@@ -162,20 +205,19 @@ func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, 
 		return cached.MustGet(), nil
 	}
 
-	client, err := registration.Build(ctx, types.ClientBuildRequest{
+	built, err := build(ctx, types.ConnectionInput{
 		Integration:  installation,
-		Credentials:  cloneCredentialBindings(credentials),
-		Config:       jsonx.CloneRawMessage(config),
+		Credential:   cloneCredentialSet(credential),
 		TokenManager: s.db.TokenManager,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	s.clientPool.SetClient(cacheKey, client)
+	s.clientPool.SetClient(cacheKey, built)
 	s.trackClientKey(cacheKey)
 
-	return client, nil
+	return built, nil
 }
 
 // InvalidateClients drops all pooled clients for one installation
@@ -202,15 +244,10 @@ func (s *Store) trackClientKey(key clientCacheKey) {
 	s.clientKeys[key.integrationID][key] = struct{}{}
 }
 
-// clientCacheDigest computes a hash digest for a set of credentials and config
-func clientCacheDigest(credentials types.CredentialBindings, config json.RawMessage) string {
-	encodedCredential, err := json.Marshal(credentials)
-	if err != nil {
-		encodedCredential = nil
-	}
-
+// clientCacheDigest computes a hash digest for a credential's data
+func clientCacheDigest(credential types.CredentialSet) string {
 	return helpers.NewHashBuilder().
-		WriteStrings(string(encodedCredential), string(config)).
+		WriteStrings(string(credential.Data)).
 		Hex()
 }
 
@@ -221,31 +258,23 @@ func cloneCredentialSet(credential types.CredentialSet) types.CredentialSet {
 	}
 }
 
-// cloneCredentialBindings returns a deep copy of CredentialBindings
-func cloneCredentialBindings(credentials types.CredentialBindings) types.CredentialBindings {
-	if len(credentials) == 0 {
-		return nil
+// client returns the transaction's client when ctx carries one, else the store's client
+func (s *Store) client(ctx context.Context) *ent.Client {
+	if tx := ent.TxFromContext(ctx); tx != nil {
+		return tx.Client()
 	}
 
-	cloned := make(types.CredentialBindings, 0, len(credentials))
-	for _, binding := range credentials {
-		cloned = append(cloned, types.CredentialBinding{
-			Ref:        binding.Ref,
-			Credential: cloneCredentialSet(binding.Credential),
-		})
-	}
-
-	return cloned
+	return s.db
 }
 
-// activeCredentialRecord returns the active credential record for an installation and credential ref
-func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID) (*ent.Hush, bool, error) {
-	records, err := s.activeCredentialRecords(ctx, integrationID, []types.CredentialSlotID{credentialRef})
+// activeCredentialRecord returns the active credential record for a connection name
+func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string, name string) (*ent.Hush, bool, error) {
+	records, err := s.activeCredentialRecords(ctx, integrationID, []string{name})
 	if err != nil {
 		return nil, false, err
 	}
 
-	record, ok := records[credentialRef.String()]
+	record, ok := records[name]
 	if !ok {
 		return nil, false, nil
 	}
@@ -253,24 +282,13 @@ func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string
 	return record, true, nil
 }
 
-// activeCredentialRecords returns all active credential records for an installation and credential refs
-// Credentials are keyed by Hush.SecretName which stores the CredentialSlotID as a unique discriminator
-func (s *Store) activeCredentialRecords(ctx context.Context, integrationID string, credentialRefs []types.CredentialSlotID) (map[string]*ent.Hush, error) {
-	query := s.db.Hush.Query().Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID)))
+// activeCredentialRecords returns active credential records keyed by Hush.SecretName
+func (s *Store) activeCredentialRecords(ctx context.Context, integrationID string, names []string) (map[string]*ent.Hush, error) {
+	query := s.client(ctx).Hush.Query().Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID)))
 
-	if len(credentialRefs) > 0 {
-		secretNames := make([]string, 0, len(credentialRefs))
-		for _, ref := range credentialRefs {
-			if ref == (types.CredentialSlotID{}) {
-				continue
-			}
-
-			secretNames = append(secretNames, ref.String())
-		}
-
-		if len(secretNames) > 0 {
-			query = query.Where(enthush.SecretNameIn(secretNames...))
-		}
+	secretNames := lo.Compact(names)
+	if len(secretNames) > 0 {
+		query = query.Where(enthush.SecretNameIn(secretNames...))
 	}
 
 	records, err := query.

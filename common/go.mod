@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/common
 
-go 1.27.1
+go 1.27.2
 
 require (
 	entgo.io/ent v0.14.6

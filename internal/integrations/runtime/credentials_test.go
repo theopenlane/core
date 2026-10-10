@@ -6,12 +6,67 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/samber/do/v2"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keystore"
 )
 
-// --- resolveConnectionFromState ---
+// credentialTestOAuth is the credential type behind the OAuth test connection
+type credentialTestOAuth struct{}
+
+// credentialTestAPIKey is the credential type behind the API key test connection
+type credentialTestAPIKey struct{}
+
+// verifyTestClient is the client the verification test connections build
+type verifyTestClient struct{}
+
+// verifyTestMetadata is the installation metadata type that derives its own identity
+type verifyTestMetadata struct {
+	// Tenant is the tenant the credential is scoped to
+	Tenant string `json:"tenant"`
+}
+
+// InstallationIdentity returns the tenant as the installation identity
+func (m verifyTestMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{ExternalID: m.Tenant}
+}
+
+// verifyTestPlainMetadata is the installation metadata type that keeps the installation's own identity
+type verifyTestPlainMetadata struct{}
+
+var (
+	credentialTestOAuthRef  = types.NewConnection[credentialTestOAuth]("credentialTestOAuth")
+	credentialTestAPIKeyRef = types.NewConnection[credentialTestAPIKey]("credentialTestAPIKey")
+)
+
+// verifyTestRuntime builds a runtime whose keystore can build and pool clients
+func verifyTestRuntime(t *testing.T) *Runtime {
+	t.Helper()
+
+	store, err := keystore.NewStore(&ent.Client{})
+	if err != nil {
+		t.Fatalf("expected keystore, got %v", err)
+	}
+
+	rt := NewForTesting(registry.New())
+	do.ProvideValue(rt.injector, store)
+
+	return rt
+}
+
+// verifyTestConnection builds a connection whose verification reports tenant
+func verifyTestConnection(tenant string) types.ConnectionRef[credentialTestOAuth] {
+	return types.NewConnection[credentialTestOAuth]("credentialTestOAuth").
+		Provides(func(context.Context, types.ConnectionRequest[credentialTestOAuth]) (*verifyTestClient, error) {
+			return &verifyTestClient{}, nil
+		}).
+		Verified(func(context.Context, types.ConnectionRequest[credentialTestOAuth], *verifyTestClient) (verifyTestMetadata, error) {
+			return verifyTestMetadata{Tenant: tenant}, nil
+		})
+}
 
 func TestResolveConnectionFromStateEmptyProviderState(t *testing.T) {
 	t.Parallel()
@@ -57,15 +112,10 @@ func TestResolveConnectionFromStateNilProviders(t *testing.T) {
 func TestResolveConnectionFromStateWithPersistedRef(t *testing.T) {
 	t.Parallel()
 
-	credRef := types.NewCredentialSlotID("oauth")
+	credRef := credentialTestOAuthRef.Connection().Credential.Name
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
-		},
-		Connections: []types.ConnectionRegistration{
-			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
-		},
+		Connections:    []types.Connector{credentialTestOAuthRef.Name("OAuth Connection")},
 	}
 
 	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: credRef})
@@ -95,12 +145,11 @@ func TestResolveConnectionFromStateWithPersistedRef(t *testing.T) {
 func TestResolveConnectionFromStateUnknownRef(t *testing.T) {
 	t.Parallel()
 
-	credRef := types.NewCredentialSlotID("unknown")
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	}
 
-	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: credRef})
+	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: "unknown"})
 
 	rt := NewForTesting(registry.New())
 	_, _, err := rt.resolveConnectionFromState(def, &ent.Integration{
@@ -115,140 +164,6 @@ func TestResolveConnectionFromStateUnknownRef(t *testing.T) {
 		t.Fatalf("expected ErrConnectionNotFound, got %v", err)
 	}
 }
-
-// --- resolveConnectionForCredential ---
-
-func TestResolveConnectionForCredentialFromPersistedState(t *testing.T) {
-	t.Parallel()
-
-	credRef := types.NewCredentialSlotID("oauth")
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
-		},
-		Connections: []types.ConnectionRegistration{
-			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
-		},
-	}
-
-	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: credRef})
-	installation := &ent.Integration{
-		DefinitionID: "test-def",
-		ProviderState: types.IntegrationProviderState{
-			Providers: map[string]json.RawMessage{
-				"test-def": providerState,
-			},
-		},
-	}
-
-	rt := NewForTesting(registry.New())
-	conn, err := rt.resolveConnectionForCredential(def, installation, credRef)
-	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-
-	if conn.Name != "OAuth Connection" {
-		t.Fatalf("expected OAuth Connection, got %q", conn.Name)
-	}
-}
-
-func TestResolveConnectionForCredentialRefNotDeclared(t *testing.T) {
-	t.Parallel()
-
-	credRef := types.NewCredentialSlotID("oauth")
-	otherRef := types.NewCredentialSlotID("api-key")
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
-		},
-		Connections: []types.ConnectionRegistration{
-			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
-		},
-	}
-
-	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: credRef})
-	installation := &ent.Integration{
-		DefinitionID: "test-def",
-		ProviderState: types.IntegrationProviderState{
-			Providers: map[string]json.RawMessage{
-				"test-def": providerState,
-			},
-		},
-	}
-
-	rt := NewForTesting(registry.New())
-	_, err := rt.resolveConnectionForCredential(def, installation, otherRef)
-	if !errors.Is(err, ErrCredentialNotDeclared) {
-		t.Fatalf("expected ErrCredentialNotDeclared, got %v", err)
-	}
-}
-
-func TestResolveConnectionForCredentialNoStateWithRef(t *testing.T) {
-	t.Parallel()
-
-	credRef := types.NewCredentialSlotID("api-key")
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "API Key", Schema: json.RawMessage(`{"type":"object"}`)},
-		},
-		Connections: []types.ConnectionRegistration{
-			{CredentialRef: credRef, Name: "API Key Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
-		},
-	}
-
-	installation := &ent.Integration{
-		DefinitionID: "test-def",
-	}
-
-	rt := NewForTesting(registry.New())
-	conn, err := rt.resolveConnectionForCredential(def, installation, credRef)
-	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-
-	if conn.Name != "API Key Connection" {
-		t.Fatalf("expected API Key Connection, got %q", conn.Name)
-	}
-}
-
-func TestResolveConnectionForCredentialNoStateEmptyRef(t *testing.T) {
-	t.Parallel()
-
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-	}
-	installation := &ent.Integration{
-		DefinitionID: "test-def",
-	}
-
-	rt := NewForTesting(registry.New())
-	_, err := rt.resolveConnectionForCredential(def, installation, types.CredentialSlotID{})
-	if !errors.Is(err, ErrConnectionRequired) {
-		t.Fatalf("expected ErrConnectionRequired, got %v", err)
-	}
-}
-
-func TestResolveConnectionForCredentialNoStateUnknownRef(t *testing.T) {
-	t.Parallel()
-
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-	}
-	installation := &ent.Integration{
-		DefinitionID: "test-def",
-	}
-
-	rt := NewForTesting(registry.New())
-	_, err := rt.resolveConnectionForCredential(def, installation, types.NewCredentialSlotID("missing"))
-	if !errors.Is(err, ErrConnectionNotFound) {
-		t.Fatalf("expected ErrConnectionNotFound, got %v", err)
-	}
-}
-
-// --- Disconnect ---
 
 func TestDisconnectNilInstallation(t *testing.T) {
 	t.Parallel()
@@ -272,113 +187,35 @@ func TestDisconnectMissingDefinition(t *testing.T) {
 	}
 }
 
-func TestDisconnectConnectionResolutionError(t *testing.T) {
-	t.Parallel()
-
-	credRef := types.NewCredentialSlotID("unknown")
-	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: credRef})
-
-	reg := registry.New()
-	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-	})
-
-	rt := NewForTesting(reg)
-	_, err := rt.Disconnect(context.Background(), &ent.Integration{
-		DefinitionID: "test-def",
-		ProviderState: types.IntegrationProviderState{
-			Providers: map[string]json.RawMessage{
-				"test-def": providerState,
-			},
-		},
-	})
-	if !errors.Is(err, ErrConnectionNotFound) {
-		t.Fatalf("expected ErrConnectionNotFound, got %v", err)
-	}
-}
-
-// --- Reconcile ---
-
-func TestReconcileNilInstallation(t *testing.T) {
+func TestReconcileCredentialNilInstallation(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
-	err := rt.Reconcile(context.Background(), nil, nil, types.CredentialSlotID{}, nil, nil)
+	err := rt.ReconcileCredential(context.Background(), nil, "", types.CredentialSet{})
 	if !errors.Is(err, ErrInstallationRequired) {
 		t.Fatalf("expected ErrInstallationRequired, got %v", err)
 	}
 }
 
-func TestReconcileMissingDefinition(t *testing.T) {
+func TestReconcileCredentialMissingDefinition(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
-	err := rt.Reconcile(context.Background(), &ent.Integration{
+	err := rt.ReconcileCredential(context.Background(), &ent.Integration{
 		DefinitionID: "nonexistent",
-	}, nil, types.CredentialSlotID{}, nil, nil)
+	}, "", types.CredentialSet{})
 	if !errors.Is(err, registry.ErrDefinitionNotFound) {
 		t.Fatalf("expected ErrDefinitionNotFound, got %v", err)
 	}
 }
 
-func TestReconcileNoInputNoCredential(t *testing.T) {
-	t.Parallel()
-
-	reg := registry.New()
-	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-	})
-
-	rt := NewForTesting(reg)
-	err := rt.Reconcile(context.Background(), &ent.Integration{
-		DefinitionID: "test-def",
-	}, nil, types.CredentialSlotID{}, nil, nil)
-	if err != nil {
-		t.Fatalf("expected no error for no-op reconcile, got %v", err)
-	}
-}
-
-func TestReconcileEmptyInputNoCredential(t *testing.T) {
-	t.Parallel()
-
-	reg := registry.New()
-	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-	})
-
-	rt := NewForTesting(reg)
-	// Empty JSON objects and null are treated as empty by jsonx.IsEmptyRawMessage
-	err := rt.Reconcile(context.Background(), &ent.Integration{
-		DefinitionID: "test-def",
-	}, json.RawMessage(`null`), types.CredentialSlotID{}, nil, nil)
-	if err != nil {
-		t.Fatalf("expected no error for null input reconcile, got %v", err)
-	}
-}
-
-// --- resolvePersistedConnection (additional cases beyond definitions_test.go) ---
-
 func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 	t.Parallel()
 
-	credRef := types.NewCredentialSlotID("oauth")
-	reg := registry.New()
-	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
-		},
-		Connections: []types.ConnectionRegistration{
-			{CredentialRef: credRef, Name: "Only Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
-		},
-	})
-
-	rt := NewForTesting(reg)
+	rt := NewForTesting(registry.New())
 	conn, err := rt.resolvePersistedConnection(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		Connections: []types.ConnectionRegistration{
-			{CredentialRef: credRef, Name: "Only Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
-		},
+		Connections:    []types.Connector{credentialTestOAuthRef.Name("Only Connection")},
 	}, &ent.Integration{
 		DefinitionID: "test-def",
 	})
@@ -394,34 +231,18 @@ func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 func TestResolvePersistedConnectionMultipleConnectionsNoState(t *testing.T) {
 	t.Parallel()
 
-	refA := types.NewCredentialSlotID("oauth")
-	refB := types.NewCredentialSlotID("api-key")
-
 	rt := NewForTesting(registry.New())
 	_, err := rt.resolvePersistedConnection(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		Connections: []types.ConnectionRegistration{
-			{CredentialRef: refA, Name: "OAuth"},
-			{CredentialRef: refB, Name: "API Key"},
+		Connections: []types.Connector{
+			credentialTestOAuthRef.Name("OAuth"),
+			credentialTestAPIKeyRef.Name("API Key"),
 		},
 	}, &ent.Integration{
 		DefinitionID: "test-def",
 	})
 	if !errors.Is(err, ErrConnectionRequired) {
 		t.Fatalf("expected ErrConnectionRequired, got %v", err)
-	}
-}
-
-// --- checkInstallationInstanceMatch ---
-
-// staticIdentityConnection builds a connection whose installation resolver always answers with the given instance id
-func staticIdentityConnection(instanceID string) types.ConnectionRegistration {
-	return types.ConnectionRegistration{
-		Integration: &types.InstallationRegistration{
-			Resolve: func(context.Context, types.InstallationRequest) (types.IntegrationInstallationMetadata, bool, error) {
-				return types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: instanceID}}, true, nil
-			},
-		},
 	}
 }
 
@@ -433,7 +254,7 @@ func TestCheckInstallationInstanceMatchRejectsInstanceMismatch(t *testing.T) {
 	}
 	metadata := types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-b"}}
 
-	err := checkInstallationInstanceMatch(context.Background(), installation, metadata)
+	err := checkInstallationInstanceMatch(installation, metadata)
 	if !errors.Is(err, ErrInstallationInstanceMismatch) {
 		t.Fatalf("expected ErrInstallationInstanceMismatch, got %v", err)
 	}
@@ -447,7 +268,7 @@ func TestCheckInstallationInstanceMatchKeepsMatchingInstance(t *testing.T) {
 	}
 	metadata := types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-a"}}
 
-	if err := checkInstallationInstanceMatch(context.Background(), installation, metadata); err != nil {
+	if err := checkInstallationInstanceMatch(installation, metadata); err != nil {
 		t.Fatalf("expected no error for a matching instance, got %v", err)
 	}
 }
@@ -457,21 +278,19 @@ func TestCheckInstallationInstanceMatchAcceptsFirstResolution(t *testing.T) {
 
 	metadata := types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-b"}}
 
-	if err := checkInstallationInstanceMatch(context.Background(), &ent.Integration{}, metadata); err != nil {
+	if err := checkInstallationInstanceMatch(&ent.Integration{}, metadata); err != nil {
 		t.Fatalf("expected no error for a first resolution, got %v", err)
 	}
 }
 
-// --- resolveConnectionIdentity ---
-
-func TestResolveConnectionIdentityDoesNotRejectInstanceMismatch(t *testing.T) {
+func TestRunConnectionHealthCheckReturnsVerificationIdentity(t *testing.T) {
 	t.Parallel()
 
-	installation := &ent.Integration{
-		InstallationMetadata: types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-a"}},
-	}
+	rt := verifyTestRuntime(t)
+	connection := verifyTestConnection("tenant-b").Connection()
+	def := types.Definition{Installation: types.InstallationOf[verifyTestMetadata]().Registration()}
 
-	metadata, err := resolveConnectionIdentity(context.Background(), installation, staticIdentityConnection("tenant-b"), nil, nil)
+	metadata, err := rt.runConnectionHealthCheck(context.Background(), &ent.Integration{ID: "installation-id"}, def, connection, types.CredentialSet{Data: json.RawMessage(`{}`)})
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -481,19 +300,38 @@ func TestResolveConnectionIdentityDoesNotRejectInstanceMismatch(t *testing.T) {
 	}
 }
 
-func TestResolveConnectionIdentityRejectsResolverWithoutInstanceID(t *testing.T) {
+func TestRunConnectionHealthCheckRejectsIdentifiableWithoutInstanceID(t *testing.T) {
 	t.Parallel()
 
-	connection := types.ConnectionRegistration{
-		Integration: &types.InstallationRegistration{
-			Resolve: func(context.Context, types.InstallationRequest) (types.IntegrationInstallationMetadata, bool, error) {
-				return types.IntegrationInstallationMetadata{}, false, nil
-			},
-		},
-	}
+	rt := verifyTestRuntime(t)
+	connection := verifyTestConnection("").Connection()
+	def := types.Definition{Installation: types.InstallationOf[verifyTestMetadata]().Registration()}
 
-	_, err := resolveConnectionIdentity(context.Background(), &ent.Integration{}, connection, nil, nil)
+	_, err := rt.runConnectionHealthCheck(context.Background(), &ent.Integration{ID: "installation-id"}, def, connection, types.CredentialSet{Data: json.RawMessage(`{}`)})
 	if !errors.Is(err, ErrInstallationInstanceIDRequired) {
 		t.Fatalf("expected ErrInstallationInstanceIDRequired, got %v", err)
+	}
+}
+
+func TestRunConnectionHealthCheckFallsBackToInstallationIDWhenNotIdentifiable(t *testing.T) {
+	t.Parallel()
+
+	rt := verifyTestRuntime(t)
+	connection := types.NewConnection[credentialTestOAuth]("credentialTestOAuth").
+		Provides(func(context.Context, types.ConnectionRequest[credentialTestOAuth]) (*verifyTestClient, error) {
+			return &verifyTestClient{}, nil
+		}).
+		Verified(func(context.Context, types.ConnectionRequest[credentialTestOAuth], *verifyTestClient) (verifyTestPlainMetadata, error) {
+			return verifyTestPlainMetadata{}, nil
+		}).Connection()
+	def := types.Definition{Installation: types.InstallationOf[verifyTestPlainMetadata]().Registration()}
+
+	metadata, err := rt.runConnectionHealthCheck(context.Background(), &ent.Integration{ID: "installation-id"}, def, connection, types.CredentialSet{Data: json.RawMessage(`{}`)})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if metadata.Display.ExternalID != "installation-id" {
+		t.Fatalf("expected the installation's own id, got %q", metadata.Display.ExternalID)
 	}
 }

@@ -513,7 +513,6 @@ func TestAllEmailOperationsHaveNames(t *testing.T) {
 
 	for _, op := range ops {
 		assert.NotEmpty(t, op.Name, "operation should have a name")
-		assert.NotEmpty(t, op.Topic, "operation should have a topic")
 		assert.NotNil(t, op.Handle, "operation should have a handler")
 	}
 }

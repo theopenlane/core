@@ -11,6 +11,7 @@ tasks:
     cmds:
       - task: schema
       - task: workflow-schema
+      - task: integration-schema
       - task: docs
       - task: workflow-docs
       - task: openapi
@@ -24,6 +25,11 @@ tasks:
     desc: generate the workflow definition jsonschema
     cmds:
       - go run jsonschema/workflow_schema_generator.go
+
+  integration-schema:
+    desc: snapshot the installation-facing surface of every integration definition
+    cmds:
+      - go run jsonschema/integration_schema_generator.go
 
   docs:
     desc: generate documentation from the jsonschema

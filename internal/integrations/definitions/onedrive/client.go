@@ -11,6 +11,7 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -18,73 +19,51 @@ import (
 // graphScope is the default scope used for Microsoft Graph client requests
 const graphScope = "https://graph.microsoft.com/.default"
 
-// Client builds OneDrive Graph clients for one installation
-type Client struct {
-	// cfg is the operator-level OneDrive configuration
-	cfg Config
+// clientBuilder returns the OneDrive Graph client builder bound to the operator config
+func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[oneDriveCred]) (*DriveClient, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[oneDriveCred]) (*DriveClient, error) {
+		cred := req.Credential
+
+		if cred.AccessToken == "" {
+			return nil, ErrOAuthTokenMissing
+		}
+
+		base := fmt.Sprintf(microsoftAuthBaseURL, "common")
+
+		oauthCfg := &oauth2.Config{
+			ClientID:     cfg.ClientID,
+			ClientSecret: cfg.ClientSecret,
+			Endpoint: oauth2.Endpoint{
+				AuthURL:  base + "/authorize",
+				TokenURL: base + "/token",
+			},
+			Scopes: []string{
+				"https://graph.microsoft.com/Files.Read",
+				"https://graph.microsoft.com/User.Read",
+				"offline_access",
+			},
+		}
+
+		ts := oauthCfg.TokenSource(ctx, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+
+		tokenCred := &oauthTokenCredential{ts: ts}
+
+		authProvider, err := kiotaauth.NewAzureIdentityAuthenticationProviderWithScopes(tokenCred, []string{graphScope})
+		if err != nil {
+			return nil, ErrClientBuildFailed
+		}
+
+		adapter, err := msgraphsdk.NewGraphRequestAdapter(authProvider)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error building onedrive client")
+			return nil, ErrClientBuildFailed
+		}
+
+		return &DriveClient{Graph: msgraphsdk.NewGraphServiceClient(adapter), TS: ts, Cfg: cfg}, nil
+	}
 }
 
-// Build constructs a DriveClient from the installation OAuth credential.
-// It wraps an oauth2.TokenSource so that expired access tokens are automatically
-// refreshed using the stored refresh token, matching the behavior of the Google Drive client.
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	cred, _, err := oneDriveCredential.Resolve(req.Credentials)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error decoding onedrive credentials")
-		return nil, ErrCredentialDecode
-	}
-
-	if cred.AccessToken == "" {
-		return nil, ErrOAuthTokenMissing
-	}
-
-	tok := &oauth2.Token{
-		AccessToken:  cred.AccessToken,
-		RefreshToken: cred.RefreshToken,
-		TokenType:    "Bearer",
-	}
-
-	if cred.Expiry != nil {
-		tok.Expiry = *cred.Expiry
-	}
-
-	base := fmt.Sprintf(microsoftAuthBaseURL, "common")
-
-	oauthCfg := &oauth2.Config{
-		ClientID:     c.cfg.ClientID,
-		ClientSecret: c.cfg.ClientSecret,
-		Endpoint: oauth2.Endpoint{
-			AuthURL:  base + "/authorize",
-			TokenURL: base + "/token",
-		},
-		Scopes: []string{
-			"https://graph.microsoft.com/Files.Read",
-			"https://graph.microsoft.com/User.Read",
-			"offline_access",
-		},
-	}
-
-	// context background used intentionally in this slot
-	ts := oauthCfg.TokenSource(context.Background(), tok)
-
-	tokenCred := &oauthTokenCredential{ts: ts}
-
-	authProvider, err := kiotaauth.NewAzureIdentityAuthenticationProviderWithScopes(tokenCred, []string{graphScope})
-	if err != nil {
-		return nil, ErrClientBuildFailed
-	}
-
-	adapter, err := msgraphsdk.NewGraphRequestAdapter(authProvider)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error building onedrive client")
-		return nil, ErrClientBuildFailed
-	}
-
-	return &DriveClient{Graph: msgraphsdk.NewGraphServiceClient(adapter), TS: ts, Cfg: c.cfg}, nil
-}
-
-// oauthTokenCredential wraps an oauth2.TokenSource as an azcore.TokenCredential so that
-// the kiota authentication provider can obtain automatically-refreshed access tokens
+// oauthTokenCredential adapts an oauth2.TokenSource to azcore.TokenCredential
 type oauthTokenCredential struct {
 	ts oauth2.TokenSource
 }

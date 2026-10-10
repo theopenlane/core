@@ -3,24 +3,21 @@ package googleworkspace
 import (
 	"time"
 
-	admin "google.golang.org/api/admin/directory/v1"
-
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the Google Workspace integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
-	// workspaceCredential is the credential slot for Google Workspace OAuth credentials
-	_, workspaceCredential = providerkit.CredentialSchema[googleWorkspaceCred]()
-	// workspaceClient is the client ref for the Google Workspace Admin SDK
-	workspaceClient = types.NewClientRef[*admin.Service]()
-	// directorySyncSchema is the operation ref for the directory sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	// oauthConnection is the Google Workspace OAuth connection
+	oauthConnection = types.ConnectionOf[googleWorkspaceCred]()
+	// installation is the installation metadata layout
+	installation = types.InstallationOf[InstallationMetadata]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
-// googleWorkspaceCred holds the provider-owned credential material for a Google Workspace installation
+// googleWorkspaceCred holds provider-owned credential material for the installation
 type googleWorkspaceCred struct {
 	// AccessToken is the OAuth2 access token
 	AccessToken string `json:"accessToken"`
@@ -32,13 +29,16 @@ type googleWorkspaceCred struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	// PrimaryDirectory marks this installation as the authoritative directory source
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.orgUnitPath.startsWith('/engineering/')"`
 }
 
-// InstallationMetadata holds the stable Google Workspace directory target selected for one installation
+// DirectorySync configures collection of Google Workspace directory users, groups, and memberships
+type DirectorySync struct {
+	types.OperationSettings
+}
+
+// InstallationMetadata holds the Google Workspace directory target for an installation
 type InstallationMetadata struct {
 	// CustomerID is the Google Workspace customer identifier
 	CustomerID string `json:"customerId,omitempty" jsonschema:"title=Customer ID"`

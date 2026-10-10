@@ -1,87 +1,58 @@
 package gcpscc
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// TestResolveCredential verifies credential resolution from bindings and default application
-func TestResolveCredential(t *testing.T) {
-	t.Run("decodes into credential schema", func(t *testing.T) {
-		raw, err := jsonx.ToRawMessage(CredentialSchema{
-			ServiceAccountKey: "\"{\\n  \\\"type\\\":\\\"service_account\\\"\\n}\"",
-			CollectionScope: CollectionScope{
-				ProjectID:      "project-123",
-				OrganizationID: "org-123",
-			},
-		})
-		require.NoError(t, err)
-
-		bindings := types.CredentialBindings{
-			{Ref: sccCredential.ID(), Credential: types.CredentialSet{Data: raw}},
-		}
-
-		meta, err := resolveCredential(bindings)
-		require.NoError(t, err)
-
-		assert.Equal(t, "project-123", meta.ProjectID)
-		assert.Equal(t, "org-123", meta.OrganizationID)
-		assert.Equal(t, "{\n  \"type\":\"service_account\"\n}", normalizeServiceAccountKey(meta.ServiceAccountKey))
+// TestServiceAccountCredentials verifies service account key validation
+func TestServiceAccountCredentials(t *testing.T) {
+	t.Run("rejects an empty key", func(t *testing.T) {
+		_, err := serviceAccountCredentials(context.Background(), "  ")
+		require.ErrorIs(t, err, ErrServiceAccountKeyInvalid)
 	})
 
-	t.Run("returns decode error for invalid provider data", func(t *testing.T) {
-		bindings := types.CredentialBindings{
-			{Ref: sccCredential.ID(), Credential: types.CredentialSet{Data: []byte(`{`)}},
-		}
-
-		_, err := resolveCredential(bindings)
-		require.ErrorIs(t, err, ErrMetadataDecode)
-	})
-
-	t.Run("returns required error when binding is missing", func(t *testing.T) {
-		_, err := resolveCredential(nil)
-		require.ErrorIs(t, err, ErrCredentialMetadataRequired)
+	t.Run("rejects a malformed key", func(t *testing.T) {
+		_, err := serviceAccountCredentials(context.Background(), "{")
+		require.ErrorIs(t, err, ErrServiceAccountKeyInvalid)
 	})
 }
 
-// TestResolveScope verifies collection scope resolution from either credential slot
-func TestResolveScope(t *testing.T) {
-	t.Run("decodes collection scope from the workload identity slot", func(t *testing.T) {
-		raw, err := jsonx.ToRawMessage(WorkloadIdentityCredentialSchema{
-			ProjectNumber: "123456789",
-			CollectionScope: CollectionScope{
-				OrganizationID: "org-123",
-			},
-		})
-		require.NoError(t, err)
+// TestServiceAccountClient verifies the service account client rejects an unusable key before building
+func TestServiceAccountClient(t *testing.T) {
+	_, err := serviceAccountClient(context.Background(), types.ConnectionRequest[CredentialSchema]{
+		Integration: &ent.Integration{},
+		Credential:  CredentialSchema{ServiceAccountKey: ""},
+	})
+	require.ErrorIs(t, err, ErrServiceAccountKeyInvalid)
+}
 
-		scope, err := resolveScope(types.CredentialBindings{
-			{Ref: workloadIdentityCredential.ID(), Credential: types.CredentialSet{Data: raw}},
-		})
-		require.NoError(t, err)
-		assert.Equal(t, "org-123", scope.OrganizationID)
+// TestWorkloadIdentityClient verifies the workload identity client requires a project number before building
+func TestWorkloadIdentityClient(t *testing.T) {
+	_, err := workloadIdentityClient(context.Background(), types.ConnectionRequest[WorkloadIdentityCredentialSchema]{
+		Integration: &ent.Integration{},
+	})
+	require.ErrorIs(t, err, ErrProjectNumberRequired)
+}
+
+// TestKeyClientEmail verifies the client email is read from a service account key
+func TestKeyClientEmail(t *testing.T) {
+	t.Run("reads the client email from a raw key", func(t *testing.T) {
+		assert.Equal(t, "collector@project-123.iam.gserviceaccount.com", keyClientEmail(`{"client_email":"collector@project-123.iam.gserviceaccount.com"}`))
 	})
 
-	t.Run("decodes collection scope from the service account slot", func(t *testing.T) {
-		raw, err := jsonx.ToRawMessage(CredentialSchema{
-			CollectionScope: CollectionScope{ProjectID: "project-123"},
-		})
-		require.NoError(t, err)
-
-		scope, err := resolveScope(types.CredentialBindings{
-			{Ref: sccCredential.ID(), Credential: types.CredentialSet{Data: raw}},
-		})
-		require.NoError(t, err)
-		assert.Equal(t, "project-123", scope.ProjectID)
+	t.Run("reads the client email from a json-encoded key", func(t *testing.T) {
+		assert.Equal(t, "collector@project-123.iam.gserviceaccount.com", keyClientEmail(`"{\"client_email\":\"collector@project-123.iam.gserviceaccount.com\"}"`))
 	})
 
-	t.Run("returns required error when no slot is bound", func(t *testing.T) {
-		_, err := resolveScope(nil)
-		require.ErrorIs(t, err, ErrCredentialMetadataRequired)
+	t.Run("returns empty for an empty or malformed key", func(t *testing.T) {
+		assert.Empty(t, keyClientEmail(""))
+		assert.Empty(t, keyClientEmail("{"))
 	})
 }

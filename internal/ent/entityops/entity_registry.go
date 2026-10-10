@@ -6969,6 +6969,7 @@ func init() {
 		{Name: "kind", Label: "Kind", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
+		{Name: "operation_config", Label: "OperationConfig", Type: "openapi.IntegrationOperationConfig", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "primary_directory", Label: "PrimaryDirectory", Type: "bool"},
@@ -6984,6 +6985,7 @@ func init() {
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "user_input", Label: "UserInput", Type: "openapi.IntegrationUserInput", Clearable: true},
 	}
 	SchemaIntegrationRun.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},

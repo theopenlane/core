@@ -8,7 +8,35 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
+
+// OperationSettings holds the uniform per-installation settings every stored operation input carries; a stored-input config type embeds it so the settings reflect into the operation's schema beside its own fields
+type OperationSettings struct {
+	// Disable switches the operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable this operation for the installation"`
+	// FilterExpr limits ingested records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to records before ingesting"`
+}
+
+// operationSettings marks the type as carrying the uniform operation settings
+func (OperationSettings) operationSettings() {
+	// marker method with no behaviour; embedding OperationSettings is what satisfies OperationInput
+}
+
+// OperationInput is satisfied by any config type that embeds OperationSettings, which every stored-input operation requires
+type OperationInput interface {
+	operationSettings()
+}
+
+// OperationSettingsFrom decodes the uniform settings from a stored operation input document
+func OperationSettingsFrom(doc json.RawMessage) (OperationSettings, error) {
+	var settings OperationSettings
+
+	err := jsonx.UnmarshalIfPresent(doc, &settings)
+
+	return settings, err
+}
 
 // WorkflowMeta captures workflow linkage for a queued integration execution
 type WorkflowMeta struct {
@@ -24,13 +52,11 @@ type WorkflowMeta struct {
 	ObjectType enums.WorkflowObjectType `json:"objectType,omitempty"`
 }
 
-// RateLimitPolicy bounds how often one operation may run per calling organization within a rolling
-// window, enforced identically on every execution path. Operations that leave this nil on their
-// OperationRegistration are never rate limited
+// RateLimitPolicy bounds how often an operation may run per organization within a rolling window
 type RateLimitPolicy struct {
 	// Window is the rolling window duration for the operation's execution budget
 	Window time.Duration
-	// Limit is the number of executions allowed per window; values below one default to a single execution
+	// Limit is executions allowed per window; below one defaults to a single execution
 	Limit int
 }
 
@@ -38,10 +64,9 @@ type RateLimitPolicy struct {
 type ExecutionPolicy struct {
 	// Inline indicates the operation should execute synchronously for direct API callers
 	Inline bool `json:"inline,omitempty"`
-	// Reconcile indicates the operation should be dispatched on a recurring schedule per connected installation
+	// Reconcile dispatches the operation on a recurring schedule per connected installation
 	Reconcile bool `json:"reconcile,omitempty"`
-	// Scheduled indicates the operation runs on a recurring schedule through the runtime
-	// provider path, with no installation; used for system-level sweeps
+	// Scheduled runs the operation on a recurring schedule with no installation, for system sweeps
 	Scheduled bool `json:"scheduled,omitempty"`
 	// SkipRunRecord indicates the IntegrationRun record creation should be skipped
 	SkipRunRecord bool `json:"skipRunRecord,omitempty"`
@@ -49,8 +74,7 @@ type ExecutionPolicy struct {
 	Snapshot bool `json:"snapshot,omitempty"`
 }
 
-// ScheduledCycleResult is the conventional response payload for scheduled runtime operations,
-// carrying the cycle delta used for adaptive scheduling
+// ScheduledCycleResult is the response payload scheduled operations use for adaptive scheduling
 type ScheduledCycleResult struct {
 	// Processed is the number of records handled during the cycle
 	Processed int `json:"processed"`
@@ -66,85 +90,75 @@ type IngestContract struct {
 type OperationRequest struct {
 	// Integration is the target installation record
 	Integration *generated.Integration
-	// Credentials lists all resolved credential bundles for the operation by slot ref
-	Credentials CredentialBindings
 	// Client is the built client instance for this operation when one is registered
 	Client any
 	// Config is the operation-specific configuration payload
 	Config json.RawMessage
-	// LastRunAt is the finish time of the most recent successful run for this operation,
-	// used by handlers that support incremental/delta fetches
+	// LastRunAt is the finish time of the most recent successful run for this operation
 	LastRunAt *time.Time
 	// DB is the ent client for operations that need database access
 	DB *generated.Client
-	// Dispatch enqueues other integration operations through the runtime-managed dispatcher,
-	// used by operations that orchestrate downstream dispatches
+	// Dispatch enqueues other integration operations through the runtime-managed dispatcher
 	Dispatch DispatchFunc
-	// Services exposes the full runtime service surface (DB, Gala, ExecuteRuntimeOperation, Dispatch),
-	// used by operations that hand off to saga-style Gala listener machinery
+	// Services exposes the full runtime service surface
 	Services RuntimeServices
 }
 
 // OperationHandler executes one definition operation
 type OperationHandler func(ctx context.Context, request OperationRequest) (json.RawMessage, error)
 
-// IngestHandler executes one definition operation and returns typed ingest payload sets for pipeline routing
+// IngestHandler executes an operation and returns typed payload sets for the ingest pipeline
 type IngestHandler func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error)
 
 // OperationRegistration declares one executable operation for a definition
 type OperationRegistration struct {
 	// Name is the stable operation identifier within the definition
 	Name string `json:"name"`
+	// Replaces lists retired operation names whose runs and health move onto this operation
+	Replaces []string `json:"-"`
 	// Description describes what the operation does
 	Description string `json:"description,omitempty"`
-	// RequiredPermissions lists what scopes or permissions are needed to retrieve data for the Operation
+	// RequiredPermissions lists scopes or permissions needed to retrieve data for the operation
 	RequiredPermissions []string `json:"requiredPermissions,omitempty"`
 	// Topic is the gala topic used to execute the operation
 	Topic gala.TopicName `json:"topic"`
 	// ClientRef identifies which registered client the operation uses
-	ClientRef ClientID `json:"-"`
-	// ConfigSchema is the JSON schema for operation configuration
-	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
-	// UISchema is optional UI layout hints for the input form; nil when absent
-	UISchema json.RawMessage `json:"uiSchema,omitempty"`
-	// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces;
-	// nil (default) and true are treated as selectable, false hides the operation from
-	// provider listings and catalog pickers
+	ClientRef string `json:"-"`
+	// ClientConflict names a second client a handler bound when ClientRef was already set; registration rejects it
+	ClientConflict string `json:"-"`
+	// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces
 	CustomerSelectable *bool `json:"customerSelectable,omitempty"`
-	// Internal marks the operation as reachable only through its own listener or saga
-	// machinery, never directly through RunIntegrationOperation.
+	// Internal marks the operation as reachable only through its own listener or saga machinery
 	Internal bool `json:"-"`
-	// RequiresPaymentMethod gates direct invocation through RunIntegrationOperation on the
-	// calling organization having a payment method on file
+	// RequiresPaymentMethod gates direct invocation on the org having a payment method on file
 	RequiresPaymentMethod bool `json:"-"`
 	// Policy controls synchronous execution behavior for the operation
 	Policy ExecutionPolicy `json:"policy"`
-	// RateLimit bounds how often this operation may run per organization; nil (default) means unlimited
+	// RateLimit bounds how often this operation may run per organization; nil means unlimited
 	RateLimit *RateLimitPolicy `json:"-"`
 	// Ingest declares the normalized schemas emitted by the operation
 	Ingest []IngestContract `json:"ingest,omitempty"`
-	// HealthCheck probes this operation's prerequisites under its own client; probe failures
-	// degrade the operation without stopping the rest of the installation
+	// HealthCheck probes this operation's prerequisites under its own client
 	HealthCheck OperationHandler `json:"-"`
 	// Handle executes the operation; set for operations that do not produce ingest payloads
 	Handle OperationHandler `json:"-"`
-	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline,
-	// set for operations that produce ingest data and mutually exclusive with Handle
+	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline
 	IngestHandle IngestHandler `json:"-"`
-	// DisabledForAll indicates if the sync is not currently available for use and no config params are shown to the user
+	// DisabledForAll marks the sync unavailable, hiding config params from the user
 	DisabledForAll bool `json:"disabledForAll"`
-	// Disabled reports whether this operation is disabled for a given installation's user input JSON;
-	// when set, reconcile cycles are skipped entirely instead of running and returning empty results
-	Disabled func(userInput json.RawMessage) bool `json:"-"`
-	// ConfigResolver extracts the operation-specific config JSON from the installation's user input JSON;
-	// when set, the resolved config is used as the operation config for reconcile runs and as the
-	// source for per-operation filter expressions in the ingest pipeline
-	ConfigResolver func(userInput json.RawMessage) json.RawMessage `json:"-"`
-	// Schedule overrides the default adaptive schedule for this operation's recurring
-	// reconcile or scheduled cycles; useful for operations that always do a full fetch
-	// and should run less frequently, or scheduled sweeps with fixed cadences
+	// Input describes the operation's input document: the payload a caller supplies on each dispatch, and for a stored operation the per-installation document kept under its name
+	Input InputRegistration `json:"input"`
+	// Stored reports whether the operation keeps a per-installation input document under its name
+	Stored bool `json:"stored"`
+	// Schedule overrides the default adaptive schedule for reconcile or scheduled cycles
 	Schedule *gala.Schedule `json:"-"`
-	// SkipDefaultLookback disables the runtime's default lookback window on initial runs;
-	// when true, LastRunAt is nil on first run so the handler performs a full fetch
+	// SkipDefaultLookback disables the runtime's default lookback window on initial runs
 	SkipDefaultLookback bool `json:"-"`
+}
+
+// DisabledFor reports whether the operation is switched off globally or by the stored input document
+func (o OperationRegistration) DisabledFor(input json.RawMessage) bool {
+	settings, err := OperationSettingsFrom(input)
+
+	return o.DisabledForAll || (err == nil && settings.Disable)
 }

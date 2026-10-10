@@ -15,7 +15,7 @@ import (
 type DefinitionLookupFunc func(id string) (types.Definition, bool)
 
 // AuthCompleteHookFunc is the callback invoked after a definition auth flow completes successfully
-type AuthCompleteHookFunc func(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, definition types.Definition, result types.AuthCompleteResult) error
+type AuthCompleteHookFunc func(ctx context.Context, installationID string, connection string, definition types.Definition, result types.AuthCompleteResult) error
 
 // InstallationRecord captures the installation fields required by auth validation.
 type InstallationRecord struct {
@@ -55,8 +55,8 @@ type BeginRequest struct {
 	DefinitionID string
 	// InstallationID identifies the installation record being activated
 	InstallationID string
-	// CredentialRef identifies which credential-schema-selected connection mode should be activated
-	CredentialRef types.CredentialSlotID
+	// CredentialRef is the name of the connection to activate
+	CredentialRef string
 	// Input carries optional definition-specific input to the auth start function
 	Input json.RawMessage
 }
@@ -85,8 +85,8 @@ type CompleteResult struct {
 	DefinitionID string
 	// InstallationID identifies the installation record containing the credential
 	InstallationID string
-	// CredentialRef identifies which credential slot received the persisted credential
-	CredentialRef types.CredentialSlotID
+	// CredentialRef is the name of the connection that received the persisted credential
+	CredentialRef string
 	// Credential contains the persisted credential payload
 	Credential types.CredentialSet
 }
@@ -106,8 +106,8 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 		return BeginResponse{}, ErrDefinitionNotFound
 	}
 
-	connection, err := def.ConnectionRegistration(req.CredentialRef)
-	if err != nil {
+	connection, ok := def.Connection(req.CredentialRef)
+	if !ok {
 		return BeginResponse{}, ErrConnectionNotFound
 	}
 
@@ -164,8 +164,8 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		return CompleteResult{}, ErrDefinitionNotFound
 	}
 
-	connection, err := def.ConnectionRegistration(authState.CredentialRef)
-	if err != nil {
+	connection, ok := def.Connection(authState.CredentialRef)
+	if !ok {
 		return CompleteResult{}, ErrConnectionNotFound
 	}
 
@@ -189,7 +189,7 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 	return CompleteResult{
 		DefinitionID:   authState.DefinitionID,
 		InstallationID: authState.InstallationID,
-		CredentialRef:  connection.Auth.CredentialRef,
+		CredentialRef:  authState.CredentialRef,
 		Credential:     completeResult.Credential,
 	}, nil
 }

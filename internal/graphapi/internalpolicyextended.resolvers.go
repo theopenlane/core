@@ -68,7 +68,7 @@ func (r *internalPolicyResolver) LiveExternalContents(ctx context.Context, obj *
 		return nil, nil
 	}
 
-	result, err := r.integrationsRuntime.ExecuteOperation(ctx, found.Integration, op, nil, configBytes)
+	result, err := r.integrationsRuntime.ExecuteOperation(ctx, found.Integration, op, configBytes)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("integration_id", found.Integration.ID).Msg("export operation failed")
 		return nil, nil

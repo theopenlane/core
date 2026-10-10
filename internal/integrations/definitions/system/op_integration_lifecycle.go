@@ -2,35 +2,13 @@ package system
 
 import (
 	"context"
-	"encoding/json"
 	"time"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
-
-// Handle adapts the integration lifecycle sweep to the generic operation registration boundary;
-// the receiver carries the operator defaults and request config overlays a copy
-func (s IntegrationLifecycleSweep) Handle() types.OperationHandler {
-	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-		sweep := s
-
-		if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
-			return nil, ErrOperationConfigInvalid
-		}
-
-		processed, err := sweep.Run(ctx, req)
-		if err != nil {
-			return nil, err
-		}
-
-		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
-	}
-}
 
 // Run executes one integration lifecycle sweep and returns the number reaped
 func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {

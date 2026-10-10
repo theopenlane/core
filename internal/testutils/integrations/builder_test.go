@@ -42,8 +42,17 @@ func TestBuilderRegistersAllSurfaces(t *testing.T) {
 		}
 	}
 
-	if _, err := reg.Client(DefinitionID.ID(), testClient.ID()); err != nil {
-		t.Fatalf("test client not registered: %v", err)
+	def, ok := reg.Definition(DefinitionID.ID())
+	if !ok {
+		t.Fatal("definition not registered")
+	}
+
+	for _, connector := range def.Connections {
+		connection := connector.Connection()
+
+		if len(connection.Clients) == 0 {
+			t.Fatalf("connection %q provides no client", connection.Name)
+		}
 	}
 
 	if _, err := reg.Webhook(DefinitionID.ID(), "inbound.events"); err != nil {
