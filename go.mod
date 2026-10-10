@@ -19,26 +19,26 @@ require (
 	entgo.io/ent v0.14.6
 	github.com/99designs/gqlgen v0.17.95
 	github.com/AfterShip/email-verifier v1.5.0
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.1
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.2
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.14.1
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity v0.15.0
 	github.com/Nerzal/gocloak/v13 v13.9.0
 	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/alicebob/miniredis/v2 v2.39.0
-	github.com/alitto/pond/v2 v2.7.1
+	github.com/alitto/pond/v2 v2.7.2
 	github.com/aws/aws-sdk-go-v2 v1.47.1
 	github.com/aws/aws-sdk-go-v2/config v1.33.6
 	github.com/aws/aws-sdk-go-v2/credentials v1.20.6
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.23.10
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.4.10
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.23.11
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.4.13
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.74.1
 	github.com/aws/aws-sdk-go-v2/service/iam v1.64.1
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.113.4
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.0
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.82.1
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.1
 	github.com/brianvoe/gofakeit/v7 v7.17.1
 	github.com/cenkalti/backoff/v5 v5.0.3
-	github.com/cloudflare/cloudflare-go/v7 v7.10.0
+	github.com/cloudflare/cloudflare-go/v7 v7.11.0
 	github.com/coder/websocket v1.8.15
 	github.com/didasy/tldr v0.7.0
 	github.com/elimity-com/scim v0.0.0-20260728105928-2641426a1539
@@ -52,14 +52,14 @@ require (
 	github.com/getkin/kin-openapi v0.149.0
 	github.com/go-jose/go-jose/v4 v4.1.5
 	github.com/go-webauthn/webauthn v0.18.2
-	github.com/gocarina/gocsv v0.0.0-20260824135904-1713ebc4797a
+	github.com/gocarina/gocsv v0.0.0-20260926200228-b2c6eb8fefab
 	github.com/goccy/go-yaml v1.19.2
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/cel-go v0.31.0
 	github.com/google/go-github/v88 v88.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gqlgo/gqlgenc v0.40.1
+	github.com/gqlgo/gqlgenc v0.41.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/invopop/jsonschema v0.14.0
 	github.com/invopop/yaml v0.3.1
@@ -123,12 +123,12 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.18.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.40.0
-	github.com/theopenlane/newman v0.4.4
-	github.com/theopenlane/riverboat v0.14.3
-	github.com/theopenlane/utils v0.7.2
+	github.com/theopenlane/newman v0.5.0
+	github.com/theopenlane/riverboat v0.14.5
+	github.com/theopenlane/utils v0.7.3
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.13.0
-	github.com/vektah/gqlparser/v2 v2.5.58
+	github.com/vektah/gqlparser/v2 v2.5.60
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/wundergraph/astjson v1.1.0
 	github.com/xeipuuv/gojsonschema v1.2.0
@@ -300,8 +300,8 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
 	github.com/moby/go-archive v0.3.0 // indirect
-	github.com/moby/moby/api v1.56.0 // indirect
-	github.com/moby/moby/client v0.5.1 // indirect
+	github.com/moby/moby/api v1.56.1 // indirect
+	github.com/moby/moby/client v0.6.1 // indirect
 	github.com/moby/patternmatcher v0.6.1 // indirect
 	github.com/moby/sys/sequential v0.7.0 // indirect
 	github.com/moby/sys/user v0.4.1 // indirect
@@ -371,7 +371,7 @@ require (
 	github.com/theopenlane/oscalot v0.1.0 // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
-	github.com/tidwall/pretty v1.2.1 // indirect
+	github.com/tidwall/pretty v1.2.2 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/tklauser/go-sysconf v0.4.0 // indirect
