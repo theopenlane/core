@@ -5,6 +5,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -122,6 +123,16 @@ func AuthzClient(ctx context.Context, m generated.Mutation) *fgax.Client {
 	mut, ok := m.(MutationClient)
 	if ok && mut.Client() != nil {
 		return &mut.Client().Authz
+	}
+
+	return nil
+}
+
+// PluralizerClientFromContext returns the initialized client from the context if it exists
+// this is useful when you need to get the client from the context directly
+func PluralizerClientFromContext(ctx context.Context) *pluralize.Client {
+	if client := EntClientFromContext(ctx); client != nil {
+		return client.Pluralizer
 	}
 
 	return nil

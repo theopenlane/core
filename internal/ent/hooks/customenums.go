@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
@@ -422,7 +421,7 @@ func isNonGlobalEnumInUse(ctrlCtx, logCtx context.Context, client *generated.Cli
 	tblInfo := findTableWithColumn(columnName)
 	if tblInfo == nil {
 		// fallback to convention if no table found
-		tableName := pluralize.NewClient().Plural(strcase.SnakeCase(edgeName))
+		tableName := client.Pluralizer.Plural(strcase.SnakeCase(edgeName))
 		tblInfo = &tableInfo{name: tableName, hasSoftDelete: true}
 	}
 
@@ -462,7 +461,7 @@ func isNonGlobalEnumInUse(ctrlCtx, logCtx context.Context, client *generated.Cli
 
 			displayLabel := label
 			if count != 1 {
-				displayLabel = pluralize.NewClient().Plural(label)
+				displayLabel = client.Pluralizer.Plural(label)
 			}
 
 			*allErrors = append(*allErrors, fmt.Sprintf("the %s value of %s is in use by %d %s and cannot be deleted until those are updated", objectType, name, count, displayLabel))

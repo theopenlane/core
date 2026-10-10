@@ -1,5 +1,5 @@
-mutation CloneBulkCSVControl($input: Upload!) {
-  cloneBulkCSVControl(input: $input) {
+mutation CloneBulkCSVControl($input: Upload!, $importTemplateMappings: Boolean) {
+  cloneBulkCSVControl(input: $input, importTemplateMappings: $importTemplateMappings) {
     controls {
       assessmentMethods
       assessmentObjectives

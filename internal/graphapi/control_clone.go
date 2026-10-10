@@ -11,8 +11,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -141,18 +143,9 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	if len(templateControlIDs) > 0 && cloneTemplateMappings {
-
-		oc, _ := gala.OperationContextFromContext(ctx)
-
-		err := gala.SetAttributes(&oc, hooks.TemplateMappingRequest{
-			ControlIDs: templateControlIDs,
-			ProgramID:  lo.FromPtr(programID),
-		})
-		if err != nil {
-			return nil, err
+		if r.integrationsRuntime == nil {
+			return nil, gala.ErrGalaRequired
 		}
-
-		ctx = gala.WithOperationContext(ctx, oc)
 	}
 
 	wherePredicate := []predicate.Control{}
@@ -230,12 +223,10 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// check program access if a program is specified
 	if programID != nil {
-<<<<<<< HEAD
 		exists, err := withTransactionalMutation(ctx).Program.Query().
 			Where(program.ID(*programID)).
 			Exist(internalCtx)
 
-		exists, err := r.db.Program.Query().Where(program.ID(*programID)).Exist(internalCtx)
 		if err != nil {
 			return nil, err
 		}
@@ -311,6 +302,27 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		logger.Error().Err(err).Msg("error collecting fields for cloned controls")
 
 		return nil, err
+	}
+
+	if len(templateControlIDs) > 0 && cloneTemplateMappings {
+		req := hooks.TemplateMappingRequest{
+			ControlIDs: templateControlIDs,
+			ProgramID:  lo.FromPtr(programID),
+		}
+
+		var value = req.ProgramID
+
+		if value == "" {
+			value = ulids.New().String()
+		}
+
+		_, err := r.integrationsRuntime.Gala().
+			EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{
+				UniqueKey: "template-mapping-" + value,
+			})
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return query.All(internalCtx)

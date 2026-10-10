@@ -112,7 +112,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 }
 
 // CloneBulkCSVControl is the resolver for the cloneBulkCSVControl field.
-func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error) {
+func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphql.Upload, importTemplateMappings *bool) (*model.ControlBulkCreatePayload, error) {
 	logger := logx.FromContext(ctx)
 	data, err := common.UnmarshalBulkData[model.CloneControlUploadInput](input)
 	if err != nil {
@@ -125,7 +125,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	convertedInput, err := controls.ConvertToCloneControlInput(data)
+	convertedInput, err := controls.ConvertToCloneControlInput(data, importTemplateMappings)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to convert clone control input")
 

@@ -14,6 +14,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/gertd/go-pluralize"
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
@@ -266,6 +267,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(entCfg),
 		ent.Summarizer(summarizerClient),
+		ent.Pluralizer(pluralize.NewClient()),
 		ent.Pool(pool),
 		ent.EntitlementManager(entitlements),
 		ent.EmailVerifier(ev),

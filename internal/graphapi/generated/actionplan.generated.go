@@ -99,7 +99,7 @@ type MutationResolver interface {
 	DeleteControl(ctx context.Context, id string) (*model.ControlDeletePayload, error)
 	DeleteBulkControl(ctx context.Context, ids []string) (*model.ControlBulkDeletePayload, error)
 	CreateControlsByClone(ctx context.Context, input *model.CloneControlInput) (*model.ControlBulkCreatePayload, error)
-	CloneBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error)
+	CloneBulkCSVControl(ctx context.Context, input graphql.Upload, importTemplateMappings *bool) (*model.ControlBulkCreatePayload, error)
 	CreateControlImplementation(ctx context.Context, input generated.CreateControlImplementationInput) (*model.ControlImplementationCreatePayload, error)
 	CreateBulkControlImplementation(ctx context.Context, input []*generated.CreateControlImplementationInput) (*model.ControlImplementationBulkCreatePayload, error)
 	CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload) (*model.ControlImplementationBulkCreatePayload, error)
@@ -757,6 +757,14 @@ func (ec *executionContext) field_Mutation_cloneBulkCSVControl_args(ctx context.
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "importTemplateMappings",
+		func(ctx context.Context, v any) (*bool, error) {
+			return ec.unmarshalOBoolean2ᚖbool(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["importTemplateMappings"] = arg1
 	return args, nil
 }
 
@@ -15067,7 +15075,7 @@ func (ec *executionContext) _Mutation_cloneBulkCSVControl(ctx context.Context, f
 		},
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CloneBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CloneBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload), fc.Args["importTemplateMappings"].(*bool))
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ControlBulkCreatePayload) graphql.Marshaler {

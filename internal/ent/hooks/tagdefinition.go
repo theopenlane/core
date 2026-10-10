@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -219,7 +218,7 @@ func isTagDefinitionInUse(ctx context.Context, client *generated.Client, tagDefI
 
 				label := config.label
 				if count != 1 {
-					label = pluralize.NewClient().Plural(config.label)
+					label = client.Pluralizer.Plural(config.label)
 				}
 
 				*allErrors = append(*allErrors, fmt.Sprintf("the tag definition %s is in use by %d %s and cannot be deleted until those are updated",

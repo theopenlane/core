@@ -145,7 +145,7 @@ func FilterByStandard(opts CloneFilterOptions) bool {
 
 // ConvertToCloneControlInput converts a slice of CloneControlUploadInput to a slice of CloneControlInput
 // this is used to process a bulk CSV upload of controls to be cloned and group them by standard
-func ConvertToCloneControlInput(input []*model.CloneControlUploadInput) ([]*model.CloneControlInput, error) {
+func ConvertToCloneControlInput(input []*model.CloneControlUploadInput, importTemplate *bool) ([]*model.CloneControlInput, error) {
 	out := []*model.CloneControlInput{}
 
 	// create a map of standards first
@@ -157,7 +157,9 @@ func ConvertToCloneControlInput(input []*model.CloneControlUploadInput) ([]*mode
 			continue
 		}
 
-		i := &model.CloneControlInput{}
+		i := &model.CloneControlInput{
+			ImportTemplateMappings: importTemplate,
+		}
 
 		_, err := ulid.Parse(stdName)
 		if err == nil {

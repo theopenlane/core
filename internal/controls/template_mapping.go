@@ -17,7 +17,10 @@ import (
 )
 
 const (
-	batchSize = 100
+	// batch writes to prevent large allocation for the batch builders of mappings.
+	// We could end up holding a large slice of pointers, so instead flush the writes
+	// every time we get to 100
+	mappingWriteBatchSize = 100
 )
 
 type controlMappings struct {
@@ -68,7 +71,7 @@ func CloneTemplateMappings(ctx context.Context, client *generated.Client, ids []
 	}
 
 	// check mappings from either the to side or from of controls or subcontrols
-	query := client.MappedControl.Query().Where(
+	mappings, err := client.MappedControl.Query().Where(
 		mappedcontrol.SystemOwned(true),
 		mappedcontrol.Or(
 			mappedcontrol.HasFromControlsWith(control.IDIn(ids...)),
@@ -77,45 +80,21 @@ func CloneTemplateMappings(ctx context.Context, client *generated.Client, ids []
 			mappedcontrol.HasToSubcontrolsWith(subcontrol.ControlIDIn(ids...)),
 		),
 	).
+		Select(
+			mappedcontrol.FieldID, mappedcontrol.FieldMappingType,
+			mappedcontrol.FieldRelation, mappedcontrol.FieldConfidence,
+		).
 		WithFromControls(controlIDsOnlyPredicate).
 		WithToControls(controlIDsOnlyPredicate).
 		WithFromSubcontrols(subcontrolReferencesPredicate).
 		WithToSubcontrols(subcontrolReferencesPredicate).
-		Order(mappedcontrol.ByID()).
-		Limit(batchSize)
-
-	var lastProcessedID string
-	for {
-		cloned := query.Clone()
-		if lastProcessedID != "" {
-			cloned.Where(mappedcontrol.IDGT(lastProcessedID))
-		}
-
-		mappings, err := cloned.All(readCtx)
-		if err != nil {
-			return err
-		}
-
-		if len(mappings) == 0 {
-			return nil
-		}
-
-		if err := cloneTemplateMapping(ctx, client, ids, orgID, program, mappings); err != nil {
-			return err
-		}
-
-		lastProcessedID = mappings[len(mappings)-1].ID
-		if len(mappings) < batchSize {
-			return nil
-		}
+		All(readCtx)
+	if err != nil {
+		return err
 	}
-}
 
-func cloneTemplateMapping(ctx context.Context, client *generated.Client, ids []string, orgID string, program *generated.Program, mappings []*generated.MappedControl) error {
-	readCtx := auth.WithInternalReadContext(ctx)
-
-	controlIDsOnlyPredicate := func(q *generated.ControlQuery) {
-		q.Select(control.FieldID)
+	if len(mappings) == 0 {
+		return nil
 	}
 
 	var controlIDs []string
@@ -123,13 +102,18 @@ func cloneTemplateMapping(ctx context.Context, client *generated.Client, ids []s
 	sourceSubcontrols := map[string]*generated.Subcontrol{}
 
 	for _, m := range mappings {
-		for _, c := range slices.Concat(m.Edges.FromControls, m.Edges.ToControls) {
-			controlIDs = append(controlIDs, c.ID)
+		// no need to allocate with appends, concat since mapping maybe large
+		for _, edge := range [][]*generated.Control{m.Edges.FromControls, m.Edges.ToControls} {
+			for _, c := range edge {
+				controlIDs = append(controlIDs, c.ID)
+			}
 		}
 
-		for _, sc := range slices.Concat(m.Edges.FromSubcontrols, m.Edges.ToSubcontrols) {
-			controlIDs = append(controlIDs, sc.ControlID)
-			sourceSubcontrols[sc.ID] = sc
+		for _, edge := range [][]*generated.Subcontrol{m.Edges.FromSubcontrols, m.Edges.ToSubcontrols} {
+			for _, sc := range edge {
+				controlIDs = append(controlIDs, sc.ControlID)
+				sourceSubcontrols[sc.ID] = sc
+			}
 		}
 	}
 
@@ -227,7 +211,7 @@ func cloneTemplateMapping(ctx context.Context, client *generated.Client, ids []s
 		return c.ID
 	})
 
-	existingQuery := client.MappedControl.Query().
+	existingMappedControls, err := client.MappedControl.Query().
 		Where(
 			mappedcontrol.Or(
 				mappedcontrol.HasFromControlsWith(control.IDIn(destinationIDs...)),
@@ -245,73 +229,52 @@ func cloneTemplateMapping(ctx context.Context, client *generated.Client, ids []s
 		WithToSubcontrols(func(q *generated.SubcontrolQuery) {
 			q.Select(subcontrol.FieldID)
 		}).
-		Order(mappedcontrol.ByID()).
-		Limit(batchSize)
-
-	existingMappings := map[dedupSetKey]struct{}{}
-
-	var lastProcessedID string
-
-	for {
-
-		cloned := existingQuery.Clone()
-		if lastProcessedID != "" {
-			cloned.Where(mappedcontrol.IDGT(lastProcessedID))
-		}
-
-		existingMappedControls, err := cloned.All(readCtx)
-		if err != nil {
-			return err
-		}
-
-		for _, m := range existingMappedControls {
-			mappingControls, _ := buildMappings(m, nil, nil)
-			existingMappings[mappingControls.uniqueKey()] = struct{}{}
-		}
-
-		if len(existingMappedControls) < batchSize {
-			break
-		}
-
-		lastProcessedID = existingMappedControls[len(existingMappedControls)-1].ID
+		All(readCtx)
+	if err != nil {
+		return err
 	}
 
-	mapped := lo.FilterMap(mappings, func(m *generated.MappedControl, _ int) (*generated.CreateMappedControlInput, bool) {
+	existingMappings := lo.Associate(existingMappedControls, func(m *generated.MappedControl) (dedupSetKey, struct{}) {
+		mappingControls, _ := buildMappings(m, nil, nil)
+		return mappingControls.uniqueKey(), struct{}{}
+	})
+
+	writeCtx := auth.WithInternalOperationContext(ctx)
+	builders := make([]*generated.MappedControlCreate, 0, mappingWriteBatchSize)
+	for _, m := range mappings {
 
 		controls, hasBothSides := buildMappings(m, controlLookup, subcontrolLookup)
 		if !hasBothSides {
-			return nil, false
+			continue
 		}
 
-		combinedControls := slices.Concat(m.Edges.FromControls, m.Edges.ToControls)
-
 		// check the from and to side for a template control that has an already existing copy in the org
-		controlExists := lo.SomeBy(combinedControls, func(c *generated.Control) bool {
+		hasControl := func(c *generated.Control) bool {
 			_, ok := sourceRefCodes[c.ID]
 			return ok && controlLookup[c.ID] != ""
-		})
-
-		combinedSubcontrols := slices.Concat(m.Edges.FromSubcontrols, m.Edges.ToSubcontrols)
+		}
+		controlExists := lo.SomeBy(m.Edges.FromControls, hasControl) || lo.SomeBy(m.Edges.ToControls, hasControl)
 
 		// subcontrols can be mapped but parent control must exists ( which is already the template one)
-		subcontrolsExists := lo.SomeBy(combinedSubcontrols, func(sc *generated.Subcontrol) bool {
+		hasSubcontrol := func(sc *generated.Subcontrol) bool {
 			_, ok := sourceRefCodes[sc.ControlID]
 			return ok && subcontrolLookup[sc.ID] != ""
-		})
+		}
+		subcontrolsExists := lo.SomeBy(m.Edges.FromSubcontrols, hasSubcontrol) || lo.SomeBy(m.Edges.ToSubcontrols, hasSubcontrol)
 
 		if !controlExists && !subcontrolsExists {
-			return nil, false
+			continue
 		}
 
 		// if an existing mapping already exists, skip it
 		key := controls.uniqueKey()
 		if _, ok := existingMappings[key]; ok {
-			return nil, false
+			continue
 		}
 
 		existingMappings[key] = struct{}{}
 
-		return &generated.CreateMappedControlInput{
+		input := generated.CreateMappedControlInput{
 			OwnerID:           lo.ToPtr(orgID),
 			Source:            lo.ToPtr(enums.MappingSourceImported),
 			MappingType:       &m.MappingType,
@@ -321,19 +284,23 @@ func cloneTemplateMapping(ctx context.Context, client *generated.Client, ids []s
 			ToControlIDs:      controls.toControls,
 			FromSubcontrolIDs: controls.fromSubcontrols,
 			ToSubcontrolIDs:   controls.toSubcontrols,
-		}, true
-	})
+		}
+		builders = append(builders, client.MappedControl.Create().SetInput(input))
 
-	if len(mapped) == 0 {
-		return nil
+		if len(builders) == mappingWriteBatchSize {
+			if err := client.MappedControl.CreateBulk(builders...).Exec(writeCtx); err != nil {
+				return err
+			}
+			clear(builders)
+			builders = builders[:0]
+		}
 	}
 
-	builders := make([]*generated.MappedControlCreate, len(mapped))
-	for i, input := range mapped {
-		builders[i] = client.MappedControl.Create().SetInput(*input)
+	if len(builders) > 0 {
+		return client.MappedControl.CreateBulk(builders...).Exec(writeCtx)
 	}
 
-	return client.MappedControl.CreateBulk(builders...).Exec(auth.WithInternalOperationContext(ctx))
+	return nil
 }
 
 // mapControls tries to match the templates to the already retrieved org control copies

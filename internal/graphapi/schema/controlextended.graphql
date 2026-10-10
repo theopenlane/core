@@ -117,6 +117,10 @@ extend type Mutation{
       csv file containing values of the control
       """
       input: Upload!
+      """
+      optionally choose to import existing template mappings for the cloned controls
+      """
+      importTemplateMappings: Boolean
   ): ControlBulkCreatePayload!
 }
 

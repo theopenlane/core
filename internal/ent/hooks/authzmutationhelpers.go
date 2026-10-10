@@ -264,7 +264,7 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 	// check if the edges were set on the mutation
 	edges := m.AddedEdges()
 	for _, e := range edges {
-		foundEdge := checkForEdge(parentField, e)
+		foundEdge := checkForEdge(utils.PluralizerClientFromContext(ctx), parentField, e)
 		if foundEdge != "" {
 			// we need to parse the graphql input to get the ids
 			field := goUpper.ToGo(parentField)
@@ -296,7 +296,7 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 	// check if the edges were set on the mutation
 	edges := m.RemovedEdges()
 	for _, e := range edges {
-		foundEdge := checkForEdge(parentField, e)
+		foundEdge := checkForEdge(utils.PluralizerClientFromContext(ctx), parentField, e)
 
 		if foundEdge != "" {
 			// we need to parse the graphql input to get the ids
@@ -314,9 +314,9 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 
 // checkForEdge checks if the edge field is the parent field or the parent field pluralized
 // or not an set edge at all
-func checkForEdge(parentField, edgeField string) string {
+func checkForEdge(pluralizer *pluralize.Client, parentField, edgeField string) string {
 	parentEdge := strings.ReplaceAll(parentField, "_id", "")
-	pluralEdge := pluralize.NewClient().Plural(parentEdge)
+	pluralEdge := pluralizer.Plural(parentEdge)
 	foundEdge := ""
 
 	// determine if the edge is the parent field or the parent field pluralized

@@ -10,6 +10,7 @@ import (
 	"os"
 	"sync"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
 
 	"entgo.io/contrib/entgql"
@@ -19,6 +20,18 @@ import (
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/common/enums/exportenums"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/entityops"
+	"github.com/theopenlane/entx/genhooks"
+	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/entx/oscalgen"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/iam/totp"
+
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/filecategorygen"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
@@ -31,17 +44,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/entx/entityops"
-	"github.com/theopenlane/entx/genhooks"
-	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/entx/oscalgen"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/iam/totp"
 )
 
 var (
@@ -487,6 +489,10 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 		entc.Dependency(
 			entc.DependencyName("ObjectManager"),
 			entc.DependencyType(&objects.Service{}),
+		),
+		entc.Dependency(
+			entc.DependencyName("Pluralizer"),
+			entc.DependencyType(pluralize.NewClient()),
 		),
 		entc.Dependency(
 			entc.DependencyName("Summarizer"),
