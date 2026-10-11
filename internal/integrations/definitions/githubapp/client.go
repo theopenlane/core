@@ -29,36 +29,37 @@ func (c *graphQLClient) Query(ctx context.Context, q any, variables map[string]a
 	return c.client.Query(ctx, q, variables)
 }
 
-// Client builds installation-scoped GitHub GraphQL clients
-type Client struct {
-	// AppConfig holds the operator-owned GitHub App settings used for token refresh.
-	AppConfig Config
-}
+// appClient builds the installation-scoped GitHub GraphQL client from the decoded credential
+func appClient(cfg Config) func(context.Context, types.ConnectionRequest[githubAppCredential]) (GraphQLClient, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[githubAppCredential]) (GraphQLClient, error) {
+		credential := req.Credential
 
-// Build constructs the GitHub GraphQL client for one installation
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	credential, err := credentialFromBindings(req.Credentials)
-	if err != nil {
-		return nil, err
+		if credential.InstallationID == 0 {
+			return nil, ErrInstallationIDMissing
+		}
+
+		if credential.AccessToken == "" || credential.Expiry == nil {
+			return nil, ErrAccessTokenMissing
+		}
+
+		tokenSource := oauth2.ReuseTokenSource(
+			tokenFromCredential(credential),
+			installationTokenSource{
+				ctx:            context.WithoutCancel(ctx),
+				cfg:            tokenRefreshConfig(cfg, credential),
+				installationID: credential.InstallationID,
+			},
+		)
+		httpClient := oauth2.NewClient(ctx, tokenSource)
+
+		return newGraphQLClient(httpClient, cfg.APIURL)
 	}
-
-	tokenSource := oauth2.ReuseTokenSource(
-		tokenFromCredential(credential),
-		installationTokenSource{
-			ctx:            context.WithoutCancel(ctx),
-			cfg:            tokenRefreshConfig(c.AppConfig, credential),
-			installationID: credential.InstallationID,
-		},
-	)
-	httpClient := oauth2.NewClient(ctx, tokenSource)
-
-	return newGraphQLClient(httpClient, c.AppConfig.APIURL)
 }
 
-// enterpriseAPIPath is the REST API path under a GitHub Enterprise Server host, trailing slash required by go-github
+// enterpriseAPIPath is the REST API path under a GitHub Enterprise Server host
 const enterpriseAPIPath = "api/v3/"
 
-// enterpriseUploadPath is the upload API path under a GitHub Enterprise Server host, trailing slash required by go-github
+// enterpriseUploadPath is the upload API path under a GitHub Enterprise Server host
 const enterpriseUploadPath = "api/uploads/"
 
 // enterpriseGraphQLPath is the GraphQL API path under a GitHub Enterprise Server host
@@ -83,14 +84,14 @@ func newGraphQLClient(httpClient *http.Client, apiURL string) (GraphQLClient, er
 	return &graphQLClient{client: graphql.NewClient(endpoint, httpClient)}, nil
 }
 
-// installationTokenSource re-mints GitHub App installation tokens when the cached token expires.
+// installationTokenSource re-mints GitHub App installation tokens when the cached token expires
 type installationTokenSource struct {
 	ctx            context.Context
 	cfg            Config
 	installationID int64
 }
 
-// Token returns a fresh installation token for the configured GitHub App installation.
+// Token returns a fresh installation token for the configured GitHub App installation
 func (s installationTokenSource) Token() (*oauth2.Token, error) {
 	jwtToken, err := appJWT(s.cfg)
 	if err != nil {
@@ -100,25 +101,7 @@ func (s installationTokenSource) Token() (*oauth2.Token, error) {
 	return installationToken(s.ctx, s.cfg, s.installationID, jwtToken)
 }
 
-// credentialFromBindings extracts the GitHub App credential payload from credential bindings.
-func credentialFromBindings(bindings types.CredentialBindings) (githubAppCredential, error) {
-	cred, _, err := gitHubAppCredential.Resolve(bindings)
-	if err != nil {
-		return githubAppCredential{}, ErrCredentialDecode
-	}
-
-	if cred.InstallationID == 0 {
-		return githubAppCredential{}, ErrInstallationIDMissing
-	}
-
-	if cred.AccessToken == "" || cred.Expiry == nil {
-		return githubAppCredential{}, ErrAccessTokenMissing
-	}
-
-	return cred, nil
-}
-
-// tokenRefreshConfig fills refresh-only config from persisted credential data when possible.
+// tokenRefreshConfig fills refresh-only config from persisted credential data when possible
 func tokenRefreshConfig(cfg Config, credential githubAppCredential) Config {
 	if cfg.AppID == "" && credential.AppID != 0 {
 		cfg.AppID = strconv.FormatInt(credential.AppID, 10)
@@ -127,7 +110,7 @@ func tokenRefreshConfig(cfg Config, credential githubAppCredential) Config {
 	return cfg
 }
 
-// tokenFromCredential converts a persisted GitHub App credential into an oauth token seed.
+// tokenFromCredential converts a persisted GitHub App credential into an oauth token seed
 func tokenFromCredential(credential githubAppCredential) *oauth2.Token {
 	if credential.AccessToken == "" {
 		return nil

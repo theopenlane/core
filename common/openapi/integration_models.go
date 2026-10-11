@@ -3,6 +3,7 @@ package openapi
 import (
 	"bytes"
 	"encoding/json"
+	"maps"
 
 	"github.com/theopenlane/utils/rout"
 )
@@ -64,6 +65,8 @@ type IntegrationInstallationIdentity struct {
 
 // IntegrationInstallationMetadata stores stable, non-secret installation identity metadata
 type IntegrationInstallationMetadata struct {
+	// Layout is the reflected type name of the metadata layout the attributes conform to
+	Layout string `json:"layout,omitempty"`
 	// Attributes is the provider-defined installation metadata payload
 	Attributes json.RawMessage `json:"attributes,omitempty"`
 	// Display is the normalized installation identity for UI rendering
@@ -76,18 +79,50 @@ type IntegrationProviderState struct {
 	Providers map[string]json.RawMessage `json:"providers,omitempty"`
 }
 
+// IntegrationUserInput stores the installation-scoped user input under the layout name it was collected with
+type IntegrationUserInput struct {
+	// Layout is the reflected type name of the user input layout the data conforms to
+	Layout string `json:"layout,omitempty"`
+	// Data is the stored user input document
+	Data json.RawMessage `json:"data,omitempty"`
+}
+
+// IntegrationOperationConfig stores the installation-scoped operation input keyed by operation name
+type IntegrationOperationConfig struct {
+	// Operations maps each operation name to its stored input document
+	Operations map[string]json.RawMessage `json:"operations,omitempty"`
+}
+
+// For returns the stored input document for one operation name, nil when none is stored
+func (c IntegrationOperationConfig) For(name string) json.RawMessage {
+	return c.Operations[name]
+}
+
+// With returns a copy of the operation config with the named operation's document replaced
+func (c IntegrationOperationConfig) With(name string, doc json.RawMessage) IntegrationOperationConfig {
+	operations := make(map[string]json.RawMessage, len(c.Operations)+1)
+
+	maps.Copy(operations, c.Operations)
+
+	operations[name] = doc
+
+	return IntegrationOperationConfig{Operations: operations}
+}
+
 // ConfigureIntegrationRequest is the request type for configuring a non-OAuth provider.
 type ConfigureIntegrationRequest struct {
 	// DefinitionID is the canonical integration definition ID from the path.
 	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GCPSCC00000000000000001"`
 	// IntegrationID is the optional existing installation to update credentials on; when omitted we create a new integration.
 	IntegrationID string `json:"integrationId,omitempty"`
-	// CredentialRef selects which credential slot is being configured.
+	// CredentialRef selects which connection is being configured.
 	CredentialRef string `json:"credentialRef"`
 	// Body holds the provider-specific credential fields as a raw JSON object.
 	Body json.RawMessage `json:"body"`
 	// UserInput holds optional installation-scoped provider configuration.
 	UserInput json.RawMessage `json:"userInput,omitempty"`
+	// OperationConfig holds optional per-operation input documents keyed by operation name.
+	OperationConfig map[string]json.RawMessage `json:"operationConfig,omitempty"`
 }
 
 // RunIntegrationOperationBody is the request body for triggering a provider operation.
@@ -186,10 +221,12 @@ type IntegrationAuthStartRequest struct {
 	DefinitionID string `json:"definitionId" description:"Integration definition ID" example:"def_01K0SLACK000000000000000001"`
 	// IntegrationID is the existing installation to start the auth flow for; when omitted a new installation is created.
 	IntegrationID string `json:"integrationId,omitempty"`
-	// CredentialRef selects which credential-schema-defined connection is being activated.
+	// CredentialRef selects which connection is being activated.
 	CredentialRef string `json:"credentialRef"`
 	// UserInput holds optional installation-scoped provider configuration.
 	UserInput json.RawMessage `json:"userInput,omitempty"`
+	// OperationConfig holds optional per-operation input documents keyed by operation name.
+	OperationConfig map[string]json.RawMessage `json:"operationConfig,omitempty"`
 }
 
 // Validate validates the ConfigureIntegrationRequest.

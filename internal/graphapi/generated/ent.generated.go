@@ -88,6 +88,7 @@ type IntegrationResolver interface {
 	WebhookURLs(ctx context.Context, obj *generated.Integration) (map[string]any, error)
 	Credentials(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
 	Config(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
+	OperationConfig(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
 }
 type InternalPolicyResolver interface {
 	HasPendingWorkflow(ctx context.Context, obj *generated.InternalPolicy) (bool, error)
@@ -99271,6 +99272,29 @@ func (ec *executionContext) _Integration_config(ctx context.Context, field graph
 	)
 }
 func (ec *executionContext) fieldContext_Integration_config(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Integration", field, true, true, errors.New("field of type JSON does not have child fields"))
+}
+
+func (ec *executionContext) _Integration_operationConfig(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Integration_operationConfig(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Integration().OperationConfig(ctx, obj)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
+			return ec.marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Integration_operationConfig(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Integration", field, true, true, errors.New("field of type JSON does not have child fields"))
 }
 
@@ -413639,6 +413663,44 @@ func (ec *executionContext) _Integration(ctx context.Context, sel ast.SelectionS
 					}
 				}()
 				res = ec._Integration_config(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "operationConfig":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Integration_operationConfig(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

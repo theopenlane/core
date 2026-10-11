@@ -1,30 +1,17 @@
 package azuresecuritycenter
 
 import (
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the Azure Security Center integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
-	// installation is the typed installation metadata handle for the Azure Security Center definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// securityCenterSchema is the credential schema for the Azure Security Center integration definition
-	securityCenterSchema, securityCenterCredential = providerkit.CredentialSchema[CredentialSchema]()
-	// securityCenterClient is the client ref for the Azure Security Center client
-	securityCenterClient = types.NewClientRef[*azureSecurityClient]()
-	// assessmentsCollectSchema is the operation ref for the Azure Security Center assessments collect operation
-	assessmentsCollectSchema, assessmentsCollectOperation = providerkit.OperationSchema[AssessmentsCollect]()
-	// subAssessmentsCollectSchema is the operation ref for the Azure Security Center sub-assessments collect operation
-	subAssessmentsCollectSchema, subAssessmentsCollectOperation = providerkit.OperationSchema[SubAssessmentsCollect]()
+	// installation is the typed installation metadata handle for the definition
+	installation = types.InstallationOf[InstallationMetadata]()
+	// securityCenterConnection is the typed connection handle for the Azure service principal
+	securityCenterConnection = types.ConnectionOf[CredentialSchema]()
 )
-
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
-}
 
 // CredentialSchema holds the Azure service principal credentials for one installation
 type CredentialSchema struct {

@@ -6,7 +6,6 @@ import (
 
 	tsclient "github.com/tailscale/tailscale-client-go/v2"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -28,20 +27,8 @@ type tailscaleMembershipPayload struct {
 	UserID string `json:"user_id"`
 }
 
-// IngestHandle adapts Tailscale directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(tailscaleClient, directorySyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
-		if cfg.Disable {
-			logx.FromContext(ctx).Debug().Msg("tailscale: directory sync is disabled")
-			return nil, nil
-		}
-
-		return d.Run(ctx, client, cfg)
-	})
-}
-
-// Run collects Tailscale users and optionally role-based groups and memberships
-func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+// runDirectorySync collects Tailscale users and optionally role-based groups and memberships
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listTailscaleUsers(ctx, client)
 	if err != nil {
 		return nil, err
@@ -59,22 +46,36 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		accountEnvelopes = append(accountEnvelopes, envelope)
 	}
 
-	payloadSets := []types.IngestPayloadSet{{
-		Schema:           entityops.SchemaDirectoryAccount.Name,
-		Envelopes:        accountEnvelopes,
-		SnapshotComplete: true,
-	}}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(accountEnvelopes)
 
 	if cfg.DisableGroupSync {
 		logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Msg("tailscale: collected users; group sync disabled")
 		return payloadSets, nil
 	}
 
-	// Build role-based groups from the unique set of roles across all users
+	groupEnvelopes, membershipEnvelopes, err := roleGroupEnvelopes(ctx, users)
+	if err != nil {
+		return nil, err
+	}
+
+	aclGroups, aclMemberships, membershipsComplete, err := aclGroupEnvelopes(ctx, client, users)
+	if err != nil {
+		return nil, err
+	}
+
+	groupEnvelopes = append(groupEnvelopes, aclGroups...)
+	membershipEnvelopes = append(membershipEnvelopes, aclMemberships...)
+
+	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("tailscale: collected users, role groups, and memberships")
+
+	return append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, membershipsComplete)...), nil
+}
+
+// roleGroupEnvelopes derives one group envelope per Tailscale role and one membership envelope per user holding it
+func roleGroupEnvelopes(ctx context.Context, users []tsclient.User) ([]types.MappingEnvelope, []types.MappingEnvelope, error) {
 	rolesSeen := make(map[tsclient.UserRole]struct{})
 	groupEnvelopes := make([]types.MappingEnvelope, 0)
 	membershipEnvelopes := make([]types.MappingEnvelope, 0)
-	membershipsComplete := true
 
 	for _, user := range users {
 		role := user.Role
@@ -93,7 +94,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 			envelope, err := providerkit.MarshalEnvelope(string(role), group, ErrPayloadEncode)
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("role", string(role)).Msg("tailscale: failed to marshal role group")
-				return nil, err
+				return nil, nil, err
 			}
 
 			groupEnvelopes = append(groupEnvelopes, envelope)
@@ -109,79 +110,70 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		envelope, err := providerkit.MarshalEnvelope(membershipKey, membership, ErrPayloadEncode)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("user", user.LoginName).Str("role", string(role)).Msg("tailscale: failed to marshal membership")
-			return nil, err
+			return nil, nil, err
 		}
 
 		membershipEnvelopes = append(membershipEnvelopes, envelope)
 	}
 
-	// Also sync user-defined ACL groups from the policy file
+	return groupEnvelopes, membershipEnvelopes, nil
+}
+
+// aclGroupEnvelopes derives group and membership envelopes from the tailnet policy file; complete is false when the policy file could not be fetched
+func aclGroupEnvelopes(ctx context.Context, client *tsclient.Client, users []tsclient.User) ([]types.MappingEnvelope, []types.MappingEnvelope, bool, error) {
+	acl, err := client.PolicyFile().Get(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Msg("tailscale: failed to fetch policy file; skipping user-defined groups")
+
+		return nil, nil, false, nil
+	}
+
 	userByEmail := make(map[string]string, len(users))
 	for _, u := range users {
 		userByEmail[u.LoginName] = u.ID
 	}
 
-	acl, err := client.PolicyFile().Get(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Msg("tailscale: failed to fetch policy file; skipping user-defined groups")
-		membershipsComplete = false
-	} else {
-		for groupName, members := range acl.Groups {
-			group := tailscaleGroupPayload{
-				ID:   groupName,
-				Name: groupName,
+	groupEnvelopes := make([]types.MappingEnvelope, 0, len(acl.Groups))
+	membershipEnvelopes := make([]types.MappingEnvelope, 0)
+
+	for groupName, members := range acl.Groups {
+		group := tailscaleGroupPayload{
+			ID:   groupName,
+			Name: groupName,
+		}
+
+		groupEnvelope, err := providerkit.MarshalEnvelope(groupName, group, ErrPayloadEncode)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("group", groupName).Msg("tailscale: failed to marshal ACL group")
+			return nil, nil, false, err
+		}
+
+		groupEnvelopes = append(groupEnvelopes, groupEnvelope)
+
+		for _, member := range members {
+			userID, ok := userByEmail[member]
+			if !ok {
+				continue
 			}
 
-			groupEnvelope, err := providerkit.MarshalEnvelope(groupName, group, ErrPayloadEncode)
+			membership := tailscaleMembershipPayload{
+				GroupID: groupName,
+				UserID:  userID,
+			}
+
+			membershipKey := fmt.Sprintf("%s:%s", groupName, userID)
+
+			membershipEnvelope, err := providerkit.MarshalEnvelope(membershipKey, membership, ErrPayloadEncode)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("group", groupName).Msg("tailscale: failed to marshal ACL group")
-				return nil, err
+				logx.FromContext(ctx).Error().Err(err).Str("group", groupName).Str("user", member).Msg("tailscale: failed to marshal ACL group membership")
+				return nil, nil, false, err
 			}
 
-			groupEnvelopes = append(groupEnvelopes, groupEnvelope)
-
-			for _, member := range members {
-				userID, ok := userByEmail[member]
-				if !ok {
-					// skip group references, tags, autogroups, wildcards
-					continue
-				}
-
-				membership := tailscaleMembershipPayload{
-					GroupID: groupName,
-					UserID:  userID,
-				}
-
-				membershipKey := fmt.Sprintf("%s:%s", groupName, userID)
-
-				membershipEnvelope, err := providerkit.MarshalEnvelope(membershipKey, membership, ErrPayloadEncode)
-				if err != nil {
-					logx.FromContext(ctx).Error().Err(err).Str("group", groupName).Str("user", member).Msg("tailscale: failed to marshal ACL group membership")
-					return nil, err
-				}
-
-				membershipEnvelopes = append(membershipEnvelopes, membershipEnvelope)
-			}
+			membershipEnvelopes = append(membershipEnvelopes, membershipEnvelope)
 		}
 	}
 
-	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("tailscale: collected users, role groups, and memberships")
-
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: membershipsComplete,
-		},
-		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
-			// memberships derived without policy data are incomplete
-			SnapshotComplete: membershipsComplete,
-		},
-	)
-
-	return payloadSets, nil
+	return groupEnvelopes, membershipEnvelopes, true, nil
 }
 
 // listTailscaleUsers fetches all users from the Tailscale API and maps them to payloads

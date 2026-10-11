@@ -12,18 +12,11 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// repositoryAssetVariant is the mapping variant for device asset payloads
+// deviceAssetVariant is the mapping variant for device asset payloads
 const deviceAssetVariant = "DEVICE"
 
-// IngestHandle adapts Tailscale asset sync to the ingest operation registration boundary
-func (a AssetSync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(tailscaleClient, func(ctx context.Context, _ types.OperationRequest, client *tsclient.Client) ([]types.IngestPayloadSet, error) {
-		return a.Run(ctx, client)
-	})
-}
-
-// Run collects Tailscale devices and emits asset ingest payloads
-func (AssetSync) Run(ctx context.Context, client *tsclient.Client) ([]types.IngestPayloadSet, error) {
+// runAssetSync collects Tailscale devices and emits asset ingest payloads
+func runAssetSync(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, _ AssetSync) ([]types.IngestPayloadSet, error) {
 	devices, err := listTailscaleDevices(ctx, client)
 	if err != nil {
 		return nil, err

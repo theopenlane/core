@@ -6,9 +6,9 @@ import (
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -39,41 +39,24 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 
-	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.IntegrationID, def)
+	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.IntegrationID, def, payload.UserInput, payload.OperationConfig)
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("failed to resolve installation")
-
-		return h.BadRequest(ctx, ErrIntegrationNotFound)
-	}
-
-	var credential *types.CredentialSet
-
-	if payload.HasCredentialBody() {
-		credential = &types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}
-	}
-
-	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
 		// do not log payload, it can contain secrets
-		logx.FromContext(requestCtx).Error().Err(err).Msg("reconcile failed")
+		logx.FromContext(requestCtx).Error().Err(err).Msg("failed to ensure installation")
 
 		return h.BadRequest(ctx, err)
 	}
 
-	if len(def.CredentialRegistrations) == 0 && installationRec.Status == enums.IntegrationStatusPending {
-		if err := h.IntegrationsRuntime.DB().Integration.UpdateOneID(installationRec.ID).
-			SetStatus(enums.IntegrationStatusConnected).
-			ClearExpiresAt().
-			Exec(requestCtx); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to mark credential-less installation connected")
+	if payload.HasCredentialBody() {
+		if err := h.IntegrationsRuntime.ReconcileCredential(requestCtx, installationRec, payload.CredentialRef, types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Msg("credential reconcile failed")
 
-			return h.BadRequest(ctx, ErrProcessingRequest)
+			return h.BadRequest(ctx, err)
 		}
-
-		installationRec.Status = enums.IntegrationStatusConnected
 	}
 
 	resp := ConfigureIntegrationResponse{
-		Reply:                rout.Reply{Success: true},
+		Success:              true,
 		Provider:             def.ID,
 		IntegrationID:        installationRec.ID,
 		HealthStatus:         "ok",
@@ -81,21 +64,9 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		InstallationMetadata: installationRec.InstallationMetadata.Attributes,
 	}
 
-	var primaryWebhookURL string
-	var primaryWebhookSecret string
-
-	for i, registration := range def.Webhooks {
-		webhook, webhookErr := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installationRec, registration.Name, "")
-		if webhookErr != nil {
-			logx.FromContext(requestCtx).Error().Err(webhookErr).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
-
-			return h.BadRequest(ctx, ErrProcessingRequest)
-		}
-
-		if i == 0 && webhook != nil {
-			primaryWebhookURL = absoluteEndpointURL(ctx, lo.FromPtr(webhook.EndpointURL))
-			primaryWebhookSecret = webhook.SecretToken
-		}
+	primaryWebhookURL, primaryWebhookSecret, err := h.ensureInstallationWebhooks(ctx, installationRec, def)
+	if err != nil {
+		return h.BadRequest(ctx, ErrProcessingRequest)
 	}
 
 	if isNewInstallation {
@@ -107,12 +78,35 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	// operation that was just re-enabled needs a new job seeded - this is a no-op
 	// when all jobs are already active
 	if lo.Contains(enums.IntegrationOperationalStatuses, installationRec.Status) {
-		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(requestCtx, installationRec); err != nil {
+		if err := h.IntegrationsRuntime.ResetReconcileLoops(requestCtx, installationRec); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to seed missing reconcile jobs after config update")
 		}
 	}
 
 	return h.Success(ctx, resp)
+}
+
+// ensureInstallationWebhooks ensures every declared webhook exists for the installation and returns the first webhook's absolute endpoint URL and secret
+func (h *Handler) ensureInstallationWebhooks(ctx echo.Context, installationRec *ent.Integration, def types.Definition) (string, string, error) {
+	requestCtx := ctx.Request().Context()
+
+	var primaryWebhookURL, primaryWebhookSecret string
+
+	for i, registration := range def.Webhooks {
+		webhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installationRec, registration.Name, "")
+		if err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
+
+			return "", "", err
+		}
+
+		if i == 0 && webhook != nil {
+			primaryWebhookURL = absoluteEndpointURL(ctx, lo.FromPtr(webhook.EndpointURL))
+			primaryWebhookSecret = webhook.SecretToken
+		}
+	}
+
+	return primaryWebhookURL, primaryWebhookSecret, nil
 }
 
 func absoluteEndpointURL(ctx echo.Context, path string) string {

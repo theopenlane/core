@@ -10,8 +10,6 @@ import (
 
 // OAuthRegistrationOptions describes how one definition maps shared OAuth mechanics to its local credential type
 type OAuthRegistrationOptions[T any] struct {
-	// CredentialRef identifies which credential slot receives the completed OAuth credential
-	CredentialRef types.CredentialRef[T]
 	// Config describes the provider OAuth endpoints and request parameters
 	Config OAuthConfig
 	// Material maps shared OAuth material to the definition-local credential payload
@@ -20,14 +18,13 @@ type OAuthRegistrationOptions[T any] struct {
 	EncodeCredentialError error
 }
 
-// OAuthRegistration adapts the shared OAuth transport flow to one definition-local auth registration
-func OAuthRegistration[T any](opts OAuthRegistrationOptions[T]) *types.AuthRegistration {
-	return &types.AuthRegistration{
-		CredentialRef: opts.CredentialRef.ID(),
-		Start: func(ctx context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+// OAuthRegistration adapts the shared OAuth transport flow to one typed auth flow
+func OAuthRegistration[T any](opts OAuthRegistrationOptions[T]) types.AuthFlow[T] {
+	return types.NewAuthFlow[T](
+		func(ctx context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 			return StartOAuth(ctx, opts.Config)
 		},
-		Complete: func(ctx context.Context, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
+		func(ctx context.Context, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
 			material, err := CompleteOAuth(ctx, opts.Config, state, input)
 			if err != nil {
 				return types.AuthCompleteResult{}, err
@@ -51,5 +48,5 @@ func OAuthRegistration[T any](opts OAuthRegistrationOptions[T]) *types.AuthRegis
 				Credential: types.CredentialSet{Data: data},
 			}, nil
 		},
-	}
+	)
 }

@@ -38612,6 +38612,7 @@ type Integration implements Node @modules(names: ["any_module"]) {
 	webhookURLs: Map
 	credentials: JSON
 	config: JSON
+	operationConfig: JSON
 }
 """
 A connection to a list of items.

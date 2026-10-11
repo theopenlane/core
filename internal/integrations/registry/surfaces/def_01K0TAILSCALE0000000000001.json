@@ -1,0 +1,124 @@
+{
+  "hash": "86b293aca8c68d72a1d9496fe5df26a64ca2a6d910bbeac63bfcf52b9f2d1e80",
+  "version": "01M49CHH2PQ6VZ1EN88BMEE4P6",
+  "surface": {
+    "id": "def_01K0TAILSCALE0000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "clientId": {
+                  "type": "string",
+                  "title": "Client ID",
+                  "description": "OAuth client ID from the Tailscale admin console."
+                },
+                "clientSecret": {
+                  "type": "string",
+                  "title": "Client Secret",
+                  "description": "OAuth client secret from the Tailscale admin console."
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "clientId",
+                "clientSecret"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "clientId": {
+                "type": "string",
+                "title": "Client ID"
+              },
+              "tailnet": {
+                "type": "string",
+                "title": "Tailnet"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "AssetSync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale/asset-sync",
+          "$ref": "#/$defs/AssetSync",
+          "$defs": {
+            "AssetSync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/providerkit/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "disableGroupSync": {
+                  "type": "boolean",
+                  "title": "Disable Group Sync",
+                  "description": "Only sync users and skip group and membership sync"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

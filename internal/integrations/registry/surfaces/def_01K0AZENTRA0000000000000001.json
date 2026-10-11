@@ -1,0 +1,133 @@
+{
+  "hash": "bd63c9b1289f6167c9e331e95fc942e517781b1509b4e26d8bcdf20ec314d3e5",
+  "version": "01M49CHH2NPBMN1CMF8MGZAXAZ",
+  "surface": {
+    "id": "def_01K0AZENTRA0000000000000001",
+    "credentials": [
+      {
+        "ref": "entraIDCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/entra-id-cred",
+          "$ref": "#/$defs/entraIDCred",
+          "$defs": {
+            "entraIDCred": {
+              "properties": {
+                "tenantId": {
+                  "type": "string",
+                  "title": "Tenant ID"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "tenantId"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "primaryDirectory": {
+                "type": "boolean",
+                "title": "Primary Directory"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "tenantId": {
+                "type": "string",
+                "title": "Tenant ID"
+              },
+              "displayName": {
+                "type": "string",
+                "title": "Display Name"
+              },
+              "verifiedDomains": {
+                "items": {
+                  "$ref": "#/$defs/VerifiedDomain"
+                },
+                "type": "array",
+                "title": "Verified Domains"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "VerifiedDomain": {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "isDefault": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "entraIDCred"
+    ],
+    "operations": [
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "disableGroupSync": {
+                  "type": "boolean",
+                  "title": "Disable Group Sync",
+                  "description": "Only sync users and skip group and membership sync"
+                },
+                "includeGuestUsers": {
+                  "type": "boolean",
+                  "title": "Include Guest Users"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

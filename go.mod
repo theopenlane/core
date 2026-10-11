@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/v2
 
-go 1.27.1
+go 1.27.2
 
 tool (
 	github.com/dave/jennifer
@@ -139,7 +139,7 @@ require (
 	gocloud.dev v0.46.0
 	golang.org/x/crypto v0.57.0
 	golang.org/x/mod v0.41.0
-	golang.org/x/net v0.59.0
+	golang.org/x/net v0.60.0
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/sync v0.23.0
 	golang.org/x/text v0.42.0

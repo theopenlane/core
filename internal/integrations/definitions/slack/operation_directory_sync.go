@@ -5,7 +5,6 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -51,16 +50,9 @@ type slackUserPayload struct {
 	IsExternal bool `json:"is_external"`
 }
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, _ types.OperationRequest, client *SlackClient) ([]types.IngestPayloadSet, error) {
-		return d.Run(ctx, client.API)
-	})
-}
-
-// Run collects Slack workspace users and emits directory account ingest payloads
-func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
-	users, err := client.GetUsersContext(ctx)
+// runDirectorySync collects Slack workspace users and emits directory account ingest payloads
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *SlackClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+	users, err := client.API.GetUsersContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("slack directory sync: failed to fetch users")
 		return nil, ErrUsersFetchFailed
@@ -85,13 +77,7 @@ func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.I
 		envelopes = append(envelopes, envelope)
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        envelopes,
-			SnapshotComplete: true,
-		},
-	}, nil
+	return providerkit.DirectoryAccountPayloadSets(envelopes), nil
 }
 
 func normalizeUser(user slackgo.User) slackUserPayload {

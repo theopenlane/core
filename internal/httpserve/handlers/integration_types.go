@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+
 	"github.com/theopenlane/utils/rout"
 
 	openapi "github.com/theopenlane/core/common/openapi"
@@ -38,8 +40,61 @@ type IntegrationHealthResponse = openapi.IntegrationHealthResponse
 type IntegrationProvidersResponse struct {
 	rout.Reply
 	// Providers is the list of available integration definitions.
-	Providers []types.Definition `json:"providers"`
+	Providers []IntegrationProvider `json:"providers"`
 }
+
+// IntegrationProvider is the provider listing projection of one definition
+type IntegrationProvider struct {
+	// Spec is the definition spec
+	Spec types.DefinitionSpec `json:"spec"`
+	// OperatorConfig is the operator config registration
+	OperatorConfig *types.OperatorConfigRegistration `json:"operatorConfig,omitempty"`
+	// UserInput is the installation user input registration
+	UserInput *types.InputRegistration `json:"userInput,omitempty"`
+	// CredentialRegistrations is the credential form of each connection
+	CredentialRegistrations []IntegrationProviderCredential `json:"credentialRegistrations,omitempty"`
+	// Connections is the list of connections
+	Connections []IntegrationProviderConnection `json:"connections,omitempty"`
+	// Operations is the list of customer selectable operations
+	Operations []types.OperationRegistration `json:"operations,omitempty"`
+	// Webhooks is the list of webhook registrations
+	Webhooks []types.WebhookRegistration `json:"webhooks,omitempty"`
+}
+
+// IntegrationProviderCredential is one connection's credential form as the console reads it
+type IntegrationProviderCredential struct {
+	// Ref is the connection name the credential is stored under
+	Ref string `json:"ref"`
+	// Name is the user-facing connection name
+	Name string `json:"name,omitempty"`
+	// Description explains the connection
+	Description string `json:"description,omitempty"`
+	// Schema is the credential form schema
+	Schema json.RawMessage `json:"schema,omitempty"`
+	// Recommended marks the recommended connection
+	Recommended bool `json:"recommended,omitempty"`
+}
+
+// IntegrationProviderConnection is one connection as the console reads it
+type IntegrationProviderConnection struct {
+	// CredentialRef is the connection name the credential is stored under
+	CredentialRef string `json:"credentialRef"`
+	// Name is the user-facing connection name
+	Name string `json:"name,omitempty"`
+	// Description explains the connection
+	Description string `json:"description,omitempty"`
+	// Meta is additional data needed to set up the connection
+	Meta map[string]types.MetaInfo `json:"meta,omitempty"`
+	// CredentialRefs lists the credential names the connection uses
+	CredentialRefs []string `json:"credentialRefs,omitempty"`
+	// Auth is set when an auth flow obtains the credential
+	Auth *IntegrationProviderAuth `json:"auth,omitempty"`
+	// Disconnect describes how the connection tears down an installation
+	Disconnect *types.DisconnectRegistration `json:"disconnect,omitempty"`
+}
+
+// IntegrationProviderAuth marks a connection whose credential an auth flow obtains
+type IntegrationProviderAuth struct{}
 
 // IntegrationAuthStartRequest is the request type for starting an integration auth flow.
 type IntegrationAuthStartRequest = openapi.IntegrationAuthStartRequest

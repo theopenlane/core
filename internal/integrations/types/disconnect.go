@@ -3,21 +3,7 @@ package types //nolint:revive
 import (
 	"context"
 	"encoding/json"
-
-	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 )
-
-// DisconnectRequest bundles the inputs for executing a disconnect flow
-type DisconnectRequest struct {
-	// Integration is the installation record being disconnected
-	Integration *generated.Integration
-	// Connection is the resolved connection mode for this installation
-	Connection ConnectionRegistration
-	// Credentials are the persisted credentials participating in this connection mode
-	Credentials CredentialBindings
-	// Config is the installation-scoped configuration payload
-	Config IntegrationConfig
-}
 
 // DisconnectResult captures the output of a disconnect flow
 type DisconnectResult struct {
@@ -33,12 +19,10 @@ type DisconnectResult struct {
 }
 
 // DisconnectFunc executes provider-specific disconnect logic for one installation
-type DisconnectFunc func(ctx context.Context, request DisconnectRequest) (DisconnectResult, error)
+type DisconnectFunc func(ctx context.Context, input ConnectionInput) (DisconnectResult, error)
 
 // DisconnectRegistration describes how one definition handles installation teardown
 type DisconnectRegistration struct {
-	// CredentialRef identifies which credential slot this disconnect flow is bound to
-	CredentialRef CredentialSlotID `json:"credentialRef,omitempty"`
 	// Description is the user-facing explanation of what disconnect does and any recommended provider-side cleanup
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema describing the disconnect result details payload
