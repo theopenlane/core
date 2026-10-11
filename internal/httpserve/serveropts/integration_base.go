@@ -104,7 +104,7 @@ func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) error {
 	}
 
 	if err := rt.SeedReconcileJobs(ctx); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Msg("failed to seed one or more missing reconcile jobs")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to seed one or more missing reconcile jobs")
 	}
 
 	if err := rt.SeedScheduledOperations(ctx); err != nil {

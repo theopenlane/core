@@ -7,7 +7,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
@@ -24,7 +25,7 @@ func slotRowIDs(t *testing.T, ctx context.Context, integrationID string, slot st
 	ids, err := suite.Client.DB.Hush.Query().
 		Where(hush.HasIntegrationsWith(integration.IDEQ(integrationID)), hush.SecretNameEQ(slot)).
 		IDs(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return ids
 }
@@ -34,7 +35,7 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 	ctx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
 	store, err := keystore.NewStore(suite.Client.DB)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	installation, _ := newHarnessInstallation(t, ctx, testint.ModeRecurring)
 
@@ -43,9 +44,9 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 	oauth := testint.OAuth.Connection().Credential.Name
 
 	t.Run("LoadAllCredentials returns every slot with the newest row winning", func(t *testing.T) {
-		require.NoError(t, store.SaveCredential(ctx, installation, serviceAccount, testint.ServiceAccountCredentialSet("proj", "svc@example.com")))
+		assert.NilError(t, store.SaveCredential(ctx, installation, serviceAccount, testint.ServiceAccountCredentialSet("proj", "svc@example.com")))
 
-		require.NoError(t, suite.Client.DB.Hush.Create().
+		assert.NilError(t, suite.Client.DB.Hush.Create().
 			SetOwnerID(org.OrganizationID).
 			SetName(token).
 			SetSecretName(token).
@@ -54,16 +55,16 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 			Exec(ctx))
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 2)
-		require.JSONEq(t, `{"token":"newest-token"}`, string(rows[token].Data))
-		require.JSONEq(t, `{"projectId":"proj","serviceAccountEmail":"svc@example.com"}`, string(rows[serviceAccount].Data))
-		require.Len(t, slotRowIDs(t, ctx, installation.ID, token), 2)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 2))
+		assertJSONEqual(t, `{"token":"newest-token"}`, string(rows[token].Data))
+		assertJSONEqual(t, `{"projectId":"proj","serviceAccountEmail":"svc@example.com"}`, string(rows[serviceAccount].Data))
+		assert.Assert(t, is.Len(slotRowIDs(t, ctx, installation.ID, token), 2))
 	})
 
 	t.Run("ReplaceCredentials updates changed slots in place and leaves unchanged slots alone", func(t *testing.T) {
 		before, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		serviceAccountIDs := slotRowIDs(t, ctx, installation.ID, serviceAccount)
 
@@ -71,31 +72,31 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 			token:          testint.TokenCredentialSet("replaced-token"),
 			serviceAccount: before[serviceAccount],
 		}
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, next))
+		assert.NilError(t, store.ReplaceCredentials(ctx, installation, before, next))
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 2)
-		require.JSONEq(t, `{"token":"replaced-token"}`, string(rows[token].Data))
-		require.Equal(t, serviceAccountIDs, slotRowIDs(t, ctx, installation.ID, serviceAccount))
-		require.Len(t, slotRowIDs(t, ctx, installation.ID, token), 2)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 2))
+		assertJSONEqual(t, `{"token":"replaced-token"}`, string(rows[token].Data))
+		assert.DeepEqual(t, serviceAccountIDs, slotRowIDs(t, ctx, installation.ID, serviceAccount))
+		assert.Assert(t, is.Len(slotRowIDs(t, ctx, installation.ID, token), 2))
 	})
 
 	t.Run("ReplaceCredentials creates new slots and deletes every row of removed slots", func(t *testing.T) {
 		before, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		next := map[string]integrationtypes.CredentialSet{
 			serviceAccount: testint.ServiceAccountCredentialSet("proj", "svc@example.com"),
 			oauth:          {Data: json.RawMessage(`{"access_token":"a"}`)},
 		}
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, next))
+		assert.NilError(t, store.ReplaceCredentials(ctx, installation, before, next))
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 2)
-		require.Empty(t, slotRowIDs(t, ctx, installation.ID, token))
-		require.Len(t, slotRowIDs(t, ctx, installation.ID, oauth), 1)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 2))
+		assert.Assert(t, is.Len(slotRowIDs(t, ctx, installation.ID, token), 0))
+		assert.Assert(t, is.Len(slotRowIDs(t, ctx, installation.ID, oauth), 1))
 	})
 
 	t.Run("ReplaceCredentials evicts pooled clients", func(t *testing.T) {
@@ -108,56 +109,56 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 		}
 
 		_, err := store.BuildClient(ctx, installation, token, "string", build, integrationtypes.CredentialSet{}, false)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 		_, err = store.BuildClient(ctx, installation, token, "string", build, integrationtypes.CredentialSet{}, false)
-		require.NoError(t, err)
-		require.Equal(t, 1, builds)
+		assert.NilError(t, err)
+		assert.Equal(t, 1, builds)
 
 		before, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
+		assert.NilError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
 			serviceAccount: testint.ServiceAccountCredentialSet("proj", "svc@example.com"),
 		}))
 
 		_, err = store.BuildClient(ctx, installation, token, "string", build, integrationtypes.CredentialSet{}, false)
-		require.NoError(t, err)
-		require.Equal(t, 2, builds)
+		assert.NilError(t, err)
+		assert.Equal(t, 2, builds)
 	})
 
 	t.Run("ReplaceCredentials leaves rows outside the previous snapshot untouched", func(t *testing.T) {
 		before, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
-		require.NoError(t, store.SaveCredential(ctx, installation, token, testint.TokenCredentialSet("concurrent-token")))
+		assert.NilError(t, store.SaveCredential(ctx, installation, token, testint.TokenCredentialSet("concurrent-token")))
 
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
+		assert.NilError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
 			serviceAccount: before[serviceAccount],
 		}))
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.JSONEq(t, `{"token":"concurrent-token"}`, string(rows[token].Data))
+		assert.NilError(t, err)
+		assertJSONEqual(t, `{"token":"concurrent-token"}`, string(rows[token].Data))
 	})
 
 	t.Run("ReplaceCredentials does not overwrite an existing row for a slot outside previous", func(t *testing.T) {
 		before, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		delete(before, token)
 
-		require.NoError(t, store.SaveCredential(ctx, installation, token, testint.TokenCredentialSet("direct-token")))
+		assert.NilError(t, store.SaveCredential(ctx, installation, token, testint.TokenCredentialSet("direct-token")))
 
 		tokenIDs := slotRowIDs(t, ctx, installation.ID, token)
 
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
+		assert.NilError(t, store.ReplaceCredentials(ctx, installation, before, map[string]integrationtypes.CredentialSet{
 			serviceAccount: before[serviceAccount],
 			token:          testint.TokenCredentialSet("overwritten-token"),
 		}))
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.JSONEq(t, `{"token":"direct-token"}`, string(rows[token].Data))
-		require.Equal(t, tokenIDs, slotRowIDs(t, ctx, installation.ID, token))
+		assert.NilError(t, err)
+		assertJSONEqual(t, `{"token":"direct-token"}`, string(rows[token].Data))
+		assert.DeepEqual(t, tokenIDs, slotRowIDs(t, ctx, installation.ID, token))
 	})
 }

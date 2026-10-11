@@ -97,8 +97,6 @@ type DomainScanImport struct {
 }
 
 // DomainScanImportOp is the operation ref for importing an accepted domain scan review
-//
-//nolint:revive
 var DomainScanImportOp = types.OperationPayloadOf[DomainScanImport]().
 	HandlesRequest(runDomainScanImport).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).

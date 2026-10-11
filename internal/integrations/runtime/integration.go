@@ -100,19 +100,17 @@ func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, own
 		return "", err
 	}
 
-	switch {
-	case len(integrations) == 1:
+	if len(integrations) == 1 {
 		return integrations[0].ID, nil
-	case len(prefer) == 0:
-		return "", nil
 	}
 
-	preferred, found := lo.Find(integrations, prefer[0])
-	if !found {
-		return "", nil
+	for _, p := range prefer {
+		if preferred, found := lo.Find(integrations, p); found {
+			return preferred.ID, nil
+		}
 	}
 
-	return preferred.ID, nil
+	return "", nil
 }
 
 // EnsureInstallation creates the installation, or resolves the one integrationID names, writing the submitted user input and operation config in one statement; a new installation of a definition without connections is identified by its own id, and one without credentials is created connected

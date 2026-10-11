@@ -3,8 +3,7 @@ package awssecurityhub
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 )
 
 // TestAssumeRoleMetadataARNAccountUsedWhenBlank verifies the account id is derived from the role ARN when the credential omits it
@@ -13,7 +12,7 @@ func TestAssumeRoleMetadataARNAccountUsedWhenBlank(t *testing.T) {
 		RoleARN:    "arn:aws:iam::123456789012:role/MyRole",
 		HomeRegion: "us-east-1",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	assert.Equal(t, "123456789012", metadata.AccountID)
 	assert.Equal(t, "us-east-1", metadata.HomeRegion)
 }
@@ -25,7 +24,7 @@ func TestAssumeRoleMetadataMatchingAccountIDAccepted(t *testing.T) {
 		HomeRegion: "us-east-1",
 		AccountID:  "123456789012",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	assert.Equal(t, "123456789012", metadata.AccountID)
 }
 
@@ -36,7 +35,7 @@ func TestAssumeRoleMetadataMismatchedAccountIDRejected(t *testing.T) {
 		HomeRegion: "us-east-1",
 		AccountID:  "999999999999",
 	})
-	require.ErrorIs(t, err, ErrAccountIDMismatch)
+	assert.ErrorIs(t, err, ErrAccountIDMismatch)
 }
 
 // TestAssumeRoleMetadataMalformedARNRejected verifies a role ARN without an account segment is rejected
@@ -45,5 +44,5 @@ func TestAssumeRoleMetadataMalformedARNRejected(t *testing.T) {
 		RoleARN:    "not-a-valid-arn",
 		HomeRegion: "us-east-1",
 	})
-	require.ErrorIs(t, err, ErrRoleARNInvalid)
+	assert.ErrorIs(t, err, ErrRoleARNInvalid)
 }

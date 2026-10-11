@@ -30,8 +30,6 @@ type DomainScanBuildReportResult struct {
 }
 
 // DomainScanBuildReportOp is the operation ref for building the scan report
-//
-//nolint:revive
 var DomainScanBuildReportOp = types.OperationPayloadOf[DomainScanBuildReport]().
 	Handles(runDomainScanBuildReport).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).

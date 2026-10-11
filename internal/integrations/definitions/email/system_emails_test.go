@@ -9,6 +9,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
 )
 
 // testDispatcher looks up a registered email dispatcher by key and returns the concrete Operation[T]
@@ -507,13 +509,18 @@ func TestAllEmailOperationsCount(t *testing.T) {
 	assert.Len(t, ops, len(dispatchers))
 }
 
-// TestAllEmailOperationsHaveNames verifies each operation registration has a non-empty name
+// TestAllEmailOperationsHaveNames verifies each operation registration has a non-empty name, a handler, and a topic stamped by the registry
 func TestAllEmailOperationsHaveNames(t *testing.T) {
-	ops := AllEmailOperations()
+	reg := registry.New()
+	require.NoError(t, reg.RegisterAll(Builder(&RuntimeEmailConfig{}, false)))
 
-	for _, op := range ops {
+	for _, op := range AllEmailOperations() {
 		assert.NotEmpty(t, op.Name, "operation should have a name")
 		assert.NotNil(t, op.Handle, "operation should have a handler")
+
+		registered, err := reg.Operation(DefinitionID.ID(), op.Name)
+		require.NoError(t, err)
+		assert.NotEmpty(t, registered.Topic, "operation should have a topic once registered")
 	}
 }
 

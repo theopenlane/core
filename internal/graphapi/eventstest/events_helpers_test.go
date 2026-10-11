@@ -4,6 +4,7 @@ package eventstest_test
 
 import (
 	"context"
+	"encoding/json"
 	"sync"
 	"testing"
 	"time"
@@ -143,6 +144,17 @@ func integrationNotificationCount(t *testing.T, ctx context.Context, orgID, obje
 	require.NoError(t, err)
 
 	return count
+}
+
+// assertJSONEqual fails the test when want and got are not semantically equal JSON documents
+func assertJSONEqual(t *testing.T, want, got string) {
+	t.Helper()
+
+	var wantValue, gotValue any
+
+	assert.NilError(t, json.Unmarshal([]byte(want), &wantValue))
+	assert.NilError(t, json.Unmarshal([]byte(got), &gotValue))
+	assert.DeepEqual(t, wantValue, gotValue)
 }
 
 // reloadIntegration fetches the current installation row with privacy allowed

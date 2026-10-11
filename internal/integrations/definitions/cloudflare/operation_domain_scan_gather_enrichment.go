@@ -31,8 +31,6 @@ type DomainScanGatherEnrichmentResult struct {
 }
 
 // DomainScanEnrichmentOp is the operation ref for gathering enrichment data for a domain
-//
-//nolint:revive
 var DomainScanEnrichmentOp = types.OperationPayloadOf[DomainScanGatherEnrichment]().
 	Handles(runDomainScanGatherEnrichment).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).

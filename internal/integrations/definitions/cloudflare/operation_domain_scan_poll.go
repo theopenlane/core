@@ -80,8 +80,6 @@ func (e ScanTaskErrors) Error() string {
 }
 
 // DomainScanPollOp is the operation ref for polling a submitted URL Scanner result
-//
-//nolint:revive
 var DomainScanPollOp = types.OperationPayloadOf[DomainScanPoll]().
 	Handles(runDomainScanPoll).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).

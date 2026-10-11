@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/httpsling"
@@ -23,13 +23,13 @@ func TestVerifyDerivesMetadataFromCredential(t *testing.T) {
 	defer server.Close()
 
 	client, err := newGraphQLClient(server.Client(), server.URL)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	meta, err := verify(context.Background(), types.ConnectionRequest[githubAppCredential]{
 		Credential: githubAppCredential{AppID: 1, InstallationID: 222, AccessToken: "token", OrganizationName: "cred-org"},
 	}, client)
-	require.NoError(t, err)
-	require.Equal(t, "222", meta.InstallationID)
-	require.Equal(t, "cred-org", meta.OrganizationName)
-	require.Equal(t, "222", meta.InstallationIdentity().ExternalID)
+	assert.NilError(t, err)
+	assert.Equal(t, "222", meta.InstallationID)
+	assert.Equal(t, "cred-org", meta.OrganizationName)
+	assert.Equal(t, "222", meta.InstallationIdentity().ExternalID)
 }

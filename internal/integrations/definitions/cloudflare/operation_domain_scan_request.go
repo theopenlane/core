@@ -16,8 +16,6 @@ import (
 )
 
 // DomainScanRequestOp is the operation ref for requesting a domain scan
-//
-//nolint:revive
 var DomainScanRequestOp = types.OperationPayloadOf[DomainScanRequest]().
 	HandlesRequest(runDomainScanRequest).
 	Policy(types.ExecutionPolicy{Inline: true, SkipRunRecord: true}).

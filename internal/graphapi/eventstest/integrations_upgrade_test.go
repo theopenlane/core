@@ -9,9 +9,10 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"golang.org/x/sync/errgroup"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -217,7 +218,7 @@ func queuedRuntimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtim
 	t.Helper()
 
 	instance, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeDurable, ConnectionURI: suite.TF.URI, QueueName: suiteQueueName, WorkerCount: 1})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	t.Cleanup(func() { _ = instance.Close() })
 
 	return runtimeOn(t, instance, versionedRegistry(t, builder))
@@ -228,7 +229,7 @@ func inMemoryGala(t *testing.T) *gala.Gala {
 	t.Helper()
 
 	instance, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 1})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	t.Cleanup(func() { _ = instance.Close() })
 
 	return instance
@@ -239,7 +240,7 @@ func versionedRegistry(t *testing.T, builder registry.Builder) *registry.Registr
 	t.Helper()
 
 	reg, err := testint.VersionedRegistry(builder)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return reg
 }
@@ -249,10 +250,10 @@ func runtimeOn(t *testing.T, instance *gala.Gala, reg *registry.Registry) *intru
 	t.Helper()
 
 	store, err := keystore.NewStore(suite.Client.DB)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	rt, err := intruntime.New(intruntime.Config{DB: suite.Client.DB, Gala: instance, Keystore: store, Registry: reg})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return rt
 }
@@ -272,7 +273,7 @@ func seedRetiredLoop(t *testing.T, ctx context.Context, installation *ent.Integr
 	headers.ScheduledAt = lo.ToPtr(time.Now().Add(time.Hour))
 
 	_, err := suite.GalaRuntime.EmitWithHeaders(emitCtx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 // installOn returns the installation of the single definition rt runs
@@ -280,17 +281,17 @@ func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userIn
 	t.Helper()
 
 	definitions := rt.Registry().Definitions()
-	require.Len(t, definitions, 1)
+	assert.Assert(t, is.Len(definitions, 1))
 
 	def := definitions[0]
 
 	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	installation, _, err := rt.EnsureInstallation(ctx, ownerID, "", def, userInput, operationConfig)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, rt.ReconcileCredential(ctx, installation, primary, credential))
+	assert.NilError(t, rt.ReconcileCredential(ctx, installation, primary, credential))
 
 	return reloadIntegration(t, ctx, installation.ID)
 }
@@ -300,21 +301,21 @@ func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, p
 	t.Helper()
 
 	reg := registry.New()
-	require.NoError(t, reg.RegisterAll(builder))
+	assert.NilError(t, reg.RegisterAll(builder))
 
 	rt := runtimeOn(t, inMemoryGala(t), reg)
 
 	installation := installOn(t, ctx, rt, nil, nil, primary, credentials[primary])
 
 	store, err := keystore.NewStore(suite.Client.DB)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	for slot, credential := range credentials {
 		if slot == primary {
 			continue
 		}
 
-		require.NoError(t, store.SaveCredential(ctx, reloadIntegration(t, ctx, installation.ID), slot, credential))
+		assert.NilError(t, store.SaveCredential(ctx, reloadIntegration(t, ctx, installation.ID), slot, credential))
 	}
 
 	return reloadIntegration(t, ctx, installation.ID), rt.Registry().Version(testint.DefinitionID.ID())
@@ -327,7 +328,7 @@ func endpointRows(t *testing.T, ctx context.Context, integrationID string) []*en
 	rows, err := suite.Client.DB.IntegrationWebhook.Query().
 		Where(integrationwebhook.IntegrationIDEQ(integrationID), integrationwebhook.ExternalEventIDIsNil()).
 		All(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return rows
 }
@@ -337,43 +338,43 @@ func TestInstallationUpgrade(t *testing.T) {
 	ctx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
 
 	store, err := keystore.NewStore(suite.Client.DB)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	def, ok := suite.IntegrationsRT.Registry().Definition(testint.DefinitionID.ID())
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	current := suite.IntegrationsRT.Registry().Version(def.ID)
-	require.NotEmpty(t, current)
+	assert.Assert(t, current != "")
 
 	t.Run("a slot retired by the current definition is upgraded inline on first use", func(t *testing.T) {
 		installation, previous := installUnder(t, ctx, previousDefinition(slotOf(testint.LegacyToken)), testint.LegacyToken.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
 			testint.LegacyToken.Connection().Credential.Name: {Data: json.RawMessage(`{"accessToken":"legacy-token"}`)},
 		})
-		require.Less(t, previous, current)
-		require.Equal(t, previous, installation.DefinitionVersion)
+		assert.Assert(t, previous < current)
+		assert.Equal(t, previous, installation.DefinitionVersion)
 
 		assessment, err := suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
-		require.NoError(t, err)
-		require.True(t, assessment.Connection.Healthy)
+		assert.NilError(t, err)
+		assert.Assert(t, assessment.Connection.Healthy)
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
-		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name))
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 1))
+		assertJSONEqual(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
+		assert.Assert(t, is.Len(slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name), 0))
 
 		reloaded := reloadIntegration(t, ctx, installation.ID)
-		require.Equal(t, current, reloaded.DefinitionVersion)
+		assert.Equal(t, current, reloaded.DefinitionVersion)
 
 		state, err := def.ProviderState(reloaded.ProviderState)
-		require.NoError(t, err)
-		require.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
+		assert.NilError(t, err)
+		assert.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
 
 		before := slotRowIDs(t, ctx, installation.ID, testint.Token.Connection().Credential.Name)
 
 		_, err = suite.IntegrationsRT.RunHealthAssessment(ctx, reloaded)
-		require.NoError(t, err)
-		require.Equal(t, before, slotRowIDs(t, ctx, installation.ID, testint.Token.Connection().Credential.Name))
+		assert.NilError(t, err)
+		assert.DeepEqual(t, before, slotRowIDs(t, ctx, installation.ID, testint.Token.Connection().Credential.Name))
 	})
 
 	t.Run("a stored type the current schema rejects fails the upgrade and marks the installation errored", func(t *testing.T) {
@@ -385,37 +386,37 @@ func TestInstallationUpgrade(t *testing.T) {
 		})
 
 		_, err := suite.IntegrationsRT.RunHealthAssessment(subCtx, installation)
-		require.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
-		require.ErrorIs(t, err, intruntime.ErrCredentialInvalid)
+		assert.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
+		assert.ErrorIs(t, err, intruntime.ErrCredentialInvalid)
 
 		_, unhealthy := integrationtypes.UnhealthyFrom(err)
-		require.True(t, unhealthy)
+		assert.Assert(t, unhealthy)
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
-		require.Equal(t, previous, reloaded.DefinitionVersion)
-		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
-		require.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
+		assert.Equal(t, previous, reloaded.DefinitionVersion)
+		assert.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
+		assert.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 
 		rows, err := store.LoadAllCredentials(subCtx, installation)
-		require.NoError(t, err)
-		require.JSONEq(t, `{"token":1}`, string(rows[testint.Token.Connection().Credential.Name].Data))
+		assert.NilError(t, err)
+		assertJSONEqual(t, `{"token":1}`, string(rows[testint.Token.Connection().Credential.Name].Data))
 	})
 
 	t.Run("a backfilled slot is completed from the installation during the upgrade", func(t *testing.T) {
 		installation, previous := installUnder(t, ctx, previousDefinition(slotOf(partialServiceAccountRef)), partialServiceAccountRef.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
 			partialServiceAccountRef.Connection().Credential.Name: {Data: json.RawMessage(`{"projectId":"p"}`)},
 		})
-		require.NotEqual(t, current, previous)
+		assert.Assert(t, current != previous)
 
 		assessment, err := suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
-		require.NoError(t, err)
-		require.True(t, assessment.Connection.Healthy)
+		assert.NilError(t, err)
+		assert.Assert(t, assessment.Connection.Healthy)
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"projectId":"p","serviceAccountEmail":"`+installation.ID+`@backfilled.example.com"}`, string(rows[testint.ServiceAccount.Connection().Credential.Name].Data))
-		require.Equal(t, current, reloadIntegration(t, ctx, installation.ID).DefinitionVersion)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 1))
+		assertJSONEqual(t, `{"projectId":"p","serviceAccountEmail":"`+installation.ID+`@backfilled.example.com"}`, string(rows[testint.ServiceAccount.Connection().Credential.Name].Data))
+		assert.Equal(t, current, reloadIntegration(t, ctx, installation.ID).DefinitionVersion)
 	})
 
 	t.Run("reconnecting with a fresh credential recovers an installation whose upgrade failed", func(t *testing.T) {
@@ -427,24 +428,24 @@ func TestInstallationUpgrade(t *testing.T) {
 		})
 
 		_, err := suite.IntegrationsRT.RunHealthAssessment(subCtx, installation)
-		require.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
+		assert.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
-		require.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
+		assert.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
+		assert.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 
 		cred := testint.TokenCredentialSet("fresh")
-		require.NoError(t, suite.IntegrationsRT.ReconcileCredential(subCtx, reloaded, testint.Token.Connection().Credential.Name, cred))
+		assert.NilError(t, suite.IntegrationsRT.ReconcileCredential(subCtx, reloaded, testint.Token.Connection().Credential.Name, cred))
 
 		recovered := reloadIntegration(t, subCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusConnected, recovered.Status)
-		require.Equal(t, current, recovered.DefinitionVersion)
-		require.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconnectedObjectType))
+		assert.Equal(t, enums.IntegrationStatusConnected, recovered.Status)
+		assert.Equal(t, current, recovered.DefinitionVersion)
+		assert.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconnectedObjectType))
 
 		rows, err := store.LoadAllCredentials(subCtx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"fresh"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 1))
+		assertJSONEqual(t, `{"token":"fresh"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
 	})
 
 	t.Run("disconnect succeeds when the persisted ref is a retired slot nothing replaces", func(t *testing.T) {
@@ -453,22 +454,22 @@ func TestInstallationUpgrade(t *testing.T) {
 		})
 
 		_, err := suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
-		require.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
+		assert.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
 
 		reloaded := reloadIntegration(t, ctx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
+		assert.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.JSONEq(t, `{"key":"k"}`, string(rows[unreplacedRef.Connection().Credential.Name].Data))
+		assert.NilError(t, err)
+		assertJSONEqual(t, `{"key":"k"}`, string(rows[unreplacedRef.Connection().Credential.Name].Data))
 
 		_, err = suite.IntegrationsRT.Disconnect(ctx, reloaded)
-		require.NoError(t, err)
-		require.False(t, integrationVisible(t, ctx, installation.ID))
+		assert.NilError(t, err)
+		assert.Assert(t, !integrationVisible(t, ctx, installation.ID))
 
 		remaining, err := suite.Client.DB.Hush.Query().Where(hush.HasIntegrationsWith(integration.IDEQ(installation.ID))).Count(ctx)
-		require.NoError(t, err)
-		require.Zero(t, remaining)
+		assert.NilError(t, err)
+		assert.Equal(t, 0, remaining)
 	})
 
 	t.Run("a crash between the credential move and the ref repoint converges on rerun", func(t *testing.T) {
@@ -477,33 +478,33 @@ func TestInstallationUpgrade(t *testing.T) {
 		})
 
 		stored, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, stored, 1)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(stored, 1))
 
-		require.NoError(t, store.ReplaceCredentials(ctx, installation, stored, map[string]integrationtypes.CredentialSet{
+		assert.NilError(t, store.ReplaceCredentials(ctx, installation, stored, map[string]integrationtypes.CredentialSet{
 			testint.Token.Connection().Credential.Name: testint.TokenCredentialSet("legacy-token"),
 		}))
-		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name))
+		assert.Assert(t, is.Len(slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name), 0))
 
 		state, err := def.ProviderState(installation.ProviderState)
-		require.NoError(t, err)
-		require.Equal(t, testint.LegacyToken.Connection().Credential.Name, state.CredentialRef)
+		assert.NilError(t, err)
+		assert.Equal(t, testint.LegacyToken.Connection().Credential.Name, state.CredentialRef)
 
 		assessment, err := suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
-		require.NoError(t, err)
-		require.True(t, assessment.Connection.Healthy)
+		assert.NilError(t, err)
+		assert.Assert(t, assessment.Connection.Healthy)
 
 		reloaded := reloadIntegration(t, ctx, installation.ID)
-		require.Equal(t, current, reloaded.DefinitionVersion)
+		assert.Equal(t, current, reloaded.DefinitionVersion)
 
 		state, err = def.ProviderState(reloaded.ProviderState)
-		require.NoError(t, err)
-		require.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
+		assert.NilError(t, err)
+		assert.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 1))
+		assertJSONEqual(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
 	})
 
 	t.Run("concurrent upgrades of one installation both succeed and converge", func(t *testing.T) {
@@ -526,20 +527,20 @@ func TestInstallationUpgrade(t *testing.T) {
 
 			return err
 		})
-		require.NoError(t, group.Wait())
+		assert.NilError(t, group.Wait())
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 1)
-		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
-		require.Empty(t, slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name))
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 1))
+		assertJSONEqual(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
+		assert.Assert(t, is.Len(slotRowIDs(t, ctx, installation.ID, testint.LegacyToken.Connection().Credential.Name), 0))
 
 		reloaded := reloadIntegration(t, ctx, installation.ID)
-		require.Equal(t, current, reloaded.DefinitionVersion)
+		assert.Equal(t, current, reloaded.DefinitionVersion)
 
 		state, err := def.ProviderState(reloaded.ProviderState)
-		require.NoError(t, err)
-		require.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
+		assert.NilError(t, err)
+		assert.Equal(t, testint.Token.Connection().Credential.Name, state.CredentialRef)
 	})
 
 	t.Run("a slot the current definition no longer declares is left in place", func(t *testing.T) {
@@ -549,18 +550,18 @@ func TestInstallationUpgrade(t *testing.T) {
 		})
 
 		stored, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, stored, 2)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(stored, 2))
 
 		_, err = suite.IntegrationsRT.RunHealthAssessment(ctx, installation)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		rows, err := store.LoadAllCredentials(ctx, installation)
-		require.NoError(t, err)
-		require.Len(t, rows, 2)
-		require.JSONEq(t, `{"value":"kept"}`, string(rows[straySlotRef.Connection().Credential.Name].Data))
-		require.JSONEq(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
-		require.Equal(t, current, reloadIntegration(t, ctx, installation.ID).DefinitionVersion)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(rows, 2))
+		assertJSONEqual(t, `{"value":"kept"}`, string(rows[straySlotRef.Connection().Credential.Name].Data))
+		assertJSONEqual(t, `{"token":"legacy-token"}`, string(rows[testint.Token.Connection().Credential.Name].Data))
+		assert.Equal(t, current, reloadIntegration(t, ctx, installation.ID).DefinitionVersion)
 	})
 
 	t.Run("user input is renamed and backfilled on upgrade", func(t *testing.T) {
@@ -571,28 +572,28 @@ func TestInstallationUpgrade(t *testing.T) {
 			def.UserInput = zoneInputRef.Registration()
 		}))
 		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
-		require.Equal(t, zoneInputRef.Name(), installation.UserInput.Layout)
-		require.JSONEq(t, `{"zone":"eu"}`, string(installation.UserInput.Data))
+		assert.Equal(t, zoneInputRef.Name(), installation.UserInput.Layout)
+		assertJSONEqual(t, `{"zone":"eu"}`, string(installation.UserInput.Data))
 
 		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = regionInputRef.Registration()
 		}))
 		renamedVersion := renamed.Registry().Version(testint.DefinitionID.ID())
-		require.NotEqual(t, renamedVersion, installation.DefinitionVersion)
+		assert.Assert(t, renamedVersion != installation.DefinitionVersion)
 
 		assessment, err := renamed.RunHealthAssessment(subCtx, installation)
-		require.NoError(t, err)
-		require.True(t, assessment.Connection.Healthy)
-		require.Equal(t, regionInputRef.Name(), installation.UserInput.Layout)
-		require.JSONEq(t, `{"region":"eu","token":"x"}`, string(installation.UserInput.Data))
-		require.Equal(t, renamedVersion, installation.DefinitionVersion)
+		assert.NilError(t, err)
+		assert.Assert(t, assessment.Connection.Healthy)
+		assert.Equal(t, regionInputRef.Name(), installation.UserInput.Layout)
+		assertJSONEqual(t, `{"region":"eu","token":"x"}`, string(installation.UserInput.Data))
+		assert.Equal(t, renamedVersion, installation.DefinitionVersion)
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
-		require.Equal(t, regionInputRef.Name(), reloaded.UserInput.Layout)
-		require.JSONEq(t, `{"region":"eu","token":"x"}`, string(reloaded.UserInput.Data))
-		require.Equal(t, renamedVersion, reloaded.DefinitionVersion)
-		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
-		require.Zero(t, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
+		assert.Equal(t, regionInputRef.Name(), reloaded.UserInput.Layout)
+		assertJSONEqual(t, `{"region":"eu","token":"x"}`, string(reloaded.UserInput.Data))
+		assert.Equal(t, renamedVersion, reloaded.DefinitionVersion)
+		assert.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
+		assert.Equal(t, 0, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 	})
 
 	t.Run("an operation rename moves health keys and run history", func(t *testing.T) {
@@ -605,20 +606,20 @@ func TestInstallationUpgrade(t *testing.T) {
 		installation := installOn(t, subCtx, previous, nil, nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 
 		retired, err := previous.Registry().Operation(testint.DefinitionID.ID(), retiredSyncOp.Name())
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		finished, err := operations.CreatePendingRun(subCtx, suite.Client.DB, installation, retired, enums.IntegrationRunTypeManual, nil)
-		require.NoError(t, err)
-		require.NoError(t, operations.CompleteRun(subCtx, suite.Client.DB, finished.ID, finished.StartedAt, operations.RunResult{}))
+		assert.NilError(t, err)
+		assert.NilError(t, operations.CompleteRun(subCtx, suite.Client.DB, finished.ID, finished.StartedAt, operations.RunResult{}))
 
 		_, err = operations.CreatePendingRun(subCtx, suite.Client.DB, installation, retired, enums.IntegrationRunTypeManual, nil)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		finishedAt, err := operations.LastSuccessfulRunAt(subCtx, suite.Client.DB, installation.ID, retiredSyncOp.Name())
-		require.NoError(t, err)
-		require.NotNil(t, finishedAt)
+		assert.NilError(t, err)
+		assert.Assert(t, finishedAt != nil)
 
-		require.NoError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).
+		assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).
 			SetHealth(models.IntegrationHealth{UnhealthyOperations: map[string]string{retiredSyncOp.Name(): "boom", "gone": "x"}}).
 			Exec(subCtx))
 
@@ -627,29 +628,29 @@ func TestInstallationUpgrade(t *testing.T) {
 		}))
 
 		assessment, err := renamed.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
-		require.NoError(t, err)
-		require.True(t, assessment.Connection.Healthy)
-		require.Equal(t, []intruntime.OperationHealthResult{{Name: renamedSyncOp.Name(), Reason: "boom"}}, assessment.Operations)
+		assert.NilError(t, err)
+		assert.Assert(t, assessment.Connection.Healthy)
+		assert.DeepEqual(t, []intruntime.OperationHealthResult{{Name: renamedSyncOp.Name(), Reason: "boom"}}, assessment.Operations)
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
-		require.Equal(t, map[string]string{renamedSyncOp.Name(): "boom"}, reloaded.Health.UnhealthyOperations)
-		require.Equal(t, renamed.Registry().Version(testint.DefinitionID.ID()), reloaded.DefinitionVersion)
+		assert.DeepEqual(t, map[string]string{renamedSyncOp.Name(): "boom"}, reloaded.Health.UnhealthyOperations)
+		assert.Equal(t, renamed.Registry().Version(testint.DefinitionID.ID()), reloaded.DefinitionVersion)
 
 		names, err := suite.Client.DB.IntegrationRun.Query().
 			Where(integrationrun.IntegrationIDEQ(installation.ID), integrationrun.OperationNameIn(retiredSyncOp.Name(), renamedSyncOp.Name())).
 			Select(integrationrun.FieldOperationName).
 			Strings(subCtx)
-		require.NoError(t, err)
-		require.Equal(t, []string{renamedSyncOp.Name(), renamedSyncOp.Name()}, names)
+		assert.NilError(t, err)
+		assert.DeepEqual(t, []string{renamedSyncOp.Name(), renamedSyncOp.Name()}, names)
 
 		movedAt, err := operations.LastSuccessfulRunAt(subCtx, suite.Client.DB, installation.ID, renamedSyncOp.Name())
-		require.NoError(t, err)
-		require.NotNil(t, movedAt)
-		require.True(t, movedAt.Equal(*finishedAt))
+		assert.NilError(t, err)
+		assert.Assert(t, movedAt != nil)
+		assert.Assert(t, movedAt.Equal(*finishedAt))
 
 		retiredAt, err := operations.LastSuccessfulRunAt(subCtx, suite.Client.DB, installation.ID, retiredSyncOp.Name())
-		require.NoError(t, err)
-		require.Nil(t, retiredAt)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Nil(retiredAt))
 	})
 
 	t.Run("an operation rename leaves the queue untouched until the next loop reset cancels the retired loop and seeds one under the current name", func(t *testing.T) {
@@ -667,29 +668,29 @@ func TestInstallationUpgrade(t *testing.T) {
 		waitForEvents()
 
 		_, err := suite.GalaRuntime.PurgeActiveJobsWithMetadata(subCtx, currentFragment)
-		require.NoError(t, err)
-		require.Zero(t, activeReconcileJobs(t, currentFragment))
+		assert.NilError(t, err)
+		assert.Equal(t, 0, activeReconcileJobs(t, currentFragment))
 
 		seedRetiredLoop(t, subCtx, installation, retiredSyncOp.Name())
-		require.Equal(t, 1, activeReconcileJobs(t, retiredFragment))
+		assert.Equal(t, 1, activeReconcileJobs(t, retiredFragment))
 
 		renamed := queuedRuntimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Operations = []integrationtypes.OperationRegistration{syncOperation(testint.RecurringOp.Replacing(retiredSyncOp), integrationtypes.ExecutionPolicy{Reconcile: true})}
 		}))
 
 		assessment, err := renamed.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
-		require.NoError(t, err)
-		require.True(t, assessment.Connection.Healthy)
-		require.Equal(t, renamed.Registry().Version(testint.DefinitionID.ID()), reloadIntegration(t, subCtx, installation.ID).DefinitionVersion)
+		assert.NilError(t, err)
+		assert.Assert(t, assessment.Connection.Healthy)
+		assert.Equal(t, renamed.Registry().Version(testint.DefinitionID.ID()), reloadIntegration(t, subCtx, installation.ID).DefinitionVersion)
 
 		waitForEvents()
 
-		require.Equal(t, 1, activeReconcileJobs(t, retiredFragment))
-		require.Zero(t, activeReconcileJobs(t, currentFragment))
+		assert.Equal(t, 1, activeReconcileJobs(t, retiredFragment))
+		assert.Equal(t, 0, activeReconcileJobs(t, currentFragment))
 
-		require.NoError(t, renamed.ResetReconcileLoops(subCtx, reloadIntegration(t, subCtx, installation.ID)))
-		require.Zero(t, activeReconcileJobs(t, retiredFragment))
-		require.Equal(t, 1, activeReconcileJobs(t, currentFragment))
+		assert.NilError(t, renamed.ResetReconcileLoops(subCtx, reloadIntegration(t, subCtx, installation.ID)))
+		assert.Equal(t, 0, activeReconcileJobs(t, retiredFragment))
+		assert.Equal(t, 1, activeReconcileJobs(t, currentFragment))
 	})
 
 	t.Run("a webhook rename keeps the provider-facing endpoint", func(t *testing.T) {
@@ -702,81 +703,81 @@ func TestInstallationUpgrade(t *testing.T) {
 		installation := installOn(t, subCtx, previous, nil, nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 
 		rows := endpointRows(t, subCtx, installation.ID)
-		require.Len(t, rows, 1)
-		require.Equal(t, retiredEventsWebhook.Name(), rows[0].Name)
+		assert.Assert(t, is.Len(rows, 1))
+		assert.Equal(t, retiredEventsWebhook.Name(), rows[0].Name)
 
 		endpointID := lo.FromPtr(rows[0].EndpointID)
 		secret := rows[0].SecretToken
-		require.NotEmpty(t, endpointID)
-		require.NotEmpty(t, secret)
+		assert.Assert(t, endpointID != "")
+		assert.Assert(t, secret != "")
 
 		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(renamedEventsWebhook.Replacing(retiredEventsWebhook), renameEventA, renameEventB)}
 		}))
 
 		early, err := renamed.EnsureWebhook(subCtx, installation, renamedEventsWebhook.Name(), "")
-		require.NoError(t, err)
-		require.Equal(t, endpointID, lo.FromPtr(early.EndpointID))
-		require.Len(t, endpointRows(t, subCtx, installation.ID), 1)
+		assert.NilError(t, err)
+		assert.Equal(t, endpointID, lo.FromPtr(early.EndpointID))
+		assert.Assert(t, is.Len(endpointRows(t, subCtx, installation.ID), 1))
 
 		duplicate, err := previous.PrepareWebhookDelivery(subCtx, rows[0], "d1")
-		require.NoError(t, err)
-		require.False(t, duplicate)
+		assert.NilError(t, err)
+		assert.Assert(t, !duplicate)
 
 		_, err = renamed.RunHealthAssessment(subCtx, installation)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		rows = endpointRows(t, subCtx, installation.ID)
-		require.Len(t, rows, 1)
-		require.Equal(t, renamedEventsWebhook.Name(), rows[0].Name)
-		require.Equal(t, endpointID, lo.FromPtr(rows[0].EndpointID))
-		require.Equal(t, secret, rows[0].SecretToken)
-		require.Equal(t, []string{renameEventA.Name(), renameEventB.Name()}, rows[0].AllowedEvents)
+		assert.Assert(t, is.Len(rows, 1))
+		assert.Equal(t, renamedEventsWebhook.Name(), rows[0].Name)
+		assert.Equal(t, endpointID, lo.FromPtr(rows[0].EndpointID))
+		assert.Equal(t, secret, rows[0].SecretToken)
+		assert.DeepEqual(t, []string{renameEventA.Name(), renameEventB.Name()}, rows[0].AllowedEvents)
 
 		dedupes, err := suite.Client.DB.IntegrationWebhook.Query().
 			Where(integrationwebhook.IntegrationIDEQ(installation.ID), integrationwebhook.ExternalEventIDEQ("d1")).
 			All(subCtx)
-		require.NoError(t, err)
-		require.Len(t, dedupes, 1)
-		require.Equal(t, renamedEventsWebhook.Name(), dedupes[0].Name)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(dedupes, 1))
+		assert.Equal(t, renamedEventsWebhook.Name(), dedupes[0].Name)
 
 		fresh := testint.TokenCredentialSet("fresh")
-		require.NoError(t, renamed.ReconcileCredential(subCtx, reloadIntegration(t, subCtx, installation.ID), testint.Token.Connection().Credential.Name, fresh))
+		assert.NilError(t, renamed.ReconcileCredential(subCtx, reloadIntegration(t, subCtx, installation.ID), testint.Token.Connection().Credential.Name, fresh))
 
 		rows = endpointRows(t, subCtx, installation.ID)
-		require.Len(t, rows, 1)
-		require.Equal(t, endpointID, lo.FromPtr(rows[0].EndpointID))
+		assert.Assert(t, is.Len(rows, 1))
+		assert.Equal(t, endpointID, lo.FromPtr(rows[0].EndpointID))
 
 		untouched := installOn(t, subCtx, previous, nil, nil, testint.Token.Connection().Credential.Name, testint.TokenCredentialSet("token"))
 		untouchedRows := endpointRows(t, subCtx, untouched.ID)
-		require.Len(t, untouchedRows, 1)
+		assert.Assert(t, is.Len(untouchedRows, 1))
 		untouchedEndpoint := lo.FromPtr(untouchedRows[0].EndpointID)
 
 		_, err = renamed.EnsureWebhook(subCtx, untouched, renamedEventsWebhook.Name(), "")
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
-		require.NoError(t, renamed.ReconcileCredential(subCtx, untouched, testint.Token.Connection().Credential.Name, fresh))
+		assert.NilError(t, renamed.ReconcileCredential(subCtx, untouched, testint.Token.Connection().Credential.Name, fresh))
 
 		untouchedRows = endpointRows(t, subCtx, untouched.ID)
-		require.Len(t, untouchedRows, 1)
-		require.Equal(t, renamedEventsWebhook.Name(), untouchedRows[0].Name)
-		require.Equal(t, untouchedEndpoint, lo.FromPtr(untouchedRows[0].EndpointID))
-		require.Equal(t, renamed.Registry().Version(testint.DefinitionID.ID()), reloadIntegration(t, subCtx, untouched.ID).DefinitionVersion)
+		assert.Assert(t, is.Len(untouchedRows, 1))
+		assert.Equal(t, renamedEventsWebhook.Name(), untouchedRows[0].Name)
+		assert.Equal(t, untouchedEndpoint, lo.FromPtr(untouchedRows[0].EndpointID))
+		assert.Equal(t, renamed.Registry().Version(testint.DefinitionID.ID()), reloadIntegration(t, subCtx, untouched.ID).DefinitionVersion)
 
 		_, err = renamed.Registry().Webhook(testint.DefinitionID.ID(), retiredEventsWebhook.Name())
-		require.ErrorIs(t, err, registry.ErrWebhookNotFound)
+		assert.ErrorIs(t, err, registry.ErrWebhookNotFound)
 
 		renamedDef, ok := renamed.Registry().Definition(testint.DefinitionID.ID())
-		require.True(t, ok)
+		assert.Assert(t, ok)
 
 		registration, replaced, found := renamedDef.ResolveWebhook(retiredEventsWebhook.Name())
-		require.True(t, found)
-		require.True(t, replaced)
-		require.Equal(t, renamedEventsWebhook.Name(), registration.Name)
+		assert.Assert(t, found)
+		assert.Assert(t, replaced)
+		assert.Equal(t, renamedEventsWebhook.Name(), registration.Name)
 	})
 
 	t.Run("a new connection is stamped with the current version", func(t *testing.T) {
 		installation, _ := newHarnessInstallation(t, ctx, testint.ModeRecurring)
-		require.Equal(t, current, installation.DefinitionVersion)
+		assert.Equal(t, current, installation.DefinitionVersion)
 	})
 }
