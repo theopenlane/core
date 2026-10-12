@@ -443,8 +443,6 @@ type CloneControlUploadInput struct {
 	// controlInput includes all the standard settings you can set on create of a control that can also be set during the creation via clone. Note that some fields like refCode, description, category, will be ignored
 	// if the control is being clone from a system owned standard
 	ControlInput *generated.CreateControlInput `json:"controlInput,omitempty"`
-	// optionally choose to import existing template mappings for the cloned controls
-	ImportTemplateMappings *bool `json:"importTemplateMappings,omitempty"`
 }
 
 // Return response for createBulkContact mutation

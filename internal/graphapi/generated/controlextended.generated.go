@@ -888,7 +888,7 @@ func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"controlID", "refCode", "standardID", "standardShortName", "standardVersion", "ownerID", "controlImplementation", "controlObjective", "implementationGuidance", "comment", "internalPolicyID", "controlInput", "importTemplateMappings"}
+	fieldsInOrder := [...]string{"controlID", "refCode", "standardID", "standardShortName", "standardVersion", "ownerID", "controlImplementation", "controlObjective", "implementationGuidance", "comment", "internalPolicyID", "controlInput"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -979,13 +979,6 @@ func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Co
 				return it, err
 			}
 			it.ControlInput = data
-		case "importTemplateMappings":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("importTemplateMappings"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ImportTemplateMappings = data
 		}
 	}
 	return it, nil

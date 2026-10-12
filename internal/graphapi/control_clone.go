@@ -101,15 +101,40 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		return nil, err
 	}
 
-	return r.cloneControls(ctx, controls, programID, cloneTemplateMappings)
+	return r.cloneTemplateControls(ctx, controls, programID, cloneTemplateMappings)
+}
+
+func (r *mutationResolver) cloneTemplateControls(ctx context.Context, controlsToClone []*generated.Control,
+	programID *string, shouldCloneTemplates bool) ([]*generated.Control, error) {
+
+	clonedControls, err := r.cloneControls(ctx, controlsToClone, programID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !shouldCloneTemplates {
+		return clonedControls, nil
+	}
+
+	if r.integrationsRuntime == nil {
+		return nil, common.ErrInternalServerError
+	}
+
+	ids := make([]string, 0, len(controlsToClone))
+	for _, c := range controlsToClone {
+		if controls.IsOpenlaneBaseControl(c) {
+			ids = append(ids, c.ID)
+		}
+	}
+
+	return clonedControls, r.emitTemplateMappingsJob(ctx, ids, lo.FromPtr(programID))
 }
 
 // cloneControls clones the given controls into the organization in the context
 // and optionally links them to a program if programID is given
 // if the controls already exist in the organization, they will not be cloned again
 // but will be updated to link to the program if needed
-func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []*generated.Control, programID *string,
-	cloneTemplateMappings bool) ([]*generated.Control, error) {
+func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []*generated.Control, programID *string) ([]*generated.Control, error) {
 
 	logger := logx.FromContext(ctx)
 	// keep track of the control IDs that already exist in the org to be updated to link to the program if needed
@@ -132,19 +157,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			logger.Error().Msg("organization does not have required modules enabled for control operations")
 
 			return nil, generated.ErrPermissionDenied
-		}
-	}
-
-	templateControlIDs := make([]string, 0, len(controlsToClone))
-	for _, c := range controlsToClone {
-		if controls.IsOpenlaneBaseControl(c) {
-			templateControlIDs = append(templateControlIDs, c.ID)
-		}
-	}
-
-	if len(templateControlIDs) > 0 && cloneTemplateMappings {
-		if r.integrationsRuntime == nil {
-			return nil, gala.ErrGalaRequired
 		}
 	}
 
@@ -304,28 +316,31 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		return nil, err
 	}
 
-	if len(templateControlIDs) > 0 && cloneTemplateMappings {
-		req := hooks.TemplateMappingRequest{
-			ControlIDs: templateControlIDs,
-			ProgramID:  lo.FromPtr(programID),
-		}
+	return query.All(internalCtx)
+}
 
-		var value = req.ProgramID
-
-		if value == "" {
-			value = ulids.New().String()
-		}
-
-		_, err := r.integrationsRuntime.Gala().
-			EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{
-				UniqueKey: "template-mapping-" + value,
-			})
-		if err != nil {
-			return nil, err
-		}
+func (r *mutationResolver) emitTemplateMappingsJob(ctx context.Context, controlIDs []string, programID string) error {
+	if len(controlIDs) == 0 {
+		return nil
 	}
 
-	return query.All(internalCtx)
+	req := hooks.TemplateMappingRequest{
+		ControlIDs: controlIDs,
+		ProgramID:  programID,
+	}
+
+	var value = req.ProgramID
+
+	if value == "" {
+		value = ulids.New().String()
+	}
+
+	_, err := r.integrationsRuntime.Gala().
+		EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{
+			UniqueKey: "template-mapping-" + value,
+		})
+
+	return err
 }
 
 // checkProgramAccess checks the users access to the specific program id

@@ -3516,7 +3516,7 @@ type ComplexityRoot struct {
 		BulkCancelWorkflowInstances          func(childComplexity int, ids []string, reason *string) int
 		BulkForceCompleteWorkflowInstances   func(childComplexity int, ids []string, applyProposal *bool) int
 		CancelWorkflowInstance               func(childComplexity int, id string, reason *string) int
-		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload, importTemplateMappings *bool) int
+		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
 		CreateAssessment                     func(childComplexity int, input generated.CreateAssessmentInput) int
@@ -24490,7 +24490,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CloneBulkCSVControl(childComplexity, args["input"].(graphql.Upload), args["importTemplateMappings"].(*bool)), true
+		return e.ComplexityRoot.Mutation.CloneBulkCSVControl(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createAPIToken":
 		if e.ComplexityRoot.Mutation.CreateAPIToken == nil {
 			break
@@ -53887,11 +53887,6 @@ input CloneControlUploadInput {
   if the control is being clone from a system owned standard
   """
   controlInput: CreateControlInput
-
-  """
-  optionally choose to import existing template mappings for the cloned controls
-  """
-    importTemplateMappings: Boolean
 }
 
 extend type Mutation{
@@ -53909,10 +53904,6 @@ extend type Mutation{
       csv file containing values of the control
       """
       input: Upload!
-      """
-      optionally choose to import existing template mappings for the cloned controls
-      """
-      importTemplateMappings: Boolean
   ): ControlBulkCreatePayload!
 }
 

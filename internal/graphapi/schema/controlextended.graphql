@@ -95,11 +95,6 @@ input CloneControlUploadInput {
   if the control is being clone from a system owned standard
   """
   controlInput: CreateControlInput
-
-  """
-  optionally choose to import existing template mappings for the cloned controls
-  """
-    importTemplateMappings: Boolean
 }
 
 extend type Mutation{
@@ -117,10 +112,6 @@ extend type Mutation{
       csv file containing values of the control
       """
       input: Upload!
-      """
-      optionally choose to import existing template mappings for the cloned controls
-      """
-      importTemplateMappings: Boolean
   ): ControlBulkCreatePayload!
 }
 

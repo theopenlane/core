@@ -1430,7 +1430,7 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.CloneBulkCSVControl(tc.ctx, tc.fileInput, lo.ToPtr(true))
+			resp, err := tc.client.CloneBulkCSVControl(tc.ctx, tc.fileInput)
 			assert.NilError(t, err)
 			assert.Check(t, resp != nil)
 

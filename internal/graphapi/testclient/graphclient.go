@@ -117,7 +117,7 @@ type TestGraphClient interface {
 	GetTrustCenterControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControls, error)
 	UpdateBulkControl(ctx context.Context, ids []string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkControl, error)
 	UpdateControl(ctx context.Context, updateControlID string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControl, error)
-	CloneBulkCSVControl(ctx context.Context, input graphql.Upload, importTemplateMappings *bool, interceptors ...clientv2.RequestInterceptor) (*CloneBulkCSVControl, error)
+	CloneBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CloneBulkCSVControl, error)
 	CreateControlsByClone(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByClone, error)
 	CreateControlsByCloneReturnID(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByCloneReturnID, error)
 	GetControlCategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlCategories, error)
@@ -180410,8 +180410,8 @@ func (c *Client) UpdateControl(ctx context.Context, updateControlID string, inpu
 	return &res, nil
 }
 
-const CloneBulkCSVControlDocument = `mutation CloneBulkCSVControl ($input: Upload!, $importTemplateMappings: Boolean) {
-	cloneBulkCSVControl(input: $input, importTemplateMappings: $importTemplateMappings) {
+const CloneBulkCSVControlDocument = `mutation CloneBulkCSVControl ($input: Upload!) {
+	cloneBulkCSVControl(input: $input) {
 		controls {
 			assessmentMethods
 			assessmentObjectives
@@ -180472,10 +180472,9 @@ const CloneBulkCSVControlDocument = `mutation CloneBulkCSVControl ($input: Uploa
 }
 `
 
-func (c *Client) CloneBulkCSVControl(ctx context.Context, input graphql.Upload, importTemplateMappings *bool, interceptors ...clientv2.RequestInterceptor) (*CloneBulkCSVControl, error) {
+func (c *Client) CloneBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CloneBulkCSVControl, error) {
 	vars := map[string]any{
-		"input":                  input,
-		"importTemplateMappings": importTemplateMappings,
+		"input": input,
 	}
 
 	var res CloneBulkCSVControl
