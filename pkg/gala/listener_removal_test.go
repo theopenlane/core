@@ -25,6 +25,20 @@ type listenerRemovalJobController struct {
 	deleted           []int64
 	listErr           error
 	successorOnDelete *rivertype.JobRow
+	paused            []string
+	resumed           []string
+}
+
+func (c *listenerRemovalJobController) QueuePause(_ context.Context, name string, _ *river.QueuePauseOpts) error {
+	c.paused = append(c.paused, name)
+
+	return nil
+}
+
+func (c *listenerRemovalJobController) QueueResume(_ context.Context, name string, _ *river.QueuePauseOpts) error {
+	c.resumed = append(c.resumed, name)
+
+	return nil
 }
 
 func (c *listenerRemovalJobController) JobList(context.Context, *river.JobListParams) (*river.JobListResult, error) {

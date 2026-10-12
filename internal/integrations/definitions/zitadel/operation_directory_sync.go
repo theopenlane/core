@@ -8,37 +8,16 @@ import (
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// protoJSON serializes Zitadel protobuf payloads into the JSON shape the mappings expect:
-// proto field names (snake_case) and integer enum values, so nested oneof messages
-// (human/machine) and timestamps serialize correctly. Standard encoding/json mangles proto
-// messages (oneof wrappers, google.protobuf.Timestamp), so protojson is required here.
+// protoJSON serializes Zitadel protobuf payloads into the JSON shape the mappings expect
 var protoJSON = protojson.MarshalOptions{UseProtoNames: true, UseEnumNumbers: true}
 
-// DirectorySync collects Zitadel directory users for ingest
-type DirectorySync struct{}
-
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(zitadelClient, func(ctx context.Context, request types.OperationRequest, c *client.Client) ([]types.IngestPayloadSet, error) {
-		var cfg UserInput
-
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
-		}
-
-		return d.Run(ctx, c, cfg)
-	})
-}
-
-// Run collects Zitadel directory users
-func (DirectorySync) Run(ctx context.Context, c *client.Client, _ UserInput) ([]types.IngestPayloadSet, error) {
-	users, err := listDirectoryUsers(ctx, c)
+// runDirectorySync collects Zitadel directory users
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c Client, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+	users, err := listDirectoryUsers(ctx, c.Client)
 	if err != nil {
 		return nil, err
 	}
@@ -60,13 +39,7 @@ func (DirectorySync) Run(ctx context.Context, c *client.Client, _ UserInput) ([]
 		accountEnvelopes = append(accountEnvelopes, providerkit.RawEnvelope(resourceID, raw))
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}, nil
+	return providerkit.DirectoryAccountPayloadSets(accountEnvelopes), nil
 }
 
 // listDirectoryUsers pages through all Zitadel users using offset-based pagination

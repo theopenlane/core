@@ -42,11 +42,6 @@ type MessageSend struct {
 	MessageID string `json:"messageId"`
 }
 
-// Handle adapts message send to the generic operation registration boundary
-func (m MessageSend) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(teamsClient, MessageSendOp, ErrOperationConfigInvalid, m.Run)
-}
-
 // Run sends a Microsoft Teams channel message via Microsoft Graph
 func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *msgraphsdk.GraphServiceClient, cfg MessageSendOperation) (json.RawMessage, error) {
 	if err := templatekit.ResolveOperationTemplate(ctx, req, cfg.TemplateID, cfg.TemplateKey, &cfg); err != nil {

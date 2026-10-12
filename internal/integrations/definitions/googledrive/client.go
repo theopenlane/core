@@ -3,64 +3,32 @@ package googledrive
 import (
 	"context"
 
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// Client builds Google Drive SDK clients for one installation
-type Client struct {
-	// cfg is the operator-level Google Drive configuration
-	cfg Config
-}
+// clientBuilder returns the Google Drive client builder bound to the operator config
+func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[googleDriveCred]) (DriveClient, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[googleDriveCred]) (DriveClient, error) {
+		cred := req.Credential
 
-// tokenSource builds a refreshing OAuth2 token source for a Google Drive credential using the
-// operator's registered OAuth client id and secret, so a stored access token is refreshed via the
-// stored refresh token and expiry rather than reused statically until it expires
-func tokenSource(ctx context.Context, cfg Config, cred googleDriveCred) oauth2.TokenSource {
-	tok := &oauth2.Token{
-		AccessToken:  cred.AccessToken,
-		RefreshToken: cred.RefreshToken,
-		TokenType:    "Bearer",
+		if cred.AccessToken == "" {
+			return DriveClient{}, ErrOAuthTokenMissing
+		}
+
+		ts := providerkit.GoogleTokenSource(ctx, cfg.ClientID, cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+
+		svc, err := drive.NewService(ctx, option.WithTokenSource(ts))
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("Failed to init drive client with provided credentials")
+
+			return DriveClient{}, ErrDriveServiceBuildFailed
+		}
+
+		return DriveClient{Svc: svc}, nil
 	}
-
-	if cred.Expiry != nil {
-		tok.Expiry = *cred.Expiry
-	}
-
-	return (&oauth2.Config{
-		ClientID:     cfg.ClientID,
-		ClientSecret: cfg.ClientSecret,
-		Endpoint:     google.Endpoint,
-	}).TokenSource(ctx, tok)
-}
-
-// Build constructs the Google Drive SDK client for one installation
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	cred, _, err := driveCredential.Resolve(req.Credentials)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("Failed to resolve drive credentials")
-
-		return nil, ErrCredentialDecode
-	}
-
-	if cred.AccessToken == "" {
-		return nil, ErrOAuthTokenMissing
-	}
-
-	// context background used intentionally in this slot
-	ts := tokenSource(context.Background(), c.cfg, cred)
-
-	svc, err := drive.NewService(ctx, option.WithTokenSource(ts))
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("Failed to init drive client with provided credentials")
-
-		return nil, ErrDriveServiceBuildFailed
-	}
-
-	return DriveClient{Svc: svc}, nil
 }

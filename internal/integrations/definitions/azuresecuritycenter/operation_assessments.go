@@ -17,11 +17,7 @@ const (
 	variantAssessment = "assessment"
 )
 
-// AssessmentPayload is the raw provider payload emitted per unhealthy assessment for ingest.
-// Assessments are security posture policy checks (e.g. "MFA should be enabled",
-// "Storage accounts should disable public access"). They are misconfigurations, not CVE
-// vulnerabilities. This data maps to the Vulnerability schema until the Finding schema
-// gains integration mapping pipeline support, at which point assessments should be remapped.
+// AssessmentPayload is the raw provider payload emitted per unhealthy assessment for ingest
 type AssessmentPayload struct {
 	// ID is the full ARM resource ID of the assessment — used as external_id
 	ID string `json:"id"`
@@ -56,17 +52,12 @@ type AssessmentPayload struct {
 }
 
 // AssessmentsCollect collects Azure Defender for Cloud assessment findings for ingest
-type AssessmentsCollect struct{}
-
-// IngestHandle adapts assessments collection to the ingest operation registration boundary
-func (a AssessmentsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(securityCenterClient, func(ctx context.Context, _ types.OperationRequest, client *azureSecurityClient) ([]types.IngestPayloadSet, error) {
-		return a.Run(ctx, client)
-	})
+type AssessmentsCollect struct {
+	types.OperationSettings
 }
 
-// Run collects all unhealthy security assessment findings for the subscription
-func (AssessmentsCollect) Run(ctx context.Context, client *azureSecurityClient) ([]types.IngestPayloadSet, error) {
+// runAssessmentsCollect collects all unhealthy security assessment findings for the subscription
+func runAssessmentsCollect(ctx context.Context, _ types.OperationRequest, client *SecurityClient, _ AssessmentsCollect) ([]types.IngestPayloadSet, error) {
 	pager := client.assessments.NewListPager(client.scope(), nil)
 
 	var envelopes []types.MappingEnvelope

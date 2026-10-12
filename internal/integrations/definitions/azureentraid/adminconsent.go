@@ -20,12 +20,11 @@ type adminConsentState struct {
 	State string `json:"state"`
 }
 
-// adminConsentRegistration builds an auth registration that uses the Azure admin consent endpoint
+// adminConsentFlow builds an auth flow that uses the Azure admin consent endpoint
 // which grants application permissions so the client credentials flow can access the tenant directory
-func adminConsentRegistration(cfg Config) *types.AuthRegistration {
-	return &types.AuthRegistration{
-		CredentialRef: entraTenantCredential.ID(),
-		Start: func(ctx context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+func adminConsentFlow(cfg Config) types.AuthFlow[entraIDCred] {
+	return types.NewAuthFlow[entraIDCred](
+		func(ctx context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 			csrfState, err := iamauth.GenerateOAuthState(0)
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error generating oauth state")
@@ -59,7 +58,7 @@ func adminConsentRegistration(cfg Config) *types.AuthRegistration {
 				State: stateData,
 			}, nil
 		},
-		Complete: func(ctx context.Context, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
+		func(ctx context.Context, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
 			var savedState adminConsentState
 			if err := jsonx.UnmarshalIfPresent(state, &savedState); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to parse consent state")
@@ -92,5 +91,5 @@ func adminConsentRegistration(cfg Config) *types.AuthRegistration {
 				Credential: types.CredentialSet{Data: data},
 			}, nil
 		},
-	}
+	)
 }
