@@ -298,7 +298,7 @@ func preferDefaultMessaging(inst *ent.Integration) bool {
 		DefaultMessaging bool `json:"defaultMessaging"`
 	}
 
-	if json.Unmarshal(inst.Config.ClientConfig, &cfg) != nil {
+	if json.Unmarshal(inst.UserInput.Data, &cfg) != nil {
 		return false
 	}
 
@@ -317,7 +317,7 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		Definition:         installationRecord.DefinitionID,
 		Operation:          operationName,
 		Config:             operationConfig,
-		InstallationConfig: jsonx.CloneRawMessage(installationRecord.Config.ClientConfig),
+		InstallationConfig: jsonx.CloneRawMessage(installationRecord.UserInput.Data),
 		OrgID:              req.OrgID,
 		InstallationID:     installationRecord.ID,
 	})

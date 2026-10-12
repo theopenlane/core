@@ -311,6 +311,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackMessageSendW
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
 	s.Require().NoError(err)
+	s.Require().NoError(s.integrationsRT.ReconcileCredential(seedCtx, slackIntegration, slackdef.MockBotTokenConnection, slackdef.MockBotTokenCredential()))
 
 	templateKey := "slack-tpl-" + ulid.Make().String()
 
@@ -395,6 +396,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackTemplateMerg
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
 	s.Require().NoError(err)
+	s.Require().NoError(s.integrationsRT.ReconcileCredential(seedCtx, slackIntegration, slackdef.MockBotTokenConnection, slackdef.MockBotTokenCredential()))
 
 	templateKey := "slack-override-" + ulid.Make().String()
 

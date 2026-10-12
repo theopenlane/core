@@ -81,11 +81,11 @@ type EntityHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
-	// the system-owned catalogue entity this entity was adopted from
+	// the system-owned catalog entity this entity was adopted from
 	CatalogEntityID string `json:"catalog_entity_id,omitempty"`
 	// whether this system-owned row is published for organizations to adopt
 	ExternallyVisible bool `json:"externally_visible,omitempty"`
-	// the lookup key of the catalogue entity this entity was adopted from
+	// the lookup key of the catalog entity this entity was adopted from
 	CatalogEntityKey string `json:"catalog_entity_key,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName string `json:"entity_relationship_state_name,omitempty"`

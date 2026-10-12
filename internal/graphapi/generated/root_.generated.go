@@ -3117,6 +3117,7 @@ type ComplexityRoot struct {
 		Metadata                 func(childComplexity int) int
 		Name                     func(childComplexity int) int
 		NotificationTemplates    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
+		OperationConfig          func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		Platform                 func(childComplexity int) int
@@ -22535,6 +22536,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
+	case "Integration.operationConfig":
+		if e.ComplexityRoot.Integration.OperationConfig == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.OperationConfig(childComplexity), true
 	case "Integration.owner":
 		if e.ComplexityRoot.Integration.Owner == nil {
 			break
@@ -78526,7 +78533,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   systemInternalID: String @hidden(if: true)
   """
-  the system-owned catalogue entity this entity was adopted from
+  the system-owned catalog entity this entity was adopted from
   """
   catalogEntityID: ID
   """
@@ -78534,7 +78541,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   externallyVisible: Boolean
   """
-  the lookup key of the catalogue entity this entity was adopted from
+  the lookup key of the catalog entity this entity was adopted from
   """
   catalogEntityKey: String
   """
@@ -78826,7 +78833,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   reviewedByGroup: Group
   reviewedByIdentityHolder: IdentityHolder
   """
-  the system-owned catalogue entity this entity was adopted from
+  the system-owned catalog entity this entity was adopted from
   """
   catalogEntity: Entity
   adoptedEntities(
@@ -144762,6 +144769,7 @@ type IntegrationDeletePayload {
     webhookURLs: Map
     credentials: JSON
     config: JSON
+    operationConfig: JSON
 }
 `, BuiltIn: false},
 	{Name: "../schema/internalpolicy.graphql", Input: `extend type InternalPolicy {
@@ -160559,6 +160567,8 @@ func (ec *executionContext) childFields_Integration(ctx context.Context, field g
 		return ec.fieldContext_Integration_credentials(ctx, field)
 	case "config":
 		return ec.fieldContext_Integration_config(ctx, field)
+	case "operationConfig":
+		return ec.fieldContext_Integration_operationConfig(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type Integration", field.Name)
 }

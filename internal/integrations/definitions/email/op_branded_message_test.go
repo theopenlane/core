@@ -139,7 +139,7 @@ func TestBrandedMessageConfigSchemaScoping(t *testing.T) {
 	assert.True(t, ok)
 
 	var schema map[string]any
-	assert.NoError(t, json.Unmarshal(d.Registration().ConfigSchema, &schema))
+	assert.NoError(t, json.Unmarshal(d.Registration().Input.Schema, &schema))
 
 	defs, ok := schema["$defs"].(map[string]any)
 	assert.True(t, ok, "schema should have $defs")

@@ -3,23 +3,18 @@ package microsoftteams
 import (
 	"time"
 
-	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
-
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// DefinitionID is the stable identifier for the Microsoft Teams integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
-	// installation is the typed installation metadata handle for the Microsoft Teams definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// teamsCredential is the auth-managed credential slot used by the Teams client
-	teamsCredentialSchema, teamsCredential = providerkit.CredentialSchema[teamsCred]()
-	// teamsClient is the client ref for the Microsoft Graph service client used by this definition
-	teamsClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
-	// messageSendSchema is the operation ref for the Microsoft Teams message send operation
-	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]() //nolint:revive // co-initialized with schema
+	// installation is the installation metadata layout
+	installation = types.InstallationOf[InstallationMetadata]()
+	// oauthConnection is the Microsoft Teams OAuth connection
+	oauthConnection = types.ConnectionOf[teamsCred]()
+	// userInput is the installation user input layout for the Microsoft Teams definition
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // teamsCred holds the provider-owned credential material for a Microsoft Teams installation
@@ -34,10 +29,8 @@ type teamsCred struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// DefaultMessaging marks this installation as the preferred Teams tenant for workflow messaging operations
+	// DefaultMessaging marks this installation as the preferred tenant for messaging
 	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // InstallationMetadata holds the stable Microsoft tenant identity for one Teams installation

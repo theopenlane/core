@@ -3,20 +3,23 @@ package oidclocal
 import (
 	"time"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the local OIDC integration definition
 	definitionID = types.NewDefinitionRef("def_01K0OIDCLOCAL000000000000001")
+	// oidcConnection is the connection handle for the auth-managed local OIDC credential
+	oidcConnection = types.ConnectionOf[oidcLocalCred]()
 	// installation is the typed installation metadata handle for the local OIDC definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// oidcCredential is the auth-managed credential slot used by the local OIDC connection
-	_, oidcCredential = providerkit.CredentialSchema[oidcLocalCred]()
-	// claimsInspectSchema is the operation ref for the OIDC claims inspection operation
-	claimsInspectSchema, claimsInspectOperation = providerkit.OperationSchema[ClaimsInspect]()
+	installation = types.InstallationOf[InstallationMetadata]()
 )
+
+// Client carries the stored credential the local OIDC operations read, since the definition has no provider client
+type Client struct {
+	// Credential is the decoded auth-managed credential
+	Credential oidcLocalCred
+}
 
 // oidcLocalCred holds the provider-owned credential material for a local OIDC installation
 type oidcLocalCred struct {
@@ -65,20 +68,6 @@ func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallati
 		ExternalID:   m.Subject,
 		ExternalName: externalName,
 	}
-}
-
-// HealthCheck holds the result of an OIDC credential health check
-type HealthCheck struct {
-	// Issuer is the OIDC issuer claim
-	Issuer string `json:"issuer,omitempty"`
-	// Subject is the OIDC subject claim
-	Subject string `json:"subject,omitempty"`
-	// Email is the OIDC email claim
-	Email string `json:"email,omitempty"`
-	// PreferredUsername is the OIDC preferred_username claim
-	PreferredUsername string `json:"preferredUsername,omitempty"`
-	// Groups captures any group names emitted in the ID token claims
-	Groups []string `json:"groups,omitempty"`
 }
 
 // ClaimsInspect returns the stored OIDC claims for inspection

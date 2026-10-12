@@ -46,9 +46,9 @@ type SystemOwnedMixin struct {
 	// autoCreateWildcardTuples will include a hook to create wildcard tuples for system owned objects
 	// this should be skipped if there are conditionals, such as `public` field on the object (see standards as an example)
 	autoCreateWildcardTuples bool
-	// catalogSchemaType is the schema type whose system-owned rows organizations can adopt, nil disables the catalogue plumbing
+	// catalogSchemaType is the schema type whose system-owned rows organizations can adopt, nil disables the catalog plumbing
 	catalogSchemaType any
-	// ownerFieldName is the organization owner field the catalogue index pairs with the catalogue pointer
+	// ownerFieldName is the organization owner field the catalog index pairs with the catalog pointer
 	ownerFieldName string
 }
 
@@ -77,21 +77,21 @@ func SkipTupleCreation() SystemOwnedMixinOption {
 	}
 }
 
-// WithCatalog adds the catalogue pointer field, edges and index so organizations can adopt this schema's system-owned rows
+// WithCatalog adds the catalog pointer field, edges and index so organizations can adopt this schema's system-owned rows
 func WithCatalog(schemaType any) SystemOwnedMixinOption {
 	return func(m *SystemOwnedMixin) {
 		m.catalogSchemaType = schemaType
 	}
 }
 
-// WithOwnerField sets the organization owner field name used by the catalogue index
+// WithOwnerField sets the organization owner field name used by the catalog index
 func WithOwnerField(name string) SystemOwnedMixinOption {
 	return func(m *SystemOwnedMixin) {
 		m.ownerFieldName = name
 	}
 }
 
-// catalogName returns the snake_case name of the catalogue schema type
+// catalogName returns the snake_case name of the catalog schema type
 func (d SystemOwnedMixin) catalogName() string {
 	return strcase.SnakeCase(reflect.TypeOf(d.catalogSchemaType).In(0).Name())
 }
@@ -138,7 +138,7 @@ func (d SystemOwnedMixin) Fields() []ent.Field {
 
 	return append(fields,
 		field.String("catalog_"+name+"_id").
-			Comment("the system-owned catalogue "+name+" this "+name+" was adopted from").
+			Comment("the system-owned catalog "+name+" this "+name+" was adopted from").
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
@@ -153,7 +153,7 @@ func (d SystemOwnedMixin) Fields() []ent.Field {
 		field.String("catalog_"+name+"_key").
 			Optional().
 			Immutable().
-			Comment("the lookup key of the catalogue "+name+" this "+name+" was adopted from").
+			Comment("the lookup key of the catalog "+name+" this "+name+" was adopted from").
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entx.CatalogKeyField(),
@@ -172,14 +172,14 @@ func (d SystemOwnedMixin) Edges() []ent.Edge {
 
 	return []ent.Edge{
 		edge.To("adopted_"+plural, d.catalogSchemaType).
-			Comment("organization "+plural+" adopted from this catalogue "+name).
+			Comment("organization "+plural+" adopted from this catalog "+name).
 			Annotations(
 				entgql.RelayConnection(),
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				accessmap.EdgeNoAuthCheck(),
 			).
 			From("catalog_"+name).
-			Comment("the system-owned catalogue "+name+" this "+name+" was adopted from").
+			Comment("the system-owned catalog "+name+" this "+name+" was adopted from").
 			Field("catalog_"+name+"_id").
 			Unique().
 			Annotations(

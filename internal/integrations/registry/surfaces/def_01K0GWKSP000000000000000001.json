@@ -1,0 +1,108 @@
+{
+  "hash": "9d0c4c5bde7271fe190670b63e0bcedcb5c0a46dce2cbe32082f27ece999fd0c",
+  "version": "01M49CHH2NPBMN1CMF905M6DPC",
+  "surface": {
+    "id": "def_01K0GWKSP000000000000000001",
+    "credentials": [
+      {
+        "ref": "googleWorkspaceCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace/google-workspace-cred",
+          "$ref": "#/$defs/googleWorkspaceCred",
+          "$defs": {
+            "googleWorkspaceCred": {
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "primaryDirectory": {
+                "type": "boolean",
+                "title": "Primary Directory"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "customerId": {
+                "type": "string",
+                "title": "Customer ID"
+              },
+              "domain": {
+                "type": "string",
+                "title": "Domain"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "googleWorkspaceCred"
+    ],
+    "operations": [
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

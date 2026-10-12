@@ -391,7 +391,7 @@ func (_m *ActionPlanHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -915,7 +915,7 @@ func (_m *AssessmentHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -1313,7 +1313,7 @@ func (_m *AssessmentPolicyHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -1657,7 +1657,7 @@ func (_m *AssessmentResponseHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -2271,7 +2271,7 @@ func (_m *AssetHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -2875,7 +2875,7 @@ func (_m *CampaignHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -3665,7 +3665,7 @@ func (_m *CampaignTargetHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -4125,7 +4125,7 @@ func (_m *ContactHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -4608,7 +4608,7 @@ func (_m *ControlHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -5091,7 +5091,7 @@ func (_m *ControlImplementationHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -5507,7 +5507,7 @@ func (_m *ControlObjectiveHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -5977,7 +5977,7 @@ func (_m *CustomDomainHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -6339,7 +6339,7 @@ func (_m *DiscussionHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -6683,7 +6683,7 @@ func (_m *DocumentDataHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -7027,7 +7027,7 @@ func (_m *EmailTemplateHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -7515,7 +7515,7 @@ func (_m *EntityHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -8490,7 +8490,7 @@ func (_m *EntityTypeHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -8852,7 +8852,7 @@ func (_m *EvidenceHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -9312,7 +9312,7 @@ func (_m *FileHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -9687,7 +9687,7 @@ func (_m *FindingControlHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10031,7 +10031,7 @@ func (_m *FindingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10545,7 +10545,7 @@ func (_m *GroupHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -10925,7 +10925,7 @@ func (_m *GroupMembershipHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -11287,7 +11287,7 @@ func (_m *GroupSettingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -11631,7 +11631,7 @@ func (_m *HushHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -12073,7 +12073,7 @@ func (_m *IdentityHolderHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -12731,7 +12731,7 @@ func (_m *InternalPolicyHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -13183,7 +13183,7 @@ func (_m *MappableDomainHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -13545,7 +13545,7 @@ func (_m *MappedControlHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -13925,7 +13925,7 @@ func (_m *NarrativeHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -14287,7 +14287,7 @@ func (_m *NoteHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -14631,7 +14631,7 @@ func (_m *NotificationPreferenceHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15029,7 +15029,7 @@ func (_m *NotificationTemplateHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15553,7 +15553,7 @@ func (_m *OrgMembershipHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -15915,7 +15915,7 @@ func (_m *OrganizationHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -16295,7 +16295,7 @@ func (_m *OrganizationSettingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -16639,7 +16639,7 @@ func (_m *PlatformHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -17284,7 +17284,7 @@ func (_m *ProcedureHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -17736,7 +17736,7 @@ func (_m *ProgramHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -18242,7 +18242,7 @@ func (_m *ProgramMembershipHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -18604,7 +18604,7 @@ func (_m *RemediationHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -19038,7 +19038,7 @@ func (_m *ReviewHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -19454,7 +19454,7 @@ func (_m *RiskHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -20187,7 +20187,7 @@ func (_m *SLADefinitionHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -20567,7 +20567,7 @@ func (_m *StandardHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21037,7 +21037,7 @@ func (_m *SubcontrolHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21520,7 +21520,7 @@ func (_m *SubprocessorHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -21882,7 +21882,7 @@ func (_m *SystemDetailHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -22244,7 +22244,7 @@ func (_m *TaskHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -22740,7 +22740,7 @@ func (_m *TemplateHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23138,7 +23138,7 @@ func (_m *TrustCenterComplianceHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23482,7 +23482,7 @@ func (_m *TrustCenterDocHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -23826,7 +23826,7 @@ func (_m *TrustCenterEntityHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -24188,7 +24188,7 @@ func (_m *TrustCenterFAQHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -24550,7 +24550,7 @@ func (_m *TrustCenterHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -24894,7 +24894,7 @@ func (_m *TrustCenterNDARequestHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -25238,7 +25238,7 @@ func (_m *TrustCenterSettingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -25582,7 +25582,7 @@ func (_m *TrustCenterSubprocessorHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -25926,7 +25926,7 @@ func (_m *TrustCenterWatermarkConfigHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -26270,7 +26270,7 @@ func (_m *UserHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -26668,7 +26668,7 @@ func (_m *UserSettingHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -27012,7 +27012,7 @@ func (_m *VendorRiskScoreHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -27446,7 +27446,7 @@ func (_m *VendorScoringConfigHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -27808,7 +27808,7 @@ func (_m *VulnerabilityHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -28296,7 +28296,7 @@ func (_m *WorkflowAssignmentHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -28640,7 +28640,7 @@ func (_m *WorkflowAssignmentTargetHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -28984,7 +28984,7 @@ func (_m *WorkflowDefinitionHistoryQuery) Paginate(
 		window, offset := limit, 0
 		for len(nodes) < limit {
 			fetchCtx, rawCount := contextx.WithRawCount(ctx)
-			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -29122,4 +29122,674 @@ func (_m *WorkflowDefinitionHistory) ToEdge(order *WorkflowDefinitionHistoryOrde
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ActionPlanHistoryQuery) clonePage() *ActionPlanHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentHistoryQuery) clonePage() *AssessmentHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentPolicyHistoryQuery) clonePage() *AssessmentPolicyHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentResponseHistoryQuery) clonePage() *AssessmentResponseHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssetHistoryQuery) clonePage() *AssetHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CampaignHistoryQuery) clonePage() *CampaignHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CampaignTargetHistoryQuery) clonePage() *CampaignTargetHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ContactHistoryQuery) clonePage() *ContactHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlHistoryQuery) clonePage() *ControlHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlImplementationHistoryQuery) clonePage() *ControlImplementationHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ControlObjectiveHistoryQuery) clonePage() *ControlObjectiveHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *CustomDomainHistoryQuery) clonePage() *CustomDomainHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DiscussionHistoryQuery) clonePage() *DiscussionHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *DocumentDataHistoryQuery) clonePage() *DocumentDataHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EmailTemplateHistoryQuery) clonePage() *EmailTemplateHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EntityHistoryQuery) clonePage() *EntityHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EntityTypeHistoryQuery) clonePage() *EntityTypeHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *EvidenceHistoryQuery) clonePage() *EvidenceHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FileHistoryQuery) clonePage() *FileHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FindingControlHistoryQuery) clonePage() *FindingControlHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *FindingHistoryQuery) clonePage() *FindingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupHistoryQuery) clonePage() *GroupHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupMembershipHistoryQuery) clonePage() *GroupMembershipHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *GroupSettingHistoryQuery) clonePage() *GroupSettingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *HushHistoryQuery) clonePage() *HushHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *IdentityHolderHistoryQuery) clonePage() *IdentityHolderHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *InternalPolicyHistoryQuery) clonePage() *InternalPolicyHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *MappableDomainHistoryQuery) clonePage() *MappableDomainHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *MappedControlHistoryQuery) clonePage() *MappedControlHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NarrativeHistoryQuery) clonePage() *NarrativeHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NoteHistoryQuery) clonePage() *NoteHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NotificationPreferenceHistoryQuery) clonePage() *NotificationPreferenceHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *NotificationTemplateHistoryQuery) clonePage() *NotificationTemplateHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrgMembershipHistoryQuery) clonePage() *OrgMembershipHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrganizationHistoryQuery) clonePage() *OrganizationHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OrganizationSettingHistoryQuery) clonePage() *OrganizationSettingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *PlatformHistoryQuery) clonePage() *PlatformHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProcedureHistoryQuery) clonePage() *ProcedureHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProgramHistoryQuery) clonePage() *ProgramHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ProgramMembershipHistoryQuery) clonePage() *ProgramMembershipHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *RemediationHistoryQuery) clonePage() *RemediationHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ReviewHistoryQuery) clonePage() *ReviewHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *RiskHistoryQuery) clonePage() *RiskHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SLADefinitionHistoryQuery) clonePage() *SLADefinitionHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *StandardHistoryQuery) clonePage() *StandardHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SubcontrolHistoryQuery) clonePage() *SubcontrolHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SubprocessorHistoryQuery) clonePage() *SubprocessorHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *SystemDetailHistoryQuery) clonePage() *SystemDetailHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TaskHistoryQuery) clonePage() *TaskHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TemplateHistoryQuery) clonePage() *TemplateHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterComplianceHistoryQuery) clonePage() *TrustCenterComplianceHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterDocHistoryQuery) clonePage() *TrustCenterDocHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterEntityHistoryQuery) clonePage() *TrustCenterEntityHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterFAQHistoryQuery) clonePage() *TrustCenterFAQHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterHistoryQuery) clonePage() *TrustCenterHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterNDARequestHistoryQuery) clonePage() *TrustCenterNDARequestHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterSettingHistoryQuery) clonePage() *TrustCenterSettingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterSubprocessorHistoryQuery) clonePage() *TrustCenterSubprocessorHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *TrustCenterWatermarkConfigHistoryQuery) clonePage() *TrustCenterWatermarkConfigHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *UserHistoryQuery) clonePage() *UserHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *UserSettingHistoryQuery) clonePage() *UserSettingHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VendorRiskScoreHistoryQuery) clonePage() *VendorRiskScoreHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VendorScoringConfigHistoryQuery) clonePage() *VendorScoringConfigHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *VulnerabilityHistoryQuery) clonePage() *VulnerabilityHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowAssignmentHistoryQuery) clonePage() *WorkflowAssignmentHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowAssignmentTargetHistoryQuery) clonePage() *WorkflowAssignmentTargetHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *WorkflowDefinitionHistoryQuery) clonePage() *WorkflowDefinitionHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
 }

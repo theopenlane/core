@@ -50,12 +50,12 @@ type integrationInstallationEntry struct {
 	Name string `json:"name"`
 }
 
-// integrationCredentialEntry captures workflow metadata for one provider credential slot
+// integrationCredentialEntry captures workflow metadata for one provider connection credential
 type integrationCredentialEntry struct {
-	Ref         types.CredentialSlotID `json:"ref"`
-	Name        string                 `json:"name,omitempty"`
-	Description string                 `json:"description,omitempty"`
-	Schema      json.RawMessage        `json:"schema,omitempty"`
+	Ref         string          `json:"ref"`
+	Name        string          `json:"name,omitempty"`
+	Description string          `json:"description,omitempty"`
+	Schema      json.RawMessage `json:"schema,omitempty"`
 }
 
 // integrationOperationEntry captures workflow metadata for one operation
@@ -100,11 +100,11 @@ func integrationWorkflowProviders(ctx context.Context, rt *intr.Runtime, db *ent
 
 	orgAvailability := resolveOrgIntegrationAvailability(ctx, db)
 
-	specs := rt.Catalog()
+	specs := rt.Registry().Catalog()
 	entries := make([]integrationProviderExtensions, 0, len(specs))
 
 	for _, spec := range specs {
-		def, ok := rt.Definition(spec.ID)
+		def, ok := rt.Registry().Definition(spec.ID)
 		if !ok {
 			continue
 		}
@@ -115,19 +115,19 @@ func integrationWorkflowProviders(ctx context.Context, rt *intr.Runtime, db *ent
 			Category:    spec.Category,
 		}
 
-		if lo.ContainsBy(def.Connections, func(connection types.ConnectionRegistration) bool {
-			return connection.Auth != nil && connection.Auth.Start != nil
-		}) {
-			entry.HasAuth = true
-		}
+		connections := def.ConnectionList()
 
-		if len(def.CredentialRegistrations) > 0 {
-			entry.CredentialSchemas = lo.Map(def.CredentialRegistrations, func(credential types.CredentialRegistration, _ int) integrationCredentialEntry {
+		entry.HasAuth = lo.ContainsBy(connections, func(c types.Connection) bool {
+			return c.Auth != nil
+		})
+
+		if len(connections) > 0 {
+			entry.CredentialSchemas = lo.Map(connections, func(c types.Connection, _ int) integrationCredentialEntry {
 				return integrationCredentialEntry{
-					Ref:         credential.Ref,
-					Name:        credential.Name,
-					Description: credential.Description,
-					Schema:      jsonx.CloneRawMessage(credential.Schema),
+					Ref:         c.Credential.Name,
+					Name:        c.Name,
+					Description: c.Description,
+					Schema:      jsonx.CloneRawMessage(c.Form),
 				}
 			})
 		}
@@ -245,7 +245,7 @@ func buildOperationEntries(ops []types.OperationRegistration) []integrationOpera
 		return integrationOperationEntry{
 			Name:         op.Name,
 			Description:  op.Description,
-			ConfigSchema: jsonx.CloneRawMessage(op.ConfigSchema),
+			ConfigSchema: jsonx.CloneRawMessage(op.Input.Schema),
 		}
 	})
 }

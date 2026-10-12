@@ -3,10 +3,12 @@ package summarizer
 import (
 	"bytes"
 	"context"
+	"html"
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
 	goldmarkparser "github.com/yuin/goldmark/parser"
 	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 )
@@ -55,7 +57,7 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 	// also convert markdown to HTML before sanitizing
 	sanitizedSentence := string(mdToHTML([]byte(sentence)))
 
-	sanitizedSentence = s.sanitizer.Sanitize(sanitizedSentence)
+	sanitizedSentence = html.UnescapeString(s.sanitizer.Sanitize(sanitizedSentence))
 
 	if strings.TrimSpace(sanitizedSentence) == "" {
 		return "", nil
@@ -66,6 +68,7 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 
 func mdToHTML(md []byte) []byte {
 	gm := goldmark.New(
+		goldmark.WithExtensions(extension.Table),
 		goldmark.WithParserOptions(
 			goldmarkparser.WithAutoHeadingID(),
 		),

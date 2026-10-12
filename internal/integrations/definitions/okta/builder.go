@@ -1,124 +1,45 @@
 package okta
 
 import (
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Okta definition builder
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Okta",
-				DisplayName: "Okta",
-				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance.",
-				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/okta",
-				Tags:        []string{"directory"},
-				Active:      false,
-				Visible:     true,
-			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         oktaCredential.ID(),
-					Name:        "Okta Credential",
-					Description: "API token used to access Okta organization data.",
-					Schema:      oktaCredentialSchema,
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  oktaCredential.ID(),
-					Name:           "Okta API Token",
-					Description:    "Configure Okta access using an API token from your organization.",
-					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
-					ClientRefs:     []types.ClientID{oktaClient.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: oktaClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: integration.Registration(),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: oktaCredential.ID(),
-						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				{
-					Ref:            oktaClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
-					Description:    "Okta API client",
-					Build:          Client{}.Build,
-				},
+			ID:           definitionID.ID(),
+			Family:       "Okta",
+			DisplayName:  "Okta",
+			Description:  "Collect Okta tenant and sign-on policy metadata for identity posture and access governance.",
+			Category:     "identity",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/okta",
+			Tags:         []string{"directory"},
+			Active:       false,
+			Visible:      true,
+			UserInput:    userInput.Registration(),
+			Installation: installation.Registration(),
+			Connections: []types.Connector{
+				oktaConnection.
+					Name("Okta API Token").
+					Description("Configure Okta access using an API token from your organization.").
+					Provides(buildClient).
+					Verified(verify).
+					Disconnects("Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect Okta directory users, groups, and memberships as directory accounts",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    oktaClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaDirectoryAccount.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryGroup.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryMembership.Name,
-						},
-					},
-					IngestHandle:        DirectorySync{}.IngestHandle(),
-					SkipDefaultLookback: true,
-				},
+				types.OperationRefOf[DirectorySync]().
+					Ingests(runDirectorySync).
+					HealthCheck(probeUser).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					SkipDefaultLookback().
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Description("Collect Okta directory users, groups, and memberships as directory accounts").
+					Registration(),
 			},
-			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaDirectoryAccount.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryAccount,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryGroup.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryGroup,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryMembership.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryMembership,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaDirectoryAccount.Name,
-								TargetField:  directoryaccount.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
-							},
-							{
-								TargetSchema: entityops.SchemaDirectoryGroup.Name,
-								TargetField:  directorygroup.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
-							},
-						},
-					},
-				},
-			},
+			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil
 	})
 }

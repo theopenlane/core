@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"maps"
+	"slices"
 	"strings"
 	"time"
 
@@ -22,25 +23,21 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one integration
-func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, integration *ent.Integration, previousIntegrationID string) error {
+// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one integration through db
+func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, db *ent.Client, integration *ent.Integration, previousIntegrationID string) error {
 	def, err := r.resolveDefinitionForInstallation(integration)
 	if err != nil {
 		return err
 	}
 
-	db := r.DB()
 	existing, err := db.IntegrationWebhook.Query().Where(integrationwebhook.IntegrationIDEQ(integration.ID), integrationwebhook.ExternalEventIDIsNil()).All(ctx)
 	if err != nil {
 		return err
 	}
 
-	currentWebhooks := lo.Associate(def.Webhooks, func(w types.WebhookRegistration) (string, struct{}) {
-		return w.Name, struct{}{}
-	})
-
 	staleIDs := lo.FilterMap(existing, func(row *ent.IntegrationWebhook, _ int) (string, bool) {
-		_, current := currentWebhooks[row.Name]
+		_, _, current := def.ResolveWebhook(row.Name)
+
 		return row.ID, !current
 	})
 
@@ -51,7 +48,7 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, integration
 	}
 
 	for _, webhook := range def.Webhooks {
-		if _, err := r.ensureWebhook(ctx, integration, webhook, previousIntegrationID); err != nil {
+		if _, err := r.ensureWebhook(ctx, db, integration, webhook, previousIntegrationID); err != nil {
 			return err
 		}
 	}
@@ -123,14 +120,12 @@ func (r *Runtime) EnsureWebhook(ctx context.Context, integration *ent.Integratio
 		return nil, err
 	}
 
-	webhook, found := lo.Find(def.Webhooks, func(w types.WebhookRegistration) bool {
-		return w.Name == webhookName
-	})
+	webhook, found := def.Webhook(webhookName)
 	if !found {
 		return nil, registry.ErrWebhookNotFound
 	}
 
-	return r.ensureWebhook(ctx, integration, webhook, previousIntegrationID)
+	return r.ensureWebhook(ctx, r.DB(), integration, webhook, previousIntegrationID)
 }
 
 // DispatchWebhookEvent emits one normalized integration webhook event through Gala.
@@ -191,7 +186,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	if !src.Runtime {
 		var err error
 
-		integration, err = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
+		integration, err = r.resolveCurrentIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
 		if err != nil {
 			return err
 		}
@@ -250,13 +245,11 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	})
 }
 
-// ensureWebhook creates or updates the persisted webhook row for one integration and webhook registration
-func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
+// ensureWebhook creates or updates the persisted webhook row for one integration and webhook registration through db
+func (r *Runtime) ensureWebhook(ctx context.Context, db *ent.Client, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {
 		return event.Name
 	})
-
-	db := r.DB()
 
 	integrationIDs := []string{intg.ID}
 	if previousIntegrationID != "" {
@@ -266,9 +259,10 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	rows, err := db.IntegrationWebhook.Query().
 		Where(
 			integrationwebhook.IntegrationIDIn(integrationIDs...),
-			integrationwebhook.NameEQ(registration.Name),
+			integrationwebhook.NameIn(append(slices.Clone(registration.Replaces), registration.Name)...),
 			integrationwebhook.ExternalEventIDIsNil(),
 		).
+		Order(integrationwebhook.ByCreatedAt()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -296,10 +290,15 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 		return create.Save(ctx)
 	}
 
-	row := rows[0]
+	row, renamed := lo.Find(rows, func(candidate *ent.IntegrationWebhook) bool {
+		return candidate.Name != registration.Name
+	})
+	if !renamed {
+		row = rows[0]
+	}
+
 	endpointURL := webhookEndpointURL(registration, lo.FromPtr(row.EndpointID))
 
-	// remove duplicates that should not exist
 	duplicateIDs := lo.FilterMap(rows, func(candidate *ent.IntegrationWebhook, _ int) (string, bool) {
 		return candidate.ID, candidate.ID != row.ID
 	})
@@ -313,6 +312,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	}
 
 	update := db.IntegrationWebhook.UpdateOneID(row.ID).
+		SetName(registration.Name).
 		SetAllowedEvents(allowedEvents).
 		SetEndpointURL(endpointURL)
 

@@ -2,14 +2,12 @@ package googledrive
 
 import (
 	"context"
-	"fmt"
 
 	"google.golang.org/api/drive/v3"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -20,34 +18,22 @@ const (
 	googleDocMIMEType = "application/vnd.google-apps.document"
 )
 
-// FolderSync lists Google Docs in a configured folder and emits ingest envelopes for policy creation
-type FolderSync struct{}
-
-// IngestHandle adapts folder sync to the ingest operation registration boundary
-func (f FolderSync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(driveClient, func(ctx context.Context, request types.OperationRequest, svc DriveClient) ([]types.IngestPayloadSet, error) {
-		var input UserInput
-
-		// a malformed client config is a different failure than one that never had a folder selected
-		if err := jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &input); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("client_config_bytes", len(request.Integration.Config.ClientConfig)).Msg("googledrive: installation client config could not be decoded into user input")
-
-			return nil, fmt.Errorf("%w: %w", ErrUserInputInvalid, err)
-		}
-
-		folderID := parseFolderID(input.FolderID)
-		if folderID == "" {
-			logx.FromContext(ctx).Error().Int("client_config_bytes", len(request.Integration.Config.ClientConfig)).Bool("folder_id_present", input.FolderID != "").Msg("googledrive: no folder id in the installation user input, the integration needs to be reconfigured with a folder selected")
-
-			return nil, ErrFolderIDMissing
-		}
-
-		return f.Run(ctx, svc, folderID)
-	})
+// FolderSync lists Google Docs in a folder and emits ingest envelopes
+type FolderSync struct {
+	types.OperationSettings
+	// FolderID is the Google Drive folder ID or URL containing policy documents
+	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents,required"`
 }
 
-// Run lists all Google Docs in the given folder and returns ingest payload sets
-func (FolderSync) Run(ctx context.Context, svc DriveClient, folderID string) ([]types.IngestPayloadSet, error) {
+// runFolderSync lists all Google Docs in the configured folder and returns ingest payload sets
+func runFolderSync(ctx context.Context, _ types.OperationRequest, svc DriveClient, cfg FolderSync) ([]types.IngestPayloadSet, error) {
+	folderID := parseFolderID(cfg.FolderID)
+	if folderID == "" {
+		logx.FromContext(ctx).Error().Bool("folder_id_present", cfg.FolderID != "").Msg("googledrive: no folder id in the installation user input, the integration needs to be reconfigured with a folder selected")
+
+		return nil, ErrFolderIDMissing
+	}
+
 	files, err := listFolderDocs(ctx, svc, folderID)
 	if err != nil {
 		return nil, err
