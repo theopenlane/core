@@ -35,7 +35,7 @@ const (
 	DefaultHost     = "http://localhost:17608"
 	DefaultEmail    = "mitb@theopenlane.io"
 	DefaultPassword = "mattisthebest1234"
-	DefaultAuthMode = "auto"
+	DefaultAuthMode = "credentials"
 )
 
 // Options configures the CLI config loader

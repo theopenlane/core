@@ -3,19 +3,17 @@ package system
 import (
 	"time"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // DefinitionID is the canonical identifier for the system definition
 var DefinitionID = types.NewDefinitionRef("def_01SYSTEM0000000000000000001")
 
 const (
-	// DefaultPaymentMethodInterval is the default number of days after org creation
-	// before an org without a payment method is marked for deletion
+	// DefaultPaymentMethodInterval is the default days before an org is marked for deletion
 	DefaultPaymentMethodInterval = 30
-	// DefaultDeletionDays is the default number of days between marking an org
-	// for deletion and the actual deletion
+	// DefaultDeletionDays is the default days between marking and deleting an org
 	DefaultDeletionDays = 7
 	// PaymentReminderMinInterval is the minimum polling interval for payment reminder sweeps
 	PaymentReminderMinInterval = 6 * time.Hour
@@ -27,7 +25,7 @@ const (
 	OrganizationDeleteMinInterval = 24 * time.Hour
 	// OrganizationDeleteMaxInterval is the maximum polling interval for organization deletion sweeps
 	OrganizationDeleteMaxInterval = 24 * time.Hour
-	// DefaultIntegrationLifecycleMaxPerRun is the default maximum number of integrations evaluated per sweep
+	// DefaultIntegrationLifecycleMaxPerRun caps integrations evaluated per sweep
 	DefaultIntegrationLifecycleMaxPerRun = 100
 	// IntegrationLifecycleMinInterval is the minimum polling interval for integration lifecycle sweeps
 	IntegrationLifecycleMinInterval = 6 * time.Hour
@@ -37,11 +35,9 @@ const (
 
 // PaymentReminderConfig contains the operator configuration for the payment reminder sweep
 type PaymentReminderConfig struct {
-	// PaymentMethodInterval is the number of days after org creation before
-	// an org without a payment method is marked for deletion
+	// PaymentMethodInterval is the days after org creation before deletion is marked
 	PaymentMethodInterval uint8 `json:"paymentmethodinterval" koanf:"paymentmethodinterval" jsonschema:"default=30,description=Days after org creation before marking for deletion"`
-	// DeletionDays is the number of days between marking an org for deletion
-	// and the actual deletion date set on pending_deletion_at
+	// DeletionDays is the days between marking an org for deletion and deleting it
 	DeletionDays uint8 `json:"deletiondays" koanf:"deletiondays" jsonschema:"default=7,description=Days between marking and actual deletion"`
 	// Enabled controls whether the payment reminder sweep is seeded at startup
 	Enabled bool `json:"enabled" koanf:"enabled" jsonschema:"default=false,description=Whether the payment reminder listener is enabled"`
@@ -57,7 +53,7 @@ type OrganizationDeleteConfig struct {
 	Enabled bool `json:"enabled" koanf:"enabled" jsonschema:"description=Whether the organization deletion listener is enabled"`
 }
 
-// IntegrationLifecycleConfig contains the operator configuration for the integration lifecycle sweep
+// IntegrationLifecycleConfig configures the integration lifecycle sweep
 type IntegrationLifecycleConfig struct {
 	// Enabled controls whether the integration lifecycle sweep is seeded at startup
 	Enabled bool `json:"enabled" koanf:"enabled" default:"true" jsonschema:"default=true,description=Whether the integration lifecycle sweep is enabled"`
@@ -91,7 +87,7 @@ func (c IntegrationLifecycleConfig) Sweep() IntegrationLifecycleSweep {
 
 // PaymentReminderSweep configures one payment reminder sweep cycle
 type PaymentReminderSweep struct {
-	// PaymentMethodInterval is the number of days after cancellation before an org is marked for deletion
+	// PaymentMethodInterval is the days after cancellation before deletion is marked
 	PaymentMethodInterval uint8 `json:"paymentMethodInterval,omitempty"`
 	// DeletionDays is the number of days between marking an org for deletion and the actual deletion
 	DeletionDays uint8 `json:"deletionDays,omitempty"`
@@ -114,7 +110,22 @@ type IntegrationLifecycleSweep struct {
 }
 
 var (
-	paymentReminderSweepSchema, PaymentReminderOp           = providerkit.OperationSchema[PaymentReminderSweep]()      //nolint:revive
-	organizationDeleteSweepSchema, OrganizationDeleteOp     = providerkit.OperationSchema[OrganizationDeleteSweep]()   //nolint:revive
-	integrationLifecycleSweepSchema, IntegrationLifecycleOp = providerkit.OperationSchema[IntegrationLifecycleSweep]() //nolint:revive
+	// PaymentReminderOp is the operation ref for the payment reminder sweep
+	PaymentReminderOp = types.OperationPayloadOf[PaymentReminderSweep](). //nolint:revive
+				Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).
+				Schedule(&gala.Schedule{MinInterval: PaymentReminderMinInterval, MaxInterval: PaymentReminderMaxInterval}).
+				CustomerSelectable(false).
+				SkipDefaultLookback()
+	// OrganizationDeleteOp is the operation ref for the organization deletion sweep
+	OrganizationDeleteOp = types.OperationPayloadOf[OrganizationDeleteSweep](). //nolint:revive
+				Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).
+				Schedule(&gala.Schedule{MinInterval: OrganizationDeleteMinInterval, MaxInterval: OrganizationDeleteMaxInterval}).
+				CustomerSelectable(false).
+				SkipDefaultLookback()
+	// IntegrationLifecycleOp is the operation ref for the integration lifecycle sweep
+	IntegrationLifecycleOp = types.OperationPayloadOf[IntegrationLifecycleSweep](). //nolint:revive
+				Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).
+				Schedule(&gala.Schedule{MinInterval: IntegrationLifecycleMinInterval, MaxInterval: IntegrationLifecycleMaxInterval}).
+				CustomerSelectable(false).
+				SkipDefaultLookback()
 )

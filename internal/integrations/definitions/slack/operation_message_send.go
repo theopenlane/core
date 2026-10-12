@@ -3,6 +3,7 @@ package slack
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/samber/lo"
 	slackgo "github.com/slack-go/slack"
@@ -11,6 +12,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
+
+// MessageSendOp is the operation ref for the Slack message send operation
+var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(MessageSend{}.Run).Permissions(scopes...) //nolint:revive
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
@@ -50,11 +54,6 @@ type MessageDelivery struct {
 	TS string `json:"ts"`
 }
 
-// Handle adapts message send to the generic operation registration boundary
-func (m MessageSend) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(slackClient, MessageSendOp, ErrOperationConfigInvalid, m.Run)
-}
-
 // Run sends a Slack message via chat.postMessage
 func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *SlackClient, cfg MessageSendOperation) (json.RawMessage, error) {
 	if err := templatekit.ResolveOperationTemplate(ctx, req, cfg.TemplateID, cfg.TemplateKey, &cfg); err != nil {
@@ -83,10 +82,10 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *Slack
 		var blocks slackgo.Blocks
 		encoded, err := json.Marshal(cfg.Blocks)
 		if err != nil {
-			return nil, ErrOperationConfigInvalid
+			return nil, fmt.Errorf("%w: %w", types.ErrOperationConfigInvalid, err)
 		}
 		if err := json.Unmarshal(encoded, &blocks); err != nil {
-			return nil, ErrOperationConfigInvalid
+			return nil, fmt.Errorf("%w: %w", types.ErrOperationConfigInvalid, err)
 		}
 
 		opts = append(opts, slackgo.MsgOptionBlocks(blocks.BlockSet...))

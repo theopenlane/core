@@ -12,6 +12,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/samber/lo"
 	slackgo "github.com/slack-go/slack"
 	"github.com/stretchr/testify/require"
 )
@@ -196,12 +197,18 @@ func TestSlackClientSendTextNoChannelConfigured(t *testing.T) {
 func TestAllSlackSystemMessagesWiredToMessageClient(t *testing.T) {
 	t.Parallel()
 
+	def, err := Builder(Config{}, nil, false)()
+	require.NoError(t, err)
+
+	clientNames := lo.Keys(def.ConnectionList()[0].Clients)
+	require.Len(t, clientNames, 1)
+
 	regs := AllSlackSystemMessages()
 	require.NotEmpty(t, regs)
 
 	for _, reg := range regs {
-		if reg.ClientRef != slackClient.ID() {
-			t.Fatalf("op %s has ClientRef %v, want %v", reg.Name, reg.ClientRef, slackClient.ID())
+		if reg.ClientRef != clientNames[0] {
+			t.Fatalf("op %s has ClientRef %v, want %v", reg.Name, reg.ClientRef, clientNames[0])
 		}
 
 		require.True(t, reg.Policy.SkipRunRecord, "op %s must be SkipRunRecord", reg.Name)

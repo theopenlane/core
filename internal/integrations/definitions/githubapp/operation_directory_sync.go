@@ -8,7 +8,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/shurcooL/githubv4"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -117,15 +116,8 @@ type orgNode struct {
 	Login string
 }
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(gitHubClient, directorySyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client GraphQLClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
-		return cfg.Run(ctx, client)
-	})
-}
-
-// Run collects GitHub organization members, teams, and team memberships for directory ingest
-func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.IngestPayloadSet, error) {
+// runDirectorySync collects GitHub org members, teams, and team memberships for directory ingest
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client GraphQLClient, cfg providerkit.DirectorySync) ([]types.IngestPayloadSet, error) {
 	orgs, err := queryViewerOrganizations(ctx, client)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("githubapp_directorysync: failed to discover organizations")
@@ -172,7 +164,7 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 
 		logx.FromContext(ctx).Info().Str("org", org.Login).Int("member_count", len(orgMembers)).Bool("saml_available", samlMap != nil).Msg("githubapp_directorysync: queried organization members")
 
-		if d.DisableGroupSync {
+		if cfg.DisableGroupSync {
 			continue
 		}
 
@@ -211,37 +203,18 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 		logx.FromContext(ctx).Info().Str("org", org.Login).Int("team_count", len(teams)).Int("membership_count", len(memberships)).Msg("githubapp_directorysync: queried organization teams")
 	}
 
-	logx.FromContext(ctx).Info().Int("org_count", len(orgs)).Int("member_count", len(userAccountEnvelopes)).Int("team_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Bool("group_sync_disabled", d.DisableGroupSync).Msg("githubapp_directorysync: collected directory records")
+	logx.FromContext(ctx).Info().Int("org_count", len(orgs)).Int("member_count", len(userAccountEnvelopes)).Int("team_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Bool("group_sync_disabled", cfg.DisableGroupSync).Msg("githubapp_directorysync: collected directory records")
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        userAccountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(userAccountEnvelopes)
 
-	if !d.DisableGroupSync {
-		payloadSets = append(payloadSets,
-			types.IngestPayloadSet{
-				Schema:           entityops.SchemaDirectoryGroup.Name,
-				Envelopes:        groupEnvelopes,
-				SnapshotComplete: groupsComplete,
-			},
-			types.IngestPayloadSet{
-				Schema:           entityops.SchemaDirectoryMembership.Name,
-				Envelopes:        membershipEnvelopes,
-				SnapshotComplete: groupsComplete,
-			},
-		)
+	if !cfg.DisableGroupSync {
+		payloadSets = append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, groupsComplete)...)
 	}
 
 	return payloadSets, nil
 }
 
-// resolveCanonicalEmail sets the best email for a member using the priority chain:
-// SAML nameId > organization verified domain email > public profile email, and collects
-// every remaining confirmed email as an alias for identity resolution
+// resolveCanonicalEmail sets the best email for a member and collects remaining confirmed aliases
 func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentity) {
 	if samlMap != nil {
 		if saml, ok := samlMap[member.Login]; ok {
@@ -266,9 +239,6 @@ func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentit
 }
 
 // queryViewerOrganizations discovers organizations accessible to the GitHub App installation
-// by extracting unique organization owners from the installation's accessible repositories.
-// The viewer.organizations query returns empty for GitHub App bot users because the bot
-// is not an organization member.
 func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgNode, error) {
 	seen := make(map[string]struct{})
 	var orgs []orgNode
@@ -325,8 +295,7 @@ func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgN
 	return orgs, nil
 }
 
-// queryExternalIdentities queries SAML external identities for an organization.
-// Returns nil, nil when the organization has no SAML identity provider configured.
+// queryExternalIdentities queries SAML external identities for an organization
 func queryExternalIdentities(ctx context.Context, client GraphQLClient, orgLogin string) (map[string]samlIdentity, error) {
 	identities := make(map[string]samlIdentity)
 	var after *githubv4.String

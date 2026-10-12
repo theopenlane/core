@@ -17,44 +17,25 @@ const microsoftAuthBaseURL = "https://login.microsoftonline.com/%s/oauth2/v2.0"
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Microsoft",
-				DisplayName: "Microsoft OneDrive",
-				Description: "Live, read-only integration with Microsoft OneDrive for document management and policy sync.",
-				Category:    "document",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/onedrive/overview",
-				Tags:        []string{"document"},
-				Active:      true,
-				Visible:     true,
-			},
+			ID:          definitionID.ID(),
+			Family:      "Microsoft",
+			DisplayName: "Microsoft OneDrive",
+			Description: "Live, read-only integration with Microsoft OneDrive for document management and policy sync.",
+			Category:    "document",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/onedrive/overview",
+			Tags:        []string{"document"},
+			Active:      true,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         oneDriveCredential.ID(),
-					Name:        "OneDrive Credential",
-					Description: "OAuth credential used to access Microsoft OneDrive documents.",
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  oneDriveCredential.ID(),
-					Name:           "OneDrive OAuth",
-					Description:    "Connect your Microsoft account using OAuth to access OneDrive documents.",
-					CredentialRefs: []types.CredentialSlotID{oneDriveCredential.ID()},
-					ClientRefs:     []types.ClientID{oneDriveClient.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: oneDriveClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
-					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
-						CredentialRef: oneDriveCredential,
+			UserInput:    userInput.Registration(),
+			Installation: installation.Registration(),
+			Connections: []types.Connector{
+				oauthConnection.
+					Name("OneDrive OAuth").
+					Description("Connect your Microsoft account using OAuth to access OneDrive documents.").
+					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
@@ -75,46 +56,20 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,
-					}),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: oneDriveCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Microsoft account under Account settings > Privacy.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				{
-					Ref:            oneDriveClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{oneDriveCredential.ID()},
-					Description:    "Microsoft OneDrive Graph API client",
-					Build:          Client{cfg: cfg}.Build,
-				},
+					})).
+					Provides(clientBuilder(cfg)).
+					Verified(verify).
+					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Microsoft account under Account settings > Privacy.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         documentExportOperation.Name(),
-					Description:  "Download a OneDrive file and return its content",
-					Topic:        definitionID.OperationTopic(documentExportOperation.Name()),
-					ClientRef:    oneDriveClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: documentExportSchema,
-					Handle:       Handle(),
-				},
-				{
-					Name:        folderSyncOperation.Name(),
-					Description: "List document files in the configured OneDrive folder and emit policy ingest envelopes",
-					Topic:       definitionID.OperationTopic(folderSyncOperation.Name()),
-					ClientRef:   oneDriveClient.ID(),
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaInternalPolicy.Name,
-						},
-					},
-					IngestHandle: FolderSync{}.IngestHandle(),
-					ConfigSchema: folderSyncSchema,
-					Schedule:     gala.NewFullFetchSchedule(),
-				},
+				documentExportOperation.Description("Download a OneDrive file and return its content").Registration(),
+				types.OperationRefOf[FolderSync]().
+					Ingests(runFolderSync).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaInternalPolicy.Name}).
+					Schedule(gala.NewFullFetchSchedule()).
+					Description("List document files in the configured OneDrive folder and emit policy ingest envelopes").
+					Registration(),
 			},
 			Mappings: []types.MappingRegistration{
 				{

@@ -1,0 +1,171 @@
+{
+  "hash": "c87f5da9dc23cfc07f9e30047cd04a06c3ae450a0052db335cce4fc72d5782be",
+  "version": "01M49CHH2NPBMN1CMF8WS6QFXK",
+  "surface": {
+    "id": "def_01K0GHAPP000000000000000001",
+    "credentials": [
+      {
+        "ref": "githubAppCredential",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/github-app-credential",
+          "$ref": "#/$defs/githubAppCredential",
+          "$defs": {
+            "githubAppCredential": {
+              "properties": {
+                "appId": {
+                  "type": "integer"
+                },
+                "installationId": {
+                  "type": "integer"
+                },
+                "accessToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "organizationName": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ],
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "installationId": {
+                "type": "string",
+                "title": "installation ID"
+              },
+              "organizationName": {
+                "type": "string",
+                "title": "organization"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "githubAppCredential"
+    ],
+    "operations": [
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/providerkit/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "disableGroupSync": {
+                  "type": "boolean",
+                  "title": "Disable Group Sync",
+                  "description": "Only sync users and skip group and membership sync"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "RepositorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/repository-sync",
+          "$ref": "#/$defs/RepositorySync",
+          "$defs": {
+            "RepositorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "VulnerabilitySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/vulnerability-sync",
+          "$ref": "#/$defs/VulnerabilitySync",
+          "$defs": {
+            "VulnerabilitySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "maxRepos": {
+                  "type": "integer",
+                  "title": "Max Repositories",
+                  "description": "Optional cap on the number of repositories to scan."
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        },
+        "upgrade": true
+      }
+    ],
+    "webhooks": [
+      {
+        "name": "installation.events",
+        "events": [
+          "code_scanning_alert",
+          "dependabot_alert",
+          "installation.created",
+          "installation.deleted",
+          "ping",
+          "secret_scanning_alert"
+        ]
+      }
+    ]
+  }
+}

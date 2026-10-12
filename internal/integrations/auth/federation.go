@@ -7,7 +7,6 @@ import (
 
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/oidc"
 )
 
@@ -24,10 +23,10 @@ type FederationSpec struct {
 }
 
 // FederatedTokenSource builds a caching token source authenticating the installation's organization via identity federation
-func FederatedTokenSource(ctx context.Context, req types.ClientBuildRequest, spec FederationSpec) (oauth2.TokenSource, error) {
+func FederatedTokenSource(ctx context.Context, manager *tokens.TokenManager, organizationID string, spec FederationSpec) (oauth2.TokenSource, error) {
 	return oidc.NewTokenSource(ctx, oidc.FederationSource{
-		Manager:          req.TokenManager,
-		OrganizationID:   req.Integration.OwnerID,
+		Manager:          manager,
+		OrganizationID:   organizationID,
 		Audience:         spec.Audience,
 		Scopes:           spec.Scopes,
 		Endpoint:         spec.Endpoint,

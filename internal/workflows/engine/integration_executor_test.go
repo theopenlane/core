@@ -54,7 +54,7 @@ func TestEvaluateInstallationScope(t *testing.T) {
 	}
 }
 
-func TestEvaluateInstallationScopeUsesClientConfig(t *testing.T) {
+func TestEvaluateInstallationScopeUsesUserInput(t *testing.T) {
 	t.Parallel()
 
 	evaluator, err := NewIntegrationScopeEvaluator()
@@ -68,8 +68,9 @@ func TestEvaluateInstallationScopeUsesClientConfig(t *testing.T) {
 		Metadata: map[string]any{
 			"environment": "stale",
 		},
-		Config: integrationtypes.IntegrationConfig{
-			ClientConfig: json.RawMessage(`{"environment":"prod"}`),
+		UserInput: integrationtypes.IntegrationUserInput{
+			Layout: "UserInput",
+			Data:   json.RawMessage(`{"environment":"prod"}`),
 		},
 	}
 
@@ -81,6 +82,6 @@ func TestEvaluateInstallationScopeUsesClientConfig(t *testing.T) {
 		t.Fatalf("expected no error, got %v", err)
 	}
 	if !allowed {
-		t.Fatal("expected scope condition to read integration.Config.ClientConfig")
+		t.Fatal("expected scope condition to read integration.UserInput.Data")
 	}
 }

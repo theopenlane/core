@@ -5,46 +5,63 @@ import (
 	"fmt"
 
 	admin "google.golang.org/api/admin/directory/v1"
+	"google.golang.org/api/googleapi"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// directoryDefaultPageSize is the number of records to request per page when listing users, groups, and members
+// directoryDefaultPageSize is the page size for listing directory records
 const directoryDefaultPageSize = int64(200)
 
 // defaultCustomerID is Google's alias for the authorized account's own customer
 const defaultCustomerID = "my_customer"
 
-// DirectorySync collects Google Workspace directory users for ingest
-type DirectorySync struct{}
+// probeMaxResults is the maximum number of users to fetch during the directory probe
+const probeMaxResults = int64(1)
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(workspaceClient, func(ctx context.Context, request types.OperationRequest, svc *admin.Service) ([]types.IngestPayloadSet, error) {
-		var meta InstallationMetadata
+// probeUsers verifies the connection can list Google Workspace users
+func probeUsers(ctx context.Context, _ types.OperationRequest, svc *admin.Service) error {
+	_, err := svc.Users.List().
+		Customer(defaultCustomerID).
+		MaxResults(probeMaxResults).
+		Projection("basic").
+		ViewType("admin_view").
+		Fields(googleapi.Field("users(id),nextPageToken")).
+		Context(ctx).
+		Do()
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("googleworkspace: users probe failed")
 
-		if err := jsonx.UnmarshalIfPresent(request.Integration.InstallationMetadata.Attributes, &meta); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Msg("googleworkspace: installation metadata could not be decoded")
+		return types.Degraded(ErrHealthCheckFailed, "the connection cannot list Google Workspace users; grant the directory scopes")
+	}
 
-			return nil, fmt.Errorf("%w: %w", ErrInstallationMetadataInvalid, err)
-		}
-
-		if meta.CustomerID == "" {
-			logx.FromContext(ctx).Error().Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Str("external_id", request.Integration.InstallationMetadata.Display.ExternalID).Str("domain", meta.Domain).Msg("googleworkspace: no customer id in installation metadata, the integration needs to be reauthorized")
-
-			return nil, types.Unhealthy(ErrCustomerIDMissing, "the Google Workspace connection is missing its customer identifier and needs to be reauthorized")
-		}
-
-		return d.Run(ctx, svc, meta.CustomerID)
-	})
+	return nil
 }
 
-// Run collects Google Workspace directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, svc *admin.Service, customerID string) ([]types.IngestPayloadSet, error) {
+// runDirectorySync collects Google Workspace directory users, groups, and memberships
+func runDirectorySync(ctx context.Context, request types.OperationRequest, svc *admin.Service, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+	var meta InstallationMetadata
+
+	if err := jsonx.UnmarshalIfPresent(request.Integration.InstallationMetadata.Attributes, &meta); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Msg("googleworkspace: installation metadata could not be decoded")
+
+		return nil, fmt.Errorf("%w: %w", ErrInstallationMetadataInvalid, err)
+	}
+
+	if meta.CustomerID == "" {
+		logx.FromContext(ctx).Error().Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Str("external_id", request.Integration.InstallationMetadata.Display.ExternalID).Str("domain", meta.Domain).Msg("googleworkspace: no customer id in installation metadata, the integration needs to be reauthorized")
+
+		return nil, types.Unhealthy(ErrCustomerIDMissing, "the Google Workspace connection is missing its customer identifier and needs to be reauthorized")
+	}
+
+	return collectDirectory(ctx, svc, meta.CustomerID)
+}
+
+// collectDirectory collects directory users, groups, and memberships for a customer
+func collectDirectory(ctx context.Context, svc *admin.Service, customerID string) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, svc, customerID)
 	if err != nil {
 		return nil, err
@@ -101,23 +118,7 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, customerID str
 		}
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-		{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	}, nil
+	return append(providerkit.DirectoryAccountPayloadSets(accountEnvelopes), providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // listDirectoryUsers pages through all Google Workspace users for the given customer
@@ -234,7 +235,7 @@ func listGroupMembers(ctx context.Context, svc *admin.Service, group *admin.Grou
 	return members, nil
 }
 
-// isIncludedUserMember reports whether a group member is a user that was included in the account ingest set
+// isIncludedUserMember reports whether a member is a user in the account ingest set
 func isIncludedUserMember(member *admin.Member, includedUsers map[string]struct{}) bool {
 	if member.Type != "" && member.Type != "USER" {
 		return false

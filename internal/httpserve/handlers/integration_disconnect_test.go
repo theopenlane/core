@@ -116,7 +116,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegration() {
 				installation, err := suite.db.Integration.Get(memberOrgOwner.UserCtx, tc.integrationID)
 				require.NoError(t, err)
 
-				credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(memberOrgOwner.UserCtx, installation, githubTestCredentialRef)
+				credential, ok, err := suite.keystore.LoadCredential(memberOrgOwner.UserCtx, installation, githubTestCredentialRef)
 				require.NoError(t, err)
 				require.True(t, ok)
 				assert.Contains(t, string(credential.Data), "secret")
@@ -129,18 +129,17 @@ func (suite *HandlerTestSuite) TestDisconnectIntegration() {
 func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
 	t.Helper()
 
-	rec, err := suite.db.Integration.Create().
-		SetOwnerID(orgID).
-		SetName(definitionID).
-		SetDefinitionID(definitionID).
-		Save(ctx)
+	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
+	assert.True(t, ok)
+
+	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def, nil, nil)
 	assert.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"secret"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, githubTestCredentialRef, &credential, nil)
+	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, githubTestCredentialRef, credential)
 	assert.NoError(t, err)
 
 	return rec.ID

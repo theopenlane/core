@@ -66,9 +66,12 @@ func addExportNotification(ctx context.Context, client *generated.Client, export
 		return nil
 	}
 
+	topic := enums.NotificationTopicExport
+
 	dataMap := map[string]any{
 		"export_id":   exportEntity.ID,
 		"export_type": exportEntity.ExportType.String(),
+		"url":         "/notifications?topic=" + topic.String(),
 	}
 
 	var title, body string
@@ -76,7 +79,7 @@ func addExportNotification(ctx context.Context, client *generated.Client, export
 	et := strings.ReplaceAll(strings.ToLower(exportEntity.ExportType.String()), "_", " ")
 	if exportEntity.Status == enums.ExportStatusReady {
 		title = "Export Complete"
-		body = fmt.Sprintf("Export of %s is ready for download", et)
+		body = fmt.Sprintf("Export of %s is ready, download it from your notifications", et)
 	} else {
 		title = "Export Failed"
 		body = fmt.Sprintf("Export of %s completed with errors", et)
@@ -86,7 +89,6 @@ func addExportNotification(ctx context.Context, client *generated.Client, export
 		}
 	}
 
-	topic := enums.NotificationTopicExport
 	notifInput := &generated.CreateNotificationInput{
 		NotificationType: enums.NotificationTypeUser,
 		Title:            title,

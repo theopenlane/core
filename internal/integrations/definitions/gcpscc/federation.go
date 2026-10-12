@@ -8,8 +8,9 @@ import (
 	"google.golang.org/api/impersonate"
 	"google.golang.org/api/option"
 
+	"github.com/theopenlane/iam/tokens"
+
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
-	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 const (
@@ -26,32 +27,13 @@ func workloadIdentityAudience(projectNumber string) string {
 	return fmt.Sprintf(workloadIdentityAudienceFormat, projectNumber, workloadIdentityName, workloadIdentityName)
 }
 
-// workloadIdentityOptions builds client options that authenticate through workload identity federation
-func workloadIdentityOptions(ctx context.Context, req types.ClientBuildRequest) ([]option.ClientOption, error) {
-	cred, ok, err := workloadIdentityCredential.Resolve(req.Credentials)
-	if err != nil {
-		return nil, ErrMetadataDecode
-	}
-
-	if !ok {
-		return nil, ErrCredentialMetadataRequired
-	}
-
-	source, err := federationSource(ctx, req, cred)
-	if err != nil {
-		return nil, err
-	}
-
-	return []option.ClientOption{option.WithTokenSource(source)}, nil
-}
-
 // federationSource builds the token source, impersonating a service account when configured
-func federationSource(ctx context.Context, req types.ClientBuildRequest, cred WorkloadIdentityCredentialSchema) (oauth2.TokenSource, error) {
+func federationSource(ctx context.Context, manager *tokens.TokenManager, organizationID string, cred WorkloadIdentityCredentialSchema) (oauth2.TokenSource, error) {
 	if cred.ProjectNumber == "" {
 		return nil, ErrProjectNumberRequired
 	}
 
-	federated, err := auth.FederatedTokenSource(ctx, req, auth.FederationSpec{
+	federated, err := auth.FederatedTokenSource(ctx, manager, organizationID, auth.FederationSpec{
 		Audience: workloadIdentityAudience(cred.ProjectNumber),
 		Scopes:   []string{defaultScope},
 		Endpoint: googleSTSEndpoint,

@@ -12,6 +12,7 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/httpsling"
 )
@@ -33,7 +34,7 @@ const (
 	organizationTeamsErrorResponse = `{"errors":[{"message":"teams unavailable"}]}`
 )
 
-// newDirectorySyncGraphQLServer serves canned GraphQL responses for each directory sync query, returning the given teams response
+// newDirectorySyncGraphQLServer serves canned GraphQL responses for each directory sync query
 func newDirectorySyncGraphQLServer(t *testing.T, teamsResponse string) GraphQLClient {
 	t.Helper()
 
@@ -66,14 +67,14 @@ func newDirectorySyncGraphQLServer(t *testing.T, teamsResponse string) GraphQLCl
 	return client
 }
 
-// TestDirectorySyncSnapshotComplete verifies account, group, and membership payload sets carry the expected completeness flags
+// TestDirectorySyncSnapshotComplete verifies payload sets carry the expected completeness flags
 func TestDirectorySyncSnapshotComplete(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
 		name          string
 		teamsResponse string
-		cfg           DirectorySync
+		cfg           providerkit.DirectorySync
 		want          map[string]bool
 	}{
 		{
@@ -97,7 +98,7 @@ func TestDirectorySyncSnapshotComplete(t *testing.T) {
 		{
 			name:          "group sync disabled emits only a complete account set",
 			teamsResponse: organizationTeamsErrorResponse,
-			cfg:           DirectorySync{DisableGroupSync: true},
+			cfg:           providerkit.DirectorySync{DisableGroupSync: true},
 			want: map[string]bool{
 				entityops.SchemaDirectoryAccount.Name: true,
 			},
@@ -110,7 +111,7 @@ func TestDirectorySyncSnapshotComplete(t *testing.T) {
 
 			client := newDirectorySyncGraphQLServer(t, tc.teamsResponse)
 
-			sets, err := tc.cfg.Run(context.Background(), client)
+			sets, err := runDirectorySync(context.Background(), types.OperationRequest{}, client, tc.cfg)
 			assert.NilError(t, err)
 			assert.DeepEqual(t, lo.SliceToMap(sets, func(set types.IngestPayloadSet) (string, bool) { return set.Schema, set.SnapshotComplete }), tc.want)
 		})
