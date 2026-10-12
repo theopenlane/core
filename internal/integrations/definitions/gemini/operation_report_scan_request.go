@@ -27,13 +27,25 @@ var supportedDocumentKinds = []string{soc2.KindName}
 // Handle adapts ReportScanRequest to the generic operation registration boundary
 func (r ReportScanRequest) Handle() types.OperationHandler {
 	return providerkit.WithClientRequestConfig(geminiClient, ReportScanRequestOp, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanRequest) (json.RawMessage, error) {
-		result, err := r.Run(ctx, request, client, cfg)
-		if err != nil {
-			return nil, err
-		}
-
-		return providerkit.EncodeResult(result, ErrResultEncode)
+		return r.runEncoded(ctx, request, client, cfg)
 	})
+}
+
+// HandleVendor runs the same parse under the vendor review operation, so the vendor rate limit applies
+func (r ReportScanRequest) HandleVendor() types.OperationHandler {
+	return providerkit.WithClientRequestConfig(geminiClient, VendorReportScanRequestOp, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *Client, cfg VendorReportScanRequest) (json.RawMessage, error) {
+		return r.runEncoded(ctx, request, client, ReportScanRequest{ScanID: cfg.ScanID, OrganizationID: cfg.OrganizationID})
+	})
+}
+
+// runEncoded runs the request and encodes its result for the operation response
+func (r ReportScanRequest) runEncoded(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanRequest) (json.RawMessage, error) {
+	result, err := r.Run(ctx, request, client, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
 // Run marks the pending scan processing, seeds the per-section tracking metadata, and emits one
@@ -53,7 +65,7 @@ func (r ReportScanRequest) Run(ctx context.Context, request types.OperationReque
 		scan.ID(cfg.ScanID),
 		scan.OwnerID(cfg.OrganizationID),
 		scan.ScanTypeEQ(enums.ScanTypeReport),
-		scan.PerformedBy(PerformedBy),
+		scan.PerformedByIn(ReportPerformers...),
 	).Only(systemCtx)
 	if err != nil {
 		return ReportScanRequestResult{}, err
@@ -82,13 +94,9 @@ func (r ReportScanRequest) Run(ctx context.Context, request types.OperationReque
 
 	switch scanRecord.DocumentKindName {
 	case soc2.KindName:
-		plan, err = r.planSOC2Report(pdf, scanRecord.Metadata)
+		plan, err = r.planSOC2Report(pdf, scanRecord.Metadata, scanRecord.PerformedBy == VendorReviewPerformedBy)
 	default:
 		err = ErrUnsupportedDocumentKind
-	}
-
-	if err != nil {
-		return failScan(systemCtx, request.DB, scanRecord.ID, err, scanRecord.Metadata, &plan.validation)
 	}
 
 	// the document is untrusted input; screen it for injected instructions before the model ever sees it
@@ -143,7 +151,12 @@ func (r ReportScanRequest) Run(ctx context.Context, request types.OperationReque
 func failScan(ctx context.Context, db *generated.Client, id string, err error, metadata map[string]any, validation *docextract.Validation) (ReportScanRequestResult, error) {
 	reason := docextract.ValidationReason(err)
 
-	logx.FromContext(ctx).Warn().Err(err).Msg("report scan: failed")
+	event := logx.FromContext(ctx).Warn().Err(err)
+	if validation != nil {
+		event = event.Int("pages", validation.Pages).Int("text_length", validation.TextLength).Strs("strong", validation.Strong).Strs("supporting", validation.Supporting)
+	}
+
+	event.Msg("report scan: failed")
 
 	if metadata == nil {
 		metadata = map[string]any{}
@@ -172,13 +185,13 @@ type reportScanPlan struct {
 
 // planSOC2Report validates the upload against the SOC 2 profile and narrows the configured sections
 // to the ones the scan asked for; the validation is returned on failure so the reason can be stored
-func (r ReportScanRequest) planSOC2Report(pdf []byte, metadata map[string]any) (reportScanPlan, error) {
+func (r ReportScanRequest) planSOC2Report(pdf []byte, metadata map[string]any, vendorReview bool) (reportScanPlan, error) {
 	validation, err := docextract.Validate(pdf, soc2.KindName)
 	if err != nil {
 		return reportScanPlan{validation: validation}, err
 	}
 
-	parts, err := r.selectParts(metadata)
+	parts, err := r.selectParts(metadata, vendorReview)
 	if err != nil {
 		return reportScanPlan{validation: validation}, err
 	}
@@ -187,19 +200,24 @@ func (r ReportScanRequest) planSOC2Report(pdf []byte, metadata map[string]any) (
 }
 
 // selectParts narrows the configured sections to the ones the scan asked for; no request means
-// every configured section, and a request naming only unconfigured sections is an error
-func (r ReportScanRequest) selectParts(metadata map[string]any) ([]string, error) {
+// every configured section except the opt-in ones, or the vendor review sections for a vendor's
+// report. A request naming only unconfigured sections is an error, as is a vendor review missing any
+func (r ReportScanRequest) selectParts(metadata map[string]any, vendorReview bool) ([]string, error) {
 	requested, err := RequestedParts(metadata)
 	if err != nil {
 		return nil, err
 	}
 
+	if len(requested) == 0 && !vendorReview {
+		return lo.Without(r.parts, soc2.OptInParts...), nil
+	}
+
 	if len(requested) == 0 {
-		return r.parts, nil
+		requested = soc2.VendorReviewParts
 	}
 
 	selected := lo.Filter(r.parts, func(name string, _ int) bool { return slices.Contains(requested, name) })
-	if len(selected) == 0 {
+	if len(selected) == 0 || (vendorReview && len(selected) < len(lo.Uniq(requested))) {
 		return nil, fmt.Errorf("%w: requested %s, configured %s", ErrRequestedPartsUnavailable, strings.Join(requested, ", "), strings.Join(r.parts, ", "))
 	}
 

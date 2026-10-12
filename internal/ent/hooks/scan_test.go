@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"entgo.io/ent"
@@ -10,6 +11,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
+	"github.com/theopenlane/core/v2/pkg/docextract"
+	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
 )
 
 func TestExceedsSingleReportFile(t *testing.T) {
@@ -97,4 +100,52 @@ func TestCheckReportScanFilesUpdateWithoutFileChange(t *testing.T) {
 	m.SetStatus(enums.ScanStatusProcessing)
 
 	assert.NilError(t, checkReportScanFiles(context.Background(), m, nil))
+}
+
+func TestNormalizedDomains(t *testing.T) {
+	assert.DeepEqual(t, normalizedDomains([]string{" Example.io ", "example.io", "", "Docs.Example.io"}), []string{"cycle.io", "example.example.io"})
+	assert.Check(t, len(normalizedDomains(nil)) == 0)
+}
+
+func TestReportScanRowMatchPerformers(t *testing.T) {
+	vendorOnly := reportScanRowMatchForKind(soc2.KindName, gemini.VendorReviewPerformedBy)
+	both := reportScanRowMatch(gemini.ReportPerformers...)
+
+	assert.Check(t, len(vendorOnly) == 3)
+	assert.DeepEqual(t, vendorOnly[1].In, []string{gemini.VendorReviewPerformedBy})
+	assert.DeepEqual(t, both[1].In, []string{gemini.PerformedBy, gemini.VendorReviewPerformedBy})
+}
+
+func TestVendorReviewTitle(t *testing.T) {
+	assert.Check(t, vendorReviewTitle(soc2.ReportTypeOne, "2026-07-28") == "SOC 2 Type 1 report review, period ending 2026-07-28")
+	assert.Check(t, vendorReviewTitle(soc2.ReportTypeTwo, "") == "SOC 2 Type 2 report review")
+	assert.Check(t, vendorReviewTitle(docextract.ReportTypeUnknown, "") == "SOC 2 report review")
+}
+
+func TestVendorReviewDetailsWithoutFindings(t *testing.T) {
+	details := vendorReviewDetails(gemini.ReportAssessment{Opinion: soc2.OpinionUnqualified, RiskRating: "low", RiskRationale: "Clean opinion.", PeriodEnd: "2026-07-28"}, nil)
+
+	assert.Check(t, details == "Clean opinion.\n\n**Auditor opinion:** Unqualified (clean)  \n**Report period end:** 2026-07-28  \n**Risk rating:** LOW\n\n**Findings:** The auditor noted no exceptions.")
+}
+
+func TestVendorReviewDetailsWithFindings(t *testing.T) {
+	details := vendorReviewDetails(gemini.ReportAssessment{Opinion: soc2.OpinionQualified, RiskRating: "medium", RiskRationale: "One access exception."}, []gemini.ReportFinding{
+		{Description: "One of 25 accounts lacked MFA", Severity: "high", RefCodes: []string{"CC6.1"}, Open: true},
+		{Description: "Late access review", Severity: "low"},
+	})
+
+	assert.Check(t, strings.Contains(details, "**Findings:**\n\n| Summary | Criticality | Related Controls |\n| --- | --- | --- |\n"))
+	assert.Check(t, strings.Contains(details, "| One of 25 accounts lacked MFA | high | CC6.1 |"))
+	assert.Check(t, strings.Contains(details, "| Late access review | low |  |"))
+	assert.Check(t, !strings.HasSuffix(details, "\n"))
+}
+
+func TestMarkdownCell(t *testing.T) {
+	assert.Check(t, markdownCell("a | b\nc  d") == `a \| b c d`)
+}
+
+func TestMissingServices(t *testing.T) {
+	assert.DeepEqual(t, missingServices([]string{"Managed DNS"}, []string{"managed dns", " Load balancing ", "", "Load Balancing"}), []string{"Load balancing"})
+	assert.Check(t, len(missingServices([]string{"A"}, []string{"a"})) == 0)
+	assert.Check(t, len(missingServices(nil, nil)) == 0)
 }

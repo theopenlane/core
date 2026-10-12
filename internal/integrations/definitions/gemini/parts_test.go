@@ -35,16 +35,42 @@ func TestRequestedPartsUnknown(t *testing.T) {
 func TestSelectPartsDefaultsToConfigured(t *testing.T) {
 	request := ReportScanRequest{parts: []string{"controls", "reviews"}}
 
-	selected, err := request.selectParts(nil)
+	selected, err := request.selectParts(nil, false)
 
 	assert.NilError(t, err)
 	assert.DeepEqual(t, selected, []string{"controls", "reviews"})
 }
 
+func TestSelectPartsDefaultLeavesOutOptInParts(t *testing.T) {
+	request := ReportScanRequest{parts: []string{"controls", "findings", "assessment"}}
+
+	selected, err := request.selectParts(nil, false)
+
+	assert.NilError(t, err)
+	assert.DeepEqual(t, selected, []string{"controls", "findings"})
+}
+
+func TestSelectPartsVendorReviewDefault(t *testing.T) {
+	request := ReportScanRequest{parts: []string{"controls", "findings", "reviews", "assessment"}}
+
+	selected, err := request.selectParts(nil, true)
+
+	assert.NilError(t, err)
+	assert.DeepEqual(t, selected, []string{"findings", "assessment"})
+}
+
+func TestSelectPartsVendorReviewMissingAssessment(t *testing.T) {
+	request := ReportScanRequest{parts: []string{"controls", "findings"}}
+
+	_, err := request.selectParts(nil, true)
+
+	assert.ErrorIs(t, err, ErrRequestedPartsUnavailable)
+}
+
 func TestSelectPartsIntersectsWithConfigured(t *testing.T) {
 	request := ReportScanRequest{parts: []string{"controls", "reviews", "assets"}}
 
-	selected, err := request.selectParts(map[string]any{requestedPartsMetadataKey: []any{"reviews", "findings"}})
+	selected, err := request.selectParts(map[string]any{requestedPartsMetadataKey: []any{"reviews", "findings"}}, false)
 
 	assert.NilError(t, err)
 	assert.DeepEqual(t, selected, []string{"reviews"})
@@ -53,7 +79,7 @@ func TestSelectPartsIntersectsWithConfigured(t *testing.T) {
 func TestSelectPartsNoneAvailable(t *testing.T) {
 	request := ReportScanRequest{parts: []string{"controls"}}
 
-	_, err := request.selectParts(map[string]any{requestedPartsMetadataKey: []any{"findings"}})
+	_, err := request.selectParts(map[string]any{requestedPartsMetadataKey: []any{"findings"}}, false)
 
 	assert.ErrorIs(t, err, ErrRequestedPartsUnavailable)
 }

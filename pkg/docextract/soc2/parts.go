@@ -21,6 +21,8 @@ const (
 	IncludeSystemDetails
 	IncludeContacts
 	IncludeProgram
+	// IncludeAssessment is a vendor risk read of the report, not part of an import so IncludeAll leaves it out
+	IncludeAssessment
 	IncludeAll = IncludeVendors | IncludeAssets | IncludeControls | IncludeGroups | IncludeDomains | IncludeReviews | IncludeFindings | IncludePlatforms | IncludeSystemDetails | IncludeContacts | IncludeProgram
 )
 
@@ -32,11 +34,19 @@ const (
 	ReviewsPart = "reviews"
 	// FindingsPart holds the exceptions and deviations noted against controls
 	FindingsPart = "findings"
+	// AssessmentPart holds the summary and risk rating of a vendor's report
+	AssessmentPart = "assessment"
 )
 
 // ControlScopedParts are the sections scoped by the ref codes of the controls section, so they
 // cannot be extracted until the controls land
 var ControlScopedParts = []string{ReviewsPart, FindingsPart}
+
+// OptInParts are only extracted when a scan asks for them, never by default
+var OptInParts = []string{AssessmentPart}
+
+// VendorReviewParts are the sections a scan of a vendor's report extracts when it asks for none
+var VendorReviewParts = []string{AssessmentPart, FindingsPart}
 
 // Parts lists every individually extractable SOC 2 section, in the order they should be requested
 var Parts = []int{
@@ -51,6 +61,7 @@ var Parts = []int{
 	IncludeControls,
 	IncludeFindings,
 	IncludeReviews,
+	IncludeAssessment,
 }
 
 // partNames maps each part to the section name its schema emits
@@ -66,6 +77,7 @@ var partNames = map[int]string{
 	IncludeControls:      "controls",
 	IncludeFindings:      "findings",
 	IncludeReviews:       "reviews",
+	IncludeAssessment:    AssessmentPart,
 }
 
 // sectionSchemas maps each part to the response schema the model must follow
@@ -82,6 +94,7 @@ var sectionSchemas = map[int]*docextract.Schema{
 	IncludeSystemDetails: schema.SystemDetailsSchema,
 	IncludeContacts:      schema.ContactSchema,
 	IncludeProgram:       schema.ProgramSchema,
+	IncludeAssessment:    schema.AssessmentSchema,
 }
 
 // PartName returns the section name a part produces, empty for an unknown part

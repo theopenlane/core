@@ -14,9 +14,50 @@ const (
 	objectsPerPage = 2
 )
 
+// layout is how a content stream draws its lines of text
+type layout int
+
+const (
+	// layoutSimple shows each line as one literal string in a Type1 font
+	layoutSimple layout = iota
+	// layoutComposite shows each line as one hex string of two byte glyph ids
+	layoutComposite
+	// layoutGlyphs shows every glyph with its own Tj and steps to the next with Td
+	layoutGlyphs
+)
+
+const (
+	// fontSize is the size every test page sets its font to
+	fontSize = 11
+	// defaultGlyphWidth is the composite font's DW
+	defaultGlyphWidth = 500
+	// digitGlyphWidth is the composite font's W entry for 0 through 9
+	digitGlyphWidth = 450
+	// narrowGlyphWidth is the composite font's W entry for I
+	narrowGlyphWidth = 250
+	// wordGap is the extra Td distance a glyph layout leaves for a space, a quarter of the font size
+	wordGap = fontSize / 4.0
+	// glyphSpaceUnits is how many glyph space units make one unit of text space
+	glyphSpaceUnits = 1000
+)
+
 // Build writes a pdf with one page per entry, each line of text on its own row; composite
 // selects a Type0 font with a ToUnicode map so the text is encoded as two byte glyph ids
 func Build(pages [][]string, composite bool) []byte {
+	if composite {
+		return build(pages, layoutComposite)
+	}
+
+	return build(pages, layoutSimple)
+}
+
+// BuildGlyphs writes a pdf in the composite font that places every glyph on its own, leaving word
+// gaps only in the Td distance, the way some html to pdf renderers lay out text
+func BuildGlyphs(pages [][]string) []byte {
+	return build(pages, layoutGlyphs)
+}
+
+func build(pages [][]string, mode layout) []byte {
 	var objects []string
 
 	kids := make([]string, 0, len(pages))
@@ -29,11 +70,11 @@ func Build(pages [][]string, composite bool) []byte {
 
 		objects = append(objects,
 			fmt.Sprintf("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 %d 0 R >> >> /Contents %d 0 R >>", fontObject, contentObject),
-			contentStream(pages[i], composite),
+			contentStream(pages[i], mode),
 		)
 	}
 
-	if composite {
+	if mode != layoutSimple {
 		objects = append(objects, compositeFontObjects(fontObject)...)
 	} else {
 		objects = append(objects, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
@@ -102,30 +143,65 @@ func compositeFontObjects(fontObject int) []string {
 
 	return []string{
 		fmt.Sprintf("<< /Type /Font /Subtype /Type0 /BaseFont /TestSans /Encoding /Identity-H /DescendantFonts [%d 0 R] /ToUnicode %d 0 R >>", descendantObject, toUnicodeObject),
-		fmt.Sprintf("<< /Type /Font /Subtype /CIDFontType2 /BaseFont /TestSans /CIDSystemInfo << /Registry (Adobe) /Ordering (Identity) /Supplement 0 >> /FontDescriptor %d 0 R /DW 500 >>", descriptorObject),
+		fmt.Sprintf("<< /Type /Font /Subtype /CIDFontType2 /BaseFont /TestSans /CIDSystemInfo << /Registry (Adobe) /Ordering (Identity) /Supplement 0 >> /FontDescriptor %d 0 R /DW %d /W [48 57 %d 73 [%d]] >>", descriptorObject, defaultGlyphWidth, digitGlyphWidth, narrowGlyphWidth),
 		"<< /Type /FontDescriptor /FontName /TestSans /Flags 32 /FontBBox [0 -200 1000 900] /ItalicAngle 0 /Ascent 900 /Descent -200 /CapHeight 700 /StemV 80 >>",
 		fmt.Sprintf("<< /Length %d >>\nstream\n%s\nendstream", len(cmap), cmap),
 	}
 }
 
-func contentStream(lines []string, composite bool) string {
+func contentStream(lines []string, mode layout) string {
 	var stream strings.Builder
 
-	stream.WriteString("BT /F1 11 Tf 72 740 Td 14 TL\n")
+	fmt.Fprintf(&stream, "BT /F1 %d Tf 72 740 Td 14 TL\n", fontSize)
 
 	for _, line := range lines {
-		if composite {
+		switch mode {
+		case layoutComposite:
 			fmt.Fprintf(&stream, "<%s> Tj T*\n", twoByteHex(line))
-
-			continue
+		case layoutGlyphs:
+			fmt.Fprintf(&stream, "%sT*\n", glyphLine(line))
+		default:
+			fmt.Fprintf(&stream, "(%s) Tj T*\n", strings.NewReplacer(`\`, `\\`, "(", `\(`, ")", `\)`).Replace(line))
 		}
-
-		fmt.Fprintf(&stream, "(%s) Tj T*\n", strings.NewReplacer(`\`, `\\`, "(", `\(`, ")", `\)`).Replace(line))
 	}
 
 	stream.WriteString("ET")
 
 	return fmt.Sprintf("<< /Length %d >>\nstream\n%s\nendstream", stream.Len(), stream.String())
+}
+
+// glyphLine draws each glyph of a line with its own Tj, stepping past the previous glyph with Td
+// and folding spaces into the step instead of drawing them
+func glyphLine(line string) string {
+	var (
+		out  strings.Builder
+		step float64
+	)
+
+	for _, r := range line {
+		if r == ' ' {
+			step += wordGap
+
+			continue
+		}
+
+		fmt.Fprintf(&out, "%g 0 Td <%s> Tj ", step, twoByteHex(string(r)))
+		step = glyphWidth(r) / glyphSpaceUnits * fontSize
+	}
+
+	return out.String()
+}
+
+// glyphWidth mirrors the composite font's W and DW entries
+func glyphWidth(r rune) float64 {
+	switch {
+	case r >= '0' && r <= '9':
+		return digitGlyphWidth
+	case r == 'I':
+		return narrowGlyphWidth
+	default:
+		return defaultGlyphWidth
+	}
 }
 
 func twoByteHex(text string) string {

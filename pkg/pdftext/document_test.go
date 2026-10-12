@@ -34,6 +34,17 @@ func TestOpenCompositeFont(t *testing.T) {
 	assert.Check(t, strings.Contains(text, "SOC 2 Type II"))
 }
 
+func TestOpenPositionedGlyphs(t *testing.T) {
+	document, err := Open(pdftest.BuildGlyphs([][]string{{"SOC 2 Type 1 Report", "Independent Service Auditor's Report"}}))
+
+	assert.NilError(t, err)
+
+	text := string(document.Text())
+
+	assert.Check(t, strings.Contains(text, "SOC 2 Type 1 Report"))
+	assert.Check(t, strings.Contains(text, "Independent Service Auditor's Report"))
+}
+
 func TestOpenRejectsNonPDF(t *testing.T) {
 	_, err := Open([]byte("not a pdf"))
 
@@ -113,6 +124,22 @@ func TestDecodeContentTextWordGaps(t *testing.T) {
 	text := (&contentScope{fonts: fonts}).decode([]byte(`BT /F1 10 Tf [(SO) -20 (C 2) -400 (report)] TJ ET`))
 
 	assert.Check(t, strings.Contains(string(text), "SOC 2 report"))
+}
+
+func TestDecodeContentTextTdStepIsNotAWordBreak(t *testing.T) {
+	fonts := map[string]*fontDecoder{"F1": {codeBytes: 1, widths: map[uint32]float64{}, defaultWidth: 500}}
+
+	text := (&contentScope{fonts: fonts}).decode([]byte(`BT /F1 10 Tf (S) Tj 5 0 Td (O) Tj 5.2 0 Td (C) Tj 8 0 Td (2) Tj 5 -12 Td (x) Tj ET`))
+
+	assert.Check(t, strings.Contains(string(text), "SOC 2 x"))
+}
+
+func TestDecodeContentTextTdWithoutWidthsBreaks(t *testing.T) {
+	fonts := map[string]*fontDecoder{"F1": {codeBytes: 1}}
+
+	text := (&contentScope{fonts: fonts}).decode([]byte(`BT /F1 10 Tf (one) Tj 20 0 Td (two) Tj ET`))
+
+	assert.Check(t, strings.Contains(string(text), "one two"))
 }
 
 func TestDecodeContentTextCompositeFont(t *testing.T) {

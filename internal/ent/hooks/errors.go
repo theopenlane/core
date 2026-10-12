@@ -262,6 +262,8 @@ var (
 	ErrExpressionNotList = errors.New("entityops: expression did not evaluate to a list")
 	// ErrQuestionnaireTransformInvalid is returned when a questionnaire transform configuration or submission cannot map to its target
 	ErrQuestionnaireTransformInvalid = errors.New("questionnaire transform invalid")
+	// ErrVendorReviewNameMissing is returned when a report meant to create a vendor did not name the company it covers
+	ErrVendorReviewNameMissing = errors.New("the report did not name the company it covers, so no vendor could be created")
 	// ErrClientResolveFailed indicates the ent client could not be resolved from the context
 	ErrClientResolveFailed = errors.New("client resolve failed")
 )

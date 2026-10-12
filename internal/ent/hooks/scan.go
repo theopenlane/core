@@ -13,9 +13,13 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
+	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
@@ -28,6 +32,8 @@ var (
 	ErrReportScanSingleFile = errors.New("a report scan may only have one PDF report attached")
 	// ErrReportScanFileImmutable is returned when the report is changed after parsing has started
 	ErrReportScanFileImmutable = errors.New("the report cannot be changed once the scan has left pending")
+	// ErrVendorReviewPaymentRequired is returned when a vendor's report is submitted by an organization without a payment method
+	ErrVendorReviewPaymentRequired = errors.New("a valid payment method is required to review vendor reports, ask your organization admin to add one in billing")
 )
 
 // scanDateTypes are the scan types that run once when they are submitted, so the submit time is
@@ -93,7 +99,8 @@ func HookScanReportSubmit() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if len(pkgobjects.GetFileIDsFromContext(ctx)) == 0 && len(m.FilesIDs()) == 0 {
+			uploaded := pkgobjects.GetFileIDsFromContext(ctx)
+			if len(uploaded) == 0 && len(m.FilesIDs()) == 0 {
 				return nil, ErrReportScanFileRequired
 			}
 
@@ -102,9 +109,81 @@ func HookScanReportSubmit() ent.Hook {
 				return nil, err
 			}
 
-			return next.Mutate(ctx, m)
+			if isVendorReviewMutation(m) {
+				if err := requireVendorReviewPayment(ctx, m); err != nil {
+					return nil, err
+				}
+			}
+
+			value, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if err := categorizeReportFiles(ctx, m, uploaded); err != nil {
+				return nil, err
+			}
+
+			if err := attachReportToVendors(ctx, m, uploaded); err != nil {
+				return nil, err
+			}
+
+			return value, nil
 		})
 	}, ent.OpCreate)
+}
+
+// isVendorReviewMutation reports whether the report scan reviews a vendor's report rather than
+// importing the organization's own
+func isVendorReviewMutation(m *generated.ScanMutation) bool {
+	performedBy, _ := m.PerformedBy()
+
+	return performedBy == gemini.VendorReviewPerformedBy
+}
+
+// requireVendorReviewPayment rejects a vendor review from an organization that cannot use paid features
+func requireVendorReviewPayment(ctx context.Context, m *generated.ScanMutation) error {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok {
+		return auth.ErrNoAuthUser
+	}
+
+	hasPaymentMethod, err := rule.HasPaymentMethod(ctx, m.Client(), caller)
+	if err != nil {
+		return err
+	}
+
+	if !hasPaymentMethod {
+		return ErrVendorReviewPaymentRequired
+	}
+
+	return nil
+}
+
+// categorizeReportFiles files an uploaded report under its document kind, e.g. soc2_report, instead
+// of the scan category every scan upload defaults to; a rerun against an existing file keeps its category
+func categorizeReportFiles(ctx context.Context, m *generated.ScanMutation, uploaded []string) error {
+	if len(uploaded) == 0 {
+		return nil
+	}
+
+	category, _ := m.DocumentKindName()
+	if category == "" {
+		category = soc2.KindName
+	}
+
+	return m.Client().File.Update().Where(file.IDIn(uploaded...)).SetCategoryName(category).Exec(ctx)
+}
+
+// attachReportToVendors files a vendor review's uploaded report as a document on the vendors the
+// scan reviews; a rerun against a document already on the vendor uploads nothing, so adds nothing
+func attachReportToVendors(ctx context.Context, m *generated.ScanMutation, uploaded []string) error {
+	entityIDs := m.EntitiesIDs()
+	if len(entityIDs) == 0 || len(uploaded) == 0 {
+		return nil
+	}
+
+	return m.Client().Entity.Update().Where(entity.IDIn(entityIDs...)).AddFileIDs(uploaded...).Exec(ctx)
 }
 
 // checkReportScanFiles holds a report scan to one attached report and rejects a file change once
@@ -133,7 +212,7 @@ func checkReportScanFiles(ctx context.Context, m *generated.ScanMutation, fileID
 		Where(
 			scan.IDIn(ids...),
 			scan.ScanTypeEQ(enums.ScanTypeReport),
-			scan.PerformedBy(gemini.PerformedBy),
+			scan.PerformedByIn(gemini.ReportPerformers...),
 		).
 		Select(scan.FieldID, scan.FieldStatus).
 		All(ctx)
@@ -183,7 +262,7 @@ func isReportScanMutation(m *generated.ScanMutation) bool {
 	scanType, _ := m.ScanType()
 	performedBy, _ := m.PerformedBy()
 
-	return scanType == enums.ScanTypeReport && performedBy == gemini.PerformedBy
+	return scanType == enums.ScanTypeReport && slices.Contains(gemini.ReportPerformers, performedBy)
 }
 
 // mutationScanType is the type the scan will be stored with, falling back to the schema default

@@ -37,6 +37,14 @@ func TestValidateTypeOne(t *testing.T) {
 	assert.Check(t, contains(result.Supporting, "as_of_date"))
 }
 
+func TestValidatePositionedGlyphs(t *testing.T) {
+	result, err := docextract.Validate(pdftest.BuildGlyphs(demoTypeOnePages()), KindName)
+
+	assert.NilError(t, err)
+	assert.Check(t, result.Confidence == docextract.ConfidenceHigh)
+	assert.Check(t, result.ReportType == ReportTypeOne)
+}
+
 func TestValidateTooShort(t *testing.T) {
 	result, err := docextract.Validate(pdftest.Build(demoTypeTwoPages()[:2], false), KindName)
 
@@ -68,9 +76,94 @@ func TestValidateCompositeFont(t *testing.T) {
 	assert.Check(t, result.TextLength > docextract.MinExtractedText)
 }
 
-func TestSubtypeUnknownWithoutDates(t *testing.T) {
-	assert.Check(t, subtype(map[string]bool{"type2_testing": true}) == docextract.ReportTypeUnknown)
-	assert.Check(t, subtype(map[string]bool{"as_of_date": true, "type2_testing": true}) == docextract.ReportTypeUnknown)
+func TestValidateTypeOneFromDesignLanguage(t *testing.T) {
+	pages := demoTypeOnePages()
+	pages[0][2] = "System and Organization Controls (SOC) 2 Report"
+
+	result, err := docextract.Validate(pdftest.Build(pages, false), KindName)
+
+	assert.NilError(t, err)
+	assert.Check(t, contains(result.Supporting, "design_only"))
+	assert.Check(t, !contains(result.Supporting, "type1_title"))
+	assert.Check(t, result.ReportType == ReportTypeOne)
+}
+
+func TestValidateTypeOneParenthesizedTitle(t *testing.T) {
+	pages := demoTypeOnePages()
+	pages[0][2] = "System and Organization Controls (SOC) 2 Type 1 Report"
+
+	result, err := docextract.Validate(pdftest.Build(pages, false), KindName)
+
+	assert.NilError(t, err)
+	assert.Check(t, contains(result.Supporting, "type1_title"))
+	assert.Check(t, result.ReportType == ReportTypeOne)
+}
+
+func TestValidateTypeOneWithVendorExceptionsControl(t *testing.T) {
+	pages := demoTypeOnePages()
+	pages[4] = append(pages[4], "REQ-23 A third-party attestation report is reviewed annually for all critical vendors. Exceptions noted in the reports are evaluated to determine their impact on the service.")
+
+	result, err := docextract.Validate(pdftest.Build(pages, false), KindName)
+
+	assert.NilError(t, err)
+	assert.Check(t, !contains(result.Strong, "type2_testing"))
+	assert.Check(t, result.ReportType == ReportTypeOne)
+}
+
+func TestSubtypeTypeOne(t *testing.T) {
+	assert.Check(t, subtype(map[string]bool{"type1_title": true}) == ReportTypeOne)
+	assert.Check(t, subtype(map[string]bool{"type1_title": true, "reporting_period": true}) == ReportTypeOne)
+	assert.Check(t, subtype(map[string]bool{"design_only": true, "as_of_date": true}) == ReportTypeOne)
+}
+
+func TestSubtypeFallsBackToTypeTwo(t *testing.T) {
+	assert.Check(t, subtype(map[string]bool{}) == ReportTypeTwo)
+	assert.Check(t, subtype(map[string]bool{"as_of_date": true}) == ReportTypeTwo)
+	assert.Check(t, subtype(map[string]bool{"design_only": true}) == ReportTypeTwo)
+	assert.Check(t, subtype(map[string]bool{"design_only": true, "as_of_date": true, "reporting_period": true}) == ReportTypeTwo)
+	assert.Check(t, subtype(map[string]bool{"type1_title": true, "type2_testing": true}) == ReportTypeTwo)
+	assert.Check(t, subtype(map[string]bool{"type1_title": true, "type2_title": true}) == ReportTypeTwo)
+}
+
+func TestValidateOpinionUnqualified(t *testing.T) {
+	pages := demoTypeOnePages()
+	pages[1] = append(pages[1],
+		"Other Matter: We did not perform any procedures regarding the operating effectiveness of controls and, accordingly, do not express an opinion thereon.",
+		"Opinion: In our opinion, in all material respects, the controls were suitably designed as of March 31, 2026.",
+	)
+
+	result, err := docextract.Validate(pdftest.Build(pages, false), KindName)
+
+	assert.NilError(t, err)
+	assert.Check(t, result.Opinion == OpinionUnqualified)
+}
+
+func TestValidateOpinionQualified(t *testing.T) {
+	pages := demoTypeTwoPages()
+	pages[1] = append(pages[1],
+		"Basis for Qualified Opinion: one of 25 sampled demo accounts lacked MFA.",
+		"In our opinion, except for the effects of the matter described in the Basis for Qualified Opinion paragraph, in all material respects the controls operated effectively.",
+	)
+
+	result, err := docextract.Validate(pdftest.Build(pages, false), KindName)
+
+	assert.NilError(t, err)
+	assert.Check(t, result.Opinion == OpinionQualified)
+}
+
+func TestValidateOpinionUnknownWithoutOpinionLanguage(t *testing.T) {
+	result, err := docextract.Validate(pdftest.Build(demoTypeTwoPages(), false), KindName)
+
+	assert.NilError(t, err)
+	assert.Check(t, result.Opinion == docextract.OpinionUnknown)
+}
+
+func TestOpinionMostSevereWins(t *testing.T) {
+	assert.Check(t, opinion(map[string]bool{"opinion_stated": true}) == OpinionUnqualified)
+	assert.Check(t, opinion(map[string]bool{"opinion_stated": true, "opinion_qualified": true}) == OpinionQualified)
+	assert.Check(t, opinion(map[string]bool{"opinion_qualified": true, "opinion_disclaimer": true}) == OpinionDisclaimer)
+	assert.Check(t, opinion(map[string]bool{"opinion_qualified": true, "opinion_disclaimer": true, "opinion_adverse": true}) == OpinionAdverse)
+	assert.Check(t, opinion(map[string]bool{}) == docextract.OpinionUnknown)
 }
 
 func contains(items []string, want string) bool {

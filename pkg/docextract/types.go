@@ -28,6 +28,15 @@ const ReportTypeUnknown ReportType = "unknown"
 // String returns the report type as a string
 func (r ReportType) String() string { return string(r) }
 
+// Opinion is the auditor's opinion a profile detected for a validated document
+type Opinion string
+
+// OpinionUnknown is used when the opinion could not be determined from the markers
+const OpinionUnknown Opinion = "unknown"
+
+// String returns the opinion as a string
+func (o Opinion) String() string { return string(o) }
+
 // MarkerWeight is how much a matched marker counts toward accepting a document
 type MarkerWeight string
 
@@ -64,6 +73,8 @@ type Profile struct {
 	Markers []Marker
 	// Subtype optionally classifies the document from the matched markers, e.g. SOC 2 Type 1 vs Type 2
 	Subtype func(found map[string]bool) ReportType
+	// Opinion optionally classifies the auditor's opinion from the matched markers
+	Opinion func(found map[string]bool) Opinion
 	// MissingSectionsHint names the sections a rejected document lacked, appended to the failure reason
 	MissingSectionsHint string
 }
@@ -80,6 +91,8 @@ type Validation struct {
 	Confidence Confidence `json:"confidence"`
 	// ReportType is the detected subtype, e.g. SOC 2 type1 or type2
 	ReportType ReportType `json:"reportType"`
+	// Opinion is the detected auditor's opinion, e.g. unqualified or qualified
+	Opinion Opinion `json:"opinion"`
 	// Strong lists the strong markers found
 	Strong []string `json:"strong"`
 	// Supporting lists the supporting markers found

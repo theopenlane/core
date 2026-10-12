@@ -404,11 +404,17 @@ func (s reportScanSaga) storeBatchFailure(ctx context.Context, envelope ReportSc
 // sectionItemCount returns how many items a parsed section array holds, zero when it is not an array
 func sectionItemCount(section json.RawMessage) int {
 	var items []json.RawMessage
-	if err := json.Unmarshal(section, &items); err != nil {
-		return 0
+	if err := json.Unmarshal(section, &items); err == nil {
+		return len(items)
 	}
 
-	return len(items)
+	// a section that is a single object, like the assessment, counts as one item
+	var object map[string]json.RawMessage
+	if err := json.Unmarshal(section, &object); err == nil && len(object) > 0 {
+		return 1
+	}
+
+	return 0
 }
 
 // retryOrFailPart schedules another attempt while budget remains, otherwise records the failure
@@ -620,6 +626,7 @@ func (s reportScanSaga) maybeFinalize(ctx context.Context, envelope ReportScanPa
 	}
 
 	linkFindings(ctx, metadata)
+	applyAssessmentOpinion(ctx, metadata)
 
 	// a not-found here means a sibling part finalized first, which is the expected race outcome
 	err = s.services.DB().Scan.UpdateOneID(envelope.ScanID).

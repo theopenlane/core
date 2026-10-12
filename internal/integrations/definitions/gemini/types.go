@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/docextract"
 	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/modelarmor"
 )
 
@@ -20,6 +21,9 @@ var (
 	geminiClient = types.NewClientRef[*Client]()
 	// reportScanRequestSchema is the operation ref for kicking off the parse of a pending report scan
 	reportScanRequestSchema, ReportScanRequestOp = providerkit.OperationSchema[ReportScanRequest]() //nolint:revive
+	// vendorReportScanRequestSchema is the operation ref for kicking off the review of a vendor's report,
+	// a separate operation so it carries its own rate limit
+	vendorReportScanRequestSchema, VendorReportScanRequestOp = providerkit.OperationSchema[VendorReportScanRequest]() //nolint:revive
 	// reportScanPartSchema is the operation ref for parsing one section of a report
 	reportScanPartSchema, ReportScanPartOp = providerkit.OperationSchema[ReportScanPartRequest]() //nolint:revive
 	// reportScanReleaseSchema is the operation ref for releasing the cached report once a scan finalizes
@@ -31,9 +35,14 @@ var (
 const (
 	// PerformedBy marks a Scan record as one the system should parse as an uploaded report
 	PerformedBy = "openlane_report_parse"
+	// VendorReviewPerformedBy marks a Scan record as a review of a vendor's report; one with no vendor
+	// linked finds or creates the vendor from the report
+	VendorReviewPerformedBy = "openlane_vendor_report_review"
 
 	// submitInterval is the minimum time between report scans for one organization
 	submitInterval = 24 * time.Hour
+	// vendorReviewInterval is the minimum time between vendor report reviews for one organization
+	vendorReviewInterval = time.Hour
 
 	// reportMetadataKey is the Scan.Metadata key holding the parsed report sections
 	reportMetadataKey = "report"
@@ -165,6 +174,88 @@ func ReportSummary(metadata map[string]any) map[string]ReportSectionSummary {
 	return summary
 }
 
+// ReportAssessment is the vendor risk read a report scan produced, with the auditor's opinion and
+// the risk rating after the opinion floor was applied
+type ReportAssessment struct {
+	// Summary is the high level summary of the report
+	Summary string `json:"summary,omitempty"`
+	// Opinion is the auditor's opinion detected when the upload was validated
+	Opinion docextract.Opinion `json:"opinion,omitempty"`
+	// RiskRating is low, medium, high, or critical
+	RiskRating string `json:"riskRating,omitempty"`
+	// RiskRationale is why the report received its risk rating
+	RiskRationale string `json:"riskRationale,omitempty"`
+	// PeriodEnd is the last day the report covers as YYYY-MM-DD
+	PeriodEnd string `json:"periodEnd,omitempty"`
+	// VendorName is the company the report covers
+	VendorName string `json:"vendorName,omitempty"`
+	// VendorDomains are the company's web domains named in the report
+	VendorDomains []string `json:"vendorDomains,omitempty"`
+	// VendorDescription is what the company does, from the report's system description
+	VendorDescription string `json:"vendorDescription,omitempty"`
+	// VendorServices are the services the company provides, from the report's system description
+	VendorServices []string `json:"vendorServices,omitempty"`
+}
+
+// ReportFinding is one exception the auditor noted, as the findings section stores it
+type ReportFinding struct {
+	// Description is what the auditor found
+	Description string `json:"description,omitempty"`
+	// Severity is high, medium, or low
+	Severity string `json:"severity,omitempty"`
+	// RefCodes are the controls the finding was noted against
+	RefCodes []string `json:"refCodes,omitempty"`
+	// Open is true when the finding was not remediated by the end of the report period
+	Open bool `json:"open,omitempty"`
+}
+
+// Findings decodes a scan's findings section, empty when the scan has none
+func Findings(metadata map[string]any) []ReportFinding {
+	report, _ := metadata[reportMetadataKey].(map[string]any)
+
+	var findings []ReportFinding
+	if err := jsonx.RoundTrip(report[soc2.FindingsPart], &findings); err != nil {
+		return nil
+	}
+
+	return findings
+}
+
+// Validation decodes the validation outcome recorded when the scan was submitted
+func Validation(metadata map[string]any) (docextract.Validation, bool) {
+	raw, ok := metadata[validationMetadataKey]
+	if !ok {
+		return docextract.Validation{}, false
+	}
+
+	var validation docextract.Validation
+	if err := jsonx.RoundTrip(raw, &validation); err != nil {
+		return docextract.Validation{}, false
+	}
+
+	return validation, true
+}
+
+// ReportPerformers are the performed_by values of every scan the system parses as an uploaded report
+var ReportPerformers = []string{PerformedBy, VendorReviewPerformedBy}
+
+// Assessment decodes a scan's vendor assessment, reporting false when the scan has none
+func Assessment(metadata map[string]any) (ReportAssessment, bool) {
+	report, _ := metadata[reportMetadataKey].(map[string]any)
+
+	raw, ok := report[soc2.AssessmentPart]
+	if !ok {
+		return ReportAssessment{}, false
+	}
+
+	var assessment ReportAssessment
+	if err := jsonx.RoundTrip(raw, &assessment); err != nil {
+		return ReportAssessment{}, false
+	}
+
+	return assessment, true
+}
+
 // ReportFileID is the file the report was parsed from, reporting false when the scan was submitted
 // before the id was recorded
 func ReportFileID(metadata map[string]any) (string, bool) {
@@ -182,6 +273,14 @@ type ReportScanRequest struct {
 
 	// parts lists the sections with a configured prompt, set by the builder from the runtime config
 	parts []string
+}
+
+// VendorReportScanRequest schedules the review of a vendor's report attached to a pending report-type Scan record
+type VendorReportScanRequest struct {
+	// ScanID identifies the Scan record whose attached report should be reviewed
+	ScanID string `json:"scanId" jsonschema:"required,title=Scan ID,description=Scan record holding the vendor's uploaded report"`
+	// OrganizationID is the organization the scan belongs to
+	OrganizationID string `json:"organizationId,omitempty"`
 }
 
 // ReportScanRequestResult acknowledges what happened to a report scan request

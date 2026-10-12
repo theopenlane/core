@@ -37,7 +37,7 @@ func Validate(pdf []byte, kind string) (Validation, error) {
 
 // Validate applies the profile to the pdf
 func (p Profile) Validate(pdf []byte, kind string) (Validation, error) {
-	result := Validation{Kind: kind, ReportType: ReportTypeUnknown}
+	result := Validation{Kind: kind, ReportType: ReportTypeUnknown, Opinion: OpinionUnknown}
 
 	document, err := pdftext.Open(pdf)
 	if err != nil {
@@ -59,16 +59,21 @@ func (p Profile) Validate(pdf []byte, kind string) (Validation, error) {
 
 	found := p.matchMarkers(text)
 
+	// matches are recorded before the required check so a rejection still reports what was found
 	for _, marker := range p.Markers {
 		switch {
-		case marker.Weight == MarkerRequired && !found[marker.Name]:
-			return result, &ValidationError{Err: ErrNotMatched, Reason: fmt.Sprintf("the uploaded file does not appear to be a %s, it never references %s", p.Kind, marker.Name)}
 		case !found[marker.Name]:
 			continue
 		case marker.Weight == MarkerStrong:
 			result.Strong = append(result.Strong, marker.Name)
 		case marker.Weight == MarkerSupporting:
 			result.Supporting = append(result.Supporting, marker.Name)
+		}
+	}
+
+	for _, marker := range p.Markers {
+		if marker.Weight == MarkerRequired && !found[marker.Name] {
+			return result, &ValidationError{Err: ErrNotMatched, Reason: fmt.Sprintf("the uploaded file does not appear to be a %s, it never references %s", p.Kind, marker.Name)}
 		}
 	}
 
@@ -88,6 +93,10 @@ func (p Profile) Validate(pdf []byte, kind string) (Validation, error) {
 
 	if p.Subtype != nil {
 		result.ReportType = p.Subtype(found)
+	}
+
+	if p.Opinion != nil {
+		result.Opinion = p.Opinion(found)
 	}
 
 	return result, nil

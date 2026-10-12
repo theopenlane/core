@@ -1,11 +1,14 @@
 package gemini
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
 
+	"github.com/theopenlane/core/v2/pkg/docextract"
 	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // This file holds what the report scan saga needs to know about SOC 2 reports. What a SOC 2
@@ -65,4 +68,33 @@ func thinSectionError(envelope ReportScanPartEnvelope, section json.RawMessage) 
 	}
 
 	return fmt.Errorf("%w: %s returned %d item(s), expected at least %d", ErrSectionTooThin, envelope.Part, len(items), minimum)
+}
+
+// applyAssessmentOpinion records the validated opinion on a vendor assessment and raises its risk
+// rating to the floor that opinion sets, so the model can never rate a report below its opinion
+func applyAssessmentOpinion(ctx context.Context, metadata map[string]any) {
+	report, _ := metadata[reportMetadataKey].(map[string]any)
+
+	assessment, ok := report[soc2.AssessmentPart].(map[string]any)
+	if !ok {
+		return
+	}
+
+	opinion := docextract.OpinionUnknown
+
+	if validation, ok := metadata[validationMetadataKey].(map[string]any); ok {
+		if value, ok := validation["opinion"].(string); ok && value != "" {
+			opinion = docextract.Opinion(value)
+		}
+	}
+
+	rating, _ := assessment["riskRating"].(string)
+	floored := soc2.ApplyRiskFloor(rating, opinion)
+
+	if floored != rating {
+		logx.FromContext(ctx).Info().Str("model_rating", rating).Str("rating", floored).Str("opinion", opinion.String()).Msg("report scan: assessment risk raised to the opinion floor")
+	}
+
+	assessment["opinion"] = opinion.String()
+	assessment["riskRating"] = floored
 }
