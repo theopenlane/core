@@ -5,17 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/docextract"
 	geminiprovider "github.com/theopenlane/core/v2/pkg/docextract/gemini"
 	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
 	"github.com/theopenlane/core/v2/pkg/modelarmor"
 )
-
-// runtimeOnlyClient rejects installation-bound builds since the Gemini client only exists on the runtime path
-func runtimeOnlyClient(_ context.Context, _ types.ClientBuildRequest) (any, error) {
-	return nil, ErrRuntimeOnly
-}
 
 // runtimeClientBuilder returns a build function that constructs the Gemini client for the
 // runtime (system) path using the operator-owned API key

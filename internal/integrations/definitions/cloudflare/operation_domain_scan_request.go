@@ -206,8 +206,6 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 		}, ErrResultEncode)
 	}
 
-	saga := domainScanSaga{services: request.Services}
-
 	if cfg.BrandDesignOnly {
 		return runBrandDesignRequest(ctx, saga, organizationID, scanRecord, cfg.Domain)
 	}

@@ -92,15 +92,6 @@ func (Scan) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("next_scan_run_at"),
 			),
-		field.Enum("origin").
-			Comment("how the scan was created, derived from the caller on create and never supplied as input").
-			GoType(enums.ScanOrigin("")).
-			Default(enums.ScanOriginSystem.String()).
-			Immutable().
-			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
-				entgql.OrderField("ORIGIN"),
-			),
 		field.String("performed_by").
 			Comment("who performed the scan when no user or group is linked").
 			Optional(),

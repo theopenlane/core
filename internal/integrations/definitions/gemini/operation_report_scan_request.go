@@ -24,18 +24,17 @@ import (
 
 var supportedDocumentKinds = []string{soc2.KindName}
 
-// Handle adapts ReportScanRequest to the generic operation registration boundary
-func (r ReportScanRequest) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(geminiClient, ReportScanRequestOp, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanRequest) (json.RawMessage, error) {
-		return r.runEncoded(ctx, request, client, cfg)
-	})
-}
+var (
+	// ReportScanRequestOp is the operation ref for kicking off the parse of a pending report scan; its handler is bound by the builder from the runtime config
+	ReportScanRequestOp = types.OperationPayloadOf[ReportScanRequest]().Policy(types.ExecutionPolicy{SkipRunRecord: true}).CustomerSelectable(false).Internal() //nolint:revive
+	// VendorReportScanRequestOp is the operation ref for kicking off the review of a vendor's report,
+	// a separate operation so it carries its own rate limit
+	VendorReportScanRequestOp = types.OperationPayloadOf[VendorReportScanRequest]().Policy(types.ExecutionPolicy{SkipRunRecord: true}).CustomerSelectable(false).Internal() //nolint:revive
+)
 
-// HandleVendor runs the same parse under the vendor review operation, so the vendor rate limit applies
-func (r ReportScanRequest) HandleVendor() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(geminiClient, VendorReportScanRequestOp, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *Client, cfg VendorReportScanRequest) (json.RawMessage, error) {
-		return r.runEncoded(ctx, request, client, ReportScanRequest{ScanID: cfg.ScanID, OrganizationID: cfg.OrganizationID})
-	})
+// handleVendor runs the same parse under the vendor review operation, so the vendor rate limit applies
+func (r ReportScanRequest) handleVendor(ctx context.Context, request types.OperationRequest, client *Client, cfg VendorReportScanRequest) (json.RawMessage, error) {
+	return r.runEncoded(ctx, request, client, ReportScanRequest{ScanID: cfg.ScanID, OrganizationID: cfg.OrganizationID})
 }
 
 // runEncoded runs the request and encodes its result for the operation response
@@ -97,6 +96,10 @@ func (r ReportScanRequest) Run(ctx context.Context, request types.OperationReque
 		plan, err = r.planSOC2Report(pdf, scanRecord.Metadata, scanRecord.PerformedBy == VendorReviewPerformedBy)
 	default:
 		err = ErrUnsupportedDocumentKind
+	}
+
+	if err != nil {
+		return ReportScanRequestResult{}, err
 	}
 
 	// the document is untrusted input; screen it for injected instructions before the model ever sees it

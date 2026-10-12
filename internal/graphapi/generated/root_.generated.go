@@ -5905,7 +5905,6 @@ type ComplexityRoot struct {
 		InternalNotes              func(childComplexity int) int
 		Metadata                   func(childComplexity int) int
 		NextScanRunAt              func(childComplexity int) int
-		Origin                     func(childComplexity int) int
 		Owner                      func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
 		PerformedBy                func(childComplexity int) int
@@ -41465,12 +41464,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Scan.NextScanRunAt(childComplexity), true
-	case "Scan.origin":
-		if e.ComplexityRoot.Scan.Origin == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Scan.Origin(childComplexity), true
 	case "Scan.owner":
 		if e.ComplexityRoot.Scan.Owner == nil {
 			break
@@ -115237,10 +115230,6 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   nextScanRunAt: DateTime
   """
-  how the scan was created, derived from the caller on create and never supplied as input
-  """
-  origin: ScanScanOrigin!
-  """
   who performed the scan when no user or group is linked
   """
   performedBy: String
@@ -115764,17 +115753,7 @@ enum ScanOrderField {
   SCAN_TYPE
   scan_date
   next_scan_run_at
-  ORIGIN
   STATUS
-}
-"""
-ScanScanOrigin is enum for the field origin
-"""
-enum ScanScanOrigin @goModel(model: "github.com/theopenlane/core/common/enums.ScanOrigin") {
-  USER
-  SYSTEM
-  INTEGRATION
-  API
 }
 """
 ScanScanStatus is enum for the field status
@@ -116158,13 +116137,6 @@ input ScanWhereInput {
   nextScanRunAtLTE: DateTime
   nextScanRunAtIsNil: Boolean
   nextScanRunAtNotNil: Boolean
-  """
-  origin field predicates
-  """
-  origin: ScanScanOrigin
-  originNEQ: ScanScanOrigin
-  originIn: [ScanScanOrigin!]
-  originNotIn: [ScanScanOrigin!]
   """
   performed_by field predicates
   """
@@ -164395,8 +164367,6 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_scanSchedule(ctx, field)
 	case "nextScanRunAt":
 		return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
-	case "origin":
-		return ec.fieldContext_Scan_origin(ctx, field)
 	case "performedBy":
 		return ec.fieldContext_Scan_performedBy(ctx, field)
 	case "performedByUserID":

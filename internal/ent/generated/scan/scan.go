@@ -82,8 +82,6 @@ const (
 	FieldScanSchedule = "scan_schedule"
 	// FieldNextScanRunAt holds the string denoting the next_scan_run_at field in the database.
 	FieldNextScanRunAt = "next_scan_run_at"
-	// FieldOrigin holds the string denoting the origin field in the database.
-	FieldOrigin = "origin"
 	// FieldPerformedBy holds the string denoting the performed_by field in the database.
 	FieldPerformedBy = "performed_by"
 	// FieldPerformedByUserID holds the string denoting the performed_by_user_id field in the database.
@@ -350,7 +348,6 @@ var Columns = []string{
 	FieldScanDate,
 	FieldScanSchedule,
 	FieldNextScanRunAt,
-	FieldOrigin,
 	FieldPerformedBy,
 	FieldPerformedByUserID,
 	FieldPerformedByGroupID,
@@ -465,18 +462,6 @@ func ScanTypeValidator(st enums.ScanType) error {
 		return nil
 	default:
 		return fmt.Errorf("scan: invalid enum value for scan_type field: %q", st)
-	}
-}
-
-const DefaultOrigin enums.ScanOrigin = "SYSTEM"
-
-// OriginValidator is a validator for the "origin" field enum values. It is called by the builders before save.
-func OriginValidator(o enums.ScanOrigin) error {
-	switch o.String() {
-	case "USER", "SYSTEM", "INTEGRATION", "API":
-		return nil
-	default:
-		return fmt.Errorf("scan: invalid enum value for origin field: %q", o)
 	}
 }
 
@@ -648,11 +633,6 @@ func ByScanSchedule(opts ...sql.OrderTermOption) OrderOption {
 // ByNextScanRunAt orders the results by the next_scan_run_at field.
 func ByNextScanRunAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNextScanRunAt, opts...).ToFunc()
-}
-
-// ByOrigin orders the results by the origin field.
-func ByOrigin(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOrigin, opts...).ToFunc()
 }
 
 // ByPerformedBy orders the results by the performed_by field.
@@ -1161,13 +1141,6 @@ var (
 	_ graphql.Marshaler = (*enums.ScanType)(nil)
 	// enums.ScanType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ScanType)(nil)
-)
-
-var (
-	// enums.ScanOrigin must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.ScanOrigin)(nil)
-	// enums.ScanOrigin must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.ScanOrigin)(nil)
 )
 
 var (

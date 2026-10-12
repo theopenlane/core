@@ -6,7 +6,6 @@ import (
 
 	"google.golang.org/genai"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/docextract"
 	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
@@ -17,19 +16,6 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Gemini integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GEMINI00000000000000001")
-	// geminiClient is the client ref for the Gemini client used by this definition
-	geminiClient = types.NewClientRef[*Client]()
-	// reportScanRequestSchema is the operation ref for kicking off the parse of a pending report scan
-	reportScanRequestSchema, ReportScanRequestOp = providerkit.OperationSchema[ReportScanRequest]() //nolint:revive
-	// vendorReportScanRequestSchema is the operation ref for kicking off the review of a vendor's report,
-	// a separate operation so it carries its own rate limit
-	vendorReportScanRequestSchema, VendorReportScanRequestOp = providerkit.OperationSchema[VendorReportScanRequest]() //nolint:revive
-	// reportScanPartSchema is the operation ref for parsing one section of a report
-	reportScanPartSchema, ReportScanPartOp = providerkit.OperationSchema[ReportScanPartRequest]() //nolint:revive
-	// reportScanReleaseSchema is the operation ref for releasing the cached report once a scan finalizes
-	reportScanReleaseSchema, ReportScanReleaseOp = providerkit.OperationSchema[ReportScanReleaseRequest]() //nolint:revive
-	// runtimeGeminiSchema is the JSON schema and typed ref for the runtime Gemini config
-	runtimeGeminiSchema, runtimeGeminiRef = providerkit.RuntimeSchema[RuntimeConfig]()
 )
 
 const (
@@ -40,9 +26,9 @@ const (
 	VendorReviewPerformedBy = "openlane_vendor_report_review"
 
 	// submitInterval is the minimum time between report scans for one organization
-	submitInterval = 24 * time.Hour
+	submitInterval = 24 * time.Hour // nolint:unused for now TODO: update before merge
 	// vendorReviewInterval is the minimum time between vendor report reviews for one organization
-	vendorReviewInterval = time.Hour
+	vendorReviewInterval = time.Hour // nolint:unused for now TODO: update before merge
 
 	// reportMetadataKey is the Scan.Metadata key holding the parsed report sections
 	reportMetadataKey = "report"

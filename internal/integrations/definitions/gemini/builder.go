@@ -3,108 +3,60 @@ package gemini
 import (
 	"fmt"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Gemini definition builder with the supplied runtime config applied.
 // The definition is currently runtime-only
 func Builder(runtime *RuntimeConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		disabled := !runtime.Provisioned()
+		request := ReportScanRequest{parts: runtime.Prompts.SOC2.ConfiguredParts()}
+
 		def := types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "Google",
-				DisplayName: "Gemini",
-				Description: "Google Gemini models for AI-assisted analysis, extraction, and content generation.",
-				Category:    "ai",
-				Tags:        []string{"ai", "reports"},
-				Active:      true,
-				Visible:     false,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "Google",
+			DisplayName: "Gemini",
+			Description: "Google Gemini models for AI-assisted analysis, extraction, and content generation.",
+			Category:    "ai",
+			Tags:        []string{"ai", "reports"},
+			Active:      true,
+			Visible:     false,
 			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: runtimeGeminiSchema,
-			},
-			Clients: []types.ClientRegistration{
-				{
-					Ref:         geminiClient.ID(),
-					Description: "Gemini API client, only provisioned through the runtime config",
-					Build:       runtimeOnlyClient,
-				},
+				Schema: jsonx.SchemaFrom[RuntimeConfig](),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:           ReportScanRequestOp.Name(),
-					Description:    "Schedule the per-section parse jobs for a pending report scan",
-					Topic:          DefinitionID.OperationTopic(ReportScanRequestOp.Name()),
-					ClientRef:      geminiClient.ID(),
-					ConfigSchema:   reportScanRequestSchema,
-					Policy:         types.ExecutionPolicy{SkipRunRecord: true},
-					DisabledForAll: !runtime.Provisioned(),
-					// RateLimit:          &types.RateLimitPolicy{Window: submitInterval},
-					Handle:             ReportScanRequest{parts: runtime.Prompts.SOC2.ConfiguredParts()}.Handle(),
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
-				},
-				{
-					Name:           VendorReportScanRequestOp.Name(),
-					Description:    "Schedule the parse jobs for a pending review of a vendor's report",
-					Topic:          DefinitionID.OperationTopic(VendorReportScanRequestOp.Name()),
-					ClientRef:      geminiClient.ID(),
-					ConfigSchema:   vendorReportScanRequestSchema,
-					Policy:         types.ExecutionPolicy{SkipRunRecord: true},
-					DisabledForAll: !runtime.Provisioned(),
-					// RateLimit:          &types.RateLimitPolicy{Window: vendorReviewInterval},
-					Handle:             ReportScanRequest{parts: runtime.Prompts.SOC2.ConfiguredParts()}.HandleVendor(),
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
-				},
-				{
-					Name:               ReportScanPartOp.Name(),
-					Description:        "Parse one section of the report attached to a report scan",
-					Topic:              DefinitionID.OperationTopic(ReportScanPartOp.Name()),
-					ClientRef:          geminiClient.ID(),
-					ConfigSchema:       reportScanPartSchema,
-					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-					DisabledForAll:     !runtime.Provisioned(),
-					Handle:             ReportScanPartRequest{}.Handle(),
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
-				},
-				{
-					Name:               ReportScanReleaseOp.Name(),
-					Description:        "Release the cached report once a report scan finalizes",
-					Topic:              DefinitionID.OperationTopic(ReportScanReleaseOp.Name()),
-					ClientRef:          geminiClient.ID(),
-					ConfigSchema:       reportScanReleaseSchema,
-					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-					DisabledForAll:     !runtime.Provisioned(),
-					Handle:             ReportScanReleaseRequest{}.Handle(),
-					CustomerSelectable: lo.ToPtr(false),
-					Internal:           true,
-				},
+				ReportScanRequestOp.Handles(request.runEncoded).
+					// RateLimit(types.RateLimitPolicy{Window: submitInterval}).
+					DisabledForAll(disabled).
+					Description("Schedule the per-section parse jobs for a pending report scan").
+					Registration(),
+				VendorReportScanRequestOp.Handles(request.handleVendor).
+					// RateLimit(types.RateLimitPolicy{Window: vendorReviewInterval}).
+					DisabledForAll(disabled).
+					Description("Schedule the parse jobs for a pending review of a vendor's report").
+					Registration(),
+				ReportScanPartOp.DisabledForAll(disabled).Description("Parse one section of the report attached to a report scan").Registration(),
+				ReportScanReleaseOp.DisabledForAll(disabled).Description("Release the cached report once a report scan finalizes").Registration(),
 			},
 			GalaListeners: []types.GalaListenerRegistration{
 				reportScanListeners(),
 			},
+			RuntimeIntegration: &types.RuntimeIntegrationRegistration{
+				Schema: jsonx.SchemaFrom[RuntimeConfig](),
+				Build:  runtimeClientBuilder(),
+			},
 		}
 
 		if runtime.Provisioned() {
-			runtimeGeminiRef.SetConfig(runtime)
-
-			marshaledConfig, err := runtimeGeminiRef.MarshalConfig()
+			config, err := jsonx.ToRawMessage(runtime)
 			if err != nil {
 				return types.Definition{}, fmt.Errorf("%w: %w", ErrRuntimeConfigDecode, err)
 			}
 
-			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
-				Ref:    runtimeGeminiRef.ID(),
-				Schema: runtimeGeminiSchema,
-				Config: marshaledConfig,
-				Build:  runtimeClientBuilder(),
-			}
+			def.RuntimeIntegration.Config = config
 		}
 
 		return def, nil

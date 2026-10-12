@@ -17,7 +17,6 @@ mutation CreateBulkCSVScan($input: Upload!) {
       internalNotes
       metadata
       nextScanRunAt
-      origin
       ownerID
       performedBy
       performedByGroupID
@@ -62,7 +61,6 @@ mutation CreateBulkScan($input: [CreateScanInput!]) {
       internalNotes
       metadata
       nextScanRunAt
-      origin
       ownerID
       performedBy
       performedByGroupID
@@ -107,7 +105,6 @@ mutation CreateScan($input: CreateScanInput!) {
       internalNotes
       metadata
       nextScanRunAt
-      origin
       ownerID
       performedBy
       performedByGroupID
@@ -184,7 +181,6 @@ query GetScanByID($scanId: ID!) {
     internalNotes
     metadata
     nextScanRunAt
-    origin
     ownerID
     performedBy
     performedByGroupID
@@ -255,7 +251,6 @@ mutation UpdateScan($updateScanId: ID!, $input: UpdateScanInput!) {
       internalNotes
       metadata
       nextScanRunAt
-      origin
       ownerID
       performedBy
       performedByGroupID

@@ -17,16 +17,17 @@ import (
 	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
-// Handle adapts ReportScanPartRequest to the generic operation registration boundary
-func (r ReportScanPartRequest) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(geminiClient, ReportScanPartOp, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanPartRequest) (json.RawMessage, error) {
-		result, err := r.Run(ctx, request, client, cfg)
-		if err != nil {
-			return nil, err
-		}
+// ReportScanPartOp is the operation ref for parsing one section of a report
+var ReportScanPartOp = types.OperationPayloadOf[ReportScanPartRequest]().Handles(handleReportScanPart).Policy(types.ExecutionPolicy{SkipRunRecord: true}).CustomerSelectable(false).Internal() //nolint:revive
 
-		return providerkit.EncodeResult(result, ErrResultEncode)
-	})
+// handleReportScanPart runs the part parse and encodes its result for the operation response
+func handleReportScanPart(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanPartRequest) (json.RawMessage, error) {
+	result, err := ReportScanPartRequest{}.Run(ctx, request, client, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
 // Run downloads the scan's pdf and extracts the single requested section

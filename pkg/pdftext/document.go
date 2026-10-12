@@ -648,7 +648,7 @@ func (c *textCursor) reset() {
 
 // moveOffsets returns the tx and ty operands of a Td or TD
 func moveOffsets(operands []token) (float64, float64, bool) {
-	if len(operands) < 2 {
+	if len(operands) < 2 { //nolint:mnd
 		return 0, 0, false
 	}
 

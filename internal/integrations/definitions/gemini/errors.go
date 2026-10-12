@@ -5,14 +5,10 @@ import "errors"
 var (
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("gemini: result encode failed")
-	// ErrOperationConfigInvalid indicates operation configuration could not be decoded
-	ErrOperationConfigInvalid = errors.New("gemini: operation config invalid")
 	// ErrRuntimeConfigDecode indicates the runtime config could not be decoded
 	ErrRuntimeConfigDecode = errors.New("gemini: runtime config decode failed")
 	// ErrRuntimeConfigInvalid indicates the runtime config is missing required fields
 	ErrRuntimeConfigInvalid = errors.New("gemini: runtime config invalid")
-	// ErrRuntimeOnly indicates the client was requested for an installation instead of the runtime path
-	ErrRuntimeOnly = errors.New("gemini: client is only available through the runtime config")
 	// ErrOrganizationRequired indicates the request carried no organization
 	ErrOrganizationRequired = errors.New("gemini: organization id required")
 	// ErrReportFileMissing indicates the scan has no pdf file attached to parse

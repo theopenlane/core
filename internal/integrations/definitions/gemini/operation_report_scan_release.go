@@ -11,16 +11,17 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// Handle adapts ReportScanReleaseRequest to the generic operation registration boundary
-func (r ReportScanReleaseRequest) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(geminiClient, ReportScanReleaseOp, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanReleaseRequest) (json.RawMessage, error) {
-		result, err := r.Run(ctx, request, client, cfg)
-		if err != nil {
-			return nil, err
-		}
+// ReportScanReleaseOp is the operation ref for releasing the cached report once a scan finalizes
+var ReportScanReleaseOp = types.OperationPayloadOf[ReportScanReleaseRequest]().Handles(handleReportScanRelease).Policy(types.ExecutionPolicy{SkipRunRecord: true}).CustomerSelectable(false).Internal() //nolint:revive
 
-		return providerkit.EncodeResult(result, ErrResultEncode)
-	})
+// handleReportScanRelease runs the cache release and encodes its result for the operation response
+func handleReportScanRelease(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanReleaseRequest) (json.RawMessage, error) {
+	result, err := ReportScanReleaseRequest{}.Run(ctx, request, client, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
 // Run deletes the cached report recorded on the scan and clears its metadata entry

@@ -72468,10 +72468,6 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
 	"""
 	nextScanRunAt: DateTime
 	"""
-	how the scan was created, derived from the caller on create and never supplied as input
-	"""
-	origin: ScanScanOrigin!
-	"""
 	who performed the scan when no user or group is linked
 	"""
 	performedBy: String
@@ -73060,17 +73056,7 @@ enum ScanOrderField {
 	SCAN_TYPE
 	scan_date
 	next_scan_run_at
-	ORIGIN
 	STATUS
-}
-"""
-ScanScanOrigin is enum for the field origin
-"""
-enum ScanScanOrigin @goModel(model: "github.com/theopenlane/core/common/enums.ScanOrigin") {
-	USER
-	SYSTEM
-	INTEGRATION
-	API
 }
 """
 ScanScanStatus is enum for the field status
@@ -73463,13 +73449,6 @@ input ScanWhereInput {
 	nextScanRunAtLTE: DateTime
 	nextScanRunAtIsNil: Boolean
 	nextScanRunAtNotNil: Boolean
-	"""
-	origin field predicates
-	"""
-	origin: ScanScanOrigin
-	originNEQ: ScanScanOrigin
-	originIn: [ScanScanOrigin!]
-	originNotIn: [ScanScanOrigin!]
 	"""
 	performed_by field predicates
 	"""

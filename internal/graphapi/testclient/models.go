@@ -29505,8 +29505,6 @@ type Scan struct {
 	ScanSchedule *string `json:"scanSchedule,omitempty"`
 	// when the scan is scheduled to run next
 	NextScanRunAt *models.DateTime `json:"nextScanRunAt,omitempty"`
-	// how the scan was created, derived from the caller on create and never supplied as input
-	Origin enums.ScanOrigin `json:"origin"`
 	// who performed the scan when no user or group is linked
 	PerformedBy *string `json:"performedBy,omitempty"`
 	// the user id that performed the scan
@@ -29927,11 +29925,6 @@ type ScanWhereInput struct {
 	NextScanRunAtLte    *models.DateTime `json:"nextScanRunAtLTE,omitempty"`
 	NextScanRunAtIsNil  *bool            `json:"nextScanRunAtIsNil,omitempty"`
 	NextScanRunAtNotNil *bool            `json:"nextScanRunAtNotNil,omitempty"`
-	// origin field predicates
-	Origin      *enums.ScanOrigin  `json:"origin,omitempty"`
-	OriginNeq   *enums.ScanOrigin  `json:"originNEQ,omitempty"`
-	OriginIn    []enums.ScanOrigin `json:"originIn,omitempty"`
-	OriginNotIn []enums.ScanOrigin `json:"originNotIn,omitempty"`
 	// performed_by field predicates
 	PerformedBy             *string  `json:"performedBy,omitempty"`
 	PerformedByNeq          *string  `json:"performedByNEQ,omitempty"`
@@ -51167,7 +51160,6 @@ const (
 	ScanOrderFieldScanType      ScanOrderField = "SCAN_TYPE"
 	ScanOrderFieldScanDate      ScanOrderField = "scan_date"
 	ScanOrderFieldNextScanRunAt ScanOrderField = "next_scan_run_at"
-	ScanOrderFieldOrigin        ScanOrderField = "ORIGIN"
 	ScanOrderFieldStatus        ScanOrderField = "STATUS"
 )
 
@@ -51177,13 +51169,12 @@ var AllScanOrderField = []ScanOrderField{
 	ScanOrderFieldScanType,
 	ScanOrderFieldScanDate,
 	ScanOrderFieldNextScanRunAt,
-	ScanOrderFieldOrigin,
 	ScanOrderFieldStatus,
 }
 
 func (e ScanOrderField) IsValid() bool {
 	switch e {
-	case ScanOrderFieldCreatedAt, ScanOrderFieldUpdatedAt, ScanOrderFieldScanType, ScanOrderFieldScanDate, ScanOrderFieldNextScanRunAt, ScanOrderFieldOrigin, ScanOrderFieldStatus:
+	case ScanOrderFieldCreatedAt, ScanOrderFieldUpdatedAt, ScanOrderFieldScanType, ScanOrderFieldScanDate, ScanOrderFieldNextScanRunAt, ScanOrderFieldStatus:
 		return true
 	}
 	return false

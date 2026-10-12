@@ -6474,7 +6474,7 @@ func init() {
 	// scan.ScanScheduleValidator is a validator for the "scan_schedule" field. It is called by the builders before save.
 	scan.ScanScheduleValidator = scanDescScanSchedule.Validators[0].(func(string) error)
 	// scanDescDiscoveredVulnerabilityIds is the schema descriptor for discovered_vulnerability_ids field.
-	scanDescDiscoveredVulnerabilityIds := scanFields[11].Descriptor()
+	scanDescDiscoveredVulnerabilityIds := scanFields[10].Descriptor()
 	// scan.DefaultDiscoveredVulnerabilityIds holds the default value on creation for the discovered_vulnerability_ids field.
 	scan.DefaultDiscoveredVulnerabilityIds = scanDescDiscoveredVulnerabilityIds.Default.([]string)
 	// scanDescID is the schema descriptor for id field.

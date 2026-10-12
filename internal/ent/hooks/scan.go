@@ -26,8 +26,6 @@ import (
 var (
 	// ErrReportScanFileRequired is returned when a report scan is created without a PDF attached
 	ErrReportScanFileRequired = errors.New("scan must include a PDF report")
-	// ErrScanOriginUnresolved is returned when a scan is created without a caller to derive its origin from
-	ErrScanOriginUnresolved = errors.New("scan origin could not be determined from the caller")
 	// ErrReportScanSingleFile is returned when more than one PDF report is attached to a report scan
 	ErrReportScanSingleFile = errors.New("a report scan may only have one PDF report attached")
 	// ErrReportScanFileImmutable is returned when the report is changed after parsing has started
@@ -44,13 +42,6 @@ var scanDateTypes = []enums.ScanType{enums.ScanTypeDomain, enums.ScanTypeReport}
 func HookScanDefaults() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ScanFunc(func(ctx context.Context, m *generated.ScanMutation) (generated.Value, error) {
-			origin, err := scanOriginFromContext(ctx)
-			if err != nil {
-				return nil, err
-			}
-
-			m.SetOrigin(origin)
-
 			if _, ok := m.ScanDate(); !ok && slices.Contains(scanDateTypes, mutationScanType(m)) {
 				m.SetScanDate(models.DateTime(time.Now()))
 			}
@@ -273,29 +264,4 @@ func mutationScanType(m *generated.ScanMutation) enums.ScanType {
 	}
 
 	return enums.ScanTypeDomain
-}
-
-// scanOriginFromContext derives the origin in a fixed order: an integration actor, then an
-// internal operation, then the user's authentication type
-func scanOriginFromContext(ctx context.Context) (enums.ScanOrigin, error) {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		return "", ErrScanOriginUnresolved
-	}
-
-	switch {
-	case caller.Has(auth.CapIntegrationActor):
-		return enums.ScanOriginIntegration, nil
-	case caller.Has(auth.CapInternalOperation):
-		return enums.ScanOriginSystem, nil
-	}
-
-	switch caller.AuthenticationType {
-	case auth.JWTAuthentication:
-		return enums.ScanOriginUser, nil
-	case auth.PATAuthentication, auth.APITokenAuthentication:
-		return enums.ScanOriginAPI, nil
-	default:
-		return "", ErrScanOriginUnresolved
-	}
 }

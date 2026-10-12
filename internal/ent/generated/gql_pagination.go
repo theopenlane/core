@@ -28205,20 +28205,6 @@ var (
 			}
 		},
 	}
-	// ScanOrderFieldOrigin orders Scan by origin.
-	ScanOrderFieldOrigin = &ScanOrderField{
-		Value: func(_m *Scan) (ent.Value, error) {
-			return _m.Origin, nil
-		},
-		column: scan.FieldOrigin,
-		toTerm: scan.ByOrigin,
-		toCursor: func(_m *Scan) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Origin,
-			}
-		},
-	}
 	// ScanOrderFieldStatus orders Scan by status.
 	ScanOrderFieldStatus = &ScanOrderField{
 		Value: func(_m *Scan) (ent.Value, error) {
@@ -28249,8 +28235,6 @@ func (f ScanOrderField) String() string {
 		str = "scan_date"
 	case ScanOrderFieldNextScanRunAt.column:
 		str = "next_scan_run_at"
-	case ScanOrderFieldOrigin.column:
-		str = "ORIGIN"
 	case ScanOrderFieldStatus.column:
 		str = "STATUS"
 	}
@@ -28279,8 +28263,6 @@ func (f *ScanOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScanOrderFieldScanDate
 	case "next_scan_run_at":
 		*f = *ScanOrderFieldNextScanRunAt
-	case "ORIGIN":
-		*f = *ScanOrderFieldOrigin
 	case "STATUS":
 		*f = *ScanOrderFieldStatus
 	default:
@@ -46414,6 +46396,7 @@ func (_q *ScanQuery) clonePage() *ScanQuery {
 	c.withAssignedToIdentityHolder = _q.withAssignedToIdentityHolder.clonePage()
 	c.withEnvironment = _q.withEnvironment.clonePage()
 	c.withScope = _q.withScope.clonePage()
+	c.withDocumentKind = _q.withDocumentKind.clonePage()
 	c.withAssets = _q.withAssets.clonePage()
 	if _q.withNamedAssets != nil {
 		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
