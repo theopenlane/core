@@ -30,11 +30,11 @@ type Client struct {
 func NewSummarizer(cfg Config) (*Client, error) {
 	sanitizer := bluemonday.StrictPolicy()
 
-	headerTabs := []string{
+	headerTags := []string{
 		"h1", "h2", "h3", "h4", "h5", "h6",
 	}
 
-	sanitizer.SkipElementsContent(headerTabs...)
+	sanitizer.SkipElementsContent(headerTags...)
 
 	switch cfg.Type {
 	case TypeLexrank:
