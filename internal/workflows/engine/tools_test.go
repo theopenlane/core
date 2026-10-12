@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -161,6 +162,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		generated.EntitlementManager(entitlements),
 		generated.Pool(pool),
 		generated.Summarizer(summarizerClient),
+		generated.Pluralizer(pluralize.NewClient()),
 	}
 
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(s.tf.URI)}
