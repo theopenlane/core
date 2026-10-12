@@ -69,12 +69,12 @@ func TestNewForTestingRegistry(t *testing.T) {
 		t.Fatal("expected registry to match")
 	}
 
-	_, ok := rt.Definition("def-1")
+	_, ok := rt.Registry().Definition("def-1")
 	if !ok {
 		t.Fatal("expected definition to be found")
 	}
 
-	catalog := rt.Catalog()
+	catalog := rt.Registry().Catalog()
 	if len(catalog) != 1 {
 		t.Fatalf("expected 1 catalog entry, got %d", len(catalog))
 	}

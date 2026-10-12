@@ -11,14 +11,12 @@ var (
 	ErrMessageEmpty = errors.New("microsoftteams: message body is required")
 	// ErrProfileLookupFailed indicates the Graph /me request failed
 	ErrProfileLookupFailed = errors.New("microsoftteams: profile lookup failed")
-	// ErrOperationConfigInvalid indicates operation config could not be decoded
-	ErrOperationConfigInvalid = errors.New("microsoftteams: operation config invalid")
 	// ErrChannelMessageSendFailed indicates the Graph channel message request failed
 	ErrChannelMessageSendFailed = errors.New("microsoftteams: channel message send failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("microsoftteams: result encode failed")
 	// ErrCredentialEncode indicates the credential could not be serialized
 	ErrCredentialEncode = errors.New("microsoftteams: credential encode failed")
-	// ErrCredentialDecode indicates the credential could not be deserialized
-	ErrCredentialDecode = errors.New("microsoftteams: credential decode failed")
+	// ErrTenantUnresolved indicates the access token did not carry a tenant identifier
+	ErrTenantUnresolved = errors.New("microsoftteams: tenant unresolved")
 )

@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"sync"
 	"time"
-
-	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // defaultSessionTTL is the duration that auth sessions remain valid when no explicit expiry is set
@@ -21,8 +19,8 @@ type AuthState struct {
 	DefinitionID string
 	// InstallationID identifies the installation record being activated
 	InstallationID string
-	// CredentialRef identifies which credential-schema-selected connection mode is being activated
-	CredentialRef types.CredentialSlotID
+	// CredentialRef is the name of the connection being activated
+	CredentialRef string
 	// CallbackState holds the opaque state payload returned by the definition's AuthStartFunc
 	CallbackState json.RawMessage
 	// CreatedAt records when the session was initiated

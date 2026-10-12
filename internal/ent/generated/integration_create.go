@@ -381,6 +381,34 @@ func (_c *IntegrationCreate) SetNillableProviderState(v *openapi.IntegrationProv
 	return _c
 }
 
+// SetUserInput sets the "user_input" field.
+func (_c *IntegrationCreate) SetUserInput(v openapi.IntegrationUserInput) *IntegrationCreate {
+	_c.mutation.SetUserInput(v)
+	return _c
+}
+
+// SetNillableUserInput sets the "user_input" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableUserInput(v *openapi.IntegrationUserInput) *IntegrationCreate {
+	if v != nil {
+		_c.SetUserInput(*v)
+	}
+	return _c
+}
+
+// SetOperationConfig sets the "operation_config" field.
+func (_c *IntegrationCreate) SetOperationConfig(v openapi.IntegrationOperationConfig) *IntegrationCreate {
+	_c.mutation.SetOperationConfig(v)
+	return _c
+}
+
+// SetNillableOperationConfig sets the "operation_config" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableOperationConfig(v *openapi.IntegrationOperationConfig) *IntegrationCreate {
+	if v != nil {
+		_c.SetOperationConfig(*v)
+	}
+	return _c
+}
+
 // SetMetadata sets the "metadata" field.
 func (_c *IntegrationCreate) SetMetadata(v map[string]interface{}) *IntegrationCreate {
 	_c.mutation.SetMetadata(v)
@@ -1096,6 +1124,14 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ProviderState(); ok {
 		_spec.SetField(integration.FieldProviderState, field.TypeJSON, value)
 		_node.ProviderState = value
+	}
+	if value, ok := _c.mutation.UserInput(); ok {
+		_spec.SetField(integration.FieldUserInput, field.TypeJSON, value)
+		_node.UserInput = value
+	}
+	if value, ok := _c.mutation.OperationConfig(); ok {
+		_spec.SetField(integration.FieldOperationConfig, field.TypeJSON, value)
+		_node.OperationConfig = value
 	}
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)

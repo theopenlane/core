@@ -2,7 +2,6 @@ package githubapp
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -29,23 +28,15 @@ func TestQueryRepositoriesUsesConfiguredGraphQLEndpoint(t *testing.T) {
 	}))
 	defer server.Close()
 
-	futureExpiry := time.Now().Add(time.Hour).UTC().Format(time.RFC3339)
+	futureExpiry := time.Now().Add(time.Hour).UTC()
 
-	clientValue, err := Client{AppConfig: Config{
+	client, err := appClient(Config{
 		AppID:      "1",
 		PrivateKey: privateKey,
 		APIURL:     server.URL,
-	}}.Build(context.Background(), types.ClientBuildRequest{
-		Credentials: types.CredentialBindings{{
-			Ref: gitHubAppCredential.ID(),
-			Credential: types.CredentialSet{
-				Data: json.RawMessage(`{"appId":1,"installationId":2,"accessToken":"token","expiry":"` + futureExpiry + `"}`),
-			},
-		}},
+	})(context.Background(), types.ConnectionRequest[githubAppCredential]{
+		Credential: githubAppCredential{AppID: 1, InstallationID: 2, AccessToken: "token", Expiry: &futureExpiry},
 	})
-	require.NoError(t, err)
-
-	client, err := gitHubClient.Cast(clientValue)
 	require.NoError(t, err)
 
 	repositories, err := queryRepositories(context.Background(), client, 1, nil)
@@ -54,39 +45,41 @@ func TestQueryRepositoriesUsesConfiguredGraphQLEndpoint(t *testing.T) {
 	require.Equal(t, "/api/graphql", requestPath)
 }
 
-// TestCredentialFromBindings verifies credential extraction and validation
-func TestCredentialFromBindings(t *testing.T) {
+// TestAppClientCredentialValidation verifies the client builder validates the decoded credential
+func TestAppClientCredentialValidation(t *testing.T) {
 	t.Parallel()
 
+	expiry := time.Date(2099, time.January, 1, 0, 0, 0, 0, time.UTC)
+
 	tests := []struct {
-		name    string
-		data    string
-		wantErr error
+		name       string
+		credential githubAppCredential
+		wantErr    error
 	}{
 		{
-			name:    "valid token and expiry",
-			data:    `{"appId":1,"installationId":2,"accessToken":"tok","expiry":"2099-01-01T00:00:00Z"}`,
-			wantErr: nil,
+			name:       "valid token and expiry",
+			credential: githubAppCredential{AppID: 1, InstallationID: 2, AccessToken: "tok", Expiry: &expiry},
+			wantErr:    nil,
 		},
 		{
-			name:    "missing installation ID",
-			data:    `{"appId":1,"installationId":0,"accessToken":"tok","expiry":"2099-01-01T00:00:00Z"}`,
-			wantErr: ErrInstallationIDMissing,
+			name:       "missing installation ID",
+			credential: githubAppCredential{AppID: 1, AccessToken: "tok", Expiry: &expiry},
+			wantErr:    ErrInstallationIDMissing,
 		},
 		{
-			name:    "missing access token",
-			data:    `{"appId":1,"installationId":2,"expiry":"2099-01-01T00:00:00Z"}`,
-			wantErr: ErrAccessTokenMissing,
+			name:       "missing access token",
+			credential: githubAppCredential{AppID: 1, InstallationID: 2, Expiry: &expiry},
+			wantErr:    ErrAccessTokenMissing,
 		},
 		{
-			name:    "missing expiry",
-			data:    `{"appId":1,"installationId":2,"accessToken":"tok"}`,
-			wantErr: ErrAccessTokenMissing,
+			name:       "missing expiry",
+			credential: githubAppCredential{AppID: 1, InstallationID: 2, AccessToken: "tok"},
+			wantErr:    ErrAccessTokenMissing,
 		},
 		{
-			name:    "missing both token and expiry",
-			data:    `{"appId":1,"installationId":2}`,
-			wantErr: ErrAccessTokenMissing,
+			name:       "missing both token and expiry",
+			credential: githubAppCredential{AppID: 1, InstallationID: 2},
+			wantErr:    ErrAccessTokenMissing,
 		},
 	}
 
@@ -94,10 +87,7 @@ func TestCredentialFromBindings(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			_, err := credentialFromBindings(types.CredentialBindings{{
-				Ref:        gitHubAppCredential.ID(),
-				Credential: types.CredentialSet{Data: json.RawMessage(tc.data)},
-			}})
+			_, err := appClient(Config{})(context.Background(), types.ConnectionRequest[githubAppCredential]{Credential: tc.credential})
 
 			switch {
 			case tc.wantErr != nil:
@@ -146,21 +136,13 @@ func TestBuildRefreshesExpiredInstallationToken(t *testing.T) {
 	}))
 	defer server.Close()
 
-	clientValue, err := Client{AppConfig: Config{
+	client, err := appClient(Config{
 		AppID:      "1",
 		PrivateKey: privateKey,
 		APIURL:     server.URL,
-	}}.Build(context.Background(), types.ClientBuildRequest{
-		Credentials: types.CredentialBindings{{
-			Ref: gitHubAppCredential.ID(),
-			Credential: types.CredentialSet{
-				Data: json.RawMessage(`{"appId":1,"installationId":2,"accessToken":"ghs_stale","expiry":"` + expired.Format(time.RFC3339) + `"}`),
-			},
-		}},
+	})(context.Background(), types.ConnectionRequest[githubAppCredential]{
+		Credential: githubAppCredential{AppID: 1, InstallationID: 2, AccessToken: "ghs_stale", Expiry: &expired},
 	})
-	require.NoError(t, err)
-
-	client, err := gitHubClient.Cast(clientValue)
 	require.NoError(t, err)
 
 	repositories, err := queryRepositories(context.Background(), client, 1, nil)

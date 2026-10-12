@@ -19,28 +19,14 @@ const (
 	defaultPageSize = 1000
 )
 
-// FindingsCollect collects Cloudflare Security Center insights for ingest as findings
-type FindingsCollect struct{}
-
-// IngestHandle adapts findings collection to the ingest operation registration boundary
-func (f FindingsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(cloudflareClient, findingsSyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ FindingsSync) ([]types.IngestPayloadSet, error) {
-		return f.Run(ctx, request.Credentials, client, request.LastRunAt)
-	})
-}
-
-// Run collects Cloudflare Security Center insights and emits finding ingest payloads
-func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, client *CloudflareClient, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
-	meta, err := resolveCredential(credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if meta.AccountID == "" {
+// runFindingsCollect collects Cloudflare Security Center insights and emits finding ingest payloads
+func runFindingsCollect(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ FindingsSync) ([]types.IngestPayloadSet, error) {
+	accountID := client.Config.AccountID
+	if accountID == "" {
 		return nil, ErrAccountIDMissing
 	}
 
-	issues, err := fetchSecurityInsights(ctx, client, meta.AccountID)
+	issues, err := fetchSecurityInsights(ctx, client, accountID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error fetching Security Center insights")
 		return nil, ErrFindingsFetchFailed
@@ -48,11 +34,11 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 
 	envelopes := make([]types.MappingEnvelope, 0, len(issues))
 	for _, issue := range issues {
-		if !insightUpdatedSince(issue, lastRunAt) {
+		if !insightUpdatedSince(issue, request.LastRunAt) {
 			continue
 		}
 
-		envelope, err := providerkit.MarshalEnvelope(meta.AccountID, issue, ErrPayloadEncode)
+		envelope, err := providerkit.MarshalEnvelope(accountID, issue, ErrPayloadEncode)
 		if err != nil {
 			return nil, err
 		}
@@ -68,7 +54,7 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 	}, nil
 }
 
-// the sdk returns the wrong json structure so use a wrapper
+// cloudflareInsightsResponse wraps the insight list response, correcting the SDK's JSON structure
 type cloudflareInsightsResponse struct {
 	Result security_center.InsightListResponse `json:"result"`
 }

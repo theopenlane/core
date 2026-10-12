@@ -51,6 +51,8 @@ type OAuthMaterial struct {
 	Expiry *time.Time
 	// Claims holds decoded OIDC ID token claims, if present
 	Claims map[string]any
+	// Extra returns an additional field of the token response, nil when absent
+	Extra func(key string) any
 }
 
 // oauthStartState carries the CSRF state value stored between start and complete
@@ -151,6 +153,7 @@ func buildOAuthMaterial(token *oauth2.Token, claims *oidc.IDTokenClaims) (OAuthM
 	if token != nil {
 		mat.AccessToken = token.AccessToken
 		mat.RefreshToken = token.RefreshToken
+		mat.Extra = token.Extra
 
 		if !token.Expiry.IsZero() {
 			exp := token.Expiry.UTC()
@@ -168,6 +171,15 @@ func buildOAuthMaterial(token *oauth2.Token, claims *oidc.IDTokenClaims) (OAuthM
 	}
 
 	return mat, nil
+}
+
+// ExtraValue returns an additional field of the token response, nil when the material carries none
+func (m OAuthMaterial) ExtraValue(key string) any {
+	if m.Extra == nil {
+		return nil
+	}
+
+	return m.Extra(key)
 }
 
 // mapAuthCodeOptions converts a string map into a sorted slice of auth code options

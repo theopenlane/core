@@ -11,8 +11,6 @@ var (
 	ErrClientSecretMissing = errors.New("azuresecuritycenter: client secret required")
 	// ErrSubscriptionIDMissing indicates the Azure subscription ID is missing
 	ErrSubscriptionIDMissing = errors.New("azuresecuritycenter: subscription ID required")
-	// ErrCredentialInvalid indicates credential metadata could not be decoded
-	ErrCredentialInvalid = errors.New("azuresecuritycenter: credential invalid")
 	// ErrCredentialBuildFailed indicates the Azure credential could not be constructed
 	ErrCredentialBuildFailed = errors.New("azuresecuritycenter: credential build failed")
 	// ErrAssessmentsClientBuildFailed indicates an armsecurity assessments client could not be constructed
@@ -23,6 +21,4 @@ var (
 	ErrSubAssessmentFetchFailed = errors.New("azuresecuritycenter: sub-assessment fetch failed")
 	// ErrIngestPayloadEncode indicates an ingest envelope payload could not be serialized
 	ErrIngestPayloadEncode = errors.New("azuresecuritycenter: ingest payload encode failed")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("azuresecuritycenter: result encode failed")
 )
