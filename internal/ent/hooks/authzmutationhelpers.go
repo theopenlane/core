@@ -264,7 +264,7 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 	// check if the edges were set on the mutation
 	edges := m.AddedEdges()
 	for _, e := range edges {
-		foundEdge := checkForEdge(utils.PluralizerClientFromContext(ctx), parentField, e)
+		foundEdge := checkForEdge(utils.PluralizerClient(ctx, m), parentField, e)
 		if foundEdge != "" {
 			// we need to parse the graphql input to get the ids
 			field := goUpper.ToGo(parentField)
@@ -296,7 +296,7 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 	// check if the edges were set on the mutation
 	edges := m.RemovedEdges()
 	for _, e := range edges {
-		foundEdge := checkForEdge(utils.PluralizerClientFromContext(ctx), parentField, e)
+		foundEdge := checkForEdge(utils.PluralizerClient(ctx, m), parentField, e)
 
 		if foundEdge != "" {
 			// we need to parse the graphql input to get the ids

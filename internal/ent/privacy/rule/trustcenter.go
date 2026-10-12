@@ -72,7 +72,7 @@ func getTrustCenterIDFromMutation(ctx context.Context, m ent.Mutation) string {
 	}
 
 	objectType := m.Type()
-	pluralObjectType := utils.PluralizerClientFromContext(ctx).Plural(objectType)
+	pluralObjectType := utils.PluralizerClient(ctx, m).Plural(objectType)
 	tableName := strcase.SnakeCase(pluralObjectType)
 
 	query := "SELECT trust_center_id FROM " + tableName + " WHERE id = $1"

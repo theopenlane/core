@@ -241,7 +241,7 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType,
 	}
 
 	// check if the object is in the organization
-	pluralObjectType := utils.PluralizerClientFromContext(ctx).Plural(objectType)
+	pluralObjectType := utils.PluralizerClient(ctx, m).Plural(objectType)
 	tableName := strcase.SnakeCase(pluralObjectType)
 
 	// files are not org owned, they rely on parents
@@ -332,7 +332,7 @@ func CheckIsSystemOwned(ctx context.Context, m ent.Mutation, objectType, objectI
 	}
 
 	// check if the object is in the organization
-	pluralObjectType := utils.PluralizerClientFromContext(ctx).Plural(objectType)
+	pluralObjectType := utils.PluralizerClient(ctx, m).Plural(objectType)
 	tableName := strcase.SnakeCase(pluralObjectType)
 
 	query := "SELECT EXISTS (SELECT 1 FROM " + tableName + " WHERE id = $1 and (owner_id is null and system_owned = true))"

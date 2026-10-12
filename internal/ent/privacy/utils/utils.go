@@ -138,6 +138,25 @@ func PluralizerClientFromContext(ctx context.Context) *pluralize.Client {
 	return nil
 }
 
+// PluralizerClient resolves the pluralizer from the context or mutation client.
+func PluralizerClient(ctx context.Context, m generated.Mutation) *pluralize.Client {
+	client := PluralizerClientFromContext(ctx)
+	if client != nil {
+		return client
+	}
+
+	if m == nil {
+		return nil
+	}
+
+	mut, ok := m.(MutationClient)
+	if ok && mut.Client() != nil {
+		return mut.Client().Pluralizer
+	}
+
+	return nil
+}
+
 // ModulesEnabled checks if the modules feature is enabled for the given client
 func ModulesEnabled(client *generated.Client) bool {
 	if client == nil {
