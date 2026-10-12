@@ -65,7 +65,7 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 		return nil
 	}
 
-	// updating may contain either email or status but both are not required to be avaialble at the same time
+	// updating may contain either email or status but both are not required to be available at the same time
 	// so we need to fetch the actual data and cannot rely on just status from the payload
 	req, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.TrustCenterNDARequest.Get)
 	if err != nil {
