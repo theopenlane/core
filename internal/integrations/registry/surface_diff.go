@@ -16,7 +16,7 @@ func unreplaced[T any](old, next []T, name func(T) string, replaces func(T) []st
 	return lo.Without(lo.Map(old, func(entry T, _ int) string { return name(entry) }), carried...)
 }
 
-// GateSurfaceChange refuses dropping a connection, operation, or webhook of the committed surface without a replacement
+// GateSurfaceChange refuses dropping a connection or operation of the committed surface without a replacement
 func GateSurfaceChange(old, next Surface) error {
 	var refused []string
 
@@ -33,10 +33,6 @@ func GateSurfaceChange(old, next Surface) error {
 	refuse("operation", unreplaced(old.Operations, next.Operations,
 		func(operation SurfaceOperation) string { return operation.Name },
 		func(operation SurfaceOperation) []string { return operation.Replaces }))
-
-	refuse("webhook", unreplaced(old.Webhooks, next.Webhooks,
-		func(webhook SurfaceWebhook) string { return webhook.Name },
-		func(webhook SurfaceWebhook) []string { return webhook.Replaces }))
 
 	if len(refused) == 0 {
 		return nil

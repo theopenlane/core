@@ -165,28 +165,6 @@ func TestDefinitionSurface(t *testing.T) {
 	}
 }
 
-func TestDefinitionSurfaceWebhooks(t *testing.T) {
-	t.Parallel()
-
-	surface := registeredSurface(t, "surface-webhooks-def")
-
-	if got := lo.Map(surface.Webhooks, func(w SurfaceWebhook, _ int) string { return w.Name }); !slices.Equal(got, []string{"events.v2", "static"}) {
-		t.Fatalf("Webhooks = %v, want sorted names", got)
-	}
-
-	if got := surface.Webhooks[0].Replaces; !slices.Equal(got, []string{"events.v1"}) {
-		t.Fatalf("events.v2 Replaces = %v", got)
-	}
-
-	if got := surface.Webhooks[0].Events; !slices.Equal(got, []string{"member.joined", "member.removed"}) {
-		t.Fatalf("events.v2 Events = %v, want sorted names", got)
-	}
-
-	if len(surface.Webhooks[1].Events) != 0 || surface.Webhooks[1].Replaces != nil {
-		t.Fatalf("static webhook = %+v, want no events and no replacements", surface.Webhooks[1])
-	}
-}
-
 func TestDefinitionSurfaceOmitsAbsentSections(t *testing.T) {
 	t.Parallel()
 
@@ -204,7 +182,7 @@ func TestDefinitionSurfaceOmitsAbsentSections(t *testing.T) {
 		t.Fatalf("decode: %v", err)
 	}
 
-	for _, absent := range []string{"userInput", "webhooks"} {
+	for _, absent := range []string{"userInput"} {
 		if _, present := keys[absent]; present {
 			t.Fatalf("expected %s to be omitted from a surface without it: %s", absent, encoded)
 		}
@@ -218,8 +196,6 @@ func TestVersionChangesWhenAnOperationIsRenamedAndIsStableAcrossOrdering(t *test
 
 	reordered := surfaceDefinition("version-def")
 	slices.Reverse(reordered.Operations)
-	slices.Reverse(reordered.Webhooks)
-	slices.Reverse(reordered.Webhooks[0].Events)
 
 	if versionOf(t, reordered) != versionOf(t, base) {
 		t.Fatal("expected declaration order not to change the version")
@@ -386,13 +362,9 @@ func TestVersionChangesWhenAReplacementIsRemoved(t *testing.T) {
 	operation := surfaceDefinition("version-def")
 	operation.Operations[0].Replaces = nil
 
-	webhook := surfaceDefinition("version-def")
-	webhook.Webhooks[1].Replaces = nil
-
 	for name, def := range map[string]integrationtypes.Definition{
 		"user input upgrade removed":    userInput,
 		"operation replacement removed": operation,
-		"webhook replacement removed":   webhook,
 	} {
 		if versionOf(t, def) == versionOf(t, base) {
 			t.Fatalf("%s: expected the version to change", name)
@@ -406,15 +378,6 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 
 	base := surfaceDefinition("version-def")
 
-	webhookName := surfaceDefinition("version-def")
-	webhookName.Webhooks[0].Name = "static-v2"
-
-	webhookReplaces := surfaceDefinition("version-def")
-	webhookReplaces.Webhooks[0].Replaces = []string{"static-old"}
-
-	webhookEventName := surfaceDefinition("version-def")
-	webhookEventName.Webhooks[1].Events[0].Name = "member.left"
-
 	userInputSchema := surfaceDefinition("version-def")
 	userInputSchema.UserInput.Schema = json.RawMessage(`{"type":"object","required":["different"]}`)
 
@@ -425,12 +388,9 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 	operationConfigSchema.Operations[0].Input.Schema = json.RawMessage(`{"type":"object","required":["limit"]}`)
 
 	for name, def := range map[string]integrationtypes.Definition{
-		"webhook name":              webhookName,
-		"webhook replaces declared": webhookReplaces,
-		"webhook event name":        webhookEventName,
-		"user input schema alone":   userInputSchema,
-		"installation schema":       installationSchema,
-		"operation config schema":   operationConfigSchema,
+		"user input schema alone": userInputSchema,
+		"installation schema":     installationSchema,
+		"operation config schema": operationConfigSchema,
 	} {
 		if versionOf(t, def) == versionOf(t, base) {
 			t.Fatalf("%s: expected the version to change", name)
@@ -438,7 +398,7 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 	}
 }
 
-// TestVersionUnchangedForDescriptionMetaAndHandlers verifies non-surfaced fields don't change it
+// TestVersionUnchangedForDescriptionMetaAndHandlers verifies non-surfaced fields, webhook contracts among them, don't change it
 func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
 	t.Parallel()
 
@@ -450,10 +410,13 @@ func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
 		testConnectionOf[testCredential]().Meta(map[string]integrationtypes.MetaInfo{"note": {Value: "hello"}}),
 	}
 	changed.Operations[0].Handle = newTestHandler()
+	changed.Webhooks[0].Name = "static-v2"
+	changed.Webhooks[0].Replaces = []string{"static-old"}
+	changed.Webhooks[1].Events[0].Name = "member.left"
 	changed.Webhooks[1].Events[0].Handle = func(context.Context, integrationtypes.WebhookHandleRequest) error { return nil }
 
 	if versionOf(t, changed) != versionOf(t, base) {
-		t.Fatal("expected description, meta, and handler changes to leave the version unchanged")
+		t.Fatal("expected description, meta, handler, and webhook changes to leave the version unchanged")
 	}
 }
 

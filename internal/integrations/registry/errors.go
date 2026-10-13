@@ -65,8 +65,8 @@ var (
 	ErrLinkSourceFieldInvalid = errors.New("integrations/registry: link source field is not a mapped input key of the required shape")
 	// ErrOperationFilterExprInvalid indicates a stored operation input carries a filter expression that does not compile
 	ErrOperationFilterExprInvalid = errors.New("integrations/registry: operation filter expression invalid")
-	// ErrDestructiveSurfaceChange indicates a removed connection, operation, or webhook has no replacement
-	ErrDestructiveSurfaceChange = errors.New("integrations/registry: removed connection, operation, or webhook has no replacing registration")
+	// ErrDestructiveSurfaceChange indicates a removed connection or operation has no replacement
+	ErrDestructiveSurfaceChange = errors.New("integrations/registry: removed connection or operation has no replacing registration")
 	// ErrSnapshotStale indicates a definition's surface does not match its committed snapshot; run task config:generate
 	ErrSnapshotStale = errors.New("integrations/registry: definition surface does not match its committed snapshot")
 )

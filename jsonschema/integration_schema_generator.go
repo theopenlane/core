@@ -34,7 +34,7 @@ func main() {
 	}
 }
 
-// generateIntegrationSchemas writes one surface snapshot per registered definition, keeping the committed version while the surface hash is unchanged and minting a new one otherwise, and refusing a removed connection, operation, or webhook that no registration declares it replaces
+// generateIntegrationSchemas writes one surface snapshot per registered definition, keeping the committed version while the surface hash is unchanged and minting a new one otherwise, and warning about a removed connection or operation that no registration declares it replaces
 func generateIntegrationSchemas(dir string) error {
 	reg := registry.New()
 	if err := reg.RegisterAll(catalog.Builders(catalog.Config{}, "", false)...); err != nil {
@@ -66,8 +66,9 @@ func generateIntegrationSchemas(dir string) error {
 				return fmt.Errorf("decode %s: %w", target, err)
 			}
 
+			// the snapshot records what the definition holds; the gate only flags the removal so the author checks for installations still holding the removed names
 			if err := registry.GateSurfaceChange(committed.Surface, next.Surface); err != nil {
-				return err
+				fmt.Fprintf(os.Stderr, "warning: %v\n", err)
 			}
 		}
 

@@ -107,7 +107,6 @@ func Builder(cfg Config) registry.Builder {
 			Webhooks: []types.WebhookRegistration{
 				InstallationEventsWebhook.Registration(types.WebhookRegistration{
 					StaticRoute:        "/github/app/webhook",
-					SecretSource:       func() string { return cfg.WebhookSecret },
 					ResolveIntegration: ResolveWebhookIntegration,
 					Verify:             app.Verify,
 					Event:              app.Event,

@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/newman/providers/mock"
 	"github.com/theopenlane/newman/providers/postmark"
 	"github.com/theopenlane/newman/providers/resend"
-	"github.com/theopenlane/newman/providers/sendgrid"
 	"github.com/theopenlane/newman/scrubber"
 )
 
@@ -31,7 +30,7 @@ func runtimeClientBuilder(devMode bool) func(context.Context, json.RawMessage) (
 			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 		}
 
-		sender, err := buildSender(cfg.Provider, cfg.APIKey, devMode, cfg.TestDir)
+		sender, err := runtimeSender(cfg, devMode)
 		if err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 		}
@@ -43,24 +42,50 @@ func runtimeClientBuilder(devMode bool) func(context.Context, json.RawMessage) (
 	}
 }
 
-// buildCustomerClient constructs an Client from resolved credentials and user input
-func buildCustomerClient(_ context.Context, req types.ConnectionRequest[Credential]) (*Client, error) {
-	sender, senderErr := buildSender(req.Credential.Provider, req.Credential.APIKey, false, "")
-	if senderErr != nil {
-		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, senderErr)
-	}
-
-	var userInput UserInput
-	if req.Integration != nil {
-		if err := jsonx.UnmarshalIfPresent(req.Integration.UserInput.Data, &userInput); err != nil {
+// customerClientBuilder returns a connection client builder that pairs the sender newSender constructs from the decoded credential with the installation user input
+func customerClientBuilder[T any](newSender func(T) (newman.EmailSender, error)) func(context.Context, types.ConnectionRequest[T]) (*Client, error) {
+	return func(_ context.Context, req types.ConnectionRequest[T]) (*Client, error) {
+		sender, err := newSender(req.Credential)
+		if err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 		}
+
+		var userInput UserInput
+		if req.Integration != nil {
+			if err := jsonx.UnmarshalIfPresent(req.Integration.UserInput.Data, &userInput); err != nil {
+				return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
+			}
+		}
+
+		return &Client{
+			Sender: sender,
+			Config: userInput.ToRuntimeConfig(),
+		}, nil
+	}
+}
+
+// resendSender constructs the Resend sender for a customer-provisioned credential
+func resendSender(cred ResendCredential) (newman.EmailSender, error) {
+	return resend.New(cred.APIKey, resend.WithHTMLScrubber(EmailHTMLScrubber))
+}
+
+// postmarkSender constructs the Postmark sender for a customer-provisioned credential, applying its stream and tracking options
+func postmarkSender(cred PostmarkCredential) (newman.EmailSender, error) {
+	opts := []postmark.Option{postmark.WithHTMLScrubber(EmailHTMLScrubber)}
+
+	if cred.MessageStream != "" {
+		opts = append(opts, postmark.WithMessageStream(cred.MessageStream))
 	}
 
-	return &Client{
-		Sender: sender,
-		Config: userInput.ToRuntimeConfig(),
-	}, nil
+	if cred.TrackOpens {
+		opts = append(opts, postmark.WithTrackOpens())
+	}
+
+	if cred.TrackLinks != "" {
+		opts = append(opts, postmark.WithTrackLinks(cred.TrackLinks))
+	}
+
+	return postmark.New(cred.ServerToken, opts...)
 }
 
 // EmailHTMLScrubber is the shared scrubber instance used by email providers for render-time HTML sanitization, preserving email-safe layout elements while stripping dangerous content
@@ -71,26 +96,29 @@ func EmailScrubber() scrubber.Scrubber { //nolint:revive
 	return EmailHTMLScrubber
 }
 
-// ProviderMock is the provider name for the mock email sender used in tests
-const ProviderMock = "mock"
+const (
+	// ProviderMock is the provider name for the mock email sender used in tests
+	ProviderMock = "mock"
+	// providerResend is the provider name recorded for Resend delivery
+	providerResend = "resend"
+	// providerPostmark is the provider name recorded for Postmark delivery
+	providerPostmark = "postmark"
+)
 
-// buildSender constructs a newman.EmailSender for the given provider, routing resend sends to a mock writer that outputs MIME files to testDir when devMode is true
-func buildSender(provider, apiKey string, devMode bool, testDir string) (newman.EmailSender, error) {
-	switch provider {
-	case "resend":
-		opts := []resend.Option{resend.WithHTMLScrubber(EmailHTMLScrubber)}
-		if devMode {
-			opts = append(opts, resend.WithDevMode(testDir))
-		}
+// runtimeSender constructs the sender for the provider cfg selects, from that provider's own credential block; devMode routes every provider to the mock writer that outputs MIME files to TestDir instead of sending
+func runtimeSender(cfg RuntimeEmailConfig, devMode bool) (newman.EmailSender, error) {
+	if devMode {
+		return mock.New(cfg.TestDir)
+	}
 
-		return resend.New(apiKey, opts...)
-	case "sendgrid":
-		return sendgrid.New(apiKey, sendgrid.WithHTMLScrubber(EmailHTMLScrubber))
-	case "postmark":
-		return postmark.New(apiKey, postmark.WithHTMLScrubber(EmailHTMLScrubber))
+	switch cfg.Provider {
+	case providerResend:
+		return resendSender(cfg.Resend.ResendCredential)
+	case providerPostmark:
+		return postmarkSender(cfg.Postmark.PostmarkCredential)
 	case ProviderMock:
 		return mock.New("")
 	default:
-		return nil, fmt.Errorf("%w: %s", ErrProviderNotSupported, provider)
+		return nil, fmt.Errorf("%w: %s", ErrProviderNotSupported, cfg.Provider)
 	}
 }

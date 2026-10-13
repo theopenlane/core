@@ -27,8 +27,8 @@ flag may be a raw JSON string or an @path/to/file.json reference.
 Example (email / resend):
   integrations integration configure \
     --definition-id def_01EMAILINT00000000000000001 \
-    --credential-ref email-api-key \
-    --body '{"apiKey":"re_xxx","provider":"resend"}' \
+    --credential-ref ResendCredential \
+    --body '{"apiKey":"re_xxx"}' \
     --user-input '{"fromEmail":"noreply@example.com","companyName":"Acme"}' \
     --operation-config '{"DirectorySync":{"disable":false,"filterExpr":"true"}}'`,
 	RunE: func(c *cobra.Command, _ []string) error {

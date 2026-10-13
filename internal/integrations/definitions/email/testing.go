@@ -2,8 +2,12 @@ package email
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
@@ -17,7 +21,6 @@ import (
 // for use in integration test suites
 func MockRuntimeConfig() *RuntimeEmailConfig {
 	return &RuntimeEmailConfig{ //nolint:gosec // test-only mock credentials
-		APIKey:         "mock-api-key",
 		Provider:       ProviderMock,
 		FromEmail:      "test@example.com",
 		CompanyName:    "MITB Company",
@@ -300,4 +303,35 @@ func testMinimalPDF(title string) []byte {
 	_ = api.Create(nil, bytes.NewReader(jsonData), &buf, nil)
 
 	return buf.Bytes()
+}
+
+const (
+	// MockResendWebhookSecret is the Svix signing secret MockProviderRuntimeConfig verifies Resend webhooks with
+	MockResendWebhookSecret = "whsec_bW9jay1yZXNlbmQtd2ViaG9vay1zZWNyZXQ=" //nolint:gosec // test-only mock credential
+	// MockPostmarkWebhookSecret is the basic auth password MockProviderRuntimeConfig verifies Postmark webhooks with
+	MockPostmarkWebhookSecret = "mock-postmark-webhook-secret" //nolint:gosec // test-only mock credential
+)
+
+// MockProviderRuntimeConfig returns the mock runtime config with provider selected and a placeholder credential, so the definition registers that provider's inbound webhook with the mock webhook secret
+func MockProviderRuntimeConfig(provider string) *RuntimeEmailConfig {
+	cfg := MockRuntimeConfig()
+	cfg.Provider = provider
+	cfg.Resend = ResendConfig{ResendCredential: ResendCredential{APIKey: "mock-api-key"}, WebhookSecret: MockResendWebhookSecret}                     //nolint:gosec // test-only mock credential
+	cfg.Postmark = PostmarkConfig{PostmarkCredential: PostmarkCredential{ServerToken: "mock-server-token"}, WebhookSecret: MockPostmarkWebhookSecret} //nolint:gosec // test-only mock credential
+
+	return cfg
+}
+
+// SvixSignature computes the v1 Svix signature header value for payload under secret, id, and timestamp, as Resend sends it
+func SvixSignature(secret, id, timestamp string, payload []byte) string {
+	key, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(secret, "whsec_"))
+	if err != nil {
+		return ""
+	}
+
+	mac := hmac.New(sha256.New, key)
+	mac.Write([]byte(id + "." + timestamp + "."))
+	mac.Write(payload)
+
+	return "v1," + base64.StdEncoding.EncodeToString(mac.Sum(nil))
 }
