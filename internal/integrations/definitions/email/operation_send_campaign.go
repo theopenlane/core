@@ -147,7 +147,7 @@ func sendBrandedCampaignTestEmail(ctx context.Context, db *generated.Client, cli
 	}
 
 	msg := messages[0]
-	msg.Tags = []newman.Tag{{Name: TagIsTest, Value: "true"}}
+	msg.Tags = []newman.Tag{{Name: TagIsTest, Value: TagTrueValue}}
 
 	if template != nil {
 		msg.Attachments = append(msg.Attachments, staticAttachmentsFromFiles(ctx, template.Edges.Files)...)

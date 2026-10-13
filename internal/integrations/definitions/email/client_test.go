@@ -3,47 +3,42 @@ package email
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/newman"
+	"github.com/theopenlane/newman/providers/mock"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-func TestBuildSender_Resend(t *testing.T) {
-	sender, err := buildSender("resend", "test-key", false, "")
+func TestCustomerClientBuilder_Resend(t *testing.T) {
+	client, err := customerClientBuilder(resendSender)(context.Background(), types.ConnectionRequest[ResendCredential]{
+		Credential: ResendCredential{APIKey: "k"},
+	})
 	require.NoError(t, err)
-	assert.NotNil(t, sender)
+	assert.NotNil(t, client.Sender)
 }
 
-func TestBuildSender_ResendDevMode(t *testing.T) {
-	sender, err := buildSender("resend", "", true, t.TempDir())
+func TestCustomerClientBuilder_Postmark(t *testing.T) {
+	client, err := customerClientBuilder(postmarkSender)(context.Background(), types.ConnectionRequest[PostmarkCredential]{
+		Credential: PostmarkCredential{ServerToken: "k", MessageStream: "broadcast", TrackOpens: true, TrackLinks: "HtmlAndText"},
+	})
 	require.NoError(t, err)
-	assert.NotNil(t, sender)
+	assert.NotNil(t, client.Sender)
 }
 
-func TestBuildSender_Mock(t *testing.T) {
-	sender, err := buildSender(ProviderMock, "", false, "")
-	require.NoError(t, err)
-	assert.NotNil(t, sender)
-}
+func TestCustomerClientBuilder_SenderError(t *testing.T) {
+	client, err := customerClientBuilder(func(ResendCredential) (newman.EmailSender, error) {
+		return nil, errors.New("boom")
+	})(context.Background(), types.ConnectionRequest[ResendCredential]{})
 
-func TestBuildSender_UnsupportedProvider(t *testing.T) {
-	sender, err := buildSender("unsupported", "test-key", false, "")
-
-	require.ErrorIs(t, err, ErrProviderNotSupported)
-	assert.Nil(t, sender)
-	assert.Contains(t, err.Error(), "unsupported")
-}
-
-func TestBuildSender_EmptyProvider(t *testing.T) {
-	sender, err := buildSender("", "test-key", false, "")
-
-	require.ErrorIs(t, err, ErrProviderNotSupported)
-	assert.Nil(t, sender)
+	require.ErrorIs(t, err, ErrClientBuildFailed)
+	assert.Nil(t, client)
 }
 
 func TestEmailScrubber_NotNil(t *testing.T) {
@@ -95,8 +90,8 @@ func TestDevModeRuntimeClient_ProvisionedIgnoresDevMode(t *testing.T) {
 	t.Parallel()
 
 	cfg := RuntimeEmailConfig{
-		APIKey:      "real-key",
 		Provider:    "resend",
+		Resend:      ResendConfig{ResendCredential: ResendCredential{APIKey: "real-key"}},
 		FromEmail:   "prod@example.com",
 		CompanyName: "ProdCo",
 		TestDir:     t.TempDir(),
@@ -120,4 +115,41 @@ func mustMarshal(t *testing.T, v any) json.RawMessage {
 	require.NoError(t, err)
 
 	return data
+}
+
+func TestRuntimeSender(t *testing.T) {
+	tests := []struct {
+		name    string
+		cfg     RuntimeEmailConfig
+		devMode bool
+		want    any
+		wantErr error
+	}{
+		{name: "resend", cfg: RuntimeEmailConfig{Provider: "resend", Resend: ResendConfig{ResendCredential: ResendCredential{APIKey: "key"}}}, want: nil},
+		{name: "postmark", cfg: RuntimeEmailConfig{Provider: "postmark", Postmark: PostmarkConfig{PostmarkCredential: PostmarkCredential{ServerToken: "token", MessageStream: "outbound", TrackOpens: true}}}, want: nil},
+		{name: "mock", cfg: RuntimeEmailConfig{Provider: ProviderMock}, want: &mock.EmailSender{}},
+		{name: "unsupported", cfg: RuntimeEmailConfig{Provider: "sendgrid"}, wantErr: ErrProviderNotSupported},
+		{name: "empty provider", cfg: RuntimeEmailConfig{}, wantErr: ErrProviderNotSupported},
+		{name: "dev mode resend", cfg: RuntimeEmailConfig{Provider: "resend", TestDir: t.TempDir()}, devMode: true, want: &mock.EmailSender{}},
+		{name: "dev mode postmark", cfg: RuntimeEmailConfig{Provider: "postmark", TestDir: t.TempDir()}, devMode: true, want: &mock.EmailSender{}},
+		{name: "dev mode unsupported", cfg: RuntimeEmailConfig{Provider: "sendgrid", TestDir: t.TempDir()}, devMode: true, want: &mock.EmailSender{}},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			sender, err := runtimeSender(tc.cfg, tc.devMode)
+			if tc.wantErr != nil {
+				require.ErrorIs(t, err, tc.wantErr)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, sender)
+
+			if tc.want != nil {
+				assert.IsType(t, tc.want, sender)
+			}
+		})
+	}
 }

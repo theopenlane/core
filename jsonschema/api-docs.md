@@ -152,7 +152,10 @@ Config contains the configuration for the core server
         "microsoftteams": {},
         "onedrive": {},
         "oidclocal": {},
-        "email": {},
+        "email": {
+            "resend": {},
+            "postmark": {}
+        },
         "paymentreminder": {
             "paymentmethodinterval": 30,
             "deletiondays": 7,
@@ -1858,7 +1861,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "microsoftteams": {},
     "onedrive": {},
     "oidclocal": {},
-    "email": {},
+    "email": {
+        "resend": {},
+        "postmark": {}
+    },
     "paymentreminder": {
         "paymentmethodinterval": 30,
         "deletiondays": 7,
@@ -2066,9 +2072,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**testdir**|`string`|Directory for dev-mode email output<br/>|no|
-|**resendsecret**|`string`|Resend webhook signing secret<br/>|no|
-|**apikey**|`string`|Email provider API key<br/>|yes|
-|**provider**|`string`|Email service provider<br/>Enum: `"resend"`<br/>|yes|
+|**provider**|`string`|Email service provider<br/>Enum: `"resend"`, `"postmark"`<br/>|yes|
+|[**resend**](#defsemailresendconfig)|`object`||yes|
+|[**postmark**](#defsemailpostmarkconfig)|`object`||yes|
 |**fromemail**|`string`|Sender email address<br/>|yes|
 |**supportemail**|`string`|Support contact email address<br/>|no|
 |**questionnaireemail**|`string`|Sender override for questionnaire auth emails<br/>|no|
@@ -2098,6 +2104,42 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**FooterTextColor**|`string`|Muted text color for headers footers and secondary content<br/>|no|
 |**AccentBorderColor**|`string`|Decorative accent color applied to borders only<br/>|no|
 |**Tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "resend": {},
+    "postmark": {}
+}
+```
+
+   
+<a name="defsemailresendconfig"></a>
+#### $defs/email\.ResendConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**apikey**|`string`|Resend API key<br/>|yes|
+|**webhooksecret**|`string`|Resend webhook signing secret<br/>|no|
+
+**Additional Properties:** not allowed   
+   
+<a name="defsemailpostmarkconfig"></a>
+#### $defs/email\.PostmarkConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**servertoken**|`string`|Postmark server API token<br/>|yes|
+|**messagestream**|`string`|Postmark message stream ID (defaults to outbound)<br/>|no|
+|**trackopens**|`boolean`|Enable Postmark open tracking<br/>|no|
+|**tracklinks**|`string`|Postmark link tracking mode<br/>Enum: `"None"`, `"HtmlAndText"`, `"HtmlOnly"`, `"TextOnly"`<br/>|no|
+|**webhooksecret**|`string`|Postmark webhook basic auth password<br/>|no|
 
 **Additional Properties:** not allowed   
    

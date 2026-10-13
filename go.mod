@@ -123,7 +123,7 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.18.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.40.0
-	github.com/theopenlane/newman v0.4.4
+	github.com/theopenlane/newman v0.5.0
 	github.com/theopenlane/riverboat v0.14.3
 	github.com/theopenlane/utils v0.7.2
 	github.com/tmc/langchaingo v0.1.14
