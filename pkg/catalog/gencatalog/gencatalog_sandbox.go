@@ -91,6 +91,7 @@ var DefaultSandboxCatalog = models.Catalog{
 				Interval:   "month",
 				LookupKey:  "price_workflow_monthly",
 				Nickname:   "price_workflow_monthly",
+				PriceID:    "price_1UQBQwJIzM4Pa2ZcEH0cTcCK",
 				UnitAmount: int64(5000),
 			}}},
 			Description:          "Workflow Automation",
@@ -98,6 +99,7 @@ var DefaultSandboxCatalog = models.Catalog{
 			IncludeWithTrial:     true,
 			LookupKey:            "workflow_addon",
 			MarketingDescription: "",
+			ProductID:            "prod_VR3Yf3aDYWFdDm",
 		},
 	},
 	Modules: map[string]models.Feature{
@@ -233,6 +235,6 @@ var DefaultSandboxCatalog = models.Catalog{
 			ProductID:            "prod_SzpzB3d9rAjrb3",
 		},
 	},
-	SHA:     "",
-	Version: "v0.0.15",
+	SHA:     "e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2",
+	Version: "v0.0.16",
 }

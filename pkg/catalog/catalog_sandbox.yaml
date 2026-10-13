@@ -1,5 +1,5 @@
-version: v0.0.15
-sha: ""
+version: v0.0.16
+sha: e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2
 modules:
   base_module:
     display_name: Base Module
@@ -81,7 +81,6 @@ modules:
         price_id: price_1Tm59FJIzM4Pa2Zctv6XeooE
     audience: public
     product_id: prod_UlcOm2q6nv0DJC
-    include_with_trial: false
   trust_center_module:
     display_name: Trust Center
     lookup_key: trust_center_module
@@ -205,5 +204,7 @@ addons:
         unit_amount: 5000
         nickname: price_workflow_monthly
         lookup_key: price_workflow_monthly
+        price_id: price_1UQBQwJIzM4Pa2ZcEH0cTcCK
     audience: private
+    product_id: prod_VR3Yf3aDYWFdDm
     include_with_trial: true
