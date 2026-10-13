@@ -1,6 +1,6 @@
 {
-  "hash": "c87f5da9dc23cfc07f9e30047cd04a06c3ae450a0052db335cce4fc72d5782be",
-  "version": "01M49CHH2NPBMN1CMF8WS6QFXK",
+  "hash": "0fb390ccab1c524bca764ddf643681328c30e31493e15f486992c036af6ce523",
+  "version": "01M4V1VGWQ2N1TGBMBBQPD0XG8",
   "surface": {
     "id": "def_01K0GHAPP000000000000000001",
     "credentials": [
@@ -152,19 +152,6 @@
           }
         },
         "upgrade": true
-      }
-    ],
-    "webhooks": [
-      {
-        "name": "installation.events",
-        "events": [
-          "code_scanning_alert",
-          "dependabot_alert",
-          "installation.created",
-          "installation.deleted",
-          "ping",
-          "secret_scanning_alert"
-        ]
       }
     ]
   }

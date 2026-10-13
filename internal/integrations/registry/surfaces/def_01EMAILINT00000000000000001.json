@@ -1,6 +1,6 @@
 {
-  "hash": "e7ff02300dc52696848b0d599087e9deaef552c32afd6c4f8231299a1c282563",
-  "version": "01M4R8YK1VKNE90VRSN2368XBB",
+  "hash": "3b649480944467be65124ece8f261b0ed564c16ff0a4a1416afacbc1c65c352d",
+  "version": "01M4V1VGWH897QF5VPFV8A3MPG",
   "surface": {
     "id": "def_01EMAILINT00000000000000001",
     "credentials": [
@@ -197,29 +197,6 @@
       },
       {
         "name": "tmpl_trustcenter_update"
-      }
-    ],
-    "webhooks": [
-      {
-        "name": "postmark.delivery",
-        "events": [
-          "Bounce",
-          "Click",
-          "Delivery",
-          "Open",
-          "SpamComplaint"
-        ]
-      },
-      {
-        "name": "resend.delivery",
-        "events": [
-          "email.bounced",
-          "email.clicked",
-          "email.delivered",
-          "email.failed",
-          "email.opened",
-          "email.sent"
-        ]
       }
     ]
   }
