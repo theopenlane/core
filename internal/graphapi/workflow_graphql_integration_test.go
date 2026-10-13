@@ -23,8 +23,8 @@ import (
 // TestWorkflowGraphQLUserApproval tests user-based approval workflows through GraphQL API
 func TestWorkflowGraphQLUserApproval(t *testing.T) {
 	// Create dedicated test users for workflow testing
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	approver := suite.WorkflowUserBuilder(context.Background(), t)
 
 	// Add approver to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
@@ -186,8 +186,8 @@ func TestWorkflowGraphQLUserApproval(t *testing.T) {
 
 func TestWorkflowGraphQLUpdateControlRespectsPermissions(t *testing.T) {
 	t.Parallel()
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	viewer := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	viewer := suite.WorkflowUserBuilder(context.Background(), t)
 	suite.AddUserToOrganization(initiator.UserCtx, t, &viewer, enums.RoleMember, initiator.OrganizationID)
 
 	ensureWorkflowEngine(t)
@@ -252,9 +252,9 @@ func TestWorkflowGraphQLGroupApproval(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users for workflow testing
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver1 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver2 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	approver1 := suite.WorkflowUserBuilder(context.Background(), t)
+	approver2 := suite.WorkflowUserBuilder(context.Background(), t)
 
 	// Add approvers to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
@@ -429,9 +429,9 @@ func TestWorkflowGraphQLMultiStepApproval(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver1 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver2 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	approver1 := suite.WorkflowUserBuilder(context.Background(), t)
+	approver2 := suite.WorkflowUserBuilder(context.Background(), t)
 
 	// Add approvers to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
@@ -620,9 +620,9 @@ func TestWorkflowGraphQLMyAssignments(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver1 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver2 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	approver1 := suite.WorkflowUserBuilder(context.Background(), t)
+	approver2 := suite.WorkflowUserBuilder(context.Background(), t)
 
 	// Add approvers to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
@@ -740,9 +740,9 @@ func TestWorkflowGraphQLApprovalAuthorization(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users for workflow testing
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	unauthorizedUser := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	approver := suite.WorkflowUserBuilder(context.Background(), t)
+	unauthorizedUser := suite.WorkflowUserBuilder(context.Background(), t)
 
 	// Add approver and unauthorized user to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
@@ -992,9 +992,9 @@ func TestWorkflowGraphQLGroupApprovalAuthorization(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	groupMember := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	nonGroupMember := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	groupMember := suite.WorkflowUserBuilder(context.Background(), t)
+	nonGroupMember := suite.WorkflowUserBuilder(context.Background(), t)
 
 	// Add users to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &groupMember, enums.RoleAdmin, initiator.OrganizationID)
@@ -1208,7 +1208,7 @@ func TestWorkflowGraphQLGroupApprovalAuthorization(t *testing.T) {
 
 	t.Run("user removed from group cannot approve", func(t *testing.T) {
 		// Create another user who will be added then removed from group
-		tempMember := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+		tempMember := suite.WorkflowUserBuilder(context.Background(), t)
 		suite.AddUserToOrganization(initiator.UserCtx, t, &tempMember, enums.RoleAdmin, initiator.OrganizationID)
 
 		// Add temp member to group
@@ -1275,8 +1275,8 @@ func TestWorkflowGraphQLObjectRef(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test user
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
-	approver := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	approver := suite.WorkflowUserBuilder(context.Background(), t)
 
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
 

@@ -111,6 +111,10 @@ func (suite *GraphTestSuite) UserBuilder(ctx context.Context, t *testing.T, feat
 	return testUser
 }
 
+func (suite *GraphTestSuite) WorkflowUserBuilder(ctx context.Context, t *testing.T) TestUserDetails {
+	return suite.UserBuilder(ctx, t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
+}
+
 var seedOnce sync.Once
 var seedErr error
 
