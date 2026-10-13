@@ -559,6 +559,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldDeletedBy:                  {Type: field.TypeString, Column: control.FieldDeletedBy},
 			control.FieldDisplayID:                  {Type: field.TypeString, Column: control.FieldDisplayID},
 			control.FieldTags:                       {Type: field.TypeJSON, Column: control.FieldTags},
+			control.FieldSourceDefinitionID:         {Type: field.TypeString, Column: control.FieldSourceDefinitionID},
+			control.FieldSourceDefinitionVersion:    {Type: field.TypeString, Column: control.FieldSourceDefinitionVersion},
+			control.FieldSourceInstanceID:           {Type: field.TypeString, Column: control.FieldSourceInstanceID},
+			control.FieldManagedBy:                  {Type: field.TypeString, Column: control.FieldManagedBy},
+			control.FieldIntegrationRunID:           {Type: field.TypeString, Column: control.FieldIntegrationRunID},
 			control.FieldExternalUUID:               {Type: field.TypeString, Column: control.FieldExternalUUID},
 			control.FieldTitle:                      {Type: field.TypeString, Column: control.FieldTitle},
 			control.FieldDescription:                {Type: field.TypeString, Column: control.FieldDescription},
@@ -1439,30 +1444,35 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Group",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			group.FieldCreatedAt:             {Type: field.TypeTime, Column: group.FieldCreatedAt},
-			group.FieldUpdatedAt:             {Type: field.TypeTime, Column: group.FieldUpdatedAt},
-			group.FieldCreatedBy:             {Type: field.TypeString, Column: group.FieldCreatedBy},
-			group.FieldUpdatedBy:             {Type: field.TypeString, Column: group.FieldUpdatedBy},
-			group.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: group.FieldUpdatedByImpersonator},
-			group.FieldDeletedAt:             {Type: field.TypeTime, Column: group.FieldDeletedAt},
-			group.FieldDeletedBy:             {Type: field.TypeString, Column: group.FieldDeletedBy},
-			group.FieldDisplayID:             {Type: field.TypeString, Column: group.FieldDisplayID},
-			group.FieldTags:                  {Type: field.TypeJSON, Column: group.FieldTags},
-			group.FieldOwnerID:               {Type: field.TypeString, Column: group.FieldOwnerID},
-			group.FieldName:                  {Type: field.TypeString, Column: group.FieldName},
-			group.FieldDescription:           {Type: field.TypeString, Column: group.FieldDescription},
-			group.FieldIsManaged:             {Type: field.TypeBool, Column: group.FieldIsManaged},
-			group.FieldGravatarLogoURL:       {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
-			group.FieldLogoURL:               {Type: field.TypeString, Column: group.FieldLogoURL},
-			group.FieldAvatarLocalFileID:     {Type: field.TypeString, Column: group.FieldAvatarLocalFileID},
-			group.FieldDisplayName:           {Type: field.TypeString, Column: group.FieldDisplayName},
-			group.FieldOscalRole:             {Type: field.TypeString, Column: group.FieldOscalRole},
-			group.FieldOscalPartyUUID:        {Type: field.TypeString, Column: group.FieldOscalPartyUUID},
-			group.FieldOscalContactUuids:     {Type: field.TypeJSON, Column: group.FieldOscalContactUuids},
-			group.FieldScimExternalID:        {Type: field.TypeString, Column: group.FieldScimExternalID},
-			group.FieldScimDisplayName:       {Type: field.TypeString, Column: group.FieldScimDisplayName},
-			group.FieldScimActive:            {Type: field.TypeBool, Column: group.FieldScimActive},
-			group.FieldScimGroupMailing:      {Type: field.TypeString, Column: group.FieldScimGroupMailing},
+			group.FieldCreatedAt:               {Type: field.TypeTime, Column: group.FieldCreatedAt},
+			group.FieldUpdatedAt:               {Type: field.TypeTime, Column: group.FieldUpdatedAt},
+			group.FieldCreatedBy:               {Type: field.TypeString, Column: group.FieldCreatedBy},
+			group.FieldUpdatedBy:               {Type: field.TypeString, Column: group.FieldUpdatedBy},
+			group.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: group.FieldUpdatedByImpersonator},
+			group.FieldDeletedAt:               {Type: field.TypeTime, Column: group.FieldDeletedAt},
+			group.FieldDeletedBy:               {Type: field.TypeString, Column: group.FieldDeletedBy},
+			group.FieldDisplayID:               {Type: field.TypeString, Column: group.FieldDisplayID},
+			group.FieldTags:                    {Type: field.TypeJSON, Column: group.FieldTags},
+			group.FieldSourceDefinitionID:      {Type: field.TypeString, Column: group.FieldSourceDefinitionID},
+			group.FieldSourceDefinitionVersion: {Type: field.TypeString, Column: group.FieldSourceDefinitionVersion},
+			group.FieldSourceInstanceID:        {Type: field.TypeString, Column: group.FieldSourceInstanceID},
+			group.FieldManagedBy:               {Type: field.TypeString, Column: group.FieldManagedBy},
+			group.FieldIntegrationRunID:        {Type: field.TypeString, Column: group.FieldIntegrationRunID},
+			group.FieldOwnerID:                 {Type: field.TypeString, Column: group.FieldOwnerID},
+			group.FieldName:                    {Type: field.TypeString, Column: group.FieldName},
+			group.FieldDescription:             {Type: field.TypeString, Column: group.FieldDescription},
+			group.FieldIsManaged:               {Type: field.TypeBool, Column: group.FieldIsManaged},
+			group.FieldGravatarLogoURL:         {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
+			group.FieldLogoURL:                 {Type: field.TypeString, Column: group.FieldLogoURL},
+			group.FieldAvatarLocalFileID:       {Type: field.TypeString, Column: group.FieldAvatarLocalFileID},
+			group.FieldDisplayName:             {Type: field.TypeString, Column: group.FieldDisplayName},
+			group.FieldOscalRole:               {Type: field.TypeString, Column: group.FieldOscalRole},
+			group.FieldOscalPartyUUID:          {Type: field.TypeString, Column: group.FieldOscalPartyUUID},
+			group.FieldOscalContactUuids:       {Type: field.TypeJSON, Column: group.FieldOscalContactUuids},
+			group.FieldScimExternalID:          {Type: field.TypeString, Column: group.FieldScimExternalID},
+			group.FieldScimDisplayName:         {Type: field.TypeString, Column: group.FieldScimDisplayName},
+			group.FieldScimActive:              {Type: field.TypeBool, Column: group.FieldScimActive},
+			group.FieldScimGroupMailing:        {Type: field.TypeString, Column: group.FieldScimGroupMailing},
 		},
 	}
 	graph.Nodes[33] = &sqlgraph.Node{
@@ -1872,22 +1882,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "MappedControl",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			mappedcontrol.FieldCreatedAt:             {Type: field.TypeTime, Column: mappedcontrol.FieldCreatedAt},
-			mappedcontrol.FieldUpdatedAt:             {Type: field.TypeTime, Column: mappedcontrol.FieldUpdatedAt},
-			mappedcontrol.FieldCreatedBy:             {Type: field.TypeString, Column: mappedcontrol.FieldCreatedBy},
-			mappedcontrol.FieldUpdatedBy:             {Type: field.TypeString, Column: mappedcontrol.FieldUpdatedBy},
-			mappedcontrol.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: mappedcontrol.FieldUpdatedByImpersonator},
-			mappedcontrol.FieldDeletedAt:             {Type: field.TypeTime, Column: mappedcontrol.FieldDeletedAt},
-			mappedcontrol.FieldDeletedBy:             {Type: field.TypeString, Column: mappedcontrol.FieldDeletedBy},
-			mappedcontrol.FieldTags:                  {Type: field.TypeJSON, Column: mappedcontrol.FieldTags},
-			mappedcontrol.FieldSystemOwned:           {Type: field.TypeBool, Column: mappedcontrol.FieldSystemOwned},
-			mappedcontrol.FieldInternalNotes:         {Type: field.TypeString, Column: mappedcontrol.FieldInternalNotes},
-			mappedcontrol.FieldSystemInternalID:      {Type: field.TypeString, Column: mappedcontrol.FieldSystemInternalID},
-			mappedcontrol.FieldOwnerID:               {Type: field.TypeString, Column: mappedcontrol.FieldOwnerID},
-			mappedcontrol.FieldMappingType:           {Type: field.TypeEnum, Column: mappedcontrol.FieldMappingType},
-			mappedcontrol.FieldRelation:              {Type: field.TypeString, Column: mappedcontrol.FieldRelation},
-			mappedcontrol.FieldConfidence:            {Type: field.TypeInt, Column: mappedcontrol.FieldConfidence},
-			mappedcontrol.FieldSource:                {Type: field.TypeEnum, Column: mappedcontrol.FieldSource},
+			mappedcontrol.FieldCreatedAt:               {Type: field.TypeTime, Column: mappedcontrol.FieldCreatedAt},
+			mappedcontrol.FieldUpdatedAt:               {Type: field.TypeTime, Column: mappedcontrol.FieldUpdatedAt},
+			mappedcontrol.FieldCreatedBy:               {Type: field.TypeString, Column: mappedcontrol.FieldCreatedBy},
+			mappedcontrol.FieldUpdatedBy:               {Type: field.TypeString, Column: mappedcontrol.FieldUpdatedBy},
+			mappedcontrol.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: mappedcontrol.FieldUpdatedByImpersonator},
+			mappedcontrol.FieldDeletedAt:               {Type: field.TypeTime, Column: mappedcontrol.FieldDeletedAt},
+			mappedcontrol.FieldDeletedBy:               {Type: field.TypeString, Column: mappedcontrol.FieldDeletedBy},
+			mappedcontrol.FieldTags:                    {Type: field.TypeJSON, Column: mappedcontrol.FieldTags},
+			mappedcontrol.FieldSourceDefinitionID:      {Type: field.TypeString, Column: mappedcontrol.FieldSourceDefinitionID},
+			mappedcontrol.FieldSourceDefinitionVersion: {Type: field.TypeString, Column: mappedcontrol.FieldSourceDefinitionVersion},
+			mappedcontrol.FieldSourceInstanceID:        {Type: field.TypeString, Column: mappedcontrol.FieldSourceInstanceID},
+			mappedcontrol.FieldManagedBy:               {Type: field.TypeString, Column: mappedcontrol.FieldManagedBy},
+			mappedcontrol.FieldIntegrationRunID:        {Type: field.TypeString, Column: mappedcontrol.FieldIntegrationRunID},
+			mappedcontrol.FieldSystemOwned:             {Type: field.TypeBool, Column: mappedcontrol.FieldSystemOwned},
+			mappedcontrol.FieldInternalNotes:           {Type: field.TypeString, Column: mappedcontrol.FieldInternalNotes},
+			mappedcontrol.FieldSystemInternalID:        {Type: field.TypeString, Column: mappedcontrol.FieldSystemInternalID},
+			mappedcontrol.FieldOwnerID:                 {Type: field.TypeString, Column: mappedcontrol.FieldOwnerID},
+			mappedcontrol.FieldMappingType:             {Type: field.TypeEnum, Column: mappedcontrol.FieldMappingType},
+			mappedcontrol.FieldRelation:                {Type: field.TypeString, Column: mappedcontrol.FieldRelation},
+			mappedcontrol.FieldConfidence:              {Type: field.TypeInt, Column: mappedcontrol.FieldConfidence},
+			mappedcontrol.FieldSource:                  {Type: field.TypeEnum, Column: mappedcontrol.FieldSource},
+			mappedcontrol.FieldExternalID:              {Type: field.TypeString, Column: mappedcontrol.FieldExternalID},
 		},
 	}
 	graph.Nodes[45] = &sqlgraph.Node{
@@ -2394,6 +2410,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			platform.FieldDeletedBy:                      {Type: field.TypeString, Column: platform.FieldDeletedBy},
 			platform.FieldDisplayID:                      {Type: field.TypeString, Column: platform.FieldDisplayID},
 			platform.FieldTags:                           {Type: field.TypeJSON, Column: platform.FieldTags},
+			platform.FieldSourceDefinitionID:             {Type: field.TypeString, Column: platform.FieldSourceDefinitionID},
+			platform.FieldSourceDefinitionVersion:        {Type: field.TypeString, Column: platform.FieldSourceDefinitionVersion},
+			platform.FieldSourceInstanceID:               {Type: field.TypeString, Column: platform.FieldSourceInstanceID},
+			platform.FieldManagedBy:                      {Type: field.TypeString, Column: platform.FieldManagedBy},
+			platform.FieldIntegrationRunID:               {Type: field.TypeString, Column: platform.FieldIntegrationRunID},
 			platform.FieldOwnerID:                        {Type: field.TypeString, Column: platform.FieldOwnerID},
 			platform.FieldInternalOwner:                  {Type: field.TypeString, Column: platform.FieldInternalOwner},
 			platform.FieldInternalOwnerUserID:            {Type: field.TypeString, Column: platform.FieldInternalOwnerUserID},
@@ -2529,6 +2550,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldDeletedBy:                  {Type: field.TypeString, Column: program.FieldDeletedBy},
 			program.FieldDisplayID:                  {Type: field.TypeString, Column: program.FieldDisplayID},
 			program.FieldTags:                       {Type: field.TypeJSON, Column: program.FieldTags},
+			program.FieldSourceDefinitionID:         {Type: field.TypeString, Column: program.FieldSourceDefinitionID},
+			program.FieldSourceDefinitionVersion:    {Type: field.TypeString, Column: program.FieldSourceDefinitionVersion},
+			program.FieldSourceInstanceID:           {Type: field.TypeString, Column: program.FieldSourceInstanceID},
+			program.FieldManagedBy:                  {Type: field.TypeString, Column: program.FieldManagedBy},
+			program.FieldIntegrationRunID:           {Type: field.TypeString, Column: program.FieldIntegrationRunID},
 			program.FieldOwnerID:                    {Type: field.TypeString, Column: program.FieldOwnerID},
 			program.FieldProgramKindName:            {Type: field.TypeString, Column: program.FieldProgramKindName},
 			program.FieldProgramKindID:              {Type: field.TypeString, Column: program.FieldProgramKindID},
@@ -2635,41 +2661,46 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Review",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			review.FieldCreatedAt:             {Type: field.TypeTime, Column: review.FieldCreatedAt},
-			review.FieldUpdatedAt:             {Type: field.TypeTime, Column: review.FieldUpdatedAt},
-			review.FieldCreatedBy:             {Type: field.TypeString, Column: review.FieldCreatedBy},
-			review.FieldUpdatedBy:             {Type: field.TypeString, Column: review.FieldUpdatedBy},
-			review.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: review.FieldUpdatedByImpersonator},
-			review.FieldDeletedAt:             {Type: field.TypeTime, Column: review.FieldDeletedAt},
-			review.FieldDeletedBy:             {Type: field.TypeString, Column: review.FieldDeletedBy},
-			review.FieldTags:                  {Type: field.TypeJSON, Column: review.FieldTags},
-			review.FieldOwnerID:               {Type: field.TypeString, Column: review.FieldOwnerID},
-			review.FieldSystemOwned:           {Type: field.TypeBool, Column: review.FieldSystemOwned},
-			review.FieldInternalNotes:         {Type: field.TypeString, Column: review.FieldInternalNotes},
-			review.FieldSystemInternalID:      {Type: field.TypeString, Column: review.FieldSystemInternalID},
-			review.FieldEnvironmentName:       {Type: field.TypeString, Column: review.FieldEnvironmentName},
-			review.FieldEnvironmentID:         {Type: field.TypeString, Column: review.FieldEnvironmentID},
-			review.FieldScopeName:             {Type: field.TypeString, Column: review.FieldScopeName},
-			review.FieldScopeID:               {Type: field.TypeString, Column: review.FieldScopeID},
-			review.FieldExternalID:            {Type: field.TypeString, Column: review.FieldExternalID},
-			review.FieldExternalOwnerID:       {Type: field.TypeString, Column: review.FieldExternalOwnerID},
-			review.FieldTitle:                 {Type: field.TypeString, Column: review.FieldTitle},
-			review.FieldState:                 {Type: field.TypeString, Column: review.FieldState},
-			review.FieldStatus:                {Type: field.TypeEnum, Column: review.FieldStatus},
-			review.FieldCategory:              {Type: field.TypeString, Column: review.FieldCategory},
-			review.FieldClassification:        {Type: field.TypeString, Column: review.FieldClassification},
-			review.FieldSummary:               {Type: field.TypeString, Column: review.FieldSummary},
-			review.FieldDetails:               {Type: field.TypeString, Column: review.FieldDetails},
-			review.FieldReporter:              {Type: field.TypeString, Column: review.FieldReporter},
-			review.FieldApproved:              {Type: field.TypeBool, Column: review.FieldApproved},
-			review.FieldReviewedAt:            {Type: field.TypeTime, Column: review.FieldReviewedAt},
-			review.FieldReportedAt:            {Type: field.TypeTime, Column: review.FieldReportedAt},
-			review.FieldApprovedAt:            {Type: field.TypeTime, Column: review.FieldApprovedAt},
-			review.FieldReviewerID:            {Type: field.TypeString, Column: review.FieldReviewerID},
-			review.FieldSource:                {Type: field.TypeString, Column: review.FieldSource},
-			review.FieldExternalURI:           {Type: field.TypeString, Column: review.FieldExternalURI},
-			review.FieldMetadata:              {Type: field.TypeJSON, Column: review.FieldMetadata},
-			review.FieldRawPayload:            {Type: field.TypeJSON, Column: review.FieldRawPayload},
+			review.FieldCreatedAt:               {Type: field.TypeTime, Column: review.FieldCreatedAt},
+			review.FieldUpdatedAt:               {Type: field.TypeTime, Column: review.FieldUpdatedAt},
+			review.FieldCreatedBy:               {Type: field.TypeString, Column: review.FieldCreatedBy},
+			review.FieldUpdatedBy:               {Type: field.TypeString, Column: review.FieldUpdatedBy},
+			review.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: review.FieldUpdatedByImpersonator},
+			review.FieldDeletedAt:               {Type: field.TypeTime, Column: review.FieldDeletedAt},
+			review.FieldDeletedBy:               {Type: field.TypeString, Column: review.FieldDeletedBy},
+			review.FieldTags:                    {Type: field.TypeJSON, Column: review.FieldTags},
+			review.FieldSourceDefinitionID:      {Type: field.TypeString, Column: review.FieldSourceDefinitionID},
+			review.FieldSourceDefinitionVersion: {Type: field.TypeString, Column: review.FieldSourceDefinitionVersion},
+			review.FieldSourceInstanceID:        {Type: field.TypeString, Column: review.FieldSourceInstanceID},
+			review.FieldManagedBy:               {Type: field.TypeString, Column: review.FieldManagedBy},
+			review.FieldIntegrationRunID:        {Type: field.TypeString, Column: review.FieldIntegrationRunID},
+			review.FieldOwnerID:                 {Type: field.TypeString, Column: review.FieldOwnerID},
+			review.FieldSystemOwned:             {Type: field.TypeBool, Column: review.FieldSystemOwned},
+			review.FieldInternalNotes:           {Type: field.TypeString, Column: review.FieldInternalNotes},
+			review.FieldSystemInternalID:        {Type: field.TypeString, Column: review.FieldSystemInternalID},
+			review.FieldEnvironmentName:         {Type: field.TypeString, Column: review.FieldEnvironmentName},
+			review.FieldEnvironmentID:           {Type: field.TypeString, Column: review.FieldEnvironmentID},
+			review.FieldScopeName:               {Type: field.TypeString, Column: review.FieldScopeName},
+			review.FieldScopeID:                 {Type: field.TypeString, Column: review.FieldScopeID},
+			review.FieldExternalID:              {Type: field.TypeString, Column: review.FieldExternalID},
+			review.FieldExternalOwnerID:         {Type: field.TypeString, Column: review.FieldExternalOwnerID},
+			review.FieldTitle:                   {Type: field.TypeString, Column: review.FieldTitle},
+			review.FieldState:                   {Type: field.TypeString, Column: review.FieldState},
+			review.FieldStatus:                  {Type: field.TypeEnum, Column: review.FieldStatus},
+			review.FieldCategory:                {Type: field.TypeString, Column: review.FieldCategory},
+			review.FieldClassification:          {Type: field.TypeString, Column: review.FieldClassification},
+			review.FieldSummary:                 {Type: field.TypeString, Column: review.FieldSummary},
+			review.FieldDetails:                 {Type: field.TypeString, Column: review.FieldDetails},
+			review.FieldReporter:                {Type: field.TypeString, Column: review.FieldReporter},
+			review.FieldApproved:                {Type: field.TypeBool, Column: review.FieldApproved},
+			review.FieldReviewedAt:              {Type: field.TypeTime, Column: review.FieldReviewedAt},
+			review.FieldReportedAt:              {Type: field.TypeTime, Column: review.FieldReportedAt},
+			review.FieldApprovedAt:              {Type: field.TypeTime, Column: review.FieldApprovedAt},
+			review.FieldReviewerID:              {Type: field.TypeString, Column: review.FieldReviewerID},
+			review.FieldSource:                  {Type: field.TypeString, Column: review.FieldSource},
+			review.FieldExternalURI:             {Type: field.TypeString, Column: review.FieldExternalURI},
+			review.FieldMetadata:                {Type: field.TypeJSON, Column: review.FieldMetadata},
+			review.FieldRawPayload:              {Type: field.TypeJSON, Column: review.FieldRawPayload},
 		},
 	}
 	graph.Nodes[66] = &sqlgraph.Node{
@@ -2802,6 +2833,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scan.FieldEnvironmentID:              {Type: field.TypeString, Column: scan.FieldEnvironmentID},
 			scan.FieldScopeName:                  {Type: field.TypeString, Column: scan.FieldScopeName},
 			scan.FieldScopeID:                    {Type: field.TypeString, Column: scan.FieldScopeID},
+			scan.FieldDocumentKindName:           {Type: field.TypeString, Column: scan.FieldDocumentKindName},
+			scan.FieldDocumentKindID:             {Type: field.TypeString, Column: scan.FieldDocumentKindID},
 			scan.FieldTarget:                     {Type: field.TypeString, Column: scan.FieldTarget},
 			scan.FieldScanType:                   {Type: field.TypeEnum, Column: scan.FieldScanType},
 			scan.FieldMetadata:                   {Type: field.TypeJSON, Column: scan.FieldMetadata},
@@ -2992,24 +3025,29 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "SystemDetail",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			systemdetail.FieldCreatedAt:             {Type: field.TypeTime, Column: systemdetail.FieldCreatedAt},
-			systemdetail.FieldUpdatedAt:             {Type: field.TypeTime, Column: systemdetail.FieldUpdatedAt},
-			systemdetail.FieldCreatedBy:             {Type: field.TypeString, Column: systemdetail.FieldCreatedBy},
-			systemdetail.FieldUpdatedBy:             {Type: field.TypeString, Column: systemdetail.FieldUpdatedBy},
-			systemdetail.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: systemdetail.FieldUpdatedByImpersonator},
-			systemdetail.FieldDeletedAt:             {Type: field.TypeTime, Column: systemdetail.FieldDeletedAt},
-			systemdetail.FieldDeletedBy:             {Type: field.TypeString, Column: systemdetail.FieldDeletedBy},
-			systemdetail.FieldDisplayID:             {Type: field.TypeString, Column: systemdetail.FieldDisplayID},
-			systemdetail.FieldTags:                  {Type: field.TypeJSON, Column: systemdetail.FieldTags},
-			systemdetail.FieldOwnerID:               {Type: field.TypeString, Column: systemdetail.FieldOwnerID},
-			systemdetail.FieldSystemName:            {Type: field.TypeString, Column: systemdetail.FieldSystemName},
-			systemdetail.FieldVersion:               {Type: field.TypeString, Column: systemdetail.FieldVersion},
-			systemdetail.FieldDescription:           {Type: field.TypeString, Column: systemdetail.FieldDescription},
-			systemdetail.FieldAuthorizationBoundary: {Type: field.TypeString, Column: systemdetail.FieldAuthorizationBoundary},
-			systemdetail.FieldSensitivityLevel:      {Type: field.TypeEnum, Column: systemdetail.FieldSensitivityLevel},
-			systemdetail.FieldLastReviewed:          {Type: field.TypeTime, Column: systemdetail.FieldLastReviewed},
-			systemdetail.FieldRevisionHistory:       {Type: field.TypeJSON, Column: systemdetail.FieldRevisionHistory},
-			systemdetail.FieldOscalMetadataJSON:     {Type: field.TypeJSON, Column: systemdetail.FieldOscalMetadataJSON},
+			systemdetail.FieldCreatedAt:               {Type: field.TypeTime, Column: systemdetail.FieldCreatedAt},
+			systemdetail.FieldUpdatedAt:               {Type: field.TypeTime, Column: systemdetail.FieldUpdatedAt},
+			systemdetail.FieldCreatedBy:               {Type: field.TypeString, Column: systemdetail.FieldCreatedBy},
+			systemdetail.FieldUpdatedBy:               {Type: field.TypeString, Column: systemdetail.FieldUpdatedBy},
+			systemdetail.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: systemdetail.FieldUpdatedByImpersonator},
+			systemdetail.FieldDeletedAt:               {Type: field.TypeTime, Column: systemdetail.FieldDeletedAt},
+			systemdetail.FieldDeletedBy:               {Type: field.TypeString, Column: systemdetail.FieldDeletedBy},
+			systemdetail.FieldDisplayID:               {Type: field.TypeString, Column: systemdetail.FieldDisplayID},
+			systemdetail.FieldTags:                    {Type: field.TypeJSON, Column: systemdetail.FieldTags},
+			systemdetail.FieldSourceDefinitionID:      {Type: field.TypeString, Column: systemdetail.FieldSourceDefinitionID},
+			systemdetail.FieldSourceDefinitionVersion: {Type: field.TypeString, Column: systemdetail.FieldSourceDefinitionVersion},
+			systemdetail.FieldSourceInstanceID:        {Type: field.TypeString, Column: systemdetail.FieldSourceInstanceID},
+			systemdetail.FieldManagedBy:               {Type: field.TypeString, Column: systemdetail.FieldManagedBy},
+			systemdetail.FieldIntegrationRunID:        {Type: field.TypeString, Column: systemdetail.FieldIntegrationRunID},
+			systemdetail.FieldOwnerID:                 {Type: field.TypeString, Column: systemdetail.FieldOwnerID},
+			systemdetail.FieldSystemName:              {Type: field.TypeString, Column: systemdetail.FieldSystemName},
+			systemdetail.FieldVersion:                 {Type: field.TypeString, Column: systemdetail.FieldVersion},
+			systemdetail.FieldDescription:             {Type: field.TypeString, Column: systemdetail.FieldDescription},
+			systemdetail.FieldAuthorizationBoundary:   {Type: field.TypeString, Column: systemdetail.FieldAuthorizationBoundary},
+			systemdetail.FieldSensitivityLevel:        {Type: field.TypeEnum, Column: systemdetail.FieldSensitivityLevel},
+			systemdetail.FieldLastReviewed:            {Type: field.TypeTime, Column: systemdetail.FieldLastReviewed},
+			systemdetail.FieldRevisionHistory:         {Type: field.TypeJSON, Column: systemdetail.FieldRevisionHistory},
+			systemdetail.FieldOscalMetadataJSON:       {Type: field.TypeJSON, Column: systemdetail.FieldOscalMetadataJSON},
 		},
 	}
 	graph.Nodes[74] = &sqlgraph.Node{
@@ -5362,6 +5400,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Contact",
 		"Subscriber",
+	)
+	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.IntegrationRunsTable,
+			Columns: []string{control.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"IntegrationRun",
 	)
 	graph.MustAddE(
 		"evidence",
@@ -8592,6 +8642,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Standard",
 	)
 	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.IntegrationRunsTable,
+			Columns: []string{group.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"Group",
+		"IntegrationRun",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -10606,6 +10668,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"MappableDomain",
 		"CustomDomain",
+	)
+	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   mappedcontrol.IntegrationRunsTable,
+			Columns: []string{mappedcontrol.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"MappedControl",
+		"IntegrationRun",
 	)
 	graph.MustAddE(
 		"owner",
@@ -13284,6 +13358,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Event",
 	)
 	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationRunsTable,
+			Columns: []string{platform.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"IntegrationRun",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -14124,6 +14210,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   program.IntegrationRunsTable,
+			Columns: []string{program.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"Program",
+		"IntegrationRun",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -14710,6 +14808,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Remediation",
 		"WorkflowObjectRef",
+	)
+	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.IntegrationRunsTable,
+			Columns: []string{review.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"IntegrationRun",
 	)
 	graph.MustAddE(
 		"owner",
@@ -15552,6 +15662,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"CustomTypeEnum",
 	)
 	graph.MustAddE(
+		"document_kind",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.DocumentKindTable,
+			Columns: []string{scan.DocumentKindColumn},
+			Bidi:    false,
+		},
+		"Scan",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
 		"assets",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -16258,6 +16380,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subscriber",
 		"User",
+	)
+	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   systemdetail.IntegrationRunsTable,
+			Columns: []string{systemdetail.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"SystemDetail",
+		"IntegrationRun",
 	)
 	graph.MustAddE(
 		"owner",
@@ -22846,6 +22980,31 @@ func (f *ControlFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(control.FieldTags))
 }
 
+// WhereSourceDefinitionID applies the entql string predicate on the source_definition_id field.
+func (f *ControlFilter) WhereSourceDefinitionID(p entql.StringP) {
+	f.Where(p.Field(control.FieldSourceDefinitionID))
+}
+
+// WhereSourceDefinitionVersion applies the entql string predicate on the source_definition_version field.
+func (f *ControlFilter) WhereSourceDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(control.FieldSourceDefinitionVersion))
+}
+
+// WhereSourceInstanceID applies the entql string predicate on the source_instance_id field.
+func (f *ControlFilter) WhereSourceInstanceID(p entql.StringP) {
+	f.Where(p.Field(control.FieldSourceInstanceID))
+}
+
+// WhereManagedBy applies the entql string predicate on the managed_by field.
+func (f *ControlFilter) WhereManagedBy(p entql.StringP) {
+	f.Where(p.Field(control.FieldManagedBy))
+}
+
+// WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
+func (f *ControlFilter) WhereIntegrationRunID(p entql.StringP) {
+	f.Where(p.Field(control.FieldIntegrationRunID))
+}
+
 // WhereExternalUUID applies the entql string predicate on the external_uuid field.
 func (f *ControlFilter) WhereExternalUUID(p entql.StringP) {
 	f.Where(p.Field(control.FieldExternalUUID))
@@ -23069,6 +23228,20 @@ func (f *ControlFilter) WhereTrustCenterVisibility(p entql.StringP) {
 // WhereIsTrustCenterControl applies the entql bool predicate on the is_trust_center_control field.
 func (f *ControlFilter) WhereIsTrustCenterControl(p entql.BoolP) {
 	f.Where(p.Field(control.FieldIsTrustCenterControl))
+}
+
+// WhereHasIntegrationRuns applies a predicate to check if query has an edge integration_runs.
+func (f *ControlFilter) WhereHasIntegrationRuns() {
+	f.Where(entql.HasEdge("integration_runs"))
+}
+
+// WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
+	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasEvidence applies a predicate to check if query has an edge evidence.
@@ -30507,6 +30680,31 @@ func (f *GroupFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(group.FieldTags))
 }
 
+// WhereSourceDefinitionID applies the entql string predicate on the source_definition_id field.
+func (f *GroupFilter) WhereSourceDefinitionID(p entql.StringP) {
+	f.Where(p.Field(group.FieldSourceDefinitionID))
+}
+
+// WhereSourceDefinitionVersion applies the entql string predicate on the source_definition_version field.
+func (f *GroupFilter) WhereSourceDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(group.FieldSourceDefinitionVersion))
+}
+
+// WhereSourceInstanceID applies the entql string predicate on the source_instance_id field.
+func (f *GroupFilter) WhereSourceInstanceID(p entql.StringP) {
+	f.Where(p.Field(group.FieldSourceInstanceID))
+}
+
+// WhereManagedBy applies the entql string predicate on the managed_by field.
+func (f *GroupFilter) WhereManagedBy(p entql.StringP) {
+	f.Where(p.Field(group.FieldManagedBy))
+}
+
+// WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
+func (f *GroupFilter) WhereIntegrationRunID(p entql.StringP) {
+	f.Where(p.Field(group.FieldIntegrationRunID))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *GroupFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(group.FieldOwnerID))
@@ -30580,6 +30778,20 @@ func (f *GroupFilter) WhereScimActive(p entql.BoolP) {
 // WhereScimGroupMailing applies the entql string predicate on the scim_group_mailing field.
 func (f *GroupFilter) WhereScimGroupMailing(p entql.StringP) {
 	f.Where(p.Field(group.FieldScimGroupMailing))
+}
+
+// WhereHasIntegrationRuns applies a predicate to check if query has an edge integration_runs.
+func (f *GroupFilter) WhereHasIntegrationRuns() {
+	f.Where(entql.HasEdge("integration_runs"))
+}
+
+// WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
+	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -34719,6 +34931,31 @@ func (f *MappedControlFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(mappedcontrol.FieldTags))
 }
 
+// WhereSourceDefinitionID applies the entql string predicate on the source_definition_id field.
+func (f *MappedControlFilter) WhereSourceDefinitionID(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldSourceDefinitionID))
+}
+
+// WhereSourceDefinitionVersion applies the entql string predicate on the source_definition_version field.
+func (f *MappedControlFilter) WhereSourceDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldSourceDefinitionVersion))
+}
+
+// WhereSourceInstanceID applies the entql string predicate on the source_instance_id field.
+func (f *MappedControlFilter) WhereSourceInstanceID(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldSourceInstanceID))
+}
+
+// WhereManagedBy applies the entql string predicate on the managed_by field.
+func (f *MappedControlFilter) WhereManagedBy(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldManagedBy))
+}
+
+// WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
+func (f *MappedControlFilter) WhereIntegrationRunID(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldIntegrationRunID))
+}
+
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
 func (f *MappedControlFilter) WhereSystemOwned(p entql.BoolP) {
 	f.Where(p.Field(mappedcontrol.FieldSystemOwned))
@@ -34757,6 +34994,25 @@ func (f *MappedControlFilter) WhereConfidence(p entql.IntP) {
 // WhereSource applies the entql string predicate on the source field.
 func (f *MappedControlFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(mappedcontrol.FieldSource))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *MappedControlFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldExternalID))
+}
+
+// WhereHasIntegrationRuns applies a predicate to check if query has an edge integration_runs.
+func (f *MappedControlFilter) WhereHasIntegrationRuns() {
+	f.Where(entql.HasEdge("integration_runs"))
+}
+
+// WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
+	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -40011,6 +40267,31 @@ func (f *PlatformFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(platform.FieldTags))
 }
 
+// WhereSourceDefinitionID applies the entql string predicate on the source_definition_id field.
+func (f *PlatformFilter) WhereSourceDefinitionID(p entql.StringP) {
+	f.Where(p.Field(platform.FieldSourceDefinitionID))
+}
+
+// WhereSourceDefinitionVersion applies the entql string predicate on the source_definition_version field.
+func (f *PlatformFilter) WhereSourceDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(platform.FieldSourceDefinitionVersion))
+}
+
+// WhereSourceInstanceID applies the entql string predicate on the source_instance_id field.
+func (f *PlatformFilter) WhereSourceInstanceID(p entql.StringP) {
+	f.Where(p.Field(platform.FieldSourceInstanceID))
+}
+
+// WhereManagedBy applies the entql string predicate on the managed_by field.
+func (f *PlatformFilter) WhereManagedBy(p entql.StringP) {
+	f.Where(p.Field(platform.FieldManagedBy))
+}
+
+// WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
+func (f *PlatformFilter) WhereIntegrationRunID(p entql.StringP) {
+	f.Where(p.Field(platform.FieldIntegrationRunID))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *PlatformFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(platform.FieldOwnerID))
@@ -40274,6 +40555,20 @@ func (f *PlatformFilter) WhereExternalReferenceID(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *PlatformFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(platform.FieldMetadata))
+}
+
+// WhereHasIntegrationRuns applies a predicate to check if query has an edge integration_runs.
+func (f *PlatformFilter) WhereHasIntegrationRuns() {
+	f.Where(entql.HasEdge("integration_runs"))
+}
+
+// WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
+	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -41616,6 +41911,31 @@ func (f *ProgramFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(program.FieldTags))
 }
 
+// WhereSourceDefinitionID applies the entql string predicate on the source_definition_id field.
+func (f *ProgramFilter) WhereSourceDefinitionID(p entql.StringP) {
+	f.Where(p.Field(program.FieldSourceDefinitionID))
+}
+
+// WhereSourceDefinitionVersion applies the entql string predicate on the source_definition_version field.
+func (f *ProgramFilter) WhereSourceDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(program.FieldSourceDefinitionVersion))
+}
+
+// WhereSourceInstanceID applies the entql string predicate on the source_instance_id field.
+func (f *ProgramFilter) WhereSourceInstanceID(p entql.StringP) {
+	f.Where(p.Field(program.FieldSourceInstanceID))
+}
+
+// WhereManagedBy applies the entql string predicate on the managed_by field.
+func (f *ProgramFilter) WhereManagedBy(p entql.StringP) {
+	f.Where(p.Field(program.FieldManagedBy))
+}
+
+// WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
+func (f *ProgramFilter) WhereIntegrationRunID(p entql.StringP) {
+	f.Where(p.Field(program.FieldIntegrationRunID))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ProgramFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(program.FieldOwnerID))
@@ -41719,6 +42039,20 @@ func (f *ProgramFilter) WhereAuditorEmail(p entql.StringP) {
 // WhereProgramOwnerID applies the entql string predicate on the program_owner_id field.
 func (f *ProgramFilter) WhereProgramOwnerID(p entql.StringP) {
 	f.Where(p.Field(program.FieldProgramOwnerID))
+}
+
+// WhereHasIntegrationRuns applies a predicate to check if query has an edge integration_runs.
+func (f *ProgramFilter) WhereHasIntegrationRuns() {
+	f.Where(entql.HasEdge("integration_runs"))
+}
+
+// WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
+	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -42797,6 +43131,31 @@ func (f *ReviewFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(review.FieldTags))
 }
 
+// WhereSourceDefinitionID applies the entql string predicate on the source_definition_id field.
+func (f *ReviewFilter) WhereSourceDefinitionID(p entql.StringP) {
+	f.Where(p.Field(review.FieldSourceDefinitionID))
+}
+
+// WhereSourceDefinitionVersion applies the entql string predicate on the source_definition_version field.
+func (f *ReviewFilter) WhereSourceDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(review.FieldSourceDefinitionVersion))
+}
+
+// WhereSourceInstanceID applies the entql string predicate on the source_instance_id field.
+func (f *ReviewFilter) WhereSourceInstanceID(p entql.StringP) {
+	f.Where(p.Field(review.FieldSourceInstanceID))
+}
+
+// WhereManagedBy applies the entql string predicate on the managed_by field.
+func (f *ReviewFilter) WhereManagedBy(p entql.StringP) {
+	f.Where(p.Field(review.FieldManagedBy))
+}
+
+// WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
+func (f *ReviewFilter) WhereIntegrationRunID(p entql.StringP) {
+	f.Where(p.Field(review.FieldIntegrationRunID))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ReviewFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(review.FieldOwnerID))
@@ -42930,6 +43289,20 @@ func (f *ReviewFilter) WhereMetadata(p entql.BytesP) {
 // WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
 func (f *ReviewFilter) WhereRawPayload(p entql.BytesP) {
 	f.Where(p.Field(review.FieldRawPayload))
+}
+
+// WhereHasIntegrationRuns applies a predicate to check if query has an edge integration_runs.
+func (f *ReviewFilter) WhereHasIntegrationRuns() {
+	f.Where(entql.HasEdge("integration_runs"))
+}
+
+// WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
+	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -44343,6 +44716,16 @@ func (f *ScanFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(scan.FieldScopeID))
 }
 
+// WhereDocumentKindName applies the entql string predicate on the document_kind_name field.
+func (f *ScanFilter) WhereDocumentKindName(p entql.StringP) {
+	f.Where(p.Field(scan.FieldDocumentKindName))
+}
+
+// WhereDocumentKindID applies the entql string predicate on the document_kind_id field.
+func (f *ScanFilter) WhereDocumentKindID(p entql.StringP) {
+	f.Where(p.Field(scan.FieldDocumentKindID))
+}
+
 // WhereTarget applies the entql string predicate on the target field.
 func (f *ScanFilter) WhereTarget(p entql.StringP) {
 	f.Where(p.Field(scan.FieldTarget))
@@ -44551,6 +44934,20 @@ func (f *ScanFilter) WhereHasScope() {
 // WhereHasScopeWith applies a predicate to check if query has an edge scope with a given conditions (other predicates).
 func (f *ScanFilter) WhereHasScopeWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("scope", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDocumentKind applies a predicate to check if query has an edge document_kind.
+func (f *ScanFilter) WhereHasDocumentKind() {
+	f.Where(entql.HasEdge("document_kind"))
+}
+
+// WhereHasDocumentKindWith applies a predicate to check if query has an edge document_kind with a given conditions (other predicates).
+func (f *ScanFilter) WhereHasDocumentKindWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("document_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -46193,6 +46590,31 @@ func (f *SystemDetailFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(systemdetail.FieldTags))
 }
 
+// WhereSourceDefinitionID applies the entql string predicate on the source_definition_id field.
+func (f *SystemDetailFilter) WhereSourceDefinitionID(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldSourceDefinitionID))
+}
+
+// WhereSourceDefinitionVersion applies the entql string predicate on the source_definition_version field.
+func (f *SystemDetailFilter) WhereSourceDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldSourceDefinitionVersion))
+}
+
+// WhereSourceInstanceID applies the entql string predicate on the source_instance_id field.
+func (f *SystemDetailFilter) WhereSourceInstanceID(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldSourceInstanceID))
+}
+
+// WhereManagedBy applies the entql string predicate on the managed_by field.
+func (f *SystemDetailFilter) WhereManagedBy(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldManagedBy))
+}
+
+// WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
+func (f *SystemDetailFilter) WhereIntegrationRunID(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldIntegrationRunID))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *SystemDetailFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(systemdetail.FieldOwnerID))
@@ -46236,6 +46658,20 @@ func (f *SystemDetailFilter) WhereRevisionHistory(p entql.BytesP) {
 // WhereOscalMetadataJSON applies the entql json.RawMessage predicate on the oscal_metadata_json field.
 func (f *SystemDetailFilter) WhereOscalMetadataJSON(p entql.BytesP) {
 	f.Where(p.Field(systemdetail.FieldOscalMetadataJSON))
+}
+
+// WhereHasIntegrationRuns applies a predicate to check if query has an edge integration_runs.
+func (f *SystemDetailFilter) WhereHasIntegrationRuns() {
+	f.Where(entql.HasEdge("integration_runs"))
+}
+
+// WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
+	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

@@ -212,48 +212,48 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, batch ingestBatch, 
 
 // newPayloadRun validates the batch against the installation and stages the shared run state
 func newPayloadRun(ctx context.Context, ic IngestContext, batch ingestBatch, handle ingestHandle) (*payloadRun, context.Context, error) {
-	definition, ok := ic.Registry.Definition(ic.Integration.DefinitionID)
+	definition, ok := ic.Registry.Definition(ic.definitionID())
 	if !ok {
 		return nil, ctx, ErrIngestDefinitionNotFound
 	}
 
-	if ic.Integration.InstallationMetadata.Display.ExternalID == "" {
-		return nil, ctx, ErrIngestInstanceIDRequired
-	}
-
-	filterExpr, err := resolveInstallationFilterExpr(ic.Integration, batch.OperationName)
-	if err != nil {
-		return nil, ctx, ErrIngestInstallationFilterConfigInvalid
-	}
-
 	run := &payloadRun{
-		ic:         ic,
-		batch:      batch,
-		handle:     handle,
-		definition: definition,
-		filterExpr: filterExpr,
-		installation: types.MappingInstallation{
-			ID:               ic.Integration.ID,
-			Name:             ic.Integration.Name,
-			DefinitionID:     definition.ID,
-			DefinitionName:   definition.DisplayName,
-			InstanceID:       ic.Integration.InstallationMetadata.Display.ExternalID,
-			PrimaryDirectory: ic.Integration.PrimaryDirectory,
-		},
-		preload: lo.SumBy(batch.PayloadSets, func(payloadSet types.IngestPayloadSet) int { return len(payloadSet.Envelopes) }) >= ingestPreloadMinRecords,
-		tracked: make(map[string]*models.FailedRecord, len(ic.Integration.Health.FailedRecords)),
+		ic:           ic,
+		batch:        batch,
+		handle:       handle,
+		definition:   definition,
+		installation: types.MappingInstallation{DefinitionID: definition.ID, DefinitionName: definition.DisplayName},
+		preload:      lo.SumBy(batch.PayloadSets, func(payloadSet types.IngestPayloadSet) int { return len(payloadSet.Envelopes) }) >= ingestPreloadMinRecords,
+		tracked:      map[string]*models.FailedRecord{},
 	}
 
-	for i := range ic.Integration.Health.FailedRecords {
-		fr := ic.Integration.Health.FailedRecords[i]
-		run.tracked[trackingKey(fr.Schema, fr.Key)] = &fr
+	if ic.Integration != nil {
+		if ic.Integration.InstallationMetadata.Display.ExternalID == "" {
+			return nil, ctx, ErrIngestInstanceIDRequired
+		}
+
+		filterExpr, err := resolveInstallationFilterExpr(ic.Integration, batch.OperationName)
+		if err != nil {
+			return nil, ctx, ErrIngestInstallationFilterConfigInvalid
+		}
+
+		run.filterExpr = filterExpr
+		run.installation.ID = ic.Integration.ID
+		run.installation.Name = ic.Integration.Name
+		run.installation.InstanceID = ic.Integration.InstallationMetadata.Display.ExternalID
+		run.installation.PrimaryDirectory = ic.Integration.PrimaryDirectory
+
+		for i := range ic.Integration.Health.FailedRecords {
+			fr := ic.Integration.Health.FailedRecords[i]
+			run.tracked[trackingKey(fr.Schema, fr.Key)] = &fr
+		}
 	}
 
 	if !run.preload {
 		return run, ctx, nil
 	}
 
-	ids, err := ic.DB.Integration.Query().Where(integration.OwnerIDEQ(ic.Integration.OwnerID)).IDs(ctx)
+	ids, err := ic.DB.Integration.Query().Where(integration.OwnerIDEQ(ic.ownerID())).IDs(ctx)
 	if err != nil {
 		return nil, ctx, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 	}
@@ -284,7 +284,7 @@ func (run *payloadRun) applySet(ctx context.Context, payloadSet types.IngestPayl
 	setCtx := ctx
 
 	if run.preload && sourceSchema.QueryByLookup != nil && len(sourceSchema.Lookup) > 0 {
-		prefetched, err := prefetchLookupMatches(ctx, run.ic.DB, run.ic.Integration.OwnerID, sourceSchema, ready)
+		prefetched, err := prefetchLookupMatches(ctx, run.ic.DB, run.ic.ownerID(), sourceSchema, ready)
 		if err != nil {
 			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -354,7 +354,13 @@ func (run *payloadRun) prepare(ctx context.Context, payloadSet types.IngestPaylo
 		}
 
 		record.schema = sourceSchema
-		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, run.ic.Integration, run.definition.ID, run.batch.Options.RunID)
+		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, entityops.Provenance{
+			Integration:  run.ic.Integration,
+			OwnerID:      run.ic.OwnerID,
+			DefinitionID: run.definition.ID,
+			InstanceID:   payloadSet.SourceInstanceID,
+			RunID:        run.batch.Options.RunID,
+		})
 
 		prepared = append(prepared, preparedIngestRecord{resource: envelope.Resource, record: record, links: mapping.Links})
 	}
@@ -383,7 +389,7 @@ func (run *payloadRun) link(ctx context.Context, sourceSchema *entityops.Schema,
 		}
 
 		for _, p := range group.records {
-			payload, err := entityops.InjectCreateLinks(linkCtx, run.ic.DB, run.ic.Integration.OwnerID, sourceSchema, p.record.Payload, specs)
+			payload, err := entityops.InjectCreateLinks(linkCtx, run.ic.DB, run.ic.ownerID(), sourceSchema, p.record.Payload, specs)
 			if err != nil {
 				logx.FromContext(p.logCtx(ctx)).Error().Err(err).Str("schema", sourceSchema.Name).Msg("ingest link target resolution failed")
 				run.fail(p.record.Schema, p.resource, fmt.Errorf("%w: %w", ErrLinkFailed, err))
@@ -407,7 +413,7 @@ func (run *payloadRun) prefetchLinkTargets(ctx context.Context, sourceSchema *en
 
 	payloads := lo.Map(records, func(p preparedIngestRecord, _ int) json.RawMessage { return p.record.Payload })
 
-	prefetched, err := entityops.PrefetchLinkTargets(ctx, run.ic.DB, run.ic.Integration.OwnerID, sourceSchema, payloads, specs)
+	prefetched, err := entityops.PrefetchLinkTargets(ctx, run.ic.DB, run.ic.ownerID(), sourceSchema, payloads, specs)
 	if err != nil {
 		return ctx, fmt.Errorf("%w: %w", ErrLinkFailed, err)
 	}
@@ -417,7 +423,7 @@ func (run *payloadRun) prefetchLinkTargets(ctx context.Context, sourceSchema *en
 
 // snapshot loads the payload set's snapshot scope when the run may infer removals for it
 func (run *payloadRun) snapshot(ctx context.Context, payloadSet types.IngestPayloadSet, sourceSchema *entityops.Schema) (*snapshotSet, error) {
-	if !run.batch.Policy.Snapshot || !payloadSet.SnapshotComplete || sourceSchema.SnapshotScope == nil {
+	if run.ic.Integration == nil || !run.batch.Policy.Snapshot || !payloadSet.SnapshotComplete || sourceSchema.SnapshotScope == nil {
 		return nil, nil
 	}
 
@@ -490,7 +496,7 @@ func (run *payloadRun) skipExcluded(ctx, recordCtx context.Context, p preparedIn
 	var rows []json.RawMessage
 
 	if set != nil || resolvable {
-		fetched, err := excludedRecordRows(ctx, run.ic.DB, run.ic.Integration.OwnerID, schema, p.record.Payload)
+		fetched, err := excludedRecordRows(ctx, run.ic.DB, run.ic.ownerID(), schema, p.record.Payload)
 		if err != nil {
 			return false, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -555,6 +561,14 @@ func (run *payloadRun) recordSuccess(outcome ingestOutcome, set *snapshotSet, tr
 // recordFailure tracks a persist failure and requeues the record when possible
 func (run *payloadRun) recordFailure(recordCtx context.Context, p preparedIngestRecord, recordKey, trackKey string, err error) {
 	wrapped := wrapIngestPersistError(err)
+
+	// runtime ingest has no installation to track or requeue against, the caller reports the failure and the user reimports
+	if run.ic.Integration == nil {
+		logx.FromContext(recordCtx).Error().Err(wrapped).Msg("ingest persist failed")
+		run.fail(p.record.Schema, p.resource, wrapped)
+
+		return
+	}
 
 	if trackKey != "" {
 		run.tracked[trackKey] = &models.FailedRecord{Schema: p.record.schema.Snake, Key: recordKey, RunID: run.batch.Options.RunID, Attempts: 1, LastError: wrapped.Error()}

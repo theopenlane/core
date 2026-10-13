@@ -769,11 +769,25 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 
 	payload := json.RawMessage(`{"external_id":"acct-1","managed_by":"int_other","source_instance_id":"tenant-other","owner_id":"org_other","source_definition_id":"def_other"}`)
 
-	stamped := entityops.StampProvenance(payload, entityops.SchemaDirectoryAccount, installation, installation.DefinitionID, "run_1")
+	stamped := entityops.StampProvenance(payload, entityops.SchemaDirectoryAccount, entityops.Provenance{Integration: installation, DefinitionID: installation.DefinitionID, RunID: "run_1"})
 
 	assert.Equal(t, "int_owner", entityops.FieldValue(stamped, entityops.FieldManagedBy), "a mapping must not pick the managing installation")
 	assert.Equal(t, "tenant-test", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID), "a mapping must not pick the source instance")
 	assert.Equal(t, "def_dir", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID), "a mapping must not pick the source definition")
 	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
 	assert.Equal(t, "acct-1", entityops.FieldValue(stamped, "external_id"), "mapped non-provenance fields pass through")
+}
+
+func TestStampProvenanceRuntimeOwner(t *testing.T) {
+	t.Parallel()
+
+	payload := json.RawMessage(`{"ref_code":"CC1.1-01","owner_id":"org_other","managed_by":"int_other"}`)
+
+	stamped := entityops.StampProvenance(payload, entityops.SchemaControl, entityops.Provenance{OwnerID: "org_1", DefinitionID: "def_gemini", InstanceID: "file_1", RunID: "run_1"})
+
+	assert.Equal(t, "org_1", entityops.FieldValue(stamped, "owner_id"))
+	assert.Equal(t, "def_gemini", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID))
+	assert.Equal(t, "file_1", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID))
+	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
+	assert.Equal(t, "", entityops.FieldValue(stamped, entityops.FieldManagedBy), "a runtime mapping must not pick the managing installation")
 }

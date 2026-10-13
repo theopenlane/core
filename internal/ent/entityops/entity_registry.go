@@ -255,8 +255,89 @@ func defaultIngestPersist(s *Schema) IngestPersist {
 			owner = integration.OwnerID
 		}
 
+		// a runtime import is a one-time write, not an installation keeping records in sync, so it never claims a match
+		if integration == nil {
+			ctx = ingestNonClaimingContextKey.Set(ctx, true)
+		}
+
 		return s.Upsert(ctx, client, owner, payload)
 	}
+}
+
+// ingestNonClaimingContextKey marks an upsert whose matches are updated without taking ownership of them
+var ingestNonClaimingContextKey = contextx.NewKey[bool]()
+
+// ingestProvenanceFields are the provenance fields a non-claiming update never writes, so a match keeps its origin
+var ingestProvenanceFields = []string{FieldManagedBy, FieldIntegrationID, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldIntegrationRunID}
+
+// applyImportUpdate updates a matched row without claiming it: provenance is never written, a row an installation
+// manages only has its empty fields filled, and to-many links are always added
+func (s *Schema) applyImportUpdate(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (bool, error) {
+	managed := lookupValue(row, FieldManagedBy) != ""
+
+	update := jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		for key := range doc {
+			if !s.keepImportKey(row, key, managed) {
+				delete(doc, key)
+			}
+		}
+
+		return true
+	})
+
+	mutation, save, err := s.Ingest.buildUpdate(ctx, client, row, s.rekeyEdgesForUpdate(update))
+	if err != nil {
+		return false, err
+	}
+
+	changes, err := s.pruneIngestFields(ctx, mutation)
+	if err != nil {
+		return false, err
+	}
+
+	if changes.Empty() {
+		return false, nil
+	}
+
+	return true, save(ctx)
+}
+
+// keepImportKey reports whether a non-claiming update writes the key: to-many links always, provenance and the owner
+// never, and any other field always on an unmanaged row but only when empty on a managed one
+func (s *Schema) keepImportKey(row json.RawMessage, key string, managed bool) bool {
+	if key == s.OwnerField || lo.Contains(ingestProvenanceFields, key) {
+		return false
+	}
+
+	if edge, ok := lo.Find(s.Edges, func(edge EdgeDescriptor) bool { return edge.CreateField == key }); ok && edge.AddField != "" {
+		return edge.Name != s.IntegrationM2MEdge && edge.Name != s.IntegrationRunM2MEdge
+	}
+
+	if !managed {
+		return true
+	}
+
+	field, ok := s.FieldByName(key)
+	if !ok || !fillableIngestType(field.Type) {
+		return false
+	}
+
+	return rowValueEmpty(row, key)
+}
+
+// fillableIngestType reports whether an empty row value of the type means unset, false and zero are real values
+func fillableIngestType(fieldType string) bool {
+	return fieldType != "bool" && !strings.HasPrefix(fieldType, "int") && !strings.HasPrefix(fieldType, "uint") && !strings.HasPrefix(fieldType, "float")
+}
+
+// rowValueEmpty reports whether a loaded row has no value for the key
+func rowValueEmpty(row json.RawMessage, key string) bool {
+	raw, ok := jsonx.DecodeObjectKey[json.RawMessage](row, key)
+	if !ok {
+		return true
+	}
+
+	return lo.Contains([]string{"null", `""`, "[]", "{}"}, string(bytes.TrimSpace(raw)))
 }
 
 // registerIngest attaches the schema's durable ingest consumer.
@@ -346,10 +427,15 @@ func (s *Schema) PersistIngest(ctx context.Context, client *generated.Client, in
 	// the split runs before prepare: prepare round-trips the payload through the typed create
 	// input, which drops through-edge keys the input struct cannot carry
 	payload, throughIDs := splitThroughEdgeIDs(s, payload)
+	payload, targetID := splitIngestTarget(payload)
 
 	payload, err = s.Ingest.prepare(ctx, integration, payload)
 	if err != nil {
 		return "", false, false, err
+	}
+
+	if targetID != "" {
+		ctx = ingestTargetContextKey.Set(ctx, targetID)
 	}
 
 	id, changed, managed, err = s.Ingest.persist(ctx, client, integration, payload)
@@ -362,6 +448,23 @@ func (s *Schema) PersistIngest(ctx context.Context, client *generated.Client, in
 	}
 
 	return id, changed, managed, applyThroughEdgeIDs(ctx, client, s, id, throughIDs)
+}
+
+// ingestTargetContextKey carries the explicit target row id from PersistIngest to Upsert
+var ingestTargetContextKey = contextx.NewKey[string]()
+
+// splitIngestTarget removes the explicit target from an ingest payload, returning its id
+func splitIngestTarget(payload json.RawMessage) (json.RawMessage, string) {
+	targetID := lookupValue(payload, FieldIngestTargetID)
+	if targetID == "" {
+		return payload, ""
+	}
+
+	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		delete(doc, FieldIngestTargetID)
+
+		return true
+	}), targetID
 }
 
 // logSanitizedIngestField records one optional mapped field dropped by ingest preparation because
@@ -385,7 +488,7 @@ func (s *Schema) handleIngest(ctx context.Context, client *generated.Client, res
 		return err
 	}
 
-	payload = StampProvenance(payload, s, integration, integration.DefinitionID, request.RunID)
+	payload = StampProvenance(payload, s, Provenance{Integration: integration, DefinitionID: integration.DefinitionID, RunID: request.RunID})
 
 	payload, err = s.Ingest.prepare(ctx, integration, payload)
 	if err != nil {
@@ -761,24 +864,48 @@ const (
 	FieldSourceInstanceID = "source_instance_id"
 	// FieldIntegrationRunID is the provenance column recording the integration run that last wrote a record
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldIngestTargetID is the payload key naming an existing row a record links to instead of upserting
+	FieldIngestTargetID = "ingest_target_id"
 )
+
+// Provenance identifies the writer of an ingest payload, an installation or a runtime source acting for an owner
+type Provenance struct {
+	// Integration is the writing installation, nil for runtime ingest
+	Integration *generated.Integration
+	// OwnerID is the organization a runtime ingest writes for, ignored when Integration is set
+	OwnerID string
+	// DefinitionID is the integration definition producing the payload
+	DefinitionID string
+	// InstanceID is the source instance a runtime ingest writes from, ignored when Integration is set
+	InstanceID string
+	// RunID is the integration run the payload belongs to
+	RunID string
+}
 
 // StampProvenance writes the schema's trusted integration-derived provenance columns and ownership
 // edges onto an ingest payload from the writing installation, overriding anything the mapping
 // emitted for them; it is the sole writer of provenance columns for both the synchronous and the
 // durable ingest paths, so a queued record persists with the same provenance a batched one does;
-// a nil installation stamps only the run id and the definition id, which is how runtime ingest writes system-owned rows
-func StampProvenance(payload json.RawMessage, schema *Schema, integration *generated.Integration, definitionID, runID string) json.RawMessage {
+// a nil installation stamps the run, definition, and when set the owner and instance, which is how runtime
+// ingest writes org-owned rows on behalf of an organization or system-owned rows when no owner is given
+func StampProvenance(payload json.RawMessage, schema *Schema, provenance Provenance) json.RawMessage {
 	type provenanceValue struct {
 		field string
 		value string
 	}
 
+	integration := provenance.Integration
+	runID := provenance.RunID
+
 	values := []provenanceValue{provenanceValue{FieldIntegrationRunID, runID}}
 
 	switch {
 	case integration == nil:
-		values = append(values, provenanceValue{FieldSourceDefinitionID, definitionID})
+		values = append(values,
+			provenanceValue{schema.OwnerField, provenance.OwnerID},
+			provenanceValue{FieldSourceDefinitionID, provenance.DefinitionID},
+			provenanceValue{FieldSourceInstanceID, provenance.InstanceID},
+		)
 	default:
 		values = append(values,
 			provenanceValue{schema.OwnerField, integration.OwnerID},
@@ -806,6 +933,23 @@ func StampProvenance(payload json.RawMessage, schema *Schema, integration *gener
 
 			if stampProvenanceKey(doc, field.Name, v.value) {
 				changed = true
+			}
+		}
+
+		// runtime payloads must not carry installation provenance a mapping emitted
+		if integration == nil {
+			for _, name := range []string{FieldManagedBy, FieldIntegrationID, FieldSourceDefinitionVersion} {
+				if _, ok := doc[name]; ok {
+					delete(doc, name)
+					changed = true
+				}
+			}
+
+			if edge, ok := schema.EdgeByName(schema.IntegrationM2MEdge); ok && schema.IntegrationM2MEdge != "" {
+				if _, present := doc[edge.CreateField]; present {
+					delete(doc, edge.CreateField)
+					changed = true
+				}
 			}
 		}
 
@@ -999,8 +1143,9 @@ func WithLookupMatches(ctx context.Context, schema *Schema, matches map[int]map[
 func selectIngestCandidate(s *Schema, rows []json.RawMessage, payload json.RawMessage) (row json.RawMessage, claimable bool, foreign bool, err error) {
 	me := lookupValue(payload, FieldManagedBy)
 
+	// an installation-less payload has no manager, so it must not claim every unmanaged row as its own
 	managedByMe := lo.Filter(rows, func(candidate json.RawMessage, _ int) bool {
-		return lookupValue(candidate, FieldManagedBy) == me
+		return me != "" && lookupValue(candidate, FieldManagedBy) == me
 	})
 
 	switch len(managedByMe) {
@@ -1095,6 +1240,7 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 	}
 
 	alternative, keys, hasKey := lookupKeyFor(s, payload)
+	targetID, targeted := ingestTargetContextKey.Get(ctx)
 
 	var (
 		rows      []json.RawMessage
@@ -1103,6 +1249,14 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 	)
 
 	switch {
+	case targeted && targetID != "":
+		// an explicit target replaces the lookup, the row then goes through the same candidate selection
+		row, lerr := s.Load(ctx, client, targetID)
+		if lerr != nil {
+			return "", false, false, lerr
+		}
+
+		rows = []json.RawMessage{row}
 	case !hasKey:
 		return "", false, false, ErrUpsertKeyMissing
 	default:
@@ -1152,10 +1306,16 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 		return "", false, false, logError(ctx, ref, err, fmt.Errorf("%s lookup matched conflicting records", s.Name))
 	}
 
-	if foreign {
+	nonClaiming, _ := ingestNonClaimingContextKey.Get(ctx)
+
+	if foreign && !nonClaiming {
 		logx.FromContext(ctx).Debug().Str(FieldSchema, s.Snake).Str(fieldEntityID, entityID(candidate)).Msg("ingest skipped record managed by another definition")
 
 		return entityID(candidate), false, false, nil
+	}
+
+	if candidate == nil && targeted {
+		return targetID, false, false, nil
 	}
 
 	if candidate == nil {
@@ -1185,6 +1345,12 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 
 	if id == "" || (s.OwnerField != "" && lookupValue(candidate, s.OwnerField) != ownerID) {
 		return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("invalid or cross-organization match for %s", s.Name))
+	}
+
+	if nonClaiming {
+		changed, err = s.applyImportUpdate(ctx, client, candidate, payload)
+
+		return id, changed, true, err
 	}
 
 	changed, managed, err = s.applyIngestUpdate(ctx, client, candidate, payload)
@@ -2264,9 +2430,34 @@ var (
 			Lower:            "control",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[ControlProjection](),
-		ConsoleRoute:   &ConsoleRoute{Base: "controls"},
-		OwnerField:     control.FieldOwnerID,
+		ProjectionType:        reflect.TypeFor[ControlProjection](),
+		ConsoleRoute:          &ConsoleRoute{Base: "controls"},
+		OwnerField:            control.FieldOwnerID,
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"ref_code"}},
+		},
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "control", Operation: refOpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateControlInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.Control.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "control", Operation: refOpUpdate, EntityID: entityID}
 
@@ -2276,6 +2467,10 @@ var (
 			}
 
 			builder := client.Control.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
 
 			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
@@ -2328,6 +2523,9 @@ var (
 			}
 
 			return entity, nil
+		},
+		Ingest: &IngestCapability{
+			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "control.ingest.requested"),
 		},
 	}
 	SchemaControlImplementation = &Schema{
@@ -3146,6 +3344,29 @@ var (
 
 			return nil
 		},
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "evidence", Operation: refOpQuery}
+
+			entities, err := client.Evidence.Query().
+				Where(evidence.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "evidence", Operation: refOpLoad, EntityID: entityID}
 
@@ -3252,6 +3473,7 @@ var (
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
+			{Fields: []string{"source", "display_name"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "finding", Operation: refOpCreate}
@@ -3397,9 +3619,54 @@ var (
 			Snake: "group",
 			Lower: "group",
 		},
-		ProjectionType:     reflect.TypeFor[GroupProjection](),
-		OwnerField:         group.FieldOwnerID,
-		IntegrationM2MEdge: "integrations",
+		ProjectionType:        reflect.TypeFor[GroupProjection](),
+		OwnerField:            group.FieldOwnerID,
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"name"}},
+		},
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "group", Operation: refOpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateGroupInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.Group.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+			ref := SchemaRef{Schema: "group", Operation: refOpUpdate, EntityID: entityID}
+
+			decoded, err := jsonx.Decode[generated.UpdateGroupInput](applyClears(input))
+			if err != nil {
+				return logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.Group.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "group", Operation: refOpQuery}
 
@@ -3438,6 +3705,9 @@ var (
 
 			return data, nil
 		},
+		Ingest: &IngestCapability{
+			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "group.ingest.requested"),
+		},
 	}
 	SchemaGroupMembership = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
@@ -3445,6 +3715,7 @@ var (
 			Snake: "group_membership",
 			Lower: "groupmembership",
 		},
+		ProjectionType: reflect.TypeFor[GroupMembershipProjection](),
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "group_membership", Operation: refOpLoad, EntityID: entityID}
 
@@ -3467,6 +3738,7 @@ var (
 			Snake: "group_setting",
 			Lower: "groupsetting",
 		},
+		ProjectionType: reflect.TypeFor[GroupSettingProjection](),
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "group_setting", Operation: refOpLoad, EntityID: entityID}
 
@@ -3836,7 +4108,31 @@ var (
 			Snake: "invite",
 			Lower: "invite",
 		},
-		OwnerField: invite.FieldOwnerID,
+		ProjectionType: reflect.TypeFor[InviteProjection](),
+		OwnerField:     invite.FieldOwnerID,
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "invite", Operation: refOpQuery}
+
+			entities, err := client.Invite.Query().
+				Where(invite.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "invite", Operation: refOpLoad, EntityID: entityID}
 
@@ -3881,7 +4177,76 @@ var (
 			Snake: "mapped_control",
 			Lower: "mappedcontrol",
 		},
-		OwnerField: mappedcontrol.FieldOwnerID,
+		ProjectionType:        reflect.TypeFor[MappedControlProjection](),
+		OwnerField:            mappedcontrol.FieldOwnerID,
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+		},
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "mapped_control", Operation: refOpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateMappedControlInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.MappedControl.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+			ref := SchemaRef{Schema: "mapped_control", Operation: refOpUpdate, EntityID: entityID}
+
+			decoded, err := jsonx.Decode[generated.UpdateMappedControlInput](applyClears(input))
+			if err != nil {
+				return logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.MappedControl.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		},
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "mapped_control", Operation: refOpQuery}
+
+			entities, err := client.MappedControl.Query().
+				Where(ownerScopeMappedControl(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "mapped_control", Operation: refOpLoad, EntityID: entityID}
 
@@ -3896,6 +4261,9 @@ var (
 			}
 
 			return data, nil
+		},
+		Ingest: &IngestCapability{
+			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "mapped_control.ingest.requested"),
 		},
 	}
 	SchemaNarrative = &Schema{
@@ -4297,9 +4665,34 @@ var (
 			Lower:            "platform",
 			WorkflowEligible: true,
 		},
-		ProjectionType:     reflect.TypeFor[PlatformProjection](),
-		OwnerField:         platform.FieldOwnerID,
-		IntegrationM2MEdge: "integrations",
+		ProjectionType:        reflect.TypeFor[PlatformProjection](),
+		OwnerField:            platform.FieldOwnerID,
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"name"}},
+		},
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "platform", Operation: refOpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreatePlatformInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.Platform.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "platform", Operation: refOpUpdate, EntityID: entityID}
 
@@ -4309,6 +4702,10 @@ var (
 			}
 
 			builder := client.Platform.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
 
 			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
@@ -4361,6 +4758,9 @@ var (
 			}
 
 			return entity, nil
+		},
+		Ingest: &IngestCapability{
+			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "platform.ingest.requested"),
 		},
 	}
 	SchemaProcedure = &Schema{
@@ -4476,9 +4876,54 @@ var (
 			Snake: "program",
 			Lower: "program",
 		},
-		ProjectionType: reflect.TypeFor[ProgramProjection](),
-		ConsoleRoute:   &ConsoleRoute{Base: "programs"},
-		OwnerField:     program.FieldOwnerID,
+		ProjectionType:        reflect.TypeFor[ProgramProjection](),
+		ConsoleRoute:          &ConsoleRoute{Base: "programs"},
+		OwnerField:            program.FieldOwnerID,
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_uuid"}},
+		},
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "program", Operation: refOpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateProgramInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.Program.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+			ref := SchemaRef{Schema: "program", Operation: refOpUpdate, EntityID: entityID}
+
+			decoded, err := jsonx.Decode[generated.UpdateProgramInput](applyClears(input))
+			if err != nil {
+				return logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.Program.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "program", Operation: refOpQuery}
 
@@ -4517,6 +4962,9 @@ var (
 
 			return data, nil
 		},
+		Ingest: &IngestCapability{
+			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "program.ingest.requested"),
+		},
 	}
 	SchemaProgramMembership = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
@@ -4524,6 +4972,7 @@ var (
 			Snake: "program_membership",
 			Lower: "programmembership",
 		},
+		ProjectionType: reflect.TypeFor[ProgramMembershipProjection](),
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "program_membership", Operation: refOpLoad, EntityID: entityID}
 
@@ -4619,9 +5068,54 @@ var (
 			Snake: "review",
 			Lower: "review",
 		},
-		ProjectionType:     reflect.TypeFor[ReviewProjection](),
-		OwnerField:         review.FieldOwnerID,
-		IntegrationM2MEdge: "integrations",
+		ProjectionType:        reflect.TypeFor[ReviewProjection](),
+		OwnerField:            review.FieldOwnerID,
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+		},
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "review", Operation: refOpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateReviewInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.Review.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+			ref := SchemaRef{Schema: "review", Operation: refOpUpdate, EntityID: entityID}
+
+			decoded, err := jsonx.Decode[generated.UpdateReviewInput](applyClears(input))
+			if err != nil {
+				return logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.Review.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "review", Operation: refOpQuery}
 
@@ -4659,6 +5153,9 @@ var (
 			}
 
 			return data, nil
+		},
+		Ingest: &IngestCapability{
+			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "review.ingest.requested"),
 		},
 	}
 	SchemaRisk = &Schema{
@@ -4843,8 +5340,32 @@ var (
 			Snake: "standard",
 			Lower: "standard",
 		},
-		ConsoleRoute: &ConsoleRoute{Base: "standards"},
-		OwnerField:   standard.FieldOwnerID,
+		ProjectionType: reflect.TypeFor[StandardProjection](),
+		ConsoleRoute:   &ConsoleRoute{Base: "standards"},
+		OwnerField:     standard.FieldOwnerID,
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "standard", Operation: refOpQuery}
+
+			entities, err := client.Standard.Query().
+				Where(ownerScopeStandard(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "standard", Operation: refOpLoad, EntityID: entityID}
 
@@ -5034,8 +5555,53 @@ var (
 			Snake: "system_detail",
 			Lower: "systemdetail",
 		},
-		ProjectionType: reflect.TypeFor[SystemDetailProjection](),
-		OwnerField:     systemdetail.FieldOwnerID,
+		ProjectionType:        reflect.TypeFor[SystemDetailProjection](),
+		OwnerField:            systemdetail.FieldOwnerID,
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"system_name"}},
+		},
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "system_detail", Operation: refOpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateSystemDetailInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.SystemDetail.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+			ref := SchemaRef{Schema: "system_detail", Operation: refOpUpdate, EntityID: entityID}
+
+			decoded, err := jsonx.Decode[generated.UpdateSystemDetailInput](applyClears(input))
+			if err != nil {
+				return logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.SystemDetail.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
 
@@ -5073,6 +5639,9 @@ var (
 			}
 
 			return data, nil
+		},
+		Ingest: &IngestCapability{
+			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "system_detail.ingest.requested"),
 		},
 	}
 	SchemaTFASetting = &Schema{
@@ -6168,56 +6737,61 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaControl.Fields = []FieldDescriptor{
-		{Name: "aliases", Label: "Aliases", Type: "[]string", Clearable: true},
-		{Name: "assessment_methods", Label: "AssessmentMethods", Type: "[]models.AssessmentMethod", Clearable: true},
-		{Name: "assessment_objectives", Label: "AssessmentObjectives", Type: "[]models.AssessmentObjective", Clearable: true},
-		{Name: "auditor_reference_id", Label: "AuditorReferenceID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "category", Label: "Category", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "category_id", Label: "CategoryID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "control_kind_id", Label: "ControlKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "control_kind_name", Label: "ControlKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "control_questions", Label: "ControlQuestions", Type: "[]string", Clearable: true},
+		{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true},
+		{Name: "assessment_methods", Label: "AssessmentMethods", Type: "[]models.AssessmentMethod", InputKey: "assessment_methods", Clearable: true},
+		{Name: "assessment_objectives", Label: "AssessmentObjectives", Type: "[]models.AssessmentObjective", InputKey: "assessment_objectives", Clearable: true},
+		{Name: "auditor_reference_id", Label: "AuditorReferenceID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "auditor_reference_id", Clearable: true},
+		{Name: "category", Label: "Category", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category", Clearable: true},
+		{Name: "category_id", Label: "CategoryID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category_id", Clearable: true},
+		{Name: "control_kind_id", Label: "ControlKindID", Type: "string", MatchKey: true, InputKey: "control_kind_id", Clearable: true},
+		{Name: "control_kind_name", Label: "ControlKindName", Type: "string", MatchKey: true, InputKey: "control_kind_name", Clearable: true, CaseInsensitive: true},
+		{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "control_owner_id", Clearable: true},
+		{Name: "control_questions", Label: "ControlQuestions", Type: "[]string", InputKey: "control_questions", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "description_json", Label: "DescriptionJSON", Type: "[]interface {}", Clearable: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
+		{Name: "description_json", Label: "DescriptionJSON", Type: "[]interface {}", InputKey: "description_json", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "evidence_requests", Label: "EvidenceRequests", Type: "[]models.EvidenceRequests", Clearable: true},
-		{Name: "example_evidence", Label: "ExampleEvidence", Type: "[]models.ExampleEvidence", Clearable: true},
-		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "implementation_description", Label: "ImplementationDescription", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "implementation_guidance", Label: "ImplementationGuidance", Type: "[]models.ImplementationGuidance", Clearable: true},
-		{Name: "implementation_status", Label: "ImplementationStatus", Type: "enums.ControlImplementationStatus", Clearable: true},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
+		{Name: "evidence_requests", Label: "EvidenceRequests", Type: "[]models.EvidenceRequests", InputKey: "evidence_requests", Clearable: true},
+		{Name: "example_evidence", Label: "ExampleEvidence", Type: "[]models.ExampleEvidence", InputKey: "example_evidence", Clearable: true},
+		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
+		{Name: "implementation_description", Label: "ImplementationDescription", Type: "string", MatchKey: true, InputKey: "implementation_description", Clearable: true},
+		{Name: "implementation_guidance", Label: "ImplementationGuidance", Type: "[]models.ImplementationGuidance", InputKey: "implementation_guidance", Clearable: true},
+		{Name: "implementation_status", Label: "ImplementationStatus", Type: "enums.ControlImplementationStatus", InputKey: "implementation_status", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "is_trust_center_control", Label: "IsTrustCenterControl", Type: "bool", Clearable: true},
-		{Name: "mapped_categories", Label: "MappedCategories", Type: "[]string", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "mapped_categories", Label: "MappedCategories", Type: "[]string", InputKey: "mapped_categories", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "public_representation", Label: "PublicRepresentation", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "ref_code", Label: "RefCode", Type: "string", MatchKey: true, WebhookPayload: true},
+		{Name: "public_representation", Label: "PublicRepresentation", Type: "string", MatchKey: true, InputKey: "public_representation", Clearable: true},
+		{Name: "ref_code", Label: "RefCode", Type: "string", MatchKey: true, InputKey: "ref_code", WebhookPayload: true},
 		{Name: "reference_framework", Label: "ReferenceFramework", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "reference_framework_revision", Label: "ReferenceFrameworkRevision", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "reference_id", Label: "ReferenceID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "references", Label: "References", Type: "[]models.Reference", Clearable: true},
-		{Name: "responsible_party_id", Label: "ResponsiblePartyID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "source", Label: "Source", Type: "enums.ControlSource", Clearable: true},
-		{Name: "source_name", Label: "SourceName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "status", Label: "Status", Type: "enums.ControlStatus", WorkflowEligible: true, Clearable: true, WebhookPayload: true},
-		{Name: "subcategory", Label: "Subcategory", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "reference_framework_revision", Label: "ReferenceFrameworkRevision", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "reference_framework_revision", Clearable: true},
+		{Name: "reference_id", Label: "ReferenceID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "reference_id", Clearable: true},
+		{Name: "references", Label: "References", Type: "[]models.Reference", InputKey: "references", Clearable: true},
+		{Name: "responsible_party_id", Label: "ResponsiblePartyID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "responsible_party_id", Clearable: true},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
+		{Name: "source", Label: "Source", Type: "enums.ControlSource", InputKey: "source", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_name", Label: "SourceName", Type: "string", MatchKey: true, InputKey: "source_name", Clearable: true},
+		{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true, InputKey: "standard_id", Clearable: true},
+		{Name: "status", Label: "Status", Type: "enums.ControlStatus", WorkflowEligible: true, InputKey: "status", Clearable: true, WebhookPayload: true},
+		{Name: "subcategory", Label: "Subcategory", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "subcategory", Clearable: true},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "testing_procedures", Label: "TestingProcedures", Type: "[]models.TestingProcedures", Clearable: true},
-		{Name: "title", Label: "Title", Type: "string", WorkflowEligible: true, MatchKey: true, DisplayKey: true, Clearable: true, WebhookPayload: true},
-		{Name: "trust_center_visibility", Label: "TrustCenterVisibility", Type: "enums.TrustCenterControlVisibility", Clearable: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+		{Name: "testing_procedures", Label: "TestingProcedures", Type: "[]models.TestingProcedures", InputKey: "testing_procedures", Clearable: true},
+		{Name: "title", Label: "Title", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "title", DisplayKey: true, Clearable: true, WebhookPayload: true},
+		{Name: "trust_center_visibility", Label: "TrustCenterVisibility", Type: "enums.TrustCenterControlVisibility", InputKey: "trust_center_visibility", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -6822,20 +7396,25 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
 		{Name: "gravatar_logo_url", Label: "GravatarLogoURL", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "is_managed", Label: "IsManaged", Type: "bool", Clearable: true},
 		{Name: "logo_url", Label: "LogoURL", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "oscal_contact_uuids", Label: "OscalContactUuids", Type: "[]string", Clearable: true},
-		{Name: "oscal_party_uuid", Label: "OscalPartyUUID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "oscal_role", Label: "OscalRole", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+		{Name: "oscal_contact_uuids", Label: "OscalContactUuids", Type: "[]string", InputKey: "oscal_contact_uuids", Clearable: true},
+		{Name: "oscal_party_uuid", Label: "OscalPartyUUID", Type: "string", MatchKey: true, InputKey: "oscal_party_uuid", Clearable: true},
+		{Name: "oscal_role", Label: "OscalRole", Type: "string", MatchKey: true, InputKey: "oscal_role", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "scim_active", Label: "ScimActive", Type: "bool", Clearable: true},
-		{Name: "scim_display_name", Label: "ScimDisplayName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scim_external_id", Label: "ScimExternalID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scim_group_mailing", Label: "ScimGroupMailing", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "scim_active", Label: "ScimActive", Type: "bool", InputKey: "scim_active", Clearable: true},
+		{Name: "scim_display_name", Label: "ScimDisplayName", Type: "string", MatchKey: true, InputKey: "scim_display_name", Clearable: true},
+		{Name: "scim_external_id", Label: "ScimExternalID", Type: "string", MatchKey: true, InputKey: "scim_external_id", Clearable: true},
+		{Name: "scim_group_mailing", Label: "ScimGroupMailing", Type: "string", MatchKey: true, InputKey: "scim_group_mailing", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7116,19 +7695,25 @@ func init() {
 		{Name: "zone_id", Label: "ZoneID", Type: "string", MatchKey: true},
 	}
 	SchemaMappedControl.Fields = []FieldDescriptor{
-		{Name: "confidence", Label: "Confidence", Type: "int", Clearable: true},
+		{Name: "confidence", Label: "Confidence", Type: "int", InputKey: "confidence", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "mapping_type", Label: "MappingType", Type: "enums.MappingType"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "mapping_type", Label: "MappingType", Type: "enums.MappingType", InputKey: "mapping_type"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "relation", Label: "Relation", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "source", Label: "Source", Type: "enums.MappingSource", Clearable: true},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "relation", Label: "Relation", Type: "string", MatchKey: true, InputKey: "relation", Clearable: true},
+		{Name: "source", Label: "Source", Type: "enums.MappingSource", InputKey: "source", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7453,63 +8038,68 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaPlatform.Fields = []FieldDescriptor{
-		{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "business_owner", Label: "BusinessOwner", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "business_owner_group_id", Label: "BusinessOwnerGroupID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "business_owner_identity_holder_id", Label: "BusinessOwnerIdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "business_owner_user_id", Label: "BusinessOwnerUserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "business_purpose", Label: "BusinessPurpose", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "contains_pii", Label: "ContainsPii", Type: "bool", WorkflowEligible: true, Clearable: true},
-		{Name: "cost_center", Label: "CostCenter", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true, InputKey: "access_model_id", Clearable: true},
+		{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, InputKey: "access_model_name", Clearable: true, CaseInsensitive: true},
+		{Name: "business_owner", Label: "BusinessOwner", Type: "string", MatchKey: true, InputKey: "business_owner", Clearable: true},
+		{Name: "business_owner_group_id", Label: "BusinessOwnerGroupID", Type: "string", MatchKey: true, InputKey: "business_owner_group_id", Clearable: true},
+		{Name: "business_owner_identity_holder_id", Label: "BusinessOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "business_owner_identity_holder_id", Clearable: true},
+		{Name: "business_owner_user_id", Label: "BusinessOwnerUserID", Type: "string", MatchKey: true, InputKey: "business_owner_user_id", Clearable: true},
+		{Name: "business_purpose", Label: "BusinessPurpose", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "business_purpose", Clearable: true},
+		{Name: "contains_pii", Label: "ContainsPii", Type: "bool", WorkflowEligible: true, InputKey: "contains_pii", Clearable: true},
+		{Name: "cost_center", Label: "CostCenter", Type: "string", MatchKey: true, InputKey: "cost_center", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
+		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, InputKey: "criticality_id", Clearable: true},
+		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, InputKey: "criticality_name", Clearable: true, CaseInsensitive: true},
 		{Name: "data_flow_summary", Label: "DataFlowSummary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", Clearable: true},
-		{Name: "external_reference_id", Label: "ExternalReferenceID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
+		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, InputKey: "encryption_status_id", Clearable: true},
+		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, InputKey: "encryption_status_name", Clearable: true, CaseInsensitive: true},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
+		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", InputKey: "estimated_monthly_cost", Clearable: true},
+		{Name: "external_reference_id", Label: "ExternalReferenceID", Type: "string", MatchKey: true, InputKey: "external_reference_id", Clearable: true},
+		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Clearable: true},
+		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Clearable: true},
+		{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "internal_owner_identity_holder_id", Clearable: true},
+		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "platform_data_classification_id", Label: "PlatformDataClassificationID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "platform_data_classification_name", Label: "PlatformDataClassificationName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "platform_kind_id", Label: "PlatformKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "platform_kind_name", Label: "PlatformKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "platform_owner_id", Label: "PlatformOwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "purchase_date", Label: "PurchaseDate", Type: "models.DateTime", Clearable: true},
-		{Name: "region", Label: "Region", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
+		{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true, InputKey: "physical_location", Clearable: true},
+		{Name: "platform_data_classification_id", Label: "PlatformDataClassificationID", Type: "string", MatchKey: true, InputKey: "platform_data_classification_id", Clearable: true},
+		{Name: "platform_data_classification_name", Label: "PlatformDataClassificationName", Type: "string", MatchKey: true, InputKey: "platform_data_classification_name", Clearable: true, CaseInsensitive: true},
+		{Name: "platform_kind_id", Label: "PlatformKindID", Type: "string", MatchKey: true, InputKey: "platform_kind_id", Clearable: true},
+		{Name: "platform_kind_name", Label: "PlatformKindName", Type: "string", MatchKey: true, InputKey: "platform_kind_name", Clearable: true, CaseInsensitive: true},
+		{Name: "platform_owner_id", Label: "PlatformOwnerID", Type: "string", MatchKey: true, InputKey: "platform_owner_id", Clearable: true},
+		{Name: "purchase_date", Label: "PurchaseDate", Type: "models.DateTime", InputKey: "purchase_date", Clearable: true},
+		{Name: "region", Label: "Region", Type: "string", MatchKey: true, InputKey: "region", Clearable: true},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "scope_statement", Label: "ScopeStatement", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "security_owner", Label: "SecurityOwner", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "security_owner_group_id", Label: "SecurityOwnerGroupID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "security_owner_identity_holder_id", Label: "SecurityOwnerIdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "security_owner_user_id", Label: "SecurityOwnerUserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType"},
-		{Name: "status", Label: "Status", Type: "enums.PlatformStatus", WorkflowEligible: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "technical_owner", Label: "TechnicalOwner", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "technical_owner_group_id", Label: "TechnicalOwnerGroupID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "technical_owner_identity_holder_id", Label: "TechnicalOwnerIdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "technical_owner_user_id", Label: "TechnicalOwnerUserID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "security_owner", Label: "SecurityOwner", Type: "string", MatchKey: true, InputKey: "security_owner", Clearable: true},
+		{Name: "security_owner_group_id", Label: "SecurityOwnerGroupID", Type: "string", MatchKey: true, InputKey: "security_owner_group_id", Clearable: true},
+		{Name: "security_owner_identity_holder_id", Label: "SecurityOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "security_owner_identity_holder_id", Clearable: true},
+		{Name: "security_owner_user_id", Label: "SecurityOwnerUserID", Type: "string", MatchKey: true, InputKey: "security_owner_user_id", Clearable: true},
+		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, InputKey: "security_tier_id", Clearable: true},
+		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name", Clearable: true, CaseInsensitive: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
+		{Name: "status", Label: "Status", Type: "enums.PlatformStatus", WorkflowEligible: true, InputKey: "status"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+		{Name: "technical_owner", Label: "TechnicalOwner", Type: "string", MatchKey: true, InputKey: "technical_owner", Clearable: true},
+		{Name: "technical_owner_group_id", Label: "TechnicalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "technical_owner_group_id", Clearable: true},
+		{Name: "technical_owner_identity_holder_id", Label: "TechnicalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "technical_owner_identity_holder_id", Clearable: true},
+		{Name: "technical_owner_user_id", Label: "TechnicalOwnerUserID", Type: "string", MatchKey: true, InputKey: "technical_owner_user_id", Clearable: true},
 		{Name: "trust_boundary_description", Label: "TrustBoundaryDescription", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7566,33 +8156,38 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaProgram.Fields = []FieldDescriptor{
-		{Name: "audit_firm", Label: "AuditFirm", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "auditor", Label: "Auditor", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "auditor_email", Label: "AuditorEmail", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "auditor_read_comments", Label: "AuditorReadComments", Type: "bool"},
-		{Name: "auditor_ready", Label: "AuditorReady", Type: "bool"},
-		{Name: "auditor_write_comments", Label: "AuditorWriteComments", Type: "bool"},
+		{Name: "audit_firm", Label: "AuditFirm", Type: "string", MatchKey: true, InputKey: "audit_firm", Clearable: true},
+		{Name: "auditor", Label: "Auditor", Type: "string", MatchKey: true, InputKey: "auditor", Clearable: true},
+		{Name: "auditor_email", Label: "AuditorEmail", Type: "string", MatchKey: true, InputKey: "auditor_email", Clearable: true},
+		{Name: "auditor_read_comments", Label: "AuditorReadComments", Type: "bool", InputKey: "auditor_read_comments"},
+		{Name: "auditor_ready", Label: "AuditorReady", Type: "bool", InputKey: "auditor_ready"},
+		{Name: "auditor_write_comments", Label: "AuditorWriteComments", Type: "bool", InputKey: "auditor_write_comments"},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "end_date", Label: "EndDate", Type: "time.Time", Clearable: true},
-		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "fieldwork_end_date", Label: "FieldworkEndDate", Type: "time.Time", Clearable: true},
-		{Name: "fieldwork_start_date", Label: "FieldworkStartDate", Type: "time.Time", Clearable: true},
-		{Name: "framework_name", Label: "FrameworkName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "observation_period_end_date", Label: "ObservationPeriodEndDate", Type: "time.Time", Clearable: true},
-		{Name: "observation_period_start_date", Label: "ObservationPeriodStartDate", Type: "time.Time", Clearable: true},
+		{Name: "end_date", Label: "EndDate", Type: "time.Time", InputKey: "end_date", Clearable: true},
+		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
+		{Name: "fieldwork_end_date", Label: "FieldworkEndDate", Type: "time.Time", InputKey: "fieldwork_end_date", Clearable: true},
+		{Name: "fieldwork_start_date", Label: "FieldworkStartDate", Type: "time.Time", InputKey: "fieldwork_start_date", Clearable: true},
+		{Name: "framework_name", Label: "FrameworkName", Type: "string", MatchKey: true, InputKey: "framework_name", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+		{Name: "observation_period_end_date", Label: "ObservationPeriodEndDate", Type: "time.Time", InputKey: "observation_period_end_date", Clearable: true},
+		{Name: "observation_period_start_date", Label: "ObservationPeriodStartDate", Type: "time.Time", InputKey: "observation_period_start_date", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "program_kind_id", Label: "ProgramKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "program_kind_name", Label: "ProgramKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "program_owner_id", Label: "ProgramOwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "start_date", Label: "StartDate", Type: "time.Time", Clearable: true},
-		{Name: "status", Label: "Status", Type: "enums.ProgramStatus"},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "program_kind_id", Label: "ProgramKindID", Type: "string", MatchKey: true, InputKey: "program_kind_id", Clearable: true},
+		{Name: "program_kind_name", Label: "ProgramKindName", Type: "string", MatchKey: true, InputKey: "program_kind_name", Clearable: true, CaseInsensitive: true},
+		{Name: "program_owner_id", Label: "ProgramOwnerID", Type: "string", MatchKey: true, InputKey: "program_owner_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "start_date", Label: "StartDate", Type: "time.Time", InputKey: "start_date", Clearable: true},
+		{Name: "status", Label: "Status", Type: "enums.ProgramStatus", InputKey: "status"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7648,38 +8243,43 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaReview.Fields = []FieldDescriptor{
-		{Name: "approved", Label: "Approved", Type: "bool", Clearable: true},
-		{Name: "approved_at", Label: "ApprovedAt", Type: "models.DateTime", Clearable: true},
-		{Name: "category", Label: "Category", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "classification", Label: "Classification", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "approved", Label: "Approved", Type: "bool", InputKey: "approved", Clearable: true},
+		{Name: "approved_at", Label: "ApprovedAt", Type: "models.DateTime", InputKey: "approved_at", Clearable: true},
+		{Name: "category", Label: "Category", Type: "string", MatchKey: true, InputKey: "category", Clearable: true},
+		{Name: "classification", Label: "Classification", Type: "string", MatchKey: true, InputKey: "classification", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "details", Label: "Details", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
+		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
+		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Clearable: true},
+		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", Clearable: true},
-		{Name: "reported_at", Label: "ReportedAt", Type: "models.DateTime", Clearable: true},
-		{Name: "reporter", Label: "Reporter", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "reviewed_at", Label: "ReviewedAt", Type: "models.DateTime", Clearable: true},
+		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Clearable: true},
+		{Name: "reported_at", Label: "ReportedAt", Type: "models.DateTime", InputKey: "reported_at", Clearable: true},
+		{Name: "reporter", Label: "Reporter", Type: "string", MatchKey: true, InputKey: "reporter", Clearable: true},
+		{Name: "reviewed_at", Label: "ReviewedAt", Type: "models.DateTime", InputKey: "reviewed_at", Clearable: true},
 		{Name: "reviewer_id", Label: "ReviewerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
-		{Name: "source", Label: "Source", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "state", Label: "State", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "status", Label: "Status", Type: "enums.ReviewStatus", Clearable: true},
-		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
+		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "state", Label: "State", Type: "string", MatchKey: true, InputKey: "state", Clearable: true},
+		{Name: "status", Label: "Status", Type: "enums.ReviewStatus", InputKey: "status", Clearable: true},
+		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Clearable: true},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7767,6 +8367,8 @@ func init() {
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "discovered_vulnerability_ids", Label: "DiscoveredVulnerabilityIds", Type: "[]string", Clearable: true},
+		{Name: "document_kind_id", Label: "DocumentKindID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "document_kind_name", Label: "DocumentKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "generated_by_platform_id", Label: "GeneratedByPlatformID", Type: "string", MatchKey: true, Clearable: true},
@@ -7917,24 +8519,29 @@ func init() {
 		{Name: "verified_phone", Label: "VerifiedPhone", Type: "bool"},
 	}
 	SchemaSystemDetail.Fields = []FieldDescriptor{
-		{Name: "authorization_boundary", Label: "AuthorizationBoundary", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "authorization_boundary", Label: "AuthorizationBoundary", Type: "string", MatchKey: true, InputKey: "authorization_boundary", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "last_reviewed", Label: "LastReviewed", Type: "models.DateTime", Clearable: true},
-		{Name: "oscal_metadata_json", Label: "OscalMetadataJSON", Type: "map[string]interface {}", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "last_reviewed", Label: "LastReviewed", Type: "models.DateTime", InputKey: "last_reviewed", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "oscal_metadata_json", Label: "OscalMetadataJSON", Type: "map[string]interface {}", InputKey: "oscal_metadata_json", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "revision_history", Label: "RevisionHistory", Type: "[]interface {}", Clearable: true},
-		{Name: "sensitivity_level", Label: "SensitivityLevel", Type: "enums.SystemSensitivityLevel", Clearable: true},
-		{Name: "system_name", Label: "SystemName", Type: "string", MatchKey: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "revision_history", Label: "RevisionHistory", Type: "[]interface {}", InputKey: "revision_history", Clearable: true},
+		{Name: "sensitivity_level", Label: "SensitivityLevel", Type: "enums.SystemSensitivityLevel", InputKey: "sensitivity_level", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "system_name", Label: "SystemName", Type: "string", MatchKey: true, InputKey: "system_name"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "version", Label: "Version", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "version", Label: "Version", Type: "string", MatchKey: true, InputKey: "version", Clearable: true},
 	}
 	SchemaTFASetting.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -9819,6 +10426,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:             "internal_policies",
@@ -12220,6 +12835,14 @@ func init() {
 			AddField:    "add_finding_editor_ids",
 		},
 		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
+		},
+		{
 			Name:        "integrations",
 			Label:       "Integrations",
 			Target:      SchemaIntegration,
@@ -13523,6 +14146,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "from_subcontrol_ids",
 			AddField:    "add_from_subcontrol_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "owner",
@@ -15562,6 +16193,14 @@ func init() {
 			AddField:    "add_identity_holder_ids",
 		},
 		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
+		},
+		{
 			Name:        "integrations",
 			Label:       "Integrations",
 			Target:      SchemaIntegration,
@@ -16041,6 +16680,14 @@ func init() {
 			AddField:    "add_finding_ids",
 		},
 		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
+		},
+		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
@@ -16488,6 +17135,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "integrations",
@@ -16962,6 +17617,15 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+		},
+		{
+			Name:        "document_kind",
+			Label:       "DocumentKind",
+			Target:      SchemaCustomTypeEnum,
+			TargetType:  "CustomTypeEnum",
+			Unique:      true,
+			CreateField: "document_kind_id",
+			Field:       "document_kind_id",
 		},
 		{
 			Name:        "editors",
@@ -17533,6 +18197,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "owner",
@@ -20271,6 +20943,34 @@ func init() {
 
 		return results, nil
 	}
+	SchemaEvidence.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "evidence", Operation: refOpQuery}
+
+		if !SchemaEvidence.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "evidence"))
+		}
+
+		entities, err := client.Evidence.Query().
+			Where(evidence.OwnerID(orgID)).
+			Where(predicate.Evidence(matchKeyIn(SchemaEvidence, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
 	SchemaFinding.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
 
@@ -20449,6 +21149,62 @@ func init() {
 		entities, err := client.InternalPolicy.Query().
 			Where(ownerScopeInternalPolicy(orgID)).
 			Where(predicate.InternalPolicy(matchKeyIn(SchemaInternalPolicy, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaInvite.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "invite", Operation: refOpQuery}
+
+		if !SchemaInvite.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "invite"))
+		}
+
+		entities, err := client.Invite.Query().
+			Where(invite.OwnerID(orgID)).
+			Where(predicate.Invite(matchKeyIn(SchemaInvite, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaMappedControl.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "mapped_control", Operation: refOpQuery}
+
+		if !SchemaMappedControl.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "mapped_control"))
+		}
+
+		entities, err := client.MappedControl.Query().
+			Where(ownerScopeMappedControl(orgID)).
+			Where(predicate.MappedControl(matchKeyIn(SchemaMappedControl, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20701,6 +21457,34 @@ func init() {
 		entities, err := client.Scan.Query().
 			Where(ownerScopeScan(orgID)).
 			Where(predicate.Scan(matchKeyIn(SchemaScan, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaStandard.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "standard", Operation: refOpQuery}
+
+		if !SchemaStandard.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "standard"))
+		}
+
+		entities, err := client.Standard.Query().
+			Where(ownerScopeStandard(orgID)).
+			Where(predicate.Standard(matchKeyIn(SchemaStandard, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21075,6 +21859,39 @@ func init() {
 
 		return prepared, nil
 	}
+	SchemaControl.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "control", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateControlInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := control.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "control", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+
+		if input.ReferenceFrameworkRevision != nil {
+			if err := control.ReferenceFrameworkRevisionValidator(*input.ReferenceFrameworkRevision); err != nil {
+				logSanitizedIngestField(ctx, "control", "reference_framework_revision", err)
+				input.ReferenceFrameworkRevision = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
 	SchemaDirectoryAccount.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpCreate}
 
@@ -21289,6 +22106,25 @@ func init() {
 
 		return prepared, nil
 	}
+	SchemaGroup.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "group", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateGroupInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
 	SchemaInternalPolicy.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
 		ref := SchemaRef{Schema: "internal_policy", Operation: refOpCreate}
 
@@ -21308,6 +22144,51 @@ func init() {
 			if err := internalpolicy.URLValidator(*input.URL); err != nil {
 				logSanitizedIngestField(ctx, "internal_policy", "url", err)
 				input.URL = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaMappedControl.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "mapped_control", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateMappedControlInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaPlatform.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "platform", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreatePlatformInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := platform.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "platform", "owner_id", err)
+				input.OwnerID = nil
 			}
 		}
 		prepared, err := json.Marshal(input)
@@ -21355,6 +22236,58 @@ func init() {
 
 		return prepared, nil
 	}
+	SchemaProgram.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "program", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateProgramInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.AuditorEmail != nil {
+			if err := program.AuditorEmailValidator(*input.AuditorEmail); err != nil {
+				logSanitizedIngestField(ctx, "program", "auditor_email", err)
+				input.AuditorEmail = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaReview.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "review", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateReviewInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := review.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "review", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
 	SchemaRisk.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
 		ref := SchemaRef{Schema: "risk", Operation: refOpCreate}
 
@@ -21366,6 +22299,32 @@ func init() {
 		if input.OwnerID != nil {
 			if err := risk.OwnerIDValidator(*input.OwnerID); err != nil {
 				logSanitizedIngestField(ctx, "risk", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaSystemDetail.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "system_detail", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateSystemDetailInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := systemdetail.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "system_detail", "owner_id", err)
 				input.OwnerID = nil
 			}
 		}
@@ -21544,6 +22503,44 @@ func init() {
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
 			update = update.Where(contact.Or(contact.IntegrationRunIDIsNil(), contact.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaControl.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "control", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Control](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateControlInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Control.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(control.Or(control.IntegrationRunIDIsNil(), control.IntegrationRunIDLT(runID)))
 			guarded = true
 		}
 
@@ -21749,6 +22746,44 @@ func init() {
 			return nil
 		}, nil
 	}
+	SchemaGroup.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "group", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Group](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateGroupInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Group.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(group.Or(group.IntegrationRunIDIsNil(), group.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
 	SchemaInternalPolicy.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
 		ref := SchemaRef{Schema: "internal_policy", Operation: refOpUpdate}
 
@@ -21772,6 +22807,82 @@ func init() {
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
 			update = update.Where(internalpolicy.Or(internalpolicy.IntegrationRunIDIsNil(), internalpolicy.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaMappedControl.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "mapped_control", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.MappedControl](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateMappedControlInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.MappedControl.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(mappedcontrol.Or(mappedcontrol.IntegrationRunIDIsNil(), mappedcontrol.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaPlatform.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "platform", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Platform](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdatePlatformInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Platform.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(platform.Or(platform.IntegrationRunIDIsNil(), platform.IntegrationRunIDLT(runID)))
 			guarded = true
 		}
 
@@ -21825,6 +22936,82 @@ func init() {
 			return nil
 		}, nil
 	}
+	SchemaProgram.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "program", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Program](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateProgramInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Program.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(program.Or(program.IntegrationRunIDIsNil(), program.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaReview.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "review", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Review](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateReviewInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Review.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(review.Or(review.IntegrationRunIDIsNil(), review.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
 	SchemaRisk.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
 		ref := SchemaRef{Schema: "risk", Operation: refOpUpdate}
 
@@ -21848,6 +23035,44 @@ func init() {
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
 			update = update.Where(risk.Or(risk.IntegrationRunIDIsNil(), risk.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaSystemDetail.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "system_detail", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.SystemDetail](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateSystemDetailInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.SystemDetail.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(systemdetail.Or(systemdetail.IntegrationRunIDIsNil(), systemdetail.IntegrationRunIDLT(runID)))
 			guarded = true
 		}
 
@@ -22057,6 +23282,51 @@ func init() {
 			query := client.Contact.Query()
 			query = query.Where(contact.OwnerID(ownerID))
 			query = query.Where(predicate.Contact(matchKeyIn(SchemaContact, primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaControl.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "control", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaControl.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "control"))
+		}
+
+		fields := SchemaControl.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Control.Query()
+			query = query.Where(ownerScopeControl(ownerID))
+			query = query.Where(predicate.Control(matchKeyIn(SchemaControl, primary, chunk)))
+			query = query.Where(control.StandardIDIsNil())
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -22297,6 +23567,50 @@ func init() {
 
 		return filterByAlternativeFields(results, fields, keys), nil
 	}
+	SchemaGroup.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "group", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaGroup.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "group"))
+		}
+
+		fields := SchemaGroup.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Group.Query()
+			query = query.Where(group.OwnerID(ownerID))
+			query = query.Where(predicate.Group(matchKeyIn(SchemaGroup, primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
 	SchemaInternalPolicy.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
 
@@ -22322,6 +23636,94 @@ func init() {
 			query := client.InternalPolicy.Query()
 			query = query.Where(ownerScopeInternalPolicy(ownerID))
 			query = query.Where(predicate.InternalPolicy(matchKeyIn(SchemaInternalPolicy, primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaMappedControl.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "mapped_control", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaMappedControl.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "mapped_control"))
+		}
+
+		fields := SchemaMappedControl.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.MappedControl.Query()
+			query = query.Where(ownerScopeMappedControl(ownerID))
+			query = query.Where(predicate.MappedControl(matchKeyIn(SchemaMappedControl, primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaPlatform.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "platform", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaPlatform.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "platform"))
+		}
+
+		fields := SchemaPlatform.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Platform.Query()
+			query = query.Where(platform.OwnerID(ownerID))
+			query = query.Where(predicate.Platform(matchKeyIn(SchemaPlatform, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -22385,6 +23787,94 @@ func init() {
 
 		return filterByAlternativeFields(results, fields, keys), nil
 	}
+	SchemaProgram.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "program", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaProgram.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "program"))
+		}
+
+		fields := SchemaProgram.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Program.Query()
+			query = query.Where(program.OwnerID(ownerID))
+			query = query.Where(predicate.Program(matchKeyIn(SchemaProgram, primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaReview.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "review", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaReview.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "review"))
+		}
+
+		fields := SchemaReview.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Review.Query()
+			query = query.Where(ownerScopeReview(ownerID))
+			query = query.Where(predicate.Review(matchKeyIn(SchemaReview, primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
 	SchemaRisk.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
 
@@ -22410,6 +23900,50 @@ func init() {
 			query := client.Risk.Query()
 			query = query.Where(risk.OwnerID(ownerID))
 			query = query.Where(predicate.Risk(matchKeyIn(SchemaRisk, primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaSystemDetail.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaSystemDetail.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "system_detail"))
+		}
+
+		fields := SchemaSystemDetail.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.SystemDetail.Query()
+			query = query.Where(systemdetail.OwnerID(ownerID))
+			query = query.Where(predicate.SystemDetail(matchKeyIn(SchemaSystemDetail, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -22974,6 +24508,46 @@ func init() {
 
 		return affected, nil
 	}
+	SchemaGroup.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "group", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Group{
+			group.And(
+				group.HasIntegrationsWith(integration.ID(installation.ID)),
+				group.Not(group.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
+				group.Or(group.SourceDefinitionIDIsNil(), group.SourceDefinitionID(""), group.SourceInstanceIDIsNil(), group.SourceInstanceID("")),
+				group.Or(group.ManagedByIsNil(), group.ManagedBy(""), group.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, group.And(
+				group.ManagedBy(installation.ID),
+				group.Or(group.SourceInstanceIDIsNil(), group.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Group.Update().
+			Where(group.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
 	SchemaInternalPolicy.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
 		ref := SchemaRef{Schema: "internal_policy", Operation: refOpUpdate}
 		instanceID := installation.InstallationMetadata.Display.ExternalID
@@ -22996,6 +24570,86 @@ func init() {
 
 		update := client.InternalPolicy.Update().
 			Where(internalpolicy.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaPlatform.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "platform", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Platform{
+			platform.And(
+				platform.HasIntegrationsWith(integration.ID(installation.ID)),
+				platform.Not(platform.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
+				platform.Or(platform.SourceDefinitionIDIsNil(), platform.SourceDefinitionID(""), platform.SourceInstanceIDIsNil(), platform.SourceInstanceID("")),
+				platform.Or(platform.ManagedByIsNil(), platform.ManagedBy(""), platform.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, platform.And(
+				platform.ManagedBy(installation.ID),
+				platform.Or(platform.SourceInstanceIDIsNil(), platform.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Platform.Update().
+			Where(platform.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaReview.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "review", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Review{
+			review.And(
+				review.HasIntegrationsWith(integration.ID(installation.ID)),
+				review.Not(review.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
+				review.Or(review.SourceDefinitionIDIsNil(), review.SourceDefinitionID(""), review.SourceInstanceIDIsNil(), review.SourceInstanceID("")),
+				review.Or(review.ManagedByIsNil(), review.ManagedBy(""), review.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, review.And(
+				review.ManagedBy(installation.ID),
+				review.Or(review.SourceInstanceIDIsNil(), review.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Review.Update().
+			Where(review.Or(predicates...)).
 			SetSourceDefinitionID(installation.DefinitionID).
 			SetManagedBy(installation.ID)
 
@@ -23360,14 +25014,21 @@ func init() {
 	SchemaAsset.Ingest.persist = defaultIngestPersist(SchemaAsset)
 	SchemaCheckResult.Ingest.persist = defaultIngestPersist(SchemaCheckResult)
 	SchemaContact.Ingest.persist = defaultIngestPersist(SchemaContact)
+	SchemaControl.Ingest.persist = defaultIngestPersist(SchemaControl)
 	SchemaDirectoryAccount.Ingest.persist = defaultIngestPersist(SchemaDirectoryAccount)
 	SchemaDirectoryGroup.Ingest.persist = defaultIngestPersist(SchemaDirectoryGroup)
 	SchemaDirectoryMembership.Ingest.persist = defaultIngestPersist(SchemaDirectoryMembership)
 	SchemaEntity.Ingest.persist = defaultIngestPersist(SchemaEntity)
 	SchemaFinding.Ingest.persist = defaultIngestPersist(SchemaFinding)
+	SchemaGroup.Ingest.persist = defaultIngestPersist(SchemaGroup)
 	SchemaInternalPolicy.Ingest.persist = defaultIngestPersist(SchemaInternalPolicy)
+	SchemaMappedControl.Ingest.persist = defaultIngestPersist(SchemaMappedControl)
+	SchemaPlatform.Ingest.persist = defaultIngestPersist(SchemaPlatform)
 	SchemaProcedure.Ingest.persist = defaultIngestPersist(SchemaProcedure)
+	SchemaProgram.Ingest.persist = defaultIngestPersist(SchemaProgram)
+	SchemaReview.Ingest.persist = defaultIngestPersist(SchemaReview)
 	SchemaRisk.Ingest.persist = defaultIngestPersist(SchemaRisk)
+	SchemaSystemDetail.Ingest.persist = defaultIngestPersist(SchemaSystemDetail)
 	SchemaVulnerability.Ingest.persist = defaultIngestPersist(SchemaVulnerability)
 
 	// through edges are linked by creating join entity rows — one per target, each with its own
@@ -23515,6 +25176,15 @@ func ownerScopeInternalPolicy(ownerID string) predicate.InternalPolicy {
 	return internalpolicy.OwnerID(ownerID)
 }
 
+// ownerScopeMappedControl scopes a mapped_control query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeMappedControl(ownerID string) predicate.MappedControl {
+	if ownerID == "" {
+		return mappedcontrol.SystemOwned(true)
+	}
+
+	return mappedcontrol.OwnerID(ownerID)
+}
+
 // ownerScopeNarrative scopes a narrative query to one organization, or to system-owned rows when ownerID is empty
 func ownerScopeNarrative(ownerID string) predicate.Narrative {
 	if ownerID == "" {
@@ -23558,6 +25228,15 @@ func ownerScopeScan(ownerID string) predicate.Scan {
 	}
 
 	return scan.OwnerID(ownerID)
+}
+
+// ownerScopeStandard scopes a standard query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeStandard(ownerID string) predicate.Standard {
+	if ownerID == "" {
+		return standard.SystemOwned(true)
+	}
+
+	return standard.OwnerID(ownerID)
 }
 
 // ownerScopeSubcontrol scopes a subcontrol query to one organization, or to system-owned rows when ownerID is empty

@@ -1,9 +1,6 @@
 package cloudflare
 
 import (
-	"context"
-	"encoding/json"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 )
@@ -98,14 +95,9 @@ type DomainScanImport struct {
 
 // DomainScanImportOp is the operation ref for importing an accepted domain scan review
 var DomainScanImportOp = types.OperationPayloadOf[DomainScanImport]().
-	HandlesRequest(runDomainScanImport).
+	IngestsRequest(ingestDomainScanImport).
+	AfterIngest(afterDomainScanImport).
+	Ingest(domainScanImportContracts...).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
 	CustomerSelectable(false).
 	Internal()
-
-// runDomainScanImport imports the reviewer-accepted domain scan report through the domain scan saga
-func runDomainScanImport(ctx context.Context, request types.OperationRequest, cfg DomainScanImport) (json.RawMessage, error) {
-	saga := domainScanSaga{services: request.Services}
-
-	return nil, saga.HandleImportDomainScanReview(ctx, cfg)
-}

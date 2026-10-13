@@ -117,4 +117,6 @@ type IngestPayloadSet struct {
 	// SnapshotComplete marks this payload set as the provider's complete record set for its
 	// schema; only complete membership sets authorize removal inference
 	SnapshotComplete bool `json:"snapshotComplete,omitempty"`
+	// SourceInstanceID is the source instance stamped on runtime ingest records, ignored when an installation is ingesting
+	SourceInstanceID string `json:"sourceInstanceId,omitempty"`
 }

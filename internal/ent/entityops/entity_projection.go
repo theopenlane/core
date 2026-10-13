@@ -380,8 +380,10 @@ type ControlProjection struct {
 	ImplementationDescription  string                             `json:"implementation_description,omitempty"`
 	ImplementationGuidance     []models.ImplementationGuidance    `json:"implementation_guidance,omitempty"`
 	ImplementationStatus       enums.ControlImplementationStatus  `json:"implementation_status,omitempty"`
+	IntegrationRunID           string                             `json:"integration_run_id,omitempty"`
 	InternalNotes              string                             `json:"internal_notes,omitempty"`
 	IsTrustCenterControl       bool                               `json:"is_trust_center_control,omitempty"`
+	ManagedBy                  string                             `json:"managed_by,omitempty"`
 	MappedCategories           []string                           `json:"mapped_categories,omitempty"`
 	OwnerID                    string                             `json:"owner_id,omitempty"`
 	PublicRepresentation       string                             `json:"public_representation,omitempty"`
@@ -394,6 +396,9 @@ type ControlProjection struct {
 	ScopeID                    string                             `json:"scope_id,omitempty"`
 	ScopeName                  string                             `json:"scope_name,omitempty"`
 	Source                     enums.ControlSource                `json:"source,omitempty"`
+	SourceDefinitionID         string                             `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion    string                             `json:"source_definition_version,omitempty"`
+	SourceInstanceID           string                             `json:"source_instance_id,omitempty"`
 	SourceName                 string                             `json:"source_name,omitempty"`
 	StandardID                 string                             `json:"standard_id,omitempty"`
 	Status                     enums.ControlStatus                `json:"status,omitempty"`
@@ -970,29 +975,70 @@ type FindingControlProjection struct {
 // the full generated.Group whose edge graph cannot be reflected
 type GroupProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                    string    `json:"id,omitempty"`
-	AvatarLocalFileID     string    `json:"avatar_local_file_id,omitempty"`
-	CreatedAt             time.Time `json:"created_at,omitempty"`
-	CreatedBy             string    `json:"created_by,omitempty"`
-	Description           string    `json:"description,omitempty"`
-	DisplayID             string    `json:"display_id,omitempty"`
-	DisplayName           string    `json:"display_name,omitempty"`
-	GravatarLogoURL       string    `json:"gravatar_logo_url,omitempty"`
-	IsManaged             bool      `json:"is_managed,omitempty"`
-	LogoURL               string    `json:"logo_url,omitempty"`
-	Name                  string    `json:"name,omitempty"`
-	OscalContactUuids     []string  `json:"oscal_contact_uuids,omitempty"`
-	OscalPartyUUID        string    `json:"oscal_party_uuid,omitempty"`
-	OscalRole             string    `json:"oscal_role,omitempty"`
-	OwnerID               string    `json:"owner_id,omitempty"`
-	ScimActive            bool      `json:"scim_active,omitempty"`
-	ScimDisplayName       string    `json:"scim_display_name,omitempty"`
-	ScimExternalID        string    `json:"scim_external_id,omitempty"`
-	ScimGroupMailing      string    `json:"scim_group_mailing,omitempty"`
-	Tags                  []string  `json:"tags,omitempty"`
-	UpdatedAt             time.Time `json:"updated_at,omitempty"`
-	UpdatedBy             string    `json:"updated_by,omitempty"`
-	UpdatedByImpersonator string    `json:"updated_by_impersonator,omitempty"`
+	ID                      string    `json:"id,omitempty"`
+	AvatarLocalFileID       string    `json:"avatar_local_file_id,omitempty"`
+	CreatedAt               time.Time `json:"created_at,omitempty"`
+	CreatedBy               string    `json:"created_by,omitempty"`
+	Description             string    `json:"description,omitempty"`
+	DisplayID               string    `json:"display_id,omitempty"`
+	DisplayName             string    `json:"display_name,omitempty"`
+	GravatarLogoURL         string    `json:"gravatar_logo_url,omitempty"`
+	IntegrationRunID        string    `json:"integration_run_id,omitempty"`
+	IsManaged               bool      `json:"is_managed,omitempty"`
+	LogoURL                 string    `json:"logo_url,omitempty"`
+	ManagedBy               string    `json:"managed_by,omitempty"`
+	Name                    string    `json:"name,omitempty"`
+	OscalContactUuids       []string  `json:"oscal_contact_uuids,omitempty"`
+	OscalPartyUUID          string    `json:"oscal_party_uuid,omitempty"`
+	OscalRole               string    `json:"oscal_role,omitempty"`
+	OwnerID                 string    `json:"owner_id,omitempty"`
+	ScimActive              bool      `json:"scim_active,omitempty"`
+	ScimDisplayName         string    `json:"scim_display_name,omitempty"`
+	ScimExternalID          string    `json:"scim_external_id,omitempty"`
+	ScimGroupMailing        string    `json:"scim_group_mailing,omitempty"`
+	SourceDefinitionID      string    `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion string    `json:"source_definition_version,omitempty"`
+	SourceInstanceID        string    `json:"source_instance_id,omitempty"`
+	Tags                    []string  `json:"tags,omitempty"`
+	UpdatedAt               time.Time `json:"updated_at,omitempty"`
+	UpdatedBy               string    `json:"updated_by,omitempty"`
+	UpdatedByImpersonator   string    `json:"updated_by_impersonator,omitempty"`
+}
+
+// GroupMembershipProjection is the flat, CEL- and jsonschema-facing view of a GroupMembership: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.GroupMembership whose edge graph cannot be reflected
+type GroupMembershipProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string     `json:"id,omitempty"`
+	CreatedAt             time.Time  `json:"created_at,omitempty"`
+	CreatedBy             string     `json:"created_by,omitempty"`
+	GroupID               string     `json:"group_id,omitempty"`
+	Role                  enums.Role `json:"role,omitempty"`
+	UpdatedAt             time.Time  `json:"updated_at,omitempty"`
+	UpdatedBy             string     `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string     `json:"updated_by_impersonator,omitempty"`
+	UserID                string     `json:"user_id,omitempty"`
+}
+
+// GroupSettingProjection is the flat, CEL- and jsonschema-facing view of a GroupSetting: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.GroupSetting whose edge graph cannot be reflected
+type GroupSettingProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string           `json:"id,omitempty"`
+	CreatedAt             time.Time        `json:"created_at,omitempty"`
+	CreatedBy             string           `json:"created_by,omitempty"`
+	GroupID               string           `json:"group_id,omitempty"`
+	JoinPolicy            enums.JoinPolicy `json:"join_policy,omitempty"`
+	SyncToGithub          bool             `json:"sync_to_github,omitempty"`
+	SyncToSlack           bool             `json:"sync_to_slack,omitempty"`
+	UpdatedAt             time.Time        `json:"updated_at,omitempty"`
+	UpdatedBy             string           `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string           `json:"updated_by_impersonator,omitempty"`
+	Visibility            enums.Visibility `json:"visibility,omitempty"`
 }
 
 // IdentityHolderProjection is the flat, CEL- and jsonschema-facing view of a IdentityHolder: its
@@ -1163,6 +1209,58 @@ type InternalPolicyProjection struct {
 	WorkflowEligibleMarker          bool                         `json:"workflow_eligible_marker,omitempty"`
 }
 
+// InviteProjection is the flat, CEL- and jsonschema-facing view of a Invite: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.Invite whose edge graph cannot be reflected
+type InviteProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string             `json:"id,omitempty"`
+	CreatedAt             time.Time          `json:"created_at,omitempty"`
+	CreatedBy             string             `json:"created_by,omitempty"`
+	Expires               time.Time          `json:"expires,omitempty"`
+	OwnerID               string             `json:"owner_id,omitempty"`
+	OwnershipTransfer     bool               `json:"ownership_transfer,omitempty"`
+	Recipient             string             `json:"recipient,omitempty"`
+	RequestorID           string             `json:"requestor_id,omitempty"`
+	Role                  enums.Role         `json:"role,omitempty"`
+	SendAttempts          int                `json:"send_attempts,omitempty"`
+	SSOExempt             bool               `json:"sso_exempt,omitempty"`
+	Status                enums.InviteStatus `json:"status,omitempty"`
+	UpdatedAt             time.Time          `json:"updated_at,omitempty"`
+	UpdatedBy             string             `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string             `json:"updated_by_impersonator,omitempty"`
+}
+
+// MappedControlProjection is the flat, CEL- and jsonschema-facing view of a MappedControl: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.MappedControl whose edge graph cannot be reflected
+type MappedControlProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                      string              `json:"id,omitempty"`
+	Confidence              int                 `json:"confidence,omitempty"`
+	CreatedAt               time.Time           `json:"created_at,omitempty"`
+	CreatedBy               string              `json:"created_by,omitempty"`
+	ExternalID              string              `json:"external_id,omitempty"`
+	IntegrationRunID        string              `json:"integration_run_id,omitempty"`
+	InternalNotes           string              `json:"internal_notes,omitempty"`
+	ManagedBy               string              `json:"managed_by,omitempty"`
+	MappingType             enums.MappingType   `json:"mapping_type,omitempty"`
+	OwnerID                 string              `json:"owner_id,omitempty"`
+	Relation                string              `json:"relation,omitempty"`
+	Source                  enums.MappingSource `json:"source,omitempty"`
+	SourceDefinitionID      string              `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion string              `json:"source_definition_version,omitempty"`
+	SourceInstanceID        string              `json:"source_instance_id,omitempty"`
+	SystemInternalID        string              `json:"system_internal_id,omitempty"`
+	SystemOwned             bool                `json:"system_owned,omitempty"`
+	Tags                    []string            `json:"tags,omitempty"`
+	UpdatedAt               time.Time           `json:"updated_at,omitempty"`
+	UpdatedBy               string              `json:"updated_by,omitempty"`
+	UpdatedByImpersonator   string              `json:"updated_by_impersonator,omitempty"`
+}
+
 // NarrativeProjection is the flat, CEL- and jsonschema-facing view of a Narrative: its
 // readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
 // names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
@@ -1265,10 +1363,12 @@ type PlatformProjection struct {
 	EstimatedMonthlyCost           float64                `json:"estimated_monthly_cost,omitempty"`
 	ExternalReferenceID            string                 `json:"external_reference_id,omitempty"`
 	ExternalUUID                   string                 `json:"external_uuid,omitempty"`
+	IntegrationRunID               string                 `json:"integration_run_id,omitempty"`
 	InternalOwner                  string                 `json:"internal_owner,omitempty"`
 	InternalOwnerGroupID           string                 `json:"internal_owner_group_id,omitempty"`
 	InternalOwnerIdentityHolderID  string                 `json:"internal_owner_identity_holder_id,omitempty"`
 	InternalOwnerUserID            string                 `json:"internal_owner_user_id,omitempty"`
+	ManagedBy                      string                 `json:"managed_by,omitempty"`
 	Metadata                       map[string]interface{} `json:"metadata,omitempty"`
 	Name                           string                 `json:"name,omitempty"`
 	OwnerID                        string                 `json:"owner_id,omitempty"`
@@ -1289,7 +1389,10 @@ type PlatformProjection struct {
 	SecurityOwnerUserID            string                 `json:"security_owner_user_id,omitempty"`
 	SecurityTierID                 string                 `json:"security_tier_id,omitempty"`
 	SecurityTierName               string                 `json:"security_tier_name,omitempty"`
+	SourceDefinitionID             string                 `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion        string                 `json:"source_definition_version,omitempty"`
 	SourceIdentifier               string                 `json:"source_identifier,omitempty"`
+	SourceInstanceID               string                 `json:"source_instance_id,omitempty"`
 	SourceType                     enums.SourceType       `json:"source_type,omitempty"`
 	Status                         enums.PlatformStatus   `json:"status,omitempty"`
 	Tags                           []string               `json:"tags,omitempty"`
@@ -1380,6 +1483,8 @@ type ProgramProjection struct {
 	FieldworkEndDate           time.Time           `json:"fieldwork_end_date,omitempty"`
 	FieldworkStartDate         time.Time           `json:"fieldwork_start_date,omitempty"`
 	FrameworkName              string              `json:"framework_name,omitempty"`
+	IntegrationRunID           string              `json:"integration_run_id,omitempty"`
+	ManagedBy                  string              `json:"managed_by,omitempty"`
 	Name                       string              `json:"name,omitempty"`
 	ObservationPeriodEndDate   time.Time           `json:"observation_period_end_date,omitempty"`
 	ObservationPeriodStartDate time.Time           `json:"observation_period_start_date,omitempty"`
@@ -1387,12 +1492,32 @@ type ProgramProjection struct {
 	ProgramKindID              string              `json:"program_kind_id,omitempty"`
 	ProgramKindName            string              `json:"program_kind_name,omitempty"`
 	ProgramOwnerID             string              `json:"program_owner_id,omitempty"`
+	SourceDefinitionID         string              `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion    string              `json:"source_definition_version,omitempty"`
+	SourceInstanceID           string              `json:"source_instance_id,omitempty"`
 	StartDate                  time.Time           `json:"start_date,omitempty"`
 	Status                     enums.ProgramStatus `json:"status,omitempty"`
 	Tags                       []string            `json:"tags,omitempty"`
 	UpdatedAt                  time.Time           `json:"updated_at,omitempty"`
 	UpdatedBy                  string              `json:"updated_by,omitempty"`
 	UpdatedByImpersonator      string              `json:"updated_by_impersonator,omitempty"`
+}
+
+// ProgramMembershipProjection is the flat, CEL- and jsonschema-facing view of a ProgramMembership: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.ProgramMembership whose edge graph cannot be reflected
+type ProgramMembershipProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string     `json:"id,omitempty"`
+	CreatedAt             time.Time  `json:"created_at,omitempty"`
+	CreatedBy             string     `json:"created_by,omitempty"`
+	ProgramID             string     `json:"program_id,omitempty"`
+	Role                  enums.Role `json:"role,omitempty"`
+	UpdatedAt             time.Time  `json:"updated_at,omitempty"`
+	UpdatedBy             string     `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string     `json:"updated_by_impersonator,omitempty"`
+	UserID                string     `json:"user_id,omitempty"`
 }
 
 // RemediationProjection is the flat, CEL- and jsonschema-facing view of a Remediation: its
@@ -1446,40 +1571,45 @@ type RemediationProjection struct {
 // the full generated.Review whose edge graph cannot be reflected
 type ReviewProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                    string                 `json:"id,omitempty"`
-	Approved              bool                   `json:"approved,omitempty"`
-	ApprovedAt            models.DateTime        `json:"approved_at,omitempty"`
-	Category              string                 `json:"category,omitempty"`
-	Classification        string                 `json:"classification,omitempty"`
-	CreatedAt             time.Time              `json:"created_at,omitempty"`
-	CreatedBy             string                 `json:"created_by,omitempty"`
-	Details               string                 `json:"details,omitempty"`
-	EnvironmentID         string                 `json:"environment_id,omitempty"`
-	EnvironmentName       string                 `json:"environment_name,omitempty"`
-	ExternalID            string                 `json:"external_id,omitempty"`
-	ExternalOwnerID       string                 `json:"external_owner_id,omitempty"`
-	ExternalURI           string                 `json:"external_uri,omitempty"`
-	InternalNotes         string                 `json:"internal_notes,omitempty"`
-	Metadata              map[string]interface{} `json:"metadata,omitempty"`
-	OwnerID               string                 `json:"owner_id,omitempty"`
-	RawPayload            map[string]interface{} `json:"raw_payload,omitempty"`
-	ReportedAt            models.DateTime        `json:"reported_at,omitempty"`
-	Reporter              string                 `json:"reporter,omitempty"`
-	ReviewedAt            models.DateTime        `json:"reviewed_at,omitempty"`
-	ReviewerID            string                 `json:"reviewer_id,omitempty"`
-	ScopeID               string                 `json:"scope_id,omitempty"`
-	ScopeName             string                 `json:"scope_name,omitempty"`
-	Source                string                 `json:"source,omitempty"`
-	State                 string                 `json:"state,omitempty"`
-	Status                enums.ReviewStatus     `json:"status,omitempty"`
-	Summary               string                 `json:"summary,omitempty"`
-	SystemInternalID      string                 `json:"system_internal_id,omitempty"`
-	SystemOwned           bool                   `json:"system_owned,omitempty"`
-	Tags                  []string               `json:"tags,omitempty"`
-	Title                 string                 `json:"title,omitempty"`
-	UpdatedAt             time.Time              `json:"updated_at,omitempty"`
-	UpdatedBy             string                 `json:"updated_by,omitempty"`
-	UpdatedByImpersonator string                 `json:"updated_by_impersonator,omitempty"`
+	ID                      string                 `json:"id,omitempty"`
+	Approved                bool                   `json:"approved,omitempty"`
+	ApprovedAt              models.DateTime        `json:"approved_at,omitempty"`
+	Category                string                 `json:"category,omitempty"`
+	Classification          string                 `json:"classification,omitempty"`
+	CreatedAt               time.Time              `json:"created_at,omitempty"`
+	CreatedBy               string                 `json:"created_by,omitempty"`
+	Details                 string                 `json:"details,omitempty"`
+	EnvironmentID           string                 `json:"environment_id,omitempty"`
+	EnvironmentName         string                 `json:"environment_name,omitempty"`
+	ExternalID              string                 `json:"external_id,omitempty"`
+	ExternalOwnerID         string                 `json:"external_owner_id,omitempty"`
+	ExternalURI             string                 `json:"external_uri,omitempty"`
+	IntegrationRunID        string                 `json:"integration_run_id,omitempty"`
+	InternalNotes           string                 `json:"internal_notes,omitempty"`
+	ManagedBy               string                 `json:"managed_by,omitempty"`
+	Metadata                map[string]interface{} `json:"metadata,omitempty"`
+	OwnerID                 string                 `json:"owner_id,omitempty"`
+	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
+	ReportedAt              models.DateTime        `json:"reported_at,omitempty"`
+	Reporter                string                 `json:"reporter,omitempty"`
+	ReviewedAt              models.DateTime        `json:"reviewed_at,omitempty"`
+	ReviewerID              string                 `json:"reviewer_id,omitempty"`
+	ScopeID                 string                 `json:"scope_id,omitempty"`
+	ScopeName               string                 `json:"scope_name,omitempty"`
+	Source                  string                 `json:"source,omitempty"`
+	SourceDefinitionID      string                 `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion string                 `json:"source_definition_version,omitempty"`
+	SourceInstanceID        string                 `json:"source_instance_id,omitempty"`
+	State                   string                 `json:"state,omitempty"`
+	Status                  enums.ReviewStatus     `json:"status,omitempty"`
+	Summary                 string                 `json:"summary,omitempty"`
+	SystemInternalID        string                 `json:"system_internal_id,omitempty"`
+	SystemOwned             bool                   `json:"system_owned,omitempty"`
+	Tags                    []string               `json:"tags,omitempty"`
+	Title                   string                 `json:"title,omitempty"`
+	UpdatedAt               time.Time              `json:"updated_at,omitempty"`
+	UpdatedBy               string                 `json:"updated_by,omitempty"`
+	UpdatedByImpersonator   string                 `json:"updated_by_impersonator,omitempty"`
 }
 
 // RiskProjection is the flat, CEL- and jsonschema-facing view of a Risk: its
@@ -1560,6 +1690,8 @@ type ScanProjection struct {
 	CreatedAt                  time.Time              `json:"created_at,omitempty"`
 	CreatedBy                  string                 `json:"created_by,omitempty"`
 	DiscoveredVulnerabilityIds []string               `json:"discovered_vulnerability_ids,omitempty"`
+	DocumentKindID             string                 `json:"document_kind_id,omitempty"`
+	DocumentKindName           string                 `json:"document_kind_name,omitempty"`
 	EnvironmentID              string                 `json:"environment_id,omitempty"`
 	EnvironmentName            string                 `json:"environment_name,omitempty"`
 	GeneratedByPlatformID      string                 `json:"generated_by_platform_id,omitempty"`
@@ -1587,6 +1719,40 @@ type ScanProjection struct {
 	UpdatedAt                  time.Time              `json:"updated_at,omitempty"`
 	UpdatedBy                  string                 `json:"updated_by,omitempty"`
 	UpdatedByImpersonator      string                 `json:"updated_by_impersonator,omitempty"`
+}
+
+// StandardProjection is the flat, CEL- and jsonschema-facing view of a Standard: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.Standard whose edge graph cannot be reflected
+type StandardProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string               `json:"id,omitempty"`
+	CreatedAt             time.Time            `json:"created_at,omitempty"`
+	CreatedBy             string               `json:"created_by,omitempty"`
+	Description           string               `json:"description,omitempty"`
+	Domains               []string             `json:"domains,omitempty"`
+	Framework             string               `json:"framework,omitempty"`
+	FreeToUse             bool                 `json:"free_to_use,omitempty"`
+	GoverningBody         string               `json:"governing_body,omitempty"`
+	GoverningBodyLogoURL  string               `json:"governing_body_logo_url,omitempty"`
+	InternalNotes         string               `json:"internal_notes,omitempty"`
+	IsPublic              bool                 `json:"is_public,omitempty"`
+	Link                  string               `json:"link,omitempty"`
+	LogoFileID            string               `json:"logo_file_id,omitempty"`
+	Name                  string               `json:"name,omitempty"`
+	OwnerID               string               `json:"owner_id,omitempty"`
+	Revision              string               `json:"revision,omitempty"`
+	ShortName             string               `json:"short_name,omitempty"`
+	StandardType          string               `json:"standard_type,omitempty"`
+	Status                enums.StandardStatus `json:"status,omitempty"`
+	SystemInternalID      string               `json:"system_internal_id,omitempty"`
+	SystemOwned           bool                 `json:"system_owned,omitempty"`
+	Tags                  []string             `json:"tags,omitempty"`
+	UpdatedAt             time.Time            `json:"updated_at,omitempty"`
+	UpdatedBy             string               `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string               `json:"updated_by_impersonator,omitempty"`
+	Version               string               `json:"version,omitempty"`
 }
 
 // SubcontrolProjection is the flat, CEL- and jsonschema-facing view of a Subcontrol: its
@@ -1699,23 +1865,28 @@ type SubscriberProjection struct {
 // the full generated.SystemDetail whose edge graph cannot be reflected
 type SystemDetailProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                    string                       `json:"id,omitempty"`
-	AuthorizationBoundary string                       `json:"authorization_boundary,omitempty"`
-	CreatedAt             time.Time                    `json:"created_at,omitempty"`
-	CreatedBy             string                       `json:"created_by,omitempty"`
-	Description           string                       `json:"description,omitempty"`
-	DisplayID             string                       `json:"display_id,omitempty"`
-	LastReviewed          models.DateTime              `json:"last_reviewed,omitempty"`
-	OscalMetadataJSON     map[string]interface{}       `json:"oscal_metadata_json,omitempty"`
-	OwnerID               string                       `json:"owner_id,omitempty"`
-	RevisionHistory       []interface{}                `json:"revision_history,omitempty"`
-	SensitivityLevel      enums.SystemSensitivityLevel `json:"sensitivity_level,omitempty"`
-	SystemName            string                       `json:"system_name,omitempty"`
-	Tags                  []string                     `json:"tags,omitempty"`
-	UpdatedAt             time.Time                    `json:"updated_at,omitempty"`
-	UpdatedBy             string                       `json:"updated_by,omitempty"`
-	UpdatedByImpersonator string                       `json:"updated_by_impersonator,omitempty"`
-	Version               string                       `json:"version,omitempty"`
+	ID                      string                       `json:"id,omitempty"`
+	AuthorizationBoundary   string                       `json:"authorization_boundary,omitempty"`
+	CreatedAt               time.Time                    `json:"created_at,omitempty"`
+	CreatedBy               string                       `json:"created_by,omitempty"`
+	Description             string                       `json:"description,omitempty"`
+	DisplayID               string                       `json:"display_id,omitempty"`
+	IntegrationRunID        string                       `json:"integration_run_id,omitempty"`
+	LastReviewed            models.DateTime              `json:"last_reviewed,omitempty"`
+	ManagedBy               string                       `json:"managed_by,omitempty"`
+	OscalMetadataJSON       map[string]interface{}       `json:"oscal_metadata_json,omitempty"`
+	OwnerID                 string                       `json:"owner_id,omitempty"`
+	RevisionHistory         []interface{}                `json:"revision_history,omitempty"`
+	SensitivityLevel        enums.SystemSensitivityLevel `json:"sensitivity_level,omitempty"`
+	SourceDefinitionID      string                       `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion string                       `json:"source_definition_version,omitempty"`
+	SourceInstanceID        string                       `json:"source_instance_id,omitempty"`
+	SystemName              string                       `json:"system_name,omitempty"`
+	Tags                    []string                     `json:"tags,omitempty"`
+	UpdatedAt               time.Time                    `json:"updated_at,omitempty"`
+	UpdatedBy               string                       `json:"updated_by,omitempty"`
+	UpdatedByImpersonator   string                       `json:"updated_by_impersonator,omitempty"`
+	Version                 string                       `json:"version,omitempty"`
 }
 
 // TaskProjection is the flat, CEL- and jsonschema-facing view of a Task: its

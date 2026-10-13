@@ -110,6 +110,23 @@ type OperationHandler func(ctx context.Context, request OperationRequest) (json.
 // IngestHandler executes an operation and returns typed payload sets for the ingest pipeline
 type IngestHandler func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error)
 
+// IngestOutcome reports what one operation's ingest persisted, handed to its AfterIngest hook
+type IngestOutcome struct {
+	// Attempted counts the records the ingest handled
+	Attempted int
+	// Succeeded counts the records persisted or deliberately left untouched
+	Succeeded int
+	// Failed counts the records that could not be imported
+	Failed int
+	// FailureSummary describes the failed records for the user, empty when none failed
+	FailureSummary string
+	// Err is the error that stopped the ingest, nil when it ran to completion
+	Err error
+}
+
+// AfterIngestHandler runs once an operation's ingest finishes or fails
+type AfterIngestHandler func(ctx context.Context, request OperationRequest, outcome IngestOutcome) error
+
 // OperationRegistration declares one executable operation for a definition
 type OperationRegistration struct {
 	// Name is the stable operation identifier within the definition
@@ -144,6 +161,8 @@ type OperationRegistration struct {
 	Handle OperationHandler `json:"-"`
 	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline
 	IngestHandle IngestHandler `json:"-"`
+	// AfterIngest runs once the operation's ingest finishes or fails, for follow-up work that needs the persisted outcome
+	AfterIngest AfterIngestHandler `json:"-"`
 	// DisabledForAll marks the sync unavailable, hiding config params from the user
 	DisabledForAll bool `json:"disabledForAll"`
 	// Input describes the operation's input document: the payload a caller supplies on each dispatch, and for a stored operation the per-installation document kept under its name

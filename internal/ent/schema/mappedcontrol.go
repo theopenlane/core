@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/common/enums"
@@ -14,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -66,6 +69,17 @@ func (MappedControl) Fields() []ent.Field {
 			).
 			Default(enums.MappingSourceManual.String()).
 			Comment("source of the mapping, e.g. manual, suggested, etc."),
+		field.String("external_id").
+			Comment("stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication").
+			Optional(),
+	}
+}
+
+// Indexes of the MappedControl
+func (MappedControl) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("external_id", ownerFieldName).
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
@@ -115,6 +129,7 @@ func (m MappedControl) Edges() []ent.Edge {
 func (m MappedControl) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: m},
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newOrgOwnedMixin(m),
 			// add group edit permissions to the mapped control
@@ -127,6 +142,9 @@ func (m MappedControl) Mixin() []ent.Mixin {
 func (MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative("external_id"),
 	}
 }
 

@@ -26,11 +26,16 @@ func InjectCreateLinks(ctx context.Context, client *generated.Client, ownerID st
 	// instead of the last rule overwriting the earlier ones
 	edgeIDs := map[string][]string{}
 	edges := map[string]EdgeDescriptor{}
+	carried := map[string]string{}
 
 	for _, link := range links {
 		edge, found := schema.EdgeByName(link.Edge)
 		if !found {
 			return nil, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpLink, Edge: link.Edge}, ErrEdgeNotFound, fmt.Errorf("%s has no linkable edge %s", schema.Name, link.Edge))
+		}
+
+		if carriesEdgeKeys(link, edge) {
+			carried[edge.Name] = edge.CreateField
 		}
 
 		selector := link.Target
@@ -70,7 +75,29 @@ func InjectCreateLinks(ctx context.Context, client *generated.Client, ownerID st
 		}
 	}
 
+	// an edge key that carried target keys must not reach the create when none of them matched
+	for name, key := range carried {
+		if _, resolved := edgeIDs[name]; resolved {
+			continue
+		}
+
+		payload = jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+			_, present := doc[key]
+			delete(doc, key)
+
+			return present
+		})
+	}
+
 	return payload, nil
+}
+
+// carriesEdgeKeys reports whether a link reads its match values from the edge's own create key,
+// which the resolved target ids then replace
+func carriesEdgeKeys(link LinkSpec, edge EdgeDescriptor) bool {
+	match := link.Target.KeyMatch
+
+	return match != nil && (match.SourceList == edge.CreateField || match.SourceField == edge.CreateField)
 }
 
 // PrefetchLinkTargets caches key-matched link target rows for a batch of payloads on the returned context

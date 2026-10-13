@@ -552,7 +552,8 @@ func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeD
 		}
 	}
 
-	if rule.SourceList != "" {
+	// a to-many edge's own create key may carry the target keys, which link injection replaces with ids
+	if rule.SourceList != "" && (edge.Unique || rule.SourceList != edge.CreateField) {
 		if err := validateSourceKey(sourceSchema, rule.SourceList, true); err != nil {
 			return err
 		}
@@ -611,6 +612,8 @@ func indexOperations(definitionID string, operations []types.OperationRegistrati
 			return nil, ErrIngestContractsRequired
 		case operation.Policy.Snapshot && operation.IngestHandle == nil:
 			return nil, ErrIngestSnapshotRequiresIngestHandle
+		case operation.AfterIngest != nil && operation.IngestHandle == nil:
+			return nil, ErrAfterIngestRequiresIngestHandle
 		case operation.ClientConflict != "":
 			return nil, fmt.Errorf("%w: definition %s operation %s clients %s and %s", ErrOperationClientConflict, definitionID, operation.Name, operation.ClientRef, operation.ClientConflict)
 		case operation.ClientRef == "":

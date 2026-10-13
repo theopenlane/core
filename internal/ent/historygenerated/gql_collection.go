@@ -2146,6 +2146,31 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldTags)
 				fieldSeen[controlhistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[controlhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldSourceDefinitionID)
+				fieldSeen[controlhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[controlhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldSourceDefinitionVersion)
+				fieldSeen[controlhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[controlhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldSourceInstanceID)
+				fieldSeen[controlhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[controlhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldManagedBy)
+				fieldSeen[controlhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[controlhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldIntegrationRunID)
+				fieldSeen[controlhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "externalUUID":
 			if _, ok := fieldSeen[controlhistory.FieldExternalUUID]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldExternalUUID)
@@ -5318,6 +5343,31 @@ func (_q *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, grouphistory.FieldTags)
 				fieldSeen[grouphistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[grouphistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldSourceDefinitionID)
+				fieldSeen[grouphistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[grouphistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldSourceDefinitionVersion)
+				fieldSeen[grouphistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[grouphistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldSourceInstanceID)
+				fieldSeen[grouphistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[grouphistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldManagedBy)
+				fieldSeen[grouphistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[grouphistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldIntegrationRunID)
+				fieldSeen[grouphistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[grouphistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, grouphistory.FieldOwnerID)
@@ -6751,6 +6801,31 @@ func (_q *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldTags)
 				fieldSeen[mappedcontrolhistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSourceDefinitionID)
+				fieldSeen[mappedcontrolhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSourceDefinitionVersion)
+				fieldSeen[mappedcontrolhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSourceInstanceID)
+				fieldSeen[mappedcontrolhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldManagedBy)
+				fieldSeen[mappedcontrolhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldIntegrationRunID)
+				fieldSeen[mappedcontrolhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "systemOwned":
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSystemOwned)
@@ -6790,6 +6865,11 @@ func (_q *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldSource]; !ok {
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSource)
 				fieldSeen[mappedcontrolhistory.FieldSource] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldExternalID)
+				fieldSeen[mappedcontrolhistory.FieldExternalID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -8398,6 +8478,31 @@ func (_q *PlatformHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, platformhistory.FieldTags)
 				fieldSeen[platformhistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[platformhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, platformhistory.FieldSourceDefinitionID)
+				fieldSeen[platformhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[platformhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, platformhistory.FieldSourceDefinitionVersion)
+				fieldSeen[platformhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[platformhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, platformhistory.FieldSourceInstanceID)
+				fieldSeen[platformhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[platformhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, platformhistory.FieldManagedBy)
+				fieldSeen[platformhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[platformhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, platformhistory.FieldIntegrationRunID)
+				fieldSeen[platformhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[platformhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, platformhistory.FieldOwnerID)
@@ -9121,6 +9226,31 @@ func (_q *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, programhistory.FieldTags)
 				fieldSeen[programhistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[programhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldSourceDefinitionID)
+				fieldSeen[programhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[programhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldSourceDefinitionVersion)
+				fieldSeen[programhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[programhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldSourceInstanceID)
+				fieldSeen[programhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[programhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldManagedBy)
+				fieldSeen[programhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[programhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldIntegrationRunID)
+				fieldSeen[programhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[programhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldOwnerID)
@@ -9772,6 +9902,31 @@ func (_q *ReviewHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[reviewhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, reviewhistory.FieldTags)
 				fieldSeen[reviewhistory.FieldTags] = struct{}{}
+			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[reviewhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldSourceDefinitionID)
+				fieldSeen[reviewhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[reviewhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldSourceDefinitionVersion)
+				fieldSeen[reviewhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[reviewhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldSourceInstanceID)
+				fieldSeen[reviewhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[reviewhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldManagedBy)
+				fieldSeen[reviewhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[reviewhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldIntegrationRunID)
+				fieldSeen[reviewhistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[reviewhistory.FieldOwnerID]; !ok {
@@ -11286,6 +11441,31 @@ func (_q *SystemDetailHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[systemdetailhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, systemdetailhistory.FieldTags)
 				fieldSeen[systemdetailhistory.FieldTags] = struct{}{}
+			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[systemdetailhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldSourceDefinitionID)
+				fieldSeen[systemdetailhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[systemdetailhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldSourceDefinitionVersion)
+				fieldSeen[systemdetailhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[systemdetailhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldSourceInstanceID)
+				fieldSeen[systemdetailhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[systemdetailhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldManagedBy)
+				fieldSeen[systemdetailhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[systemdetailhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldIntegrationRunID)
+				fieldSeen[systemdetailhistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[systemdetailhistory.FieldOwnerID]; !ok {

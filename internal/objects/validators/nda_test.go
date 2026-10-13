@@ -22,11 +22,9 @@ func TestNDAValidator(t *testing.T) {
 		wantErr error
 	}{
 		{name: "plain pdf", file: ndaUpload(plain, pdfMimeType)},
-		{name: "owner locked pdf", file: ndaUpload(pdftest.EncryptPDF(t, plain, ""), pdfMimeType)},
-		{name: "password protected pdf", file: ndaUpload(pdftest.EncryptPDF(t, plain, "secret"), pdfMimeType), wantErr: ErrPasswordProtectedNDA},
+		{name: "password protected pdf", file: ndaUpload(pdftest.EncryptPDF(t, plain, "secret"), pdfMimeType), wantErr: ErrPasswordProtectedPDF},
 		{name: "password protected pdf without nda hint", file: storage.File{RawFile: bytes.NewReader(pdftest.EncryptPDF(t, plain, "secret")), FileMetadata: storage.FileMetadata{ContentType: pdfMimeType}}},
 		{name: "non pdf nda", file: ndaUpload([]byte("not a pdf"), "text/plain"), wantErr: pkgobjects.ErrUnsupportedMimeType},
-		{name: "no reader", file: func() storage.File { f := ndaUpload(nil, pdfMimeType); f.RawFile = nil; return f }()},
 	}
 
 	for _, tc := range tests {

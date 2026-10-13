@@ -35,6 +35,8 @@ var (
 	ErrIngestContractsRequired = errors.New("integrations/registry: IngestHandle requires at least one Ingest contract")
 	// ErrIngestSnapshotRequiresIngestHandle indicates Policy.Snapshot is set without an IngestHandle
 	ErrIngestSnapshotRequiresIngestHandle = errors.New("integrations/registry: policy snapshot requires an IngestHandle")
+	// ErrAfterIngestRequiresIngestHandle indicates AfterIngest is set without an IngestHandle
+	ErrAfterIngestRequiresIngestHandle = errors.New("integrations/registry: AfterIngest requires an IngestHandle")
 	// ErrWebhookEventResolverRequired indicates a webhook registration is missing its event resolver
 	ErrWebhookEventResolverRequired = errors.New("integrations/registry: webhook event resolver required")
 	// ErrWebhookEventHandlerRequired indicates a webhook event registration is missing its handler

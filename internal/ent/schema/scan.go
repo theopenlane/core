@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -145,6 +146,7 @@ func (s Scan) Mixin() []ent.Mixin {
 			newResponsibilityMixin(s, withReviewedBy(), withAssignedTo()),
 			newCustomEnumMixin(s, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(s, withEnumFieldName("scope"), withGlobalEnum()),
+			newCustomEnumMixin(s, withEnumFieldName("document_kind"), withGlobalEnum()),
 		},
 	}.getMixins(s)
 }
@@ -192,6 +194,15 @@ func (s Scan) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
+	}
+}
+
+// Hooks of the Scan
+func (Scan) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookScanDefaults(),
+		hooks.HookScanFiles(),
+		hooks.HookScanReportSubmit(),
 	}
 }
 

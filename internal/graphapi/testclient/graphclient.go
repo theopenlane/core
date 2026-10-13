@@ -481,6 +481,7 @@ type TestGraphClient interface {
 	UpdateBulkCSVRemediation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVRemediation, error)
 	UpdateBulkRemediation(ctx context.Context, ids []string, input UpdateRemediationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRemediation, error)
 	UpdateRemediation(ctx context.Context, updateRemediationID string, input UpdateRemediationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateRemediation, error)
+	ImportReportScan(ctx context.Context, input ImportReportScanInput, interceptors ...clientv2.RequestInterceptor) (*ImportReportScan, error)
 	CreateBulkCSVReview(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVReview, error)
 	CreateBulkReview(ctx context.Context, input []*CreateReviewInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkReview, error)
 	CreateReview(ctx context.Context, input CreateReviewInput, interceptors ...clientv2.RequestInterceptor) (*CreateReview, error)
@@ -18879,8 +18880,10 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	ImplementationDescription  *string                             "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
 	ImplementationGuidance     []*models.ImplementationGuidance    "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
 	ImplementationStatus       *enums.ControlImplementationStatus  "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	IntegrationRunID           *string                             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	IsTrustCenterControl       *bool                               "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
+	ManagedBy                  *string                             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MappedCategories           []string                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                    *string                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PublicRepresentation       *string                             "json:\"publicRepresentation,omitempty\" graphql:\"publicRepresentation\""
@@ -18893,6 +18896,9 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	ScopeID                    *string                             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
 	ScopeName                  *string                             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
 	Source                     *enums.ControlSource                "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID         *string                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceName                 *string                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	StandardID                 *string                             "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                     *enums.ControlStatus                "json:\"status,omitempty\" graphql:\"status\""
@@ -19059,6 +19065,12 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetImplementationSt
 	}
 	return t.ImplementationStatus
 }
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
@@ -19070,6 +19082,12 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetIsTrustCenterCon
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
 	return t.IsTrustCenterControl
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetMappedCategories() []string {
 	if t == nil {
@@ -19142,6 +19160,24 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSource() *enums.
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
 	return t.Source
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceName() *string {
 	if t == nil {
@@ -19265,8 +19301,10 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	ImplementationDescription  *string                             "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
 	ImplementationGuidance     []*models.ImplementationGuidance    "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
 	ImplementationStatus       *enums.ControlImplementationStatus  "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	IntegrationRunID           *string                             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	IsTrustCenterControl       *bool                               "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
+	ManagedBy                  *string                             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MappedCategories           []string                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                    *string                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PublicRepresentation       *string                             "json:\"publicRepresentation,omitempty\" graphql:\"publicRepresentation\""
@@ -19279,6 +19317,9 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	ScopeID                    *string                             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
 	ScopeName                  *string                             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
 	Source                     *enums.ControlSource                "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID         *string                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceName                 *string                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	StandardID                 *string                             "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                     *enums.ControlStatus                "json:\"status,omitempty\" graphql:\"status\""
@@ -19445,6 +19486,12 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetImplementationStatus()
 	}
 	return t.ImplementationStatus
 }
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
@@ -19456,6 +19503,12 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetIsTrustCenterControl()
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
 	return t.IsTrustCenterControl
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetMappedCategories() []string {
 	if t == nil {
@@ -19528,6 +19581,24 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetSource() *enums.Contro
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
 	return t.Source
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetSourceName() *string {
 	if t == nil {
@@ -19866,8 +19937,10 @@ type CreateControl_CreateControl_Control struct {
 	ImplementationDescription  *string                                                    "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
 	ImplementationGuidance     []*models.ImplementationGuidance                           "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
 	ImplementationStatus       *enums.ControlImplementationStatus                         "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	IntegrationRunID           *string                                                    "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string                                                    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	IsTrustCenterControl       *bool                                                      "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
+	ManagedBy                  *string                                                    "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MappedCategories           []string                                                   "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                    *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs                   CreateControl_CreateControl_Control_Programs               "json:\"programs\" graphql:\"programs\""
@@ -19881,6 +19954,9 @@ type CreateControl_CreateControl_Control struct {
 	ScopeID                    *string                                                    "json:\"scopeID,omitempty\" graphql:\"scopeID\""
 	ScopeName                  *string                                                    "json:\"scopeName,omitempty\" graphql:\"scopeName\""
 	Source                     *enums.ControlSource                                       "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID         *string                                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceName                 *string                                                    "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	StandardID                 *string                                                    "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                     *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
@@ -20077,6 +20153,12 @@ func (t *CreateControl_CreateControl_Control) GetImplementationStatus() *enums.C
 	}
 	return t.ImplementationStatus
 }
+func (t *CreateControl_CreateControl_Control) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateControl_CreateControl_Control) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control{}
@@ -20088,6 +20170,12 @@ func (t *CreateControl_CreateControl_Control) GetIsTrustCenterControl() *bool {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.IsTrustCenterControl
+}
+func (t *CreateControl_CreateControl_Control) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateControl_CreateControl_Control) GetMappedCategories() []string {
 	if t == nil {
@@ -20166,6 +20254,24 @@ func (t *CreateControl_CreateControl_Control) GetSource() *enums.ControlSource {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.Source
+}
+func (t *CreateControl_CreateControl_Control) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateControl_CreateControl_Control) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateControl_CreateControl_Control) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateControl_CreateControl_Control) GetSourceName() *string {
 	if t == nil {
@@ -21292,8 +21398,10 @@ type GetControlByID_Control struct {
 	ImplementationDescription  *string                                       "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
 	ImplementationGuidance     []*models.ImplementationGuidance              "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
 	ImplementationStatus       *enums.ControlImplementationStatus            "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	IntegrationRunID           *string                                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string                                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	IsTrustCenterControl       *bool                                         "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
+	ManagedBy                  *string                                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MappedCategories           []string                                      "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                    *string                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs                   GetControlByID_Control_Programs               "json:\"programs\" graphql:\"programs\""
@@ -21308,6 +21416,9 @@ type GetControlByID_Control struct {
 	ScopeID                    *string                                       "json:\"scopeID,omitempty\" graphql:\"scopeID\""
 	ScopeName                  *string                                       "json:\"scopeName,omitempty\" graphql:\"scopeName\""
 	Source                     *enums.ControlSource                          "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID         *string                                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceName                 *string                                       "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Standard                   *GetControlByID_Control_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID                 *string                                       "json:\"standardID,omitempty\" graphql:\"standardID\""
@@ -21506,6 +21617,12 @@ func (t *GetControlByID_Control) GetImplementationStatus() *enums.ControlImpleme
 	}
 	return t.ImplementationStatus
 }
+func (t *GetControlByID_Control) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetControlByID_Control) GetInternalNotes() *string {
 	if t == nil {
 		t = &GetControlByID_Control{}
@@ -21517,6 +21634,12 @@ func (t *GetControlByID_Control) GetIsTrustCenterControl() *bool {
 		t = &GetControlByID_Control{}
 	}
 	return t.IsTrustCenterControl
+}
+func (t *GetControlByID_Control) GetManagedBy() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.ManagedBy
 }
 func (t *GetControlByID_Control) GetMappedCategories() []string {
 	if t == nil {
@@ -21601,6 +21724,24 @@ func (t *GetControlByID_Control) GetSource() *enums.ControlSource {
 		t = &GetControlByID_Control{}
 	}
 	return t.Source
+}
+func (t *GetControlByID_Control) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetControlByID_Control) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetControlByID_Control) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetControlByID_Control) GetSourceName() *string {
 	if t == nil {
@@ -22051,8 +22192,10 @@ type GetControls_Controls_Edges_Node struct {
 	ImplementationDescription  *string                                                "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
 	ImplementationGuidance     []*models.ImplementationGuidance                       "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
 	ImplementationStatus       *enums.ControlImplementationStatus                     "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	IntegrationRunID           *string                                                "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string                                                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	IsTrustCenterControl       *bool                                                  "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
+	ManagedBy                  *string                                                "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MappedCategories           []string                                               "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                    *string                                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs                   GetControls_Controls_Edges_Node_Programs               "json:\"programs\" graphql:\"programs\""
@@ -22066,6 +22209,9 @@ type GetControls_Controls_Edges_Node struct {
 	ScopeID                    *string                                                "json:\"scopeID,omitempty\" graphql:\"scopeID\""
 	ScopeName                  *string                                                "json:\"scopeName,omitempty\" graphql:\"scopeName\""
 	Source                     *enums.ControlSource                                   "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID         *string                                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceName                 *string                                                "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Standard                   *GetControls_Controls_Edges_Node_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID                 *string                                                "json:\"standardID,omitempty\" graphql:\"standardID\""
@@ -22264,6 +22410,12 @@ func (t *GetControls_Controls_Edges_Node) GetImplementationStatus() *enums.Contr
 	}
 	return t.ImplementationStatus
 }
+func (t *GetControls_Controls_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetControls_Controls_Edges_Node) GetInternalNotes() *string {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
@@ -22275,6 +22427,12 @@ func (t *GetControls_Controls_Edges_Node) GetIsTrustCenterControl() *bool {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.IsTrustCenterControl
+}
+func (t *GetControls_Controls_Edges_Node) GetManagedBy() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.ManagedBy
 }
 func (t *GetControls_Controls_Edges_Node) GetMappedCategories() []string {
 	if t == nil {
@@ -22353,6 +22511,24 @@ func (t *GetControls_Controls_Edges_Node) GetSource() *enums.ControlSource {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.Source
+}
+func (t *GetControls_Controls_Edges_Node) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetControls_Controls_Edges_Node) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetControls_Controls_Edges_Node) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetControls_Controls_Edges_Node) GetSourceName() *string {
 	if t == nil {
@@ -22930,8 +23106,10 @@ type UpdateBulkControl_UpdateBulkControl_Controls struct {
 	ImplementationDescription  *string                                                             "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
 	ImplementationGuidance     []*models.ImplementationGuidance                                    "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
 	ImplementationStatus       *enums.ControlImplementationStatus                                  "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	IntegrationRunID           *string                                                             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string                                                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	IsTrustCenterControl       *bool                                                               "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
+	ManagedBy                  *string                                                             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MappedCategories           []string                                                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                    *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs                   UpdateBulkControl_UpdateBulkControl_Controls_Programs               "json:\"programs\" graphql:\"programs\""
@@ -22945,6 +23123,9 @@ type UpdateBulkControl_UpdateBulkControl_Controls struct {
 	ScopeID                    *string                                                             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
 	ScopeName                  *string                                                             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
 	Source                     *enums.ControlSource                                                "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID         *string                                                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                                                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                                                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceName                 *string                                                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	StandardID                 *string                                                             "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                     *enums.ControlStatus                                                "json:\"status,omitempty\" graphql:\"status\""
@@ -23141,6 +23322,12 @@ func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetImplementationStatus()
 	}
 	return t.ImplementationStatus
 }
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetInternalNotes() *string {
 	if t == nil {
 		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
@@ -23152,6 +23339,12 @@ func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetIsTrustCenterControl()
 		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
 	}
 	return t.IsTrustCenterControl
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetMappedCategories() []string {
 	if t == nil {
@@ -23230,6 +23423,24 @@ func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSource() *enums.Contro
 		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
 	}
 	return t.Source
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSourceName() *string {
 	if t == nil {
@@ -23867,8 +24078,10 @@ type UpdateControl_UpdateControl_Control struct {
 	ImplementationDescription  *string                                                    "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
 	ImplementationGuidance     []*models.ImplementationGuidance                           "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
 	ImplementationStatus       *enums.ControlImplementationStatus                         "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	IntegrationRunID           *string                                                    "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string                                                    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	IsTrustCenterControl       *bool                                                      "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
+	ManagedBy                  *string                                                    "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MappedCategories           []string                                                   "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                    *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Programs                   UpdateControl_UpdateControl_Control_Programs               "json:\"programs\" graphql:\"programs\""
@@ -23882,6 +24095,9 @@ type UpdateControl_UpdateControl_Control struct {
 	ScopeID                    *string                                                    "json:\"scopeID,omitempty\" graphql:\"scopeID\""
 	ScopeName                  *string                                                    "json:\"scopeName,omitempty\" graphql:\"scopeName\""
 	Source                     *enums.ControlSource                                       "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID         *string                                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceName                 *string                                                    "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Standard                   *UpdateControl_UpdateControl_Control_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID                 *string                                                    "json:\"standardID,omitempty\" graphql:\"standardID\""
@@ -24092,6 +24308,12 @@ func (t *UpdateControl_UpdateControl_Control) GetImplementationStatus() *enums.C
 	}
 	return t.ImplementationStatus
 }
+func (t *UpdateControl_UpdateControl_Control) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateControl_UpdateControl_Control) GetInternalNotes() *string {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control{}
@@ -24103,6 +24325,12 @@ func (t *UpdateControl_UpdateControl_Control) GetIsTrustCenterControl() *bool {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.IsTrustCenterControl
+}
+func (t *UpdateControl_UpdateControl_Control) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateControl_UpdateControl_Control) GetMappedCategories() []string {
 	if t == nil {
@@ -24181,6 +24409,24 @@ func (t *UpdateControl_UpdateControl_Control) GetSource() *enums.ControlSource {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.Source
+}
+func (t *UpdateControl_UpdateControl_Control) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateControl_UpdateControl_Control) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateControl_UpdateControl_Control) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateControl_UpdateControl_Control) GetSourceName() *string {
 	if t == nil {
@@ -57569,32 +57815,37 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetTotalCount() i
 }
 
 type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups struct {
-	AvatarLocalFileID     *string                                               "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	CreatedAt             *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                                               "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                                                "json:\"displayID\" graphql:\"displayID\""
-	DisplayName           string                                                "json:\"displayName\" graphql:\"displayName\""
-	GravatarLogoURL       *string                                               "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
-	ID                    string                                                "json:\"id\" graphql:\"id\""
-	IsManaged             *bool                                                 "json:\"isManaged,omitempty\" graphql:\"isManaged\""
-	LogoURL               *string                                               "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members               CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members  "json:\"members\" graphql:\"members\""
-	Name                  string                                                "json:\"name\" graphql:\"name\""
-	OscalContactUuids     []string                                              "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
-	OscalPartyUUID        *string                                               "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
-	OscalRole             *string                                               "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
-	Owner                 *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Owner   "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID               *string                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScimActive            *bool                                                 "json:\"scimActive,omitempty\" graphql:\"scimActive\""
-	ScimDisplayName       *string                                               "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
-	ScimExternalID        *string                                               "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
-	ScimGroupMailing      *string                                               "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
-	Setting               *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags                  []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                               "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	AvatarLocalFileID       *string                                               "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	CreatedAt               *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                                               "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                                                "json:\"displayID\" graphql:\"displayID\""
+	DisplayName             string                                                "json:\"displayName\" graphql:\"displayName\""
+	GravatarLogoURL         *string                                               "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
+	ID                      string                                                "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                                               "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	IsManaged               *bool                                                 "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL                 *string                                               "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	ManagedBy               *string                                               "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Members                 CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members  "json:\"members\" graphql:\"members\""
+	Name                    string                                                "json:\"name\" graphql:\"name\""
+	OscalContactUuids       []string                                              "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
+	OscalPartyUUID          *string                                               "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
+	OscalRole               *string                                               "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
+	Owner                   *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Owner   "json:\"owner,omitempty\" graphql:\"owner\""
+	OwnerID                 *string                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScimActive              *bool                                                 "json:\"scimActive,omitempty\" graphql:\"scimActive\""
+	ScimDisplayName         *string                                               "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
+	ScimExternalID          *string                                               "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
+	ScimGroupMailing        *string                                               "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
+	Setting                 *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting "json:\"setting,omitempty\" graphql:\"setting\""
+	SourceDefinitionID      *string                                               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                                               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                                               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Tags                    []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                                               "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetAvatarLocalFileID() *string {
@@ -57645,6 +57896,12 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetIsManaged() *bool {
 	if t == nil {
 		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
@@ -57656,6 +57913,12 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetLogoURL() *string {
 		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
 	}
 	return t.LogoURL
+}
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetMembers() *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members {
 	if t == nil {
@@ -57728,6 +57991,24 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetSetting() *CreateBulkC
 		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
 	}
 	return t.Setting
+}
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetTags() []string {
 	if t == nil {
@@ -57902,32 +58183,37 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetTotalCount() int64 {
 }
 
 type CreateBulkGroup_CreateBulkGroup_Groups struct {
-	AvatarLocalFileID     *string                                         "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	CreatedAt             *time.Time                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                                         "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                                          "json:\"displayID\" graphql:\"displayID\""
-	DisplayName           string                                          "json:\"displayName\" graphql:\"displayName\""
-	GravatarLogoURL       *string                                         "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
-	ID                    string                                          "json:\"id\" graphql:\"id\""
-	IsManaged             *bool                                           "json:\"isManaged,omitempty\" graphql:\"isManaged\""
-	LogoURL               *string                                         "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members               CreateBulkGroup_CreateBulkGroup_Groups_Members  "json:\"members\" graphql:\"members\""
-	Name                  string                                          "json:\"name\" graphql:\"name\""
-	OscalContactUuids     []string                                        "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
-	OscalPartyUUID        *string                                         "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
-	OscalRole             *string                                         "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
-	Owner                 *CreateBulkGroup_CreateBulkGroup_Groups_Owner   "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID               *string                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScimActive            *bool                                           "json:\"scimActive,omitempty\" graphql:\"scimActive\""
-	ScimDisplayName       *string                                         "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
-	ScimExternalID        *string                                         "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
-	ScimGroupMailing      *string                                         "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
-	Setting               *CreateBulkGroup_CreateBulkGroup_Groups_Setting "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags                  []string                                        "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                         "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	AvatarLocalFileID       *string                                         "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	CreatedAt               *time.Time                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                                         "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                                          "json:\"displayID\" graphql:\"displayID\""
+	DisplayName             string                                          "json:\"displayName\" graphql:\"displayName\""
+	GravatarLogoURL         *string                                         "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
+	ID                      string                                          "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                                         "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	IsManaged               *bool                                           "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL                 *string                                         "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	ManagedBy               *string                                         "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Members                 CreateBulkGroup_CreateBulkGroup_Groups_Members  "json:\"members\" graphql:\"members\""
+	Name                    string                                          "json:\"name\" graphql:\"name\""
+	OscalContactUuids       []string                                        "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
+	OscalPartyUUID          *string                                         "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
+	OscalRole               *string                                         "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
+	Owner                   *CreateBulkGroup_CreateBulkGroup_Groups_Owner   "json:\"owner,omitempty\" graphql:\"owner\""
+	OwnerID                 *string                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScimActive              *bool                                           "json:\"scimActive,omitempty\" graphql:\"scimActive\""
+	ScimDisplayName         *string                                         "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
+	ScimExternalID          *string                                         "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
+	ScimGroupMailing        *string                                         "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
+	Setting                 *CreateBulkGroup_CreateBulkGroup_Groups_Setting "json:\"setting,omitempty\" graphql:\"setting\""
+	SourceDefinitionID      *string                                         "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                                         "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                                         "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Tags                    []string                                        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                                         "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetAvatarLocalFileID() *string {
@@ -57978,6 +58264,12 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetIsManaged() *bool {
 	if t == nil {
 		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
@@ -57989,6 +58281,12 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetLogoURL() *string {
 		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
 	}
 	return t.LogoURL
+}
+func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetMembers() *CreateBulkGroup_CreateBulkGroup_Groups_Members {
 	if t == nil {
@@ -58061,6 +58359,24 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetSetting() *CreateBulkGroup_C
 		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
 	}
 	return t.Setting
+}
+func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetTags() []string {
 	if t == nil {
@@ -58289,33 +58605,38 @@ func (t *CreateGroup_CreateGroup_Group_Members) GetEdges() []*CreateGroup_Create
 }
 
 type CreateGroup_CreateGroup_Group struct {
-	AvatarLocalFileID     *string                                   "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	CreatedAt             *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                                   "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                                    "json:\"displayID\" graphql:\"displayID\""
-	DisplayName           string                                    "json:\"displayName\" graphql:\"displayName\""
-	GravatarLogoURL       *string                                   "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
-	ID                    string                                    "json:\"id\" graphql:\"id\""
-	IsManaged             *bool                                     "json:\"isManaged,omitempty\" graphql:\"isManaged\""
-	LogoURL               *string                                   "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members               CreateGroup_CreateGroup_Group_Members     "json:\"members\" graphql:\"members\""
-	Name                  string                                    "json:\"name\" graphql:\"name\""
-	OscalContactUuids     []string                                  "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
-	OscalPartyUUID        *string                                   "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
-	OscalRole             *string                                   "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
-	Owner                 *CreateGroup_CreateGroup_Group_Owner      "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID               *string                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Permissions           CreateGroup_CreateGroup_Group_Permissions "json:\"permissions\" graphql:\"permissions\""
-	ScimActive            *bool                                     "json:\"scimActive,omitempty\" graphql:\"scimActive\""
-	ScimDisplayName       *string                                   "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
-	ScimExternalID        *string                                   "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
-	ScimGroupMailing      *string                                   "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
-	Setting               *CreateGroup_CreateGroup_Group_Setting    "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags                  []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                   "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	AvatarLocalFileID       *string                                   "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	CreatedAt               *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                                   "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                                    "json:\"displayID\" graphql:\"displayID\""
+	DisplayName             string                                    "json:\"displayName\" graphql:\"displayName\""
+	GravatarLogoURL         *string                                   "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
+	ID                      string                                    "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                                   "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	IsManaged               *bool                                     "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL                 *string                                   "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	ManagedBy               *string                                   "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Members                 CreateGroup_CreateGroup_Group_Members     "json:\"members\" graphql:\"members\""
+	Name                    string                                    "json:\"name\" graphql:\"name\""
+	OscalContactUuids       []string                                  "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
+	OscalPartyUUID          *string                                   "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
+	OscalRole               *string                                   "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
+	Owner                   *CreateGroup_CreateGroup_Group_Owner      "json:\"owner,omitempty\" graphql:\"owner\""
+	OwnerID                 *string                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Permissions             CreateGroup_CreateGroup_Group_Permissions "json:\"permissions\" graphql:\"permissions\""
+	ScimActive              *bool                                     "json:\"scimActive,omitempty\" graphql:\"scimActive\""
+	ScimDisplayName         *string                                   "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
+	ScimExternalID          *string                                   "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
+	ScimGroupMailing        *string                                   "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
+	Setting                 *CreateGroup_CreateGroup_Group_Setting    "json:\"setting,omitempty\" graphql:\"setting\""
+	SourceDefinitionID      *string                                   "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                                   "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                                   "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Tags                    []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                                   "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateGroup_CreateGroup_Group) GetAvatarLocalFileID() *string {
@@ -58366,6 +58687,12 @@ func (t *CreateGroup_CreateGroup_Group) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateGroup_CreateGroup_Group) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateGroup_CreateGroup_Group) GetIsManaged() *bool {
 	if t == nil {
 		t = &CreateGroup_CreateGroup_Group{}
@@ -58377,6 +58704,12 @@ func (t *CreateGroup_CreateGroup_Group) GetLogoURL() *string {
 		t = &CreateGroup_CreateGroup_Group{}
 	}
 	return t.LogoURL
+}
+func (t *CreateGroup_CreateGroup_Group) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateGroup_CreateGroup_Group) GetMembers() *CreateGroup_CreateGroup_Group_Members {
 	if t == nil {
@@ -58455,6 +58788,24 @@ func (t *CreateGroup_CreateGroup_Group) GetSetting() *CreateGroup_CreateGroup_Gr
 		t = &CreateGroup_CreateGroup_Group{}
 	}
 	return t.Setting
+}
+func (t *CreateGroup_CreateGroup_Group) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateGroup_CreateGroup_Group) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateGroup_CreateGroup_Group) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateGroup_CreateGroup_Group) GetTags() []string {
 	if t == nil {
@@ -59334,33 +59685,38 @@ func (t *GetGroupByID_Group_Members) GetTotalCount() int64 {
 }
 
 type GetGroupByID_Group struct {
-	AvatarLocalFileID     *string                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	CreatedAt             *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                        "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                         "json:\"displayID\" graphql:\"displayID\""
-	DisplayName           string                         "json:\"displayName\" graphql:\"displayName\""
-	GravatarLogoURL       *string                        "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
-	ID                    string                         "json:\"id\" graphql:\"id\""
-	IsManaged             *bool                          "json:\"isManaged,omitempty\" graphql:\"isManaged\""
-	LogoURL               *string                        "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members               GetGroupByID_Group_Members     "json:\"members\" graphql:\"members\""
-	Name                  string                         "json:\"name\" graphql:\"name\""
-	OscalContactUuids     []string                       "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
-	OscalPartyUUID        *string                        "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
-	OscalRole             *string                        "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
-	Owner                 *GetGroupByID_Group_Owner      "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID               *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Permissions           GetGroupByID_Group_Permissions "json:\"permissions\" graphql:\"permissions\""
-	ScimActive            *bool                          "json:\"scimActive,omitempty\" graphql:\"scimActive\""
-	ScimDisplayName       *string                        "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
-	ScimExternalID        *string                        "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
-	ScimGroupMailing      *string                        "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
-	Setting               *GetGroupByID_Group_Setting    "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags                  []string                       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	AvatarLocalFileID       *string                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	CreatedAt               *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
+	DisplayName             string                         "json:\"displayName\" graphql:\"displayName\""
+	GravatarLogoURL         *string                        "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
+	ID                      string                         "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	IsManaged               *bool                          "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL                 *string                        "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Members                 GetGroupByID_Group_Members     "json:\"members\" graphql:\"members\""
+	Name                    string                         "json:\"name\" graphql:\"name\""
+	OscalContactUuids       []string                       "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
+	OscalPartyUUID          *string                        "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
+	OscalRole               *string                        "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
+	Owner                   *GetGroupByID_Group_Owner      "json:\"owner,omitempty\" graphql:\"owner\""
+	OwnerID                 *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Permissions             GetGroupByID_Group_Permissions "json:\"permissions\" graphql:\"permissions\""
+	ScimActive              *bool                          "json:\"scimActive,omitempty\" graphql:\"scimActive\""
+	ScimDisplayName         *string                        "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
+	ScimExternalID          *string                        "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
+	ScimGroupMailing        *string                        "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
+	Setting                 *GetGroupByID_Group_Setting    "json:\"setting,omitempty\" graphql:\"setting\""
+	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Tags                    []string                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *GetGroupByID_Group) GetAvatarLocalFileID() *string {
@@ -59411,6 +59767,12 @@ func (t *GetGroupByID_Group) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetGroupByID_Group) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetGroupByID_Group{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetGroupByID_Group) GetIsManaged() *bool {
 	if t == nil {
 		t = &GetGroupByID_Group{}
@@ -59422,6 +59784,12 @@ func (t *GetGroupByID_Group) GetLogoURL() *string {
 		t = &GetGroupByID_Group{}
 	}
 	return t.LogoURL
+}
+func (t *GetGroupByID_Group) GetManagedBy() *string {
+	if t == nil {
+		t = &GetGroupByID_Group{}
+	}
+	return t.ManagedBy
 }
 func (t *GetGroupByID_Group) GetMembers() *GetGroupByID_Group_Members {
 	if t == nil {
@@ -59500,6 +59868,24 @@ func (t *GetGroupByID_Group) GetSetting() *GetGroupByID_Group_Setting {
 		t = &GetGroupByID_Group{}
 	}
 	return t.Setting
+}
+func (t *GetGroupByID_Group) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetGroupByID_Group{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetGroupByID_Group) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetGroupByID_Group{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetGroupByID_Group) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetGroupByID_Group{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetGroupByID_Group) GetTags() []string {
 	if t == nil {
@@ -60285,33 +60671,38 @@ func (t *UpdateGroup_UpdateGroup_Group_Members) GetTotalCount() int64 {
 }
 
 type UpdateGroup_UpdateGroup_Group struct {
-	AvatarLocalFileID     *string                                   "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	CreatedAt             *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                                   "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                                    "json:\"displayID\" graphql:\"displayID\""
-	DisplayName           string                                    "json:\"displayName\" graphql:\"displayName\""
-	GravatarLogoURL       *string                                   "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
-	ID                    string                                    "json:\"id\" graphql:\"id\""
-	IsManaged             *bool                                     "json:\"isManaged,omitempty\" graphql:\"isManaged\""
-	LogoURL               *string                                   "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members               UpdateGroup_UpdateGroup_Group_Members     "json:\"members\" graphql:\"members\""
-	Name                  string                                    "json:\"name\" graphql:\"name\""
-	OscalContactUuids     []string                                  "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
-	OscalPartyUUID        *string                                   "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
-	OscalRole             *string                                   "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
-	Owner                 *UpdateGroup_UpdateGroup_Group_Owner      "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID               *string                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Permissions           UpdateGroup_UpdateGroup_Group_Permissions "json:\"permissions\" graphql:\"permissions\""
-	ScimActive            *bool                                     "json:\"scimActive,omitempty\" graphql:\"scimActive\""
-	ScimDisplayName       *string                                   "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
-	ScimExternalID        *string                                   "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
-	ScimGroupMailing      *string                                   "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
-	Setting               *UpdateGroup_UpdateGroup_Group_Setting    "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags                  []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                   "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	AvatarLocalFileID       *string                                   "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	CreatedAt               *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                                   "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                                    "json:\"displayID\" graphql:\"displayID\""
+	DisplayName             string                                    "json:\"displayName\" graphql:\"displayName\""
+	GravatarLogoURL         *string                                   "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
+	ID                      string                                    "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                                   "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	IsManaged               *bool                                     "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL                 *string                                   "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	ManagedBy               *string                                   "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Members                 UpdateGroup_UpdateGroup_Group_Members     "json:\"members\" graphql:\"members\""
+	Name                    string                                    "json:\"name\" graphql:\"name\""
+	OscalContactUuids       []string                                  "json:\"oscalContactUuids,omitempty\" graphql:\"oscalContactUuids\""
+	OscalPartyUUID          *string                                   "json:\"oscalPartyUUID,omitempty\" graphql:\"oscalPartyUUID\""
+	OscalRole               *string                                   "json:\"oscalRole,omitempty\" graphql:\"oscalRole\""
+	Owner                   *UpdateGroup_UpdateGroup_Group_Owner      "json:\"owner,omitempty\" graphql:\"owner\""
+	OwnerID                 *string                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Permissions             UpdateGroup_UpdateGroup_Group_Permissions "json:\"permissions\" graphql:\"permissions\""
+	ScimActive              *bool                                     "json:\"scimActive,omitempty\" graphql:\"scimActive\""
+	ScimDisplayName         *string                                   "json:\"scimDisplayName,omitempty\" graphql:\"scimDisplayName\""
+	ScimExternalID          *string                                   "json:\"scimExternalID,omitempty\" graphql:\"scimExternalID\""
+	ScimGroupMailing        *string                                   "json:\"scimGroupMailing,omitempty\" graphql:\"scimGroupMailing\""
+	Setting                 *UpdateGroup_UpdateGroup_Group_Setting    "json:\"setting,omitempty\" graphql:\"setting\""
+	SourceDefinitionID      *string                                   "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                                   "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                                   "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Tags                    []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                                   "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *UpdateGroup_UpdateGroup_Group) GetAvatarLocalFileID() *string {
@@ -60362,6 +60753,12 @@ func (t *UpdateGroup_UpdateGroup_Group) GetID() string {
 	}
 	return t.ID
 }
+func (t *UpdateGroup_UpdateGroup_Group) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateGroup_UpdateGroup_Group) GetIsManaged() *bool {
 	if t == nil {
 		t = &UpdateGroup_UpdateGroup_Group{}
@@ -60373,6 +60770,12 @@ func (t *UpdateGroup_UpdateGroup_Group) GetLogoURL() *string {
 		t = &UpdateGroup_UpdateGroup_Group{}
 	}
 	return t.LogoURL
+}
+func (t *UpdateGroup_UpdateGroup_Group) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateGroup_UpdateGroup_Group) GetMembers() *UpdateGroup_UpdateGroup_Group_Members {
 	if t == nil {
@@ -60451,6 +60854,24 @@ func (t *UpdateGroup_UpdateGroup_Group) GetSetting() *UpdateGroup_UpdateGroup_Gr
 		t = &UpdateGroup_UpdateGroup_Group{}
 	}
 	return t.Setting
+}
+func (t *UpdateGroup_UpdateGroup_Group) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateGroup_UpdateGroup_Group) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateGroup_UpdateGroup_Group) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateGroup_UpdateGroup_Group) GetTags() []string {
 	if t == nil {
@@ -72389,21 +72810,27 @@ func (t *UpdateMappableDomain_UpdateMappableDomain) GetMappableDomain() *UpdateM
 }
 
 type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls struct {
-	Confidence            *int64               "json:\"confidence,omitempty\" graphql:\"confidence\""
-	CreatedAt             *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                    string               "json:\"id\" graphql:\"id\""
-	InternalNotes         *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	MappingType           enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
-	OwnerID               *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Relation              *string              "json:\"relation,omitempty\" graphql:\"relation\""
-	Source                *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
-	SystemInternalID      *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool                "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string              "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Confidence              *int64               "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt               *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExternalID              *string              "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string               "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	MappingType             enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	OwnerID                 *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Relation                *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source                  *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemInternalID        *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool                "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string              "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetConfidence() *int64 {
@@ -72424,17 +72851,35 @@ func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) G
 	}
 	return t.CreatedBy
 }
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetExternalID() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
+	}
+	return t.ExternalID
+}
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
 	}
 	return t.ID
 }
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetMappingType() *enums.MappingType {
 	if t == nil {
@@ -72459,6 +72904,24 @@ func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) G
 		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
 	}
 	return t.Source
+}
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetSystemInternalID() *string {
 	if t == nil {
@@ -72669,25 +73132,31 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_ToSubcon
 }
 
 type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls struct {
-	Confidence            *int64                                                                         "json:\"confidence,omitempty\" graphql:\"confidence\""
-	CreatedAt             *time.Time                                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FromControls          CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_FromControls    "json:\"fromControls\" graphql:\"fromControls\""
-	FromSubcontrols       CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_FromSubcontrols "json:\"fromSubcontrols\" graphql:\"fromSubcontrols\""
-	ID                    string                                                                         "json:\"id\" graphql:\"id\""
-	InternalNotes         *string                                                                        "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	MappingType           enums.MappingType                                                              "json:\"mappingType\" graphql:\"mappingType\""
-	OwnerID               *string                                                                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Relation              *string                                                                        "json:\"relation,omitempty\" graphql:\"relation\""
-	Source                *enums.MappingSource                                                           "json:\"source,omitempty\" graphql:\"source\""
-	SystemInternalID      *string                                                                        "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool                                                                          "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string                                                                       "json:\"tags,omitempty\" graphql:\"tags\""
-	ToControls            CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_ToControls      "json:\"toControls\" graphql:\"toControls\""
-	ToSubcontrols         CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_ToSubcontrols   "json:\"toSubcontrols\" graphql:\"toSubcontrols\""
-	UpdatedAt             *time.Time                                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                                                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Confidence              *int64                                                                         "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt               *time.Time                                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExternalID              *string                                                                        "json:\"externalID,omitempty\" graphql:\"externalID\""
+	FromControls            CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_FromControls    "json:\"fromControls\" graphql:\"fromControls\""
+	FromSubcontrols         CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_FromSubcontrols "json:\"fromSubcontrols\" graphql:\"fromSubcontrols\""
+	ID                      string                                                                         "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                                                                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string                                                                        "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string                                                                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	MappingType             enums.MappingType                                                              "json:\"mappingType\" graphql:\"mappingType\""
+	OwnerID                 *string                                                                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Relation                *string                                                                        "json:\"relation,omitempty\" graphql:\"relation\""
+	Source                  *enums.MappingSource                                                           "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string                                                                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                                                                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                                                                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemInternalID        *string                                                                        "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool                                                                          "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string                                                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	ToControls              CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_ToControls      "json:\"toControls\" graphql:\"toControls\""
+	ToSubcontrols           CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_ToSubcontrols   "json:\"toSubcontrols\" graphql:\"toSubcontrols\""
+	UpdatedAt               *time.Time                                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                                                                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetConfidence() *int64 {
@@ -72708,6 +73177,12 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetCrea
 	}
 	return t.CreatedBy
 }
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetExternalID() *string {
+	if t == nil {
+		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
+	}
+	return t.ExternalID
+}
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetFromControls() *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_FromControls {
 	if t == nil {
 		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
@@ -72726,11 +73201,23 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetID()
 	}
 	return t.ID
 }
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetMappingType() *enums.MappingType {
 	if t == nil {
@@ -72755,6 +73242,24 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSour
 		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
 	}
 	return t.Source
+}
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSystemInternalID() *string {
 	if t == nil {
@@ -72977,25 +73482,31 @@ func (t *CreateMappedControl_CreateMappedControl_MappedControl_ToSubcontrols) Ge
 }
 
 type CreateMappedControl_CreateMappedControl_MappedControl struct {
-	Confidence            *int64                                                                "json:\"confidence,omitempty\" graphql:\"confidence\""
-	CreatedAt             *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FromControls          CreateMappedControl_CreateMappedControl_MappedControl_FromControls    "json:\"fromControls\" graphql:\"fromControls\""
-	FromSubcontrols       CreateMappedControl_CreateMappedControl_MappedControl_FromSubcontrols "json:\"fromSubcontrols\" graphql:\"fromSubcontrols\""
-	ID                    string                                                                "json:\"id\" graphql:\"id\""
-	InternalNotes         *string                                                               "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	MappingType           enums.MappingType                                                     "json:\"mappingType\" graphql:\"mappingType\""
-	OwnerID               *string                                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Relation              *string                                                               "json:\"relation,omitempty\" graphql:\"relation\""
-	Source                *enums.MappingSource                                                  "json:\"source,omitempty\" graphql:\"source\""
-	SystemInternalID      *string                                                               "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool                                                                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	ToControls            CreateMappedControl_CreateMappedControl_MappedControl_ToControls      "json:\"toControls\" graphql:\"toControls\""
-	ToSubcontrols         CreateMappedControl_CreateMappedControl_MappedControl_ToSubcontrols   "json:\"toSubcontrols\" graphql:\"toSubcontrols\""
-	UpdatedAt             *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                                               "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Confidence              *int64                                                                "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt               *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExternalID              *string                                                               "json:\"externalID,omitempty\" graphql:\"externalID\""
+	FromControls            CreateMappedControl_CreateMappedControl_MappedControl_FromControls    "json:\"fromControls\" graphql:\"fromControls\""
+	FromSubcontrols         CreateMappedControl_CreateMappedControl_MappedControl_FromSubcontrols "json:\"fromSubcontrols\" graphql:\"fromSubcontrols\""
+	ID                      string                                                                "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                                                               "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string                                                               "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string                                                               "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	MappingType             enums.MappingType                                                     "json:\"mappingType\" graphql:\"mappingType\""
+	OwnerID                 *string                                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Relation                *string                                                               "json:\"relation,omitempty\" graphql:\"relation\""
+	Source                  *enums.MappingSource                                                  "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string                                                               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                                                               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                                                               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemInternalID        *string                                                               "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool                                                                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	ToControls              CreateMappedControl_CreateMappedControl_MappedControl_ToControls      "json:\"toControls\" graphql:\"toControls\""
+	ToSubcontrols           CreateMappedControl_CreateMappedControl_MappedControl_ToSubcontrols   "json:\"toSubcontrols\" graphql:\"toSubcontrols\""
+	UpdatedAt               *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                                                               "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetConfidence() *int64 {
@@ -73016,6 +73527,12 @@ func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetCreatedBy() *
 	}
 	return t.CreatedBy
 }
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetExternalID() *string {
+	if t == nil {
+		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
+	}
+	return t.ExternalID
+}
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetFromControls() *CreateMappedControl_CreateMappedControl_MappedControl_FromControls {
 	if t == nil {
 		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
@@ -73034,11 +73551,23 @@ func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetMappingType() *enums.MappingType {
 	if t == nil {
@@ -73063,6 +73592,24 @@ func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSource() *enu
 		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
 	}
 	return t.Source
+}
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSystemInternalID() *string {
 	if t == nil {
@@ -73640,25 +74187,31 @@ func (t *GetMappedControlByID_MappedControl_ToSubcontrols) GetEdges() []*GetMapp
 }
 
 type GetMappedControlByID_MappedControl struct {
-	Confidence            *int64                                             "json:\"confidence,omitempty\" graphql:\"confidence\""
-	CreatedAt             *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FromControls          GetMappedControlByID_MappedControl_FromControls    "json:\"fromControls\" graphql:\"fromControls\""
-	FromSubcontrols       GetMappedControlByID_MappedControl_FromSubcontrols "json:\"fromSubcontrols\" graphql:\"fromSubcontrols\""
-	ID                    string                                             "json:\"id\" graphql:\"id\""
-	InternalNotes         *string                                            "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	MappingType           enums.MappingType                                  "json:\"mappingType\" graphql:\"mappingType\""
-	OwnerID               *string                                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Relation              *string                                            "json:\"relation,omitempty\" graphql:\"relation\""
-	Source                *enums.MappingSource                               "json:\"source,omitempty\" graphql:\"source\""
-	SystemInternalID      *string                                            "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool                                              "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string                                           "json:\"tags,omitempty\" graphql:\"tags\""
-	ToControls            GetMappedControlByID_MappedControl_ToControls      "json:\"toControls\" graphql:\"toControls\""
-	ToSubcontrols         GetMappedControlByID_MappedControl_ToSubcontrols   "json:\"toSubcontrols\" graphql:\"toSubcontrols\""
-	UpdatedAt             *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Confidence              *int64                                             "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt               *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExternalID              *string                                            "json:\"externalID,omitempty\" graphql:\"externalID\""
+	FromControls            GetMappedControlByID_MappedControl_FromControls    "json:\"fromControls\" graphql:\"fromControls\""
+	FromSubcontrols         GetMappedControlByID_MappedControl_FromSubcontrols "json:\"fromSubcontrols\" graphql:\"fromSubcontrols\""
+	ID                      string                                             "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string                                            "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string                                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	MappingType             enums.MappingType                                  "json:\"mappingType\" graphql:\"mappingType\""
+	OwnerID                 *string                                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Relation                *string                                            "json:\"relation,omitempty\" graphql:\"relation\""
+	Source                  *enums.MappingSource                               "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string                                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemInternalID        *string                                            "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool                                              "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string                                           "json:\"tags,omitempty\" graphql:\"tags\""
+	ToControls              GetMappedControlByID_MappedControl_ToControls      "json:\"toControls\" graphql:\"toControls\""
+	ToSubcontrols           GetMappedControlByID_MappedControl_ToSubcontrols   "json:\"toSubcontrols\" graphql:\"toSubcontrols\""
+	UpdatedAt               *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                                            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *GetMappedControlByID_MappedControl) GetConfidence() *int64 {
@@ -73679,6 +74232,12 @@ func (t *GetMappedControlByID_MappedControl) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetMappedControlByID_MappedControl) GetExternalID() *string {
+	if t == nil {
+		t = &GetMappedControlByID_MappedControl{}
+	}
+	return t.ExternalID
+}
 func (t *GetMappedControlByID_MappedControl) GetFromControls() *GetMappedControlByID_MappedControl_FromControls {
 	if t == nil {
 		t = &GetMappedControlByID_MappedControl{}
@@ -73697,11 +74256,23 @@ func (t *GetMappedControlByID_MappedControl) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetMappedControlByID_MappedControl) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetMappedControlByID_MappedControl{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetMappedControlByID_MappedControl) GetInternalNotes() *string {
 	if t == nil {
 		t = &GetMappedControlByID_MappedControl{}
 	}
 	return t.InternalNotes
+}
+func (t *GetMappedControlByID_MappedControl) GetManagedBy() *string {
+	if t == nil {
+		t = &GetMappedControlByID_MappedControl{}
+	}
+	return t.ManagedBy
 }
 func (t *GetMappedControlByID_MappedControl) GetMappingType() *enums.MappingType {
 	if t == nil {
@@ -73726,6 +74297,24 @@ func (t *GetMappedControlByID_MappedControl) GetSource() *enums.MappingSource {
 		t = &GetMappedControlByID_MappedControl{}
 	}
 	return t.Source
+}
+func (t *GetMappedControlByID_MappedControl) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetMappedControlByID_MappedControl{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetMappedControlByID_MappedControl) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetMappedControlByID_MappedControl{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetMappedControlByID_MappedControl) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetMappedControlByID_MappedControl{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetMappedControlByID_MappedControl) GetSystemInternalID() *string {
 	if t == nil {
@@ -74281,25 +74870,31 @@ func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_ToSubcontrols) Ge
 }
 
 type UpdateMappedControl_UpdateMappedControl_MappedControl struct {
-	Confidence            *int64                                                                "json:\"confidence,omitempty\" graphql:\"confidence\""
-	CreatedAt             *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FromControls          UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls    "json:\"fromControls\" graphql:\"fromControls\""
-	FromSubcontrols       UpdateMappedControl_UpdateMappedControl_MappedControl_FromSubcontrols "json:\"fromSubcontrols\" graphql:\"fromSubcontrols\""
-	ID                    string                                                                "json:\"id\" graphql:\"id\""
-	InternalNotes         *string                                                               "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	MappingType           enums.MappingType                                                     "json:\"mappingType\" graphql:\"mappingType\""
-	OwnerID               *string                                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Relation              *string                                                               "json:\"relation,omitempty\" graphql:\"relation\""
-	Source                *enums.MappingSource                                                  "json:\"source,omitempty\" graphql:\"source\""
-	SystemInternalID      *string                                                               "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool                                                                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	ToControls            UpdateMappedControl_UpdateMappedControl_MappedControl_ToControls      "json:\"toControls\" graphql:\"toControls\""
-	ToSubcontrols         UpdateMappedControl_UpdateMappedControl_MappedControl_ToSubcontrols   "json:\"toSubcontrols\" graphql:\"toSubcontrols\""
-	UpdatedAt             *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                                               "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Confidence              *int64                                                                "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt               *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExternalID              *string                                                               "json:\"externalID,omitempty\" graphql:\"externalID\""
+	FromControls            UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls    "json:\"fromControls\" graphql:\"fromControls\""
+	FromSubcontrols         UpdateMappedControl_UpdateMappedControl_MappedControl_FromSubcontrols "json:\"fromSubcontrols\" graphql:\"fromSubcontrols\""
+	ID                      string                                                                "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                                                               "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string                                                               "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string                                                               "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	MappingType             enums.MappingType                                                     "json:\"mappingType\" graphql:\"mappingType\""
+	OwnerID                 *string                                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Relation                *string                                                               "json:\"relation,omitempty\" graphql:\"relation\""
+	Source                  *enums.MappingSource                                                  "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string                                                               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                                                               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                                                               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemInternalID        *string                                                               "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool                                                                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	ToControls              UpdateMappedControl_UpdateMappedControl_MappedControl_ToControls      "json:\"toControls\" graphql:\"toControls\""
+	ToSubcontrols           UpdateMappedControl_UpdateMappedControl_MappedControl_ToSubcontrols   "json:\"toSubcontrols\" graphql:\"toSubcontrols\""
+	UpdatedAt               *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                                                               "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetConfidence() *int64 {
@@ -74320,6 +74915,12 @@ func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetCreatedBy() *
 	}
 	return t.CreatedBy
 }
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetExternalID() *string {
+	if t == nil {
+		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
+	}
+	return t.ExternalID
+}
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetFromControls() *UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls {
 	if t == nil {
 		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
@@ -74338,11 +74939,23 @@ func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetID() string {
 	}
 	return t.ID
 }
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetInternalNotes() *string {
 	if t == nil {
 		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
 	}
 	return t.InternalNotes
+}
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetMappingType() *enums.MappingType {
 	if t == nil {
@@ -74367,6 +74980,24 @@ func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSource() *enu
 		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
 	}
 	return t.Source
+}
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSystemInternalID() *string {
 	if t == nil {
@@ -86686,10 +87317,12 @@ type CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms struct {
 	ExternalReferenceID            *string              "json:\"externalReferenceID,omitempty\" graphql:\"externalReferenceID\""
 	ExternalUUID                   *string              "json:\"externalUUID,omitempty\" graphql:\"externalUUID\""
 	ID                             string               "json:\"id\" graphql:\"id\""
+	IntegrationRunID               *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalOwner                  *string              "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID           *string              "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
 	InternalOwnerIdentityHolderID  *string              "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
 	InternalOwnerUserID            *string              "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
+	ManagedBy                      *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                       map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name                           string               "json:\"name\" graphql:\"name\""
 	OwnerID                        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -86710,7 +87343,10 @@ type CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms struct {
 	SecurityOwnerUserID            *string              "json:\"securityOwnerUserID,omitempty\" graphql:\"securityOwnerUserID\""
 	SecurityTierID                 *string              "json:\"securityTierID,omitempty\" graphql:\"securityTierID\""
 	SecurityTierName               *string              "json:\"securityTierName,omitempty\" graphql:\"securityTierName\""
+	SourceDefinitionID             *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion        *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string              "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
+	SourceInstanceID               *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceType                     enums.SourceType     "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus "json:\"status\" graphql:\"status\""
 	Tags                           []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -86869,6 +87505,12 @@ func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetInternalOwner() *string {
 	if t == nil {
 		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
@@ -86892,6 +87534,12 @@ func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetInternalOwner
 		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
 	}
 	return t.InternalOwnerUserID
+}
+func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetMetadata() map[string]any {
 	if t == nil {
@@ -87013,11 +87661,29 @@ func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSecurityTierN
 	}
 	return t.SecurityTierName
 }
+func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
+	}
+	return t.SourceDefinitionVersion
+}
 func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSourceIdentifier() *string {
 	if t == nil {
 		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
 	}
 	return t.SourceIdentifier
+}
+func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSourceType() *enums.SourceType {
 	if t == nil {
@@ -87292,10 +87958,12 @@ type CreateBulkPlatform_CreateBulkPlatform_Platforms struct {
 	ExternalReferenceID            *string                                                               "json:\"externalReferenceID,omitempty\" graphql:\"externalReferenceID\""
 	ExternalUUID                   *string                                                               "json:\"externalUUID,omitempty\" graphql:\"externalUUID\""
 	ID                             string                                                                "json:\"id\" graphql:\"id\""
+	IntegrationRunID               *string                                                               "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalOwner                  *string                                                               "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID           *string                                                               "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
 	InternalOwnerIdentityHolderID  *string                                                               "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
 	InternalOwnerUserID            *string                                                               "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
+	ManagedBy                      *string                                                               "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                       map[string]any                                                        "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name                           string                                                                "json:\"name\" graphql:\"name\""
 	OwnerID                        *string                                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -87316,7 +87984,10 @@ type CreateBulkPlatform_CreateBulkPlatform_Platforms struct {
 	SecurityOwnerUserID            *string                                                               "json:\"securityOwnerUserID,omitempty\" graphql:\"securityOwnerUserID\""
 	SecurityTierID                 *string                                                               "json:\"securityTierID,omitempty\" graphql:\"securityTierID\""
 	SecurityTierName               *string                                                               "json:\"securityTierName,omitempty\" graphql:\"securityTierName\""
+	SourceDefinitionID             *string                                                               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion        *string                                                               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string                                                               "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
+	SourceInstanceID               *string                                                               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceType                     enums.SourceType                                                      "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus                                                  "json:\"status\" graphql:\"status\""
 	Tags                           []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
@@ -87488,6 +88159,12 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetInternalOwner() *string {
 	if t == nil {
 		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
@@ -87511,6 +88188,12 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetInternalOwnerUserID
 		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
 	}
 	return t.InternalOwnerUserID
+}
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetMetadata() map[string]any {
 	if t == nil {
@@ -87632,11 +88315,29 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSecurityTierName() 
 	}
 	return t.SecurityTierName
 }
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
+	}
+	return t.SourceDefinitionVersion
+}
 func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSourceIdentifier() *string {
 	if t == nil {
 		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
 	}
 	return t.SourceIdentifier
+}
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSourceType() *enums.SourceType {
 	if t == nil {
@@ -88793,10 +89494,12 @@ type GetAllPlatforms_Platforms_Edges_Node struct {
 	ExternalUUID                   *string                                                    "json:\"externalUUID,omitempty\" graphql:\"externalUUID\""
 	ID                             string                                                     "json:\"id\" graphql:\"id\""
 	IdentityHolders                GetAllPlatforms_Platforms_Edges_Node_IdentityHolders       "json:\"identityHolders\" graphql:\"identityHolders\""
+	IntegrationRunID               *string                                                    "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalOwner                  *string                                                    "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID           *string                                                    "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
 	InternalOwnerIdentityHolderID  *string                                                    "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
 	InternalOwnerUserID            *string                                                    "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
+	ManagedBy                      *string                                                    "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                       map[string]any                                             "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name                           string                                                     "json:\"name\" graphql:\"name\""
 	OwnerID                        *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -88817,7 +89520,10 @@ type GetAllPlatforms_Platforms_Edges_Node struct {
 	SecurityOwnerUserID            *string                                                    "json:\"securityOwnerUserID,omitempty\" graphql:\"securityOwnerUserID\""
 	SecurityTierID                 *string                                                    "json:\"securityTierID,omitempty\" graphql:\"securityTierID\""
 	SecurityTierName               *string                                                    "json:\"securityTierName,omitempty\" graphql:\"securityTierName\""
+	SourceDefinitionID             *string                                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion        *string                                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string                                                    "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
+	SourceInstanceID               *string                                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceType                     enums.SourceType                                           "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus                                       "json:\"status\" graphql:\"status\""
 	Tags                           []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
@@ -88995,6 +89701,12 @@ func (t *GetAllPlatforms_Platforms_Edges_Node) GetIdentityHolders() *GetAllPlatf
 	}
 	return &t.IdentityHolders
 }
+func (t *GetAllPlatforms_Platforms_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAllPlatforms_Platforms_Edges_Node{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetAllPlatforms_Platforms_Edges_Node) GetInternalOwner() *string {
 	if t == nil {
 		t = &GetAllPlatforms_Platforms_Edges_Node{}
@@ -89018,6 +89730,12 @@ func (t *GetAllPlatforms_Platforms_Edges_Node) GetInternalOwnerUserID() *string 
 		t = &GetAllPlatforms_Platforms_Edges_Node{}
 	}
 	return t.InternalOwnerUserID
+}
+func (t *GetAllPlatforms_Platforms_Edges_Node) GetManagedBy() *string {
+	if t == nil {
+		t = &GetAllPlatforms_Platforms_Edges_Node{}
+	}
+	return t.ManagedBy
 }
 func (t *GetAllPlatforms_Platforms_Edges_Node) GetMetadata() map[string]any {
 	if t == nil {
@@ -89139,11 +89857,29 @@ func (t *GetAllPlatforms_Platforms_Edges_Node) GetSecurityTierName() *string {
 	}
 	return t.SecurityTierName
 }
+func (t *GetAllPlatforms_Platforms_Edges_Node) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetAllPlatforms_Platforms_Edges_Node{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetAllPlatforms_Platforms_Edges_Node) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetAllPlatforms_Platforms_Edges_Node{}
+	}
+	return t.SourceDefinitionVersion
+}
 func (t *GetAllPlatforms_Platforms_Edges_Node) GetSourceIdentifier() *string {
 	if t == nil {
 		t = &GetAllPlatforms_Platforms_Edges_Node{}
 	}
 	return t.SourceIdentifier
+}
+func (t *GetAllPlatforms_Platforms_Edges_Node) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetAllPlatforms_Platforms_Edges_Node{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetAllPlatforms_Platforms_Edges_Node) GetSourceType() *enums.SourceType {
 	if t == nil {
@@ -89449,10 +90185,12 @@ type GetPlatformByID_Platform struct {
 	ExternalReferenceID            *string                                        "json:\"externalReferenceID,omitempty\" graphql:\"externalReferenceID\""
 	ExternalUUID                   *string                                        "json:\"externalUUID,omitempty\" graphql:\"externalUUID\""
 	ID                             string                                         "json:\"id\" graphql:\"id\""
+	IntegrationRunID               *string                                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalOwner                  *string                                        "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID           *string                                        "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
 	InternalOwnerIdentityHolderID  *string                                        "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
 	InternalOwnerUserID            *string                                        "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
+	ManagedBy                      *string                                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                       map[string]any                                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name                           string                                         "json:\"name\" graphql:\"name\""
 	OwnerID                        *string                                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -89473,7 +90211,10 @@ type GetPlatformByID_Platform struct {
 	SecurityOwnerUserID            *string                                        "json:\"securityOwnerUserID,omitempty\" graphql:\"securityOwnerUserID\""
 	SecurityTierID                 *string                                        "json:\"securityTierID,omitempty\" graphql:\"securityTierID\""
 	SecurityTierName               *string                                        "json:\"securityTierName,omitempty\" graphql:\"securityTierName\""
+	SourceDefinitionID             *string                                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion        *string                                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string                                        "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
+	SourceInstanceID               *string                                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceType                     enums.SourceType                               "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus                           "json:\"status\" graphql:\"status\""
 	Tags                           []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -89645,6 +90386,12 @@ func (t *GetPlatformByID_Platform) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetPlatformByID_Platform) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetPlatformByID_Platform{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetPlatformByID_Platform) GetInternalOwner() *string {
 	if t == nil {
 		t = &GetPlatformByID_Platform{}
@@ -89668,6 +90415,12 @@ func (t *GetPlatformByID_Platform) GetInternalOwnerUserID() *string {
 		t = &GetPlatformByID_Platform{}
 	}
 	return t.InternalOwnerUserID
+}
+func (t *GetPlatformByID_Platform) GetManagedBy() *string {
+	if t == nil {
+		t = &GetPlatformByID_Platform{}
+	}
+	return t.ManagedBy
 }
 func (t *GetPlatformByID_Platform) GetMetadata() map[string]any {
 	if t == nil {
@@ -89789,11 +90542,29 @@ func (t *GetPlatformByID_Platform) GetSecurityTierName() *string {
 	}
 	return t.SecurityTierName
 }
+func (t *GetPlatformByID_Platform) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetPlatformByID_Platform{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetPlatformByID_Platform) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetPlatformByID_Platform{}
+	}
+	return t.SourceDefinitionVersion
+}
 func (t *GetPlatformByID_Platform) GetSourceIdentifier() *string {
 	if t == nil {
 		t = &GetPlatformByID_Platform{}
 	}
 	return t.SourceIdentifier
+}
+func (t *GetPlatformByID_Platform) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetPlatformByID_Platform{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetPlatformByID_Platform) GetSourceType() *enums.SourceType {
 	if t == nil {
@@ -89931,10 +90702,12 @@ type GetPlatforms_Platforms_Edges_Node struct {
 	ExternalReferenceID            *string              "json:\"externalReferenceID,omitempty\" graphql:\"externalReferenceID\""
 	ExternalUUID                   *string              "json:\"externalUUID,omitempty\" graphql:\"externalUUID\""
 	ID                             string               "json:\"id\" graphql:\"id\""
+	IntegrationRunID               *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalOwner                  *string              "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID           *string              "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
 	InternalOwnerIdentityHolderID  *string              "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
 	InternalOwnerUserID            *string              "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
+	ManagedBy                      *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                       map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name                           string               "json:\"name\" graphql:\"name\""
 	OwnerID                        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -89955,7 +90728,10 @@ type GetPlatforms_Platforms_Edges_Node struct {
 	SecurityOwnerUserID            *string              "json:\"securityOwnerUserID,omitempty\" graphql:\"securityOwnerUserID\""
 	SecurityTierID                 *string              "json:\"securityTierID,omitempty\" graphql:\"securityTierID\""
 	SecurityTierName               *string              "json:\"securityTierName,omitempty\" graphql:\"securityTierName\""
+	SourceDefinitionID             *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion        *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string              "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
+	SourceInstanceID               *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	SourceType                     enums.SourceType     "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus "json:\"status\" graphql:\"status\""
 	Tags                           []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -90114,6 +90890,12 @@ func (t *GetPlatforms_Platforms_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetPlatforms_Platforms_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetPlatforms_Platforms_Edges_Node{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetPlatforms_Platforms_Edges_Node) GetInternalOwner() *string {
 	if t == nil {
 		t = &GetPlatforms_Platforms_Edges_Node{}
@@ -90137,6 +90919,12 @@ func (t *GetPlatforms_Platforms_Edges_Node) GetInternalOwnerUserID() *string {
 		t = &GetPlatforms_Platforms_Edges_Node{}
 	}
 	return t.InternalOwnerUserID
+}
+func (t *GetPlatforms_Platforms_Edges_Node) GetManagedBy() *string {
+	if t == nil {
+		t = &GetPlatforms_Platforms_Edges_Node{}
+	}
+	return t.ManagedBy
 }
 func (t *GetPlatforms_Platforms_Edges_Node) GetMetadata() map[string]any {
 	if t == nil {
@@ -90258,11 +91046,29 @@ func (t *GetPlatforms_Platforms_Edges_Node) GetSecurityTierName() *string {
 	}
 	return t.SecurityTierName
 }
+func (t *GetPlatforms_Platforms_Edges_Node) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetPlatforms_Platforms_Edges_Node{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetPlatforms_Platforms_Edges_Node) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetPlatforms_Platforms_Edges_Node{}
+	}
+	return t.SourceDefinitionVersion
+}
 func (t *GetPlatforms_Platforms_Edges_Node) GetSourceIdentifier() *string {
 	if t == nil {
 		t = &GetPlatforms_Platforms_Edges_Node{}
 	}
 	return t.SourceIdentifier
+}
+func (t *GetPlatforms_Platforms_Edges_Node) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetPlatforms_Platforms_Edges_Node{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetPlatforms_Platforms_Edges_Node) GetSourceType() *enums.SourceType {
 	if t == nil {
@@ -94740,6 +95546,8 @@ type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
 	FieldworkStartDate         *time.Time          "json:\"fieldworkStartDate,omitempty\" graphql:\"fieldworkStartDate\""
 	FrameworkName              *string             "json:\"frameworkName,omitempty\" graphql:\"frameworkName\""
 	ID                         string              "json:\"id\" graphql:\"id\""
+	IntegrationRunID           *string             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	ManagedBy                  *string             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Name                       string              "json:\"name\" graphql:\"name\""
 	ObservationPeriodEndDate   *time.Time          "json:\"observationPeriodEndDate,omitempty\" graphql:\"observationPeriodEndDate\""
 	ObservationPeriodStartDate *time.Time          "json:\"observationPeriodStartDate,omitempty\" graphql:\"observationPeriodStartDate\""
@@ -94747,6 +95555,9 @@ type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
 	ProgramKindID              *string             "json:\"programKindID,omitempty\" graphql:\"programKindID\""
 	ProgramKindName            *string             "json:\"programKindName,omitempty\" graphql:\"programKindName\""
 	ProgramOwnerID             *string             "json:\"programOwnerID,omitempty\" graphql:\"programOwnerID\""
+	SourceDefinitionID         *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	StartDate                  *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                       []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -94851,6 +95662,18 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.IntegrationRunID
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.ManagedBy
+}
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
@@ -94892,6 +95715,24 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetProgramOwnerID()
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
 	}
 	return t.ProgramOwnerID
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetStartDate() *time.Time {
 	if t == nil {
@@ -94958,6 +95799,8 @@ type CreateBulkProgram_CreateBulkProgram_Programs struct {
 	FieldworkStartDate         *time.Time          "json:\"fieldworkStartDate,omitempty\" graphql:\"fieldworkStartDate\""
 	FrameworkName              *string             "json:\"frameworkName,omitempty\" graphql:\"frameworkName\""
 	ID                         string              "json:\"id\" graphql:\"id\""
+	IntegrationRunID           *string             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	ManagedBy                  *string             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Name                       string              "json:\"name\" graphql:\"name\""
 	ObservationPeriodEndDate   *time.Time          "json:\"observationPeriodEndDate,omitempty\" graphql:\"observationPeriodEndDate\""
 	ObservationPeriodStartDate *time.Time          "json:\"observationPeriodStartDate,omitempty\" graphql:\"observationPeriodStartDate\""
@@ -94965,6 +95808,9 @@ type CreateBulkProgram_CreateBulkProgram_Programs struct {
 	ProgramKindID              *string             "json:\"programKindID,omitempty\" graphql:\"programKindID\""
 	ProgramKindName            *string             "json:\"programKindName,omitempty\" graphql:\"programKindName\""
 	ProgramOwnerID             *string             "json:\"programOwnerID,omitempty\" graphql:\"programOwnerID\""
+	SourceDefinitionID         *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	StartDate                  *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                       []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -95069,6 +95915,18 @@ func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.IntegrationRunID
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.ManagedBy
+}
 func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetName() string {
 	if t == nil {
 		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
@@ -95110,6 +95968,24 @@ func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetProgramOwnerID() *stri
 		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
 	}
 	return t.ProgramOwnerID
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetStartDate() *time.Time {
 	if t == nil {
@@ -96002,7 +96878,9 @@ type CreateProgram_CreateProgram_Program struct {
 	FieldworkStartDate         *time.Time                                           "json:\"fieldworkStartDate,omitempty\" graphql:\"fieldworkStartDate\""
 	FrameworkName              *string                                              "json:\"frameworkName,omitempty\" graphql:\"frameworkName\""
 	ID                         string                                               "json:\"id\" graphql:\"id\""
+	IntegrationRunID           *string                                              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalPolicies           CreateProgram_CreateProgram_Program_InternalPolicies "json:\"internalPolicies\" graphql:\"internalPolicies\""
+	ManagedBy                  *string                                              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Name                       string                                               "json:\"name\" graphql:\"name\""
 	ObservationPeriodEndDate   *time.Time                                           "json:\"observationPeriodEndDate,omitempty\" graphql:\"observationPeriodEndDate\""
 	ObservationPeriodStartDate *time.Time                                           "json:\"observationPeriodStartDate,omitempty\" graphql:\"observationPeriodStartDate\""
@@ -96011,6 +96889,9 @@ type CreateProgram_CreateProgram_Program struct {
 	ProgramKindID              *string                                              "json:\"programKindID,omitempty\" graphql:\"programKindID\""
 	ProgramKindName            *string                                              "json:\"programKindName,omitempty\" graphql:\"programKindName\""
 	ProgramOwnerID             *string                                              "json:\"programOwnerID,omitempty\" graphql:\"programOwnerID\""
+	SourceDefinitionID         *string                                              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                                              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                                              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	StartDate                  *time.Time                                           "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus                                  "json:\"status\" graphql:\"status\""
 	Tags                       []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -96128,11 +97009,23 @@ func (t *CreateProgram_CreateProgram_Program) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateProgram_CreateProgram_Program) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateProgram_CreateProgram_Program) GetInternalPolicies() *CreateProgram_CreateProgram_Program_InternalPolicies {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program{}
 	}
 	return &t.InternalPolicies
+}
+func (t *CreateProgram_CreateProgram_Program) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateProgram_CreateProgram_Program) GetName() string {
 	if t == nil {
@@ -96181,6 +97074,24 @@ func (t *CreateProgram_CreateProgram_Program) GetProgramOwnerID() *string {
 		t = &CreateProgram_CreateProgram_Program{}
 	}
 	return t.ProgramOwnerID
+}
+func (t *CreateProgram_CreateProgram_Program) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateProgram_CreateProgram_Program) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateProgram_CreateProgram_Program) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateProgram_CreateProgram_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -97392,7 +98303,9 @@ type GetProgramByID_Program struct {
 	FieldworkStartDate         *time.Time                              "json:\"fieldworkStartDate,omitempty\" graphql:\"fieldworkStartDate\""
 	FrameworkName              *string                                 "json:\"frameworkName,omitempty\" graphql:\"frameworkName\""
 	ID                         string                                  "json:\"id\" graphql:\"id\""
+	IntegrationRunID           *string                                 "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalPolicies           GetProgramByID_Program_InternalPolicies "json:\"internalPolicies\" graphql:\"internalPolicies\""
+	ManagedBy                  *string                                 "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Members                    GetProgramByID_Program_Members          "json:\"members\" graphql:\"members\""
 	Name                       string                                  "json:\"name\" graphql:\"name\""
 	ObservationPeriodEndDate   *time.Time                              "json:\"observationPeriodEndDate,omitempty\" graphql:\"observationPeriodEndDate\""
@@ -97402,6 +98315,9 @@ type GetProgramByID_Program struct {
 	ProgramKindID              *string                                 "json:\"programKindID,omitempty\" graphql:\"programKindID\""
 	ProgramKindName            *string                                 "json:\"programKindName,omitempty\" graphql:\"programKindName\""
 	ProgramOwnerID             *string                                 "json:\"programOwnerID,omitempty\" graphql:\"programOwnerID\""
+	SourceDefinitionID         *string                                 "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                                 "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                                 "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	StartDate                  *time.Time                              "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus                     "json:\"status\" graphql:\"status\""
 	Tags                       []string                                "json:\"tags,omitempty\" graphql:\"tags\""
@@ -97519,11 +98435,23 @@ func (t *GetProgramByID_Program) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetProgramByID_Program) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetProgramByID_Program) GetInternalPolicies() *GetProgramByID_Program_InternalPolicies {
 	if t == nil {
 		t = &GetProgramByID_Program{}
 	}
 	return &t.InternalPolicies
+}
+func (t *GetProgramByID_Program) GetManagedBy() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.ManagedBy
 }
 func (t *GetProgramByID_Program) GetMembers() *GetProgramByID_Program_Members {
 	if t == nil {
@@ -97578,6 +98506,24 @@ func (t *GetProgramByID_Program) GetProgramOwnerID() *string {
 		t = &GetProgramByID_Program{}
 	}
 	return t.ProgramOwnerID
+}
+func (t *GetProgramByID_Program) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetProgramByID_Program) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetProgramByID_Program) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetProgramByID_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -98631,7 +99577,9 @@ type UpdateProgram_UpdateProgram_Program struct {
 	FieldworkStartDate         *time.Time                                           "json:\"fieldworkStartDate,omitempty\" graphql:\"fieldworkStartDate\""
 	FrameworkName              *string                                              "json:\"frameworkName,omitempty\" graphql:\"frameworkName\""
 	ID                         string                                               "json:\"id\" graphql:\"id\""
+	IntegrationRunID           *string                                              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalPolicies           UpdateProgram_UpdateProgram_Program_InternalPolicies "json:\"internalPolicies\" graphql:\"internalPolicies\""
+	ManagedBy                  *string                                              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Members                    UpdateProgram_UpdateProgram_Program_Members          "json:\"members\" graphql:\"members\""
 	Name                       string                                               "json:\"name\" graphql:\"name\""
 	ObservationPeriodEndDate   *time.Time                                           "json:\"observationPeriodEndDate,omitempty\" graphql:\"observationPeriodEndDate\""
@@ -98641,6 +99589,9 @@ type UpdateProgram_UpdateProgram_Program struct {
 	ProgramKindID              *string                                              "json:\"programKindID,omitempty\" graphql:\"programKindID\""
 	ProgramKindName            *string                                              "json:\"programKindName,omitempty\" graphql:\"programKindName\""
 	ProgramOwnerID             *string                                              "json:\"programOwnerID,omitempty\" graphql:\"programOwnerID\""
+	SourceDefinitionID         *string                                              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                                              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                                              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
 	StartDate                  *time.Time                                           "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus                                  "json:\"status\" graphql:\"status\""
 	Tags                       []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -98758,11 +99709,23 @@ func (t *UpdateProgram_UpdateProgram_Program) GetID() string {
 	}
 	return t.ID
 }
+func (t *UpdateProgram_UpdateProgram_Program) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateProgram_UpdateProgram_Program) GetInternalPolicies() *UpdateProgram_UpdateProgram_Program_InternalPolicies {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program{}
 	}
 	return &t.InternalPolicies
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateProgram_UpdateProgram_Program) GetMembers() *UpdateProgram_UpdateProgram_Program_Members {
 	if t == nil {
@@ -98817,6 +99780,24 @@ func (t *UpdateProgram_UpdateProgram_Program) GetProgramOwnerID() *string {
 		t = &UpdateProgram_UpdateProgram_Program{}
 	}
 	return t.ProgramOwnerID
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateProgram_UpdateProgram_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -102497,41 +103478,57 @@ func (t *UpdateRemediation_UpdateRemediation) GetRemediation() *UpdateRemediatio
 	return &t.Remediation
 }
 
+type ImportReportScan_ImportReportScan struct {
+	Accepted bool "json:\"accepted\" graphql:\"accepted\""
+}
+
+func (t *ImportReportScan_ImportReportScan) GetAccepted() bool {
+	if t == nil {
+		t = &ImportReportScan_ImportReportScan{}
+	}
+	return t.Accepted
+}
+
 type CreateBulkCSVReview_CreateBulkCSVReview_Reviews struct {
-	Approved              *bool               "json:\"approved,omitempty\" graphql:\"approved\""
-	ApprovedAt            *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
-	Category              *string             "json:\"category,omitempty\" graphql:\"category\""
-	Classification        *string             "json:\"classification,omitempty\" graphql:\"classification\""
-	CreatedAt             *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details               *string             "json:\"details,omitempty\" graphql:\"details\""
-	EnvironmentID         *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	ExternalID            *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
-	ExternalOwnerID       *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
-	ExternalURI           *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                    string              "json:\"id\" graphql:\"id\""
-	InternalNotes         *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Metadata              map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
-	OwnerID               *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RawPayload            map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
-	ReportedAt            *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
-	Reporter              *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
-	ReviewedAt            *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
-	ReviewerID            *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
-	ScopeID               *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	Source                *string             "json:\"source,omitempty\" graphql:\"source\""
-	State                 *string             "json:\"state,omitempty\" graphql:\"state\""
-	Status                *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
-	Summary               *string             "json:\"summary,omitempty\" graphql:\"summary\""
-	SystemInternalID      *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	Title                 string              "json:\"title\" graphql:\"title\""
-	UpdatedAt             *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Approved                *bool               "json:\"approved,omitempty\" graphql:\"approved\""
+	ApprovedAt              *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
+	Category                *string             "json:\"category,omitempty\" graphql:\"category\""
+	Classification          *string             "json:\"classification,omitempty\" graphql:\"classification\""
+	CreatedAt               *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string             "json:\"details,omitempty\" graphql:\"details\""
+	EnvironmentID           *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName         *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExternalID              *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ExternalOwnerID         *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
+	ExternalURI             *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string              "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Metadata                map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID                 *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RawPayload              map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
+	ReportedAt              *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
+	Reporter                *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
+	ReviewedAt              *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
+	ReviewerID              *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
+	ScopeID                 *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName               *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Source                  *string             "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
+	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
+	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
+	SystemInternalID        *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                   string              "json:\"title\" graphql:\"title\""
+	UpdatedAt               *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetApproved() *bool {
@@ -102612,11 +103609,23 @@ func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetMetadata() map[string]any {
 	if t == nil {
@@ -102677,6 +103686,24 @@ func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetSource() *string {
 		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
 	}
 	return t.Source
+}
+func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetState() *string {
 	if t == nil {
@@ -102751,40 +103778,45 @@ func (t *CreateBulkCSVReview_CreateBulkCSVReview) GetReviews() []*CreateBulkCSVR
 }
 
 type CreateBulkReview_CreateBulkReview_Reviews struct {
-	Approved              *bool               "json:\"approved,omitempty\" graphql:\"approved\""
-	ApprovedAt            *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
-	Category              *string             "json:\"category,omitempty\" graphql:\"category\""
-	Classification        *string             "json:\"classification,omitempty\" graphql:\"classification\""
-	CreatedAt             *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details               *string             "json:\"details,omitempty\" graphql:\"details\""
-	EnvironmentID         *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	ExternalID            *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
-	ExternalOwnerID       *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
-	ExternalURI           *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                    string              "json:\"id\" graphql:\"id\""
-	InternalNotes         *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Metadata              map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
-	OwnerID               *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RawPayload            map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
-	ReportedAt            *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
-	Reporter              *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
-	ReviewedAt            *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
-	ReviewerID            *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
-	ScopeID               *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	Source                *string             "json:\"source,omitempty\" graphql:\"source\""
-	State                 *string             "json:\"state,omitempty\" graphql:\"state\""
-	Status                *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
-	Summary               *string             "json:\"summary,omitempty\" graphql:\"summary\""
-	SystemInternalID      *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	Title                 string              "json:\"title\" graphql:\"title\""
-	UpdatedAt             *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Approved                *bool               "json:\"approved,omitempty\" graphql:\"approved\""
+	ApprovedAt              *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
+	Category                *string             "json:\"category,omitempty\" graphql:\"category\""
+	Classification          *string             "json:\"classification,omitempty\" graphql:\"classification\""
+	CreatedAt               *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string             "json:\"details,omitempty\" graphql:\"details\""
+	EnvironmentID           *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName         *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExternalID              *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ExternalOwnerID         *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
+	ExternalURI             *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string              "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Metadata                map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID                 *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RawPayload              map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
+	ReportedAt              *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
+	Reporter                *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
+	ReviewedAt              *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
+	ReviewerID              *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
+	ScopeID                 *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName               *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Source                  *string             "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
+	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
+	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
+	SystemInternalID        *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                   string              "json:\"title\" graphql:\"title\""
+	UpdatedAt               *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateBulkReview_CreateBulkReview_Reviews) GetApproved() *bool {
@@ -102865,11 +103897,23 @@ func (t *CreateBulkReview_CreateBulkReview_Reviews) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateBulkReview_CreateBulkReview_Reviews) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkReview_CreateBulkReview_Reviews{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkReview_CreateBulkReview_Reviews) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateBulkReview_CreateBulkReview_Reviews{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateBulkReview_CreateBulkReview_Reviews) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkReview_CreateBulkReview_Reviews{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkReview_CreateBulkReview_Reviews) GetMetadata() map[string]any {
 	if t == nil {
@@ -102930,6 +103974,24 @@ func (t *CreateBulkReview_CreateBulkReview_Reviews) GetSource() *string {
 		t = &CreateBulkReview_CreateBulkReview_Reviews{}
 	}
 	return t.Source
+}
+func (t *CreateBulkReview_CreateBulkReview_Reviews) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkReview_CreateBulkReview_Reviews{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkReview_CreateBulkReview_Reviews) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkReview_CreateBulkReview_Reviews{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkReview_CreateBulkReview_Reviews) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkReview_CreateBulkReview_Reviews{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkReview_CreateBulkReview_Reviews) GetState() *string {
 	if t == nil {
@@ -103004,40 +104066,45 @@ func (t *CreateBulkReview_CreateBulkReview) GetReviews() []*CreateBulkReview_Cre
 }
 
 type CreateReview_CreateReview_Review struct {
-	Approved              *bool               "json:\"approved,omitempty\" graphql:\"approved\""
-	ApprovedAt            *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
-	Category              *string             "json:\"category,omitempty\" graphql:\"category\""
-	Classification        *string             "json:\"classification,omitempty\" graphql:\"classification\""
-	CreatedAt             *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details               *string             "json:\"details,omitempty\" graphql:\"details\""
-	EnvironmentID         *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	ExternalID            *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
-	ExternalOwnerID       *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
-	ExternalURI           *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                    string              "json:\"id\" graphql:\"id\""
-	InternalNotes         *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Metadata              map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
-	OwnerID               *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RawPayload            map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
-	ReportedAt            *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
-	Reporter              *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
-	ReviewedAt            *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
-	ReviewerID            *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
-	ScopeID               *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	Source                *string             "json:\"source,omitempty\" graphql:\"source\""
-	State                 *string             "json:\"state,omitempty\" graphql:\"state\""
-	Status                *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
-	Summary               *string             "json:\"summary,omitempty\" graphql:\"summary\""
-	SystemInternalID      *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	Title                 string              "json:\"title\" graphql:\"title\""
-	UpdatedAt             *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Approved                *bool               "json:\"approved,omitempty\" graphql:\"approved\""
+	ApprovedAt              *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
+	Category                *string             "json:\"category,omitempty\" graphql:\"category\""
+	Classification          *string             "json:\"classification,omitempty\" graphql:\"classification\""
+	CreatedAt               *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string             "json:\"details,omitempty\" graphql:\"details\""
+	EnvironmentID           *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName         *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExternalID              *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ExternalOwnerID         *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
+	ExternalURI             *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string              "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Metadata                map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID                 *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RawPayload              map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
+	ReportedAt              *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
+	Reporter                *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
+	ReviewedAt              *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
+	ReviewerID              *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
+	ScopeID                 *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName               *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Source                  *string             "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
+	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
+	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
+	SystemInternalID        *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                   string              "json:\"title\" graphql:\"title\""
+	UpdatedAt               *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *CreateReview_CreateReview_Review) GetApproved() *bool {
@@ -103118,11 +104185,23 @@ func (t *CreateReview_CreateReview_Review) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateReview_CreateReview_Review) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateReview_CreateReview_Review{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateReview_CreateReview_Review) GetInternalNotes() *string {
 	if t == nil {
 		t = &CreateReview_CreateReview_Review{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateReview_CreateReview_Review) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateReview_CreateReview_Review{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateReview_CreateReview_Review) GetMetadata() map[string]any {
 	if t == nil {
@@ -103183,6 +104262,24 @@ func (t *CreateReview_CreateReview_Review) GetSource() *string {
 		t = &CreateReview_CreateReview_Review{}
 	}
 	return t.Source
+}
+func (t *CreateReview_CreateReview_Review) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateReview_CreateReview_Review{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateReview_CreateReview_Review) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateReview_CreateReview_Review{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateReview_CreateReview_Review) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateReview_CreateReview_Review{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateReview_CreateReview_Review) GetState() *string {
 	if t == nil {
@@ -103533,40 +104630,45 @@ func (t *GetAllReviews_Reviews) GetTotalCount() int64 {
 }
 
 type GetReviewByID_Review struct {
-	Approved              *bool               "json:\"approved,omitempty\" graphql:\"approved\""
-	ApprovedAt            *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
-	Category              *string             "json:\"category,omitempty\" graphql:\"category\""
-	Classification        *string             "json:\"classification,omitempty\" graphql:\"classification\""
-	CreatedAt             *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details               *string             "json:\"details,omitempty\" graphql:\"details\""
-	EnvironmentID         *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	ExternalID            *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
-	ExternalOwnerID       *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
-	ExternalURI           *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                    string              "json:\"id\" graphql:\"id\""
-	InternalNotes         *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Metadata              map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
-	OwnerID               *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RawPayload            map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
-	ReportedAt            *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
-	Reporter              *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
-	ReviewedAt            *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
-	ReviewerID            *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
-	ScopeID               *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	Source                *string             "json:\"source,omitempty\" graphql:\"source\""
-	State                 *string             "json:\"state,omitempty\" graphql:\"state\""
-	Status                *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
-	Summary               *string             "json:\"summary,omitempty\" graphql:\"summary\""
-	SystemInternalID      *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	Title                 string              "json:\"title\" graphql:\"title\""
-	UpdatedAt             *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Approved                *bool               "json:\"approved,omitempty\" graphql:\"approved\""
+	ApprovedAt              *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
+	Category                *string             "json:\"category,omitempty\" graphql:\"category\""
+	Classification          *string             "json:\"classification,omitempty\" graphql:\"classification\""
+	CreatedAt               *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string             "json:\"details,omitempty\" graphql:\"details\""
+	EnvironmentID           *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName         *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExternalID              *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ExternalOwnerID         *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
+	ExternalURI             *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string              "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Metadata                map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID                 *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RawPayload              map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
+	ReportedAt              *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
+	Reporter                *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
+	ReviewedAt              *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
+	ReviewerID              *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
+	ScopeID                 *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName               *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Source                  *string             "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
+	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
+	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
+	SystemInternalID        *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                   string              "json:\"title\" graphql:\"title\""
+	UpdatedAt               *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *GetReviewByID_Review) GetApproved() *bool {
@@ -103647,11 +104749,23 @@ func (t *GetReviewByID_Review) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetReviewByID_Review) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetReviewByID_Review{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetReviewByID_Review) GetInternalNotes() *string {
 	if t == nil {
 		t = &GetReviewByID_Review{}
 	}
 	return t.InternalNotes
+}
+func (t *GetReviewByID_Review) GetManagedBy() *string {
+	if t == nil {
+		t = &GetReviewByID_Review{}
+	}
+	return t.ManagedBy
 }
 func (t *GetReviewByID_Review) GetMetadata() map[string]any {
 	if t == nil {
@@ -103712,6 +104826,24 @@ func (t *GetReviewByID_Review) GetSource() *string {
 		t = &GetReviewByID_Review{}
 	}
 	return t.Source
+}
+func (t *GetReviewByID_Review) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetReviewByID_Review{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetReviewByID_Review) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetReviewByID_Review{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetReviewByID_Review) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetReviewByID_Review{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetReviewByID_Review) GetState() *string {
 	if t == nil {
@@ -104015,40 +105147,45 @@ func (t *GetReviews_Reviews) GetTotalCount() int64 {
 }
 
 type UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews struct {
-	Approved              *bool               "json:\"approved,omitempty\" graphql:\"approved\""
-	ApprovedAt            *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
-	Category              *string             "json:\"category,omitempty\" graphql:\"category\""
-	Classification        *string             "json:\"classification,omitempty\" graphql:\"classification\""
-	CreatedAt             *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details               *string             "json:\"details,omitempty\" graphql:\"details\""
-	EnvironmentID         *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	ExternalID            *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
-	ExternalOwnerID       *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
-	ExternalURI           *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                    string              "json:\"id\" graphql:\"id\""
-	InternalNotes         *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Metadata              map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
-	OwnerID               *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RawPayload            map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
-	ReportedAt            *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
-	Reporter              *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
-	ReviewedAt            *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
-	ReviewerID            *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
-	ScopeID               *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	Source                *string             "json:\"source,omitempty\" graphql:\"source\""
-	State                 *string             "json:\"state,omitempty\" graphql:\"state\""
-	Status                *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
-	Summary               *string             "json:\"summary,omitempty\" graphql:\"summary\""
-	SystemInternalID      *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	Title                 string              "json:\"title\" graphql:\"title\""
-	UpdatedAt             *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Approved                *bool               "json:\"approved,omitempty\" graphql:\"approved\""
+	ApprovedAt              *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
+	Category                *string             "json:\"category,omitempty\" graphql:\"category\""
+	Classification          *string             "json:\"classification,omitempty\" graphql:\"classification\""
+	CreatedAt               *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string             "json:\"details,omitempty\" graphql:\"details\""
+	EnvironmentID           *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName         *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExternalID              *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ExternalOwnerID         *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
+	ExternalURI             *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string              "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Metadata                map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID                 *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RawPayload              map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
+	ReportedAt              *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
+	Reporter                *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
+	ReviewedAt              *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
+	ReviewerID              *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
+	ScopeID                 *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName               *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Source                  *string             "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
+	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
+	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
+	SystemInternalID        *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                   string              "json:\"title\" graphql:\"title\""
+	UpdatedAt               *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetApproved() *bool {
@@ -104129,11 +105266,23 @@ func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetID() string {
 	}
 	return t.ID
 }
+func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetInternalNotes() *string {
 	if t == nil {
 		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
 	}
 	return t.InternalNotes
+}
+func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetMetadata() map[string]any {
 	if t == nil {
@@ -104194,6 +105343,24 @@ func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetSource() *string {
 		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
 	}
 	return t.Source
+}
+func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetState() *string {
 	if t == nil {
@@ -104289,40 +105456,45 @@ func (t *UpdateBulkCSVReview_UpdateBulkCSVReview) GetUpdatedIDs() []string {
 }
 
 type UpdateBulkReview_UpdateBulkReview_Reviews struct {
-	Approved              *bool               "json:\"approved,omitempty\" graphql:\"approved\""
-	ApprovedAt            *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
-	Category              *string             "json:\"category,omitempty\" graphql:\"category\""
-	Classification        *string             "json:\"classification,omitempty\" graphql:\"classification\""
-	CreatedAt             *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details               *string             "json:\"details,omitempty\" graphql:\"details\""
-	EnvironmentID         *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	ExternalID            *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
-	ExternalOwnerID       *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
-	ExternalURI           *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                    string              "json:\"id\" graphql:\"id\""
-	InternalNotes         *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Metadata              map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
-	OwnerID               *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RawPayload            map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
-	ReportedAt            *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
-	Reporter              *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
-	ReviewedAt            *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
-	ReviewerID            *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
-	ScopeID               *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	Source                *string             "json:\"source,omitempty\" graphql:\"source\""
-	State                 *string             "json:\"state,omitempty\" graphql:\"state\""
-	Status                *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
-	Summary               *string             "json:\"summary,omitempty\" graphql:\"summary\""
-	SystemInternalID      *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                  []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	Title                 string              "json:\"title\" graphql:\"title\""
-	UpdatedAt             *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Approved                *bool               "json:\"approved,omitempty\" graphql:\"approved\""
+	ApprovedAt              *models.DateTime    "json:\"approvedAt,omitempty\" graphql:\"approvedAt\""
+	Category                *string             "json:\"category,omitempty\" graphql:\"category\""
+	Classification          *string             "json:\"classification,omitempty\" graphql:\"classification\""
+	CreatedAt               *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string             "json:\"details,omitempty\" graphql:\"details\""
+	EnvironmentID           *string             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName         *string             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExternalID              *string             "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ExternalOwnerID         *string             "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
+	ExternalURI             *string             "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string              "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes           *string             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	ManagedBy               *string             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Metadata                map[string]any      "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID                 *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RawPayload              map[string]any      "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
+	ReportedAt              *models.DateTime    "json:\"reportedAt,omitempty\" graphql:\"reportedAt\""
+	Reporter                *string             "json:\"reporter,omitempty\" graphql:\"reporter\""
+	ReviewedAt              *models.DateTime    "json:\"reviewedAt,omitempty\" graphql:\"reviewedAt\""
+	ReviewerID              *string             "json:\"reviewerID,omitempty\" graphql:\"reviewerID\""
+	ScopeID                 *string             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName               *string             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Source                  *string             "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
+	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
+	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
+	SystemInternalID        *string             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned             *bool               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                    []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title                   string              "json:\"title\" graphql:\"title\""
+	UpdatedAt               *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetApproved() *bool {
@@ -104403,11 +105575,23 @@ func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetID() string {
 	}
 	return t.ID
 }
+func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetInternalNotes() *string {
 	if t == nil {
 		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
 	}
 	return t.InternalNotes
+}
+func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetMetadata() map[string]any {
 	if t == nil {
@@ -104468,6 +105652,24 @@ func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetSource() *string {
 		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
 	}
 	return t.Source
+}
+func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetState() *string {
 	if t == nil {
@@ -109810,6 +111012,8 @@ type CreateBulkCSVScan_CreateBulkCSVScan_Scans struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -109881,6 +111085,18 @@ func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetDiscoveredVulnerabilityId
 		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetDocumentKindID() *string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.DocumentKindID
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetDocumentKindName() *string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.DocumentKindName
 }
 func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetEnvironmentID() *string {
 	if t == nil {
@@ -110070,6 +111286,8 @@ type CreateBulkScan_CreateBulkScan_Scans struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -110141,6 +111359,18 @@ func (t *CreateBulkScan_CreateBulkScan_Scans) GetDiscoveredVulnerabilityIds() []
 		t = &CreateBulkScan_CreateBulkScan_Scans{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetDocumentKindID() *string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.DocumentKindID
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetDocumentKindName() *string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.DocumentKindName
 }
 func (t *CreateBulkScan_CreateBulkScan_Scans) GetEnvironmentID() *string {
 	if t == nil {
@@ -110330,6 +111560,8 @@ type CreateScan_CreateScan_Scan struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -110401,6 +111633,18 @@ func (t *CreateScan_CreateScan_Scan) GetDiscoveredVulnerabilityIds() []string {
 		t = &CreateScan_CreateScan_Scan{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *CreateScan_CreateScan_Scan) GetDocumentKindID() *string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.DocumentKindID
+}
+func (t *CreateScan_CreateScan_Scan) GetDocumentKindName() *string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.DocumentKindName
 }
 func (t *CreateScan_CreateScan_Scan) GetEnvironmentID() *string {
 	if t == nil {
@@ -110750,6 +111994,8 @@ type GetScanByID_Scan struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -110821,6 +112067,18 @@ func (t *GetScanByID_Scan) GetDiscoveredVulnerabilityIds() []string {
 		t = &GetScanByID_Scan{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *GetScanByID_Scan) GetDocumentKindID() *string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.DocumentKindID
+}
+func (t *GetScanByID_Scan) GetDocumentKindName() *string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.DocumentKindName
 }
 func (t *GetScanByID_Scan) GetEnvironmentID() *string {
 	if t == nil {
@@ -111148,6 +112406,8 @@ type UpdateScan_UpdateScan_Scan struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -111219,6 +112479,18 @@ func (t *UpdateScan_UpdateScan_Scan) GetDiscoveredVulnerabilityIds() []string {
 		t = &UpdateScan_UpdateScan_Scan{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *UpdateScan_UpdateScan_Scan) GetDocumentKindID() *string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.DocumentKindID
+}
+func (t *UpdateScan_UpdateScan_Scan) GetDocumentKindName() *string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.DocumentKindName
 }
 func (t *UpdateScan_UpdateScan_Scan) GetEnvironmentID() *string {
 	if t == nil {
@@ -123362,23 +124634,28 @@ func (t *UpdateSubscriber_UpdateSubscriber) GetSubscriber() *UpdateSubscriber_Up
 }
 
 type CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetAuthorizationBoundary() *string {
@@ -123417,11 +124694,23 @@ func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetI
 	}
 	return t.ID
 }
+func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
 	}
 	return t.LastReviewed
+}
+func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -123446,6 +124735,24 @@ func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetS
 		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
 	}
 	return t.SensitivityLevel
+}
+func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetSystemName() string {
 	if t == nil {
@@ -123496,23 +124803,28 @@ func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail) GetSystemDetails()
 }
 
 type CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetAuthorizationBoundary() *string {
@@ -123551,11 +124863,23 @@ func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetID() st
 	}
 	return t.ID
 }
+func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
 	}
 	return t.LastReviewed
+}
+func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -123580,6 +124904,24 @@ func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetSensiti
 		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
 	}
 	return t.SensitivityLevel
+}
+func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetSystemName() string {
 	if t == nil {
@@ -123630,23 +124972,28 @@ func (t *CreateBulkSystemDetail_CreateBulkSystemDetail) GetSystemDetails() []*Cr
 }
 
 type CreateSystemDetail_CreateSystemDetail_SystemDetail struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetAuthorizationBoundary() *string {
@@ -123685,11 +125032,23 @@ func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
 	}
 	return t.LastReviewed
+}
+func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -123714,6 +125073,24 @@ func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetSensitivityLevel
 		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
 	}
 	return t.SensitivityLevel
+}
+func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
+	}
+	return t.SourceInstanceID
 }
 func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetSystemName() string {
 	if t == nil {
@@ -123832,23 +125209,28 @@ func (t *GetAllSystemDetails_SystemDetails_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllSystemDetails_SystemDetails_Edges_Node struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetAuthorizationBoundary() *string {
@@ -123887,11 +125269,23 @@ func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
 	}
 	return t.LastReviewed
+}
+func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetManagedBy() *string {
+	if t == nil {
+		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.ManagedBy
 }
 func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -123916,6 +125310,24 @@ func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetSensitivityLevel() *en
 		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
 	}
 	return t.SensitivityLevel
+}
+func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetSystemName() string {
 	if t == nil {
@@ -123991,23 +125403,28 @@ func (t *GetAllSystemDetails_SystemDetails) GetTotalCount() int64 {
 }
 
 type GetSystemDetailByID_SystemDetail struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetSystemDetailByID_SystemDetail) GetAuthorizationBoundary() *string {
@@ -124046,11 +125463,23 @@ func (t *GetSystemDetailByID_SystemDetail) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetSystemDetailByID_SystemDetail) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetSystemDetailByID_SystemDetail{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetSystemDetailByID_SystemDetail) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &GetSystemDetailByID_SystemDetail{}
 	}
 	return t.LastReviewed
+}
+func (t *GetSystemDetailByID_SystemDetail) GetManagedBy() *string {
+	if t == nil {
+		t = &GetSystemDetailByID_SystemDetail{}
+	}
+	return t.ManagedBy
 }
 func (t *GetSystemDetailByID_SystemDetail) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -124075,6 +125504,24 @@ func (t *GetSystemDetailByID_SystemDetail) GetSensitivityLevel() *enums.SystemSe
 		t = &GetSystemDetailByID_SystemDetail{}
 	}
 	return t.SensitivityLevel
+}
+func (t *GetSystemDetailByID_SystemDetail) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetSystemDetailByID_SystemDetail{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetSystemDetailByID_SystemDetail) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetSystemDetailByID_SystemDetail{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetSystemDetailByID_SystemDetail) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetSystemDetailByID_SystemDetail{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetSystemDetailByID_SystemDetail) GetSystemName() string {
 	if t == nil {
@@ -124146,23 +125593,28 @@ func (t *GetSystemDetails_SystemDetails_PageInfo) GetStartCursor() *string {
 }
 
 type GetSystemDetails_SystemDetails_Edges_Node struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *GetSystemDetails_SystemDetails_Edges_Node) GetAuthorizationBoundary() *string {
@@ -124201,11 +125653,23 @@ func (t *GetSystemDetails_SystemDetails_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetSystemDetails_SystemDetails_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetSystemDetails_SystemDetails_Edges_Node) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &GetSystemDetails_SystemDetails_Edges_Node{}
 	}
 	return t.LastReviewed
+}
+func (t *GetSystemDetails_SystemDetails_Edges_Node) GetManagedBy() *string {
+	if t == nil {
+		t = &GetSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.ManagedBy
 }
 func (t *GetSystemDetails_SystemDetails_Edges_Node) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -124230,6 +125694,24 @@ func (t *GetSystemDetails_SystemDetails_Edges_Node) GetSensitivityLevel() *enums
 		t = &GetSystemDetails_SystemDetails_Edges_Node{}
 	}
 	return t.SensitivityLevel
+}
+func (t *GetSystemDetails_SystemDetails_Edges_Node) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetSystemDetails_SystemDetails_Edges_Node) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetSystemDetails_SystemDetails_Edges_Node) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.SourceInstanceID
 }
 func (t *GetSystemDetails_SystemDetails_Edges_Node) GetSystemName() string {
 	if t == nil {
@@ -124305,23 +125787,28 @@ func (t *GetSystemDetails_SystemDetails) GetTotalCount() int64 {
 }
 
 type UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetAuthorizationBoundary() *string {
@@ -124360,11 +125847,23 @@ func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetI
 	}
 	return t.ID
 }
+func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
 	}
 	return t.LastReviewed
+}
+func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -124389,6 +125888,24 @@ func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetS
 		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
 	}
 	return t.SensitivityLevel
+}
+func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetSystemName() string {
 	if t == nil {
@@ -124460,23 +125977,28 @@ func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail) GetUpdatedIDs() []
 }
 
 type UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetAuthorizationBoundary() *string {
@@ -124515,11 +126037,23 @@ func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetID() st
 	}
 	return t.ID
 }
+func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
 	}
 	return t.LastReviewed
+}
+func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -124544,6 +126078,24 @@ func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetSensiti
 		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
 	}
 	return t.SensitivityLevel
+}
+func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetSystemName() string {
 	if t == nil {
@@ -124615,23 +126167,28 @@ func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail) GetUpdatedIDs() []string
 }
 
 type UpdateSystemDetail_UpdateSystemDetail_SystemDetail struct {
-	AuthorizationBoundary *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID             string                        "json:\"displayID\" graphql:\"displayID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	LastReviewed          *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
-	OscalMetadataJSON     map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevisionHistory       []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
-	SensitivityLevel      *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
-	SystemName            string                        "json:\"systemName\" graphql:\"systemName\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version               *string                       "json:\"version,omitempty\" graphql:\"version\""
+	AuthorizationBoundary   *string                       "json:\"authorizationBoundary,omitempty\" graphql:\"authorizationBoundary\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description             *string                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID               string                        "json:\"displayID\" graphql:\"displayID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastReviewed            *models.DateTime              "json:\"lastReviewed,omitempty\" graphql:\"lastReviewed\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OscalMetadataJSON       map[string]any                "json:\"oscalMetadataJSON,omitempty\" graphql:\"oscalMetadataJSON\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevisionHistory         []any                         "json:\"revisionHistory,omitempty\" graphql:\"revisionHistory\""
+	SensitivityLevel        *enums.SystemSensitivityLevel "json:\"sensitivityLevel,omitempty\" graphql:\"sensitivityLevel\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Version                 *string                       "json:\"version,omitempty\" graphql:\"version\""
 }
 
 func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetAuthorizationBoundary() *string {
@@ -124670,11 +126227,23 @@ func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetID() string {
 	}
 	return t.ID
 }
+func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetLastReviewed() *models.DateTime {
 	if t == nil {
 		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
 	}
 	return t.LastReviewed
+}
+func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetOscalMetadataJSON() map[string]any {
 	if t == nil {
@@ -124699,6 +126268,24 @@ func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetSensitivityLevel
 		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
 	}
 	return t.SensitivityLevel
+}
+func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
+	}
+	return t.SourceInstanceID
 }
 func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetSystemName() string {
 	if t == nil {
@@ -171323,6 +172910,17 @@ func (t *UpdateRemediation) GetUpdateRemediation() *UpdateRemediation_UpdateReme
 	return &t.UpdateRemediation
 }
 
+type ImportReportScan struct {
+	ImportReportScan ImportReportScan_ImportReportScan "json:\"importReportScan\" graphql:\"importReportScan\""
+}
+
+func (t *ImportReportScan) GetImportReportScan() *ImportReportScan_ImportReportScan {
+	if t == nil {
+		t = &ImportReportScan{}
+	}
+	return &t.ImportReportScan
+}
+
 type CreateBulkCSVReview struct {
 	CreateBulkCSVReview CreateBulkCSVReview_CreateBulkCSVReview "json:\"createBulkCSVReview\" graphql:\"createBulkCSVReview\""
 }
@@ -179336,8 +180934,10 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -179350,6 +180950,9 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -179414,8 +181017,10 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -179428,6 +181033,9 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -179492,8 +181100,10 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -179506,6 +181116,9 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -179779,8 +181392,10 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		implementationDescription
 		implementationGuidance
 		implementationStatus
+		integrationRunID
 		internalNotes
 		isTrustCenterControl
+		managedBy
 		mappedCategories
 		ownerID
 		publicRepresentation
@@ -179793,6 +181408,9 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		scopeID
 		scopeName
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceName
 		standardID
 		status
@@ -179930,8 +181548,10 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $after:
 				implementationDescription
 				implementationGuidance
 				implementationStatus
+				integrationRunID
 				internalNotes
 				isTrustCenterControl
+				managedBy
 				mappedCategories
 				ownerID
 				publicRepresentation
@@ -179944,6 +181564,9 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $after:
 				scopeID
 				scopeName
 				source
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				sourceName
 				standardID
 				status
@@ -180144,8 +181767,10 @@ const UpdateBulkControlDocument = `mutation UpdateBulkControl ($ids: [ID!]!, $in
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -180158,6 +181783,9 @@ const UpdateBulkControlDocument = `mutation UpdateBulkControl ($ids: [ID!]!, $in
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -180268,8 +181896,10 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -180282,6 +181912,9 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -189165,8 +190798,10 @@ const CreateBulkCSVGroupDocument = `mutation CreateBulkCSVGroup ($input: Upload!
 			displayName
 			gravatarLogoURL
 			id
+			integrationRunID
 			isManaged
 			logoURL
+			managedBy
 			name
 			oscalContactUuids
 			oscalPartyUUID
@@ -189176,6 +190811,9 @@ const CreateBulkCSVGroupDocument = `mutation CreateBulkCSVGroup ($input: Upload!
 			scimDisplayName
 			scimExternalID
 			scimGroupMailing
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			tags
 			updatedAt
 			updatedBy
@@ -189238,8 +190876,10 @@ const CreateBulkGroupDocument = `mutation CreateBulkGroup ($input: [CreateGroupI
 			displayName
 			gravatarLogoURL
 			id
+			integrationRunID
 			isManaged
 			logoURL
+			managedBy
 			name
 			oscalContactUuids
 			oscalPartyUUID
@@ -189249,6 +190889,9 @@ const CreateBulkGroupDocument = `mutation CreateBulkGroup ($input: [CreateGroupI
 			scimDisplayName
 			scimExternalID
 			scimGroupMailing
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			tags
 			updatedAt
 			updatedBy
@@ -189311,8 +190954,10 @@ const CreateGroupDocument = `mutation CreateGroup ($input: CreateGroupInput!) {
 			displayName
 			gravatarLogoURL
 			id
+			integrationRunID
 			isManaged
 			logoURL
+			managedBy
 			name
 			oscalContactUuids
 			oscalPartyUUID
@@ -189322,6 +190967,9 @@ const CreateGroupDocument = `mutation CreateGroup ($input: CreateGroupInput!) {
 			scimDisplayName
 			scimExternalID
 			scimGroupMailing
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			tags
 			updatedAt
 			updatedBy
@@ -189604,8 +191252,10 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 		displayName
 		gravatarLogoURL
 		id
+		integrationRunID
 		isManaged
 		logoURL
+		managedBy
 		name
 		oscalContactUuids
 		oscalPartyUUID
@@ -189615,6 +191265,9 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 		scimDisplayName
 		scimExternalID
 		scimGroupMailing
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		tags
 		updatedAt
 		updatedBy
@@ -189818,8 +191471,10 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 			displayName
 			gravatarLogoURL
 			id
+			integrationRunID
 			isManaged
 			logoURL
+			managedBy
 			name
 			oscalContactUuids
 			oscalPartyUUID
@@ -189829,6 +191484,9 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 			scimDisplayName
 			scimExternalID
 			scimGroupMailing
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			tags
 			updatedAt
 			updatedBy
@@ -193002,12 +194660,18 @@ const CreateBulkCSVMappedControlDocument = `mutation CreateBulkCSVMappedControl 
 			confidence
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			mappingType
 			ownerID
 			relation
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			tags
@@ -193042,12 +194706,18 @@ const CreateBulkMappedControlDocument = `mutation CreateBulkMappedControl ($inpu
 			confidence
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			mappingType
 			ownerID
 			relation
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			tags
@@ -193114,12 +194784,18 @@ const CreateMappedControlDocument = `mutation CreateMappedControl ($input: Creat
 			confidence
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			mappingType
 			ownerID
 			relation
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			tags
@@ -193285,12 +194961,18 @@ const GetMappedControlByIDDocument = `query GetMappedControlByID ($mappedControl
 		confidence
 		createdAt
 		createdBy
+		externalID
 		id
+		integrationRunID
 		internalNotes
+		managedBy
 		mappingType
 		ownerID
 		relation
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		systemInternalID
 		systemOwned
 		tags
@@ -193436,12 +195118,18 @@ const UpdateMappedControlDocument = `mutation UpdateMappedControl ($updateMapped
 			confidence
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			mappingType
 			ownerID
 			relation
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			tags
@@ -196858,10 +198546,12 @@ const CreateBulkCSVPlatformDocument = `mutation CreateBulkCSVPlatform ($input: U
 			externalReferenceID
 			externalUUID
 			id
+			integrationRunID
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			metadata
 			name
 			ownerID
@@ -196882,7 +198572,10 @@ const CreateBulkCSVPlatformDocument = `mutation CreateBulkCSVPlatform ($input: U
 			securityOwnerUserID
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourceType
 			status
 			tags
@@ -196944,10 +198637,12 @@ const CreateBulkPlatformDocument = `mutation CreateBulkPlatform ($input: [Create
 			externalReferenceID
 			externalUUID
 			id
+			integrationRunID
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			metadata
 			name
 			ownerID
@@ -196968,7 +198663,10 @@ const CreateBulkPlatformDocument = `mutation CreateBulkPlatform ($input: [Create
 			securityOwnerUserID
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourceType
 			status
 			tags
@@ -197238,10 +198936,12 @@ const GetAllPlatformsDocument = `query GetAllPlatforms ($first: Int, $last: Int,
 				externalReferenceID
 				externalUUID
 				id
+				integrationRunID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
 				internalOwnerUserID
+				managedBy
 				metadata
 				name
 				ownerID
@@ -197262,7 +198962,10 @@ const GetAllPlatformsDocument = `query GetAllPlatforms ($first: Int, $last: Int,
 				securityOwnerUserID
 				securityTierID
 				securityTierName
+				sourceDefinitionID
+				sourceDefinitionVersion
 				sourceIdentifier
+				sourceInstanceID
 				sourceType
 				status
 				tags
@@ -197368,10 +199071,12 @@ const GetPlatformByIDDocument = `query GetPlatformByID ($platformId: ID!) {
 		externalReferenceID
 		externalUUID
 		id
+		integrationRunID
 		internalOwner
 		internalOwnerGroupID
 		internalOwnerIdentityHolderID
 		internalOwnerUserID
+		managedBy
 		metadata
 		name
 		ownerID
@@ -197392,7 +199097,10 @@ const GetPlatformByIDDocument = `query GetPlatformByID ($platformId: ID!) {
 		securityOwnerUserID
 		securityTierID
 		securityTierName
+		sourceDefinitionID
+		sourceDefinitionVersion
 		sourceIdentifier
+		sourceInstanceID
 		sourceType
 		status
 		tags
@@ -197491,10 +199199,12 @@ const GetPlatformsDocument = `query GetPlatforms ($first: Int, $last: Int, $afte
 				externalReferenceID
 				externalUUID
 				id
+				integrationRunID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
 				internalOwnerUserID
+				managedBy
 				metadata
 				name
 				ownerID
@@ -197515,7 +199225,10 @@ const GetPlatformsDocument = `query GetPlatforms ($first: Int, $last: Int, $afte
 				securityOwnerUserID
 				securityTierID
 				securityTierName
+				sourceDefinitionID
+				sourceDefinitionVersion
 				sourceIdentifier
+				sourceInstanceID
 				sourceType
 				status
 				tags
@@ -198511,6 +200224,8 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			fieldworkStartDate
 			frameworkName
 			id
+			integrationRunID
+			managedBy
 			name
 			observationPeriodEndDate
 			observationPeriodStartDate
@@ -198518,6 +200233,9 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			programKindID
 			programKindName
 			programOwnerID
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -198565,6 +200283,8 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			fieldworkStartDate
 			frameworkName
 			id
+			integrationRunID
+			managedBy
 			name
 			observationPeriodEndDate
 			observationPeriodStartDate
@@ -198572,6 +200292,9 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			programKindID
 			programKindName
 			programOwnerID
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -198769,6 +200492,8 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			fieldworkStartDate
 			frameworkName
 			id
+			integrationRunID
+			managedBy
 			name
 			observationPeriodEndDate
 			observationPeriodStartDate
@@ -198776,6 +200501,9 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			programKindID
 			programKindName
 			programOwnerID
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -199063,6 +200791,8 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		fieldworkStartDate
 		frameworkName
 		id
+		integrationRunID
+		managedBy
 		name
 		observationPeriodEndDate
 		observationPeriodStartDate
@@ -199070,6 +200800,9 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		programKindID
 		programKindName
 		programOwnerID
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		startDate
 		status
 		tags
@@ -199303,6 +201036,8 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			fieldworkStartDate
 			frameworkName
 			id
+			integrationRunID
+			managedBy
 			name
 			observationPeriodEndDate
 			observationPeriodStartDate
@@ -199310,6 +201045,9 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			programKindID
 			programKindName
 			programOwnerID
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -200505,6 +202243,30 @@ func (c *Client) UpdateRemediation(ctx context.Context, updateRemediationID stri
 	return &res, nil
 }
 
+const ImportReportScanDocument = `mutation ImportReportScan ($input: ImportReportScanInput!) {
+	importReportScan(input: $input) {
+		accepted
+	}
+}
+`
+
+func (c *Client) ImportReportScan(ctx context.Context, input ImportReportScanInput, interceptors ...clientv2.RequestInterceptor) (*ImportReportScan, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res ImportReportScan
+	if err := c.Client.Post(ctx, "ImportReportScan", ImportReportScanDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVReviewDocument = `mutation CreateBulkCSVReview ($input: Upload!) {
 	createBulkCSVReview(input: $input) {
 		reviews {
@@ -200521,7 +202283,9 @@ const CreateBulkCSVReviewDocument = `mutation CreateBulkCSVReview ($input: Uploa
 			externalOwnerID
 			externalURI
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			rawPayload
@@ -200532,6 +202296,9 @@ const CreateBulkCSVReviewDocument = `mutation CreateBulkCSVReview ($input: Uploa
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -200580,7 +202347,9 @@ const CreateBulkReviewDocument = `mutation CreateBulkReview ($input: [CreateRevi
 			externalOwnerID
 			externalURI
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			rawPayload
@@ -200591,6 +202360,9 @@ const CreateBulkReviewDocument = `mutation CreateBulkReview ($input: [CreateRevi
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -200639,7 +202411,9 @@ const CreateReviewDocument = `mutation CreateReview ($input: CreateReviewInput!)
 			externalOwnerID
 			externalURI
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			rawPayload
@@ -200650,6 +202424,9 @@ const CreateReviewDocument = `mutation CreateReview ($input: CreateReviewInput!)
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -200803,7 +202580,9 @@ const GetReviewByIDDocument = `query GetReviewByID ($reviewId: ID!) {
 		externalOwnerID
 		externalURI
 		id
+		integrationRunID
 		internalNotes
+		managedBy
 		metadata
 		ownerID
 		rawPayload
@@ -200814,6 +202593,9 @@ const GetReviewByIDDocument = `query GetReviewByID ($reviewId: ID!) {
 		scopeID
 		scopeName
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		state
 		status
 		summary
@@ -200921,7 +202703,9 @@ const UpdateBulkCSVReviewDocument = `mutation UpdateBulkCSVReview ($input: Uploa
 			externalOwnerID
 			externalURI
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			rawPayload
@@ -200932,6 +202716,9 @@ const UpdateBulkCSVReviewDocument = `mutation UpdateBulkCSVReview ($input: Uploa
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -200983,7 +202770,9 @@ const UpdateBulkReviewDocument = `mutation UpdateBulkReview ($ids: [ID!]!, $inpu
 			externalOwnerID
 			externalURI
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			rawPayload
@@ -200994,6 +202783,9 @@ const UpdateBulkReviewDocument = `mutation UpdateBulkReview ($ids: [ID!]!, $inpu
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -202091,6 +203883,8 @@ const CreateBulkCSVScanDocument = `mutation CreateBulkCSVScan ($input: Upload!) 
 			createdAt
 			createdBy
 			discoveredVulnerabilityIds
+			documentKindID
+			documentKindName
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -202151,6 +203945,8 @@ const CreateBulkScanDocument = `mutation CreateBulkScan ($input: [CreateScanInpu
 			createdAt
 			createdBy
 			discoveredVulnerabilityIds
+			documentKindID
+			documentKindName
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -202211,6 +204007,8 @@ const CreateScanDocument = `mutation CreateScan ($input: CreateScanInput!) {
 			createdAt
 			createdBy
 			discoveredVulnerabilityIds
+			documentKindID
+			documentKindName
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -202337,6 +204135,8 @@ const GetScanByIDDocument = `query GetScanByID ($scanId: ID!) {
 		createdAt
 		createdBy
 		discoveredVulnerabilityIds
+		documentKindID
+		documentKindName
 		environmentID
 		environmentName
 		generatedByPlatformID
@@ -202443,6 +204243,8 @@ const UpdateScanDocument = `mutation UpdateScan ($updateScanId: ID!, $input: Upd
 			createdAt
 			createdBy
 			discoveredVulnerabilityIds
+			documentKindID
+			documentKindName
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -205320,11 +207122,16 @@ const CreateBulkCSVSystemDetailDocument = `mutation CreateBulkCSVSystemDetail ($
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -205362,11 +207169,16 @@ const CreateBulkSystemDetailDocument = `mutation CreateBulkSystemDetail ($input:
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -205404,11 +207216,16 @@ const CreateSystemDetailDocument = `mutation CreateSystemDetail ($input: CreateS
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -205504,11 +207321,16 @@ const GetAllSystemDetailsDocument = `query GetAllSystemDetails ($first: Int, $la
 				description
 				displayID
 				id
+				integrationRunID
 				lastReviewed
+				managedBy
 				oscalMetadataJSON
 				ownerID
 				revisionHistory
 				sensitivityLevel
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemName
 				tags
 				updatedAt
@@ -205550,11 +207372,16 @@ const GetSystemDetailByIDDocument = `query GetSystemDetailByID ($systemDetailId:
 		description
 		displayID
 		id
+		integrationRunID
 		lastReviewed
+		managedBy
 		oscalMetadataJSON
 		ownerID
 		revisionHistory
 		sensitivityLevel
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		systemName
 		tags
 		updatedAt
@@ -205599,11 +207426,16 @@ const GetSystemDetailsDocument = `query GetSystemDetails ($first: Int, $last: In
 				description
 				displayID
 				id
+				integrationRunID
 				lastReviewed
+				managedBy
 				oscalMetadataJSON
 				ownerID
 				revisionHistory
 				sensitivityLevel
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemName
 				tags
 				updatedAt
@@ -205647,11 +207479,16 @@ const UpdateBulkCSVSystemDetailDocument = `mutation UpdateBulkCSVSystemDetail ($
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -205692,11 +207529,16 @@ const UpdateBulkSystemDetailDocument = `mutation UpdateBulkSystemDetail ($ids: [
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -205738,11 +207580,16 @@ const UpdateSystemDetailDocument = `mutation UpdateSystemDetail ($updateSystemDe
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -217340,6 +219187,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateBulkCSVRemediationDocument:              "UpdateBulkCSVRemediation",
 	UpdateBulkRemediationDocument:                 "UpdateBulkRemediation",
 	UpdateRemediationDocument:                     "UpdateRemediation",
+	ImportReportScanDocument:                      "ImportReportScan",
 	CreateBulkCSVReviewDocument:                   "CreateBulkCSVReview",
 	CreateBulkReviewDocument:                      "CreateBulkReview",
 	CreateReviewDocument:                          "CreateReview",

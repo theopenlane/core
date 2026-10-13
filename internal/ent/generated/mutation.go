@@ -32728,6 +32728,11 @@ type ControlMutation struct {
 	display_id                     *string
 	tags                           *[]string
 	appendtags                     []string
+	source_definition_id           *string
+	source_definition_version      *string
+	source_instance_id             *string
+	managed_by                     *string
+	integration_run_id             *string
 	external_uuid                  *string
 	title                          *string
 	description                    *string
@@ -32777,6 +32782,9 @@ type ControlMutation struct {
 	trust_center_visibility        *enums.TrustCenterControlVisibility
 	is_trust_center_control        *bool
 	clearedFields                  map[string]struct{}
+	integration_runs               map[string]struct{}
+	removedintegration_runs        map[string]struct{}
+	clearedintegration_runs        bool
 	evidence                       map[string]struct{}
 	removedevidence                map[string]struct{}
 	clearedevidence                bool
@@ -33434,6 +33442,251 @@ func (m *ControlMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, control.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *ControlMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *ControlMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *ControlMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[control.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *ControlMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[control.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *ControlMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, control.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *ControlMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *ControlMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *ControlMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[control.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *ControlMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[control.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *ControlMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, control.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *ControlMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *ControlMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *ControlMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[control.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *ControlMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[control.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *ControlMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, control.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *ControlMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *ControlMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *ControlMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[control.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *ControlMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[control.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *ControlMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, control.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *ControlMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *ControlMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *ControlMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[control.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *ControlMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[control.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *ControlMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, control.FieldIntegrationRunID)
 }
 
 // SetExternalUUID sets the "external_uuid" field.
@@ -35804,6 +36057,60 @@ func (m *ControlMutation) ResetIsTrustCenterControl() {
 	delete(m.clearedFields, control.FieldIsTrustCenterControl)
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *ControlMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *ControlMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *ControlMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *ControlMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *ControlMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *ControlMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *ControlMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by ids.
 func (m *ControlMutation) AddEvidenceIDs(ids ...string) {
 	if m.evidence == nil {
@@ -37674,7 +37981,7 @@ func (m *ControlMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlMutation) Fields() []string {
-	fields := make([]string, 0, 54)
+	fields := make([]string, 0, 59)
 	if m.created_at != nil {
 		fields = append(fields, control.FieldCreatedAt)
 	}
@@ -37701,6 +38008,21 @@ func (m *ControlMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, control.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, control.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, control.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, control.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, control.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, control.FieldIntegrationRunID)
 	}
 	if m.external_uuid != nil {
 		fields = append(fields, control.FieldExternalUUID)
@@ -37863,6 +38185,16 @@ func (m *ControlMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case control.FieldTags:
 		return m.Tags()
+	case control.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case control.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case control.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case control.FieldManagedBy:
+		return m.ManagedBy()
+	case control.FieldIntegrationRunID:
+		return m.IntegrationRunID()
 	case control.FieldExternalUUID:
 		return m.ExternalUUID()
 	case control.FieldTitle:
@@ -37980,6 +38312,16 @@ func (m *ControlMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDisplayID(ctx)
 	case control.FieldTags:
 		return m.OldTags(ctx)
+	case control.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case control.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case control.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case control.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case control.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
 	case control.FieldExternalUUID:
 		return m.OldExternalUUID(ctx)
 	case control.FieldTitle:
@@ -38141,6 +38483,41 @@ func (m *ControlMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case control.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case control.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case control.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case control.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case control.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
 		return nil
 	case control.FieldExternalUUID:
 		v, ok := value.(string)
@@ -38511,6 +38888,21 @@ func (m *ControlMutation) ClearedFields() []string {
 	if m.FieldCleared(control.FieldTags) {
 		fields = append(fields, control.FieldTags)
 	}
+	if m.FieldCleared(control.FieldSourceDefinitionID) {
+		fields = append(fields, control.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(control.FieldSourceDefinitionVersion) {
+		fields = append(fields, control.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(control.FieldSourceInstanceID) {
+		fields = append(fields, control.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(control.FieldManagedBy) {
+		fields = append(fields, control.FieldManagedBy)
+	}
+	if m.FieldCleared(control.FieldIntegrationRunID) {
+		fields = append(fields, control.FieldIntegrationRunID)
+	}
 	if m.FieldCleared(control.FieldExternalUUID) {
 		fields = append(fields, control.FieldExternalUUID)
 	}
@@ -38681,6 +39073,21 @@ func (m *ControlMutation) ClearField(name string) error {
 	case control.FieldTags:
 		m.ClearTags()
 		return nil
+	case control.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case control.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case control.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case control.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case control.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
 	case control.FieldExternalUUID:
 		m.ClearExternalUUID()
 		return nil
@@ -38848,6 +39255,21 @@ func (m *ControlMutation) ResetField(name string) error {
 	case control.FieldTags:
 		m.ResetTags()
 		return nil
+	case control.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case control.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case control.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case control.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case control.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
 	case control.FieldExternalUUID:
 		m.ResetExternalUUID()
 		return nil
@@ -38989,7 +39411,10 @@ func (m *ControlMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 38)
+	edges := make([]string, 0, 39)
+	if m.integration_runs != nil {
+		edges = append(edges, control.EdgeIntegrationRuns)
+	}
 	if m.evidence != nil {
 		edges = append(edges, control.EdgeEvidence)
 	}
@@ -39111,6 +39536,12 @@ func (m *ControlMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case control.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case control.EdgeEvidence:
 		ids := make([]ent.Value, 0, len(m.evidence))
 		for id := range m.evidence {
@@ -39329,7 +39760,10 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 38)
+	edges := make([]string, 0, 39)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, control.EdgeIntegrationRuns)
+	}
 	if m.removedevidence != nil {
 		edges = append(edges, control.EdgeEvidence)
 	}
@@ -39427,6 +39861,12 @@ func (m *ControlMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case control.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case control.EdgeEvidence:
 		ids := make([]ent.Value, 0, len(m.removedevidence))
 		for id := range m.removedevidence {
@@ -39613,7 +40053,10 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 38)
+	edges := make([]string, 0, 39)
+	if m.clearedintegration_runs {
+		edges = append(edges, control.EdgeIntegrationRuns)
+	}
 	if m.clearedevidence {
 		edges = append(edges, control.EdgeEvidence)
 	}
@@ -39735,6 +40178,8 @@ func (m *ControlMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ControlMutation) EdgeCleared(name string) bool {
 	switch name {
+	case control.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case control.EdgeEvidence:
 		return m.clearedevidence
 	case control.EdgeControlObjectives:
@@ -39851,6 +40296,9 @@ func (m *ControlMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ControlMutation) ResetEdge(name string) error {
 	switch name {
+	case control.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
+		return nil
 	case control.EdgeEvidence:
 		m.ResetEvidence()
 		return nil
@@ -102141,6 +102589,11 @@ type GroupMutation struct {
 	display_id                                   *string
 	tags                                         *[]string
 	appendtags                                   []string
+	source_definition_id                         *string
+	source_definition_version                    *string
+	source_instance_id                           *string
+	managed_by                                   *string
+	integration_run_id                           *string
 	name                                         *string
 	description                                  *string
 	is_managed                                   *bool
@@ -102156,6 +102609,9 @@ type GroupMutation struct {
 	scim_active                                  *bool
 	scim_group_mailing                           *string
 	clearedFields                                map[string]struct{}
+	integration_runs                             map[string]struct{}
+	removedintegration_runs                      map[string]struct{}
+	clearedintegration_runs                      bool
 	owner                                        *string
 	clearedowner                                 bool
 	program_editors                              map[string]struct{}
@@ -102866,6 +103322,251 @@ func (m *GroupMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, group.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *GroupMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *GroupMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *GroupMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[group.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *GroupMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[group.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *GroupMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, group.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *GroupMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *GroupMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *GroupMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[group.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *GroupMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[group.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *GroupMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, group.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *GroupMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *GroupMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *GroupMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[group.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *GroupMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[group.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *GroupMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, group.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *GroupMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *GroupMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *GroupMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[group.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *GroupMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[group.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *GroupMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, group.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *GroupMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *GroupMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *GroupMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[group.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *GroupMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[group.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *GroupMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, group.FieldIntegrationRunID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -103591,6 +104292,60 @@ func (m *GroupMutation) ScimGroupMailingCleared() bool {
 func (m *GroupMutation) ResetScimGroupMailing() {
 	m.scim_group_mailing = nil
 	delete(m.clearedFields, group.FieldScimGroupMailing)
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *GroupMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *GroupMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *GroupMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *GroupMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *GroupMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *GroupMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *GroupMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -106487,7 +107242,7 @@ func (m *GroupMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 29)
 	if m.created_at != nil {
 		fields = append(fields, group.FieldCreatedAt)
 	}
@@ -106514,6 +107269,21 @@ func (m *GroupMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, group.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, group.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, group.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, group.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, group.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, group.FieldIntegrationRunID)
 	}
 	if m.owner != nil {
 		fields = append(fields, group.FieldOwnerID)
@@ -106586,6 +107356,16 @@ func (m *GroupMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case group.FieldTags:
 		return m.Tags()
+	case group.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case group.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case group.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case group.FieldManagedBy:
+		return m.ManagedBy()
+	case group.FieldIntegrationRunID:
+		return m.IntegrationRunID()
 	case group.FieldOwnerID:
 		return m.OwnerID()
 	case group.FieldName:
@@ -106643,6 +107423,16 @@ func (m *GroupMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldDisplayID(ctx)
 	case group.FieldTags:
 		return m.OldTags(ctx)
+	case group.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case group.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case group.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case group.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case group.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
 	case group.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case group.FieldName:
@@ -106744,6 +107534,41 @@ func (m *GroupMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case group.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case group.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case group.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case group.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case group.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
 		return nil
 	case group.FieldOwnerID:
 		v, ok := value.(string)
@@ -106904,6 +107729,21 @@ func (m *GroupMutation) ClearedFields() []string {
 	if m.FieldCleared(group.FieldTags) {
 		fields = append(fields, group.FieldTags)
 	}
+	if m.FieldCleared(group.FieldSourceDefinitionID) {
+		fields = append(fields, group.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(group.FieldSourceDefinitionVersion) {
+		fields = append(fields, group.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(group.FieldSourceInstanceID) {
+		fields = append(fields, group.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(group.FieldManagedBy) {
+		fields = append(fields, group.FieldManagedBy)
+	}
+	if m.FieldCleared(group.FieldIntegrationRunID) {
+		fields = append(fields, group.FieldIntegrationRunID)
+	}
 	if m.FieldCleared(group.FieldOwnerID) {
 		fields = append(fields, group.FieldOwnerID)
 	}
@@ -106981,6 +107821,21 @@ func (m *GroupMutation) ClearField(name string) error {
 	case group.FieldTags:
 		m.ClearTags()
 		return nil
+	case group.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case group.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case group.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case group.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case group.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
 	case group.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -107055,6 +107910,21 @@ func (m *GroupMutation) ResetField(name string) error {
 	case group.FieldTags:
 		m.ResetTags()
 		return nil
+	case group.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case group.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case group.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case group.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case group.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
 	case group.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -107106,7 +107976,10 @@ func (m *GroupMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *GroupMutation) AddedEdges() []string {
-	edges := make([]string, 0, 54)
+	edges := make([]string, 0, 55)
+	if m.integration_runs != nil {
+		edges = append(edges, group.EdgeIntegrationRuns)
+	}
 	if m.owner != nil {
 		edges = append(edges, group.EdgeOwner)
 	}
@@ -107276,6 +108149,12 @@ func (m *GroupMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *GroupMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case group.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case group.EdgeOwner:
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
@@ -107600,7 +108479,10 @@ func (m *GroupMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *GroupMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 54)
+	edges := make([]string, 0, 55)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, group.EdgeIntegrationRuns)
+	}
 	if m.removedprogram_editors != nil {
 		edges = append(edges, group.EdgeProgramEditors)
 	}
@@ -107761,6 +108643,12 @@ func (m *GroupMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *GroupMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case group.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case group.EdgeProgramEditors:
 		ids := make([]ent.Value, 0, len(m.removedprogram_editors))
 		for id := range m.removedprogram_editors {
@@ -108073,7 +108961,10 @@ func (m *GroupMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *GroupMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 54)
+	edges := make([]string, 0, 55)
+	if m.clearedintegration_runs {
+		edges = append(edges, group.EdgeIntegrationRuns)
+	}
 	if m.clearedowner {
 		edges = append(edges, group.EdgeOwner)
 	}
@@ -108243,6 +109134,8 @@ func (m *GroupMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *GroupMutation) EdgeCleared(name string) bool {
 	switch name {
+	case group.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case group.EdgeOwner:
 		return m.clearedowner
 	case group.EdgeProgramEditors:
@@ -108376,6 +109269,9 @@ func (m *GroupMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *GroupMutation) ResetEdge(name string) error {
 	switch name {
+	case group.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
+		return nil
 	case group.EdgeOwner:
 		m.ResetOwner()
 		return nil
@@ -138195,50 +139091,59 @@ func (m *MappableDomainMutation) ResetEdge(name string) error {
 // MappedControlMutation represents an operation that mutates the MappedControl nodes in the graph.
 type MappedControlMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	tags                    *[]string
-	appendtags              []string
-	system_owned            *bool
-	internal_notes          *string
-	system_internal_id      *string
-	mapping_type            *enums.MappingType
-	relation                *string
-	confidence              *int
-	addconfidence           *int
-	source                  *enums.MappingSource
-	clearedFields           map[string]struct{}
-	owner                   *string
-	clearedowner            bool
-	blocked_groups          map[string]struct{}
-	removedblocked_groups   map[string]struct{}
-	clearedblocked_groups   bool
-	editors                 map[string]struct{}
-	removededitors          map[string]struct{}
-	clearededitors          bool
-	from_controls           map[string]struct{}
-	removedfrom_controls    map[string]struct{}
-	clearedfrom_controls    bool
-	to_controls             map[string]struct{}
-	removedto_controls      map[string]struct{}
-	clearedto_controls      bool
-	from_subcontrols        map[string]struct{}
-	removedfrom_subcontrols map[string]struct{}
-	clearedfrom_subcontrols bool
-	to_subcontrols          map[string]struct{}
-	removedto_subcontrols   map[string]struct{}
-	clearedto_subcontrols   bool
-	done                    bool
-	oldValue                func(context.Context) (*MappedControl, error)
-	predicates              []predicate.MappedControl
+	op                        Op
+	typ                       string
+	id                        *string
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	mapping_type              *enums.MappingType
+	relation                  *string
+	confidence                *int
+	addconfidence             *int
+	source                    *enums.MappingSource
+	external_id               *string
+	clearedFields             map[string]struct{}
+	integration_runs          map[string]struct{}
+	removedintegration_runs   map[string]struct{}
+	clearedintegration_runs   bool
+	owner                     *string
+	clearedowner              bool
+	blocked_groups            map[string]struct{}
+	removedblocked_groups     map[string]struct{}
+	clearedblocked_groups     bool
+	editors                   map[string]struct{}
+	removededitors            map[string]struct{}
+	clearededitors            bool
+	from_controls             map[string]struct{}
+	removedfrom_controls      map[string]struct{}
+	clearedfrom_controls      bool
+	to_controls               map[string]struct{}
+	removedto_controls        map[string]struct{}
+	clearedto_controls        bool
+	from_subcontrols          map[string]struct{}
+	removedfrom_subcontrols   map[string]struct{}
+	clearedfrom_subcontrols   bool
+	to_subcontrols            map[string]struct{}
+	removedto_subcontrols     map[string]struct{}
+	clearedto_subcontrols     bool
+	done                      bool
+	oldValue                  func(context.Context) (*MappedControl, error)
+	predicates                []predicate.MappedControl
 }
 
 var _ ent.Mutation = (*MappedControlMutation)(nil)
@@ -138753,6 +139658,251 @@ func (m *MappedControlMutation) ResetTags() {
 	delete(m.clearedFields, mappedcontrol.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *MappedControlMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *MappedControlMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the MappedControl entity.
+// If the MappedControl object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *MappedControlMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[mappedcontrol.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *MappedControlMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[mappedcontrol.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *MappedControlMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, mappedcontrol.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *MappedControlMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *MappedControlMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the MappedControl entity.
+// If the MappedControl object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *MappedControlMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[mappedcontrol.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *MappedControlMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[mappedcontrol.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *MappedControlMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, mappedcontrol.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *MappedControlMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *MappedControlMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the MappedControl entity.
+// If the MappedControl object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *MappedControlMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[mappedcontrol.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *MappedControlMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[mappedcontrol.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *MappedControlMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, mappedcontrol.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *MappedControlMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *MappedControlMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the MappedControl entity.
+// If the MappedControl object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *MappedControlMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[mappedcontrol.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *MappedControlMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[mappedcontrol.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *MappedControlMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, mappedcontrol.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *MappedControlMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *MappedControlMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the MappedControl entity.
+// If the MappedControl object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *MappedControlMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[mappedcontrol.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *MappedControlMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[mappedcontrol.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *MappedControlMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, mappedcontrol.FieldIntegrationRunID)
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (m *MappedControlMutation) SetSystemOwned(b bool) {
 	m.system_owned = &b
@@ -139153,6 +140303,109 @@ func (m *MappedControlMutation) ResetSource() {
 	delete(m.clearedFields, mappedcontrol.FieldSource)
 }
 
+// SetExternalID sets the "external_id" field.
+func (m *MappedControlMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *MappedControlMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the MappedControl entity.
+// If the MappedControl object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *MappedControlMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[mappedcontrol.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *MappedControlMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[mappedcontrol.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *MappedControlMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, mappedcontrol.FieldExternalID)
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *MappedControlMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *MappedControlMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *MappedControlMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *MappedControlMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *MappedControlMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *MappedControlMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *MappedControlMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *MappedControlMutation) ClearOwner() {
 	m.clearedowner = true
@@ -139538,7 +140791,7 @@ func (m *MappedControlMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MappedControlMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, mappedcontrol.FieldCreatedAt)
 	}
@@ -139562,6 +140815,21 @@ func (m *MappedControlMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, mappedcontrol.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, mappedcontrol.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, mappedcontrol.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, mappedcontrol.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, mappedcontrol.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, mappedcontrol.FieldIntegrationRunID)
 	}
 	if m.system_owned != nil {
 		fields = append(fields, mappedcontrol.FieldSystemOwned)
@@ -139587,6 +140855,9 @@ func (m *MappedControlMutation) Fields() []string {
 	if m.source != nil {
 		fields = append(fields, mappedcontrol.FieldSource)
 	}
+	if m.external_id != nil {
+		fields = append(fields, mappedcontrol.FieldExternalID)
+	}
 	return fields
 }
 
@@ -139611,6 +140882,16 @@ func (m *MappedControlMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case mappedcontrol.FieldTags:
 		return m.Tags()
+	case mappedcontrol.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case mappedcontrol.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case mappedcontrol.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case mappedcontrol.FieldManagedBy:
+		return m.ManagedBy()
+	case mappedcontrol.FieldIntegrationRunID:
+		return m.IntegrationRunID()
 	case mappedcontrol.FieldSystemOwned:
 		return m.SystemOwned()
 	case mappedcontrol.FieldInternalNotes:
@@ -139627,6 +140908,8 @@ func (m *MappedControlMutation) Field(name string) (ent.Value, bool) {
 		return m.Confidence()
 	case mappedcontrol.FieldSource:
 		return m.Source()
+	case mappedcontrol.FieldExternalID:
+		return m.ExternalID()
 	}
 	return nil, false
 }
@@ -139652,6 +140935,16 @@ func (m *MappedControlMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldDeletedBy(ctx)
 	case mappedcontrol.FieldTags:
 		return m.OldTags(ctx)
+	case mappedcontrol.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case mappedcontrol.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case mappedcontrol.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case mappedcontrol.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case mappedcontrol.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
 	case mappedcontrol.FieldSystemOwned:
 		return m.OldSystemOwned(ctx)
 	case mappedcontrol.FieldInternalNotes:
@@ -139668,6 +140961,8 @@ func (m *MappedControlMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldConfidence(ctx)
 	case mappedcontrol.FieldSource:
 		return m.OldSource(ctx)
+	case mappedcontrol.FieldExternalID:
+		return m.OldExternalID(ctx)
 	}
 	return nil, fmt.Errorf("unknown MappedControl field %s", name)
 }
@@ -139733,6 +141028,41 @@ func (m *MappedControlMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTags(v)
 		return nil
+	case mappedcontrol.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case mappedcontrol.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case mappedcontrol.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case mappedcontrol.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case mappedcontrol.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
 	case mappedcontrol.FieldSystemOwned:
 		v, ok := value.(bool)
 		if !ok {
@@ -139788,6 +141118,13 @@ func (m *MappedControlMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSource(v)
+		return nil
+	case mappedcontrol.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown MappedControl field %s", name)
@@ -139858,6 +141195,21 @@ func (m *MappedControlMutation) ClearedFields() []string {
 	if m.FieldCleared(mappedcontrol.FieldTags) {
 		fields = append(fields, mappedcontrol.FieldTags)
 	}
+	if m.FieldCleared(mappedcontrol.FieldSourceDefinitionID) {
+		fields = append(fields, mappedcontrol.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(mappedcontrol.FieldSourceDefinitionVersion) {
+		fields = append(fields, mappedcontrol.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(mappedcontrol.FieldSourceInstanceID) {
+		fields = append(fields, mappedcontrol.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(mappedcontrol.FieldManagedBy) {
+		fields = append(fields, mappedcontrol.FieldManagedBy)
+	}
+	if m.FieldCleared(mappedcontrol.FieldIntegrationRunID) {
+		fields = append(fields, mappedcontrol.FieldIntegrationRunID)
+	}
 	if m.FieldCleared(mappedcontrol.FieldSystemOwned) {
 		fields = append(fields, mappedcontrol.FieldSystemOwned)
 	}
@@ -139878,6 +141230,9 @@ func (m *MappedControlMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(mappedcontrol.FieldSource) {
 		fields = append(fields, mappedcontrol.FieldSource)
+	}
+	if m.FieldCleared(mappedcontrol.FieldExternalID) {
+		fields = append(fields, mappedcontrol.FieldExternalID)
 	}
 	return fields
 }
@@ -139917,6 +141272,21 @@ func (m *MappedControlMutation) ClearField(name string) error {
 	case mappedcontrol.FieldTags:
 		m.ClearTags()
 		return nil
+	case mappedcontrol.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case mappedcontrol.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case mappedcontrol.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case mappedcontrol.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case mappedcontrol.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
 	case mappedcontrol.FieldSystemOwned:
 		m.ClearSystemOwned()
 		return nil
@@ -139937,6 +141307,9 @@ func (m *MappedControlMutation) ClearField(name string) error {
 		return nil
 	case mappedcontrol.FieldSource:
 		m.ClearSource()
+		return nil
+	case mappedcontrol.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	}
 	return fmt.Errorf("unknown MappedControl nullable field %s", name)
@@ -139970,6 +141343,21 @@ func (m *MappedControlMutation) ResetField(name string) error {
 	case mappedcontrol.FieldTags:
 		m.ResetTags()
 		return nil
+	case mappedcontrol.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case mappedcontrol.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case mappedcontrol.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case mappedcontrol.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case mappedcontrol.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
 	case mappedcontrol.FieldSystemOwned:
 		m.ResetSystemOwned()
 		return nil
@@ -139994,13 +141382,19 @@ func (m *MappedControlMutation) ResetField(name string) error {
 	case mappedcontrol.FieldSource:
 		m.ResetSource()
 		return nil
+	case mappedcontrol.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	}
 	return fmt.Errorf("unknown MappedControl field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MappedControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
+	if m.integration_runs != nil {
+		edges = append(edges, mappedcontrol.EdgeIntegrationRuns)
+	}
 	if m.owner != nil {
 		edges = append(edges, mappedcontrol.EdgeOwner)
 	}
@@ -140029,6 +141423,12 @@ func (m *MappedControlMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *MappedControlMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case mappedcontrol.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case mappedcontrol.EdgeOwner:
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
@@ -140075,7 +141475,10 @@ func (m *MappedControlMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MappedControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, mappedcontrol.EdgeIntegrationRuns)
+	}
 	if m.removedblocked_groups != nil {
 		edges = append(edges, mappedcontrol.EdgeBlockedGroups)
 	}
@@ -140101,6 +141504,12 @@ func (m *MappedControlMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *MappedControlMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case mappedcontrol.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case mappedcontrol.EdgeBlockedGroups:
 		ids := make([]ent.Value, 0, len(m.removedblocked_groups))
 		for id := range m.removedblocked_groups {
@@ -140143,7 +141552,10 @@ func (m *MappedControlMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MappedControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
+	if m.clearedintegration_runs {
+		edges = append(edges, mappedcontrol.EdgeIntegrationRuns)
+	}
 	if m.clearedowner {
 		edges = append(edges, mappedcontrol.EdgeOwner)
 	}
@@ -140172,6 +141584,8 @@ func (m *MappedControlMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *MappedControlMutation) EdgeCleared(name string) bool {
 	switch name {
+	case mappedcontrol.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case mappedcontrol.EdgeOwner:
 		return m.clearedowner
 	case mappedcontrol.EdgeBlockedGroups:
@@ -140205,6 +141619,9 @@ func (m *MappedControlMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *MappedControlMutation) ResetEdge(name string) error {
 	switch name {
+	case mappedcontrol.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
+		return nil
 	case mappedcontrol.EdgeOwner:
 		m.ResetOwner()
 		return nil
@@ -181933,6 +183350,11 @@ type PlatformMutation struct {
 	display_id                             *string
 	tags                                   *[]string
 	appendtags                             []string
+	source_definition_id                   *string
+	source_definition_version              *string
+	source_instance_id                     *string
+	managed_by                             *string
+	integration_run_id                     *string
 	internal_owner                         *string
 	business_owner                         *string
 	technical_owner                        *string
@@ -181966,6 +183388,9 @@ type PlatformMutation struct {
 	external_reference_id                  *string
 	metadata                               *map[string]interface{}
 	clearedFields                          map[string]struct{}
+	integration_runs                       map[string]struct{}
+	removedintegration_runs                map[string]struct{}
+	clearedintegration_runs                bool
 	owner                                  *string
 	clearedowner                           bool
 	blocked_groups                         map[string]struct{}
@@ -182645,6 +184070,251 @@ func (m *PlatformMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, platform.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *PlatformMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *PlatformMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *PlatformMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[platform.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *PlatformMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[platform.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *PlatformMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, platform.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *PlatformMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *PlatformMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *PlatformMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[platform.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *PlatformMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[platform.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *PlatformMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, platform.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *PlatformMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *PlatformMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *PlatformMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[platform.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *PlatformMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[platform.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *PlatformMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, platform.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *PlatformMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *PlatformMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *PlatformMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[platform.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *PlatformMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[platform.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *PlatformMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, platform.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *PlatformMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *PlatformMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *PlatformMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[platform.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *PlatformMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[platform.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *PlatformMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, platform.FieldIntegrationRunID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -185226,6 +186896,60 @@ func (m *PlatformMutation) ResetMetadata() {
 	delete(m.clearedFields, platform.FieldMetadata)
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *PlatformMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *PlatformMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *PlatformMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *PlatformMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *PlatformMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *PlatformMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *PlatformMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *PlatformMutation) ClearOwner() {
 	m.clearedowner = true
@@ -187366,7 +189090,7 @@ func (m *PlatformMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PlatformMutation) Fields() []string {
-	fields := make([]string, 0, 62)
+	fields := make([]string, 0, 67)
 	if m.created_at != nil {
 		fields = append(fields, platform.FieldCreatedAt)
 	}
@@ -187393,6 +189117,21 @@ func (m *PlatformMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, platform.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, platform.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, platform.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, platform.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, platform.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, platform.FieldIntegrationRunID)
 	}
 	if m.owner != nil {
 		fields = append(fields, platform.FieldOwnerID)
@@ -187579,6 +189318,16 @@ func (m *PlatformMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case platform.FieldTags:
 		return m.Tags()
+	case platform.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case platform.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case platform.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case platform.FieldManagedBy:
+		return m.ManagedBy()
+	case platform.FieldIntegrationRunID:
+		return m.IntegrationRunID()
 	case platform.FieldOwnerID:
 		return m.OwnerID()
 	case platform.FieldInternalOwner:
@@ -187712,6 +189461,16 @@ func (m *PlatformMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDisplayID(ctx)
 	case platform.FieldTags:
 		return m.OldTags(ctx)
+	case platform.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case platform.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case platform.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case platform.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case platform.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
 	case platform.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case platform.FieldInternalOwner:
@@ -187889,6 +189648,41 @@ func (m *PlatformMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case platform.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case platform.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case platform.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case platform.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case platform.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
 		return nil
 	case platform.FieldOwnerID:
 		v, ok := value.(string)
@@ -188330,6 +190124,21 @@ func (m *PlatformMutation) ClearedFields() []string {
 	if m.FieldCleared(platform.FieldTags) {
 		fields = append(fields, platform.FieldTags)
 	}
+	if m.FieldCleared(platform.FieldSourceDefinitionID) {
+		fields = append(fields, platform.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(platform.FieldSourceDefinitionVersion) {
+		fields = append(fields, platform.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(platform.FieldSourceInstanceID) {
+		fields = append(fields, platform.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(platform.FieldManagedBy) {
+		fields = append(fields, platform.FieldManagedBy)
+	}
+	if m.FieldCleared(platform.FieldIntegrationRunID) {
+		fields = append(fields, platform.FieldIntegrationRunID)
+	}
 	if m.FieldCleared(platform.FieldOwnerID) {
 		fields = append(fields, platform.FieldOwnerID)
 	}
@@ -188518,6 +190327,21 @@ func (m *PlatformMutation) ClearField(name string) error {
 	case platform.FieldTags:
 		m.ClearTags()
 		return nil
+	case platform.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case platform.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case platform.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case platform.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case platform.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
 	case platform.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -188703,6 +190527,21 @@ func (m *PlatformMutation) ResetField(name string) error {
 	case platform.FieldTags:
 		m.ResetTags()
 		return nil
+	case platform.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case platform.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case platform.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case platform.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case platform.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
 	case platform.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -188868,7 +190707,10 @@ func (m *PlatformMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PlatformMutation) AddedEdges() []string {
-	edges := make([]string, 0, 50)
+	edges := make([]string, 0, 51)
+	if m.integration_runs != nil {
+		edges = append(edges, platform.EdgeIntegrationRuns)
+	}
 	if m.owner != nil {
 		edges = append(edges, platform.EdgeOwner)
 	}
@@ -189026,6 +190868,12 @@ func (m *PlatformMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *PlatformMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case platform.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case platform.EdgeOwner:
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
@@ -189288,7 +191136,10 @@ func (m *PlatformMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PlatformMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 50)
+	edges := make([]string, 0, 51)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, platform.EdgeIntegrationRuns)
+	}
 	if m.removedblocked_groups != nil {
 		edges = append(edges, platform.EdgeBlockedGroups)
 	}
@@ -189380,6 +191231,12 @@ func (m *PlatformMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *PlatformMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case platform.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case platform.EdgeBlockedGroups:
 		ids := make([]ent.Value, 0, len(m.removedblocked_groups))
 		for id := range m.removedblocked_groups {
@@ -189554,7 +191411,10 @@ func (m *PlatformMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PlatformMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 50)
+	edges := make([]string, 0, 51)
+	if m.clearedintegration_runs {
+		edges = append(edges, platform.EdgeIntegrationRuns)
+	}
 	if m.clearedowner {
 		edges = append(edges, platform.EdgeOwner)
 	}
@@ -189712,6 +191572,8 @@ func (m *PlatformMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *PlatformMutation) EdgeCleared(name string) bool {
 	switch name {
+	case platform.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case platform.EdgeOwner:
 		return m.clearedowner
 	case platform.EdgeBlockedGroups:
@@ -189894,6 +191756,9 @@ func (m *PlatformMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *PlatformMutation) ResetEdge(name string) error {
 	switch name {
+	case platform.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
+		return nil
 	case platform.EdgeOwner:
 		m.ResetOwner()
 		return nil
@@ -195285,6 +197150,11 @@ type ProgramMutation struct {
 	display_id                    *string
 	tags                          *[]string
 	appendtags                    []string
+	source_definition_id          *string
+	source_definition_version     *string
+	source_instance_id            *string
+	managed_by                    *string
+	integration_run_id            *string
 	program_kind_name             *string
 	external_uuid                 *string
 	name                          *string
@@ -195304,6 +197174,9 @@ type ProgramMutation struct {
 	auditor                       *string
 	auditor_email                 *string
 	clearedFields                 map[string]struct{}
+	integration_runs              map[string]struct{}
+	removedintegration_runs       map[string]struct{}
+	clearedintegration_runs       bool
 	owner                         *string
 	clearedowner                  bool
 	blocked_groups                map[string]struct{}
@@ -195927,6 +197800,251 @@ func (m *ProgramMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, program.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *ProgramMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *ProgramMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *ProgramMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[program.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *ProgramMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[program.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *ProgramMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, program.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *ProgramMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *ProgramMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *ProgramMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[program.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *ProgramMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[program.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *ProgramMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, program.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *ProgramMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *ProgramMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *ProgramMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[program.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *ProgramMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[program.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *ProgramMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, program.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *ProgramMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *ProgramMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *ProgramMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[program.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *ProgramMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[program.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *ProgramMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, program.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *ProgramMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *ProgramMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *ProgramMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[program.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *ProgramMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[program.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *ProgramMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, program.FieldIntegrationRunID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -196891,6 +199009,60 @@ func (m *ProgramMutation) ProgramOwnerIDCleared() bool {
 func (m *ProgramMutation) ResetProgramOwnerID() {
 	m.program_owner = nil
 	delete(m.clearedFields, program.FieldProgramOwnerID)
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *ProgramMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *ProgramMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *ProgramMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *ProgramMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *ProgramMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *ProgramMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *ProgramMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -198196,7 +200368,7 @@ func (m *ProgramMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProgramMutation) Fields() []string {
-	fields := make([]string, 0, 30)
+	fields := make([]string, 0, 35)
 	if m.created_at != nil {
 		fields = append(fields, program.FieldCreatedAt)
 	}
@@ -198223,6 +200395,21 @@ func (m *ProgramMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, program.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, program.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, program.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, program.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, program.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, program.FieldIntegrationRunID)
 	}
 	if m.owner != nil {
 		fields = append(fields, program.FieldOwnerID)
@@ -198313,6 +200500,16 @@ func (m *ProgramMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case program.FieldTags:
 		return m.Tags()
+	case program.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case program.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case program.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case program.FieldManagedBy:
+		return m.ManagedBy()
+	case program.FieldIntegrationRunID:
+		return m.IntegrationRunID()
 	case program.FieldOwnerID:
 		return m.OwnerID()
 	case program.FieldProgramKindName:
@@ -198382,6 +200579,16 @@ func (m *ProgramMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDisplayID(ctx)
 	case program.FieldTags:
 		return m.OldTags(ctx)
+	case program.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case program.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case program.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case program.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case program.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
 	case program.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case program.FieldProgramKindName:
@@ -198495,6 +200702,41 @@ func (m *ProgramMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case program.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case program.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case program.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case program.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case program.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
 		return nil
 	case program.FieldOwnerID:
 		v, ok := value.(string)
@@ -198697,6 +200939,21 @@ func (m *ProgramMutation) ClearedFields() []string {
 	if m.FieldCleared(program.FieldTags) {
 		fields = append(fields, program.FieldTags)
 	}
+	if m.FieldCleared(program.FieldSourceDefinitionID) {
+		fields = append(fields, program.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(program.FieldSourceDefinitionVersion) {
+		fields = append(fields, program.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(program.FieldSourceInstanceID) {
+		fields = append(fields, program.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(program.FieldManagedBy) {
+		fields = append(fields, program.FieldManagedBy)
+	}
+	if m.FieldCleared(program.FieldIntegrationRunID) {
+		fields = append(fields, program.FieldIntegrationRunID)
+	}
 	if m.FieldCleared(program.FieldOwnerID) {
 		fields = append(fields, program.FieldOwnerID)
 	}
@@ -198783,6 +201040,21 @@ func (m *ProgramMutation) ClearField(name string) error {
 	case program.FieldTags:
 		m.ClearTags()
 		return nil
+	case program.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case program.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case program.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case program.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case program.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
 	case program.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -198866,6 +201138,21 @@ func (m *ProgramMutation) ResetField(name string) error {
 	case program.FieldTags:
 		m.ResetTags()
 		return nil
+	case program.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case program.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case program.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case program.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case program.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
 	case program.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -198935,7 +201222,10 @@ func (m *ProgramMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProgramMutation) AddedEdges() []string {
-	edges := make([]string, 0, 25)
+	edges := make([]string, 0, 26)
+	if m.integration_runs != nil {
+		edges = append(edges, program.EdgeIntegrationRuns)
+	}
 	if m.owner != nil {
 		edges = append(edges, program.EdgeOwner)
 	}
@@ -199018,6 +201308,12 @@ func (m *ProgramMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case program.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case program.EdgeOwner:
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
@@ -199168,7 +201464,10 @@ func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProgramMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 25)
+	edges := make([]string, 0, 26)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, program.EdgeIntegrationRuns)
+	}
 	if m.removedblocked_groups != nil {
 		edges = append(edges, program.EdgeBlockedGroups)
 	}
@@ -199242,6 +201541,12 @@ func (m *ProgramMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case program.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case program.EdgeBlockedGroups:
 		ids := make([]ent.Value, 0, len(m.removedblocked_groups))
 		for id := range m.removedblocked_groups {
@@ -199380,7 +201685,10 @@ func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProgramMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 25)
+	edges := make([]string, 0, 26)
+	if m.clearedintegration_runs {
+		edges = append(edges, program.EdgeIntegrationRuns)
+	}
 	if m.clearedowner {
 		edges = append(edges, program.EdgeOwner)
 	}
@@ -199463,6 +201771,8 @@ func (m *ProgramMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ProgramMutation) EdgeCleared(name string) bool {
 	switch name {
+	case program.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case program.EdgeOwner:
 		return m.clearedowner
 	case program.EdgeBlockedGroups:
@@ -199538,6 +201848,9 @@ func (m *ProgramMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ProgramMutation) ResetEdge(name string) error {
 	switch name {
+	case program.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
+		return nil
 	case program.EdgeOwner:
 		m.ResetOwner()
 		return nil
@@ -205282,104 +207595,112 @@ func (m *RemediationMutation) ResetEdge(name string) error {
 // ReviewMutation represents an operation that mutates the Review nodes in the graph.
 type ReviewMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	updated_by_impersonator  *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	tags                     *[]string
-	appendtags               []string
-	system_owned             *bool
-	internal_notes           *string
-	system_internal_id       *string
-	environment_name         *string
-	scope_name               *string
-	external_id              *string
-	external_owner_id        *string
-	title                    *string
-	state                    *string
-	status                   *enums.ReviewStatus
-	category                 *string
-	classification           *string
-	summary                  *string
-	details                  *string
-	reporter                 *string
-	approved                 *bool
-	reviewed_at              *models.DateTime
-	reported_at              *models.DateTime
-	approved_at              *models.DateTime
-	source                   *string
-	external_uri             *string
-	metadata                 *map[string]interface{}
-	raw_payload              *map[string]interface{}
-	clearedFields            map[string]struct{}
-	owner                    *string
-	clearedowner             bool
-	blocked_groups           map[string]struct{}
-	removedblocked_groups    map[string]struct{}
-	clearedblocked_groups    bool
-	editors                  map[string]struct{}
-	removededitors           map[string]struct{}
-	clearededitors           bool
-	environment              *string
-	clearedenvironment       bool
-	scope                    *string
-	clearedscope             bool
-	integrations             map[string]struct{}
-	removedintegrations      map[string]struct{}
-	clearedintegrations      bool
-	findings                 map[string]struct{}
-	removedfindings          map[string]struct{}
-	clearedfindings          bool
-	vulnerabilities          map[string]struct{}
-	removedvulnerabilities   map[string]struct{}
-	clearedvulnerabilities   bool
-	action_plans             map[string]struct{}
-	removedaction_plans      map[string]struct{}
-	clearedaction_plans      bool
-	remediations             map[string]struct{}
-	removedremediations      map[string]struct{}
-	clearedremediations      bool
-	controls                 map[string]struct{}
-	removedcontrols          map[string]struct{}
-	clearedcontrols          bool
-	subcontrols              map[string]struct{}
-	removedsubcontrols       map[string]struct{}
-	clearedsubcontrols       bool
-	risks                    map[string]struct{}
-	removedrisks             map[string]struct{}
-	clearedrisks             bool
-	programs                 map[string]struct{}
-	removedprograms          map[string]struct{}
-	clearedprograms          bool
-	assets                   map[string]struct{}
-	removedassets            map[string]struct{}
-	clearedassets            bool
-	entities                 map[string]struct{}
-	removedentities          map[string]struct{}
-	clearedentities          bool
-	tasks                    map[string]struct{}
-	removedtasks             map[string]struct{}
-	clearedtasks             bool
-	reviewer                 *string
-	clearedreviewer          bool
-	comments                 map[string]struct{}
-	removedcomments          map[string]struct{}
-	clearedcomments          bool
-	files                    map[string]struct{}
-	removedfiles             map[string]struct{}
-	clearedfiles             bool
-	internal_policies        map[string]struct{}
-	removedinternal_policies map[string]struct{}
-	clearedinternal_policies bool
-	done                     bool
-	oldValue                 func(context.Context) (*Review, error)
-	predicates               []predicate.Review
+	op                        Op
+	typ                       string
+	id                        *string
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	environment_name          *string
+	scope_name                *string
+	external_id               *string
+	external_owner_id         *string
+	title                     *string
+	state                     *string
+	status                    *enums.ReviewStatus
+	category                  *string
+	classification            *string
+	summary                   *string
+	details                   *string
+	reporter                  *string
+	approved                  *bool
+	reviewed_at               *models.DateTime
+	reported_at               *models.DateTime
+	approved_at               *models.DateTime
+	source                    *string
+	external_uri              *string
+	metadata                  *map[string]interface{}
+	raw_payload               *map[string]interface{}
+	clearedFields             map[string]struct{}
+	integration_runs          map[string]struct{}
+	removedintegration_runs   map[string]struct{}
+	clearedintegration_runs   bool
+	owner                     *string
+	clearedowner              bool
+	blocked_groups            map[string]struct{}
+	removedblocked_groups     map[string]struct{}
+	clearedblocked_groups     bool
+	editors                   map[string]struct{}
+	removededitors            map[string]struct{}
+	clearededitors            bool
+	environment               *string
+	clearedenvironment        bool
+	scope                     *string
+	clearedscope              bool
+	integrations              map[string]struct{}
+	removedintegrations       map[string]struct{}
+	clearedintegrations       bool
+	findings                  map[string]struct{}
+	removedfindings           map[string]struct{}
+	clearedfindings           bool
+	vulnerabilities           map[string]struct{}
+	removedvulnerabilities    map[string]struct{}
+	clearedvulnerabilities    bool
+	action_plans              map[string]struct{}
+	removedaction_plans       map[string]struct{}
+	clearedaction_plans       bool
+	remediations              map[string]struct{}
+	removedremediations       map[string]struct{}
+	clearedremediations       bool
+	controls                  map[string]struct{}
+	removedcontrols           map[string]struct{}
+	clearedcontrols           bool
+	subcontrols               map[string]struct{}
+	removedsubcontrols        map[string]struct{}
+	clearedsubcontrols        bool
+	risks                     map[string]struct{}
+	removedrisks              map[string]struct{}
+	clearedrisks              bool
+	programs                  map[string]struct{}
+	removedprograms           map[string]struct{}
+	clearedprograms           bool
+	assets                    map[string]struct{}
+	removedassets             map[string]struct{}
+	clearedassets             bool
+	entities                  map[string]struct{}
+	removedentities           map[string]struct{}
+	clearedentities           bool
+	tasks                     map[string]struct{}
+	removedtasks              map[string]struct{}
+	clearedtasks              bool
+	reviewer                  *string
+	clearedreviewer           bool
+	comments                  map[string]struct{}
+	removedcomments           map[string]struct{}
+	clearedcomments           bool
+	files                     map[string]struct{}
+	removedfiles              map[string]struct{}
+	clearedfiles              bool
+	internal_policies         map[string]struct{}
+	removedinternal_policies  map[string]struct{}
+	clearedinternal_policies  bool
+	done                      bool
+	oldValue                  func(context.Context) (*Review, error)
+	predicates                []predicate.Review
 }
 
 var _ ent.Mutation = (*ReviewMutation)(nil)
@@ -205892,6 +208213,251 @@ func (m *ReviewMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, review.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *ReviewMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *ReviewMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *ReviewMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[review.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *ReviewMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[review.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *ReviewMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, review.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *ReviewMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *ReviewMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *ReviewMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[review.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *ReviewMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[review.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *ReviewMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, review.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *ReviewMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *ReviewMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *ReviewMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[review.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *ReviewMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[review.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *ReviewMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, review.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *ReviewMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *ReviewMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *ReviewMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[review.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *ReviewMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[review.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *ReviewMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, review.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *ReviewMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *ReviewMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *ReviewMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[review.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *ReviewMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[review.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *ReviewMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, review.FieldIntegrationRunID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -207204,6 +209770,60 @@ func (m *ReviewMutation) ResetRawPayload() {
 	delete(m.clearedFields, review.FieldRawPayload)
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *ReviewMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *ReviewMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *ReviewMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *ReviewMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *ReviewMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *ReviewMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *ReviewMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *ReviewMutation) ClearOwner() {
 	m.clearedowner = true
@@ -208264,7 +210884,7 @@ func (m *ReviewMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ReviewMutation) Fields() []string {
-	fields := make([]string, 0, 35)
+	fields := make([]string, 0, 40)
 	if m.created_at != nil {
 		fields = append(fields, review.FieldCreatedAt)
 	}
@@ -208288,6 +210908,21 @@ func (m *ReviewMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, review.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, review.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, review.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, review.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, review.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, review.FieldIntegrationRunID)
 	}
 	if m.owner != nil {
 		fields = append(fields, review.FieldOwnerID)
@@ -208394,6 +211029,16 @@ func (m *ReviewMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case review.FieldTags:
 		return m.Tags()
+	case review.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case review.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case review.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case review.FieldManagedBy:
+		return m.ManagedBy()
+	case review.FieldIntegrationRunID:
+		return m.IntegrationRunID()
 	case review.FieldOwnerID:
 		return m.OwnerID()
 	case review.FieldSystemOwned:
@@ -208473,6 +211118,16 @@ func (m *ReviewMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldDeletedBy(ctx)
 	case review.FieldTags:
 		return m.OldTags(ctx)
+	case review.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case review.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case review.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case review.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case review.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
 	case review.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case review.FieldSystemOwned:
@@ -208591,6 +211246,41 @@ func (m *ReviewMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case review.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case review.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case review.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case review.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case review.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
 		return nil
 	case review.FieldOwnerID:
 		v, ok := value.(string)
@@ -208835,6 +211525,21 @@ func (m *ReviewMutation) ClearedFields() []string {
 	if m.FieldCleared(review.FieldTags) {
 		fields = append(fields, review.FieldTags)
 	}
+	if m.FieldCleared(review.FieldSourceDefinitionID) {
+		fields = append(fields, review.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(review.FieldSourceDefinitionVersion) {
+		fields = append(fields, review.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(review.FieldSourceInstanceID) {
+		fields = append(fields, review.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(review.FieldManagedBy) {
+		fields = append(fields, review.FieldManagedBy)
+	}
+	if m.FieldCleared(review.FieldIntegrationRunID) {
+		fields = append(fields, review.FieldIntegrationRunID)
+	}
 	if m.FieldCleared(review.FieldOwnerID) {
 		fields = append(fields, review.FieldOwnerID)
 	}
@@ -208951,6 +211656,21 @@ func (m *ReviewMutation) ClearField(name string) error {
 	case review.FieldTags:
 		m.ClearTags()
 		return nil
+	case review.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case review.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case review.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case review.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case review.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
 	case review.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -209061,6 +211781,21 @@ func (m *ReviewMutation) ResetField(name string) error {
 	case review.FieldTags:
 		m.ResetTags()
 		return nil
+	case review.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case review.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case review.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case review.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case review.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
 	case review.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -209148,7 +211883,10 @@ func (m *ReviewMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ReviewMutation) AddedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 22)
+	if m.integration_runs != nil {
+		edges = append(edges, review.EdgeIntegrationRuns)
+	}
 	if m.owner != nil {
 		edges = append(edges, review.EdgeOwner)
 	}
@@ -209219,6 +211957,12 @@ func (m *ReviewMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ReviewMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case review.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case review.EdgeOwner:
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
@@ -209343,7 +212087,10 @@ func (m *ReviewMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ReviewMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 22)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, review.EdgeIntegrationRuns)
+	}
 	if m.removedblocked_groups != nil {
 		edges = append(edges, review.EdgeBlockedGroups)
 	}
@@ -209402,6 +212149,12 @@ func (m *ReviewMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *ReviewMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case review.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case review.EdgeBlockedGroups:
 		ids := make([]ent.Value, 0, len(m.removedblocked_groups))
 		for id := range m.removedblocked_groups {
@@ -209510,7 +212263,10 @@ func (m *ReviewMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ReviewMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 22)
+	if m.clearedintegration_runs {
+		edges = append(edges, review.EdgeIntegrationRuns)
+	}
 	if m.clearedowner {
 		edges = append(edges, review.EdgeOwner)
 	}
@@ -209581,6 +212337,8 @@ func (m *ReviewMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ReviewMutation) EdgeCleared(name string) bool {
 	switch name {
+	case review.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case review.EdgeOwner:
 		return m.clearedowner
 	case review.EdgeBlockedGroups:
@@ -209651,6 +212409,9 @@ func (m *ReviewMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ReviewMutation) ResetEdge(name string) error {
 	switch name {
+	case review.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
+		return nil
 	case review.EdgeOwner:
 		m.ResetOwner()
 		return nil
@@ -218092,6 +220853,7 @@ type ScanMutation struct {
 	assigned_to                        *string
 	environment_name                   *string
 	scope_name                         *string
+	document_kind_name                 *string
 	target                             *string
 	scan_type                          *enums.ScanType
 	metadata                           *map[string]interface{}
@@ -218127,6 +220889,8 @@ type ScanMutation struct {
 	clearedenvironment                 bool
 	scope                              *string
 	clearedscope                       bool
+	document_kind                      *string
+	cleareddocument_kind               bool
 	assets                             map[string]struct{}
 	removedassets                      map[string]struct{}
 	clearedassets                      bool
@@ -219470,6 +222234,104 @@ func (m *ScanMutation) ResetScopeID() {
 	delete(m.clearedFields, scan.FieldScopeID)
 }
 
+// SetDocumentKindName sets the "document_kind_name" field.
+func (m *ScanMutation) SetDocumentKindName(s string) {
+	m.document_kind_name = &s
+}
+
+// DocumentKindName returns the value of the "document_kind_name" field in the mutation.
+func (m *ScanMutation) DocumentKindName() (r string, exists bool) {
+	v := m.document_kind_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDocumentKindName returns the old "document_kind_name" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldDocumentKindName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDocumentKindName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDocumentKindName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDocumentKindName: %w", err)
+	}
+	return oldValue.DocumentKindName, nil
+}
+
+// ClearDocumentKindName clears the value of the "document_kind_name" field.
+func (m *ScanMutation) ClearDocumentKindName() {
+	m.document_kind_name = nil
+	m.clearedFields[scan.FieldDocumentKindName] = struct{}{}
+}
+
+// DocumentKindNameCleared returns if the "document_kind_name" field was cleared in this mutation.
+func (m *ScanMutation) DocumentKindNameCleared() bool {
+	_, ok := m.clearedFields[scan.FieldDocumentKindName]
+	return ok
+}
+
+// ResetDocumentKindName resets all changes to the "document_kind_name" field.
+func (m *ScanMutation) ResetDocumentKindName() {
+	m.document_kind_name = nil
+	delete(m.clearedFields, scan.FieldDocumentKindName)
+}
+
+// SetDocumentKindID sets the "document_kind_id" field.
+func (m *ScanMutation) SetDocumentKindID(s string) {
+	m.document_kind = &s
+}
+
+// DocumentKindID returns the value of the "document_kind_id" field in the mutation.
+func (m *ScanMutation) DocumentKindID() (r string, exists bool) {
+	v := m.document_kind
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDocumentKindID returns the old "document_kind_id" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldDocumentKindID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDocumentKindID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDocumentKindID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDocumentKindID: %w", err)
+	}
+	return oldValue.DocumentKindID, nil
+}
+
+// ClearDocumentKindID clears the value of the "document_kind_id" field.
+func (m *ScanMutation) ClearDocumentKindID() {
+	m.document_kind = nil
+	m.clearedFields[scan.FieldDocumentKindID] = struct{}{}
+}
+
+// DocumentKindIDCleared returns if the "document_kind_id" field was cleared in this mutation.
+func (m *ScanMutation) DocumentKindIDCleared() bool {
+	_, ok := m.clearedFields[scan.FieldDocumentKindID]
+	return ok
+}
+
+// ResetDocumentKindID resets all changes to the "document_kind_id" field.
+func (m *ScanMutation) ResetDocumentKindID() {
+	m.document_kind = nil
+	delete(m.clearedFields, scan.FieldDocumentKindID)
+}
+
 // SetTarget sets the "target" field.
 func (m *ScanMutation) SetTarget(s string) {
 	m.target = &s
@@ -220386,6 +223248,33 @@ func (m *ScanMutation) ResetScope() {
 	m.clearedscope = false
 }
 
+// ClearDocumentKind clears the "document_kind" edge to the CustomTypeEnum entity.
+func (m *ScanMutation) ClearDocumentKind() {
+	m.cleareddocument_kind = true
+	m.clearedFields[scan.FieldDocumentKindID] = struct{}{}
+}
+
+// DocumentKindCleared reports if the "document_kind" edge to the CustomTypeEnum entity was cleared.
+func (m *ScanMutation) DocumentKindCleared() bool {
+	return m.DocumentKindIDCleared() || m.cleareddocument_kind
+}
+
+// DocumentKindIDs returns the "document_kind" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// DocumentKindID instead. It exists only for internal usage by the builders.
+func (m *ScanMutation) DocumentKindIDs() (ids []string) {
+	if id := m.document_kind; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetDocumentKind resets all changes to the "document_kind" edge.
+func (m *ScanMutation) ResetDocumentKind() {
+	m.document_kind = nil
+	m.cleareddocument_kind = false
+}
+
 // AddAssetIDs adds the "assets" edge to the Asset entity by ids.
 func (m *ScanMutation) AddAssetIDs(ids ...string) {
 	if m.assets == nil {
@@ -221149,7 +224038,7 @@ func (m *ScanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScanMutation) Fields() []string {
-	fields := make([]string, 0, 36)
+	fields := make([]string, 0, 38)
 	if m.created_at != nil {
 		fields = append(fields, scan.FieldCreatedAt)
 	}
@@ -221221,6 +224110,12 @@ func (m *ScanMutation) Fields() []string {
 	}
 	if m.scope != nil {
 		fields = append(fields, scan.FieldScopeID)
+	}
+	if m.document_kind_name != nil {
+		fields = append(fields, scan.FieldDocumentKindName)
+	}
+	if m.document_kind != nil {
+		fields = append(fields, scan.FieldDocumentKindID)
 	}
 	if m.target != nil {
 		fields = append(fields, scan.FieldTarget)
@@ -221314,6 +224209,10 @@ func (m *ScanMutation) Field(name string) (ent.Value, bool) {
 		return m.ScopeName()
 	case scan.FieldScopeID:
 		return m.ScopeID()
+	case scan.FieldDocumentKindName:
+		return m.DocumentKindName()
+	case scan.FieldDocumentKindID:
+		return m.DocumentKindID()
 	case scan.FieldTarget:
 		return m.Target()
 	case scan.FieldScanType:
@@ -221395,6 +224294,10 @@ func (m *ScanMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldScopeName(ctx)
 	case scan.FieldScopeID:
 		return m.OldScopeID(ctx)
+	case scan.FieldDocumentKindName:
+		return m.OldDocumentKindName(ctx)
+	case scan.FieldDocumentKindID:
+		return m.OldDocumentKindID(ctx)
 	case scan.FieldTarget:
 		return m.OldTarget(ctx)
 	case scan.FieldScanType:
@@ -221596,6 +224499,20 @@ func (m *ScanMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetScopeID(v)
 		return nil
+	case scan.FieldDocumentKindName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDocumentKindName(v)
+		return nil
+	case scan.FieldDocumentKindID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDocumentKindID(v)
+		return nil
 	case scan.FieldTarget:
 		v, ok := value.(string)
 		if !ok {
@@ -221782,6 +224699,12 @@ func (m *ScanMutation) ClearedFields() []string {
 	if m.FieldCleared(scan.FieldScopeID) {
 		fields = append(fields, scan.FieldScopeID)
 	}
+	if m.FieldCleared(scan.FieldDocumentKindName) {
+		fields = append(fields, scan.FieldDocumentKindName)
+	}
+	if m.FieldCleared(scan.FieldDocumentKindID) {
+		fields = append(fields, scan.FieldDocumentKindID)
+	}
 	if m.FieldCleared(scan.FieldMetadata) {
 		fields = append(fields, scan.FieldMetadata)
 	}
@@ -221895,6 +224818,12 @@ func (m *ScanMutation) ClearField(name string) error {
 	case scan.FieldScopeID:
 		m.ClearScopeID()
 		return nil
+	case scan.FieldDocumentKindName:
+		m.ClearDocumentKindName()
+		return nil
+	case scan.FieldDocumentKindID:
+		m.ClearDocumentKindID()
+		return nil
 	case scan.FieldMetadata:
 		m.ClearMetadata()
 		return nil
@@ -222002,6 +224931,12 @@ func (m *ScanMutation) ResetField(name string) error {
 	case scan.FieldScopeID:
 		m.ResetScopeID()
 		return nil
+	case scan.FieldDocumentKindName:
+		m.ResetDocumentKindName()
+		return nil
+	case scan.FieldDocumentKindID:
+		m.ResetDocumentKindID()
+		return nil
 	case scan.FieldTarget:
 		m.ResetTarget()
 		return nil
@@ -222044,7 +224979,7 @@ func (m *ScanMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ScanMutation) AddedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.owner != nil {
 		edges = append(edges, scan.EdgeOwner)
 	}
@@ -222077,6 +225012,9 @@ func (m *ScanMutation) AddedEdges() []string {
 	}
 	if m.scope != nil {
 		edges = append(edges, scan.EdgeScope)
+	}
+	if m.document_kind != nil {
+		edges = append(edges, scan.EdgeDocumentKind)
 	}
 	if m.assets != nil {
 		edges = append(edges, scan.EdgeAssets)
@@ -222178,6 +225116,10 @@ func (m *ScanMutation) AddedIDs(name string) []ent.Value {
 		if id := m.scope; id != nil {
 			return []ent.Value{*id}
 		}
+	case scan.EdgeDocumentKind:
+		if id := m.document_kind; id != nil {
+			return []ent.Value{*id}
+		}
 	case scan.EdgeAssets:
 		ids := make([]ent.Value, 0, len(m.assets))
 		for id := range m.assets {
@@ -222268,7 +225210,7 @@ func (m *ScanMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ScanMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, scan.EdgeBlockedGroups)
 	}
@@ -222408,7 +225350,7 @@ func (m *ScanMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ScanMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.clearedowner {
 		edges = append(edges, scan.EdgeOwner)
 	}
@@ -222441,6 +225383,9 @@ func (m *ScanMutation) ClearedEdges() []string {
 	}
 	if m.clearedscope {
 		edges = append(edges, scan.EdgeScope)
+	}
+	if m.cleareddocument_kind {
+		edges = append(edges, scan.EdgeDocumentKind)
 	}
 	if m.clearedassets {
 		edges = append(edges, scan.EdgeAssets)
@@ -222516,6 +225461,8 @@ func (m *ScanMutation) EdgeCleared(name string) bool {
 		return m.clearedenvironment
 	case scan.EdgeScope:
 		return m.clearedscope
+	case scan.EdgeDocumentKind:
+		return m.cleareddocument_kind
 	case scan.EdgeAssets:
 		return m.clearedassets
 	case scan.EdgeEntities:
@@ -222581,6 +225528,9 @@ func (m *ScanMutation) ClearEdge(name string) error {
 	case scan.EdgeScope:
 		m.ClearScope()
 		return nil
+	case scan.EdgeDocumentKind:
+		m.ClearDocumentKind()
+		return nil
 	case scan.EdgeGeneratedByPlatform:
 		m.ClearGeneratedByPlatform()
 		return nil
@@ -222630,6 +225580,9 @@ func (m *ScanMutation) ResetEdge(name string) error {
 		return nil
 	case scan.EdgeScope:
 		m.ResetScope()
+		return nil
+	case scan.EdgeDocumentKind:
+		m.ResetDocumentKind()
 		return nil
 	case scan.EdgeAssets:
 		m.ResetAssets()
@@ -235272,46 +238225,54 @@ func (m *SubscriberMutation) ResetEdge(name string) error {
 // SystemDetailMutation represents an operation that mutates the SystemDetail nodes in the graph.
 type SystemDetailMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	display_id              *string
-	tags                    *[]string
-	appendtags              []string
-	system_name             *string
-	version                 *string
-	description             *string
-	authorization_boundary  *string
-	sensitivity_level       *enums.SystemSensitivityLevel
-	last_reviewed           *models.DateTime
-	revision_history        *[]interface{}
-	appendrevision_history  []interface{}
-	oscal_metadata_json     *map[string]interface{}
-	clearedFields           map[string]struct{}
-	owner                   *string
-	clearedowner            bool
-	programs                map[string]struct{}
-	removedprograms         map[string]struct{}
-	clearedprograms         bool
-	platforms               map[string]struct{}
-	removedplatforms        map[string]struct{}
-	clearedplatforms        bool
-	entities                map[string]struct{}
-	removedentities         map[string]struct{}
-	clearedentities         bool
-	assets                  map[string]struct{}
-	removedassets           map[string]struct{}
-	clearedassets           bool
-	done                    bool
-	oldValue                func(context.Context) (*SystemDetail, error)
-	predicates              []predicate.SystemDetail
+	op                        Op
+	typ                       string
+	id                        *string
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	display_id                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	system_name               *string
+	version                   *string
+	description               *string
+	authorization_boundary    *string
+	sensitivity_level         *enums.SystemSensitivityLevel
+	last_reviewed             *models.DateTime
+	revision_history          *[]interface{}
+	appendrevision_history    []interface{}
+	oscal_metadata_json       *map[string]interface{}
+	clearedFields             map[string]struct{}
+	integration_runs          map[string]struct{}
+	removedintegration_runs   map[string]struct{}
+	clearedintegration_runs   bool
+	owner                     *string
+	clearedowner              bool
+	programs                  map[string]struct{}
+	removedprograms           map[string]struct{}
+	clearedprograms           bool
+	platforms                 map[string]struct{}
+	removedplatforms          map[string]struct{}
+	clearedplatforms          bool
+	entities                  map[string]struct{}
+	removedentities           map[string]struct{}
+	clearedentities           bool
+	assets                    map[string]struct{}
+	removedassets             map[string]struct{}
+	clearedassets             bool
+	done                      bool
+	oldValue                  func(context.Context) (*SystemDetail, error)
+	predicates                []predicate.SystemDetail
 }
 
 var _ ent.Mutation = (*SystemDetailMutation)(nil)
@@ -235862,6 +238823,251 @@ func (m *SystemDetailMutation) ResetTags() {
 	delete(m.clearedFields, systemdetail.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *SystemDetailMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *SystemDetailMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the SystemDetail entity.
+// If the SystemDetail object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *SystemDetailMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[systemdetail.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *SystemDetailMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[systemdetail.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *SystemDetailMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, systemdetail.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *SystemDetailMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *SystemDetailMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the SystemDetail entity.
+// If the SystemDetail object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *SystemDetailMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[systemdetail.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *SystemDetailMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[systemdetail.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *SystemDetailMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, systemdetail.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *SystemDetailMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *SystemDetailMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the SystemDetail entity.
+// If the SystemDetail object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *SystemDetailMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[systemdetail.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *SystemDetailMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[systemdetail.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *SystemDetailMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, systemdetail.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *SystemDetailMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *SystemDetailMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the SystemDetail entity.
+// If the SystemDetail object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *SystemDetailMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[systemdetail.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *SystemDetailMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[systemdetail.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *SystemDetailMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, systemdetail.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *SystemDetailMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *SystemDetailMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the SystemDetail entity.
+// If the SystemDetail object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *SystemDetailMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[systemdetail.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *SystemDetailMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[systemdetail.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *SystemDetailMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, systemdetail.FieldIntegrationRunID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *SystemDetailMutation) SetOwnerID(s string) {
 	m.owner = &s
@@ -236306,6 +239512,60 @@ func (m *SystemDetailMutation) ResetOscalMetadataJSON() {
 	delete(m.clearedFields, systemdetail.FieldOscalMetadataJSON)
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *SystemDetailMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *SystemDetailMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *SystemDetailMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *SystemDetailMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *SystemDetailMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *SystemDetailMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *SystemDetailMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *SystemDetailMutation) ClearOwner() {
 	m.clearedowner = true
@@ -236583,7 +239843,7 @@ func (m *SystemDetailMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemDetailMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 23)
 	if m.created_at != nil {
 		fields = append(fields, systemdetail.FieldCreatedAt)
 	}
@@ -236610,6 +239870,21 @@ func (m *SystemDetailMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, systemdetail.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, systemdetail.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, systemdetail.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, systemdetail.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, systemdetail.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, systemdetail.FieldIntegrationRunID)
 	}
 	if m.owner != nil {
 		fields = append(fields, systemdetail.FieldOwnerID)
@@ -236664,6 +239939,16 @@ func (m *SystemDetailMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case systemdetail.FieldTags:
 		return m.Tags()
+	case systemdetail.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case systemdetail.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case systemdetail.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case systemdetail.FieldManagedBy:
+		return m.ManagedBy()
+	case systemdetail.FieldIntegrationRunID:
+		return m.IntegrationRunID()
 	case systemdetail.FieldOwnerID:
 		return m.OwnerID()
 	case systemdetail.FieldSystemName:
@@ -236709,6 +239994,16 @@ func (m *SystemDetailMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldDisplayID(ctx)
 	case systemdetail.FieldTags:
 		return m.OldTags(ctx)
+	case systemdetail.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case systemdetail.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case systemdetail.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case systemdetail.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case systemdetail.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
 	case systemdetail.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case systemdetail.FieldSystemName:
@@ -236798,6 +240093,41 @@ func (m *SystemDetailMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case systemdetail.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case systemdetail.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case systemdetail.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case systemdetail.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case systemdetail.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
 		return nil
 	case systemdetail.FieldOwnerID:
 		v, ok := value.(string)
@@ -236916,6 +240246,21 @@ func (m *SystemDetailMutation) ClearedFields() []string {
 	if m.FieldCleared(systemdetail.FieldTags) {
 		fields = append(fields, systemdetail.FieldTags)
 	}
+	if m.FieldCleared(systemdetail.FieldSourceDefinitionID) {
+		fields = append(fields, systemdetail.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(systemdetail.FieldSourceDefinitionVersion) {
+		fields = append(fields, systemdetail.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(systemdetail.FieldSourceInstanceID) {
+		fields = append(fields, systemdetail.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(systemdetail.FieldManagedBy) {
+		fields = append(fields, systemdetail.FieldManagedBy)
+	}
+	if m.FieldCleared(systemdetail.FieldIntegrationRunID) {
+		fields = append(fields, systemdetail.FieldIntegrationRunID)
+	}
 	if m.FieldCleared(systemdetail.FieldOwnerID) {
 		fields = append(fields, systemdetail.FieldOwnerID)
 	}
@@ -236978,6 +240323,21 @@ func (m *SystemDetailMutation) ClearField(name string) error {
 	case systemdetail.FieldTags:
 		m.ClearTags()
 		return nil
+	case systemdetail.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case systemdetail.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case systemdetail.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case systemdetail.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case systemdetail.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
 	case systemdetail.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -237037,6 +240397,21 @@ func (m *SystemDetailMutation) ResetField(name string) error {
 	case systemdetail.FieldTags:
 		m.ResetTags()
 		return nil
+	case systemdetail.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case systemdetail.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case systemdetail.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case systemdetail.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case systemdetail.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
 	case systemdetail.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -237070,7 +240445,10 @@ func (m *SystemDetailMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SystemDetailMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
+	if m.integration_runs != nil {
+		edges = append(edges, systemdetail.EdgeIntegrationRuns)
+	}
 	if m.owner != nil {
 		edges = append(edges, systemdetail.EdgeOwner)
 	}
@@ -237093,6 +240471,12 @@ func (m *SystemDetailMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *SystemDetailMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case systemdetail.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case systemdetail.EdgeOwner:
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
@@ -237127,7 +240511,10 @@ func (m *SystemDetailMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SystemDetailMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, systemdetail.EdgeIntegrationRuns)
+	}
 	if m.removedprograms != nil {
 		edges = append(edges, systemdetail.EdgePrograms)
 	}
@@ -237147,6 +240534,12 @@ func (m *SystemDetailMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *SystemDetailMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case systemdetail.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case systemdetail.EdgePrograms:
 		ids := make([]ent.Value, 0, len(m.removedprograms))
 		for id := range m.removedprograms {
@@ -237177,7 +240570,10 @@ func (m *SystemDetailMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SystemDetailMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
+	if m.clearedintegration_runs {
+		edges = append(edges, systemdetail.EdgeIntegrationRuns)
+	}
 	if m.clearedowner {
 		edges = append(edges, systemdetail.EdgeOwner)
 	}
@@ -237200,6 +240596,8 @@ func (m *SystemDetailMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *SystemDetailMutation) EdgeCleared(name string) bool {
 	switch name {
+	case systemdetail.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case systemdetail.EdgeOwner:
 		return m.clearedowner
 	case systemdetail.EdgePrograms:
@@ -237229,6 +240627,9 @@ func (m *SystemDetailMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *SystemDetailMutation) ResetEdge(name string) error {
 	switch name {
+	case systemdetail.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
+		return nil
 	case systemdetail.EdgeOwner:
 		m.ResetOwner()
 		return nil

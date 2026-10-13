@@ -168,6 +168,23 @@ func TestValidateLinkRules(t *testing.T) {
 			wantErr: ErrLinkSourceFieldInvalid,
 		},
 		{
+			name: "edge create key carries target keys",
+			rule: integrationtypes.LinkRule{
+				TargetSchema: entityops.SchemaControl.Name,
+				TargetField:  control.FieldRefCode,
+				SourceList:   "control_ids",
+			},
+		},
+		{
+			name: "another edge create key in the list slot",
+			rule: integrationtypes.LinkRule{
+				TargetSchema: entityops.SchemaControl.Name,
+				TargetField:  control.FieldRefCode,
+				SourceList:   "asset_ids",
+			},
+			wantErr: ErrLinkSourceFieldInvalid,
+		},
+		{
 			name: "scalar input key in the list slot",
 			rule: integrationtypes.LinkRule{
 				TargetSchema: entityops.SchemaControl.Name,

@@ -81,7 +81,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			GalaListeners: []types.GalaListenerRegistration{
 				domainScanListeners(),
 			},
-			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
+			Mappings: append(append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 				providerkit.FindingMapping(mapExprFinding),
 				types.MappingRegistration{
 					Schema: entityops.SchemaAsset.Name,
@@ -90,7 +90,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 						MapExpr:    mapExprAsset,
 					},
 				},
-			),
+			), domainScanImportMappings()...),
 		}
 
 		if runtime.Provisioned() {

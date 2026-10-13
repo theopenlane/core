@@ -2,19 +2,15 @@ package controls
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
-	"github.com/oklog/ulid/v2"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
-	"github.com/theopenlane/core/v2/internal/graphapi/common"
-	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
@@ -33,28 +29,6 @@ type CloneFilterOptions struct {
 	RefCodes []string
 	// Categories is a list of Categories to filter the controls by
 	Categories []string
-}
-
-// GetCloneFilterOptions returns the filter options for cloning controls from the input based on the provided fields
-func GetCloneFilterOptions(input *model.CloneControlInput) CloneFilterOptions {
-	filters := CloneFilterOptions{
-		Categories: input.Categories,
-		RefCodes:   input.RefCodes,
-	}
-
-	// if standardID is provided, used that, otherwise use the standardShortName
-	if input.StandardID != nil {
-		filters.StandardID = input.StandardID
-	} else {
-		if input.StandardShortName != nil {
-			filters.StandardShortName = input.StandardShortName
-		}
-		if input.StandardVersion != nil {
-			filters.StandardVersion = input.StandardVersion
-		}
-	}
-
-	return filters
 }
 
 // StandardFilter returns the predicate to filter by standard based on the filter options
@@ -140,101 +114,6 @@ func ControlFilterByStandard(ctx context.Context, opts CloneFilterOptions, std *
 // FilterByStandard returns true if the filter options contain a standardID or standardShortName
 func FilterByStandard(opts CloneFilterOptions) bool {
 	return opts.StandardID != nil || opts.StandardShortName != nil
-}
-
-// ConvertToCloneControlInput converts a slice of CloneControlUploadInput to a slice of CloneControlInput
-// this is used to process a bulk CSV upload of controls to be cloned and group them by standard
-func ConvertToCloneControlInput(input []*model.CloneControlUploadInput) ([]*model.CloneControlInput, error) {
-	out := []*model.CloneControlInput{}
-
-	// create a map of standards first
-	stds := controlUploadSliceToMap(input)
-
-	for stdName, controlInputs := range stds {
-		// sanity check if there are no controls keep going
-		if len(controlInputs) == 0 {
-			continue
-		}
-
-		i := &model.CloneControlInput{}
-
-		_, err := ulid.Parse(stdName)
-		if err == nil {
-			i.StandardID = &stdName
-		} else {
-			i.StandardShortName = &stdName
-		}
-
-		if controlInputs[0].StandardVersion != nil {
-			stdVersion := strings.TrimSpace(*controlInputs[0].StandardVersion)
-			i.StandardVersion = &stdVersion
-		}
-
-		if controlInputs[0].OwnerID != nil {
-			ownerID := strings.TrimSpace(*controlInputs[0].OwnerID)
-			i.OwnerID = &ownerID
-		}
-
-		for _, ci := range controlInputs {
-			if !stripeAndCompare(i.StandardVersion, ci.StandardVersion) {
-				return nil, fmt.Errorf("%w: all controls for a standard must have the same version", common.ErrInvalidInput)
-			}
-
-			if !stripeAndCompare(i.OwnerID, ci.OwnerID) {
-				return nil, fmt.Errorf("%w: all controls for a standard must have the same owner", common.ErrInvalidInput)
-			}
-
-			if ci.RefCode != nil {
-				i.RefCodes = append(i.RefCodes, *ci.RefCode)
-			}
-
-			if ci.ControlID != nil {
-				i.ControlIDs = append(i.ControlIDs, *ci.ControlID)
-			}
-		}
-
-		out = append(out, i)
-	}
-
-	return out, nil
-}
-
-// controlUploadSliceToMap converts a slice of CloneControlUploadInput to a map grouped by standard
-func controlUploadSliceToMap(input []*model.CloneControlUploadInput) map[string][]*model.CloneControlUploadInput {
-	out := map[string][]*model.CloneControlUploadInput{}
-
-	for _, i := range input {
-		key := ""
-		if i.StandardID != nil {
-			key = *i.StandardID
-		} else if i.StandardShortName != nil {
-			key = *i.StandardShortName
-		}
-
-		if key != "" {
-			out[key] = append(out[key], i)
-		}
-	}
-
-	return out
-}
-
-// stripeAndCompare trims leading and trailing spaces from two strings and compares them
-// returns true if they are equal, false otherwise
-func stripeAndCompare(a, b *string) bool {
-	if a == nil && b == nil {
-		return true
-	}
-
-	if a == nil && b != nil {
-		return false
-	}
-
-	if a != nil && b == nil {
-		return false
-	}
-
-	return strings.TrimSpace(*a) == strings.TrimSpace(*b)
 }
 
 // GetControlIDFromRefCode searches for a control ID by ref code or alias in the provided controls

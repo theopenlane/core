@@ -1,0 +1,54 @@
+"""
+The items a reviewer accepted from one section of a parsed report, by the key each item is imported by:
+name for programs, domains, entities, assets, groups and platforms, ref_code for controls, system_name for
+systemdetails, email for contacts, and external_id for reviews and findings
+"""
+input ImportReportScanSectionInput {
+    """
+    the section name, e.g. programs, controls, reviews, findings
+    """
+    section: String!
+    """
+    the keys of the accepted items in the section
+    """
+    keys: [String!]!
+    """
+    reviewer-edited items, each replacing the stored item with the same key
+    """
+    edited: [Map!]
+}
+
+"""
+The accepted items of a parsed report to import into the organization
+"""
+input ImportReportScanInput {
+    """
+    the report scan whose parsed results are imported
+    """
+    scanID: ID!
+    """
+    the accepted items, by section; when the programs section accepts the program, the imported records are linked to it
+    """
+    sections: [ImportReportScanSectionInput!]!
+}
+
+type ImportReportScanPayload {
+    """
+    whether the report was accepted for import
+    """
+    accepted: Boolean!
+}
+
+extend type Mutation {
+    """
+    Accept the reviewed results of a parsed SOC 2 report and asynchronously import them: the program and its
+    framework controls for the tested categories, then the report's controls, vendors, assets, groups, platforms,
+    systems, contacts, reviews, findings and the mappings from its controls to the framework
+    """
+    importReportScan(
+        """
+        the accepted report results
+        """
+        input: ImportReportScanInput!
+    ): ImportReportScanPayload!
+}

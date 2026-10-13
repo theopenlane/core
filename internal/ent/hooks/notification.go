@@ -9,8 +9,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/graphsubscriptions"
-	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookNotification runs on notification mutations to validate channels
@@ -65,51 +63,15 @@ func isValidChannels(channels []enums.Channel) error {
 	return nil
 }
 
-// HookNotificationPublish runs after notification creation to publish to subscribers
-func HookNotificationPublish() ent.Hook {
+// HookNotificationDefaultChannels defaults a new notification to in-app delivery when no channels are set
+func HookNotificationDefaultChannels() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.NotificationFunc(func(ctx context.Context, m *generated.NotificationMutation) (generated.Value, error) {
-			// Execute the mutation first
-			val, err := next.Mutate(ctx, m)
-			if err != nil {
-				return nil, err
+			if channels, ok := m.Channels(); !ok || len(channels) == 0 {
+				m.SetChannels([]enums.Channel{enums.ChannelInApp})
 			}
 
-			// After successful creation, publish to subscription manager
-			notification, ok := val.(*generated.Notification)
-			if !ok {
-				logx.FromContext(ctx).Warn().Msg("notification hook: value is not a notification")
-				return val, nil
-			}
-
-			logx.FromContext(ctx).Debug().Str("notification_id", notification.ID).Msg("notification hook: notification created, attempting to publish")
-
-			// Get the global subscription manager
-			manager := graphsubscriptions.GetGlobalManager()
-			if manager == nil {
-				// No subscription manager configured, skip publishing
-				logx.FromContext(ctx).Debug().Msg("notification hook: subscription manager is nil, skipping publish")
-				return val, nil
-			}
-
-			// a notification targets a single user when it names one, otherwise every session in the owning org
-			userID := notification.UserID
-			ownerID := notification.OwnerID
-
-			// if both are empty, there is not one to send it to
-			if userID == "" && ownerID == "" {
-				logx.FromContext(ctx).Debug().Str("notification_id", notification.ID).Msg("notification hook: no user or owner to route to, skipping publish")
-				return val, nil
-			}
-
-			logx.FromContext(ctx).Debug().Str("user_id", userID).Str("owner_id", ownerID).Str("notification_id", notification.ID).Msg("notification hook: publishing to subscription manager")
-
-			// Publish the notification to subscribers
-			if err := manager.Publish(userID, ownerID, notification); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("user_id", userID).Str("owner_id", ownerID).Msg("failed to publish notification to subscribers")
-			}
-
-			return val, nil
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate)
 }
