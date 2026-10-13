@@ -93,6 +93,12 @@ var DefaultSandboxCatalog = models.Catalog{
 				Nickname:   "price_workflow_monthly",
 				PriceID:    "price_1UQBQwJIzM4Pa2ZcEH0cTcCK",
 				UnitAmount: int64(5000),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_workflow_annually",
+				Nickname:   "price_workflow_annually",
+				PriceID:    "price_1UQCbUJIzM4Pa2Zceo2OxN0l",
+				UnitAmount: int64(54000),
 			}}},
 			Description:          "Workflow Automation",
 			DisplayName:          "Workflow Automation",
@@ -235,6 +241,6 @@ var DefaultSandboxCatalog = models.Catalog{
 			ProductID:            "prod_SzpzB3d9rAjrb3",
 		},
 	},
-	SHA:     "e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2",
-	Version: "v0.0.16",
+	SHA:     "fea0fed73552a59ff56e29784e64f69b5eea9381cc2976e2fc1e98166aa0e6d3",
+	Version: "v0.0.17",
 }
