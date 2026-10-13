@@ -2,34 +2,27 @@ package runtime
 
 import (
 	"context"
-	"errors"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/keymaker"
 )
 
-// installationResolverFunc matches the signature of Runtime.ResolveIntegration for testability
-type installationResolverFunc func(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error)
-
-// lookupKeymakerInstallation adapts runtime installation resolution to keymaker's lookup contract
+// lookupKeymakerInstallation resolves one installation into keymaker's lookup contract
 func (r *Runtime) lookupKeymakerInstallation(ctx context.Context, integrationID string) (keymaker.InstallationRecord, error) {
-	return resolveKeymakerInstallation(ctx, integrationID, r.ResolveIntegration)
-}
-
-// resolveKeymakerInstallation maps installation resolution into a keymaker record
-func resolveKeymakerInstallation(ctx context.Context, integrationID string, resolve installationResolverFunc) (keymaker.InstallationRecord, error) {
 	if integrationID == "" {
 		return keymaker.InstallationRecord{}, keymaker.ErrInstallationIDRequired
 	}
 
-	record, err := resolve(ctx, IntegrationLookup{IntegrationID: integrationID})
-	if err != nil {
-		switch {
-		case errors.Is(err, ErrInstallationNotFound):
-			return keymaker.InstallationRecord{}, keymaker.ErrInstallationNotFound
-		default:
-			return keymaker.InstallationRecord{}, err
-		}
+	return keymakerRecord(r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: integrationID}))
+}
+
+// keymakerRecord maps a resolved installation and its lookup error onto keymaker's record and sentinels
+func keymakerRecord(record *ent.Integration, err error) (keymaker.InstallationRecord, error) {
+	switch {
+	case ent.IsNotFound(err):
+		return keymaker.InstallationRecord{}, keymaker.ErrInstallationNotFound
+	case err != nil:
+		return keymaker.InstallationRecord{}, err
 	}
 
 	return keymaker.InstallationRecord{

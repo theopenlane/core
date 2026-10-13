@@ -35,7 +35,7 @@ func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailT
 	for _, d := range dispatchers {
 		reg := d.Registration()
 
-		schema, err := jsonx.ToMap(reg.ConfigSchema)
+		schema, err := jsonx.ToMap(reg.Input.Schema)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("key", reg.Name).Msg("failed converting catalog config schema")
 

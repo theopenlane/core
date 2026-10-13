@@ -1,24 +1,39 @@
 package keycloak
 
 import (
+	"context"
+
 	gocloak "github.com/Nerzal/gocloak/v13"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the Keycloak integration definition
 	definitionID = types.NewDefinitionRef("def_01K0KEYCLOAK000000000000001")
-	// integration is the typed installation metadata handle for the Keycloak definition
-	integration = types.NewInstallationRef(resolveInstallationMetadata)
-	// keycloakCredentialSchema is the JSON schema for the Keycloak credential
-	// keycloakCredential is the typed runtime ref for resolving the credential
-	keycloakCredentialSchema, keycloakCredential = providerkit.CredentialSchema[CredentialSchema]()
-	// keycloakClient is the client ref for the Keycloak API client
-	keycloakClient = types.NewClientRef[*gocloak.GoCloak]()
-	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	// clientCredentials is the connection handle for the Keycloak client credentials
+	clientCredentials = types.ConnectionOf[CredentialSchema]()
+	// installation is the typed installation metadata handle for the Keycloak definition
+	installation = types.InstallationOf[InstallationMetadata]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
+
+// Client is the Keycloak API client with the realm scope and client credentials its calls need
+type Client struct {
+	// GoCloak is the underlying Keycloak API client
+	*gocloak.GoCloak
+	// Realm is the Keycloak realm the client is scoped to
+	Realm string
+	// ClientID is the Keycloak client ID used to log in
+	ClientID string
+	// ClientSecret is the Keycloak client secret used to log in
+	ClientSecret string
+}
+
+// ClientToken acquires an access token for the client credentials in the realm
+func (c Client) ClientToken(ctx context.Context) (*gocloak.JWT, error) {
+	return c.LoginClient(ctx, c.ClientID, c.ClientSecret, c.Realm)
+}
 
 // CredentialSchema holds the Keycloak instance credentials for one installation
 type CredentialSchema struct {
@@ -36,10 +51,6 @@ type CredentialSchema struct {
 type UserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
-	// DisableGroupSync when true only syncs users, skipping groups and memberships
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
-	// FilterExpr limits imported records to envelopes matching a CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting, example=Example: payload.enabled == true"`
 }
 
 // InstallationMetadata holds the stable Keycloak realm identity for one installation

@@ -15,22 +15,14 @@ import (
 // teamsGraphScope is the Microsoft Graph scope used for Teams operations
 const teamsGraphScope = "https://graph.microsoft.com/.default"
 
-// Client builds Microsoft Graph service clients for one Teams installation
-type Client struct{}
-
-// Build constructs the Microsoft Graph service client from the installation OAuth access token
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	tc, _, err := teamsCredential.Resolve(req.Credentials)
-	if err != nil {
-		return nil, ErrCredentialDecode
-	}
-
-	if tc.AccessToken == "" {
+// buildClient constructs the Microsoft Graph service client from the installation OAuth access token
+func buildClient(_ context.Context, req types.ConnectionRequest[teamsCred]) (*msgraphsdk.GraphServiceClient, error) {
+	if req.Credential.AccessToken == "" {
 		return nil, ErrOAuthTokenMissing
 	}
 
 	cred := &staticTokenCredential{
-		token:  tc.AccessToken,
+		token:  req.Credential.AccessToken,
 		expiry: time.Now().Add(time.Hour),
 	}
 

@@ -201,7 +201,7 @@ func TestValidateLinkRules(t *testing.T) {
 func TestRegisterValidatesMappingLinks(t *testing.T) {
 	t.Parallel()
 
-	def, _ := minimalDefinition("def_link_validation")
+	def := minimalDefinition("def_link_validation")
 	def.Operations[0].Handle = nil
 	def.Operations[0].IngestHandle = newTestIngestHandler()
 	def.Operations[0].Ingest = []integrationtypes.IngestContract{{Schema: entityops.SchemaFinding.Name}}
@@ -226,7 +226,7 @@ func TestRegisterValidatesMappingLinks(t *testing.T) {
 func TestRegisterPopulatesLinkTargets(t *testing.T) {
 	t.Parallel()
 
-	def, _ := minimalDefinition("def_link_targets")
+	def := minimalDefinition("def_link_targets")
 	def.Operations[0].Handle = nil
 	def.Operations[0].IngestHandle = newTestIngestHandler()
 	def.Operations[0].Ingest = []integrationtypes.IngestContract{{Schema: entityops.SchemaFinding.Name}}

@@ -6,34 +6,26 @@ import (
 
 	"github.com/theopenlane/iam/tokens"
 
+	"github.com/theopenlane/core/common/models"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
-// ClientBuildRequest bundles the inputs for building one installation-scoped client
-type ClientBuildRequest struct {
+// CredentialSet is the persisted credential bundle used by integrations
+type CredentialSet = models.CredentialSet
+
+// ConnectionInput is the erased input every connection closure receives; Client is set for verification, UserInput for disconnect
+type ConnectionInput struct {
 	// Integration is the target installation record
 	Integration *generated.Integration
-	// Credentials lists all resolved credential bundles for this client by slot ref
-	Credentials CredentialBindings
-	// Config is the client-specific configuration payload
-	Config json.RawMessage
+	// Credential is the persisted credential bundle for the connection
+	Credential CredentialSet
 	// TokenManager signs assertions for providers that authenticate via identity federation
 	TokenManager *tokens.TokenManager
+	// Client is the built client the verification runs against
+	Client any
+	// UserInput is the stored installation-scoped user input document consumed by disconnect
+	UserInput json.RawMessage
 }
 
-// ClientBuilderFunc builds a client for one installation
-type ClientBuilderFunc func(ctx context.Context, req ClientBuildRequest) (any, error)
-
-// ClientRegistration declares one buildable client for a definition
-type ClientRegistration struct {
-	// Ref is the internal client identity used for operation/runtime lookup
-	Ref ClientID `json:"-"`
-	// CredentialRefs identifies which durable credential slots this client may use
-	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
-	// Description describes what the client is used for
-	Description string `json:"description,omitempty"`
-	// ConfigSchema is the JSON schema for client-specific configuration
-	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
-	// Build constructs the client
-	Build ClientBuilderFunc `json:"-"`
-}
+// ClientBuilderFunc builds one client from the erased input
+type ClientBuilderFunc func(ctx context.Context, input ConnectionInput) (any, error)

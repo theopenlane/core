@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/v2
 
-go 1.27.1
+go 1.27.2
 
 tool (
 	github.com/dave/jennifer

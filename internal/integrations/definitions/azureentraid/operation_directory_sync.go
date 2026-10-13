@@ -10,14 +10,12 @@ import (
 	"github.com/microsoftgraph/msgraph-sdk-go/users"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// mapCapacityFactor is the multiplier applied to the expected entry count when pre-sizing maps for deduplication
+// mapCapacityFactor sizes maps ahead for deduplication
 const mapCapacityFactor = 2
 
 // directoryUserPayload is the JSON-serializable representation of one Entra ID user
@@ -88,24 +86,8 @@ type directoryMembershipPayload struct {
 	Member directoryEntityRef `json:"member"`
 }
 
-// DirectorySync collects Azure Entra ID directory users, groups, and memberships for ingest
-type DirectorySync struct{}
-
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(entraClient, func(ctx context.Context, request types.OperationRequest, c *msgraphsdk.GraphServiceClient) ([]types.IngestPayloadSet, error) {
-		var cfg UserInput
-
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
-		}
-
-		return d.Run(ctx, c, cfg)
-	})
-}
-
-// Run collects Azure Entra ID directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, cfg UserInput) ([]types.IngestPayloadSet, error) {
+// runDirectorySync collects Azure Entra ID directory users, groups, and memberships
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *msgraphsdk.GraphServiceClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listEntraUsers(ctx, c)
 	if err != nil {
 		return nil, err
@@ -134,13 +116,7 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 		}
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(accountEnvelopes)
 
 	if cfg.DisableGroupSync {
 		return payloadSets, nil
@@ -194,20 +170,7 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 		}
 	}
 
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	)
-
-	return payloadSets, nil
+	return append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // odataPage is the minimal interface required from an OData collection response page
@@ -241,8 +204,7 @@ func paginateOData[T any, P odataPage[T]](ctx context.Context, fetchFirst func()
 	return items, nil
 }
 
-// userSelectFields are the Graph API fields explicitly requested for user listings;
-// accountEnabled is not returned by default and must be $selected
+// userSelectFields are the Graph API fields requested for user listings
 var userSelectFields = []string{
 	"id", "displayName", "mail", "userPrincipalName", "otherMails",
 	"accountEnabled", "userType", "department", "givenName", "surname", "jobTitle",
@@ -293,7 +255,7 @@ func listEntraGroups(ctx context.Context, c *msgraphsdk.GraphServiceClient) ([]m
 	}, ErrGroupsFetchFailed)
 }
 
-// listEntraGroupUserMembers pages through user-type members for one group via the /microsoft.graph.user cast endpoint
+// listEntraGroupUserMembers pages through user-type members for one group
 func listEntraGroupUserMembers(ctx context.Context, c *msgraphsdk.GraphServiceClient, groupID string) ([]models.Userable, error) {
 	if groupID == "" {
 		return nil, nil
@@ -318,7 +280,7 @@ func listEntraGroupUserMembers(ctx context.Context, c *msgraphsdk.GraphServiceCl
 }
 
 // isEntraUserIncluded applies inclusion filters based on installation config
-func isEntraUserIncluded(user models.Userable, cfg UserInput) bool {
+func isEntraUserIncluded(user models.Userable, cfg DirectorySync) bool {
 	if !cfg.IncludeGuestUsers && strings.EqualFold(lo.FromPtr(user.GetUserType()), "Guest") {
 		return false
 	}

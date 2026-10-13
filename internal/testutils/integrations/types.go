@@ -3,55 +3,81 @@
 package integrations
 
 import (
+	"context"
 	"encoding/json"
 	"time"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// DefinitionID is the stable identifier for the shared test integration definition
+// DefinitionID is the id of the shared test integration definition
 var DefinitionID = types.NewDefinitionRef("def_01K0TESTDEF0000000000000001")
 
 var (
 	// RepoSyncOp is the async client-resolving operation
-	repoSyncSchema, RepoSyncOp = providerkit.OperationSchema[repoSync]()
+	RepoSyncOp = types.OperationPayloadOf[repoSync]().Handles(repoSyncHandler)
 	// ValidatedOp is the inline operation with a required config field
-	validatedSchema, ValidatedOp = providerkit.OperationSchema[validatedRun]()
+	ValidatedOp = types.OperationPayloadOf[validatedRun]().HandlesRequest(validatedHandler).Policy(types.ExecutionPolicy{Inline: true})
 	// RecurringOp is the healthy idle loop
-	recurringSchema, RecurringOp = providerkit.OperationSchema[recurringCycle]()
+	RecurringOp = types.OperationRefOf[recurringCycle]().
+			HandlesRequest(idleCycle[recurringCycle]).
+			Policy(types.ExecutionPolicy{Reconcile: true}).
+			Schedule(&gala.Schedule{MinInterval: recurringInterval})
 	// ExhaustingOp is the always-failing loop
-	exhaustingSchema, ExhaustingOp = providerkit.OperationSchema[exhaustingCycle]()
+	ExhaustingOp = types.OperationRefOf[exhaustingCycle]().
+			HandlesRequest(failingCycle).
+			Policy(types.ExecutionPolicy{Reconcile: true}).
+			Schedule(&gala.Schedule{MinInterval: exhaustingInterval, MaxErrorStreak: exhaustingMaxErrorStreak})
 	// UnresolvableOp is the client-resolving loop seeded without a credential
-	unresolvableSchema, UnresolvableOp = providerkit.OperationSchema[unresolvableCycle]()
+	UnresolvableOp = types.OperationRefOf[unresolvableCycle]().
+			Handles(idleClientCycle).
+			Policy(types.ExecutionPolicy{Reconcile: true}).
+			Schedule(&gala.Schedule{MinInterval: recurringInterval})
 
-	// TokenCredential is the credential slot the test client is built from
-	tokenSchema, TokenCredential = providerkit.CredentialSchema[tokenCred]()
-	// OAuthCredential is the auth-managed slot filled by the OAuth fixture
-	_, OAuthCredential = providerkit.CredentialSchema[oauthTokenCred]()
-	// ServiceAccountCredential is the strict-schema slot used by config flows
-	serviceAccountSchema, ServiceAccountCredential = providerkit.CredentialSchema[serviceAccountCred]()
+	// LegacyToken is the unregistered legacy token connection
+	LegacyToken = types.ConnectionOf[legacyTokenCred]()
+	// Token is the token connection the test client is built from, taking over the legacy connection's payloads
+	Token = types.ConnectionOf[tokenCred]().Replacing(LegacyToken).Upgraded(upgradeLegacyToken)
+	// OAuth is the auth-managed connection filled by the OAuth fixture
+	OAuth = types.ConnectionOf[oauthTokenCred]()
+	// ServiceAccount is the strict-schema service account connection
+	ServiceAccount = types.ConnectionOf[serviceAccountCred]().Upgraded(func(_ context.Context, req types.InstallationRequest, _ string, stored json.RawMessage) (serviceAccountCred, error) {
+		c, err := jsonx.Decode[serviceAccountCred](stored)
+		if err != nil {
+			return serviceAccountCred{}, err
+		}
 
-	// testClient builds from the token credential
-	testClient = types.NewClientRef[*Client]()
+		if c.ServiceAccountEmail == "" {
+			c.ServiceAccountEmail = req.Integration.ID + "@backfilled.example.com"
+		}
+
+		return c, nil
+	})
+
+	// installation is the installation metadata layout of the shared test definition
+	installation = types.InstallationOf[testMetadata]()
 
 	// WebhookAlertCreated is the webhook event contract
 	WebhookAlertCreated = types.NewWebhookEventRef[webhookAlertEnvelope]("alert.created")
 )
 
 const (
-	// ModeRecurring seeds a healthy idle loop
+	// ModeRecurring is the healthy idle loop mode
 	ModeRecurring = "recurring"
-	// ModeExhausting seeds a loop whose every cycle fails
+	// ModeExhausting is the always-failing loop mode
 	ModeExhausting = "exhausting"
-	// ModeUnresolvable seeds a client-resolving loop without a credential
+	// ModeUnresolvable is the client-resolving loop mode without a credential
 	ModeUnresolvable = "unresolvable"
 )
 
 const (
-	// FailProjectID fails the health check when set as the service-account project id
+	// FailProjectID is the project id value that fails connection verification
 	FailProjectID = "fail-project"
-	// FailToken fails the health check when set as the token value
+	// FailToken is the token value that fails connection verification
 	FailToken = "fail"
 )
 
@@ -63,17 +89,26 @@ const (
 
 type repoSync struct{}
 
+// testMetadata is the installation metadata of the shared test definition
+type testMetadata struct{}
+
 // validatedRun is the config for the inline operation with a required field
 type validatedRun struct {
 	// Target is the required target field
 	Target string `json:"target" jsonschema:"required"`
 }
 
-type recurringCycle struct{}
+type recurringCycle struct {
+	types.OperationSettings
+}
 
-type exhaustingCycle struct{}
+type exhaustingCycle struct {
+	types.OperationSettings
+}
 
-type unresolvableCycle struct{}
+type unresolvableCycle struct {
+	types.OperationSettings
+}
 
 // tokenCred is the credential material the test client is built from
 type tokenCred struct {
@@ -97,42 +132,57 @@ type serviceAccountCred struct {
 	ServiceAccountEmail string `json:"serviceAccountEmail" jsonschema:"required"`
 }
 
-// UserInput is the installation-scoped user input for the test definition
-type UserInput struct {
-	// Mode selects which recurring loop operation is active
-	Mode string `json:"mode,omitempty" jsonschema:"title=Scheduling Mode"`
-	// FilterExpr is a free-form filter expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression"`
-}
-
 type webhookAlertEnvelope struct{}
 
-// ModeInput returns the installation user input selecting one scheduling mode
-func ModeInput(mode string) json.RawMessage {
-	raw, err := json.Marshal(UserInput{Mode: mode})
-	if err != nil {
-		panic(err)
+// ModeOperationConfig returns the per-operation input disabling every reconcile loop except the one selected by mode
+func ModeOperationConfig(mode string) map[string]json.RawMessage {
+	loops := map[string]string{
+		ModeRecurring:    RecurringOp.Name(),
+		ModeExhausting:   ExhaustingOp.Name(),
+		ModeUnresolvable: UnresolvableOp.Name(),
 	}
 
-	return raw
+	config := make(map[string]json.RawMessage, len(loops))
+
+	for loopMode, operation := range loops {
+		config[operation] = lo.Must(json.Marshal(types.OperationSettings{Disable: loopMode != mode}))
+	}
+
+	return config
 }
 
-// TokenCredentialSet builds the token credential payload
+// legacyTokenCred is the token shape stored under the retired slot
+type legacyTokenCred struct {
+	// AccessToken is the legacy field name for the token
+	AccessToken string `json:"accessToken"`
+}
+
+// upgradeLegacyToken maps a payload stored under the legacy token slot onto the current token shape
+func upgradeLegacyToken(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (tokenCred, error) {
+	switch from {
+	case LegacyToken.Connection().Credential.Name:
+		legacy, err := jsonx.Decode[legacyTokenCred](stored)
+		if err != nil {
+			return tokenCred{}, err
+		}
+
+		return tokenCred{Token: legacy.AccessToken}, nil
+	default:
+		return jsonx.Decode[tokenCred](stored)
+	}
+}
+
+// credentialSet returns a credential payload marshaled from value
+func credentialSet(value any) types.CredentialSet {
+	return types.CredentialSet{Data: lo.Must(json.Marshal(value))}
+}
+
+// TokenCredentialSet returns the token credential payload
 func TokenCredentialSet(token string) types.CredentialSet {
-	raw, err := json.Marshal(tokenCred{Token: token})
-	if err != nil {
-		panic(err)
-	}
-
-	return types.CredentialSet{Data: raw}
+	return credentialSet(tokenCred{Token: token})
 }
 
-// ServiceAccountCredentialSet builds the strict credential payload
+// ServiceAccountCredentialSet returns the strict credential payload
 func ServiceAccountCredentialSet(projectID, email string) types.CredentialSet {
-	raw, err := json.Marshal(serviceAccountCred{ProjectID: projectID, ServiceAccountEmail: email})
-	if err != nil {
-		panic(err)
-	}
-
-	return types.CredentialSet{Data: raw}
+	return credentialSet(serviceAccountCred{ProjectID: projectID, ServiceAccountEmail: email})
 }

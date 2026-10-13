@@ -156,13 +156,12 @@ func TestAsAuthCodeOptionReturnsOption(t *testing.T) {
 func TestOAuthRegistrationStartDelegates(t *testing.T) {
 	t.Parallel()
 
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
+	reg := types.ConnectionOf[testCredential]().Authenticates(OAuthRegistration(OAuthRegistrationOptions[testCredential]{
+		Config: testOAuthCfg,
 		Material: func(mat OAuthMaterial) (testCredential, error) {
 			return testCredential{AccessToken: mat.AccessToken}, nil
 		},
-	})
+	})).Connection().Auth
 
 	result, err := reg.Start(context.Background(), nil)
 	if err != nil {
@@ -177,15 +176,13 @@ func TestOAuthRegistrationStartDelegates(t *testing.T) {
 func TestOAuthRegistrationCompleteCodeExchangeError(t *testing.T) {
 	t.Parallel()
 
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
+	reg := types.ConnectionOf[testCredential]().Authenticates(OAuthRegistration(OAuthRegistrationOptions[testCredential]{
+		Config: testOAuthCfg,
 		Material: func(mat OAuthMaterial) (testCredential, error) {
 			return testCredential{AccessToken: mat.AccessToken}, nil
 		},
-	})
+	})).Connection().Auth
 
-	// Valid state but code exchange will fail (no real OAuth server)
 	state := json.RawMessage(`{}`)
 	input := types.AuthCallbackInput{
 		Query: []types.AuthCallbackValue{
@@ -224,7 +221,6 @@ func TestStartOAuthWithAuthParams(t *testing.T) {
 func TestCompleteOAuthEmptyStartStateHitsCodeExchange(t *testing.T) {
 	t.Parallel()
 
-	// Empty start state skips CSRF validation but still attempts code exchange
 	state := json.RawMessage(`{}`)
 	input := types.AuthCallbackInput{
 		Query: []types.AuthCallbackValue{
