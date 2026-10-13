@@ -16,6 +16,7 @@ import (
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 const (
@@ -26,12 +27,17 @@ const (
 )
 
 // withEmailProviderRuntime swaps in an integrations runtime whose email definition is built for provider, so only that provider's inbound webhook is registered, and returns the restore func
+//
+// the runtime gets its own in-memory gala because listeners registered on the shared durable bus outlive the swap and would fan out every email operation later tests dispatch
 func (suite *HandlerTestSuite) withEmailProviderRuntime(t *testing.T, provider string) func() {
 	t.Helper()
 
+	galaInstance, err := gala.NewGala(t.Context(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 1})
+	require.NoError(t, err)
+
 	rt, err := runtime.New(runtime.Config{
 		DB:                 suite.galaDB,
-		Gala:               suite.galaRuntime,
+		Gala:               galaInstance,
 		Keystore:           suite.keystore,
 		DefinitionBuilders: []registry.Builder{emaildef.Builder(emaildef.MockProviderRuntimeConfig(provider), false)},
 	})
@@ -42,6 +48,9 @@ func (suite *HandlerTestSuite) withEmailProviderRuntime(t *testing.T, provider s
 
 	return func() {
 		suite.h.IntegrationsRuntime = original
+
+		require.NoError(t, galaInstance.WaitIdle(t.Context()))
+		require.NoError(t, galaInstance.Close())
 	}
 }
 
