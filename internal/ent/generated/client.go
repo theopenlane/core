@@ -26023,6 +26023,22 @@ func (c *ScanClient) QueryScope(_m *Scan) *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryDocumentKind queries the document_kind edge of a Scan.
+func (c *ScanClient) QueryDocumentKind(_m *Scan) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.DocumentKindTable, scan.DocumentKindColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssets queries the assets edge of a Scan.
 func (c *ScanClient) QueryAssets(_m *Scan) *AssetQuery {
 	query := (&AssetClient{config: c.config}).Query()

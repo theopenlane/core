@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
-	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -250,18 +249,12 @@ func mapEntityInput(ctx context.Context, client *entgen.Client, req questionnair
 
 	// external intake submissions default to the org's vendor entity type
 	if req.TemplateKind == enums.TemplateKindExternalIntake && input.EntityTypeID == nil {
-		id, err := client.EntityType.Query().
-			Where(
-				entitytype.OwnerIDEQ(req.OrganizationID),
-				entitytype.NameEqualFold("vendor"),
-			).
-			FirstID(ctx)
-
-		switch {
-		case entgen.IsNotFound(err):
-		case err != nil:
+		id, ok, err := orgVendorEntityTypeID(ctx, client, req.OrganizationID)
+		if err != nil {
 			return entgen.CreateEntityInput{}, "", err
-		default:
+		}
+
+		if ok {
 			input.EntityTypeID = &id
 		}
 	}

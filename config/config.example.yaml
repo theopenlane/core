@@ -207,6 +207,20 @@ integrations:
         rooturl: https://www.theopenlane.io
         supportemail: support@theopenlane.io
         testdir: fixtures/email
+    gemini:
+        apikey: ""
+        backend: ""
+        location: ""
+        model: ""
+        modelarmortemplate: ""
+        project: ""
+        prompts:
+            soc2:
+                continuation: ""
+                report: ""
+                scope: ""
+                sections: {}
+            systeminstruction: ""
     githubapp:
         appid: ""
         appslug: ""

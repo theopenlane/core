@@ -4920,6 +4920,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "document_kind": {
+	ObjectType:          "custom_type_enum",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 }, "assets": {
 	ObjectType:          "asset",
 	SkipEditCheck:       false,

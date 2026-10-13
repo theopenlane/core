@@ -109810,6 +109810,8 @@ type CreateBulkCSVScan_CreateBulkCSVScan_Scans struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -109881,6 +109883,18 @@ func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetDiscoveredVulnerabilityId
 		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetDocumentKindID() *string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.DocumentKindID
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetDocumentKindName() *string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.DocumentKindName
 }
 func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetEnvironmentID() *string {
 	if t == nil {
@@ -110070,6 +110084,8 @@ type CreateBulkScan_CreateBulkScan_Scans struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -110141,6 +110157,18 @@ func (t *CreateBulkScan_CreateBulkScan_Scans) GetDiscoveredVulnerabilityIds() []
 		t = &CreateBulkScan_CreateBulkScan_Scans{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetDocumentKindID() *string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.DocumentKindID
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetDocumentKindName() *string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.DocumentKindName
 }
 func (t *CreateBulkScan_CreateBulkScan_Scans) GetEnvironmentID() *string {
 	if t == nil {
@@ -110330,6 +110358,8 @@ type CreateScan_CreateScan_Scan struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -110401,6 +110431,18 @@ func (t *CreateScan_CreateScan_Scan) GetDiscoveredVulnerabilityIds() []string {
 		t = &CreateScan_CreateScan_Scan{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *CreateScan_CreateScan_Scan) GetDocumentKindID() *string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.DocumentKindID
+}
+func (t *CreateScan_CreateScan_Scan) GetDocumentKindName() *string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.DocumentKindName
 }
 func (t *CreateScan_CreateScan_Scan) GetEnvironmentID() *string {
 	if t == nil {
@@ -110750,6 +110792,8 @@ type GetScanByID_Scan struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -110821,6 +110865,18 @@ func (t *GetScanByID_Scan) GetDiscoveredVulnerabilityIds() []string {
 		t = &GetScanByID_Scan{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *GetScanByID_Scan) GetDocumentKindID() *string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.DocumentKindID
+}
+func (t *GetScanByID_Scan) GetDocumentKindName() *string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.DocumentKindName
 }
 func (t *GetScanByID_Scan) GetEnvironmentID() *string {
 	if t == nil {
@@ -111148,6 +111204,8 @@ type UpdateScan_UpdateScan_Scan struct {
 	CreatedAt                  *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                  *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DiscoveredVulnerabilityIds []string         "json:\"discoveredVulnerabilityIds,omitempty\" graphql:\"discoveredVulnerabilityIds\""
+	DocumentKindID             *string          "json:\"documentKindID,omitempty\" graphql:\"documentKindID\""
+	DocumentKindName           *string          "json:\"documentKindName,omitempty\" graphql:\"documentKindName\""
 	EnvironmentID              *string          "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName            *string          "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	GeneratedByPlatformID      *string          "json:\"generatedByPlatformID,omitempty\" graphql:\"generatedByPlatformID\""
@@ -111219,6 +111277,18 @@ func (t *UpdateScan_UpdateScan_Scan) GetDiscoveredVulnerabilityIds() []string {
 		t = &UpdateScan_UpdateScan_Scan{}
 	}
 	return t.DiscoveredVulnerabilityIds
+}
+func (t *UpdateScan_UpdateScan_Scan) GetDocumentKindID() *string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.DocumentKindID
+}
+func (t *UpdateScan_UpdateScan_Scan) GetDocumentKindName() *string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.DocumentKindName
 }
 func (t *UpdateScan_UpdateScan_Scan) GetEnvironmentID() *string {
 	if t == nil {
@@ -202091,6 +202161,8 @@ const CreateBulkCSVScanDocument = `mutation CreateBulkCSVScan ($input: Upload!) 
 			createdAt
 			createdBy
 			discoveredVulnerabilityIds
+			documentKindID
+			documentKindName
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -202151,6 +202223,8 @@ const CreateBulkScanDocument = `mutation CreateBulkScan ($input: [CreateScanInpu
 			createdAt
 			createdBy
 			discoveredVulnerabilityIds
+			documentKindID
+			documentKindName
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -202211,6 +202285,8 @@ const CreateScanDocument = `mutation CreateScan ($input: CreateScanInput!) {
 			createdAt
 			createdBy
 			discoveredVulnerabilityIds
+			documentKindID
+			documentKindName
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -202337,6 +202413,8 @@ const GetScanByIDDocument = `query GetScanByID ($scanId: ID!) {
 		createdAt
 		createdBy
 		discoveredVulnerabilityIds
+		documentKindID
+		documentKindName
 		environmentID
 		environmentName
 		generatedByPlatformID
@@ -202443,6 +202521,8 @@ const UpdateScanDocument = `mutation UpdateScan ($updateScanId: ID!, $input: Upd
 			createdAt
 			createdBy
 			discoveredVulnerabilityIds
+			documentKindID
+			documentKindName
 			environmentID
 			environmentName
 			generatedByPlatformID

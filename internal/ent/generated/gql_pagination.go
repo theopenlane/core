@@ -46396,6 +46396,7 @@ func (_q *ScanQuery) clonePage() *ScanQuery {
 	c.withAssignedToIdentityHolder = _q.withAssignedToIdentityHolder.clonePage()
 	c.withEnvironment = _q.withEnvironment.clonePage()
 	c.withScope = _q.withScope.clonePage()
+	c.withDocumentKind = _q.withDocumentKind.clonePage()
 	c.withAssets = _q.withAssets.clonePage()
 	if _q.withNamedAssets != nil {
 		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))

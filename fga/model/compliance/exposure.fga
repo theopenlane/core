@@ -23,7 +23,7 @@ type risk
     define parent_editor: can_edit from parent_context or can_edit_risk from parent_context or can_edit from parent
     define parent_viewer: can_view_risk from parent_context or can_view from parent
     define parent_context: [organization]
-    define parent: [program, control, control_objective, subcontrol, procedure, internal_policy]
+    define parent: [program, control, control_objective, subcontrol, procedure, internal_policy, platform]
 
 # findings permissions can be inherited from parent objects or based on the organization in context
 type finding
@@ -123,7 +123,7 @@ type scan
     define parent_editor: can_edit from parent_context or can_edit_scan from parent_context or can_edit from parent
     define parent_viewer: can_view from parent_context or can_view_scan from parent_context or can_view from parent
     define parent_context: [organization]
-    define parent: [platform, asset]
+    define parent: [platform, asset, entity, control, subcontrol, risk]
 
 type vendor_scoring_config
   relations

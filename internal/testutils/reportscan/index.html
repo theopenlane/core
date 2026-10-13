@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report Scan Test</title>
+    <link href="../login/webauthn/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      pre { max-height: 480px; overflow: auto; font-size: 12px; }
+      .section-card { margin-bottom: 1rem; }
+    </style>
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="mb-4">Report Scan Test</h1>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label" for="apiBase">API host</label>
+              <input type="text" class="form-control" id="apiBase" value="http://localhost:17608" />
+            </div>
+            <div class="col-md-8">
+              <label class="form-label" for="token">Bearer token (PAT or API token, optional when logged in with cookies)</label>
+              <input type="password" class="form-control" id="token" placeholder="tolp_..." />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="orgID">Organization ID</label>
+              <input type="text" class="form-control" id="orgID" placeholder="required with a PAT, optional otherwise" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="reportFile">SOC 2 report PDF</label>
+              <input type="file" class="form-control" id="reportFile" accept="application/pdf" />
+            </div>
+            <div class="col-12">
+              <label class="form-label">Sections to parse (none checked parses every configured section)</label>
+              <div id="partOptions" class="d-flex flex-wrap gap-3"></div>
+            </div>
+          </div>
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-primary" id="submitButton">Submit report</button>
+            <button class="btn btn-outline-secondary" id="listButton">List report scans</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-8">
+              <label class="form-label" for="scanID">Scan ID</label>
+              <input type="text" class="form-control" id="scanID" placeholder="filled in after submit" />
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+              <button class="btn btn-secondary" id="pollButton">Poll status</button>
+              <button class="btn btn-outline-danger" id="stopButton">Stop polling</button>
+            </div>
+          </div>
+          <div class="mt-3" id="statusLine">No scan selected</div>
+        </div>
+      </div>
+
+      <div id="sections"></div>
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Log</h5>
+          <pre id="log" class="bg-light p-3 rounded"></pre>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const PERFORMED_BY = "openlane_report_parse";
+      const POLL_INTERVAL_MS = 10000;
+      let pollTimer = null;
+
+      const el = (id) => document.getElementById(id);
+
+      function log(message) {
+        const line = `[${new Date().toISOString()}] ${message}`;
+        el("log").textContent += line + "\n";
+        el("log").scrollTop = el("log").scrollHeight;
+      }
+
+      function getCSRFToken() {
+        return document.cookie
+          .split(";")
+          .map((c) => c.trim().split("="))
+          .find(([name]) => name === "ol.csrf-token")?.[1] || null;
+      }
+
+      function authHeaders() {
+        const headers = {};
+        const token = el("token").value.trim();
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        } else {
+          const csrf = getCSRFToken();
+          if (csrf) {
+            headers["X-CSRF-Token"] = csrf;
+          }
+        }
+        return headers;
+      }
+
+      const PART_NAMES = ["programs", "entities", "assets", "controls", "groups", "domains", "reviews", "findings", "platforms", "systemdetails", "contacts"];
+
+      function renderPartOptions() {
+        el("partOptions").innerHTML = PART_NAMES.map(
+          (name) => `<div class="form-check"><input class="form-check-input part-option" type="checkbox" id="part-${name}" value="${name}" /><label class="form-check-label" for="part-${name}">${name}</label></div>`,
+        ).join("");
+      }
+
+      function selectedParts() {
+        return Array.from(document.querySelectorAll(".part-option:checked")).map((box) => box.value);
+      }
+
+      async function graphql(query, variables) {
+        const resp = await fetch(`${el("apiBase").value}/query`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...authHeaders() },
+          credentials: "include",
+          body: JSON.stringify({ query, variables }),
+        });
+        const body = await resp.json();
+        if (body.errors) {
+          throw new Error(body.errors.map((e) => e.message).join("; "));
+        }
+        return body.data;
+      }
+
+      async function graphqlUpload(query, variables, file) {
+        const form = new FormData();
+        form.append("operations", JSON.stringify({ query, variables: { ...variables, scanFiles: [null] } }));
+        form.append("map", JSON.stringify({ 0: ["variables.scanFiles.0"] }));
+        form.append("0", file, file.name);
+
+        const resp = await fetch(`${el("apiBase").value}/query`, {
+          method: "POST",
+          headers: authHeaders(),
+          credentials: "include",
+          body: form,
+        });
+        const body = await resp.json();
+        if (body.errors) {
+          throw new Error(body.errors.map((e) => e.message).join("; "));
+        }
+        return body.data;
+      }
+
+      const scanFields = `id target status scanType performedBy createdAt updatedAt metadata files { edges { node { id providedFileName detectedContentType } } }`;
+
+      async function submitReport() {
+        const file = el("reportFile").files[0];
+        if (!file) {
+          log("choose a pdf first");
+          return;
+        }
+
+        const input = {
+          target: file.name,
+          scanType: "REPORT",
+          performedBy: PERFORMED_BY,
+          status: "PENDING",
+        };
+
+        const parts = selectedParts();
+        if (parts.length > 0) {
+          input.metadata = { parts };
+        }
+
+        const orgID = el("orgID").value.trim();
+        if (orgID) {
+          input.ownerID = orgID;
+        }
+
+        const mutation = `
+          mutation CreateReportScan($input: CreateScanInput!, $scanFiles: [Upload!]) {
+            createScan(input: $input, scanFiles: $scanFiles) { scan { ${scanFields} } }
+          }
+        `;
+
+        log(`submitting ${file.name} (${file.size} bytes)`);
+
+        try {
+          const data = await graphqlUpload(mutation, { input }, file);
+          const scan = data.createScan.scan;
+          el("scanID").value = scan.id;
+          renderScan(scan);
+          log(`created scan ${scan.id}, polling every ${POLL_INTERVAL_MS / 1000}s`);
+          startPolling();
+        } catch (err) {
+          log(`submit failed: ${err.message}`);
+        }
+      }
+
+      async function fetchScan() {
+        const id = el("scanID").value.trim();
+        if (!id) {
+          log("no scan id");
+          return null;
+        }
+
+        const query = `query ReportScan($id: ID!) { scan(id: $id) { ${scanFields} } }`;
+
+        try {
+          const data = await graphql(query, { id });
+          renderScan(data.scan);
+          return data.scan;
+        } catch (err) {
+          log(`poll failed: ${err.message}`);
+          return null;
+        }
+      }
+
+      function startPolling() {
+        stopPolling();
+        pollTimer = setInterval(async () => {
+          const scan = await fetchScan();
+          if (scan && (scan.status === "COMPLETED" || scan.status === "FAILED")) {
+            log(`scan ${scan.id} is ${scan.status}, polling stopped`);
+            stopPolling();
+          }
+        }, POLL_INTERVAL_MS);
+      }
+
+      function stopPolling() {
+        if (pollTimer) {
+          clearInterval(pollTimer);
+          pollTimer = null;
+        }
+      }
+
+      async function listScans() {
+        const query = `
+          query ReportScans {
+            scans(where: { scanType: REPORT, performedBy: "${PERFORMED_BY}" }, orderBy: { field: created_at, direction: DESC }, first: 20) {
+              edges { node { id target status createdAt } }
+            }
+          }
+        `;
+
+        try {
+          const data = await graphql(query, {});
+          const rows = data.scans.edges.map((e) => `${e.node.id}  ${e.node.status.padEnd(10)}  ${e.node.createdAt}  ${e.node.target}`);
+          log(rows.length ? "report scans:\n" + rows.join("\n") : "no report scans found");
+        } catch (err) {
+          log(`list failed: ${err.message}`);
+        }
+      }
+
+      function renderScan(scan) {
+        el("statusLine").innerHTML = `<strong>${scan.id}</strong> &middot; ${scan.target} &middot; <span class="badge bg-${badgeFor(scan.status)}">${scan.status}</span> &middot; updated ${scan.updatedAt}`;
+
+        const container = el("sections");
+        container.innerHTML = "";
+
+        const metadata = scan.metadata || {};
+
+        if (metadata.error) {
+          container.appendChild(card("Error", metadata.error));
+        }
+
+        const report = metadata.report || {};
+        Object.keys(report).sort().forEach((name) => {
+          const value = report[name];
+          const count = Array.isArray(value) ? ` (${value.length})` : "";
+          container.appendChild(card(`${name}${count}`, JSON.stringify(value, null, 2)));
+        });
+      }
+
+      function card(title, body) {
+        const div = document.createElement("div");
+        div.className = "card section-card";
+        div.innerHTML = `<div class="card-body"><h5 class="card-title"></h5><pre class="bg-light p-3 rounded"></pre></div>`;
+        div.querySelector("h5").textContent = title;
+        div.querySelector("pre").textContent = body;
+        return div;
+      }
+
+      function badgeFor(status) {
+        switch (status) {
+          case "COMPLETED": return "success";
+          case "FAILED": return "danger";
+          case "PROCESSING": return "warning";
+          default: return "secondary";
+        }
+      }
+
+      renderPartOptions();
+      el("submitButton").addEventListener("click", submitReport);
+      el("pollButton").addEventListener("click", () => { fetchScan(); startPolling(); });
+      el("stopButton").addEventListener("click", () => { stopPolling(); log("polling stopped"); });
+      el("listButton").addEventListener("click", listScans);
+    </script>
+  </body>
+</html>
