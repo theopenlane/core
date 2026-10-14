@@ -9,11 +9,13 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
@@ -212,7 +214,42 @@ func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentM
 		),
 	).Exec(allowCtx)
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	return reconcileBrandingForTrustCenter(allowCtx, orgSub.OwnerID)
+}
+
+func reconcileBrandingForTrustCenter(ctx context.Context, ownerID string) error {
+
+	tx := transaction.FromContext(ctx)
+
+	ok, err := tx.OrgModule.Query().Where(
+		orgmodule.OwnerID(ownerID),
+		orgmodule.ModuleEQ(models.CatalogTrustcenterBrandingAddon),
+		orgmodule.Active(true),
+	).Exist(ctx)
+	if err != nil {
+		return err
+	}
+
+	ts, err := tx.TrustCenter.Query().
+		Where(trustcenter.OwnerID(ownerID)).
+		Select(trustcenter.FieldID).
+		First(ctx)
+	if ent.IsNotFound(err) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return tx.TrustCenterSetting.Update().
+		Where(trustcentersetting.TrustCenterID(ts.ID)).
+		SetRemoveBranding(ok).
+		Exec(ctx)
 }
 
 // removeAllModules drops all modules except the base one
@@ -233,5 +270,9 @@ func (h *Handler) removeAllModules(ctx context.Context, subscription *stripe.Sub
 		),
 	).Exec(allowCtx)
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	return reconcileBrandingForTrustCenter(allowCtx, orgSub.OwnerID)
 }
