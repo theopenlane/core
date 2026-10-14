@@ -10,9 +10,11 @@ const (
 	CatalogEntityManagementModule        OrgModule = "entity_management_module"
 	CatalogExtraEvidenceStorageAddon     OrgModule = "extra_evidence_storage_addon"
 	CatalogPolicyManagementAddon         OrgModule = "policy_management_addon"
+	CatalogQuestionnaireDomainAddon      OrgModule = "questionnaire_domain_addon"
 	CatalogRegistryModule                OrgModule = "registry_module"
 	CatalogRiskManagementAddon           OrgModule = "risk_management_addon"
 	CatalogTrustCenterModule             OrgModule = "trust_center_module"
+	CatalogTrustcenterBrandingAddon      OrgModule = "trustcenter_branding_addon"
 	CatalogVulnerabilityManagementModule OrgModule = "vulnerability_management_module"
 	CatalogWorkflowAddon                 OrgModule = "workflow_addon"
 )
@@ -21,7 +23,7 @@ const (
 const CatalogAnyModule OrgModule = "any_module"
 
 // AllOrgModules contains every module and addon in the catalog
-var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule, CatalogWorkflowAddon}
+var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogQuestionnaireDomainAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogTrustcenterBrandingAddon, CatalogVulnerabilityManagementModule, CatalogWorkflowAddon}
 
 // OrgModuleByConstName maps the name of each module constant to the module it holds
 var OrgModuleByConstName = map[string]OrgModule{
@@ -32,9 +34,11 @@ var OrgModuleByConstName = map[string]OrgModule{
 	"CatalogEntityManagementModule":        CatalogEntityManagementModule,
 	"CatalogExtraEvidenceStorageAddon":     CatalogExtraEvidenceStorageAddon,
 	"CatalogPolicyManagementAddon":         CatalogPolicyManagementAddon,
+	"CatalogQuestionnaireDomainAddon":      CatalogQuestionnaireDomainAddon,
 	"CatalogRegistryModule":                CatalogRegistryModule,
 	"CatalogRiskManagementAddon":           CatalogRiskManagementAddon,
 	"CatalogTrustCenterModule":             CatalogTrustCenterModule,
+	"CatalogTrustcenterBrandingAddon":      CatalogTrustcenterBrandingAddon,
 	"CatalogVulnerabilityManagementModule": CatalogVulnerabilityManagementModule,
 	"CatalogWorkflowAddon":                 CatalogWorkflowAddon,
 }

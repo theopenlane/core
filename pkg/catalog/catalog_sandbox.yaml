@@ -1,5 +1,5 @@
-version: v0.0.17
-sha: fea0fed73552a59ff56e29784e64f69b5eea9381cc2976e2fc1e98166aa0e6d3
+version: v0.0.16
+sha: e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2
 modules:
   base_module:
     display_name: Base Module
@@ -175,6 +175,25 @@ addons:
         price_id: price_1S3qXHJIzM4Pa2Zcjl8y3TWX
     audience: beta
     product_id: prod_SzqDMmZeWJiUDm
+  questionnaire_domain_addon:
+    display_name: Questionnaire custom domain
+    lookup_key: questionnaire_custom_domain_addon
+    description: Questionnaire custom domain
+    marketing_description: Use a custom domain for your hosted questionnaires
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 2000
+        nickname: price_questionnaire_custom_domain_monthly
+        lookup_key: price_questionnaire_custom_domain_monthly
+        price_id: price_1UQRqUJIzM4Pa2ZcqMCbWhCO
+      - interval: year
+        unit_amount: 20000
+        nickname: price_questionnaire_custom_domain_yearly
+        lookup_key: price_questionnaire_custom_domain_yearly
+        price_id: price_1UQRqWJIzM4Pa2ZcVXPmx7pP
+    audience: private
+    product_id: prod_VRKVWuKkT9FOGT
   risk_management_addon:
     display_name: Risk Management
     lookup_key: risk_management_addon
@@ -194,6 +213,25 @@ addons:
         price_id: price_1S3qXJJIzM4Pa2Zc0V7TvS0A
     audience: beta
     product_id: prod_SzqDvmryWdfvr7
+  trustcenter_branding_addon:
+    display_name: Trustcenter Branding
+    lookup_key: trustcenter_branding_addon
+    description: Trustcenter Branding
+    marketing_description: Customization option to remove the Openlane branding on your Trustcenter
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 5000
+        nickname: price_trustcenter_branding_monthly
+        lookup_key: price_trustcenter_branding_monthly
+        price_id: price_1UQRqjJIzM4Pa2ZcGgZczYkN
+      - interval: year
+        unit_amount: 50000
+        nickname: price_trustcenter_branding_annually
+        lookup_key: price_trustcenter_branding_yearly
+        price_id: price_1UQRqlJIzM4Pa2Zc8bRUfuwJ
+    audience: private
+    product_id: prod_VRKVprEOFUrczE
   workflow_addon:
     display_name: Workflow Automation
     lookup_key: workflow_addon

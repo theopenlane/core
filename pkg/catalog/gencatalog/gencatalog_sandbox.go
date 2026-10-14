@@ -64,6 +64,27 @@ var DefaultSandboxCatalog = models.Catalog{
 			MarketingDescription: "Create and maintain your security policies with version control. Keep your documentation audit-ready",
 			ProductID:            "prod_SzqDMmZeWJiUDm",
 		},
+		string(models.CatalogQuestionnaireDomainAddon): models.Feature{
+			Audience: "private",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_questionnaire_custom_domain_monthly",
+				Nickname:   "price_questionnaire_custom_domain_monthly",
+				PriceID:    "price_1UQRqUJIzM4Pa2ZcqMCbWhCO",
+				UnitAmount: int64(2000),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_questionnaire_custom_domain_yearly",
+				Nickname:   "price_questionnaire_custom_domain_yearly",
+				PriceID:    "price_1UQRqWJIzM4Pa2ZcVXPmx7pP",
+				UnitAmount: int64(20000),
+			}}},
+			Description:          "Questionnaire custom domain",
+			DisplayName:          "Questionnaire custom domain",
+			LookupKey:            "questionnaire_custom_domain_addon",
+			MarketingDescription: "Use a custom domain for your hosted questionnaires",
+			ProductID:            "prod_VRKVWuKkT9FOGT",
+		},
 		string(models.CatalogRiskManagementAddon): models.Feature{
 			Audience: "beta",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
@@ -84,6 +105,27 @@ var DefaultSandboxCatalog = models.Catalog{
 			LookupKey:            "risk_management_addon",
 			MarketingDescription: "Comprehensive risk assessment and monitoring solution. Make data-driven decisions about your security posture.",
 			ProductID:            "prod_SzqDvmryWdfvr7",
+		},
+		string(models.CatalogTrustcenterBrandingAddon): models.Feature{
+			Audience: "private",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_trustcenter_branding_monthly",
+				Nickname:   "price_trustcenter_branding_monthly",
+				PriceID:    "price_1UQRqjJIzM4Pa2ZcGgZczYkN",
+				UnitAmount: int64(5000),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_trustcenter_branding_yearly",
+				Nickname:   "price_trustcenter_branding_annually",
+				PriceID:    "price_1UQRqlJIzM4Pa2Zc8bRUfuwJ",
+				UnitAmount: int64(50000),
+			}}},
+			Description:          "Trustcenter Branding",
+			DisplayName:          "Trustcenter Branding",
+			LookupKey:            "trustcenter_branding_addon",
+			MarketingDescription: "Customization option to remove the Openlane branding on your Trustcenter",
+			ProductID:            "prod_VRKVprEOFUrczE",
 		},
 		string(models.CatalogWorkflowAddon): models.Feature{
 			Audience: "private",
@@ -241,6 +283,6 @@ var DefaultSandboxCatalog = models.Catalog{
 			ProductID:            "prod_SzpzB3d9rAjrb3",
 		},
 	},
-	SHA:     "fea0fed73552a59ff56e29784e64f69b5eea9381cc2976e2fc1e98166aa0e6d3",
-	Version: "v0.0.17",
+	SHA:     "e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2",
+	Version: "v0.0.16",
 }
