@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -1742,6 +1743,29 @@ var (
 			}
 
 			return entity, nil
+		},
+	}
+	SchemaAssessmentDomain = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "AssessmentDomain",
+			Snake: "assessment_domain",
+			Lower: "assessmentdomain",
+		},
+		OwnerField: assessmentdomain.FieldOwnerID,
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "assessment_domain", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.AssessmentDomain.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
 		},
 	}
 	SchemaAssessmentPolicy = &Schema{
@@ -5950,6 +5974,15 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
+	SchemaAssessmentDomain.Fields = []FieldDescriptor{
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "custom_domain_id", Label: "CustomDomainID", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+	}
 	SchemaAssessmentPolicy.Fields = []FieldDescriptor{
 		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -8886,6 +8919,26 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+		},
+	}
+	SchemaAssessmentDomain.Edges = []EdgeDescriptor{
+		{
+			Name:        "custom_domain",
+			Label:       "CustomDomain",
+			Target:      SchemaCustomDomain,
+			TargetType:  "CustomDomain",
+			Unique:      true,
+			CreateField: "custom_domain_id",
+			Field:       "custom_domain_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 	}
 	SchemaAssessmentPolicy.Edges = []EdgeDescriptor{
@@ -14059,6 +14112,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "assessment_creator_ids",
 			AddField:    "add_assessment_creator_ids",
+		},
+		{
+			Name:        "assessment_domains",
+			Label:       "AssessmentDomains",
+			Target:      SchemaAssessmentDomain,
+			TargetType:  "AssessmentDomain",
+			CreateField: "assessment_domain_ids",
+			AddField:    "add_assessment_domain_ids",
 		},
 		{
 			Name:        "assessment_policies",
@@ -23678,6 +23739,7 @@ var allSchemas = []*Schema{
 	SchemaAPIToken,
 	SchemaActionPlan,
 	SchemaAssessment,
+	SchemaAssessmentDomain,
 	SchemaAssessmentPolicy,
 	SchemaAssessmentResponse,
 	SchemaAsset,

@@ -253,6 +253,7 @@ func (o Organization) Edges() []ent.Edge {
 		hiddenOwnerEdge(o, Assessment{}),
 		hiddenOwnerEdge(o, AssessmentResponse{}),
 		hiddenOwnerEdge(o, AssessmentPolicy{}),
+		hiddenOwnerEdge(o, AssessmentDomain{}),
 		hiddenOwnerEdge(o, CustomTypeEnum{}),
 		hiddenOwnerEdge(o, TagDefinition{}),
 		hiddenOwnerEdge(o, Remediation{}),

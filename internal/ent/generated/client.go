@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -148,6 +149,8 @@ type Client struct {
 	ActionPlan *ActionPlanClient
 	// Assessment is the client for interacting with the Assessment builders.
 	Assessment *AssessmentClient
+	// AssessmentDomain is the client for interacting with the AssessmentDomain builders.
+	AssessmentDomain *AssessmentDomainClient
 	// AssessmentPolicy is the client for interacting with the AssessmentPolicy builders.
 	AssessmentPolicy *AssessmentPolicyClient
 	// AssessmentResponse is the client for interacting with the AssessmentResponse builders.
@@ -365,6 +368,7 @@ func (c *Client) init() {
 	c.APIToken = NewAPITokenClient(c.config)
 	c.ActionPlan = NewActionPlanClient(c.config)
 	c.Assessment = NewAssessmentClient(c.config)
+	c.AssessmentDomain = NewAssessmentDomainClient(c.config)
 	c.AssessmentPolicy = NewAssessmentPolicyClient(c.config)
 	c.AssessmentResponse = NewAssessmentResponseClient(c.config)
 	c.Asset = NewAssetClient(c.config)
@@ -663,6 +667,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		APIToken:                   NewAPITokenClient(cfg),
 		ActionPlan:                 NewActionPlanClient(cfg),
 		Assessment:                 NewAssessmentClient(cfg),
+		AssessmentDomain:           NewAssessmentDomainClient(cfg),
 		AssessmentPolicy:           NewAssessmentPolicyClient(cfg),
 		AssessmentResponse:         NewAssessmentResponseClient(cfg),
 		Asset:                      NewAssetClient(cfg),
@@ -782,6 +787,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		APIToken:                   NewAPITokenClient(cfg),
 		ActionPlan:                 NewActionPlanClient(cfg),
 		Assessment:                 NewAssessmentClient(cfg),
+		AssessmentDomain:           NewAssessmentDomainClient(cfg),
 		AssessmentPolicy:           NewAssessmentPolicyClient(cfg),
 		AssessmentResponse:         NewAssessmentResponseClient(cfg),
 		Asset:                      NewAssetClient(cfg),
@@ -908,7 +914,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentPolicy,
+		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentDomain, c.AssessmentPolicy,
 		c.AssessmentResponse, c.Asset, c.Campaign, c.CampaignTarget, c.CheckResult,
 		c.Contact, c.Control, c.ControlImplementation, c.ControlObjective,
 		c.CustomDomain, c.CustomTypeEnum, c.DNSVerification, c.DirectoryAccount,
@@ -940,7 +946,7 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentPolicy,
+		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentDomain, c.AssessmentPolicy,
 		c.AssessmentResponse, c.Asset, c.Campaign, c.CampaignTarget, c.CheckResult,
 		c.Contact, c.Control, c.ControlImplementation, c.ControlObjective,
 		c.CustomDomain, c.CustomTypeEnum, c.DNSVerification, c.DirectoryAccount,
@@ -1049,6 +1055,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ActionPlan.mutate(ctx, m)
 	case *AssessmentMutation:
 		return c.Assessment.mutate(ctx, m)
+	case *AssessmentDomainMutation:
+		return c.AssessmentDomain.mutate(ctx, m)
 	case *AssessmentPolicyMutation:
 		return c.AssessmentPolicy.mutate(ctx, m)
 	case *AssessmentResponseMutation:
@@ -2178,6 +2186,173 @@ func (c *AssessmentClient) mutate(ctx context.Context, m *AssessmentMutation) (V
 		return (&AssessmentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Assessment mutation op: %q", m.Op())
+	}
+}
+
+// AssessmentDomainClient is a client for the AssessmentDomain schema.
+type AssessmentDomainClient struct {
+	config
+}
+
+// NewAssessmentDomainClient returns a client for the AssessmentDomain from the given config.
+func NewAssessmentDomainClient(c config) *AssessmentDomainClient {
+	return &AssessmentDomainClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assessmentdomain.Hooks(f(g(h())))`.
+func (c *AssessmentDomainClient) Use(hooks ...Hook) {
+	c.hooks.AssessmentDomain = append(c.hooks.AssessmentDomain, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assessmentdomain.Intercept(f(g(h())))`.
+func (c *AssessmentDomainClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AssessmentDomain = append(c.inters.AssessmentDomain, interceptors...)
+}
+
+// Create returns a builder for creating a AssessmentDomain entity.
+func (c *AssessmentDomainClient) Create() *AssessmentDomainCreate {
+	mutation := newAssessmentDomainMutation(c.config, OpCreate)
+	return &AssessmentDomainCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AssessmentDomain entities.
+func (c *AssessmentDomainClient) CreateBulk(builders ...*AssessmentDomainCreate) *AssessmentDomainCreateBulk {
+	return &AssessmentDomainCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssessmentDomainClient) MapCreateBulk(slice any, setFunc func(*AssessmentDomainCreate, int)) *AssessmentDomainCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssessmentDomainCreateBulk{err: fmt.Errorf("calling to AssessmentDomainClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssessmentDomainCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssessmentDomainCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AssessmentDomain.
+func (c *AssessmentDomainClient) Update() *AssessmentDomainUpdate {
+	mutation := newAssessmentDomainMutation(c.config, OpUpdate)
+	return &AssessmentDomainUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssessmentDomainClient) UpdateOne(_m *AssessmentDomain) *AssessmentDomainUpdateOne {
+	mutation := newAssessmentDomainMutation(c.config, OpUpdateOne, withAssessmentDomain(_m))
+	return &AssessmentDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssessmentDomainClient) UpdateOneID(id string) *AssessmentDomainUpdateOne {
+	mutation := newAssessmentDomainMutation(c.config, OpUpdateOne, withAssessmentDomainID(id))
+	return &AssessmentDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AssessmentDomain.
+func (c *AssessmentDomainClient) Delete() *AssessmentDomainDelete {
+	mutation := newAssessmentDomainMutation(c.config, OpDelete)
+	return &AssessmentDomainDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssessmentDomainClient) DeleteOne(_m *AssessmentDomain) *AssessmentDomainDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssessmentDomainClient) DeleteOneID(id string) *AssessmentDomainDeleteOne {
+	builder := c.Delete().Where(assessmentdomain.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssessmentDomainDeleteOne{builder}
+}
+
+// Query returns a query builder for AssessmentDomain.
+func (c *AssessmentDomainClient) Query() *AssessmentDomainQuery {
+	return &AssessmentDomainQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssessmentDomain},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AssessmentDomain entity by its id.
+func (c *AssessmentDomainClient) Get(ctx context.Context, id string) (*AssessmentDomain, error) {
+	return c.Query().Where(assessmentdomain.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssessmentDomainClient) GetX(ctx context.Context, id string) *AssessmentDomain {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a AssessmentDomain.
+func (c *AssessmentDomainClient) QueryOwner(_m *AssessmentDomain) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentdomain.Table, assessmentdomain.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentdomain.OwnerTable, assessmentdomain.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCustomDomain queries the custom_domain edge of a AssessmentDomain.
+func (c *AssessmentDomainClient) QueryCustomDomain(_m *AssessmentDomain) *CustomDomainQuery {
+	query := (&CustomDomainClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentdomain.Table, assessmentdomain.FieldID, id),
+			sqlgraph.To(customdomain.Table, customdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessmentdomain.CustomDomainTable, assessmentdomain.CustomDomainColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AssessmentDomainClient) Hooks() []Hook {
+	hooks := c.hooks.AssessmentDomain
+	return append(hooks[:len(hooks):len(hooks)], assessmentdomain.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssessmentDomainClient) Interceptors() []Interceptor {
+	inters := c.inters.AssessmentDomain
+	return append(inters[:len(inters):len(inters)], assessmentdomain.Interceptors[:]...)
+}
+
+func (c *AssessmentDomainClient) mutate(ctx context.Context, m *AssessmentDomainMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssessmentDomainCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssessmentDomainUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssessmentDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssessmentDomainDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown AssessmentDomain mutation op: %q", m.Op())
 	}
 }
 
@@ -20931,6 +21106,22 @@ func (c *OrganizationClient) QueryAssessmentPolicies(_m *Organization) *Assessme
 	return query
 }
 
+// QueryAssessmentDomains queries the assessment_domains edge of a Organization.
+func (c *OrganizationClient) QueryAssessmentDomains(_m *Organization) *AssessmentDomainQuery {
+	query := (&AssessmentDomainClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(assessmentdomain.Table, assessmentdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentDomainsTable, organization.AssessmentDomainsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryCustomTypeEnums queries the custom_type_enums edge of a Organization.
 func (c *OrganizationClient) QueryCustomTypeEnums(_m *Organization) *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: c.config}).Query()
@@ -35118,17 +35309,17 @@ func (c *WorkflowProposalClient) mutate(ctx context.Context, m *WorkflowProposal
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		APIToken, ActionPlan, Assessment, AssessmentPolicy, AssessmentResponse, Asset,
-		Campaign, CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
-		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
-		DirectoryAccount, DirectoryGroup, DirectoryMembership, Discussion,
-		DocumentData, EmailTemplate, EmailVerificationToken, Entity, EntityType, Event,
-		Evidence, Export, File, FileDownloadToken, Finding, FindingControl, Group,
-		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
-		Integration, IntegrationRun, IntegrationWebhook, InternalPolicy, Invite,
-		MappableDomain, MappedControl, Narrative, Note, Notification,
-		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
-		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
+		APIToken, ActionPlan, Assessment, AssessmentDomain, AssessmentPolicy,
+		AssessmentResponse, Asset, Campaign, CampaignTarget, CheckResult, Contact,
+		Control, ControlImplementation, ControlObjective, CustomDomain, CustomTypeEnum,
+		DNSVerification, DirectoryAccount, DirectoryGroup, DirectoryMembership,
+		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
+		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
+		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
+		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
+		InternalPolicy, Invite, MappableDomain, MappedControl, Narrative, Note,
+		Notification, NotificationPreference, NotificationTemplate, Onboarding,
+		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
 		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
@@ -35141,17 +35332,17 @@ type (
 		WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
-		APIToken, ActionPlan, Assessment, AssessmentPolicy, AssessmentResponse, Asset,
-		Campaign, CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
-		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
-		DirectoryAccount, DirectoryGroup, DirectoryMembership, Discussion,
-		DocumentData, EmailTemplate, EmailVerificationToken, Entity, EntityType, Event,
-		Evidence, Export, File, FileDownloadToken, Finding, FindingControl, Group,
-		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
-		Integration, IntegrationRun, IntegrationWebhook, InternalPolicy, Invite,
-		MappableDomain, MappedControl, Narrative, Note, Notification,
-		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
-		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
+		APIToken, ActionPlan, Assessment, AssessmentDomain, AssessmentPolicy,
+		AssessmentResponse, Asset, Campaign, CampaignTarget, CheckResult, Contact,
+		Control, ControlImplementation, ControlObjective, CustomDomain, CustomTypeEnum,
+		DNSVerification, DirectoryAccount, DirectoryGroup, DirectoryMembership,
+		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
+		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
+		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
+		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
+		InternalPolicy, Invite, MappableDomain, MappedControl, Narrative, Note,
+		Notification, NotificationPreference, NotificationTemplate, Onboarding,
+		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
 		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,

@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentdomainhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
@@ -142,6 +143,7 @@ func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			actionplanhistory.Table:                 actionplanhistory.ValidColumn,
+			assessmentdomainhistory.Table:           assessmentdomainhistory.ValidColumn,
 			assessmenthistory.Table:                 assessmenthistory.ValidColumn,
 			assessmentpolicyhistory.Table:           assessmentpolicyhistory.ValidColumn,
 			assessmentresponsehistory.Table:         assessmentresponsehistory.ValidColumn,

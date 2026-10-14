@@ -1043,6 +1043,193 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *AssessmentDomainMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	return auth.HasInLineageContextCaller(ctx, auth.CapBypassAuditLog)
+
+}
+
+func (m *AssessmentDomainMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.AssessmentDomainHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if customDomainID, exists := m.CustomDomainID(); exists {
+		create = create.SetCustomDomainID(customDomainID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *AssessmentDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessmentdomain, err := client.AssessmentDomain.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AssessmentDomainHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(assessmentdomain.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(assessmentdomain.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(assessmentdomain.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(assessmentdomain.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(assessmentdomain.UpdatedByImpersonator)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(assessmentdomain.OwnerID)
+		}
+
+		if customDomainID, exists := m.CustomDomainID(); exists {
+			create = create.SetCustomDomainID(customDomainID)
+		} else {
+			create = create.SetCustomDomainID(assessmentdomain.CustomDomainID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AssessmentDomainMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessmentdomain, err := client.AssessmentDomain.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AssessmentDomainHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(assessmentdomain.CreatedAt).
+			SetUpdatedAt(assessmentdomain.UpdatedAt).
+			SetCreatedBy(assessmentdomain.CreatedBy).
+			SetUpdatedBy(assessmentdomain.UpdatedBy).
+			SetNillableUpdatedByImpersonator(assessmentdomain.UpdatedByImpersonator).
+			SetOwnerID(assessmentdomain.OwnerID).
+			SetCustomDomainID(assessmentdomain.CustomDomainID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *AssessmentPolicyMutation) skipper(ctx context.Context) bool {
 
 	if PurgeHistoryEnabled(ctx) {

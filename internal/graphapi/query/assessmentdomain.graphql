@@ -1,0 +1,14 @@
+mutation CreateAssessmentDomain ($input: CreateAssessmentDomainInput!) {
+	createAssessmentDomain(input: $input) {
+		customDomain {
+			id
+			cnameRecord
+			mappableDomainID
+			dnsVerification {
+				dnsVerificationStatus
+				dnsTxtRecord
+				dnsTxtValue
+			}
+		}
+	}
+}

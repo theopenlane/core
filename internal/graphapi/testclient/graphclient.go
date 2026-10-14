@@ -37,6 +37,7 @@ type TestGraphClient interface {
 	GetAssessmentByID(ctx context.Context, assessmentID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentByID, error)
 	GetAssessments(ctx context.Context, first *int64, last *int64, where *AssessmentWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessments, error)
 	UpdateAssessment(ctx context.Context, updateAssessmentID string, input UpdateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessment, error)
+	CreateAssessmentDomain(ctx context.Context, input CreateAssessmentDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentDomain, error)
 	CreateAssessmentPolicy(ctx context.Context, input CreateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentPolicy, error)
 	CreateBulkAssessmentPolicy(ctx context.Context, input []*CreateAssessmentPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessmentPolicy, error)
 	CreateBulkCSVAssessmentPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessmentPolicy, error)
@@ -5249,6 +5250,74 @@ func (t *UpdateAssessment_UpdateAssessment) GetAssessment() *UpdateAssessment_Up
 		t = &UpdateAssessment_UpdateAssessment{}
 	}
 	return &t.Assessment
+}
+
+type CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification struct {
+	DNSTxtRecord          string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue           string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+}
+
+func (t *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification) GetDNSTxtValue() string {
+	if t == nil {
+		t = &CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification{}
+	}
+	return t.DNSTxtValue
+}
+func (t *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
+	if t == nil {
+		t = &CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification{}
+	}
+	return &t.DNSVerificationStatus
+}
+
+type CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain struct {
+	CnameRecord      string                                                                      "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	DNSVerification  *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification "json:\"dnsVerification,omitempty\" graphql:\"dnsVerification\""
+	ID               string                                                                      "json:\"id\" graphql:\"id\""
+	MappableDomainID string                                                                      "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+}
+
+func (t *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain) GetDNSVerification() *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain_DNSVerification {
+	if t == nil {
+		t = &CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain{}
+	}
+	return t.DNSVerification
+}
+func (t *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain) GetID() string {
+	if t == nil {
+		t = &CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain{}
+	}
+	return t.ID
+}
+func (t *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain) GetMappableDomainID() string {
+	if t == nil {
+		t = &CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain{}
+	}
+	return t.MappableDomainID
+}
+
+type CreateAssessmentDomain_CreateAssessmentDomain struct {
+	CustomDomain CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain "json:\"customDomain\" graphql:\"customDomain\""
+}
+
+func (t *CreateAssessmentDomain_CreateAssessmentDomain) GetCustomDomain() *CreateAssessmentDomain_CreateAssessmentDomain_CustomDomain {
+	if t == nil {
+		t = &CreateAssessmentDomain_CreateAssessmentDomain{}
+	}
+	return &t.CustomDomain
 }
 
 type CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy struct {
@@ -166439,6 +166508,17 @@ func (t *UpdateAssessment) GetUpdateAssessment() *UpdateAssessment_UpdateAssessm
 	return &t.UpdateAssessment
 }
 
+type CreateAssessmentDomain struct {
+	CreateAssessmentDomain CreateAssessmentDomain_CreateAssessmentDomain "json:\"createAssessmentDomain\" graphql:\"createAssessmentDomain\""
+}
+
+func (t *CreateAssessmentDomain) GetCreateAssessmentDomain() *CreateAssessmentDomain_CreateAssessmentDomain {
+	if t == nil {
+		t = &CreateAssessmentDomain{}
+	}
+	return &t.CreateAssessmentDomain
+}
+
 type CreateAssessmentPolicy struct {
 	CreateAssessmentPolicy CreateAssessmentPolicy_CreateAssessmentPolicy "json:\"createAssessmentPolicy\" graphql:\"createAssessmentPolicy\""
 }
@@ -175738,6 +175818,39 @@ func (c *Client) UpdateAssessment(ctx context.Context, updateAssessmentID string
 
 	var res UpdateAssessment
 	if err := c.Client.Post(ctx, "UpdateAssessment", UpdateAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAssessmentDomainDocument = `mutation CreateAssessmentDomain ($input: CreateAssessmentDomainInput!) {
+	createAssessmentDomain(input: $input) {
+		customDomain {
+			id
+			cnameRecord
+			mappableDomainID
+			dnsVerification {
+				dnsVerificationStatus
+				dnsTxtRecord
+				dnsTxtValue
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateAssessmentDomain(ctx context.Context, input CreateAssessmentDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAssessmentDomain
+	if err := c.Client.Post(ctx, "CreateAssessmentDomain", CreateAssessmentDomainDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -216896,6 +217009,7 @@ var DocumentOperationNames = map[string]string{
 	GetAssessmentByIDDocument:                     "GetAssessmentByID",
 	GetAssessmentsDocument:                        "GetAssessments",
 	UpdateAssessmentDocument:                      "UpdateAssessment",
+	CreateAssessmentDomainDocument:                "CreateAssessmentDomain",
 	CreateAssessmentPolicyDocument:                "CreateAssessmentPolicy",
 	CreateBulkAssessmentPolicyDocument:            "CreateBulkAssessmentPolicy",
 	CreateBulkCSVAssessmentPolicyDocument:         "CreateBulkCSVAssessmentPolicy",

@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentdomainhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
@@ -171,6 +172,35 @@ func init() {
 	actionplanhistoryDescID := actionplanhistoryFields[10].Descriptor()
 	// actionplanhistory.DefaultID holds the default value on creation for the id field.
 	actionplanhistory.DefaultID = actionplanhistoryDescID.Default.(func() string)
+	assessmentdomainhistory.Policy = privacy.NewPolicies(historyschema.AssessmentDomainHistory{})
+	assessmentdomainhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := assessmentdomainhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	assessmentdomainhistoryInters := historyschema.AssessmentDomainHistory{}.Interceptors()
+	assessmentdomainhistory.Interceptors[0] = assessmentdomainhistoryInters[0]
+	assessmentdomainhistoryFields := historyschema.AssessmentDomainHistory{}.Fields()
+	_ = assessmentdomainhistoryFields
+	// assessmentdomainhistoryDescHistoryTime is the schema descriptor for history_time field.
+	assessmentdomainhistoryDescHistoryTime := assessmentdomainhistoryFields[0].Descriptor()
+	// assessmentdomainhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	assessmentdomainhistory.DefaultHistoryTime = assessmentdomainhistoryDescHistoryTime.Default.(func() time.Time)
+	// assessmentdomainhistoryDescCreatedAt is the schema descriptor for created_at field.
+	assessmentdomainhistoryDescCreatedAt := assessmentdomainhistoryFields[3].Descriptor()
+	// assessmentdomainhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assessmentdomainhistory.DefaultCreatedAt = assessmentdomainhistoryDescCreatedAt.Default.(func() time.Time)
+	// assessmentdomainhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	assessmentdomainhistoryDescUpdatedAt := assessmentdomainhistoryFields[4].Descriptor()
+	// assessmentdomainhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assessmentdomainhistory.DefaultUpdatedAt = assessmentdomainhistoryDescUpdatedAt.Default.(func() time.Time)
+	// assessmentdomainhistoryDescID is the schema descriptor for id field.
+	assessmentdomainhistoryDescID := assessmentdomainhistoryFields[8].Descriptor()
+	// assessmentdomainhistory.DefaultID holds the default value on creation for the id field.
+	assessmentdomainhistory.DefaultID = assessmentdomainhistoryDescID.Default.(func() string)
 	assessmenthistory.Policy = privacy.NewPolicies(historyschema.AssessmentHistory{})
 	assessmenthistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {

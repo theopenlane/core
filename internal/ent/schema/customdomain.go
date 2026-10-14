@@ -151,5 +151,6 @@ func (CustomDomain) Hooks() []ent.Hook {
 func (CustomDomain) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
+		models.CatalogQuestionnaireDomainAddon,
 	}
 }

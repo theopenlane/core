@@ -46,6 +46,8 @@ type Resolver struct {
 	workflowsConfig     workflows.Config
 	integrationsRuntime *integrationsruntime.Runtime
 
+	assessmentCnameTarget string
+
 	// subscription settings
 	subscriptionSettings
 

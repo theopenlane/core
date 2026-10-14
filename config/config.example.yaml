@@ -413,6 +413,7 @@ redis:
     writetimeout: 0
 refreshinterval: 600000000000
 server:
+    assessmentcnametarget: ""
     cachecontrol:
         enabled: true
         etagheaders: []

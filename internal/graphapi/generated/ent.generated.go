@@ -118,6 +118,7 @@ type QueryResolver interface {
 	APITokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) (*generated.APITokenConnection, error)
 	ActionPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) (*generated.ActionPlanConnection, error)
 	Assessments(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) (*generated.AssessmentConnection, error)
+	AssessmentDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentDomainOrder, where *generated.AssessmentDomainWhereInput) (*generated.AssessmentDomainConnection, error)
 	AssessmentPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) (*generated.AssessmentPolicyConnection, error)
 	AssessmentResponses(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) (*generated.AssessmentResponseConnection, error)
 	Assets(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) (*generated.AssetConnection, error)
@@ -30103,6 +30104,60 @@ func (ec *executionContext) field_Query_apiTokens_args(ctx context.Context, rawA
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_assessmentDomains_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.AssessmentDomainOrder, error) {
+			return ec.unmarshalOAssessmentDomainOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.AssessmentDomainWhereInput, error) {
+			return ec.unmarshalOAssessmentDomainWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_assessmentPolicies_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -54078,6 +54133,396 @@ func (ec *executionContext) _AssessmentConnection_totalCount(ctx context.Context
 }
 func (ec *executionContext) fieldContext_AssessmentConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("AssessmentConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_id(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomain", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_createdAt(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomain", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_updatedAt(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomain", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_createdBy(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomain", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_updatedBy(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomain", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_updatedByImpersonator(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedByImpersonator, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomain", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_ownerID(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_ownerID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_ownerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomain", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_customDomainID(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_customDomainID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CustomDomainID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_customDomainID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomain", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomain_owner(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_owner(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Owner(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
+			return ec.marshalOOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_owner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentDomain",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Organization(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentDomain_customDomain(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomain_customDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CustomDomain(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomDomain) graphql.Marshaler {
+			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomain_customDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentDomain",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CustomDomain(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentDomainConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomainConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomainConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.AssessmentDomainEdge) graphql.Marshaler {
+			return ec.marshalOAssessmentDomainEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainEdge(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomainConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentDomainConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentDomainEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentDomainConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomainConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomainConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomainConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentDomainConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentDomainConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomainConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomainConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomainConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomainConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
+func (ec *executionContext) _AssessmentDomainEdge_node(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomainEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomainEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentDomain) graphql.Marshaler {
+			return ec.marshalOAssessmentDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomain(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomainEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentDomainEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentDomain(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AssessmentDomainEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentDomainEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentDomainEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentDomainEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentDomainEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
 }
 
 func (ec *executionContext) _AssessmentEdge_node(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentEdge) (ret graphql.Marshaler) {
@@ -125306,6 +125751,50 @@ func (ec *executionContext) fieldContext_Query_assessments(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_assessmentDomains(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_assessmentDomains(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().AssessmentDomains(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.AssessmentDomainOrder), fc.Args["where"].(*generated.AssessmentDomainWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentDomainConnection) graphql.Marshaler {
+			return ec.marshalNAssessmentDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_assessmentDomains(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentDomainConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_assessmentDomains_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_assessmentPolicies(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -179790,6 +180279,630 @@ func (ec *executionContext) unmarshalInputActionPlanWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.DismissedImprovementSuggestionsHas = data
+		}
+	}
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAssessmentDomainOrder(ctx context.Context, obj any) (generated.AssessmentDomainOrder, error) {
+	var it generated.AssessmentDomainOrder
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNAssessmentDomainOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAssessmentDomainWhereInput(ctx context.Context, obj any) (generated.AssessmentDomainWhereInput, error) {
+	var it generated.AssessmentDomainWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "customDomainID", "customDomainIDNEQ", "customDomainIDIn", "customDomainIDNotIn", "customDomainIDContains", "customDomainIDHasPrefix", "customDomainIDHasSuffix", "customDomainIDEqualFold", "customDomainIDContainsFold", "hasOwner", "hasOwnerWith", "hasCustomDomain", "hasCustomDomainWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOAssessmentDomainWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOAssessmentDomainWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOAssessmentDomainWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDEqualFold = data
+		case "idContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDContainsFold = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIsNil = data
+		case "createdAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotNil = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIsNil = data
+		case "updatedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "updatedByImpersonator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonator = data
+		case "updatedByImpersonatorNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNEQ = data
+		case "updatedByImpersonatorIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIn = data
+		case "updatedByImpersonatorNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotIn = data
+		case "updatedByImpersonatorContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
+		case "updatedByImpersonatorHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasSuffix = data
+		case "updatedByImpersonatorIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIsNil = data
+		case "updatedByImpersonatorNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotNil = data
+		case "updatedByImpersonatorEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorEqualFold = data
+		case "updatedByImpersonatorContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContainsFold = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "ownerIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNEQ = data
+		case "ownerIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDIn = data
+		case "ownerIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNotIn = data
+		case "ownerIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
+		case "ownerIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasSuffix = data
+		case "ownerIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDIsNil = data
+		case "ownerIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNotNil = data
+		case "ownerIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDEqualFold = data
+		case "ownerIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDContainsFold = data
+		case "customDomainID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainID = data
+		case "customDomainIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainIDNEQ = data
+		case "customDomainIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainIDIn = data
+		case "customDomainIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainIDNotIn = data
+		case "customDomainIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainIDContains = data
+		case "customDomainIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainIDHasPrefix = data
+		case "customDomainIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainIDHasSuffix = data
+		case "customDomainIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainIDEqualFold = data
+		case "customDomainIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainIDContainsFold = data
+		case "hasOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOwner"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasOwner = data
+		case "hasOwnerWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOwnerWith"))
+			data, err := ec.unmarshalOOrganizationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasOwnerWith = data
+		case "hasCustomDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasCustomDomain = data
+		case "hasCustomDomainWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomDomainWith"))
+			data, err := ec.unmarshalOCustomDomainWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasCustomDomainWith = data
 		}
 	}
 	return it, nil
@@ -327206,6 +328319,50 @@ func (ec *executionContext) unmarshalInputUpdateActionPlanInput(ctx context.Cont
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateAssessmentDomainInput(ctx context.Context, obj any) (generated.UpdateAssessmentDomainInput, error) {
+	var it generated.UpdateAssessmentDomainInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"ownerID", "clearOwner", "customDomainID"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "clearOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearOwner"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearOwner = data
+		case "customDomainID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CustomDomainID = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateAssessmentInput(ctx context.Context, obj any) (generated.UpdateAssessmentInput, error) {
 	var it generated.UpdateAssessmentInput
 	if obj == nil {
@@ -383957,6 +385114,11 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._AssessmentPolicy(ctx, sel, obj)
+	case *generated.AssessmentDomain:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._AssessmentDomain(ctx, sel, obj)
 	case *generated.Assessment:
 		if obj == nil {
 			return graphql.Null
@@ -386298,6 +387460,246 @@ func (ec *executionContext) _AssessmentConnection(ctx context.Context, sel ast.S
 			}
 		case "totalCount":
 			out.Values[i] = ec._AssessmentConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var assessmentDomainImplementors = []string{"AssessmentDomain", "Node"}
+
+func (ec *executionContext) _AssessmentDomain(ctx context.Context, sel ast.SelectionSet, obj *generated.AssessmentDomain) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentDomainImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssessmentDomain")
+		case "id":
+			out.Values[i] = ec._AssessmentDomain_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdAt":
+			out.Values[i] = ec._AssessmentDomain_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedAt":
+			out.Values[i] = ec._AssessmentDomain_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdBy":
+			out.Values[i] = ec._AssessmentDomain_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._AssessmentDomain_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedByImpersonator":
+			out.Values[i] = ec._AssessmentDomain_updatedByImpersonator(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "ownerID":
+			out.Values[i] = ec._AssessmentDomain_ownerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "customDomainID":
+			out.Values[i] = ec._AssessmentDomain_customDomainID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "owner":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._AssessmentDomain_owner(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "customDomain":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._AssessmentDomain_customDomain(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var assessmentDomainConnectionImplementors = []string{"AssessmentDomainConnection"}
+
+func (ec *executionContext) _AssessmentDomainConnection(ctx context.Context, sel ast.SelectionSet, obj *generated.AssessmentDomainConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentDomainConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssessmentDomainConnection")
+		case "edges":
+			out.Values[i] = ec._AssessmentDomainConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._AssessmentDomainConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._AssessmentDomainConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var assessmentDomainEdgeImplementors = []string{"AssessmentDomainEdge"}
+
+func (ec *executionContext) _AssessmentDomainEdge(ctx context.Context, sel ast.SelectionSet, obj *generated.AssessmentDomainEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentDomainEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssessmentDomainEdge")
+		case "node":
+			out.Values[i] = ec._AssessmentDomainEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._AssessmentDomainEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -429945,6 +431347,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "assessmentDomains":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_assessmentDomains(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "assessmentPolicies":
 			field := field
 
@@ -459256,6 +460680,42 @@ func (ec *executionContext) marshalNAssessmentConnection2ᚖgithubᚗcomᚋtheop
 	return ec._AssessmentConnection(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNAssessmentDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentDomainConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AssessmentDomainConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNAssessmentDomainOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainOrder(ctx context.Context, v any) (*generated.AssessmentDomainOrder, error) {
+	res, err := ec.unmarshalInputAssessmentDomainOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNAssessmentDomainOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainOrderField(ctx context.Context, v any) (*generated.AssessmentDomainOrderField, error) {
+	var res = new(generated.AssessmentDomainOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAssessmentDomainOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentDomainOrderField) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNAssessmentDomainWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainWhereInput(ctx context.Context, v any) (*generated.AssessmentDomainWhereInput, error) {
+	res, err := ec.unmarshalInputAssessmentDomainWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNAssessmentOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentOrder(ctx context.Context, v any) (*generated.AssessmentOrder, error) {
 	res, err := ec.unmarshalInputAssessmentOrder(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -466128,6 +467588,75 @@ func (ec *executionContext) marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheop
 		return graphql.Null
 	}
 	return ec._AssessmentConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOAssessmentDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomain(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentDomain) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._AssessmentDomain(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOAssessmentDomainEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.AssessmentDomainEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalOAssessmentDomainEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainEdge(ctx, sel, v[i])
+	})
+
+	return ret
+}
+
+func (ec *executionContext) marshalOAssessmentDomainEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainEdge(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentDomainEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._AssessmentDomainEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOAssessmentDomainOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainOrderᚄ(ctx context.Context, v any) ([]*generated.AssessmentDomainOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.AssessmentDomainOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAssessmentDomainOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAssessmentDomainWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainWhereInputᚄ(ctx context.Context, v any) ([]*generated.AssessmentDomainWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.AssessmentDomainWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAssessmentDomainWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAssessmentDomainWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentDomainWhereInput(ctx context.Context, v any) (*generated.AssessmentDomainWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputAssessmentDomainWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOAssessmentEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.AssessmentEdge) graphql.Marshaler {

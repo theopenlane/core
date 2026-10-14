@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -3238,6 +3239,161 @@ func newAssessmentPaginateArgs(rv map[string]any) *assessmentPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*AssessmentWhereInput); ok {
 		args.opts = append(args.opts, WithAssessmentFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *AssessmentDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*AssessmentDomainQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *AssessmentDomainQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(assessmentdomain.Columns))
+		selectedFields = []string{assessmentdomain.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[assessmentdomain.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldOwnerID)
+				fieldSeen[assessmentdomain.FieldOwnerID] = struct{}{}
+			}
+
+		case "customDomain":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomDomainClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customdomainImplementors)...); err != nil {
+				return err
+			}
+			_q.withCustomDomain = query
+			if _, ok := fieldSeen[assessmentdomain.FieldCustomDomainID]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldCustomDomainID)
+				fieldSeen[assessmentdomain.FieldCustomDomainID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[assessmentdomain.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldCreatedAt)
+				fieldSeen[assessmentdomain.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[assessmentdomain.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldUpdatedAt)
+				fieldSeen[assessmentdomain.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[assessmentdomain.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldCreatedBy)
+				fieldSeen[assessmentdomain.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[assessmentdomain.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldUpdatedBy)
+				fieldSeen[assessmentdomain.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[assessmentdomain.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldUpdatedByImpersonator)
+				fieldSeen[assessmentdomain.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[assessmentdomain.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldOwnerID)
+				fieldSeen[assessmentdomain.FieldOwnerID] = struct{}{}
+			}
+		case "customDomainID":
+			if _, ok := fieldSeen[assessmentdomain.FieldCustomDomainID]; !ok {
+				selectedFields = append(selectedFields, assessmentdomain.FieldCustomDomainID)
+				fieldSeen[assessmentdomain.FieldCustomDomainID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type assessmentdomainPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []AssessmentDomainPaginateOption
+}
+
+func newAssessmentDomainPaginateArgs(rv map[string]any) *assessmentdomainPaginateArgs {
+	args := &assessmentdomainPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*AssessmentDomainOrder:
+			args.opts = append(args.opts, WithAssessmentDomainOrder(v))
+		case []any:
+			var orders []*AssessmentDomainOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &AssessmentDomainOrder{Field: &AssessmentDomainOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithAssessmentDomainOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*AssessmentDomainWhereInput); ok {
+		args.opts = append(args.opts, WithAssessmentDomainFilter(v.Filter))
 	}
 	return args
 }
