@@ -121,6 +121,44 @@ modules:
     audience: private
     product_id: prod_SzpzB3d9rAjrb3
 addons:
+  assessment_custom_domain_addon:
+    display_name: Questionnaire custom domain
+    lookup_key: assessment_custom_domain_addon
+    description: Questionnaire custom domain
+    marketing_description: Use a custom domain for your hosted questionnaires
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 2500
+        nickname: price_questionnaire_custom_domain_monthly
+        lookup_key: price_assessment_custom_domain_monthly
+        price_id: price_1UQvl2JIzM4Pa2ZcAdAEbinC
+      - interval: year
+        unit_amount: 27000
+        nickname: price_questionnaire_custom_domain_yearly
+        lookup_key: price_assessment_custom_domain_yearly
+        price_id: price_1UQvl2JIzM4Pa2Zcy9JuYGrz
+    audience: private
+    product_id: prod_VRKVWuKkT9FOGT
+  branding_trustcenter_addon:
+    display_name: Trustcenter Branding
+    lookup_key: branding_trustcenter_addon
+    description: Trustcenter Branding
+    marketing_description: Customization option to remove the Openlane branding on your Trustcenter
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 2500
+        nickname: price_trustcenter_branding_monthly
+        lookup_key: price_branding_trustcenter_monthly
+        price_id: price_1UQvl5JIzM4Pa2ZcohBfcn2z
+      - interval: year
+        unit_amount: 27000
+        nickname: price_trustcenter_branding_annually
+        lookup_key: price_branding_trustcenter_yearly
+        price_id: price_1UQvl6JIzM4Pa2ZcSzpwqgEA
+    audience: private
+    product_id: prod_VRKVprEOFUrczE
   domain_scanning_addon:
     display_name: Domain and Vulnerability Scanning
     lookup_key: domain_scanning_addon
@@ -175,25 +213,6 @@ addons:
         price_id: price_1S3qXHJIzM4Pa2Zcjl8y3TWX
     audience: beta
     product_id: prod_SzqDMmZeWJiUDm
-  questionnaire_domain_addon:
-    display_name: Questionnaire custom domain
-    lookup_key: questionnaire_custom_domain_addon
-    description: Questionnaire custom domain
-    marketing_description: Use a custom domain for your hosted questionnaires
-    billing:
-      prices:
-      - interval: month
-        unit_amount: 2000
-        nickname: price_questionnaire_custom_domain_monthly
-        lookup_key: price_questionnaire_custom_domain_monthly
-        price_id: price_1UQRqUJIzM4Pa2ZcqMCbWhCO
-      - interval: year
-        unit_amount: 20000
-        nickname: price_questionnaire_custom_domain_yearly
-        lookup_key: price_questionnaire_custom_domain_yearly
-        price_id: price_1UQRqWJIzM4Pa2ZcVXPmx7pP
-    audience: private
-    product_id: prod_VRKVWuKkT9FOGT
   risk_management_addon:
     display_name: Risk Management
     lookup_key: risk_management_addon
@@ -213,25 +232,6 @@ addons:
         price_id: price_1S3qXJJIzM4Pa2Zc0V7TvS0A
     audience: beta
     product_id: prod_SzqDvmryWdfvr7
-  trustcenter_branding_addon:
-    display_name: Trustcenter Branding
-    lookup_key: trustcenter_branding_addon
-    description: Trustcenter Branding
-    marketing_description: Customization option to remove the Openlane branding on your Trustcenter
-    billing:
-      prices:
-      - interval: month
-        unit_amount: 5000
-        nickname: price_trustcenter_branding_monthly
-        lookup_key: price_trustcenter_branding_monthly
-        price_id: price_1UQRqjJIzM4Pa2ZcGgZczYkN
-      - interval: year
-        unit_amount: 50000
-        nickname: price_trustcenter_branding_annually
-        lookup_key: price_trustcenter_branding_yearly
-        price_id: price_1UQRqlJIzM4Pa2Zc8bRUfuwJ
-    audience: private
-    product_id: prod_VRKVprEOFUrczE
   workflow_addon:
     display_name: Workflow Automation
     lookup_key: workflow_addon

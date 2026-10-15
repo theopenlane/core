@@ -6,6 +6,48 @@ import models "github.com/theopenlane/core/common/models"
 
 var DefaultSandboxCatalog = models.Catalog{
 	Addons: map[string]models.Feature{
+		string(models.CatalogAssessmentCustomDomainAddon): models.Feature{
+			Audience: "private",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_assessment_custom_domain_monthly",
+				Nickname:   "price_questionnaire_custom_domain_monthly",
+				PriceID:    "price_1UQvl2JIzM4Pa2ZcAdAEbinC",
+				UnitAmount: int64(2500),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_assessment_custom_domain_yearly",
+				Nickname:   "price_questionnaire_custom_domain_yearly",
+				PriceID:    "price_1UQvl2JIzM4Pa2Zcy9JuYGrz",
+				UnitAmount: int64(27000),
+			}}},
+			Description:          "Questionnaire custom domain",
+			DisplayName:          "Questionnaire custom domain",
+			LookupKey:            "assessment_custom_domain_addon",
+			MarketingDescription: "Use a custom domain for your hosted questionnaires",
+			ProductID:            "prod_VRKVWuKkT9FOGT",
+		},
+		string(models.CatalogBrandingTrustcenterAddon): models.Feature{
+			Audience: "private",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_branding_trustcenter_monthly",
+				Nickname:   "price_trustcenter_branding_monthly",
+				PriceID:    "price_1UQvl5JIzM4Pa2ZcohBfcn2z",
+				UnitAmount: int64(2500),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_branding_trustcenter_yearly",
+				Nickname:   "price_trustcenter_branding_annually",
+				PriceID:    "price_1UQvl6JIzM4Pa2ZcSzpwqgEA",
+				UnitAmount: int64(27000),
+			}}},
+			Description:          "Trustcenter Branding",
+			DisplayName:          "Trustcenter Branding",
+			LookupKey:            "branding_trustcenter_addon",
+			MarketingDescription: "Customization option to remove the Openlane branding on your Trustcenter",
+			ProductID:            "prod_VRKVprEOFUrczE",
+		},
 		string(models.CatalogDomainScanningAddon): models.Feature{
 			Audience: "private",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
@@ -64,27 +106,6 @@ var DefaultSandboxCatalog = models.Catalog{
 			MarketingDescription: "Create and maintain your security policies with version control. Keep your documentation audit-ready",
 			ProductID:            "prod_SzqDMmZeWJiUDm",
 		},
-		string(models.CatalogQuestionnaireDomainAddon): models.Feature{
-			Audience: "private",
-			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
-				Interval:   "month",
-				LookupKey:  "price_questionnaire_custom_domain_monthly",
-				Nickname:   "price_questionnaire_custom_domain_monthly",
-				PriceID:    "price_1UQRqUJIzM4Pa2ZcqMCbWhCO",
-				UnitAmount: int64(2000),
-			}, models.ItemPrice{
-				Interval:   "year",
-				LookupKey:  "price_questionnaire_custom_domain_yearly",
-				Nickname:   "price_questionnaire_custom_domain_yearly",
-				PriceID:    "price_1UQRqWJIzM4Pa2ZcVXPmx7pP",
-				UnitAmount: int64(20000),
-			}}},
-			Description:          "Questionnaire custom domain",
-			DisplayName:          "Questionnaire custom domain",
-			LookupKey:            "questionnaire_custom_domain_addon",
-			MarketingDescription: "Use a custom domain for your hosted questionnaires",
-			ProductID:            "prod_VRKVWuKkT9FOGT",
-		},
 		string(models.CatalogRiskManagementAddon): models.Feature{
 			Audience: "beta",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
@@ -105,27 +126,6 @@ var DefaultSandboxCatalog = models.Catalog{
 			LookupKey:            "risk_management_addon",
 			MarketingDescription: "Comprehensive risk assessment and monitoring solution. Make data-driven decisions about your security posture.",
 			ProductID:            "prod_SzqDvmryWdfvr7",
-		},
-		string(models.CatalogTrustcenterBrandingAddon): models.Feature{
-			Audience: "private",
-			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
-				Interval:   "month",
-				LookupKey:  "price_trustcenter_branding_monthly",
-				Nickname:   "price_trustcenter_branding_monthly",
-				PriceID:    "price_1UQRqjJIzM4Pa2ZcGgZczYkN",
-				UnitAmount: int64(5000),
-			}, models.ItemPrice{
-				Interval:   "year",
-				LookupKey:  "price_trustcenter_branding_yearly",
-				Nickname:   "price_trustcenter_branding_annually",
-				PriceID:    "price_1UQRqlJIzM4Pa2Zc8bRUfuwJ",
-				UnitAmount: int64(50000),
-			}}},
-			Description:          "Trustcenter Branding",
-			DisplayName:          "Trustcenter Branding",
-			LookupKey:            "trustcenter_branding_addon",
-			MarketingDescription: "Customization option to remove the Openlane branding on your Trustcenter",
-			ProductID:            "prod_VRKVprEOFUrczE",
 		},
 		string(models.CatalogWorkflowAddon): models.Feature{
 			Audience: "private",
