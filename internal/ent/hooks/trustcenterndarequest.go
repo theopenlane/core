@@ -7,12 +7,8 @@ import (
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -24,6 +20,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 )
 
 // HookTrustCenterNDARequestCreate handles new NDA request creation

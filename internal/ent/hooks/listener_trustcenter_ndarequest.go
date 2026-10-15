@@ -76,11 +76,12 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 		return nil
 	}
 
+	// if this is an update mutation and the status field didn't change, we don't need to run the approval evaluation
 	if payload.Operation != entityops.OpCreate && !payload.FieldChanged(trustcenterndarequest.FieldStatus) {
 		return nil
 	}
 
-	if payload.Operation == entityops.OpCreate && req.Status == enums.TrustCenterNDARequestStatusRequested {
+	if req.Status == enums.TrustCenterNDARequestStatusRequested {
 		req, err = processApproval(inv.Context, inv.Client, req)
 		if err != nil {
 			return err
@@ -88,6 +89,7 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 	}
 
 	switch req.Status {
+	// requested status is the default case and we still fall in here if auto approval is not turned on
 	case enums.TrustCenterNDARequestStatusRequested, enums.TrustCenterNDARequestStatusApproved:
 
 		err := sendSystemEmail(inv.Context, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
@@ -139,47 +141,38 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 }
 
 func processApproval(ctx context.Context, client *generated.Client, request *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
-	tc, err := client.TrustCenter.Query().
-		Where(trustcenter.ID(request.TrustCenterID)).
-		WithSetting(func(q *generated.TrustCenterSettingQuery) {
-			q.Where(trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive))
-		}).
-		Only(ctx)
+	setting, err := client.TrustCenterSetting.Query().
+		Where(
+			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
+			trustcentersetting.TrustCenterID(request.TrustCenterID),
+		).Only(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	settings, err := tc.Edges.SettingOrErr()
-	if err != nil {
-		return nil, err
-	}
-
-	if !settings.EnableAutoApproval {
+	if !setting.EnableAutoApproval {
 		return request, nil
 	}
 
-	rules := settings.AutoApprovalRules
+	rules := setting.AutoApprovalRules
 
-	ok := !settings.NdaApprovalRequired
+	ok := !setting.NdaApprovalRequired
 
-	status := enums.TrustCenterNDARequestStatusNeedsApproval
+	status := enums.TrustCenterNDARequestStatusApproved
 
-	if settings.NdaApprovalRequired {
+	if setting.NdaApprovalRequired {
 		ok, err = evaluateRules(ctx, client, request, rules)
 		if err != nil {
 			return nil, err
 		}
 
-		switch {
-		case ok:
-			status = enums.TrustCenterNDARequestStatusApproved
-
-		case !rules.ManualApprovalOnFailure:
-
-			status = enums.TrustCenterNDARequestStatusDeclined
+		if !ok {
+			if rules.ManualApprovalOnFailure {
+				status = enums.TrustCenterNDARequestStatusNeedsApproval
+			} else {
+				status = enums.TrustCenterNDARequestStatusDeclined
+			}
 		}
-	} else {
-		status = enums.TrustCenterNDARequestStatusApproved
 	}
 
 	// saving this will retrigger the listener, so be sure to skip it
