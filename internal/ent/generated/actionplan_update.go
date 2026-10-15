@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -28,6 +29,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
@@ -776,6 +778,86 @@ func (_u *ActionPlanUpdate) ClearWorkflowEligibleMarker() *ActionPlanUpdate {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *ActionPlanUpdate) SetInternalOwner(v string) *ActionPlanUpdate {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableInternalOwner(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *ActionPlanUpdate) ClearInternalOwner() *ActionPlanUpdate {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *ActionPlanUpdate) SetInternalOwnerUserID(v string) *ActionPlanUpdate {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableInternalOwnerUserID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *ActionPlanUpdate) ClearInternalOwnerUserID() *ActionPlanUpdate {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *ActionPlanUpdate) SetInternalOwnerGroupID(v string) *ActionPlanUpdate {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableInternalOwnerGroupID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *ActionPlanUpdate) ClearInternalOwnerGroupID() *ActionPlanUpdate {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *ActionPlanUpdate) SetInternalOwnerIdentityHolderID(v string) *ActionPlanUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *ActionPlanUpdate) ClearInternalOwnerIdentityHolderID() *ActionPlanUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ActionPlanUpdate) SetTitle(v string) *ActionPlanUpdate {
 	_u.mutation.SetTitle(v)
@@ -1035,6 +1117,21 @@ func (_u *ActionPlanUpdate) AddViewers(v ...*Group) *ActionPlanUpdate {
 // SetActionPlanKind sets the "action_plan_kind" edge to the CustomTypeEnum entity.
 func (_u *ActionPlanUpdate) SetActionPlanKind(v *CustomTypeEnum) *ActionPlanUpdate {
 	return _u.SetActionPlanKindID(v.ID)
+}
+
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *ActionPlanUpdate) SetInternalOwnerUser(v *User) *ActionPlanUpdate {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *ActionPlanUpdate) SetInternalOwnerGroup(v *Group) *ActionPlanUpdate {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *ActionPlanUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *ActionPlanUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
@@ -1311,6 +1408,24 @@ func (_u *ActionPlanUpdate) RemoveViewers(v ...*Group) *ActionPlanUpdate {
 // ClearActionPlanKind clears the "action_plan_kind" edge to the CustomTypeEnum entity.
 func (_u *ActionPlanUpdate) ClearActionPlanKind() *ActionPlanUpdate {
 	_u.mutation.ClearActionPlanKind()
+	return _u
+}
+
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *ActionPlanUpdate) ClearInternalOwnerUser() *ActionPlanUpdate {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *ActionPlanUpdate) ClearInternalOwnerGroup() *ActionPlanUpdate {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *ActionPlanUpdate) ClearInternalOwnerIdentityHolder() *ActionPlanUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -1906,6 +2021,12 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(actionplan.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(actionplan.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(actionplan.FieldInternalOwner, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
 	}
@@ -2223,6 +2344,93 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerUserTable,
+			Columns: []string{actionplan.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerUserTable,
+			Columns: []string{actionplan.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerGroupTable,
+			Columns: []string{actionplan.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerGroupTable,
+			Columns: []string{actionplan.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerIdentityHolderTable,
+			Columns: []string{actionplan.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerIdentityHolderTable,
+			Columns: []string{actionplan.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3506,6 +3714,86 @@ func (_u *ActionPlanUpdateOne) ClearWorkflowEligibleMarker() *ActionPlanUpdateOn
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *ActionPlanUpdateOne) SetInternalOwner(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableInternalOwner(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *ActionPlanUpdateOne) ClearInternalOwner() *ActionPlanUpdateOne {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *ActionPlanUpdateOne) SetInternalOwnerUserID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableInternalOwnerUserID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *ActionPlanUpdateOne) ClearInternalOwnerUserID() *ActionPlanUpdateOne {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *ActionPlanUpdateOne) SetInternalOwnerGroupID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableInternalOwnerGroupID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *ActionPlanUpdateOne) ClearInternalOwnerGroupID() *ActionPlanUpdateOne {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *ActionPlanUpdateOne) SetInternalOwnerIdentityHolderID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *ActionPlanUpdateOne) ClearInternalOwnerIdentityHolderID() *ActionPlanUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ActionPlanUpdateOne) SetTitle(v string) *ActionPlanUpdateOne {
 	_u.mutation.SetTitle(v)
@@ -3765,6 +4053,21 @@ func (_u *ActionPlanUpdateOne) AddViewers(v ...*Group) *ActionPlanUpdateOne {
 // SetActionPlanKind sets the "action_plan_kind" edge to the CustomTypeEnum entity.
 func (_u *ActionPlanUpdateOne) SetActionPlanKind(v *CustomTypeEnum) *ActionPlanUpdateOne {
 	return _u.SetActionPlanKindID(v.ID)
+}
+
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *ActionPlanUpdateOne) SetInternalOwnerUser(v *User) *ActionPlanUpdateOne {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *ActionPlanUpdateOne) SetInternalOwnerGroup(v *Group) *ActionPlanUpdateOne {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *ActionPlanUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *ActionPlanUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
@@ -4041,6 +4344,24 @@ func (_u *ActionPlanUpdateOne) RemoveViewers(v ...*Group) *ActionPlanUpdateOne {
 // ClearActionPlanKind clears the "action_plan_kind" edge to the CustomTypeEnum entity.
 func (_u *ActionPlanUpdateOne) ClearActionPlanKind() *ActionPlanUpdateOne {
 	_u.mutation.ClearActionPlanKind()
+	return _u
+}
+
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *ActionPlanUpdateOne) ClearInternalOwnerUser() *ActionPlanUpdateOne {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *ActionPlanUpdateOne) ClearInternalOwnerGroup() *ActionPlanUpdateOne {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *ActionPlanUpdateOne) ClearInternalOwnerIdentityHolder() *ActionPlanUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -4666,6 +4987,12 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(actionplan.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(actionplan.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(actionplan.FieldInternalOwner, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
 	}
@@ -4983,6 +5310,93 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerUserTable,
+			Columns: []string{actionplan.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerUserTable,
+			Columns: []string{actionplan.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerGroupTable,
+			Columns: []string{actionplan.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerGroupTable,
+			Columns: []string{actionplan.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerIdentityHolderTable,
+			Columns: []string{actionplan.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerIdentityHolderTable,
+			Columns: []string{actionplan.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

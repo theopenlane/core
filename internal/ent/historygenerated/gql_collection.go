@@ -314,6 +314,26 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldWorkflowEligibleMarker)
 				fieldSeen[actionplanhistory.FieldWorkflowEligibleMarker] = struct{}{}
 			}
+		case "internalOwner":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalOwner]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalOwner)
+				fieldSeen[actionplanhistory.FieldInternalOwner] = struct{}{}
+			}
+		case "internalOwnerUserID":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalOwnerUserID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalOwnerUserID)
+				fieldSeen[actionplanhistory.FieldInternalOwnerUserID] = struct{}{}
+			}
+		case "internalOwnerGroupID":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalOwnerGroupID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalOwnerGroupID)
+				fieldSeen[actionplanhistory.FieldInternalOwnerGroupID] = struct{}{}
+			}
+		case "internalOwnerIdentityHolderID":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalOwnerIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalOwnerIdentityHolderID)
+				fieldSeen[actionplanhistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
+			}
 		case "title":
 			if _, ok := fieldSeen[actionplanhistory.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldTitle)

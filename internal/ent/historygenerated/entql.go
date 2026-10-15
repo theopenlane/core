@@ -138,6 +138,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldActionPlanKindName:              {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanKindName},
 			actionplanhistory.FieldActionPlanKindID:                {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanKindID},
 			actionplanhistory.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: actionplanhistory.FieldWorkflowEligibleMarker},
+			actionplanhistory.FieldInternalOwner:                   {Type: field.TypeString, Column: actionplanhistory.FieldInternalOwner},
+			actionplanhistory.FieldInternalOwnerUserID:             {Type: field.TypeString, Column: actionplanhistory.FieldInternalOwnerUserID},
+			actionplanhistory.FieldInternalOwnerGroupID:            {Type: field.TypeString, Column: actionplanhistory.FieldInternalOwnerGroupID},
+			actionplanhistory.FieldInternalOwnerIdentityHolderID:   {Type: field.TypeString, Column: actionplanhistory.FieldInternalOwnerIdentityHolderID},
 			actionplanhistory.FieldTitle:                           {Type: field.TypeString, Column: actionplanhistory.FieldTitle},
 			actionplanhistory.FieldDescription:                     {Type: field.TypeString, Column: actionplanhistory.FieldDescription},
 			actionplanhistory.FieldDueDate:                         {Type: field.TypeTime, Column: actionplanhistory.FieldDueDate},
@@ -3281,6 +3285,26 @@ func (f *ActionPlanHistoryFilter) WhereActionPlanKindID(p entql.StringP) {
 // WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
 func (f *ActionPlanHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(actionplanhistory.FieldWorkflowEligibleMarker))
+}
+
+// WhereInternalOwner applies the entql string predicate on the internal_owner field.
+func (f *ActionPlanHistoryFilter) WhereInternalOwner(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldInternalOwner))
+}
+
+// WhereInternalOwnerUserID applies the entql string predicate on the internal_owner_user_id field.
+func (f *ActionPlanHistoryFilter) WhereInternalOwnerUserID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldInternalOwnerUserID))
+}
+
+// WhereInternalOwnerGroupID applies the entql string predicate on the internal_owner_group_id field.
+func (f *ActionPlanHistoryFilter) WhereInternalOwnerGroupID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldInternalOwnerGroupID))
+}
+
+// WhereInternalOwnerIdentityHolderID applies the entql string predicate on the internal_owner_identity_holder_id field.
+func (f *ActionPlanHistoryFilter) WhereInternalOwnerIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldInternalOwnerIdentityHolderID))
 }
 
 // WhereTitle applies the entql string predicate on the title field.

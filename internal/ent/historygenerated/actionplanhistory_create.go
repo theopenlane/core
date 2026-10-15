@@ -574,6 +574,62 @@ func (_c *ActionPlanHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *A
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *ActionPlanHistoryCreate) SetInternalOwner(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableInternalOwner(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *ActionPlanHistoryCreate) SetInternalOwnerUserID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableInternalOwnerUserID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *ActionPlanHistoryCreate) SetInternalOwnerGroupID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *ActionPlanHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ActionPlanHistoryCreate) SetTitle(v string) *ActionPlanHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -1113,6 +1169,22 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(actionplanhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
+	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(actionplanhistory.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(actionplanhistory.FieldInternalOwnerUserID, field.TypeString, value)
+		_node.InternalOwnerUserID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(actionplanhistory.FieldInternalOwnerGroupID, field.TypeString, value)
+		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(actionplanhistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(actionplanhistory.FieldTitle, field.TypeString, value)

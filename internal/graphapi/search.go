@@ -55,12 +55,13 @@ func searchActionPlans(ctx context.Context, query string, after *entgql.Cursor[s
 	request := withTransactionalMutation(ctx).ActionPlan.Query().
 		Where(
 			actionplan.Or(
-				actionplan.DetailsContainsFold(query), // search by Details
-				actionplan.ID(query),                  // search equal to ID
-				actionplan.NameContainsFold(query),    // search by Name
+				actionplan.DetailsContainsFold(query),       // search by Details
+				actionplan.ID(query),                        // search equal to ID
+				actionplan.InternalOwnerContainsFold(query), // search by InternalOwner
+				actionplan.NameContainsFold(query),          // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 			),
 		)

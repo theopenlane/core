@@ -810,6 +810,10 @@ type CreateActionPlan_CreateActionPlan_ActionPlan struct {
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	InternalOwner                   *string                       "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID            *string                       "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID   *string                       "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID             *string                       "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
 	Metadata                        map[string]any                "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -988,6 +992,30 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetInternalNotes() *strin
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetInternalOwner() *string {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.InternalOwner
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.InternalOwnerUserID
 }
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetManagedBy() *string {
 	if t == nil {
@@ -1189,6 +1217,10 @@ type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	InternalOwner                   *string                       "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID            *string                       "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID   *string                       "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID             *string                       "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
 	Metadata                        map[string]any                "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -1367,6 +1399,30 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetInternalNotes
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetInternalOwner() *string {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.InternalOwner
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerUserID
 }
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetManagedBy() *string {
 	if t == nil {
@@ -1568,6 +1624,10 @@ type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	InternalOwner                   *string                       "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID            *string                       "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID   *string                       "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID             *string                       "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
 	Metadata                        map[string]any                "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -1746,6 +1806,30 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetInterna
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
 	return t.InternalNotes
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetInternalOwner() *string {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.InternalOwner
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerUserID
 }
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetManagedBy() *string {
 	if t == nil {
@@ -1958,6 +2042,10 @@ type GetActionPlanByID_ActionPlan struct {
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	InternalOwner                   *string                       "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID            *string                       "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID   *string                       "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID             *string                       "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
 	Metadata                        map[string]any                "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -2136,6 +2224,30 @@ func (t *GetActionPlanByID_ActionPlan) GetInternalNotes() *string {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
 	return t.InternalNotes
+}
+func (t *GetActionPlanByID_ActionPlan) GetInternalOwner() *string {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.InternalOwner
+}
+func (t *GetActionPlanByID_ActionPlan) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *GetActionPlanByID_ActionPlan) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *GetActionPlanByID_ActionPlan) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.InternalOwnerUserID
 }
 func (t *GetActionPlanByID_ActionPlan) GetManagedBy() *string {
 	if t == nil {
@@ -2602,6 +2714,10 @@ type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	InternalOwner                   *string                       "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID            *string                       "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID   *string                       "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID             *string                       "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
 	Metadata                        map[string]any                "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -2780,6 +2896,30 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetInternalNotes() *strin
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
 	return t.InternalNotes
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetInternalOwner() *string {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.InternalOwner
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.InternalOwnerUserID
 }
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetManagedBy() *string {
 	if t == nil {
@@ -2981,6 +3121,10 @@ type UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans struct {
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	InternalOwner                   *string                       "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID            *string                       "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID   *string                       "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID             *string                       "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
 	Metadata                        map[string]any                "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -3159,6 +3303,30 @@ func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetInternalNotes
 		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
 	}
 	return t.InternalNotes
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetInternalOwner() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.InternalOwner
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.InternalOwnerUserID
 }
 func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetManagedBy() *string {
 	if t == nil {
@@ -111433,10 +111601,11 @@ func (t *GlobalSearch_Search_ActionPlans_PageInfo) GetStartCursor() *string {
 }
 
 type GlobalSearch_Search_ActionPlans_Edges_Node struct {
-	Details *string  "json:\"details,omitempty\" graphql:\"details\""
-	ID      string   "json:\"id\" graphql:\"id\""
-	Name    string   "json:\"name\" graphql:\"name\""
-	Tags    []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Details       *string  "json:\"details,omitempty\" graphql:\"details\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	InternalOwner *string  "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	Name          string   "json:\"name\" graphql:\"name\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *GlobalSearch_Search_ActionPlans_Edges_Node) GetDetails() *string {
@@ -111450,6 +111619,12 @@ func (t *GlobalSearch_Search_ActionPlans_Edges_Node) GetID() string {
 		t = &GlobalSearch_Search_ActionPlans_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GlobalSearch_Search_ActionPlans_Edges_Node) GetInternalOwner() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ActionPlans_Edges_Node{}
+	}
+	return t.InternalOwner
 }
 func (t *GlobalSearch_Search_ActionPlans_Edges_Node) GetName() string {
 	if t == nil {
@@ -174581,6 +174756,10 @@ const CreateActionPlanDocument = `mutation CreateActionPlan ($input: CreateActio
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -174658,6 +174837,10 @@ const CreateBulkActionPlanDocument = `mutation CreateBulkActionPlan ($input: [Cr
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -174735,6 +174918,10 @@ const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($inpu
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -174835,6 +175022,10 @@ const GetActionPlanByIDDocument = `query GetActionPlanByID ($actionPlanId: ID!) 
 		improvementSuggestions
 		integrationRunID
 		internalNotes
+		internalOwner
+		internalOwnerGroupID
+		internalOwnerIdentityHolderID
+		internalOwnerUserID
 		managedBy
 		managementMode
 		metadata
@@ -174995,6 +175186,10 @@ const UpdateActionPlanDocument = `mutation UpdateActionPlan ($updateActionPlanId
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -175073,6 +175268,10 @@ const UpdateBulkActionPlanDocument = `mutation UpdateBulkActionPlan ($ids: [ID!]
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -202509,6 +202708,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				node {
 					details
 					id
+					internalOwner
 					name
 					tags
 				}
