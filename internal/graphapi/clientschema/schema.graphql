@@ -97972,7 +97972,7 @@ input WebauthnWhereInput {
 	"""
 	tagsHas: String
 }
-type WorkflowAssignment implements Node @modules(names: ["any_module"]) {
+type WorkflowAssignment implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -98192,7 +98192,7 @@ type WorkflowAssignmentRejectPayload {
 WorkflowAssignmentRejection captures details when an approval is rejected or denied.
 """
 scalar WorkflowAssignmentRejection
-type WorkflowAssignmentTarget implements Node @modules(names: ["any_module"]) {
+type WorkflowAssignmentTarget implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -98784,7 +98784,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
 	REJECTED
 	CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node @modules(names: ["any_module"]) {
+type WorkflowDefinition implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -99464,7 +99464,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
 	LIFECYCLE
 	NOTIFICATION
 }
-type WorkflowEvent implements Node @modules(names: ["any_module"]) {
+type WorkflowEvent implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -99763,7 +99763,7 @@ type WorkflowFieldMetadata {
 	"""
 	type: String!
 }
-type WorkflowInstance implements Node @modules(names: ["any_module"]) {
+type WorkflowInstance implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -100720,7 +100720,7 @@ type WorkflowMetadata {
 	"""
 	extensions: Map!
 }
-type WorkflowObjectRef implements Node @modules(names: ["any_module"]) {
+type WorkflowObjectRef implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -101495,7 +101495,7 @@ type WorkflowObjectTypeMetadata {
 	"""
 	resolverKeys: [String!]!
 }
-type WorkflowProposal implements Node @modules(names: ["any_module"]) {
+type WorkflowProposal implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
