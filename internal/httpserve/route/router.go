@@ -418,7 +418,6 @@ func RegisterRoutes(router *Router) error {
 		registerSupportCallbackHandler,
 		registerProductCatalogHandler,
 		registerFileDownloadHandler,
-		registerIntegrationWebhookHandler,
 		registerSCIMRoutes,
 		registerEmailTestSendHandler,
 		registerScopesHandler,

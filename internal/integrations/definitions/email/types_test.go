@@ -14,24 +14,34 @@ func TestRuntimeEmailConfig_Provisioned(t *testing.T) {
 		expected bool
 	}{
 		{
-			name:     "all fields present",
-			cfg:      RuntimeEmailConfig{APIKey: "key", Provider: "resend", FromEmail: "test@example.com"},
+			name:     "resend with its key",
+			cfg:      RuntimeEmailConfig{Provider: "resend", Resend: ResendConfig{ResendCredential: ResendCredential{APIKey: "key"}}, FromEmail: "test@example.com"},
 			expected: true,
 		},
 		{
-			name:     "missing api key",
-			cfg:      RuntimeEmailConfig{Provider: "resend", FromEmail: "test@example.com"},
+			name:     "postmark with its token",
+			cfg:      RuntimeEmailConfig{Provider: "postmark", Postmark: PostmarkConfig{PostmarkCredential: PostmarkCredential{ServerToken: "token"}}, FromEmail: "test@example.com"},
+			expected: true,
+		},
+		{
+			name:     "resend selected but only postmark configured",
+			cfg:      RuntimeEmailConfig{Provider: "resend", Postmark: PostmarkConfig{PostmarkCredential: PostmarkCredential{ServerToken: "token"}}, FromEmail: "test@example.com"},
 			expected: false,
 		},
 		{
 			name:     "missing provider",
-			cfg:      RuntimeEmailConfig{APIKey: "key", FromEmail: "test@example.com"},
+			cfg:      RuntimeEmailConfig{Resend: ResendConfig{ResendCredential: ResendCredential{APIKey: "key"}}, FromEmail: "test@example.com"},
 			expected: false,
 		},
 		{
 			name:     "missing from email",
-			cfg:      RuntimeEmailConfig{APIKey: "key", Provider: "resend"},
+			cfg:      RuntimeEmailConfig{Provider: "resend", Resend: ResendConfig{ResendCredential: ResendCredential{APIKey: "key"}}},
 			expected: false,
+		},
+		{
+			name:     "mock needs no credential",
+			cfg:      RuntimeEmailConfig{Provider: ProviderMock, FromEmail: "test@example.com"},
+			expected: true,
 		},
 		{
 			name:     "zero value",

@@ -493,26 +493,79 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "email.PostmarkConfig": {
+      "properties": {
+        "servertoken": {
+          "type": "string",
+          "description": "Postmark server API token"
+        },
+        "messagestream": {
+          "type": "string",
+          "description": "Postmark message stream ID (defaults to outbound)"
+        },
+        "trackopens": {
+          "type": "boolean",
+          "description": "Enable Postmark open tracking"
+        },
+        "tracklinks": {
+          "type": "string",
+          "enum": [
+            "None",
+            "HtmlAndText",
+            "HtmlOnly",
+            "TextOnly"
+          ],
+          "description": "Postmark link tracking mode"
+        },
+        "webhooksecret": {
+          "type": "string",
+          "description": "Postmark webhook basic auth password"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "servertoken"
+      ]
+    },
+    "email.ResendConfig": {
+      "properties": {
+        "apikey": {
+          "type": "string",
+          "description": "Resend API key"
+        },
+        "webhooksecret": {
+          "type": "string",
+          "description": "Resend webhook signing secret"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apikey"
+      ]
+    },
     "email.RuntimeEmailConfig": {
       "properties": {
         "testdir": {
           "type": "string",
           "description": "Directory for dev-mode email output"
         },
-        "resendsecret": {
-          "type": "string",
-          "description": "Resend webhook signing secret"
-        },
-        "apikey": {
-          "type": "string",
-          "description": "Email provider API key"
-        },
         "provider": {
           "type": "string",
           "enum": [
-            "resend"
+            "resend",
+            "postmark"
           ],
           "description": "Email service provider"
+        },
+        "resend": {
+          "$ref": "#/$defs/email.ResendConfig",
+          "description": "Resend provider configuration"
+        },
+        "postmark": {
+          "$ref": "#/$defs/email.PostmarkConfig",
+          "description": "Postmark provider configuration"
         },
         "fromemail": {
           "type": "string",
@@ -638,7 +691,6 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "apikey",
         "provider",
         "fromemail"
       ]

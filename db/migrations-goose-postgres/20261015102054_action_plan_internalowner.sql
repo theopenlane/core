@@ -1,0 +1,7 @@
+-- +goose Up
+-- modify "action_plans" table
+ALTER TABLE "action_plans" ADD COLUMN "internal_owner" character varying NULL, ADD COLUMN "internal_owner_user_id" character varying NULL, ADD COLUMN "internal_owner_group_id" character varying NULL, ADD COLUMN "internal_owner_identity_holder_id" character varying NULL, ADD CONSTRAINT "action_plans_groups_internal_owner_group" FOREIGN KEY ("internal_owner_group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "action_plans_identity_holders_internal_owner_identity_holder" FOREIGN KEY ("internal_owner_identity_holder_id") REFERENCES "identity_holders" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "action_plans_users_internal_owner_user" FOREIGN KEY ("internal_owner_user_id") REFERENCES "users" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+
+-- +goose Down
+-- reverse: modify "action_plans" table
+ALTER TABLE "action_plans" DROP CONSTRAINT "action_plans_users_internal_owner_user", DROP CONSTRAINT "action_plans_identity_holders_internal_owner_identity_holder", DROP CONSTRAINT "action_plans_groups_internal_owner_group", DROP COLUMN "internal_owner_identity_holder_id", DROP COLUMN "internal_owner_group_id", DROP COLUMN "internal_owner_user_id", DROP COLUMN "internal_owner";

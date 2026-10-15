@@ -15,7 +15,10 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -286,6 +289,145 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	require.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationOtherOrgInstallationNotFound() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+	otherUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	integrationID := suite.createOperationTestIntegration(t, owner.UserCtx, owner.OrganizationID, operationTestDefinitionID)
+
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		IntegrationID: integrationID,
+		Body: handlers.RunIntegrationOperationBody{
+			Operation: opTestHealthCheckOperation.Name(),
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(otherUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Contains(t, rec.Body.String(), handlers.ErrIntegrationNotFound.Error())
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationNoActiveOrgUnauthorized() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	integrationID := suite.createOperationTestIntegration(t, owner.UserCtx, owner.OrganizationID, operationTestDefinitionID)
+
+	// a system admin bypasses the org query filter, so the handler itself must refuse a caller with no active organization
+	noOrgCtx := auth.NewTestContextWithOrgID(owner.ID, "", auth.WithCapabilities(auth.CapabilitiesForSystemAdmin(true)))
+	noOrgCtx = ent.NewContext(noOrgCtx, suite.db)
+
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		IntegrationID: integrationID,
+		Body: handlers.RunIntegrationOperationBody{
+			Operation: opTestHealthCheckOperation.Name(),
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(noOrgCtx))
+
+	require.Equal(t, http.StatusUnauthorized, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemDefinitionNotInvocable() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(operationTestSystemDefinitionID)
+	require.True(t, ok)
+	require.False(t, def.Installable())
+
+	// the configure handler refuses non-installable definitions, so this row can only exist by bypassing that surface
+	record, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(owner.UserCtx, owner.OrganizationID, "", def, nil, nil)
+	require.NoError(t, err)
+
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		IntegrationID: record.ID,
+		Body: handlers.RunIntegrationOperationBody{
+			Operation: opTestSystemSweepOperation.Name(),
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestSystemDefinitionID+"/operations?integration_id="+record.ID, bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(owner.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Contains(t, rec.Body.String(), handlers.ErrIntegrationNotFound.Error())
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemOwnedInstallationNotFound() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	// a full-system admin with no organization creates an ownerless row, which the system-owned hook flags
+	systemCtx := auth.NewTestContextWithOrgID(owner.ID, "", auth.WithCapabilities(auth.CapSystemAdmin|auth.CapBypassOrgFilter|auth.CapInternalOperation|auth.CapSystemSweep))
+	systemCtx = ent.NewContext(systemCtx, suite.db)
+
+	record, err := suite.db.Integration.Create().
+		SetName("system installation").
+		SetDefinitionID(operationTestDefinitionID).
+		SetStatus(enums.IntegrationStatusConnected).
+		Save(systemCtx)
+	require.NoError(t, err)
+	require.True(t, record.SystemOwned)
+	require.Empty(t, record.OwnerID)
+
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		IntegrationID: record.ID,
+		Body: handlers.RunIntegrationOperationBody{
+			Operation: opTestHealthCheckOperation.Name(),
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+record.ID, bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(owner.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Contains(t, rec.Body.String(), handlers.ErrIntegrationNotFound.Error())
 }
 
 func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {

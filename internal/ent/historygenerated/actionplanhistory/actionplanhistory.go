@@ -110,6 +110,14 @@ const (
 	FieldActionPlanKindID = "action_plan_kind_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -184,6 +192,10 @@ var Columns = []string{
 	FieldActionPlanKindName,
 	FieldActionPlanKindID,
 	FieldWorkflowEligibleMarker,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldTitle,
 	FieldDescription,
 	FieldDueDate,
@@ -501,6 +513,26 @@ func ByActionPlanKindID(opts ...sql.OrderTermOption) OrderOption {
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
+}
+
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.

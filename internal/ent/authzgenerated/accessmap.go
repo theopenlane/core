@@ -58,6 +58,21 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "internal_owner_user": {
+	ObjectType:          "user",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "internal_owner_group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "internal_owner_identity_holder": {
+	ObjectType:          "identity_holder",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "risks": {
 	ObjectType:          "risk",
 	SkipEditCheck:       false,

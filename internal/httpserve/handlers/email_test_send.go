@@ -95,7 +95,7 @@ func (h *Handler) EmailTestSendHandler(ctx echo.Context) error {
 		}
 	}
 
-	testTag := newman.Tag{Name: email.TagIsTest, Value: "true"}
+	testTag := newman.Tag{Name: email.TagIsTest, Value: email.TagTrueValue}
 	results := make([]EmailTestSendResult, 0, len(ops))
 
 	for _, op := range ops {

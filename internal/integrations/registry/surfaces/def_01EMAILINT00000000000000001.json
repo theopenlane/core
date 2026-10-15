@@ -1,39 +1,75 @@
 {
-  "hash": "1eef7dec386bef6956aaa19b6ef9e9ded1c87df5a6afe067b9e0a1b174471023",
-  "version": "01M4A6JGR0FY812CJSXEMVR843",
+  "hash": "3b649480944467be65124ece8f261b0ed564c16ff0a4a1416afacbc1c65c352d",
+  "version": "01M4V1VGWH897QF5VPFV8A3MPG",
   "surface": {
     "id": "def_01EMAILINT00000000000000001",
     "credentials": [
       {
-        "ref": "Credential",
+        "ref": "PostmarkCredential",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/email/credential",
-          "$ref": "#/$defs/Credential",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/email/postmark-credential",
+          "$ref": "#/$defs/PostmarkCredential",
           "$defs": {
-            "Credential": {
+            "PostmarkCredential": {
               "properties": {
-                "apiKey": {
+                "serverToken": {
                   "type": "string",
-                  "description": "Email provider API key"
+                  "description": "Postmark server API token"
                 },
-                "provider": {
+                "messageStream": {
+                  "type": "string",
+                  "description": "Postmark message stream ID (defaults to outbound)"
+                },
+                "trackOpens": {
+                  "type": "boolean",
+                  "description": "Enable Postmark open tracking"
+                },
+                "trackLinks": {
                   "type": "string",
                   "enum": [
-                    "resend"
+                    "None",
+                    "HtmlAndText",
+                    "HtmlOnly",
+                    "TextOnly"
                   ],
-                  "description": "Email service provider"
+                  "description": "Postmark link tracking mode"
                 }
               },
               "additionalProperties": false,
               "type": "object",
               "required": [
-                "apiKey",
-                "provider"
+                "serverToken"
               ]
             }
           }
         }
+      },
+      {
+        "ref": "ResendCredential",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/email/resend-credential",
+          "$ref": "#/$defs/ResendCredential",
+          "$defs": {
+            "ResendCredential": {
+              "properties": {
+                "apiKey": {
+                  "type": "string",
+                  "description": "Resend API key"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "apiKey"
+              ]
+            }
+          }
+        },
+        "replaces": [
+          "Credential"
+        ]
       }
     ],
     "userInput": {
@@ -89,7 +125,8 @@
       }
     },
     "connections": [
-      "Credential"
+      "PostmarkCredential",
+      "ResendCredential"
     ],
     "operations": [
       {
@@ -160,19 +197,6 @@
       },
       {
         "name": "tmpl_trustcenter_update"
-      }
-    ],
-    "webhooks": [
-      {
-        "name": "resend.delivery",
-        "events": [
-          "email.bounced",
-          "email.clicked",
-          "email.delivered",
-          "email.failed",
-          "email.opened",
-          "email.sent"
-        ]
       }
     ]
   }

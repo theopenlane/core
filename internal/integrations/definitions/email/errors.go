@@ -19,6 +19,8 @@ var (
 	ErrCampaignNotFound = errors.New("email: campaign not found")
 	// ErrSenderNotConfigured indicates the email client has no sender configured
 	ErrSenderNotConfigured = errors.New("email: sender not configured")
+	// ErrSenderVerifyFailed indicates the email provider rejected the configured credentials
+	ErrSenderVerifyFailed = errors.New("email: provider rejected the credentials")
 	// ErrCampaignMissingAssessment indicates a questionnaire campaign has no linked assessment
 	ErrCampaignMissingAssessment = errors.New("email: campaign has no assessment ID")
 	// ErrAssessmentNotFound indicates the assessment linked to a campaign cannot be found
@@ -31,6 +33,10 @@ var (
 	ErrWebhookPayloadInvalid = errors.New("email: webhook payload invalid")
 	// ErrWebhookMissingID indicates the svix-id header is absent from the webhook request
 	ErrWebhookMissingID = errors.New("email: webhook missing svix-id header")
+	// ErrWebhookAuthMissing indicates the inbound webhook request carries no basic auth credentials
+	ErrWebhookAuthMissing = errors.New("email: webhook basic auth missing")
+	// ErrWebhookAuthInvalid indicates the inbound webhook basic auth password does not match the configured secret
+	ErrWebhookAuthInvalid = errors.New("email: webhook basic auth invalid")
 	// ErrMissingURLResolutionFields indicates a PreHook cannot resolve a URL because required fields are empty
 	ErrMissingURLResolutionFields = errors.New("email: missing required fields for URL resolution")
 	// ErrResultEncode indicates an operation result payload could not be encoded

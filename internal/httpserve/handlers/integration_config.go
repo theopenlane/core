@@ -35,7 +35,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	}
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.DefinitionID)
-	if !ok || !def.Active {
+	if !ok || !def.Active || !def.Installable() {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 
@@ -86,13 +86,15 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	return h.Success(ctx, resp)
 }
 
-// ensureInstallationWebhooks ensures every declared webhook exists for the installation and returns the first webhook's absolute endpoint URL and secret
+// ensureInstallationWebhooks ensures every installation-scoped webhook exists for the installation and returns the first one's absolute endpoint URL and secret; runtime-owned webhooks have no installation rows
 func (h *Handler) ensureInstallationWebhooks(ctx echo.Context, installationRec *ent.Integration, def types.Definition) (string, string, error) {
 	requestCtx := ctx.Request().Context()
 
 	var primaryWebhookURL, primaryWebhookSecret string
 
-	for i, registration := range def.Webhooks {
+	installationWebhooks := lo.Reject(def.Webhooks, func(registration types.WebhookRegistration, _ int) bool { return registration.RuntimeOwned() })
+
+	for i, registration := range installationWebhooks {
 		webhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installationRec, registration.Name, "")
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
