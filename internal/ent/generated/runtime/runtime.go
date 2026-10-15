@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -471,6 +472,57 @@ func init() {
 	assessmentDescID := assessmentMixinFields4[0].Descriptor()
 	// assessment.DefaultID holds the default value on creation for the id field.
 	assessment.DefaultID = assessmentDescID.Default.(func() string)
+	assessmentdomainMixin := schema.AssessmentDomain{}.Mixin()
+	assessmentdomain.Policy = privacy.NewPolicies(schema.AssessmentDomain{})
+	assessmentdomain.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := assessmentdomain.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	assessmentdomainMixinHooks0 := assessmentdomainMixin[0].Hooks()
+	assessmentdomainMixinHooks1 := assessmentdomainMixin[1].Hooks()
+	assessmentdomainMixinHooks5 := assessmentdomainMixin[5].Hooks()
+
+	assessmentdomain.Hooks[1] = assessmentdomainMixinHooks0[0]
+
+	assessmentdomain.Hooks[2] = assessmentdomainMixinHooks1[0]
+
+	assessmentdomain.Hooks[3] = assessmentdomainMixinHooks5[0]
+	assessmentdomainMixinInters5 := assessmentdomainMixin[5].Interceptors()
+	assessmentdomain.Interceptors[0] = assessmentdomainMixinInters5[0]
+	assessmentdomainMixinFields0 := assessmentdomainMixin[0].Fields()
+	_ = assessmentdomainMixinFields0
+	assessmentdomainMixinFields3 := assessmentdomainMixin[3].Fields()
+	_ = assessmentdomainMixinFields3
+	assessmentdomainMixinFields5 := assessmentdomainMixin[5].Fields()
+	_ = assessmentdomainMixinFields5
+	assessmentdomainFields := schema.AssessmentDomain{}.Fields()
+	_ = assessmentdomainFields
+	// assessmentdomainDescCreatedAt is the schema descriptor for created_at field.
+	assessmentdomainDescCreatedAt := assessmentdomainMixinFields0[0].Descriptor()
+	// assessmentdomain.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assessmentdomain.DefaultCreatedAt = assessmentdomainDescCreatedAt.Default.(func() time.Time)
+	// assessmentdomainDescUpdatedAt is the schema descriptor for updated_at field.
+	assessmentdomainDescUpdatedAt := assessmentdomainMixinFields0[1].Descriptor()
+	// assessmentdomain.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assessmentdomain.DefaultUpdatedAt = assessmentdomainDescUpdatedAt.Default.(func() time.Time)
+	// assessmentdomain.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	assessmentdomain.UpdateDefaultUpdatedAt = assessmentdomainDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assessmentdomainDescOwnerID is the schema descriptor for owner_id field.
+	assessmentdomainDescOwnerID := assessmentdomainMixinFields5[0].Descriptor()
+	// assessmentdomain.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	assessmentdomain.OwnerIDValidator = assessmentdomainDescOwnerID.Validators[0].(func(string) error)
+	// assessmentdomainDescCustomDomainID is the schema descriptor for custom_domain_id field.
+	assessmentdomainDescCustomDomainID := assessmentdomainFields[0].Descriptor()
+	// assessmentdomain.CustomDomainIDValidator is a validator for the "custom_domain_id" field. It is called by the builders before save.
+	assessmentdomain.CustomDomainIDValidator = assessmentdomainDescCustomDomainID.Validators[0].(func(string) error)
+	// assessmentdomainDescID is the schema descriptor for id field.
+	assessmentdomainDescID := assessmentdomainMixinFields3[0].Descriptor()
+	// assessmentdomain.DefaultID holds the default value on creation for the id field.
+	assessmentdomain.DefaultID = assessmentdomainDescID.Default.(func() string)
 	assessmentpolicyMixin := schema.AssessmentPolicy{}.Mixin()
 	assessmentpolicy.Policy = privacy.NewPolicies(schema.AssessmentPolicy{})
 	assessmentpolicy.Hooks[0] = func(next ent.Mutator) ent.Mutator {

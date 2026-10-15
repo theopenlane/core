@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentdomainhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
@@ -161,6 +162,33 @@ func (f TraverseActionPlanHistory) Traverse(ctx context.Context, q historygenera
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.ActionPlanHistoryQuery", q)
+}
+
+// The AssessmentDomainHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AssessmentDomainHistoryFunc func(context.Context, *historygenerated.AssessmentDomainHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f AssessmentDomainHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.AssessmentDomainHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.AssessmentDomainHistoryQuery", q)
+}
+
+// The TraverseAssessmentDomainHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAssessmentDomainHistory func(context.Context, *historygenerated.AssessmentDomainHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAssessmentDomainHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAssessmentDomainHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.AssessmentDomainHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.AssessmentDomainHistoryQuery", q)
 }
 
 // The AssessmentHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1950,6 +1978,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 	switch q := q.(type) {
 	case *historygenerated.ActionPlanHistoryQuery:
 		return &query[*historygenerated.ActionPlanHistoryQuery, predicate.ActionPlanHistory, actionplanhistory.OrderOption]{typ: historygenerated.TypeActionPlanHistory, tq: q}, nil
+	case *historygenerated.AssessmentDomainHistoryQuery:
+		return &query[*historygenerated.AssessmentDomainHistoryQuery, predicate.AssessmentDomainHistory, assessmentdomainhistory.OrderOption]{typ: historygenerated.TypeAssessmentDomainHistory, tq: q}, nil
 	case *historygenerated.AssessmentHistoryQuery:
 		return &query[*historygenerated.AssessmentHistoryQuery, predicate.AssessmentHistory, assessmenthistory.OrderOption]{typ: historygenerated.TypeAssessmentHistory, tq: q}, nil
 	case *historygenerated.AssessmentPolicyHistoryQuery:

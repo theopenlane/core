@@ -104,6 +104,31 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	AssessmentDomainHistory struct {
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		CustomDomainID        func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+	}
+
+	AssessmentDomainHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AssessmentDomainHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	AssessmentHistory struct {
 		AssessmentType         func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
@@ -1842,6 +1867,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		ActionPlanHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ActionPlanHistoryOrder, where *historygenerated.ActionPlanHistoryWhereInput) int
+		AssessmentDomainHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentDomainHistoryOrder, where *historygenerated.AssessmentDomainHistoryWhereInput) int
 		AssessmentHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentHistoryOrder, where *historygenerated.AssessmentHistoryWhereInput) int
 		AssessmentPolicyHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentPolicyHistoryOrder, where *historygenerated.AssessmentPolicyHistoryWhereInput) int
 		AssessmentResponseHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentResponseHistoryOrder, where *historygenerated.AssessmentResponseHistoryWhereInput) int
@@ -3411,6 +3437,105 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanHistoryEdge.Node(childComplexity), true
+
+	case "AssessmentDomainHistory.createdAt":
+		if e.ComplexityRoot.AssessmentDomainHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.CreatedAt(childComplexity), true
+	case "AssessmentDomainHistory.createdBy":
+		if e.ComplexityRoot.AssessmentDomainHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.CreatedBy(childComplexity), true
+	case "AssessmentDomainHistory.customDomainID":
+		if e.ComplexityRoot.AssessmentDomainHistory.CustomDomainID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.CustomDomainID(childComplexity), true
+	case "AssessmentDomainHistory.historyTime":
+		if e.ComplexityRoot.AssessmentDomainHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.HistoryTime(childComplexity), true
+	case "AssessmentDomainHistory.id":
+		if e.ComplexityRoot.AssessmentDomainHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.ID(childComplexity), true
+	case "AssessmentDomainHistory.operation":
+		if e.ComplexityRoot.AssessmentDomainHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.Operation(childComplexity), true
+	case "AssessmentDomainHistory.ownerID":
+		if e.ComplexityRoot.AssessmentDomainHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.OwnerID(childComplexity), true
+	case "AssessmentDomainHistory.ref":
+		if e.ComplexityRoot.AssessmentDomainHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.Ref(childComplexity), true
+	case "AssessmentDomainHistory.updatedAt":
+		if e.ComplexityRoot.AssessmentDomainHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.UpdatedAt(childComplexity), true
+	case "AssessmentDomainHistory.updatedBy":
+		if e.ComplexityRoot.AssessmentDomainHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.UpdatedBy(childComplexity), true
+	case "AssessmentDomainHistory.updatedByImpersonator":
+		if e.ComplexityRoot.AssessmentDomainHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistory.UpdatedByImpersonator(childComplexity), true
+
+	case "AssessmentDomainHistoryConnection.edges":
+		if e.ComplexityRoot.AssessmentDomainHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistoryConnection.Edges(childComplexity), true
+	case "AssessmentDomainHistoryConnection.pageInfo":
+		if e.ComplexityRoot.AssessmentDomainHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistoryConnection.PageInfo(childComplexity), true
+	case "AssessmentDomainHistoryConnection.totalCount":
+		if e.ComplexityRoot.AssessmentDomainHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistoryConnection.TotalCount(childComplexity), true
+
+	case "AssessmentDomainHistoryEdge.cursor":
+		if e.ComplexityRoot.AssessmentDomainHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistoryEdge.Cursor(childComplexity), true
+	case "AssessmentDomainHistoryEdge.node":
+		if e.ComplexityRoot.AssessmentDomainHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainHistoryEdge.Node(childComplexity), true
 
 	case "AssessmentHistory.assessmentType":
 		if e.ComplexityRoot.AssessmentHistory.AssessmentType == nil {
@@ -11833,6 +11958,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.ActionPlanHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ActionPlanHistoryOrder), args["where"].(*historygenerated.ActionPlanHistoryWhereInput)), true
+	case "Query.assessmentDomainHistories":
+		if e.ComplexityRoot.Query.AssessmentDomainHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_assessmentDomainHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AssessmentDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssessmentDomainHistoryOrder), args["where"].(*historygenerated.AssessmentDomainHistoryWhereInput)), true
 	case "Query.assessmentHistories":
 		if e.ComplexityRoot.Query.AssessmentHistories == nil {
 			break
@@ -17948,6 +18084,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputActionPlanHistoryOrder,
 		ec.unmarshalInputActionPlanHistoryWhereInput,
+		ec.unmarshalInputAssessmentDomainHistoryOrder,
+		ec.unmarshalInputAssessmentDomainHistoryWhereInput,
 		ec.unmarshalInputAssessmentHistoryOrder,
 		ec.unmarshalInputAssessmentHistoryWhereInput,
 		ec.unmarshalInputAssessmentPolicyHistoryOrder,
@@ -19142,6 +19280,219 @@ input ActionPlanHistoryWhereInput {
   sourceNotNil: Boolean
   sourceEqualFold: String
   sourceContainsFold: String
+}
+type AssessmentDomainHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: AssessmentDomainHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  customDomainID: String!
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentDomainHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [AssessmentDomainHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentDomainHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AssessmentDomainHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+AssessmentDomainHistoryOpType is enum for the field operation
+"""
+enum AssessmentDomainHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for AssessmentDomainHistory connections
+"""
+input AssessmentDomainHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AssessmentDomainHistories.
+  """
+  field: AssessmentDomainHistoryOrderField!
+}
+"""
+Properties by which AssessmentDomainHistory connections can be ordered.
+"""
+enum AssessmentDomainHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+AssessmentDomainHistoryWhereInput is used for filtering AssessmentDomainHistory objects.
+Input was generated by ent.
+"""
+input AssessmentDomainHistoryWhereInput {
+  not: AssessmentDomainHistoryWhereInput
+  and: [AssessmentDomainHistoryWhereInput!]
+  or: [AssessmentDomainHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: AssessmentDomainHistoryOpType
+  operationNEQ: AssessmentDomainHistoryOpType
+  operationIn: [AssessmentDomainHistoryOpType!]
+  operationNotIn: [AssessmentDomainHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  custom_domain_id field predicates
+  """
+  customDomainID: String
+  customDomainIDNEQ: String
+  customDomainIDIn: [String!]
+  customDomainIDNotIn: [String!]
+  customDomainIDContains: String
+  customDomainIDHasPrefix: String
+  customDomainIDHasSuffix: String
+  customDomainIDEqualFold: String
+  customDomainIDContainsFold: String
 }
 type AssessmentHistory implements Node {
   id: ID!
@@ -39176,6 +39527,37 @@ type Query {
     """
     where: ActionPlanHistoryWhereInput
   ): ActionPlanHistoryConnection!
+  assessmentDomainHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentDomainHistories returned from the connection.
+    """
+    orderBy: AssessmentDomainHistoryOrder
+
+    """
+    Filtering options for AssessmentDomainHistories returned from the connection.
+    """
+    where: AssessmentDomainHistoryWhereInput
+  ): AssessmentDomainHistoryConnection!
   assessmentHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -54047,6 +54429,56 @@ func (ec *executionContext) childFields_ActionPlanHistoryEdge(ctx context.Contex
 		return ec.fieldContext_ActionPlanHistoryEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ActionPlanHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentDomainHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AssessmentDomainHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_AssessmentDomainHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_AssessmentDomainHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_AssessmentDomainHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AssessmentDomainHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AssessmentDomainHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AssessmentDomainHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AssessmentDomainHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AssessmentDomainHistory_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AssessmentDomainHistory_ownerID(ctx, field)
+	case "customDomainID":
+		return ec.fieldContext_AssessmentDomainHistory_customDomainID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentDomainHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentDomainHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AssessmentDomainHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AssessmentDomainHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AssessmentDomainHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentDomainHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentDomainHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AssessmentDomainHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AssessmentDomainHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentDomainHistoryEdge", field.Name)
 }
 
 func (ec *executionContext) childFields_AssessmentHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

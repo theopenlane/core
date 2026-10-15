@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentdomainhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
@@ -96,6 +97,7 @@ const (
 
 	// Node types.
 	TypeActionPlanHistory                 = "ActionPlanHistory"
+	TypeAssessmentDomainHistory           = "AssessmentDomainHistory"
 	TypeAssessmentHistory                 = "AssessmentHistory"
 	TypeAssessmentPolicyHistory           = "AssessmentPolicyHistory"
 	TypeAssessmentResponseHistory         = "AssessmentResponseHistory"
@@ -4553,6 +4555,960 @@ func (m *ActionPlanHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ActionPlanHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown ActionPlanHistory edge %s", name)
+}
+
+// AssessmentDomainHistoryMutation represents an operation that mutates the AssessmentDomainHistory nodes in the graph.
+type AssessmentDomainHistoryMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	history_time            *time.Time
+	ref                     *string
+	operation               *history.OpType
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	owner_id                *string
+	custom_domain_id        *string
+	clearedFields           map[string]struct{}
+	done                    bool
+	oldValue                func(context.Context) (*AssessmentDomainHistory, error)
+	predicates              []predicate.AssessmentDomainHistory
+}
+
+var _ ent.Mutation = (*AssessmentDomainHistoryMutation)(nil)
+
+// assessmentdomainhistoryOption allows management of the mutation configuration using functional options.
+type assessmentdomainhistoryOption func(*AssessmentDomainHistoryMutation)
+
+// newAssessmentDomainHistoryMutation creates new mutation for the AssessmentDomainHistory entity.
+func newAssessmentDomainHistoryMutation(c config, op Op, opts ...assessmentdomainhistoryOption) *AssessmentDomainHistoryMutation {
+	m := &AssessmentDomainHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAssessmentDomainHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAssessmentDomainHistoryID sets the ID field of the mutation.
+func withAssessmentDomainHistoryID(id string) assessmentdomainhistoryOption {
+	return func(m *AssessmentDomainHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AssessmentDomainHistory
+		)
+		m.oldValue = func(ctx context.Context) (*AssessmentDomainHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AssessmentDomainHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAssessmentDomainHistory sets the old AssessmentDomainHistory of the mutation.
+func withAssessmentDomainHistory(node *AssessmentDomainHistory) assessmentdomainhistoryOption {
+	return func(m *AssessmentDomainHistoryMutation) {
+		m.oldValue = func(context.Context) (*AssessmentDomainHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AssessmentDomainHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AssessmentDomainHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("historygenerated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of AssessmentDomainHistory entities.
+func (m *AssessmentDomainHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AssessmentDomainHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AssessmentDomainHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AssessmentDomainHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *AssessmentDomainHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *AssessmentDomainHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *AssessmentDomainHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *AssessmentDomainHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[assessmentdomainhistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[assessmentdomainhistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *AssessmentDomainHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, assessmentdomainhistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *AssessmentDomainHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) Operation() (r history.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *AssessmentDomainHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AssessmentDomainHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *AssessmentDomainHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[assessmentdomainhistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[assessmentdomainhistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AssessmentDomainHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, assessmentdomainhistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AssessmentDomainHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *AssessmentDomainHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[assessmentdomainhistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[assessmentdomainhistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AssessmentDomainHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, assessmentdomainhistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *AssessmentDomainHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *AssessmentDomainHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[assessmentdomainhistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[assessmentdomainhistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *AssessmentDomainHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, assessmentdomainhistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *AssessmentDomainHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *AssessmentDomainHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[assessmentdomainhistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[assessmentdomainhistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *AssessmentDomainHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, assessmentdomainhistory.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *AssessmentDomainHistoryMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *AssessmentDomainHistoryMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[assessmentdomainhistory.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[assessmentdomainhistory.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *AssessmentDomainHistoryMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, assessmentdomainhistory.FieldUpdatedByImpersonator)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *AssessmentDomainHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *AssessmentDomainHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[assessmentdomainhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[assessmentdomainhistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *AssessmentDomainHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, assessmentdomainhistory.FieldOwnerID)
+}
+
+// SetCustomDomainID sets the "custom_domain_id" field.
+func (m *AssessmentDomainHistoryMutation) SetCustomDomainID(s string) {
+	m.custom_domain_id = &s
+}
+
+// CustomDomainID returns the value of the "custom_domain_id" field in the mutation.
+func (m *AssessmentDomainHistoryMutation) CustomDomainID() (r string, exists bool) {
+	v := m.custom_domain_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCustomDomainID returns the old "custom_domain_id" field's value of the AssessmentDomainHistory entity.
+// If the AssessmentDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentDomainHistoryMutation) OldCustomDomainID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCustomDomainID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCustomDomainID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCustomDomainID: %w", err)
+	}
+	return oldValue.CustomDomainID, nil
+}
+
+// ResetCustomDomainID resets all changes to the "custom_domain_id" field.
+func (m *AssessmentDomainHistoryMutation) ResetCustomDomainID() {
+	m.custom_domain_id = nil
+}
+
+// Where appends a list predicates to the AssessmentDomainHistoryMutation builder.
+func (m *AssessmentDomainHistoryMutation) Where(ps ...predicate.AssessmentDomainHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the AssessmentDomainHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *AssessmentDomainHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.AssessmentDomainHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *AssessmentDomainHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *AssessmentDomainHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (AssessmentDomainHistory).
+func (m *AssessmentDomainHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AssessmentDomainHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 10)
+	if m.history_time != nil {
+		fields = append(fields, assessmentdomainhistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, assessmentdomainhistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, assessmentdomainhistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, assessmentdomainhistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, assessmentdomainhistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, assessmentdomainhistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, assessmentdomainhistory.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, assessmentdomainhistory.FieldUpdatedByImpersonator)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, assessmentdomainhistory.FieldOwnerID)
+	}
+	if m.custom_domain_id != nil {
+		fields = append(fields, assessmentdomainhistory.FieldCustomDomainID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AssessmentDomainHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case assessmentdomainhistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case assessmentdomainhistory.FieldRef:
+		return m.Ref()
+	case assessmentdomainhistory.FieldOperation:
+		return m.Operation()
+	case assessmentdomainhistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case assessmentdomainhistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case assessmentdomainhistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case assessmentdomainhistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case assessmentdomainhistory.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case assessmentdomainhistory.FieldOwnerID:
+		return m.OwnerID()
+	case assessmentdomainhistory.FieldCustomDomainID:
+		return m.CustomDomainID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AssessmentDomainHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case assessmentdomainhistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case assessmentdomainhistory.FieldRef:
+		return m.OldRef(ctx)
+	case assessmentdomainhistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case assessmentdomainhistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case assessmentdomainhistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case assessmentdomainhistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case assessmentdomainhistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case assessmentdomainhistory.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case assessmentdomainhistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case assessmentdomainhistory.FieldCustomDomainID:
+		return m.OldCustomDomainID(ctx)
+	}
+	return nil, fmt.Errorf("unknown AssessmentDomainHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AssessmentDomainHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case assessmentdomainhistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case assessmentdomainhistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case assessmentdomainhistory.FieldOperation:
+		v, ok := value.(history.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case assessmentdomainhistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case assessmentdomainhistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case assessmentdomainhistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case assessmentdomainhistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case assessmentdomainhistory.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case assessmentdomainhistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case assessmentdomainhistory.FieldCustomDomainID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCustomDomainID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AssessmentDomainHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AssessmentDomainHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AssessmentDomainHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AssessmentDomainHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown AssessmentDomainHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AssessmentDomainHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(assessmentdomainhistory.FieldRef) {
+		fields = append(fields, assessmentdomainhistory.FieldRef)
+	}
+	if m.FieldCleared(assessmentdomainhistory.FieldCreatedAt) {
+		fields = append(fields, assessmentdomainhistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(assessmentdomainhistory.FieldUpdatedAt) {
+		fields = append(fields, assessmentdomainhistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(assessmentdomainhistory.FieldCreatedBy) {
+		fields = append(fields, assessmentdomainhistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(assessmentdomainhistory.FieldUpdatedBy) {
+		fields = append(fields, assessmentdomainhistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(assessmentdomainhistory.FieldUpdatedByImpersonator) {
+		fields = append(fields, assessmentdomainhistory.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(assessmentdomainhistory.FieldOwnerID) {
+		fields = append(fields, assessmentdomainhistory.FieldOwnerID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AssessmentDomainHistoryMutation) ClearField(name string) error {
+	switch name {
+	case assessmentdomainhistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case assessmentdomainhistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case assessmentdomainhistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case assessmentdomainhistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case assessmentdomainhistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case assessmentdomainhistory.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case assessmentdomainhistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	}
+	return fmt.Errorf("unknown AssessmentDomainHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AssessmentDomainHistoryMutation) ResetField(name string) error {
+	switch name {
+	case assessmentdomainhistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case assessmentdomainhistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case assessmentdomainhistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case assessmentdomainhistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case assessmentdomainhistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case assessmentdomainhistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case assessmentdomainhistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case assessmentdomainhistory.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case assessmentdomainhistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case assessmentdomainhistory.FieldCustomDomainID:
+		m.ResetCustomDomainID()
+		return nil
+	}
+	return fmt.Errorf("unknown AssessmentDomainHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AssessmentDomainHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AssessmentDomainHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AssessmentDomainHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AssessmentDomainHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AssessmentDomainHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AssessmentDomainHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown AssessmentDomainHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AssessmentDomainHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown AssessmentDomainHistory edge %s", name)
 }
 
 // AssessmentHistoryMutation represents an operation that mutates the AssessmentHistory nodes in the graph.

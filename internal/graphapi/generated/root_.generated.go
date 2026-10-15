@@ -332,6 +332,34 @@ type ComplexityRoot struct {
 		DeletedID func(childComplexity int) int
 	}
 
+	AssessmentDomain struct {
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		CustomDomain          func(childComplexity int) int
+		CustomDomainID        func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+	}
+
+	AssessmentDomainConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AssessmentDomainCreatePayload struct {
+		CustomDomain func(childComplexity int) int
+	}
+
+	AssessmentDomainEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	AssessmentEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
@@ -3520,6 +3548,7 @@ type ComplexityRoot struct {
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
 		CreateAssessment                     func(childComplexity int, input generated.CreateAssessmentInput) int
+		CreateAssessmentDomain               func(childComplexity int, input model.CreateAssessmentDomainInput) int
 		CreateAssessmentPolicy               func(childComplexity int, input generated.CreateAssessmentPolicyInput) int
 		CreateAssessmentResponse             func(childComplexity int, input generated.CreateAssessmentResponseInput) int
 		CreateAssessmentTemplate             func(childComplexity int, input model.CreateAssessmentTemplateInput) int
@@ -5224,6 +5253,7 @@ type ComplexityRoot struct {
 		ActionPlanSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ActionPlans                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		Assessment                      func(childComplexity int, id string) int
+		AssessmentDomains               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentDomainOrder, where *generated.AssessmentDomainWhereInput) int
 		AssessmentPolicies              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) int
 		AssessmentPolicy                func(childComplexity int, id string) int
 		AssessmentResponse              func(childComplexity int, id string) int
@@ -9305,6 +9335,106 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentDeletePayload.DeletedID(childComplexity), true
+
+	case "AssessmentDomain.createdAt":
+		if e.ComplexityRoot.AssessmentDomain.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.CreatedAt(childComplexity), true
+	case "AssessmentDomain.createdBy":
+		if e.ComplexityRoot.AssessmentDomain.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.CreatedBy(childComplexity), true
+	case "AssessmentDomain.customDomain":
+		if e.ComplexityRoot.AssessmentDomain.CustomDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.CustomDomain(childComplexity), true
+	case "AssessmentDomain.customDomainID":
+		if e.ComplexityRoot.AssessmentDomain.CustomDomainID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.CustomDomainID(childComplexity), true
+	case "AssessmentDomain.id":
+		if e.ComplexityRoot.AssessmentDomain.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.ID(childComplexity), true
+	case "AssessmentDomain.owner":
+		if e.ComplexityRoot.AssessmentDomain.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.Owner(childComplexity), true
+	case "AssessmentDomain.ownerID":
+		if e.ComplexityRoot.AssessmentDomain.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.OwnerID(childComplexity), true
+	case "AssessmentDomain.updatedAt":
+		if e.ComplexityRoot.AssessmentDomain.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.UpdatedAt(childComplexity), true
+	case "AssessmentDomain.updatedBy":
+		if e.ComplexityRoot.AssessmentDomain.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.UpdatedBy(childComplexity), true
+	case "AssessmentDomain.updatedByImpersonator":
+		if e.ComplexityRoot.AssessmentDomain.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomain.UpdatedByImpersonator(childComplexity), true
+
+	case "AssessmentDomainConnection.edges":
+		if e.ComplexityRoot.AssessmentDomainConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainConnection.Edges(childComplexity), true
+	case "AssessmentDomainConnection.pageInfo":
+		if e.ComplexityRoot.AssessmentDomainConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainConnection.PageInfo(childComplexity), true
+	case "AssessmentDomainConnection.totalCount":
+		if e.ComplexityRoot.AssessmentDomainConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainConnection.TotalCount(childComplexity), true
+
+	case "AssessmentDomainCreatePayload.customDomain":
+		if e.ComplexityRoot.AssessmentDomainCreatePayload.CustomDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainCreatePayload.CustomDomain(childComplexity), true
+
+	case "AssessmentDomainEdge.cursor":
+		if e.ComplexityRoot.AssessmentDomainEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainEdge.Cursor(childComplexity), true
+	case "AssessmentDomainEdge.node":
+		if e.ComplexityRoot.AssessmentDomainEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainEdge.Node(childComplexity), true
 
 	case "AssessmentEdge.cursor":
 		if e.ComplexityRoot.AssessmentEdge.Cursor == nil {
@@ -24524,6 +24654,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateAssessment(childComplexity, args["input"].(generated.CreateAssessmentInput)), true
+	case "Mutation.createAssessmentDomain":
+		if e.ComplexityRoot.Mutation.CreateAssessmentDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAssessmentDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateAssessmentDomain(childComplexity, args["input"].(model.CreateAssessmentDomainInput)), true
 	case "Mutation.createAssessmentPolicy":
 		if e.ComplexityRoot.Mutation.CreateAssessmentPolicy == nil {
 			break
@@ -36596,6 +36737,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Assessment(childComplexity, args["id"].(string)), true
+	case "Query.assessmentDomains":
+		if e.ComplexityRoot.Query.AssessmentDomains == nil {
+			break
+		}
+
+		args, err := ec.field_Query_assessmentDomains_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AssessmentDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentDomainOrder), args["where"].(*generated.AssessmentDomainWhereInput)), true
 	case "Query.assessmentPolicies":
 		if e.ComplexityRoot.Query.AssessmentPolicies == nil {
 			break
@@ -51164,6 +51316,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputActionPlanOrder,
 		ec.unmarshalInputActionPlanWhereInput,
 		ec.unmarshalInputAddProgramMembershipInput,
+		ec.unmarshalInputAssessmentDomainOrder,
+		ec.unmarshalInputAssessmentDomainWhereInput,
 		ec.unmarshalInputAssessmentOrder,
 		ec.unmarshalInputAssessmentPoliciesInput,
 		ec.unmarshalInputAssessmentPolicyOrder,
@@ -51194,6 +51348,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputControlWhereInput,
 		ec.unmarshalInputCreateAPITokenInput,
 		ec.unmarshalInputCreateActionPlanInput,
+		ec.unmarshalInputCreateAssessmentDomainInput,
 		ec.unmarshalInputCreateAssessmentInput,
 		ec.unmarshalInputCreateAssessmentPolicyInput,
 		ec.unmarshalInputCreateAssessmentResponseInput,
@@ -51433,6 +51588,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterWhereInput,
 		ec.unmarshalInputUpdateAPITokenInput,
 		ec.unmarshalInputUpdateActionPlanInput,
+		ec.unmarshalInputUpdateAssessmentDomainInput,
 		ec.unmarshalInputUpdateAssessmentInput,
 		ec.unmarshalInputUpdateAssessmentPolicyInput,
 		ec.unmarshalInputUpdateAssetInput,
@@ -52350,6 +52506,29 @@ type AssessmentBulkDeletePayload {
     Error message when the bulk delete did not apply to every requested ID
     """
     error: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/assessmentdomain.graphql", Input: `extend type Mutation{
+    """
+    Create a new assessmentDomain
+    """
+    createAssessmentDomain(
+        """
+        values of the assessmentDomain
+        """
+        input: CreateAssessmentDomainInput!
+    ): AssessmentDomainCreatePayload!
+}
+
+"""
+Return response for createAssessmentDomain mutation
+"""
+type AssessmentDomainCreatePayload {
+    customDomain: CustomDomain!
+}
+
+input CreateAssessmentDomainInput {
+    cnameRecord: String!
 }
 `, BuiltIn: false},
 	{Name: "../schema/assessmentextended.graphql", Input: `extend type Assessment {
@@ -58481,6 +58660,190 @@ type AssessmentConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+type AssessmentDomain implements Node @modules(names: ["questionnaire_domain_addon"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  customDomainID: ID!
+  owner: Organization
+  customDomain: CustomDomain!
+}
+"""
+A connection to a list of items.
+"""
+type AssessmentDomainConnection {
+  """
+  A list of edges.
+  """
+  edges: [AssessmentDomainEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssessmentDomainEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AssessmentDomain
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for AssessmentDomain connections
+"""
+input AssessmentDomainOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AssessmentDomains.
+  """
+  field: AssessmentDomainOrderField!
+}
+"""
+Properties by which AssessmentDomain connections can be ordered.
+"""
+enum AssessmentDomainOrderField {
+  created_at
+  updated_at
+}
+"""
+AssessmentDomainWhereInput is used for filtering AssessmentDomain objects.
+Input was generated by ent.
+"""
+input AssessmentDomainWhereInput {
+  not: AssessmentDomainWhereInput
+  and: [AssessmentDomainWhereInput!]
+  or: [AssessmentDomainWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  custom_domain_id field predicates
+  """
+  customDomainID: ID
+  customDomainIDNEQ: ID
+  customDomainIDIn: [ID!]
+  customDomainIDNotIn: [ID!]
+  customDomainIDContains: ID
+  customDomainIDHasPrefix: ID
+  customDomainIDHasSuffix: ID
+  customDomainIDEqualFold: ID
+  customDomainIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  custom_domain edge predicates
+  """
+  hasCustomDomain: Boolean
+  hasCustomDomainWith: [CustomDomainWhereInput!]
 }
 """
 An edge in a connection.
@@ -73316,7 +73679,7 @@ Define a Relay Cursor type:
 https://relay.dev/graphql/connections.htm#sec-Cursor
 """
 scalar Cursor
-type CustomDomain implements Node @modules(names: ["trust_center_module"]) {
+type CustomDomain implements Node @modules(names: ["trust_center_module","questionnaire_domain_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -74313,7 +74676,7 @@ input CustomTypeEnumWhereInput {
   hasPlatforms: Boolean
   hasPlatformsWith: [PlatformWhereInput!]
 }
-type DNSVerification implements Node @modules(names: ["trust_center_module"]) {
+type DNSVerification implements Node @modules(names: ["trust_center_module","questionnaire_domain_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -107714,6 +108077,37 @@ type Query {
     """
     where: AssessmentWhereInput
   ): AssessmentConnection!
+  assessmentDomains(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssessmentDomains returned from the connection.
+    """
+    orderBy: [AssessmentDomainOrder!]
+
+    """
+    Filtering options for AssessmentDomains returned from the connection.
+    """
+    where: AssessmentDomainWhereInput
+  ): AssessmentDomainConnection!
   assessmentPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -126363,6 +126757,15 @@ input UpdateActionPlanInput {
   clearWorkflowObjectRefs: Boolean
 }
 """
+UpdateAssessmentDomainInput is used for update AssessmentDomain object.
+Input was generated by ent.
+"""
+input UpdateAssessmentDomainInput {
+  ownerID: ID
+  clearOwner: Boolean
+  customDomainID: ID
+}
+"""
 UpdateAssessmentInput is used for update Assessment object.
 Input was generated by ent.
 """
@@ -138806,7 +139209,7 @@ input WebauthnWhereInput {
   """
   tagsHas: String
 }
-type WorkflowAssignment implements Node @modules(names: ["any_module"]) {
+type WorkflowAssignment implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -138987,7 +139390,7 @@ enum WorkflowAssignmentOrderField {
   created_at
   updated_at
 }
-type WorkflowAssignmentTarget implements Node @modules(names: ["any_module"]) {
+type WorkflowAssignmentTarget implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -139562,7 +139965,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
   REJECTED
   CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node @modules(names: ["any_module"]) {
+type WorkflowDefinition implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140198,7 +140601,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
   LIFECYCLE
   NOTIFICATION
 }
-type WorkflowEvent implements Node @modules(names: ["any_module"]) {
+type WorkflowEvent implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140447,7 +140850,7 @@ enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core
   EMIT_RECOVERED
   EMIT_FAILED_TERMINAL
 }
-type WorkflowInstance implements Node @modules(names: ["any_module"]) {
+type WorkflowInstance implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -141364,7 +141767,7 @@ enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenla
   FAILED
   PAUSED
 }
-type WorkflowObjectRef implements Node @modules(names: ["any_module"]) {
+type WorkflowObjectRef implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -142110,7 +142513,7 @@ input WorkflowObjectRefWhereInput {
   hasRemediation: Boolean
   hasRemediationWith: [RemediationWhereInput!]
 }
-type WorkflowProposal implements Node @modules(names: ["any_module"]) {
+type WorkflowProposal implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -151709,10 +152112,10 @@ input CreateTrustCenterDomainInput {
 	the type of the custom domain
 	"""
 	domainType: CustomDomainCustomDomainType
-    """
-    trust center ID
-    """
-    trustCenterID: ID!
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcenterentity.graphql", Input: `extend type Query {
@@ -154862,6 +155265,62 @@ func (ec *executionContext) childFields_AssessmentDeletePayload(ctx context.Cont
 		return ec.fieldContext_AssessmentDeletePayload_deletedID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AssessmentDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentDomain(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AssessmentDomain_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AssessmentDomain_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AssessmentDomain_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AssessmentDomain_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AssessmentDomain_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AssessmentDomain_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AssessmentDomain_ownerID(ctx, field)
+	case "customDomainID":
+		return ec.fieldContext_AssessmentDomain_customDomainID(ctx, field)
+	case "owner":
+		return ec.fieldContext_AssessmentDomain_owner(ctx, field)
+	case "customDomain":
+		return ec.fieldContext_AssessmentDomain_customDomain(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentDomain", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentDomainConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AssessmentDomainConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AssessmentDomainConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AssessmentDomainConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentDomainConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentDomainCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "customDomain":
+		return ec.fieldContext_AssessmentDomainCreatePayload_customDomain(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentDomainCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentDomainEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AssessmentDomainEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AssessmentDomainEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentDomainEdge", field.Name)
 }
 
 func (ec *executionContext) childFields_AssessmentEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

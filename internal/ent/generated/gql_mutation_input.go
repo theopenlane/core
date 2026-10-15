@@ -1203,6 +1203,38 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 	return c
 }
 
+// UpdateAssessmentDomainInput represents a mutation input for updating assessmentdomains.
+type UpdateAssessmentDomainInput struct {
+	ClearOwner     bool
+	OwnerID        *string `json:"owner_id,omitempty"`
+	CustomDomainID *string `json:"custom_domain_id,omitempty"`
+}
+
+// Mutate applies the UpdateAssessmentDomainInput on the AssessmentDomainMutation builder.
+func (i *UpdateAssessmentDomainInput) Mutate(m *AssessmentDomainMutation) {
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.CustomDomainID; v != nil {
+		m.SetCustomDomainID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateAssessmentDomainInput on the AssessmentDomainUpdate builder.
+func (c *AssessmentDomainUpdate) SetInput(i UpdateAssessmentDomainInput) *AssessmentDomainUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateAssessmentDomainInput on the AssessmentDomainUpdateOne builder.
+func (c *AssessmentDomainUpdateOne) SetInput(i UpdateAssessmentDomainInput) *AssessmentDomainUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateAssessmentPolicyInput represents a mutation input for creating assessmentpolicies.
 type CreateAssessmentPolicyInput struct {
 	PolicyRevision   *string `json:"policy_revision,omitempty"`

@@ -180,6 +180,17 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 },
+}, "assessment_domain": {"owner": {
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "custom_domain": {
+	ObjectType:          "custom_domain",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+},
 }, "assessment_policy": {"owner": {
 	ObjectType:          "organization",
 	SkipEditCheck:       true,
@@ -3820,6 +3831,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "assessment_policies": {
 	ObjectType:          "assessment_policy",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "assessment_domains": {
+	ObjectType:          "assessment_domain",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,

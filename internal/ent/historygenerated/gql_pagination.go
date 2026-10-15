@@ -17,6 +17,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/errcode"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentdomainhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
@@ -706,6 +707,350 @@ func (_m *ActionPlanHistory) ToEdge(order *ActionPlanHistoryOrder) *ActionPlanHi
 		order = DefaultActionPlanHistoryOrder
 	}
 	return &ActionPlanHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// AssessmentDomainHistoryEdge is the edge representation of AssessmentDomainHistory.
+type AssessmentDomainHistoryEdge struct {
+	Node   *AssessmentDomainHistory `json:"node"`
+	Cursor Cursor                   `json:"cursor"`
+}
+
+// AssessmentDomainHistoryConnection is the connection containing edges to AssessmentDomainHistory.
+type AssessmentDomainHistoryConnection struct {
+	Edges      []*AssessmentDomainHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                       `json:"pageInfo"`
+	TotalCount int                            `json:"totalCount"`
+}
+
+func (c *AssessmentDomainHistoryConnection) build(nodes []*AssessmentDomainHistory, pager *assessmentdomainhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *AssessmentDomainHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *AssessmentDomainHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *AssessmentDomainHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*AssessmentDomainHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &AssessmentDomainHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// AssessmentDomainHistoryPaginateOption enables pagination customization.
+type AssessmentDomainHistoryPaginateOption func(*assessmentdomainhistoryPager) error
+
+// WithAssessmentDomainHistoryOrder configures pagination ordering.
+func WithAssessmentDomainHistoryOrder(order *AssessmentDomainHistoryOrder) AssessmentDomainHistoryPaginateOption {
+	if order == nil {
+		order = DefaultAssessmentDomainHistoryOrder
+	}
+	o := *order
+	return func(pager *assessmentdomainhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultAssessmentDomainHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithAssessmentDomainHistoryFilter configures pagination filter.
+func WithAssessmentDomainHistoryFilter(filter func(*AssessmentDomainHistoryQuery) (*AssessmentDomainHistoryQuery, error)) AssessmentDomainHistoryPaginateOption {
+	return func(pager *assessmentdomainhistoryPager) error {
+		if filter == nil {
+			return errors.New("AssessmentDomainHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type assessmentdomainhistoryPager struct {
+	reverse bool
+	order   *AssessmentDomainHistoryOrder
+	filter  func(*AssessmentDomainHistoryQuery) (*AssessmentDomainHistoryQuery, error)
+}
+
+func newAssessmentDomainHistoryPager(opts []AssessmentDomainHistoryPaginateOption, reverse bool) (*assessmentdomainhistoryPager, error) {
+	pager := &assessmentdomainhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultAssessmentDomainHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *assessmentdomainhistoryPager) applyFilter(query *AssessmentDomainHistoryQuery) (*AssessmentDomainHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *assessmentdomainhistoryPager) toCursor(_m *AssessmentDomainHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *assessmentdomainhistoryPager) applyCursors(query *AssessmentDomainHistoryQuery, after, before *Cursor) (*AssessmentDomainHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultAssessmentDomainHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *assessmentdomainhistoryPager) applyOrder(query *AssessmentDomainHistoryQuery) *AssessmentDomainHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultAssessmentDomainHistoryOrder.Field {
+		query = query.Order(DefaultAssessmentDomainHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *assessmentdomainhistoryPager) orderExpr(query *AssessmentDomainHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultAssessmentDomainHistoryOrder.Field {
+			b.Comma().Ident(DefaultAssessmentDomainHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to AssessmentDomainHistory.
+func (_m *AssessmentDomainHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...AssessmentDomainHistoryPaginateOption,
+) (*AssessmentDomainHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newAssessmentDomainHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &AssessmentDomainHistoryConnection{Edges: []*AssessmentDomainHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	var nodes []*AssessmentDomainHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.clonePage().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// AssessmentDomainHistoryOrderFieldHistoryTime orders AssessmentDomainHistory by history_time.
+	AssessmentDomainHistoryOrderFieldHistoryTime = &AssessmentDomainHistoryOrderField{
+		Value: func(_m *AssessmentDomainHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: assessmentdomainhistory.FieldHistoryTime,
+		toTerm: assessmentdomainhistory.ByHistoryTime,
+		toCursor: func(_m *AssessmentDomainHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// AssessmentDomainHistoryOrderFieldCreatedAt orders AssessmentDomainHistory by created_at.
+	AssessmentDomainHistoryOrderFieldCreatedAt = &AssessmentDomainHistoryOrderField{
+		Value: func(_m *AssessmentDomainHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: assessmentdomainhistory.FieldCreatedAt,
+		toTerm: assessmentdomainhistory.ByCreatedAt,
+		toCursor: func(_m *AssessmentDomainHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// AssessmentDomainHistoryOrderFieldUpdatedAt orders AssessmentDomainHistory by updated_at.
+	AssessmentDomainHistoryOrderFieldUpdatedAt = &AssessmentDomainHistoryOrderField{
+		Value: func(_m *AssessmentDomainHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: assessmentdomainhistory.FieldUpdatedAt,
+		toTerm: assessmentdomainhistory.ByUpdatedAt,
+		toCursor: func(_m *AssessmentDomainHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f AssessmentDomainHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case AssessmentDomainHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case AssessmentDomainHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case AssessmentDomainHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f AssessmentDomainHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *AssessmentDomainHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("AssessmentDomainHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *AssessmentDomainHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *AssessmentDomainHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *AssessmentDomainHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid AssessmentDomainHistoryOrderField", str)
+	}
+	return nil
+}
+
+// AssessmentDomainHistoryOrderField defines the ordering field of AssessmentDomainHistory.
+type AssessmentDomainHistoryOrderField struct {
+	// Value extracts the ordering value from the given AssessmentDomainHistory.
+	Value    func(*AssessmentDomainHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) assessmentdomainhistory.OrderOption
+	toCursor func(*AssessmentDomainHistory) Cursor
+}
+
+// AssessmentDomainHistoryOrder defines the ordering of AssessmentDomainHistory.
+type AssessmentDomainHistoryOrder struct {
+	Direction OrderDirection                     `json:"direction"`
+	Field     *AssessmentDomainHistoryOrderField `json:"field"`
+}
+
+// DefaultAssessmentDomainHistoryOrder is the default ordering of AssessmentDomainHistory.
+var DefaultAssessmentDomainHistoryOrder = &AssessmentDomainHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &AssessmentDomainHistoryOrderField{
+		Value: func(_m *AssessmentDomainHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: assessmentdomainhistory.FieldID,
+		toTerm: assessmentdomainhistory.ByID,
+		toCursor: func(_m *AssessmentDomainHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts AssessmentDomainHistory into AssessmentDomainHistoryEdge.
+func (_m *AssessmentDomainHistory) ToEdge(order *AssessmentDomainHistoryOrder) *AssessmentDomainHistoryEdge {
+	if order == nil {
+		order = DefaultAssessmentDomainHistoryOrder
+	}
+	return &AssessmentDomainHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -29126,6 +29471,16 @@ func (_m *WorkflowDefinitionHistory) ToEdge(order *WorkflowDefinitionHistoryOrde
 
 // clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
 func (_q *ActionPlanHistoryQuery) clonePage() *ActionPlanHistoryQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *AssessmentDomainHistoryQuery) clonePage() *AssessmentDomainHistoryQuery {
 	if _q == nil {
 		return nil
 	}

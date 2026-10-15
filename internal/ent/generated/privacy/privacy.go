@@ -183,6 +183,30 @@ func (f AssessmentMutationRuleFunc) EvalMutation(ctx context.Context, m generate
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.AssessmentMutation", m)
 }
 
+// The AssessmentDomainQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type AssessmentDomainQueryRuleFunc func(context.Context, *generated.AssessmentDomainQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f AssessmentDomainQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AssessmentDomainQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.AssessmentDomainQuery", q)
+}
+
+// The AssessmentDomainMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type AssessmentDomainMutationRuleFunc func(context.Context, *generated.AssessmentDomainMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f AssessmentDomainMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.AssessmentDomainMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.AssessmentDomainMutation", m)
+}
+
 // The AssessmentPolicyQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type AssessmentPolicyQueryRuleFunc func(context.Context, *generated.AssessmentPolicyQuery) error
@@ -2552,6 +2576,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.AssessmentQuery:
 		return q.Filter(), nil
+	case *generated.AssessmentDomainQuery:
+		return q.Filter(), nil
 	case *generated.AssessmentPolicyQuery:
 		return q.Filter(), nil
 	case *generated.AssessmentResponseQuery:
@@ -2758,6 +2784,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.ActionPlanMutation:
 		return m.Filter(), nil
 	case *generated.AssessmentMutation:
+		return m.Filter(), nil
+	case *generated.AssessmentDomainMutation:
 		return m.Filter(), nil
 	case *generated.AssessmentPolicyMutation:
 		return m.Filter(), nil

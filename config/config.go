@@ -149,6 +149,7 @@ type Server struct {
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
 	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:"cname.openlane-dns.com"`
+	AssessmentCnameTarget  string `json:"assessmentcnametarget" koanf:"assessmentcnametarget" default:""`
 	// TrustCenterPreviewZoneID is the cloudflare zone id that holds trust center preview domain records
 	TrustCenterPreviewZoneID string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:"" sensitive:"true"`
 	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription

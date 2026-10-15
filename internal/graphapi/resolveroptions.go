@@ -21,6 +21,12 @@ func (r Resolver) WithTrustCenterCnameTarget(cname string) *Resolver {
 	return &r
 }
 
+func (r Resolver) WithAssessmentCnameTarget(cname string) *Resolver {
+	r.assessmentCnameTarget = cname
+
+	return &r
+}
+
 // WithTrustCenterDefaultDomain sets the default trust center domain for the resolver
 func (r Resolver) WithTrustCenterDefaultDomain(domain string) *Resolver {
 	r.defaultTrustCenterDomain = domain

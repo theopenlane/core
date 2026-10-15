@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -2400,6 +2401,21 @@ func (_c *OrganizationCreate) AddAssessmentPolicies(v ...*AssessmentPolicy) *Org
 		ids[i] = v[i].ID
 	}
 	return _c.AddAssessmentPolicyIDs(ids...)
+}
+
+// AddAssessmentDomainIDs adds the "assessment_domains" edge to the AssessmentDomain entity by IDs.
+func (_c *OrganizationCreate) AddAssessmentDomainIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAssessmentDomainIDs(ids...)
+	return _c
+}
+
+// AddAssessmentDomains adds the "assessment_domains" edges to the AssessmentDomain entity.
+func (_c *OrganizationCreate) AddAssessmentDomains(v ...*AssessmentDomain) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentDomainIDs(ids...)
 }
 
 // AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
@@ -5117,6 +5133,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentDomainsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentDomainsTable,
+			Columns: []string{organization.AssessmentDomainsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentdomain.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

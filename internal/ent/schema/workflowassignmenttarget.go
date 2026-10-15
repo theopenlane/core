@@ -114,7 +114,7 @@ func (WorkflowAssignmentTarget) Mixin() []ent.Mixin {
 
 // Modules this schema has access to
 func (WorkflowAssignmentTarget) Modules() []models.OrgModule {
-	return []models.OrgModule{models.CatalogAnyModule}
+	return []models.OrgModule{models.CatalogWorkflowAddon}
 }
 
 // Policy of the WorkflowAssignmentTarget

@@ -140,6 +140,11 @@ type AssessmentDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createAssessmentDomain mutation
+type AssessmentDomainCreatePayload struct {
+	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
 // AssessmentPoliciesInput is used to attach internal policies to an assessment
 // along with the assessment creation
 type AssessmentPoliciesInput struct {
@@ -836,6 +841,10 @@ type ControlReportOrder struct {
 type ControlUpdatePayload struct {
 	// Updated control
 	Control *generated.Control `json:"control"`
+}
+
+type CreateAssessmentDomainInput struct {
+	CnameRecord string `json:"cnameRecord"`
 }
 
 // Input for creating a questionnaire template from an assessment

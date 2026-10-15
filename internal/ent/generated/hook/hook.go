@@ -45,6 +45,18 @@ func (f AssessmentFunc) Mutate(ctx context.Context, m generated.Mutation) (gener
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssessmentMutation", m)
 }
 
+// The AssessmentDomainFunc type is an adapter to allow the use of ordinary
+// function as AssessmentDomain mutator.
+type AssessmentDomainFunc func(context.Context, *generated.AssessmentDomainMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AssessmentDomainFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AssessmentDomainMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssessmentDomainMutation", m)
+}
+
 // The AssessmentPolicyFunc type is an adapter to allow the use of ordinary
 // function as AssessmentPolicy mutator.
 type AssessmentPolicyFunc func(context.Context, *generated.AssessmentPolicyMutation) (generated.Value, error)

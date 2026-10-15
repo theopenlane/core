@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -242,6 +243,7 @@ type OrganizationQuery struct {
 	withAssessments                             *AssessmentQuery
 	withAssessmentResponses                     *AssessmentResponseQuery
 	withAssessmentPolicies                      *AssessmentPolicyQuery
+	withAssessmentDomains                       *AssessmentDomainQuery
 	withCustomTypeEnums                         *CustomTypeEnumQuery
 	withTagDefinitions                          *TagDefinitionQuery
 	withRemediations                            *RemediationQuery
@@ -399,6 +401,7 @@ type OrganizationQuery struct {
 	withNamedAssessments                        map[string]*AssessmentQuery
 	withNamedAssessmentResponses                map[string]*AssessmentResponseQuery
 	withNamedAssessmentPolicies                 map[string]*AssessmentPolicyQuery
+	withNamedAssessmentDomains                  map[string]*AssessmentDomainQuery
 	withNamedCustomTypeEnums                    map[string]*CustomTypeEnumQuery
 	withNamedTagDefinitions                     map[string]*TagDefinitionQuery
 	withNamedRemediations                       map[string]*RemediationQuery
@@ -3449,6 +3452,28 @@ func (_q *OrganizationQuery) QueryAssessmentPolicies() *AssessmentPolicyQuery {
 	return query
 }
 
+// QueryAssessmentDomains chains the current query on the "assessment_domains" edge.
+func (_q *OrganizationQuery) QueryAssessmentDomains() *AssessmentDomainQuery {
+	query := (&AssessmentDomainClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(assessmentdomain.Table, assessmentdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentDomainsTable, organization.AssessmentDomainsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryCustomTypeEnums chains the current query on the "custom_type_enums" edge.
 func (_q *OrganizationQuery) QueryCustomTypeEnums() *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: _q.config}).Query()
@@ -4261,6 +4286,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withAssessments:                        _q.withAssessments.Clone(),
 		withAssessmentResponses:                _q.withAssessmentResponses.Clone(),
 		withAssessmentPolicies:                 _q.withAssessmentPolicies.Clone(),
+		withAssessmentDomains:                  _q.withAssessmentDomains.Clone(),
 		withCustomTypeEnums:                    _q.withCustomTypeEnums.Clone(),
 		withTagDefinitions:                     _q.withTagDefinitions.Clone(),
 		withRemediations:                       _q.withRemediations.Clone(),
@@ -5786,6 +5812,17 @@ func (_q *OrganizationQuery) WithAssessmentPolicies(opts ...func(*AssessmentPoli
 	return _q
 }
 
+// WithAssessmentDomains tells the query-builder to eager-load the nodes that are connected to
+// the "assessment_domains" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAssessmentDomains(opts ...func(*AssessmentDomainQuery)) *OrganizationQuery {
+	query := (&AssessmentDomainClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessmentDomains = query
+	return _q
+}
+
 // WithCustomTypeEnums tells the query-builder to eager-load the nodes that are connected to
 // the "custom_type_enums" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithCustomTypeEnums(opts ...func(*CustomTypeEnumQuery)) *OrganizationQuery {
@@ -6112,7 +6149,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [158]bool{
+		loadedTypes = [159]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6249,6 +6286,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withAssessments != nil,
 			_q.withAssessmentResponses != nil,
 			_q.withAssessmentPolicies != nil,
+			_q.withAssessmentDomains != nil,
 			_q.withCustomTypeEnums != nil,
 			_q.withTagDefinitions != nil,
 			_q.withRemediations != nil,
@@ -7335,6 +7373,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization) { n.Edges.AssessmentPolicies = []*AssessmentPolicy{} },
 			func(n *Organization, e *AssessmentPolicy) {
 				n.Edges.AssessmentPolicies = append(n.Edges.AssessmentPolicies, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssessmentDomains; query != nil {
+		if err := _q.loadAssessmentDomains(ctx, query, nodes,
+			func(n *Organization) { n.Edges.AssessmentDomains = []*AssessmentDomain{} },
+			func(n *Organization, e *AssessmentDomain) {
+				n.Edges.AssessmentDomains = append(n.Edges.AssessmentDomains, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -8443,6 +8490,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAssessmentPolicies(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedAssessmentPolicies(name) },
 			func(n *Organization, e *AssessmentPolicy) { n.appendNamedAssessmentPolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssessmentDomains {
+		if err := _q.loadAssessmentDomains(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAssessmentDomains(name) },
+			func(n *Organization, e *AssessmentDomain) { n.appendNamedAssessmentDomains(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -12906,6 +12960,36 @@ func (_q *OrganizationQuery) loadAssessmentPolicies(ctx context.Context, query *
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadAssessmentDomains(ctx context.Context, query *AssessmentDomainQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *AssessmentDomain)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(assessmentdomain.FieldOwnerID)
+	}
+	query.Where(predicate.AssessmentDomain(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AssessmentDomainsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadCustomTypeEnums(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *CustomTypeEnum)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -15534,6 +15618,20 @@ func (_q *OrganizationQuery) WithNamedAssessmentPolicies(name string, opts ...fu
 		_q.withNamedAssessmentPolicies = make(map[string]*AssessmentPolicyQuery)
 	}
 	_q.withNamedAssessmentPolicies[name] = query
+	return _q
+}
+
+// WithNamedAssessmentDomains tells the query-builder to eager-load the nodes that are connected to the "assessment_domains"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAssessmentDomains(name string, opts ...func(*AssessmentDomainQuery)) *OrganizationQuery {
+	query := (&AssessmentDomainClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessmentDomains == nil {
+		_q.withNamedAssessmentDomains = make(map[string]*AssessmentDomainQuery)
+	}
+	_q.withNamedAssessmentDomains[name] = query
 	return _q
 }
 

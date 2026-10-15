@@ -11,6 +11,9 @@ import (
 // ActionPlanHistory is the predicate function for actionplanhistory builders.
 type ActionPlanHistory func(*sql.Selector)
 
+// AssessmentDomainHistory is the predicate function for assessmentdomainhistory builders.
+type AssessmentDomainHistory func(*sql.Selector)
+
 // AssessmentHistory is the predicate function for assessmenthistory builders.
 type AssessmentHistory func(*sql.Selector)
 
