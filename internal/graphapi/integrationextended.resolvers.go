@@ -11,7 +11,6 @@ import (
 	"encoding/json/jsontext"
 
 	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"

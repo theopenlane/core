@@ -223,6 +223,10 @@ type ActionPlanHistoryMutation struct {
 	action_plan_kind_name                   *string
 	action_plan_kind_id                     *string
 	workflow_eligible_marker                *bool
+	internal_owner                          *string
+	internal_owner_user_id                  *string
+	internal_owner_group_id                 *string
+	internal_owner_identity_holder_id       *string
 	title                                   *string
 	description                             *string
 	due_date                                *time.Time
@@ -2638,6 +2642,202 @@ func (m *ActionPlanHistoryMutation) ResetWorkflowEligibleMarker() {
 	delete(m.clearedFields, actionplanhistory.FieldWorkflowEligibleMarker)
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (m *ActionPlanHistoryMutation) SetInternalOwner(s string) {
+	m.internal_owner = &s
+}
+
+// InternalOwner returns the value of the "internal_owner" field in the mutation.
+func (m *ActionPlanHistoryMutation) InternalOwner() (r string, exists bool) {
+	v := m.internal_owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwner returns the old "internal_owner" field's value of the ActionPlanHistory entity.
+// If the ActionPlanHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanHistoryMutation) OldInternalOwner(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwner is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwner requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwner: %w", err)
+	}
+	return oldValue.InternalOwner, nil
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (m *ActionPlanHistoryMutation) ClearInternalOwner() {
+	m.internal_owner = nil
+	m.clearedFields[actionplanhistory.FieldInternalOwner] = struct{}{}
+}
+
+// InternalOwnerCleared returns if the "internal_owner" field was cleared in this mutation.
+func (m *ActionPlanHistoryMutation) InternalOwnerCleared() bool {
+	_, ok := m.clearedFields[actionplanhistory.FieldInternalOwner]
+	return ok
+}
+
+// ResetInternalOwner resets all changes to the "internal_owner" field.
+func (m *ActionPlanHistoryMutation) ResetInternalOwner() {
+	m.internal_owner = nil
+	delete(m.clearedFields, actionplanhistory.FieldInternalOwner)
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (m *ActionPlanHistoryMutation) SetInternalOwnerUserID(s string) {
+	m.internal_owner_user_id = &s
+}
+
+// InternalOwnerUserID returns the value of the "internal_owner_user_id" field in the mutation.
+func (m *ActionPlanHistoryMutation) InternalOwnerUserID() (r string, exists bool) {
+	v := m.internal_owner_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerUserID returns the old "internal_owner_user_id" field's value of the ActionPlanHistory entity.
+// If the ActionPlanHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanHistoryMutation) OldInternalOwnerUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerUserID: %w", err)
+	}
+	return oldValue.InternalOwnerUserID, nil
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (m *ActionPlanHistoryMutation) ClearInternalOwnerUserID() {
+	m.internal_owner_user_id = nil
+	m.clearedFields[actionplanhistory.FieldInternalOwnerUserID] = struct{}{}
+}
+
+// InternalOwnerUserIDCleared returns if the "internal_owner_user_id" field was cleared in this mutation.
+func (m *ActionPlanHistoryMutation) InternalOwnerUserIDCleared() bool {
+	_, ok := m.clearedFields[actionplanhistory.FieldInternalOwnerUserID]
+	return ok
+}
+
+// ResetInternalOwnerUserID resets all changes to the "internal_owner_user_id" field.
+func (m *ActionPlanHistoryMutation) ResetInternalOwnerUserID() {
+	m.internal_owner_user_id = nil
+	delete(m.clearedFields, actionplanhistory.FieldInternalOwnerUserID)
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (m *ActionPlanHistoryMutation) SetInternalOwnerGroupID(s string) {
+	m.internal_owner_group_id = &s
+}
+
+// InternalOwnerGroupID returns the value of the "internal_owner_group_id" field in the mutation.
+func (m *ActionPlanHistoryMutation) InternalOwnerGroupID() (r string, exists bool) {
+	v := m.internal_owner_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerGroupID returns the old "internal_owner_group_id" field's value of the ActionPlanHistory entity.
+// If the ActionPlanHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanHistoryMutation) OldInternalOwnerGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerGroupID: %w", err)
+	}
+	return oldValue.InternalOwnerGroupID, nil
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (m *ActionPlanHistoryMutation) ClearInternalOwnerGroupID() {
+	m.internal_owner_group_id = nil
+	m.clearedFields[actionplanhistory.FieldInternalOwnerGroupID] = struct{}{}
+}
+
+// InternalOwnerGroupIDCleared returns if the "internal_owner_group_id" field was cleared in this mutation.
+func (m *ActionPlanHistoryMutation) InternalOwnerGroupIDCleared() bool {
+	_, ok := m.clearedFields[actionplanhistory.FieldInternalOwnerGroupID]
+	return ok
+}
+
+// ResetInternalOwnerGroupID resets all changes to the "internal_owner_group_id" field.
+func (m *ActionPlanHistoryMutation) ResetInternalOwnerGroupID() {
+	m.internal_owner_group_id = nil
+	delete(m.clearedFields, actionplanhistory.FieldInternalOwnerGroupID)
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *ActionPlanHistoryMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder_id = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *ActionPlanHistoryMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the ActionPlanHistory entity.
+// If the ActionPlanHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanHistoryMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *ActionPlanHistoryMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder_id = nil
+	m.clearedFields[actionplanhistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *ActionPlanHistoryMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[actionplanhistory.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *ActionPlanHistoryMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder_id = nil
+	delete(m.clearedFields, actionplanhistory.FieldInternalOwnerIdentityHolderID)
+}
+
 // SetTitle sets the "title" field.
 func (m *ActionPlanHistoryMutation) SetTitle(s string) {
 	m.title = &s
@@ -3172,7 +3372,7 @@ func (m *ActionPlanHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActionPlanHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 56)
+	fields := make([]string, 0, 60)
 	if m.history_time != nil {
 		fields = append(fields, actionplanhistory.FieldHistoryTime)
 	}
@@ -3308,6 +3508,18 @@ func (m *ActionPlanHistoryMutation) Fields() []string {
 	if m.workflow_eligible_marker != nil {
 		fields = append(fields, actionplanhistory.FieldWorkflowEligibleMarker)
 	}
+	if m.internal_owner != nil {
+		fields = append(fields, actionplanhistory.FieldInternalOwner)
+	}
+	if m.internal_owner_user_id != nil {
+		fields = append(fields, actionplanhistory.FieldInternalOwnerUserID)
+	}
+	if m.internal_owner_group_id != nil {
+		fields = append(fields, actionplanhistory.FieldInternalOwnerGroupID)
+	}
+	if m.internal_owner_identity_holder_id != nil {
+		fields = append(fields, actionplanhistory.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.title != nil {
 		fields = append(fields, actionplanhistory.FieldTitle)
 	}
@@ -3439,6 +3651,14 @@ func (m *ActionPlanHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ActionPlanKindID()
 	case actionplanhistory.FieldWorkflowEligibleMarker:
 		return m.WorkflowEligibleMarker()
+	case actionplanhistory.FieldInternalOwner:
+		return m.InternalOwner()
+	case actionplanhistory.FieldInternalOwnerUserID:
+		return m.InternalOwnerUserID()
+	case actionplanhistory.FieldInternalOwnerGroupID:
+		return m.InternalOwnerGroupID()
+	case actionplanhistory.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
 	case actionplanhistory.FieldTitle:
 		return m.Title()
 	case actionplanhistory.FieldDescription:
@@ -3560,6 +3780,14 @@ func (m *ActionPlanHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldActionPlanKindID(ctx)
 	case actionplanhistory.FieldWorkflowEligibleMarker:
 		return m.OldWorkflowEligibleMarker(ctx)
+	case actionplanhistory.FieldInternalOwner:
+		return m.OldInternalOwner(ctx)
+	case actionplanhistory.FieldInternalOwnerUserID:
+		return m.OldInternalOwnerUserID(ctx)
+	case actionplanhistory.FieldInternalOwnerGroupID:
+		return m.OldInternalOwnerGroupID(ctx)
+	case actionplanhistory.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
 	case actionplanhistory.FieldTitle:
 		return m.OldTitle(ctx)
 	case actionplanhistory.FieldDescription:
@@ -3906,6 +4134,34 @@ func (m *ActionPlanHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetWorkflowEligibleMarker(v)
 		return nil
+	case actionplanhistory.FieldInternalOwner:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwner(v)
+		return nil
+	case actionplanhistory.FieldInternalOwnerUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerUserID(v)
+		return nil
+	case actionplanhistory.FieldInternalOwnerGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerGroupID(v)
+		return nil
+	case actionplanhistory.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
+		return nil
 	case actionplanhistory.FieldTitle:
 		v, ok := value.(string)
 		if !ok {
@@ -4139,6 +4395,18 @@ func (m *ActionPlanHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(actionplanhistory.FieldWorkflowEligibleMarker) {
 		fields = append(fields, actionplanhistory.FieldWorkflowEligibleMarker)
 	}
+	if m.FieldCleared(actionplanhistory.FieldInternalOwner) {
+		fields = append(fields, actionplanhistory.FieldInternalOwner)
+	}
+	if m.FieldCleared(actionplanhistory.FieldInternalOwnerUserID) {
+		fields = append(fields, actionplanhistory.FieldInternalOwnerUserID)
+	}
+	if m.FieldCleared(actionplanhistory.FieldInternalOwnerGroupID) {
+		fields = append(fields, actionplanhistory.FieldInternalOwnerGroupID)
+	}
+	if m.FieldCleared(actionplanhistory.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, actionplanhistory.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.FieldCleared(actionplanhistory.FieldDescription) {
 		fields = append(fields, actionplanhistory.FieldDescription)
 	}
@@ -4302,6 +4570,18 @@ func (m *ActionPlanHistoryMutation) ClearField(name string) error {
 		return nil
 	case actionplanhistory.FieldWorkflowEligibleMarker:
 		m.ClearWorkflowEligibleMarker()
+		return nil
+	case actionplanhistory.FieldInternalOwner:
+		m.ClearInternalOwner()
+		return nil
+	case actionplanhistory.FieldInternalOwnerUserID:
+		m.ClearInternalOwnerUserID()
+		return nil
+	case actionplanhistory.FieldInternalOwnerGroupID:
+		m.ClearInternalOwnerGroupID()
+		return nil
+	case actionplanhistory.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
 		return nil
 	case actionplanhistory.FieldDescription:
 		m.ClearDescription()
@@ -4469,6 +4749,18 @@ func (m *ActionPlanHistoryMutation) ResetField(name string) error {
 		return nil
 	case actionplanhistory.FieldWorkflowEligibleMarker:
 		m.ResetWorkflowEligibleMarker()
+		return nil
+	case actionplanhistory.FieldInternalOwner:
+		m.ResetInternalOwner()
+		return nil
+	case actionplanhistory.FieldInternalOwnerUserID:
+		m.ResetInternalOwnerUserID()
+		return nil
+	case actionplanhistory.FieldInternalOwnerGroupID:
+		m.ResetInternalOwnerGroupID()
+		return nil
+	case actionplanhistory.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
 		return nil
 	case actionplanhistory.FieldTitle:
 		m.ResetTitle()

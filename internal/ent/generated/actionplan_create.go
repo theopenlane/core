@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -26,6 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
@@ -553,6 +555,62 @@ func (_c *ActionPlanCreate) SetNillableWorkflowEligibleMarker(v *bool) *ActionPl
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *ActionPlanCreate) SetInternalOwner(v string) *ActionPlanCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableInternalOwner(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *ActionPlanCreate) SetInternalOwnerUserID(v string) *ActionPlanCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableInternalOwnerUserID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *ActionPlanCreate) SetInternalOwnerGroupID(v string) *ActionPlanCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableInternalOwnerGroupID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *ActionPlanCreate) SetInternalOwnerIdentityHolderID(v string) *ActionPlanCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ActionPlanCreate) SetTitle(v string) *ActionPlanCreate {
 	_c.mutation.SetTitle(v)
@@ -775,6 +833,21 @@ func (_c *ActionPlanCreate) AddViewers(v ...*Group) *ActionPlanCreate {
 // SetActionPlanKind sets the "action_plan_kind" edge to the CustomTypeEnum entity.
 func (_c *ActionPlanCreate) SetActionPlanKind(v *CustomTypeEnum) *ActionPlanCreate {
 	return _c.SetActionPlanKindID(v.ID)
+}
+
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_c *ActionPlanCreate) SetInternalOwnerUser(v *User) *ActionPlanCreate {
+	return _c.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_c *ActionPlanCreate) SetInternalOwnerGroup(v *Group) *ActionPlanCreate {
+	return _c.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *ActionPlanCreate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *ActionPlanCreate {
+	return _c.SetInternalOwnerIdentityHolderID(v.ID)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
@@ -1318,6 +1391,10 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
 	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(actionplan.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -1492,6 +1569,57 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ActionPlanKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerUserTable,
+			Columns: []string{actionplan.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerGroupTable,
+			Columns: []string{actionplan.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerIdentityHolderTable,
+			Columns: []string{actionplan.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {

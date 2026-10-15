@@ -1635,6 +1635,54 @@ func (c *ActionPlanClient) QueryActionPlanKind(_m *ActionPlan) *CustomTypeEnumQu
 	return query
 }
 
+// QueryInternalOwnerUser queries the internal_owner_user edge of a ActionPlan.
+func (c *ActionPlanClient) QueryInternalOwnerUser(_m *ActionPlan) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerUserTable, actionplan.InternalOwnerUserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a ActionPlan.
+func (c *ActionPlanClient) QueryInternalOwnerGroup(_m *ActionPlan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerGroupTable, actionplan.InternalOwnerGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a ActionPlan.
+func (c *ActionPlanClient) QueryInternalOwnerIdentityHolder(_m *ActionPlan) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerIdentityHolderTable, actionplan.InternalOwnerIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryRisks queries the risks edge of a ActionPlan.
 func (c *ActionPlanClient) QueryRisks(_m *ActionPlan) *RiskQuery {
 	query := (&RiskClient{config: c.config}).Query()

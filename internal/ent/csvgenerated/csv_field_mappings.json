@@ -14,6 +14,21 @@
       "csvColumn": "DocumentDelegateGroupName",
       "targetField": "DelegateID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
     }
   ],
   "Assessment": [

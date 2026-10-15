@@ -874,6 +874,30 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				IsSlice:         false,
 				CreateIfMissing: false,
 			},
+			{
+				SourceColumn:    "InternalOwnerGroupName",
+				TargetField:     "InternalOwnerGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerIdentityHolderEmail",
+				TargetField:     "InternalOwnerIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerUserEmail",
+				TargetField:     "InternalOwnerUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"Assessment": {
@@ -2190,10 +2214,13 @@ func (APITokenCSVUpdateInput) CSVInputWrapper() {}
 
 // ActionPlanCSVInput wraps CreateActionPlanInput with CSV reference columns.
 type ActionPlanCSVInput struct {
-	Input                     generated.CreateActionPlanInput
-	ApproverGroupName         string   `csv:"ApproverGroupName"`
-	ControlRefCodes           []string `csv:"ControlRefCodes"`
-	DocumentDelegateGroupName string   `csv:"DocumentDelegateGroupName"`
+	Input                            generated.CreateActionPlanInput
+	ApproverGroupName                string   `csv:"ApproverGroupName"`
+	ControlRefCodes                  []string `csv:"ControlRefCodes"`
+	DocumentDelegateGroupName        string   `csv:"DocumentDelegateGroupName"`
+	InternalOwnerGroupName           string   `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string   `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string   `csv:"InternalOwnerUserEmail"`
 }
 
 // CSVInputWrapper marks ActionPlanCSVInput for CSV header preprocessing.
@@ -2202,11 +2229,14 @@ func (ActionPlanCSVInput) CSVInputWrapper() {}
 // ActionPlanCSVUpdateInput wraps UpdateActionPlanInput with CSV reference columns for bulk updates.
 type ActionPlanCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID                        string `csv:"ID"`
-	Input                     generated.UpdateActionPlanInput
-	ApproverGroupName         string   `csv:"ApproverGroupName"`
-	ControlRefCodes           []string `csv:"ControlRefCodes"`
-	DocumentDelegateGroupName string   `csv:"DocumentDelegateGroupName"`
+	ID                               string `csv:"ID"`
+	Input                            generated.UpdateActionPlanInput
+	ApproverGroupName                string   `csv:"ApproverGroupName"`
+	ControlRefCodes                  []string `csv:"ControlRefCodes"`
+	DocumentDelegateGroupName        string   `csv:"DocumentDelegateGroupName"`
+	InternalOwnerGroupName           string   `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string   `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string   `csv:"InternalOwnerUserEmail"`
 }
 
 // CSVInputWrapper marks ActionPlanCSVUpdateInput for CSV header preprocessing.

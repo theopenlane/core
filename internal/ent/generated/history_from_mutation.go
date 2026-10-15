@@ -228,6 +228,22 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
+	if internalOwner, exists := m.InternalOwner(); exists {
+		create = create.SetInternalOwner(internalOwner)
+	}
+
+	if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+		create = create.SetInternalOwnerUserID(internalOwnerUserID)
+	}
+
+	if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+		create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+	}
+
+	if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+		create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+	}
+
 	if title, exists := m.Title(); exists {
 		create = create.SetTitle(title)
 	}
@@ -558,6 +574,30 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetWorkflowEligibleMarker(actionplan.WorkflowEligibleMarker)
 		}
 
+		if internalOwner, exists := m.InternalOwner(); exists {
+			create = create.SetInternalOwner(internalOwner)
+		} else {
+			create = create.SetInternalOwner(actionplan.InternalOwner)
+		}
+
+		if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+			create = create.SetInternalOwnerUserID(internalOwnerUserID)
+		} else {
+			create = create.SetInternalOwnerUserID(actionplan.InternalOwnerUserID)
+		}
+
+		if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+			create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+		} else {
+			create = create.SetInternalOwnerGroupID(actionplan.InternalOwnerGroupID)
+		}
+
+		if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+			create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+		} else {
+			create = create.SetInternalOwnerIdentityHolderID(actionplan.InternalOwnerIdentityHolderID)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -704,6 +744,10 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetActionPlanKindName(actionplan.ActionPlanKindName).
 			SetActionPlanKindID(actionplan.ActionPlanKindID).
 			SetWorkflowEligibleMarker(actionplan.WorkflowEligibleMarker).
+			SetInternalOwner(actionplan.InternalOwner).
+			SetInternalOwnerUserID(actionplan.InternalOwnerUserID).
+			SetInternalOwnerGroupID(actionplan.InternalOwnerGroupID).
+			SetInternalOwnerIdentityHolderID(actionplan.InternalOwnerIdentityHolderID).
 			SetTitle(actionplan.Title).
 			SetDescription(actionplan.Description).
 			SetDueDate(actionplan.DueDate).
