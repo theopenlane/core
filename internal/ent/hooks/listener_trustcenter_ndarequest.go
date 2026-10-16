@@ -239,7 +239,23 @@ func evaluateRules(ctx context.Context, client *generated.Client, req *generated
 	return validateEmailRules(result, rules), nil
 }
 
-func validateEmailRules(result *emailverifier.Result, setting models.TrustCenterNDARequestSetting) bool {
+func validateEmailRules(setting models.TrustCenterNDARequestSetting) (bool) {
+	result *emailverifier.Result
+	if client.EmailVerifier != nil {
+		var err error
+		result, err = client.EmailVerifier.Client.Verify(req.Email)
+		if err != nil {
+
+			// we do not want to fail the job. Instead log and return here
+			logx.FromContext(ctx).Error().Err(err).
+				Str("email", req.Email).
+				Msg("could not verify email")
+
+			return false
+		}
+	}
+
+
 	if result == nil || !result.Syntax.Valid {
 		return false
 	}
@@ -256,7 +272,7 @@ func validateEmailRules(result *emailverifier.Result, setting models.TrustCenter
 		return true
 	}
 
-	return false
+	return false, false
 }
 
 func validateDomainList(domain string, rules models.TrustCenterNDARequestSetting) (isApproved, didMatch bool) {
