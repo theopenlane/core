@@ -7,15 +7,17 @@ type TrustCenterNDARequestSetting struct {
 	// AllowDisposableEmail enables known disposable emails to be used
 	AllowDisposableEmail bool `json:"allowDisposableEmail"`
 
-	// WorkEmailOnly approves email addresses from non-free, non-disposable domains.
+	// WorkEmailOnly when true will not auto-approve any free or disposable domains 
 	WorkEmailOnly bool `json:"workEmailOnly"`
 
-	// AllowRoleAccount if the domain matches a known role format like
-	// support@, sales@
+	// AllowRoleAccount when false will not auto-approve any known role format like
+	// support@, sales@ even if they pass other checks
 	AllowRoleAccount bool `json:"allowRoleAccount"`
 
 	// ApproveFromExistingRequestDomain enables auto approval if an existing approved
-	// request already uses this domain
+	// request already uses this domain, this is used in conjunction with the email rules above
+	// so if you have an existing request from a @gmail.com email but you have WorkEmailOnly=true
+	// this will not auto approve
 	ApproveFromExistingRequestDomain bool `json:"approveFromExistingRequestDomain"`
 
 	// ApproveIfContactExists enables auto approval if an active contact in the
@@ -23,19 +25,21 @@ type TrustCenterNDARequestSetting struct {
 	ApproveIfContactExists bool `json:"approveIfContactExists"`
 
 	// ApproveFromContactDomain enables auto approval if the domain exists
-	// in the contacts
+	// in the contacts, this is used in conjunction with the email rules above
+	// so if you have a contact with a @gmail.com email but you have WorkEmailOnly=true
+	// this will not auto approve
 	ApproveFromContactDomain bool `json:"approveFromContactDomain"`
 
 	// UseDomainBlocklist enables the usage of the domain blocklist to
-	// automatically exclude certain domains. This could be
-	// for competitors or others
+	// automatically exclude certain domains, for example to not auto-approve your 
+	// competitor email domains
 	UseDomainBlocklist bool `json:"useDomainBlocklist"`
 
 	// DomainBlocklist contains the domains that are not allowed to be
 	// automatically approved. This is only effective if UseDomainBlocklist is true
 	DomainBlocklist []string `json:"domainBlocklist,omitempty"`
 
-	// UseDomainBlocklist allows the usage of a whitelist to approve
+	// UseDomainAllowlist allows the usage of a whitelist to approve
 	// nda requests from certain domains
 	UseDomainAllowlist bool `json:"useDomainAllowlist"`
 
