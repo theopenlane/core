@@ -200,6 +200,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldActionPlanKindName:              {Type: field.TypeString, Column: actionplan.FieldActionPlanKindName},
 			actionplan.FieldActionPlanKindID:                {Type: field.TypeString, Column: actionplan.FieldActionPlanKindID},
 			actionplan.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: actionplan.FieldWorkflowEligibleMarker},
+			actionplan.FieldInternalOwner:                   {Type: field.TypeString, Column: actionplan.FieldInternalOwner},
+			actionplan.FieldInternalOwnerUserID:             {Type: field.TypeString, Column: actionplan.FieldInternalOwnerUserID},
+			actionplan.FieldInternalOwnerGroupID:            {Type: field.TypeString, Column: actionplan.FieldInternalOwnerGroupID},
+			actionplan.FieldInternalOwnerIdentityHolderID:   {Type: field.TypeString, Column: actionplan.FieldInternalOwnerIdentityHolderID},
 			actionplan.FieldTitle:                           {Type: field.TypeString, Column: actionplan.FieldTitle},
 			actionplan.FieldDescription:                     {Type: field.TypeString, Column: actionplan.FieldDescription},
 			actionplan.FieldDueDate:                         {Type: field.TypeTime, Column: actionplan.FieldDueDate},
@@ -4045,6 +4049,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ActionPlan",
 		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"internal_owner_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerUserTable,
+			Columns: []string{actionplan.InternalOwnerUserColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"User",
+	)
+	graph.MustAddE(
+		"internal_owner_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerGroupTable,
+			Columns: []string{actionplan.InternalOwnerGroupColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"Group",
+	)
+	graph.MustAddE(
+		"internal_owner_identity_holder",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerIdentityHolderTable,
+			Columns: []string{actionplan.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"IdentityHolder",
 	)
 	graph.MustAddE(
 		"risks",
@@ -19627,6 +19667,26 @@ func (f *ActionPlanFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(actionplan.FieldWorkflowEligibleMarker))
 }
 
+// WhereInternalOwner applies the entql string predicate on the internal_owner field.
+func (f *ActionPlanFilter) WhereInternalOwner(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldInternalOwner))
+}
+
+// WhereInternalOwnerUserID applies the entql string predicate on the internal_owner_user_id field.
+func (f *ActionPlanFilter) WhereInternalOwnerUserID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldInternalOwnerUserID))
+}
+
+// WhereInternalOwnerGroupID applies the entql string predicate on the internal_owner_group_id field.
+func (f *ActionPlanFilter) WhereInternalOwnerGroupID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldInternalOwnerGroupID))
+}
+
+// WhereInternalOwnerIdentityHolderID applies the entql string predicate on the internal_owner_identity_holder_id field.
+func (f *ActionPlanFilter) WhereInternalOwnerIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldInternalOwnerIdentityHolderID))
+}
+
 // WhereTitle applies the entql string predicate on the title field.
 func (f *ActionPlanFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldTitle))
@@ -19788,6 +19848,48 @@ func (f *ActionPlanFilter) WhereHasActionPlanKind() {
 // WhereHasActionPlanKindWith applies a predicate to check if query has an edge action_plan_kind with a given conditions (other predicates).
 func (f *ActionPlanFilter) WhereHasActionPlanKindWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("action_plan_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerUser applies a predicate to check if query has an edge internal_owner_user.
+func (f *ActionPlanFilter) WhereHasInternalOwnerUser() {
+	f.Where(entql.HasEdge("internal_owner_user"))
+}
+
+// WhereHasInternalOwnerUserWith applies a predicate to check if query has an edge internal_owner_user with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasInternalOwnerUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("internal_owner_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerGroup applies a predicate to check if query has an edge internal_owner_group.
+func (f *ActionPlanFilter) WhereHasInternalOwnerGroup() {
+	f.Where(entql.HasEdge("internal_owner_group"))
+}
+
+// WhereHasInternalOwnerGroupWith applies a predicate to check if query has an edge internal_owner_group with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasInternalOwnerGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("internal_owner_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerIdentityHolder applies a predicate to check if query has an edge internal_owner_identity_holder.
+func (f *ActionPlanFilter) WhereHasInternalOwnerIdentityHolder() {
+	f.Where(entql.HasEdge("internal_owner_identity_holder"))
+}
+
+// WhereHasInternalOwnerIdentityHolderWith applies a predicate to check if query has an edge internal_owner_identity_holder with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("internal_owner_identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

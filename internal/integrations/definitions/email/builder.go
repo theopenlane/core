@@ -15,7 +15,7 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 			ID:           DefinitionID.ID(),
 			Family:       "email",
 			DisplayName:  "Email",
-			Description:  "Send templated transactional and campaign emails via resend.",
+			Description:  "Send templated transactional and campaign emails via Resend or Postmark.",
 			Category:     "messaging",
 			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/email/overview",
 			Tags:         []string{"email", "messaging", "notifications"},
@@ -23,11 +23,17 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 			Visible:      true,
 			Installation: installation.Registration(),
 			Connections: []types.Connector{
-				apiKeyConnection.
-					Name("Email Provider API Key").
-					Description("Configure email delivery using an API key for resend, sendgrid, or postmark").
-					Provides(buildCustomerClient).
-					Verified(verify),
+				resendConnection.
+					Name("Resend API Key").
+					Description("Configure email delivery through Resend using an API key").
+					Recommended().
+					Provides(customerClientBuilder(resendSender)).
+					Verified(verifySender[ResendCredential](providerResend)),
+				postmarkConnection.
+					Name("Postmark Server Token").
+					Description("Configure email delivery through Postmark using a server API token").
+					Provides(customerClientBuilder(postmarkSender)).
+					Verified(verifySender[PostmarkCredential](providerPostmark)),
 			},
 			UserInput: userInput.Registration(),
 			Operations: append(AllEmailOperations(),
@@ -40,22 +46,41 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 		}
 
 		deliveryHandler := ResendDeliveryEvent{}.Handle
+		postmarkHandler := PostmarkDeliveryEvent{}.Handle
 
-		def.Webhooks = []types.WebhookRegistration{
-			resendWebhookRef.Registration(types.WebhookRegistration{
-				StaticRoute:  "/email/webhook",
-				SecretSource: func() string { return cfg.ResendSecret },
-				Verify:       ResendWebhook{Secret: cfg.ResendSecret}.Verify,
-				Event:        ResendWebhook{}.Event,
-				Events: []types.WebhookEventRegistration{
-					resendEmailSentEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailDeliveredEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailOpenedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailClickedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailBouncedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
-					resendEmailFailedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
-				},
-			}),
+		resendWebhook := resendWebhookRef.Registration(types.WebhookRegistration{
+			StaticRoute: "/email/webhook",
+			Verify:      ResendWebhook{Secret: cfg.Resend.WebhookSecret}.Verify,
+			Event:       ResendWebhook{}.Event,
+			Events: []types.WebhookEventRegistration{
+				resendEmailSentEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+				resendEmailDeliveredEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+				resendEmailOpenedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+				resendEmailClickedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+				resendEmailBouncedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+				resendEmailFailedEvent.Registration(types.WebhookEventRegistration{Handle: deliveryHandler}),
+			},
+		})
+
+		postmarkWebhook := postmarkWebhookRef.Registration(types.WebhookRegistration{
+			StaticRoute: "/email/webhook/postmark",
+			Verify:      PostmarkWebhook{Secret: cfg.Postmark.WebhookSecret}.Verify,
+			Event:       PostmarkWebhook{}.Event,
+			Events: []types.WebhookEventRegistration{
+				postmarkDeliveryEvent.Registration(types.WebhookEventRegistration{Handle: postmarkHandler}),
+				postmarkBounceEvent.Registration(types.WebhookEventRegistration{Handle: postmarkHandler}),
+				postmarkSpamComplaintEvent.Registration(types.WebhookEventRegistration{Handle: postmarkHandler}),
+				postmarkOpenEvent.Registration(types.WebhookEventRegistration{Handle: postmarkHandler}),
+				postmarkClickEvent.Registration(types.WebhookEventRegistration{Handle: postmarkHandler}),
+			},
+		})
+
+		// only the selected provider's inbound route is registered
+		switch cfg.Provider {
+		case providerResend:
+			def.Webhooks = []types.WebhookRegistration{resendWebhook}
+		case providerPostmark:
+			def.Webhooks = []types.WebhookRegistration{postmarkWebhook}
 		}
 
 		if len(cfg.Social) == 0 {

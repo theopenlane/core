@@ -160,11 +160,11 @@ func init() {
 	// actionplanhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	actionplanhistory.DefaultWorkflowEligibleMarker = actionplanhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanhistoryDescRequiresApproval is the schema descriptor for requires_approval field.
-	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[51].Descriptor()
+	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[55].Descriptor()
 	// actionplanhistory.DefaultRequiresApproval holds the default value on creation for the requires_approval field.
 	actionplanhistory.DefaultRequiresApproval = actionplanhistoryDescRequiresApproval.Default.(bool)
 	// actionplanhistoryDescBlocked is the schema descriptor for blocked field.
-	actionplanhistoryDescBlocked := actionplanhistoryFields[52].Descriptor()
+	actionplanhistoryDescBlocked := actionplanhistoryFields[56].Descriptor()
 	// actionplanhistory.DefaultBlocked holds the default value on creation for the blocked field.
 	actionplanhistory.DefaultBlocked = actionplanhistoryDescBlocked.Default.(bool)
 	// actionplanhistoryDescID is the schema descriptor for id field.

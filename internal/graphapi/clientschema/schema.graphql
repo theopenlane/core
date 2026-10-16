@@ -555,6 +555,22 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
 	"""
 	workflowEligibleMarker: Boolean
 	"""
+	the internal owner for the action plan when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
+	the internal owner user id for the action plan
+	"""
+	internalOwnerUserID: ID
+	"""
+	the internal owner group id for the action plan
+	"""
+	internalOwnerGroupID: ID
+	"""
+	the internal owner identity holder id for the action plan
+	"""
+	internalOwnerIdentityHolderID: ID
+	"""
 	short title describing the action plan
 	"""
 	title: String!
@@ -732,6 +748,9 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
 		where: GroupWhereInput
 	): GroupConnection!
 	actionPlanKind: CustomTypeEnum
+	internalOwnerUser: User
+	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	risks(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -1242,6 +1261,7 @@ enum ActionPlanOrderField {
 	MANAGEMENT_MODE
 	review_due
 	REVIEW_FREQUENCY
+	internal_owner
 	title
 	due_date
 	PRIORITY
@@ -1667,6 +1687,62 @@ input ActionPlanWhereInput {
 	workflowEligibleMarkerIsNil: Boolean
 	workflowEligibleMarkerNotNil: Boolean
 	"""
+	internal_owner field predicates
+	"""
+	internalOwner: String
+	internalOwnerNEQ: String
+	internalOwnerIn: [String!]
+	internalOwnerNotIn: [String!]
+	internalOwnerContains: String
+	internalOwnerHasPrefix: String
+	internalOwnerHasSuffix: String
+	internalOwnerIsNil: Boolean
+	internalOwnerNotNil: Boolean
+	internalOwnerEqualFold: String
+	internalOwnerContainsFold: String
+	"""
+	internal_owner_user_id field predicates
+	"""
+	internalOwnerUserID: ID
+	internalOwnerUserIDNEQ: ID
+	internalOwnerUserIDIn: [ID!]
+	internalOwnerUserIDNotIn: [ID!]
+	internalOwnerUserIDContains: ID
+	internalOwnerUserIDHasPrefix: ID
+	internalOwnerUserIDHasSuffix: ID
+	internalOwnerUserIDIsNil: Boolean
+	internalOwnerUserIDNotNil: Boolean
+	internalOwnerUserIDEqualFold: ID
+	internalOwnerUserIDContainsFold: ID
+	"""
+	internal_owner_group_id field predicates
+	"""
+	internalOwnerGroupID: ID
+	internalOwnerGroupIDNEQ: ID
+	internalOwnerGroupIDIn: [ID!]
+	internalOwnerGroupIDNotIn: [ID!]
+	internalOwnerGroupIDContains: ID
+	internalOwnerGroupIDHasPrefix: ID
+	internalOwnerGroupIDHasSuffix: ID
+	internalOwnerGroupIDIsNil: Boolean
+	internalOwnerGroupIDNotNil: Boolean
+	internalOwnerGroupIDEqualFold: ID
+	internalOwnerGroupIDContainsFold: ID
+	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
+	"""
 	title field predicates
 	"""
 	title: String
@@ -1799,6 +1875,21 @@ input ActionPlanWhereInput {
 	"""
 	hasActionPlanKind: Boolean
 	hasActionPlanKindWith: [CustomTypeEnumWhereInput!]
+	"""
+	internal_owner_user edge predicates
+	"""
+	hasInternalOwnerUser: Boolean
+	hasInternalOwnerUserWith: [UserWhereInput!]
+	"""
+	internal_owner_group edge predicates
+	"""
+	hasInternalOwnerGroup: Boolean
+	hasInternalOwnerGroupWith: [GroupWhereInput!]
+	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	risks edge predicates
 	"""
@@ -12649,6 +12740,10 @@ input CreateActionPlanInput {
 	"""
 	workflowEligibleMarker: Boolean
 	"""
+	the internal owner for the action plan when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
 	short title describing the action plan
 	"""
 	title: String!
@@ -12700,6 +12795,9 @@ input CreateActionPlanInput {
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
 	actionPlanKindID: ID
+	internalOwnerUserID: ID
+	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	riskIDs: [ID!]
 	controlIDs: [ID!]
 	programIDs: [ID!]
@@ -84844,6 +84942,11 @@ input UpdateActionPlanInput {
 	workflowEligibleMarker: Boolean
 	clearWorkflowEligibleMarker: Boolean
 	"""
+	the internal owner for the action plan when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	clearInternalOwner: Boolean
+	"""
 	short title describing the action plan
 	"""
 	title: String
@@ -84913,6 +85016,12 @@ input UpdateActionPlanInput {
 	clearViewers: Boolean
 	actionPlanKindID: ID
 	clearActionPlanKind: Boolean
+	internalOwnerUserID: ID
+	clearInternalOwnerUser: Boolean
+	internalOwnerGroupID: ID
+	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisks: Boolean

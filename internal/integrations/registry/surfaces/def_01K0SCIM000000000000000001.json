@@ -1,6 +1,6 @@
 {
-  "hash": "f2ea8a3a347c5114193e6b49351cc5e9f73eacfb7806c24d18f6dff80a321fb7",
-  "version": "01M49CHH2PQ6VZ1EN887Y8SWQH",
+  "hash": "ec60ce450ab99d83ff217737b383a883462867b465f157a7b7a0970db1dc21dd",
+  "version": "01M4V1VGWRTYQE62W97YTVA8WM",
   "surface": {
     "id": "def_01K0SCIM000000000000000001",
     "credentials": [],
@@ -58,11 +58,6 @@
             }
           }
         }
-      }
-    ],
-    "webhooks": [
-      {
-        "name": "scim.auth"
       }
     ]
   }

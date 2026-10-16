@@ -13,6 +13,7 @@ query GlobalSearch($query: String!) {
         node {
           details
           id
+          internalOwner
           name
           tags
         }

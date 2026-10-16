@@ -194,6 +194,13 @@ type ComplexityRoot struct {
 		IntegrationRuns                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes                   func(childComplexity int) int
+		InternalOwner                   func(childComplexity int) int
+		InternalOwnerGroup              func(childComplexity int) int
+		InternalOwnerGroupID            func(childComplexity int) int
+		InternalOwnerIdentityHolder     func(childComplexity int) int
+		InternalOwnerIdentityHolderID   func(childComplexity int) int
+		InternalOwnerUser               func(childComplexity int) int
+		InternalOwnerUserID             func(childComplexity int) int
 		ManagedBy                       func(childComplexity int) int
 		ManagementMode                  func(childComplexity int) int
 		Metadata                        func(childComplexity int) int
@@ -8608,6 +8615,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlan.InternalNotes(childComplexity), true
+	case "ActionPlan.internalOwner":
+		if e.ComplexityRoot.ActionPlan.InternalOwner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwner(childComplexity), true
+	case "ActionPlan.internalOwnerGroup":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerGroup(childComplexity), true
+	case "ActionPlan.internalOwnerGroupID":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerGroupID(childComplexity), true
+	case "ActionPlan.internalOwnerIdentityHolder":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerIdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerIdentityHolder(childComplexity), true
+	case "ActionPlan.internalOwnerIdentityHolderID":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerIdentityHolderID(childComplexity), true
+	case "ActionPlan.internalOwnerUser":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerUser(childComplexity), true
+	case "ActionPlan.internalOwnerUserID":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerUserID(childComplexity), true
 	case "ActionPlan.managedBy":
 		if e.ComplexityRoot.ActionPlan.ManagedBy == nil {
 			break
@@ -56870,6 +56919,22 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
   """
   workflowEligibleMarker: Boolean
   """
+  the internal owner for the action plan when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the action plan
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the action plan
+  """
+  internalOwnerGroupID: ID
+  """
+  the internal owner identity holder id for the action plan
+  """
+  internalOwnerIdentityHolderID: ID
+  """
   short title describing the action plan
   """
   title: String!
@@ -57047,6 +57112,9 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
     where: GroupWhereInput
   ): GroupConnection!
   actionPlanKind: CustomTypeEnum
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  internalOwnerIdentityHolder: IdentityHolder
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -57476,6 +57544,7 @@ enum ActionPlanOrderField {
   MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
+  internal_owner
   title
   due_date
   PRIORITY
@@ -57892,6 +57961,62 @@ input ActionPlanWhereInput {
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: ID
+  internalOwnerIdentityHolderIDNEQ: ID
+  internalOwnerIdentityHolderIDIn: [ID!]
+  internalOwnerIdentityHolderIDNotIn: [ID!]
+  internalOwnerIdentityHolderIDContains: ID
+  internalOwnerIdentityHolderIDHasPrefix: ID
+  internalOwnerIdentityHolderIDHasSuffix: ID
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: ID
+  internalOwnerIdentityHolderIDContainsFold: ID
+  """
   title field predicates
   """
   title: String
@@ -58024,6 +58149,21 @@ input ActionPlanWhereInput {
   """
   hasActionPlanKind: Boolean
   hasActionPlanKindWith: [CustomTypeEnumWhereInput!]
+  """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  internal_owner_identity_holder edge predicates
+  """
+  hasInternalOwnerIdentityHolder: Boolean
+  hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
   """
   risks edge predicates
   """
@@ -67550,6 +67690,10 @@ input CreateActionPlanInput {
   """
   workflowEligibleMarker: Boolean
   """
+  the internal owner for the action plan when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
   short title describing the action plan
   """
   title: String!
@@ -67601,6 +67745,9 @@ input CreateActionPlanInput {
   editorIDs: [ID!]
   viewerIDs: [ID!]
   actionPlanKindID: ID
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  internalOwnerIdentityHolderID: ID
   riskIDs: [ID!]
   controlIDs: [ID!]
   programIDs: [ID!]
@@ -126311,6 +126458,11 @@ input UpdateActionPlanInput {
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
   """
+  the internal owner for the action plan when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
   short title describing the action plan
   """
   title: String
@@ -126380,6 +126532,12 @@ input UpdateActionPlanInput {
   clearViewers: Boolean
   actionPlanKindID: ID
   clearActionPlanKind: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  internalOwnerIdentityHolderID: ID
+  clearInternalOwnerIdentityHolder: Boolean
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
@@ -154658,6 +154816,14 @@ func (ec *executionContext) childFields_ActionPlan(ctx context.Context, field gr
 		return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_ActionPlan_workflowEligibleMarker(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_ActionPlan_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_ActionPlan_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_ActionPlan_internalOwnerGroupID(ctx, field)
+	case "internalOwnerIdentityHolderID":
+		return ec.fieldContext_ActionPlan_internalOwnerIdentityHolderID(ctx, field)
 	case "title":
 		return ec.fieldContext_ActionPlan_title(ctx, field)
 	case "description":
@@ -154696,6 +154862,12 @@ func (ec *executionContext) childFields_ActionPlan(ctx context.Context, field gr
 		return ec.fieldContext_ActionPlan_viewers(ctx, field)
 	case "actionPlanKind":
 		return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
+	case "internalOwnerUser":
+		return ec.fieldContext_ActionPlan_internalOwnerUser(ctx, field)
+	case "internalOwnerGroup":
+		return ec.fieldContext_ActionPlan_internalOwnerGroup(ctx, field)
+	case "internalOwnerIdentityHolder":
+		return ec.fieldContext_ActionPlan_internalOwnerIdentityHolder(ctx, field)
 	case "risks":
 		return ec.fieldContext_ActionPlan_risks(ctx, field)
 	case "controls":

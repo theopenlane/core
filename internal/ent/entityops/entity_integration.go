@@ -49,6 +49,14 @@ var ActionPlanFields = struct {
 	ImprovementSuggestions FieldDescriptor
 	// InternalNotes is the internal_notes field
 	InternalNotes FieldDescriptor
+	// InternalOwner is the internal_owner field
+	InternalOwner FieldDescriptor
+	// InternalOwnerGroupID is the internal_owner_group_id field
+	InternalOwnerGroupID FieldDescriptor
+	// InternalOwnerIdentityHolderID is the internal_owner_identity_holder_id field
+	InternalOwnerIdentityHolderID FieldDescriptor
+	// InternalOwnerUserID is the internal_owner_user_id field
+	InternalOwnerUserID FieldDescriptor
 	// ManagementMode is the management_mode field
 	ManagementMode FieldDescriptor
 	// Metadata is the metadata field
@@ -102,6 +110,10 @@ var ActionPlanFields = struct {
 	ExternalFileID:                  FieldDescriptor{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
 	ImprovementSuggestions:          FieldDescriptor{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
 	InternalNotes:                   FieldDescriptor{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+	InternalOwner:                   FieldDescriptor{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Clearable: true},
+	InternalOwnerGroupID:            FieldDescriptor{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Clearable: true},
+	InternalOwnerIdentityHolderID:   FieldDescriptor{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "internal_owner_identity_holder_id", Clearable: true},
+	InternalOwnerUserID:             FieldDescriptor{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
 	ManagementMode:                  FieldDescriptor{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
 	Metadata:                        FieldDescriptor{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true, Volatile: true},
 	Name:                            FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},

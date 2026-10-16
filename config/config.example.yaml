@@ -196,14 +196,21 @@ integrations:
             scanttl: 86400
     consoleintegrationpath: /organization-settings/integrations
     email:
-        apikey: ""
         apiurl: https://api.theopenlane.io
         docsurl: https://docs.theopenlane.io
         fromemail: support@mail.theopenlane.io
+        postmark:
+            messagestream: ""
+            servertoken: ""
+            tracklinks: ""
+            trackopens: false
+            webhooksecret: ""
         producturl: https://console.theopenlane.io
         provider: resend
         questionnaireemail: support@mail.theopenlane.io
-        resendsecret: ""
+        resend:
+            apikey: ""
+            webhooksecret: ""
         rooturl: https://www.theopenlane.io
         supportemail: support@theopenlane.io
         testdir: fixtures/email

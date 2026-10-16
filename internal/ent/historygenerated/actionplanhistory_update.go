@@ -196,6 +196,18 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(actionplanhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalOwner, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(actionplanhistory.FieldDescription, field.TypeString)
 	}
@@ -436,6 +448,18 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(actionplanhistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalOwner, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(actionplanhistory.FieldDescription, field.TypeString)

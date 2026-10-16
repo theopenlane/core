@@ -15,7 +15,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // ActionPlan is the model entity for the ActionPlan schema.
@@ -107,6 +109,14 @@ type ActionPlan struct {
 	ActionPlanKindID string `json:"action_plan_kind_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
+	// the internal owner for the action plan when no user, group, or identity holder is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the action plan
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the action plan
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the action plan
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
 	// short title describing the action plan
 	Title string `json:"title,omitempty"`
 	// detailed description of remediation steps and objectives
@@ -156,6 +166,12 @@ type ActionPlanEdges struct {
 	Viewers []*Group `json:"viewers,omitempty"`
 	// ActionPlanKind holds the value of the action_plan_kind edge.
 	ActionPlanKind *CustomTypeEnum `json:"action_plan_kind,omitempty"`
+	// InternalOwnerUser holds the value of the internal_owner_user edge.
+	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
+	// InternalOwnerGroup holds the value of the internal_owner_group edge.
+	InternalOwnerGroup *Group `json:"internal_owner_group,omitempty"`
+	// InternalOwnerIdentityHolder holds the value of the internal_owner_identity_holder edge.
+	InternalOwnerIdentityHolder *IdentityHolder `json:"internal_owner_identity_holder,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
 	// Controls holds the value of the controls edge.
@@ -182,9 +198,9 @@ type ActionPlanEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [23]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [23]map[string]int
 
 	namedIntegrationRuns    map[string][]*IntegrationRun
 	namedBlockedGroups      map[string][]*Group
@@ -283,10 +299,43 @@ func (e ActionPlanEdges) ActionPlanKindOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "action_plan_kind"}
 }
 
+// InternalOwnerUserOrErr returns the InternalOwnerUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) InternalOwnerUserOrErr() (*User, error) {
+	if e.InternalOwnerUser != nil {
+		return e.InternalOwnerUser, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_user"}
+}
+
+// InternalOwnerGroupOrErr returns the InternalOwnerGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) InternalOwnerGroupOrErr() (*Group, error) {
+	if e.InternalOwnerGroup != nil {
+		return e.InternalOwnerGroup, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_group"}
+}
+
+// InternalOwnerIdentityHolderOrErr returns the InternalOwnerIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.InternalOwnerIdentityHolder != nil {
+		return e.InternalOwnerIdentityHolder, nil
+	} else if e.loadedTypes[10] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_identity_holder"}
+}
+
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[11] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -295,7 +344,7 @@ func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[12] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -304,7 +353,7 @@ func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[13] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -313,7 +362,7 @@ func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[14] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -322,7 +371,7 @@ func (e ActionPlanEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[15] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -331,7 +380,7 @@ func (e ActionPlanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[16] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -340,7 +389,7 @@ func (e ActionPlanEdges) ScansOrErr() ([]*Scan, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[17] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -349,7 +398,7 @@ func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[18] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -358,7 +407,7 @@ func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[19] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -367,7 +416,7 @@ func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[20] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -378,7 +427,7 @@ func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
 func (e ActionPlanEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[18] {
+	} else if e.loadedTypes[21] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -387,7 +436,7 @@ func (e ActionPlanEdges) FileOrErr() (*File, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[22] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -402,7 +451,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned, actionplan.FieldWorkflowEligibleMarker, actionplan.FieldRequiresApproval, actionplan.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldUpdatedByImpersonator, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldSourceDefinitionID, actionplan.FieldSourceDefinitionVersion, actionplan.FieldSourceInstanceID, actionplan.FieldManagedBy, actionplan.FieldIntegrationRunID, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldManagementMode, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldExternalFileID, actionplan.FieldExternalContents, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldUpdatedByImpersonator, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldSourceDefinitionID, actionplan.FieldSourceDefinitionVersion, actionplan.FieldSourceInstanceID, actionplan.FieldManagedBy, actionplan.FieldIntegrationRunID, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldManagementMode, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldExternalFileID, actionplan.FieldExternalContents, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldInternalOwner, actionplan.FieldInternalOwnerUserID, actionplan.FieldInternalOwnerGroupID, actionplan.FieldInternalOwnerIdentityHolderID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate, actionplan.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -708,6 +757,30 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
 			}
+		case actionplan.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case actionplan.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case actionplan.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case actionplan.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
+			}
 		case actionplan.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
@@ -851,6 +924,21 @@ func (_m *ActionPlan) QueryViewers() *GroupQuery {
 // QueryActionPlanKind queries the "action_plan_kind" edge of the ActionPlan entity.
 func (_m *ActionPlan) QueryActionPlanKind() *CustomTypeEnumQuery {
 	return NewActionPlanClient(_m.config).QueryActionPlanKind(_m)
+}
+
+// QueryInternalOwnerUser queries the "internal_owner_user" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryInternalOwnerUser() *UserQuery {
+	return NewActionPlanClient(_m.config).QueryInternalOwnerUser(_m)
+}
+
+// QueryInternalOwnerGroup queries the "internal_owner_group" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryInternalOwnerGroup() *GroupQuery {
+	return NewActionPlanClient(_m.config).QueryInternalOwnerGroup(_m)
+}
+
+// QueryInternalOwnerIdentityHolder queries the "internal_owner_identity_holder" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	return NewActionPlanClient(_m.config).QueryInternalOwnerIdentityHolder(_m)
 }
 
 // QueryRisks queries the "risks" edge of the ActionPlan entity.
@@ -1075,6 +1163,18 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)

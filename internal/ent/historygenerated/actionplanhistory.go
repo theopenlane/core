@@ -112,6 +112,14 @@ type ActionPlanHistory struct {
 	ActionPlanKindID string `json:"action_plan_kind_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
+	// the internal owner for the action plan when no user, group, or identity holder is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the action plan
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the action plan
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the action plan
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
 	// short title describing the action plan
 	Title string `json:"title,omitempty"`
 	// detailed description of remediation steps and objectives
@@ -148,7 +156,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case actionplanhistory.FieldApprovalRequired, actionplanhistory.FieldSystemOwned, actionplanhistory.FieldWorkflowEligibleMarker, actionplanhistory.FieldRequiresApproval, actionplanhistory.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldUpdatedByImpersonator, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldSourceDefinitionID, actionplanhistory.FieldSourceDefinitionVersion, actionplanhistory.FieldSourceInstanceID, actionplanhistory.FieldManagedBy, actionplanhistory.FieldIntegrationRunID, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldManagementMode, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldExternalFileID, actionplanhistory.FieldExternalContents, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldTitle, actionplanhistory.FieldDescription, actionplanhistory.FieldPriority, actionplanhistory.FieldBlockerReason, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldUpdatedByImpersonator, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldSourceDefinitionID, actionplanhistory.FieldSourceDefinitionVersion, actionplanhistory.FieldSourceInstanceID, actionplanhistory.FieldManagedBy, actionplanhistory.FieldIntegrationRunID, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldManagementMode, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldExternalFileID, actionplanhistory.FieldExternalContents, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldInternalOwner, actionplanhistory.FieldInternalOwnerUserID, actionplanhistory.FieldInternalOwnerGroupID, actionplanhistory.FieldInternalOwnerIdentityHolderID, actionplanhistory.FieldTitle, actionplanhistory.FieldDescription, actionplanhistory.FieldPriority, actionplanhistory.FieldBlockerReason, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldReviewDue, actionplanhistory.FieldDueDate, actionplanhistory.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -466,6 +474,30 @@ func (_m *ActionPlanHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
 			}
+		case actionplanhistory.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case actionplanhistory.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case actionplanhistory.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case actionplanhistory.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
+			}
 		case actionplanhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
@@ -721,6 +753,18 @@ func (_m *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)

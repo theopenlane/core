@@ -354,6 +354,14 @@ type ActionPlan struct {
 	ActionPlanKindID *string `json:"actionPlanKindID,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
+	// the internal owner for the action plan when no user, group, or identity holder is linked
+	InternalOwner *string `json:"internalOwner,omitempty"`
+	// the internal owner user id for the action plan
+	InternalOwnerUserID *string `json:"internalOwnerUserID,omitempty"`
+	// the internal owner group id for the action plan
+	InternalOwnerGroupID *string `json:"internalOwnerGroupID,omitempty"`
+	// the internal owner identity holder id for the action plan
+	InternalOwnerIdentityHolderID *string `json:"internalOwnerIdentityHolderID,omitempty"`
 	// short title describing the action plan
 	Title string `json:"title"`
 	// detailed description of remediation steps and objectives
@@ -380,24 +388,27 @@ type ActionPlan struct {
 	// the group of users who are responsible for approving the action_plan
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the action_plan, used for temporary approval
-	Delegate           *Group                       `json:"delegate,omitempty"`
-	Owner              *Organization                `json:"owner,omitempty"`
-	BlockedGroups      *GroupConnection             `json:"blockedGroups"`
-	Editors            *GroupConnection             `json:"editors"`
-	Viewers            *GroupConnection             `json:"viewers"`
-	ActionPlanKind     *CustomTypeEnum              `json:"actionPlanKind,omitempty"`
-	Risks              *RiskConnection              `json:"risks"`
-	Controls           *ControlConnection           `json:"controls"`
-	Programs           *ProgramConnection           `json:"programs"`
-	Findings           *FindingConnection           `json:"findings"`
-	Vulnerabilities    *VulnerabilityConnection     `json:"vulnerabilities"`
-	Scans              *ScanConnection              `json:"scans"`
-	Reviews            *ReviewConnection            `json:"reviews"`
-	Remediations       *RemediationConnection       `json:"remediations"`
-	Tasks              *TaskConnection              `json:"tasks"`
-	Integrations       *IntegrationConnection       `json:"integrations"`
-	File               *File                        `json:"file,omitempty"`
-	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	Delegate                    *Group                       `json:"delegate,omitempty"`
+	Owner                       *Organization                `json:"owner,omitempty"`
+	BlockedGroups               *GroupConnection             `json:"blockedGroups"`
+	Editors                     *GroupConnection             `json:"editors"`
+	Viewers                     *GroupConnection             `json:"viewers"`
+	ActionPlanKind              *CustomTypeEnum              `json:"actionPlanKind,omitempty"`
+	InternalOwnerUser           *User                        `json:"internalOwnerUser,omitempty"`
+	InternalOwnerGroup          *Group                       `json:"internalOwnerGroup,omitempty"`
+	InternalOwnerIdentityHolder *IdentityHolder              `json:"internalOwnerIdentityHolder,omitempty"`
+	Risks                       *RiskConnection              `json:"risks"`
+	Controls                    *ControlConnection           `json:"controls"`
+	Programs                    *ProgramConnection           `json:"programs"`
+	Findings                    *FindingConnection           `json:"findings"`
+	Vulnerabilities             *VulnerabilityConnection     `json:"vulnerabilities"`
+	Scans                       *ScanConnection              `json:"scans"`
+	Reviews                     *ReviewConnection            `json:"reviews"`
+	Remediations                *RemediationConnection       `json:"remediations"`
+	Tasks                       *TaskConnection              `json:"tasks"`
+	Integrations                *IntegrationConnection       `json:"integrations"`
+	File                        *File                        `json:"file,omitempty"`
+	WorkflowObjectRefs          *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
 	// Indicates if this actionPlan has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this actionPlan has any workflow history (completed or failed instances)
@@ -817,6 +828,54 @@ type ActionPlanWhereInput struct {
 	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
 	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
 	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
+	// internal_owner field predicates
+	InternalOwner             *string  `json:"internalOwner,omitempty"`
+	InternalOwnerNeq          *string  `json:"internalOwnerNEQ,omitempty"`
+	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
+	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
+	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
+	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
+	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
+	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
+	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
+	InternalOwnerEqualFold    *string  `json:"internalOwnerEqualFold,omitempty"`
+	InternalOwnerContainsFold *string  `json:"internalOwnerContainsFold,omitempty"`
+	// internal_owner_user_id field predicates
+	InternalOwnerUserID             *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerUserIdneq          *string  `json:"internalOwnerUserIDNEQ,omitempty"`
+	InternalOwnerUserIDIn           []string `json:"internalOwnerUserIDIn,omitempty"`
+	InternalOwnerUserIDNotIn        []string `json:"internalOwnerUserIDNotIn,omitempty"`
+	InternalOwnerUserIDContains     *string  `json:"internalOwnerUserIDContains,omitempty"`
+	InternalOwnerUserIDHasPrefix    *string  `json:"internalOwnerUserIDHasPrefix,omitempty"`
+	InternalOwnerUserIDHasSuffix    *string  `json:"internalOwnerUserIDHasSuffix,omitempty"`
+	InternalOwnerUserIDIsNil        *bool    `json:"internalOwnerUserIDIsNil,omitempty"`
+	InternalOwnerUserIDNotNil       *bool    `json:"internalOwnerUserIDNotNil,omitempty"`
+	InternalOwnerUserIDEqualFold    *string  `json:"internalOwnerUserIDEqualFold,omitempty"`
+	InternalOwnerUserIDContainsFold *string  `json:"internalOwnerUserIDContainsFold,omitempty"`
+	// internal_owner_group_id field predicates
+	InternalOwnerGroupID             *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerGroupIdneq          *string  `json:"internalOwnerGroupIDNEQ,omitempty"`
+	InternalOwnerGroupIDIn           []string `json:"internalOwnerGroupIDIn,omitempty"`
+	InternalOwnerGroupIDNotIn        []string `json:"internalOwnerGroupIDNotIn,omitempty"`
+	InternalOwnerGroupIDContains     *string  `json:"internalOwnerGroupIDContains,omitempty"`
+	InternalOwnerGroupIDHasPrefix    *string  `json:"internalOwnerGroupIDHasPrefix,omitempty"`
+	InternalOwnerGroupIDHasSuffix    *string  `json:"internalOwnerGroupIDHasSuffix,omitempty"`
+	InternalOwnerGroupIDIsNil        *bool    `json:"internalOwnerGroupIDIsNil,omitempty"`
+	InternalOwnerGroupIDNotNil       *bool    `json:"internalOwnerGroupIDNotNil,omitempty"`
+	InternalOwnerGroupIDEqualFold    *string  `json:"internalOwnerGroupIDEqualFold,omitempty"`
+	InternalOwnerGroupIDContainsFold *string  `json:"internalOwnerGroupIDContainsFold,omitempty"`
+	// internal_owner_identity_holder_id field predicates
+	InternalOwnerIdentityHolderID             *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	InternalOwnerIdentityHolderIdneq          *string  `json:"internalOwnerIdentityHolderIDNEQ,omitempty"`
+	InternalOwnerIdentityHolderIDIn           []string `json:"internalOwnerIdentityHolderIDIn,omitempty"`
+	InternalOwnerIdentityHolderIDNotIn        []string `json:"internalOwnerIdentityHolderIDNotIn,omitempty"`
+	InternalOwnerIdentityHolderIDContains     *string  `json:"internalOwnerIdentityHolderIDContains,omitempty"`
+	InternalOwnerIdentityHolderIDHasPrefix    *string  `json:"internalOwnerIdentityHolderIDHasPrefix,omitempty"`
+	InternalOwnerIdentityHolderIDHasSuffix    *string  `json:"internalOwnerIdentityHolderIDHasSuffix,omitempty"`
+	InternalOwnerIdentityHolderIDIsNil        *bool    `json:"internalOwnerIdentityHolderIDIsNil,omitempty"`
+	InternalOwnerIdentityHolderIDNotNil       *bool    `json:"internalOwnerIdentityHolderIDNotNil,omitempty"`
+	InternalOwnerIdentityHolderIDEqualFold    *string  `json:"internalOwnerIdentityHolderIDEqualFold,omitempty"`
+	InternalOwnerIdentityHolderIDContainsFold *string  `json:"internalOwnerIdentityHolderIDContainsFold,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -916,6 +975,15 @@ type ActionPlanWhereInput struct {
 	// action_plan_kind edge predicates
 	HasActionPlanKind     *bool                       `json:"hasActionPlanKind,omitempty"`
 	HasActionPlanKindWith []*CustomTypeEnumWhereInput `json:"hasActionPlanKindWith,omitempty"`
+	// internal_owner_user edge predicates
+	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
+	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
+	// internal_owner_group edge predicates
+	HasInternalOwnerGroup     *bool              `json:"hasInternalOwnerGroup,omitempty"`
+	HasInternalOwnerGroupWith []*GroupWhereInput `json:"hasInternalOwnerGroupWith,omitempty"`
+	// internal_owner_identity_holder edge predicates
+	HasInternalOwnerIdentityHolder     *bool                       `json:"hasInternalOwnerIdentityHolder,omitempty"`
+	HasInternalOwnerIdentityHolderWith []*IdentityHolderWhereInput `json:"hasInternalOwnerIdentityHolderWith,omitempty"`
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
@@ -6201,6 +6269,8 @@ type CreateActionPlanInput struct {
 	ActionPlanKindName *string `json:"actionPlanKindName,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
+	// the internal owner for the action plan when no user, group, or identity holder is linked
+	InternalOwner *string `json:"internalOwner,omitempty"`
 	// short title describing the action plan
 	Title string `json:"title"`
 	// detailed description of remediation steps and objectives
@@ -6222,27 +6292,30 @@ type CreateActionPlanInput struct {
 	// raw payload received from the integration for auditing and troubleshooting
 	RawPayload map[string]any `json:"rawPayload,omitempty"`
 	// source of the action plan
-	Source               *string  `json:"source,omitempty"`
-	IntegrationRunIDs    []string `json:"integrationRunIDs,omitempty"`
-	ApproverID           *string  `json:"approverID,omitempty"`
-	DelegateID           *string  `json:"delegateID,omitempty"`
-	OwnerID              *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs      []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs            []string `json:"editorIDs,omitempty"`
-	ViewerIDs            []string `json:"viewerIDs,omitempty"`
-	ActionPlanKindID     *string  `json:"actionPlanKindID,omitempty"`
-	RiskIDs              []string `json:"riskIDs,omitempty"`
-	ControlIDs           []string `json:"controlIDs,omitempty"`
-	ProgramIDs           []string `json:"programIDs,omitempty"`
-	FindingIDs           []string `json:"findingIDs,omitempty"`
-	VulnerabilityIDs     []string `json:"vulnerabilityIDs,omitempty"`
-	ScanIDs              []string `json:"scanIDs,omitempty"`
-	ReviewIDs            []string `json:"reviewIDs,omitempty"`
-	RemediationIDs       []string `json:"remediationIDs,omitempty"`
-	TaskIDs              []string `json:"taskIDs,omitempty"`
-	IntegrationIDs       []string `json:"integrationIDs,omitempty"`
-	FileID               *string  `json:"fileID,omitempty"`
-	WorkflowObjectRefIDs []string `json:"workflowObjectRefIDs,omitempty"`
+	Source                        *string  `json:"source,omitempty"`
+	IntegrationRunIDs             []string `json:"integrationRunIDs,omitempty"`
+	ApproverID                    *string  `json:"approverID,omitempty"`
+	DelegateID                    *string  `json:"delegateID,omitempty"`
+	OwnerID                       *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs               []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                     []string `json:"editorIDs,omitempty"`
+	ViewerIDs                     []string `json:"viewerIDs,omitempty"`
+	ActionPlanKindID              *string  `json:"actionPlanKindID,omitempty"`
+	InternalOwnerUserID           *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerGroupID          *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerIdentityHolderID *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	RiskIDs                       []string `json:"riskIDs,omitempty"`
+	ControlIDs                    []string `json:"controlIDs,omitempty"`
+	ProgramIDs                    []string `json:"programIDs,omitempty"`
+	FindingIDs                    []string `json:"findingIDs,omitempty"`
+	VulnerabilityIDs              []string `json:"vulnerabilityIDs,omitempty"`
+	ScanIDs                       []string `json:"scanIDs,omitempty"`
+	ReviewIDs                     []string `json:"reviewIDs,omitempty"`
+	RemediationIDs                []string `json:"remediationIDs,omitempty"`
+	TaskIDs                       []string `json:"taskIDs,omitempty"`
+	IntegrationIDs                []string `json:"integrationIDs,omitempty"`
+	FileID                        *string  `json:"fileID,omitempty"`
+	WorkflowObjectRefIDs          []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateAssessmentInput is used for create Assessment object.
@@ -36115,6 +36188,9 @@ type UpdateActionPlanInput struct {
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
 	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
+	// the internal owner for the action plan when no user, group, or identity holder is linked
+	InternalOwner      *string `json:"internalOwner,omitempty"`
+	ClearInternalOwner *bool   `json:"clearInternalOwner,omitempty"`
 	// short title describing the action plan
 	Title *string `json:"title,omitempty"`
 	// detailed description of remediation steps and objectives
@@ -36143,62 +36219,68 @@ type UpdateActionPlanInput struct {
 	RawPayload      map[string]any `json:"rawPayload,omitempty"`
 	ClearRawPayload *bool          `json:"clearRawPayload,omitempty"`
 	// source of the action plan
-	Source                     *string             `json:"source,omitempty"`
-	ClearSource                *bool               `json:"clearSource,omitempty"`
-	AddIntegrationRunIDs       []string            `json:"addIntegrationRunIDs,omitempty"`
-	RemoveIntegrationRunIDs    []string            `json:"removeIntegrationRunIDs,omitempty"`
-	ClearIntegrationRuns       *bool               `json:"clearIntegrationRuns,omitempty"`
-	ApproverID                 *string             `json:"approverID,omitempty"`
-	ClearApprover              *bool               `json:"clearApprover,omitempty"`
-	DelegateID                 *string             `json:"delegateID,omitempty"`
-	ClearDelegate              *bool               `json:"clearDelegate,omitempty"`
-	AddBlockedGroupIDs         []string            `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs      []string            `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups         *bool               `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs               []string            `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs            []string            `json:"removeEditorIDs,omitempty"`
-	ClearEditors               *bool               `json:"clearEditors,omitempty"`
-	AddViewerIDs               []string            `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs            []string            `json:"removeViewerIDs,omitempty"`
-	ClearViewers               *bool               `json:"clearViewers,omitempty"`
-	ActionPlanKindID           *string             `json:"actionPlanKindID,omitempty"`
-	ClearActionPlanKind        *bool               `json:"clearActionPlanKind,omitempty"`
-	AddRiskIDs                 []string            `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs              []string            `json:"removeRiskIDs,omitempty"`
-	ClearRisks                 *bool               `json:"clearRisks,omitempty"`
-	AddControlIDs              []string            `json:"addControlIDs,omitempty"`
-	RemoveControlIDs           []string            `json:"removeControlIDs,omitempty"`
-	ClearControls              *bool               `json:"clearControls,omitempty"`
-	AddProgramIDs              []string            `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs           []string            `json:"removeProgramIDs,omitempty"`
-	ClearPrograms              *bool               `json:"clearPrograms,omitempty"`
-	AddFindingIDs              []string            `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs           []string            `json:"removeFindingIDs,omitempty"`
-	ClearFindings              *bool               `json:"clearFindings,omitempty"`
-	AddVulnerabilityIDs        []string            `json:"addVulnerabilityIDs,omitempty"`
-	RemoveVulnerabilityIDs     []string            `json:"removeVulnerabilityIDs,omitempty"`
-	ClearVulnerabilities       *bool               `json:"clearVulnerabilities,omitempty"`
-	AddScanIDs                 []string            `json:"addScanIDs,omitempty"`
-	RemoveScanIDs              []string            `json:"removeScanIDs,omitempty"`
-	ClearScans                 *bool               `json:"clearScans,omitempty"`
-	AddReviewIDs               []string            `json:"addReviewIDs,omitempty"`
-	RemoveReviewIDs            []string            `json:"removeReviewIDs,omitempty"`
-	ClearReviews               *bool               `json:"clearReviews,omitempty"`
-	AddRemediationIDs          []string            `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs       []string            `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations          *bool               `json:"clearRemediations,omitempty"`
-	AddTaskIDs                 []string            `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs              []string            `json:"removeTaskIDs,omitempty"`
-	ClearTasks                 *bool               `json:"clearTasks,omitempty"`
-	AddIntegrationIDs          []string            `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs       []string            `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations          *bool               `json:"clearIntegrations,omitempty"`
-	FileID                     *string             `json:"fileID,omitempty"`
-	ClearFile                  *bool               `json:"clearFile,omitempty"`
-	AddWorkflowObjectRefIDs    []string            `json:"addWorkflowObjectRefIDs,omitempty"`
-	RemoveWorkflowObjectRefIDs []string            `json:"removeWorkflowObjectRefIDs,omitempty"`
-	ClearWorkflowObjectRefs    *bool               `json:"clearWorkflowObjectRefs,omitempty"`
-	RevisionBump               *models.VersionBump `json:"RevisionBump,omitempty"`
+	Source                           *string             `json:"source,omitempty"`
+	ClearSource                      *bool               `json:"clearSource,omitempty"`
+	AddIntegrationRunIDs             []string            `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs          []string            `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns             *bool               `json:"clearIntegrationRuns,omitempty"`
+	ApproverID                       *string             `json:"approverID,omitempty"`
+	ClearApprover                    *bool               `json:"clearApprover,omitempty"`
+	DelegateID                       *string             `json:"delegateID,omitempty"`
+	ClearDelegate                    *bool               `json:"clearDelegate,omitempty"`
+	AddBlockedGroupIDs               []string            `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs            []string            `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups               *bool               `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                     []string            `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                  []string            `json:"removeEditorIDs,omitempty"`
+	ClearEditors                     *bool               `json:"clearEditors,omitempty"`
+	AddViewerIDs                     []string            `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs                  []string            `json:"removeViewerIDs,omitempty"`
+	ClearViewers                     *bool               `json:"clearViewers,omitempty"`
+	ActionPlanKindID                 *string             `json:"actionPlanKindID,omitempty"`
+	ClearActionPlanKind              *bool               `json:"clearActionPlanKind,omitempty"`
+	InternalOwnerUserID              *string             `json:"internalOwnerUserID,omitempty"`
+	ClearInternalOwnerUser           *bool               `json:"clearInternalOwnerUser,omitempty"`
+	InternalOwnerGroupID             *string             `json:"internalOwnerGroupID,omitempty"`
+	ClearInternalOwnerGroup          *bool               `json:"clearInternalOwnerGroup,omitempty"`
+	InternalOwnerIdentityHolderID    *string             `json:"internalOwnerIdentityHolderID,omitempty"`
+	ClearInternalOwnerIdentityHolder *bool               `json:"clearInternalOwnerIdentityHolder,omitempty"`
+	AddRiskIDs                       []string            `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs                    []string            `json:"removeRiskIDs,omitempty"`
+	ClearRisks                       *bool               `json:"clearRisks,omitempty"`
+	AddControlIDs                    []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs                 []string            `json:"removeControlIDs,omitempty"`
+	ClearControls                    *bool               `json:"clearControls,omitempty"`
+	AddProgramIDs                    []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs                 []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                    *bool               `json:"clearPrograms,omitempty"`
+	AddFindingIDs                    []string            `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs                 []string            `json:"removeFindingIDs,omitempty"`
+	ClearFindings                    *bool               `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs              []string            `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs           []string            `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities             *bool               `json:"clearVulnerabilities,omitempty"`
+	AddScanIDs                       []string            `json:"addScanIDs,omitempty"`
+	RemoveScanIDs                    []string            `json:"removeScanIDs,omitempty"`
+	ClearScans                       *bool               `json:"clearScans,omitempty"`
+	AddReviewIDs                     []string            `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                  []string            `json:"removeReviewIDs,omitempty"`
+	ClearReviews                     *bool               `json:"clearReviews,omitempty"`
+	AddRemediationIDs                []string            `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs             []string            `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations                *bool               `json:"clearRemediations,omitempty"`
+	AddTaskIDs                       []string            `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                    []string            `json:"removeTaskIDs,omitempty"`
+	ClearTasks                       *bool               `json:"clearTasks,omitempty"`
+	AddIntegrationIDs                []string            `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs             []string            `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations                *bool               `json:"clearIntegrations,omitempty"`
+	FileID                           *string             `json:"fileID,omitempty"`
+	ClearFile                        *bool               `json:"clearFile,omitempty"`
+	AddWorkflowObjectRefIDs          []string            `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs       []string            `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs          *bool               `json:"clearWorkflowObjectRefs,omitempty"`
+	RevisionBump                     *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateAssessmentInput is used for update Assessment object.
@@ -47053,6 +47135,7 @@ const (
 	ActionPlanOrderFieldManagementMode  ActionPlanOrderField = "MANAGEMENT_MODE"
 	ActionPlanOrderFieldReviewDue       ActionPlanOrderField = "review_due"
 	ActionPlanOrderFieldReviewFrequency ActionPlanOrderField = "REVIEW_FREQUENCY"
+	ActionPlanOrderFieldInternalOwner   ActionPlanOrderField = "internal_owner"
 	ActionPlanOrderFieldTitle           ActionPlanOrderField = "title"
 	ActionPlanOrderFieldDueDate         ActionPlanOrderField = "due_date"
 	ActionPlanOrderFieldPriority        ActionPlanOrderField = "PRIORITY"
@@ -47068,6 +47151,7 @@ var AllActionPlanOrderField = []ActionPlanOrderField{
 	ActionPlanOrderFieldManagementMode,
 	ActionPlanOrderFieldReviewDue,
 	ActionPlanOrderFieldReviewFrequency,
+	ActionPlanOrderFieldInternalOwner,
 	ActionPlanOrderFieldTitle,
 	ActionPlanOrderFieldDueDate,
 	ActionPlanOrderFieldPriority,
@@ -47076,7 +47160,7 @@ var AllActionPlanOrderField = []ActionPlanOrderField{
 
 func (e ActionPlanOrderField) IsValid() bool {
 	switch e {
-	case ActionPlanOrderFieldCreatedAt, ActionPlanOrderFieldUpdatedAt, ActionPlanOrderFieldRevision, ActionPlanOrderFieldName, ActionPlanOrderFieldStatus, ActionPlanOrderFieldManagementMode, ActionPlanOrderFieldReviewDue, ActionPlanOrderFieldReviewFrequency, ActionPlanOrderFieldTitle, ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
+	case ActionPlanOrderFieldCreatedAt, ActionPlanOrderFieldUpdatedAt, ActionPlanOrderFieldRevision, ActionPlanOrderFieldName, ActionPlanOrderFieldStatus, ActionPlanOrderFieldManagementMode, ActionPlanOrderFieldReviewDue, ActionPlanOrderFieldReviewFrequency, ActionPlanOrderFieldInternalOwner, ActionPlanOrderFieldTitle, ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
 		return true
 	}
 	return false

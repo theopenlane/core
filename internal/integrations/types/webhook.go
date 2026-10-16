@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/samber/lo"
+
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
@@ -90,8 +92,6 @@ type WebhookRegistration struct {
 	EndpointURLTemplate string `json:"endpointUrlTemplate,omitempty"`
 	// StaticRoute is a fixed URL path registered instead of a per-installation endpoint
 	StaticRoute string `json:"staticRoute,omitempty"`
-	// SecretSource returns an operator-supplied webhook secret instead of auto-generating one
-	SecretSource func() string `json:"-"`
 	// ResolveIntegration locates the integration record from the inbound request
 	ResolveIntegration func(ctx context.Context, db *generated.Client, req WebhookInboundRequest) (*generated.Integration, error) `json:"-"`
 	// Verify authenticates the inbound webhook request
@@ -100,4 +100,14 @@ type WebhookRegistration struct {
 	Event WebhookEventFunc `json:"-"`
 	// Events lists the supported event handlers for the webhook
 	Events []WebhookEventRegistration `json:"events,omitempty"`
+}
+
+// RuntimeOwned reports whether the webhook is received on a static route with no installation to resolve, so it never has per-installation rows
+func (w WebhookRegistration) RuntimeOwned() bool {
+	return w.StaticRoute != "" && w.ResolveIntegration == nil
+}
+
+// HandlesEvent reports whether name is one of the webhook's registered events
+func (w WebhookRegistration) HandlesEvent(name string) bool {
+	return lo.ContainsBy(w.Events, func(event WebhookEventRegistration) bool { return event.Name == name })
 }
