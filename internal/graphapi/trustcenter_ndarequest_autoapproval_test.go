@@ -440,3 +440,73 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		})
 	}
 }
+
+func TestNDAAutoApproval_Update(t *testing.T) {
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	defer th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+
+	listener, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	defer listener.Teardown()
+
+	// create a contact and set up a simple approval rule against matching contacts
+	contact := (&th.ContactBuilder{Client: suite.Client}).MustNew(tcOrg.Owner.UserCtx, t)
+
+	_, err = suite.Client.API.UpdateTrustCenterSetting(tcOrg.Owner.UserCtx, tcOrg.TrustCenter.Edges.Setting.ID, testclient.UpdateTrustCenterSettingInput{
+		NdaApprovalRequired: lo.ToPtr(true),
+		EnableAutoApproval:  lo.ToPtr(true),
+		AutoApprovalRules: &models.TrustCenterNDARequestSetting{
+			ApproveIfContactExists:  true,
+			ManualApprovalOnFailure: true,
+		},
+	}, nil, nil, nil, nil, nil, nil)
+	assert.NilError(t, err)
+
+	autoApprovedRequest, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		TrustCenterID: &tcOrg.TrustCenter.ID,
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         contact.Email,
+	})
+	assert.NilError(t, err)
+	assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
+
+	request, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, autoApprovedRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	assert.NilError(t, err)
+	assert.Equal(t, *request.TrustCenterNDARequest.Status, enums.TrustCenterNDARequestStatusApproved)
+
+	// make a new email address that should fail surely because it does not exists as a contact
+	email := gofakeit.LetterN(12) + "@theopenlane.io"
+	unmatched, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		TrustCenterID: &tcOrg.TrustCenter.ID,
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         email,
+	})
+	assert.NilError(t, err)
+	assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
+
+	requestID := unmatched.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID
+
+	unmatchedRequest, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, requestID)
+	assert.NilError(t, err)
+	assert.Equal(t, *unmatchedRequest.TrustCenterNDARequest.Status, enums.TrustCenterNDARequestStatusNeedsApproval)
+	assert.Assert(t, unmatchedRequest.TrustCenterNDARequest.AutoApproved != nil)
+	assert.Assert(t, !*unmatchedRequest.TrustCenterNDARequest.AutoApproved)
+
+	// now add the email again so we can update the nda request
+	(&th.ContactBuilder{Client: suite.Client, Email: email}).MustNew(tcOrg.Owner.UserCtx, t)
+
+	_, err = suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, requestID, testclient.UpdateTrustCenterNDARequestInput{
+		Status: lo.ToPtr(enums.TrustCenterNDARequestStatusRequested),
+	})
+	assert.NilError(t, err)
+	assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
+
+	result, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, requestID)
+	assert.NilError(t, err)
+	assert.Equal(t, *result.TrustCenterNDARequest.Status, enums.TrustCenterNDARequestStatusApproved)
+	assert.Assert(t, result.TrustCenterNDARequest.AutoApproved != nil)
+	assert.Assert(t, *result.TrustCenterNDARequest.AutoApproved)
+}

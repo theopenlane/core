@@ -91,19 +91,19 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		expectedSecondaryEmail string
 	}{
 		{
-			name:            "happy path - no approval required, status should be APPROVED",
+			name:            "happy path - no approval required, status should be REQUESTED",
 			input:           noApprovalRequiredRequest,
 			client:          suite.Client.API,
 			ctx:             tcOrg.Owner.UserCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
+			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
 			expectEmailSent: ndaEmail,
 		},
 		{
-			name:                   "happy path - resend request with no approval required, status should be APPROVED",
+			name:                   "happy path - resend request with no approval required, status should be REQUESTED",
 			input:                  noApprovalRequiredRequest,
 			client:                 suite.Client.API,
 			ctx:                    tcOrg.Owner.UserCtx,
-			expectedStatus:         enums.TrustCenterNDARequestStatusApproved,
+			expectedStatus:         enums.TrustCenterNDARequestStatusRequested,
 			expectEmailSent:        ndaEmail,
 			setStatus:              &enums.TrustCenterNDARequestStatusSigned,
 			expectedSecondaryEmail: authEmail,
@@ -159,7 +159,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			},
 			client:          suite.Client.API,
 			ctx:             tcOrg.Owner.UserCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
+			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
 			expectEmailSent: ndaEmail,
 		},
 		{
@@ -593,7 +593,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			},
 			client:          suite.Client.API,
 			ctx:             anonCtx,
-			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
+			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
 			expectEmailSent: true,
 			testResponse:    true,
 		},

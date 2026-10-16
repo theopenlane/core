@@ -119,7 +119,7 @@ func TestNDAAttestationListener(t *testing.T) {
 			trustcenterndarequest.TrustCenterID(trustCenter.ID),
 		).Only(internalCtx)
 		assert.NilError(t, err)
-		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusApproved, bystander.Status))
+		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, bystander.Status))
 		assert.Check(t, bystander.FileID == nil)
 
 		docData, err := suite.Client.DB.DocumentData.Get(internalCtx, docDataID)

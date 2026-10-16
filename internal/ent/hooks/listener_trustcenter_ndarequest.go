@@ -150,28 +150,26 @@ func processApproval(ctx context.Context, client *generated.Client, request *gen
 		return nil, err
 	}
 
-	if !setting.EnableAutoApproval {
+	if !setting.NdaApprovalRequired {
 		return request, nil
 	}
 
 	rules := setting.AutoApprovalRules
 
-	ok := !setting.NdaApprovalRequired
+	ok := false
 
-	status := enums.TrustCenterNDARequestStatusApproved
+	status := enums.TrustCenterNDARequestStatusNeedsApproval
 
-	if setting.NdaApprovalRequired {
+	if setting.EnableAutoApproval {
 		ok, err = evaluateRules(ctx, client, request, rules)
 		if err != nil {
 			return nil, err
 		}
 
-		if !ok {
-			if rules.ManualApprovalOnFailure {
-				status = enums.TrustCenterNDARequestStatusNeedsApproval
-			} else {
-				status = enums.TrustCenterNDARequestStatusDeclined
-			}
+		if ok {
+			status = enums.TrustCenterNDARequestStatusApproved
+		} else if !rules.ManualApprovalOnFailure {
+			status = enums.TrustCenterNDARequestStatusDeclined
 		}
 	}
 

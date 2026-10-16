@@ -78,7 +78,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	approvedRequest, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, ndaRequestID)
 	assert.NilError(t, err)
-	assert.Equal(t, enums.TrustCenterNDARequestStatusApproved, *approvedRequest.TrustCenterNDARequest.Status)
+	assert.Equal(t, enums.TrustCenterNDARequestStatusRequested, *approvedRequest.TrustCenterNDARequest.Status)
 	anonCtx, signer := th.CreateAnonymousTrustCenterContextForSubject(trustCenter.ID, trustCenter.OwnerID, ndaRequestID, email)
 
 	input := testclient.SubmitTrustCenterNDAResponseInput{
