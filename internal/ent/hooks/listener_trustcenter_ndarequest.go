@@ -212,8 +212,8 @@ func evaluateRules(ctx context.Context, client *generated.Client, req *generated
 		return ok, err
 	}
 
-	if isApproved, isBlocked := validateEmailRules(ctx, client, rules, req); isApproved || isBlocked {
-		return isApproved, nil
+	if isBlocked := validateEmailRules(ctx, client, rules, req); isBlocked {
+		return false, nil
 	}
 
 	if ok, err := validateDomainFromNDARequest(ctx, client, req, domain, rules); err != nil || ok {
@@ -223,8 +223,8 @@ func evaluateRules(ctx context.Context, client *generated.Client, req *generated
 	return validateContactDomain(ctx, client, domain, rules)
 }
 
-func validateEmailRules(ctx context.Context, client *generated.Client, setting models.TrustCenterNDARequestSetting,
-	req *generated.TrustCenterNDARequest) (approved, blocked bool) {
+func validateEmailRules(ctx context.Context, client *generated.Client,
+	setting models.TrustCenterNDARequestSetting, req *generated.TrustCenterNDARequest) bool {
 
 	var result *emailverifier.Result
 
@@ -237,32 +237,23 @@ func validateEmailRules(ctx context.Context, client *generated.Client, setting m
 				Str("email", req.Email).
 				Msg("could not verify email")
 
-			return false, false
+			return true
 		}
 	}
 
 	if result == nil || !result.Syntax.Valid {
-		return false, false
+		return true
 	}
 
-	// work only email takes precedence
-	if setting.WorkEmailOnly {
-		// we want to approve only non dispoable and free emails.
-		// at the same time we need to block the next evaluation if it is either free or disposable
-		return !result.Free && !result.Disposable, result.Free || result.Disposable
+	if setting.WorkEmailOnly && (result.Free || result.Disposable) {
+		return true
 	}
 
-	// we want to make sure all disposable addresses are explicitly allowed,
-	// so things like role like accounts at disposable addresses pass the check
-	if result.Disposable {
-		return setting.AllowDisposableEmail, !setting.AllowDisposableEmail
+	if result.Disposable && !setting.AllowDisposableEmail {
+		return true
 	}
 
-	if setting.AllowRoleAccount && result.RoleAccount {
-		return true, false
-	}
-
-	return false, false
+	return result.RoleAccount && !setting.AllowRoleAccount
 }
 
 func validateDomainList(domain string, rules models.TrustCenterNDARequestSetting) (isApproved, didMatch bool) {

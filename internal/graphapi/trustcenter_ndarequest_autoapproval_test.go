@@ -129,6 +129,26 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		status        enums.TrustCenterNDARequestStatus
 	}{
 		{
+			ctx:   tcOrg.Owner.UserCtx,
+			name:  "work email only rule block free contact domain",
+			email: gofakeit.LetterN(12) + "@" + freeDomain,
+			options: models.TrustCenterNDARequestSetting{
+				WorkEmailOnly:            true,
+				ApproveFromContactDomain: true,
+			},
+			status: enums.TrustCenterNDARequestStatusDeclined,
+		},
+		{
+			ctx:   tcOrg.Owner.UserCtx,
+			name:  "work email only rule blocks free domain from existing nda request",
+			email: gofakeit.LetterN(12) + "@" + freeDomain,
+			options: models.TrustCenterNDARequestSetting{
+				WorkEmailOnly:                    true,
+				ApproveFromExistingRequestDomain: true,
+			},
+			status: enums.TrustCenterNDARequestStatusDeclined,
+		},
+		{
 			ctx:   anonCtx,
 			name:  "domain whitelisted",
 			email: gofakeit.LetterN(12) + "@" + allowedDomain,
@@ -142,21 +162,30 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "work email rule approves role account",
+			name:  "work email rule does not bypass role restriction",
 			email: "support@" + allowedDomain,
 			options: models.TrustCenterNDARequestSetting{
 				WorkEmailOnly: true,
 			},
-			status: enums.TrustCenterNDARequestStatusApproved,
+			status: enums.TrustCenterNDARequestStatusDeclined,
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "role account is approved when allowed",
+			name:  "role email rule alone cannot auto approve",
 			email: "sales@" + allowedDomain,
 			options: models.TrustCenterNDARequestSetting{
 				AllowRoleAccount: true,
 			},
-			status: enums.TrustCenterNDARequestStatusApproved,
+			status: enums.TrustCenterNDARequestStatusDeclined,
+		},
+		{
+			ctx:   tcOrg.Owner.UserCtx,
+			name:  "work email restriction alone cannot auto approve",
+			email: gofakeit.LetterN(12) + "@" + companyDomain,
+			options: models.TrustCenterNDARequestSetting{
+				WorkEmailOnly: true,
+			},
+			status: enums.TrustCenterNDARequestStatusDeclined,
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
@@ -237,15 +266,6 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "allow only work email",
-			email: gofakeit.LetterN(12) + "@" + companyDomain,
-			options: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly: true,
-			},
-			status: enums.TrustCenterNDARequestStatusApproved,
-		},
-		{
-			ctx:   tcOrg.Owner.UserCtx,
 			name:  "allowlisted free domain approves before work email restriction",
 			email: gofakeit.LetterN(12) + "@" + freeDomain,
 			options: models.TrustCenterNDARequestSetting{
@@ -292,7 +312,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "organisation contact must be active to be granted access",
+			name:  "inactive contact does not auto approve the request",
 			email: inactiveContactEmail,
 			options: models.TrustCenterNDARequestSetting{
 				ApproveIfContactExists: true,
@@ -336,7 +356,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "contact match approves before othe rules restrictions",
+			name:  "exact contact match approves before email restrictions are evaluated",
 			email: restrictedContactEmail,
 			options: models.TrustCenterNDARequestSetting{
 				AllowDisposableEmail:    true,

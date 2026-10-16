@@ -23,21 +23,38 @@ func TestValidateEmailRestrictions(t *testing.T) {
 	}
 
 	tests := []struct {
-		name     string
-		email    string
-		setting  models.TrustCenterNDARequestSetting
-		approved bool
-		blocked  bool
+		name    string
+		email   string
+		setting models.TrustCenterNDARequestSetting
+		blocked bool
 	}{
 		{
-			name: "invalid email",
+			name:    "invalid email",
+			blocked: true,
 			setting: models.TrustCenterNDARequestSetting{
 				AllowDisposableEmail: true,
 				AllowRoleAccount:     true,
 			},
 		},
 		{
-			name:    "a disposable email without a matching rule",
+			name:  "work email cannot bypass role restriction",
+			email: "support@stripe.com",
+			setting: models.TrustCenterNDARequestSetting{
+				WorkEmailOnly: true,
+			},
+			blocked: true,
+		},
+		{
+			name:  "disposable rules cannot bypass work email restriction",
+			email: "signer@mailinator.com",
+			setting: models.TrustCenterNDARequestSetting{
+				AllowDisposableEmail: true,
+				WorkEmailOnly:        true,
+			},
+			blocked: true,
+		},
+		{
+			name:    "disposable email is blocked when disposable emails are not allowed",
 			email:   "signer@mailinator.com",
 			blocked: true,
 		},
@@ -47,7 +64,6 @@ func TestValidateEmailRestrictions(t *testing.T) {
 			setting: models.TrustCenterNDARequestSetting{
 				AllowDisposableEmail: true,
 			},
-			approved: true,
 		},
 		{
 			name:  "disposable email blocked by work email only",
@@ -66,13 +82,12 @@ func TestValidateEmailRestrictions(t *testing.T) {
 			blocked: true,
 		},
 		{
-			name:  "role account at a disposable domain is allowed when disposables allowed",
+			name:  "role account at a disposable domain is allowed when both types are allowed",
 			email: "support@mailinator.com",
 			setting: models.TrustCenterNDARequestSetting{
 				AllowRoleAccount:     true,
 				AllowDisposableEmail: true,
 			},
-			approved: true,
 		},
 	}
 
@@ -80,8 +95,7 @@ func TestValidateEmailRestrictions(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			req := &generated.TrustCenterNDARequest{Email: tt.email}
 
-			approved, blocked := validateEmailRules(t.Context(), client, tt.setting, req)
-			assert.Equal(t, tt.approved, approved)
+			blocked := validateEmailRules(t.Context(), client, tt.setting, req)
 			assert.Equal(t, tt.blocked, blocked)
 		})
 	}

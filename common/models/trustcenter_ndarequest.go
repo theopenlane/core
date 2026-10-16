@@ -7,7 +7,7 @@ type TrustCenterNDARequestSetting struct {
 	// AllowDisposableEmail enables known disposable emails to be used
 	AllowDisposableEmail bool `json:"allowDisposableEmail"`
 
-	// WorkEmailOnly when true will not auto-approve any free or disposable domains 
+	// WorkEmailOnly when true will not auto-approve any free or disposable domains
 	WorkEmailOnly bool `json:"workEmailOnly"`
 
 	// AllowRoleAccount when false will not auto-approve any known role format like
@@ -31,7 +31,7 @@ type TrustCenterNDARequestSetting struct {
 	ApproveFromContactDomain bool `json:"approveFromContactDomain"`
 
 	// UseDomainBlocklist enables the usage of the domain blocklist to
-	// automatically exclude certain domains, for example to not auto-approve your 
+	// automatically exclude certain domains, for example to not auto-approve your
 	// competitor email domains
 	UseDomainBlocklist bool `json:"useDomainBlocklist"`
 
