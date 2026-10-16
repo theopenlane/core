@@ -1,0 +1,308 @@
+{
+  "hash": "6d3fc809ac64af0be90a5172bda9e4201c638ab2f7d237f8b0262f6ad00ca0fd",
+  "version": "01M4RFP5CJTFKY2P23Q963YD4C",
+  "surface": {
+    "id": "def_01K0OBJECTSTORE00000000001",
+    "credentials": [
+      {
+        "ref": "AWSAccessKeyCredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore/aws-access-key-credential-schema",
+          "$ref": "#/$defs/AWSAccessKeyCredentialSchema",
+          "$defs": {
+            "AWSAccessKeyCredentialSchema": {
+              "properties": {
+                "accessKeyId": {
+                  "type": "string",
+                  "title": "Access Key ID"
+                },
+                "secretAccessKey": {
+                  "type": "string",
+                  "title": "Secret Access Key"
+                },
+                "region": {
+                  "type": "string",
+                  "title": "Region",
+                  "description": "AWS region of the bucket (e.g. us-east-1)"
+                },
+                "bucket": {
+                  "type": "string",
+                  "title": "Bucket",
+                  "description": "Bucket the integration reads from and writes to"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "accessKeyId",
+                "secretAccessKey",
+                "region",
+                "bucket"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ref": "AWSAssumeRoleCredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore/aws-assume-role-credential-schema",
+          "$ref": "#/$defs/AWSAssumeRoleCredentialSchema",
+          "$defs": {
+            "AWSAssumeRoleCredentialSchema": {
+              "properties": {
+                "roleArn": {
+                  "type": "string",
+                  "title": "IAM Role ARN",
+                  "description": "Cross-account role Openlane assumes in your account"
+                },
+                "externalId": {
+                  "type": "string",
+                  "title": "External ID",
+                  "description": "External ID required in the role trust policy",
+                  "generate": true
+                },
+                "region": {
+                  "type": "string",
+                  "title": "Region",
+                  "description": "AWS region of the bucket (e.g. us-east-1)"
+                },
+                "sessionName": {
+                  "type": "string",
+                  "title": "Session Name",
+                  "description": "Optional STS session name override"
+                },
+                "bucket": {
+                  "type": "string",
+                  "title": "Bucket",
+                  "description": "Bucket the integration reads from and writes to"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "roleArn",
+                "externalId",
+                "region",
+                "bucket"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ref": "R2CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore/r2-credential-schema",
+          "$ref": "#/$defs/R2CredentialSchema",
+          "$defs": {
+            "R2CredentialSchema": {
+              "properties": {
+                "accountId": {
+                  "type": "string",
+                  "title": "Account ID",
+                  "description": "Cloudflare account ID that owns the bucket"
+                },
+                "accessKeyId": {
+                  "type": "string",
+                  "title": "Access Key ID"
+                },
+                "secretAccessKey": {
+                  "type": "string",
+                  "title": "Secret Access Key"
+                },
+                "bucket": {
+                  "type": "string",
+                  "title": "Bucket",
+                  "description": "Bucket the integration reads from and writes to"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "accountId",
+                "accessKeyId",
+                "secretAccessKey",
+                "bucket"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ref": "ServiceAccountCredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore/service-account-credential-schema",
+          "$ref": "#/$defs/ServiceAccountCredentialSchema",
+          "$defs": {
+            "ServiceAccountCredentialSchema": {
+              "properties": {
+                "serviceAccountKey": {
+                  "type": "string",
+                  "title": "Service Account Key JSON",
+                  "description": "Service Account JSON used to authenticate on your behalf to Google Cloud Storage"
+                },
+                "projectId": {
+                  "type": "string",
+                  "title": "Project ID",
+                  "description": "Google Cloud project that owns the bucket and is used for quota attribution"
+                },
+                "bucket": {
+                  "type": "string",
+                  "title": "Bucket",
+                  "description": "Bucket the integration reads from and writes to"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "serviceAccountKey",
+                "bucket"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ref": "WorkloadIdentityCredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore/workload-identity-credential-schema",
+          "$ref": "#/$defs/WorkloadIdentityCredentialSchema",
+          "$defs": {
+            "WorkloadIdentityCredentialSchema": {
+              "properties": {
+                "projectNumber": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$",
+                  "title": "GCP Project Number",
+                  "description": "Numeric project number of the GCP project hosting the openlane workload identity pool and provider"
+                },
+                "serviceAccountEmail": {
+                  "type": "string",
+                  "title": "Service Account Email",
+                  "description": "Optional service account to impersonate when accessing the bucket"
+                },
+                "projectId": {
+                  "type": "string",
+                  "title": "Project ID",
+                  "description": "Google Cloud project that owns the bucket and is used for quota attribution"
+                },
+                "bucket": {
+                  "type": "string",
+                  "title": "Bucket",
+                  "description": "Bucket the integration reads from and writes to"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "projectNumber",
+                "bucket"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "provider": {
+                "type": "string",
+                "title": "Provider"
+              },
+              "bucket": {
+                "type": "string",
+                "title": "Bucket"
+              },
+              "region": {
+                "type": "string",
+                "title": "Region"
+              },
+              "projectId": {
+                "type": "string",
+                "title": "Project ID"
+              },
+              "serviceAccountEmail": {
+                "type": "string",
+                "title": "Service Account Email"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "AWSAccessKeyCredentialSchema",
+      "AWSAssumeRoleCredentialSchema",
+      "R2CredentialSchema",
+      "ServiceAccountCredentialSchema",
+      "WorkloadIdentityCredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "ImportRecords",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore/import-records",
+          "$ref": "#/$defs/ImportRecords",
+          "$defs": {
+            "ImportRecords": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "prefix": {
+                  "type": "string",
+                  "title": "Prefix",
+                  "description": "Object key prefix (directory) whose JSON files hold arrays of records"
+                },
+                "schema": {
+                  "type": "string",
+                  "title": "Schema",
+                  "description": "Internal model the records are mapped and upserted into (e.g. Entity)"
+                },
+                "variant": {
+                  "type": "string",
+                  "title": "Variant",
+                  "description": "Mapping variant to apply such as vendor to link imported entities to the vendor entity type"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "prefix",
+                "schema"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "SystemImport"
+      },
+      {
+        "name": "WriteObject"
+      }
+    ]
+  }
+}

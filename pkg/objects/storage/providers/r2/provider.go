@@ -175,7 +175,7 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 			Region:       p.options.Region,
 			ContentType:  opts.ContentType,
 			ProviderType: storagetypes.R2Provider,
-			FullURI:      fmt.Sprintf("r2://%s/%s", p.options.Bucket, objectKey),
+			FullURI:      storage.Scheme(storagetypes.R2Provider) + p.options.Bucket + "/" + objectKey,
 		},
 	}, nil
 }
@@ -320,7 +320,7 @@ func (p *Provider) ListObjects(ctx context.Context, prefix string, limit int) ([
 
 // GetScheme returns the URI scheme for R2
 func (p *Provider) GetScheme() *string {
-	scheme := "r2://"
+	scheme := storage.Scheme(storagetypes.R2Provider)
 
 	return &scheme
 }

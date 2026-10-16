@@ -152,7 +152,6 @@ func (d SystemOwnedMixin) Fields() []ent.Field {
 			),
 		field.String("catalog_"+name+"_key").
 			Optional().
-			Immutable().
 			Comment("the lookup key of the catalog "+name+" this "+name+" was adopted from").
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),

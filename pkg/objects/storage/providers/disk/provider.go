@@ -44,7 +44,7 @@ func NewDiskProvider(options *storage.ProviderOptions) (*Provider, error) {
 
 	disk := &Provider{
 		options: options.Clone(),
-		Scheme:  "file://",
+		Scheme:  storage.Scheme(storagetypes.DiskProvider),
 	}
 
 	disk.proxyPresignEnabled = options.ProxyPresignEnabled
@@ -233,7 +233,7 @@ func (p *Provider) ListObjects(_ context.Context, prefix string, limit int) ([]s
 
 // GetScheme returns the URI scheme for disk
 func (p *Provider) GetScheme() *string {
-	scheme := "file://"
+	scheme := p.Scheme
 
 	return &scheme
 }

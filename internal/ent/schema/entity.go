@@ -65,7 +65,7 @@ func (Entity) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 				entx.IntegrationMappingField(),
-				entx.FieldSourceManaged(),
+				entx.CatalogMatchField(),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -73,31 +73,38 @@ func (Entity) Fields() []ent.Field {
 			Optional().
 			NotEmpty().
 			Annotations(
-				entx.FieldSearchable(),
-				entgql.OrderField("display_name"),
-				entx.FieldSourceManaged(),
+				append([]schema.Annotation{
+					entx.FieldSearchable(),
+					entgql.OrderField("display_name"),
+					entx.CatalogMatchField(),
+				}, entx.CatalogManagedField()...)...,
 			),
 		field.String("description").
 			Comment("An optional description of the entity").
 			Optional().
 			Annotations(
-				entx.FieldSearchable(),
-				entx.IntegrationMappingField(),
-				entx.FieldSourceManaged(),
+				append([]schema.Annotation{
+					entx.FieldSearchable(),
+					entx.IntegrationMappingField(),
+				}, entx.CatalogManagedField()...)...,
 			),
 		field.Strings("domains").
 			Comment("domains associated with the entity").
 			Validate(validator.ValidateDomains()).
 			Annotations(
-				entx.FieldSourceManaged(),
+				append([]schema.Annotation{
+					entx.CatalogMatchField(),
+				}, entx.CatalogManagedField()...)...,
 			).
 			Optional(),
 		field.Strings("aliases").
 			Comment("common matching names that should match with the entity").
 			Annotations(
-				entx.FieldSearchable(),
-				entx.IntegrationMappingField(),
-				entx.FieldSourceManaged(),
+				append([]schema.Annotation{
+					entx.FieldSearchable(),
+					entx.IntegrationMappingField(),
+					entx.CatalogMatchField(),
+				}, entx.CatalogManagedField()...)...,
 			).
 			Optional(),
 		field.String("entity_type_id").
@@ -223,23 +230,20 @@ func (Entity) Fields() []ent.Field {
 			}).
 			Optional().
 			Annotations(
-				entgql.OrderField("status_page_url"),
-				entx.FieldSourceManaged(),
+				append([]schema.Annotation{
+					entgql.OrderField("status_page_url"),
+				}, entx.CatalogManagedField()...)...,
 			),
 		field.Strings("provided_services").
 			Comment("services provided by the entity").
 			Optional().
-			Annotations(
-				entx.FieldSourceManaged(),
-			).
+			Annotations(entx.CatalogManagedField()...).
 			Default([]string{}),
 		field.Strings("links").
 			Comment("external links associated with the entity").
 			Validate(validator.ValidateURLs()).
 			Optional().
-			Annotations(
-				entx.FieldSourceManaged(),
-			).
+			Annotations(entx.CatalogManagedField()...).
 			Default([]string{}),
 		field.String("risk_rating").
 			Comment("the risk rating label for the entity").
@@ -304,9 +308,7 @@ func (Entity) Fields() []ent.Field {
 			MaxLen(urlMaxLen).
 			Validate(validator.ValidateURL()).
 			Optional().
-			Annotations(
-				entx.FieldSourceManaged(),
-			).
+			Annotations(entx.CatalogManagedField()...).
 			Nillable(),
 		field.String("logo_file_id").
 			Comment("The logo file id for the entity").
@@ -321,6 +323,7 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("external_id"),
 				entx.IntegrationMappingField().LookupKey(),
+				entx.CatalogMatchField(),
 			),
 		field.Time("observed_at").
 			Comment("time when this entity was last observed by the source integration").
@@ -439,11 +442,10 @@ func (e Entity) Edges() []ent.Edge {
 func (Entity) Indexes() []ent.Index {
 	return []ent.Index{
 		// names should be unique, but ignore deleted names
-		index.Fields("name", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("name", ownerFieldName).Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("reviewed_by_user_id"),
 		index.Fields("external_id", ownerFieldName).
-			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL AND external_id IS NOT NULL")),
 	}
 }
 

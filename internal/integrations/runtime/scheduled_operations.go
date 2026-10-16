@@ -35,12 +35,26 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 		return 0, err
 	}
 
-	var result types.ScheduledCycleResult
-	if err := jsonx.UnmarshalIfPresent(response, &result); err != nil {
-		return 0, err
+	var processed int
+
+	switch {
+	case operation.IngestHandle != nil:
+		var result operations.IngestResult
+		if err := jsonx.UnmarshalIfPresent(response, &result); err != nil {
+			return 0, err
+		}
+
+		processed = result.Changed
+	default:
+		var result types.ScheduledCycleResult
+		if err := jsonx.UnmarshalIfPresent(response, &result); err != nil {
+			return 0, err
+		}
+
+		processed = result.Processed
 	}
 
-	return result.Processed, nil
+	return processed, nil
 }
 
 // SeedScheduledOperations ensures every Scheduled-policy operation has an active polling loop
