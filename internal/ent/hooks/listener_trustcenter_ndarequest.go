@@ -343,7 +343,7 @@ func createNDARequestMutationNotification(ctx context.Context, client *generated
 		},
 	}
 
-	_, err := client.Notification.Create().SetID(notificationID).SetInput(input).Save(ctx)
+	err := client.Notification.Create().SetID(notificationID).SetInput(input).Exec(ctx)
 	if IsUniqueConstraintError(err) {
 		return nil
 	}
