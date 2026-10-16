@@ -10,84 +10,79 @@ import (
 	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
 
 const ndaApprovalTestDomain = "theopenlane.io"
 
 func TestValidateEmailRestrictions(t *testing.T) {
+	client := &generated.Client{
+		EmailVerifier: &validator.EmailVerifier{
+			Client: emailverifier.NewVerifier(),
+		},
+	}
+
 	tests := []struct {
-		name       string
-		valid      bool
-		disposable bool
-		role       bool
-		free       bool
-		setting    models.TrustCenterNDARequestSetting
-		approved   bool
+		name     string
+		email    string
+		setting  models.TrustCenterNDARequestSetting
+		approved bool
+		blocked  bool
 	}{
 		{
-			name:       "invalid email",
-			disposable: true,
-			role:       true,
+			name: "invalid email",
 			setting: models.TrustCenterNDARequestSetting{
 				AllowDisposableEmail: true,
 				AllowRoleAccount:     true,
 			},
 		},
 		{
-			name:  "work email provided",
-			valid: true,
-			setting: models.TrustCenterNDARequestSetting{
-				WorkEmailOnly: true,
-			},
-			approved: true,
+			name:    "a disposable email without a matching rule",
+			email:   "signer@mailinator.com",
+			blocked: true,
 		},
 		{
-			name:       "disposable email rejected",
-			valid:      true,
-			disposable: true,
-		},
-		{
-			name:       "disposable email allowed",
-			valid:      true,
-			disposable: true,
+			name:  "disposable emails allowed",
+			email: "signer@mailinator.com",
 			setting: models.TrustCenterNDARequestSetting{
 				AllowDisposableEmail: true,
 			},
 			approved: true,
 		},
 		{
-			name:  "role email rejected",
-			valid: true,
-			role:  true,
+			name:  "disposable email blocked by work email only",
+			email: "signer@mailinator.com",
+			setting: models.TrustCenterNDARequestSetting{
+				WorkEmailOnly: true,
+			},
+			blocked: true,
 		},
 		{
-			name:  "role email allowed",
-			valid: true,
-			role:  true,
+			name:  "role account at a disposable domain is blocked",
+			email: "support@mailinator.com",
 			setting: models.TrustCenterNDARequestSetting{
 				AllowRoleAccount: true,
 			},
-			approved: true,
+			blocked: true,
 		},
 		{
-			name:  "free email without a matching rule should not be approved",
-			valid: true,
-			free:  true,
+			name:  "role account at a disposable domain is allowed when disposables allowed",
+			email: "support@mailinator.com",
+			setting: models.TrustCenterNDARequestSetting{
+				AllowRoleAccount:     true,
+				AllowDisposableEmail: true,
+			},
+			approved: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := &emailverifier.Result{
-				Syntax: emailverifier.Syntax{
-					Valid: tt.valid,
-				},
-				Disposable:  tt.disposable,
-				RoleAccount: tt.role,
-				Free:        tt.free,
-			}
+			req := &generated.TrustCenterNDARequest{Email: tt.email}
 
-			assert.Equal(t, tt.approved, validateEmailRules(result, tt.setting))
+			approved, blocked := validateEmailRules(t.Context(), client, tt.setting, req)
+			assert.Equal(t, tt.approved, approved)
+			assert.Equal(t, tt.blocked, blocked)
 		})
 	}
 }

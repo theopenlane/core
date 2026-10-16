@@ -212,64 +212,54 @@ func evaluateRules(ctx context.Context, client *generated.Client, req *generated
 		return ok, err
 	}
 
+	if isApproved, isBlocked := validateEmailRules(ctx, client, rules, req); isApproved || isBlocked {
+		return isApproved, nil
+	}
+
 	if ok, err := validateDomainFromNDARequest(ctx, client, req, domain, rules); err != nil || ok {
 		return ok, err
 	}
 
-	if ok, err := validateContactDomain(ctx, client, domain, rules); err != nil || ok {
-		return ok, err
-	}
-
-	var result *emailverifier.Result
-	if client.EmailVerifier != nil {
-
-		var err error
-		result, err = client.EmailVerifier.Client.Verify(req.Email)
-		if err != nil {
-
-			// we do not want to fail the job. Instead log and return here
-			logx.FromContext(ctx).Error().Err(err).
-				Str("email", req.Email).
-				Msg("could not verify email")
-
-			return false, nil
-		}
-	}
-
-	return validateEmailRules(result, rules), nil
+	return validateContactDomain(ctx, client, domain, rules)
 }
 
-func validateEmailRules(setting models.TrustCenterNDARequestSetting) (bool) {
-	result *emailverifier.Result
+func validateEmailRules(ctx context.Context, client *generated.Client, setting models.TrustCenterNDARequestSetting,
+	req *generated.TrustCenterNDARequest) (approved, blocked bool) {
+
+	var result *emailverifier.Result
+
 	if client.EmailVerifier != nil {
 		var err error
 		result, err = client.EmailVerifier.Client.Verify(req.Email)
 		if err != nil {
-
 			// we do not want to fail the job. Instead log and return here
 			logx.FromContext(ctx).Error().Err(err).
 				Str("email", req.Email).
 				Msg("could not verify email")
 
-			return false
+			return false, false
 		}
 	}
 
-
 	if result == nil || !result.Syntax.Valid {
-		return false
+		return false, false
 	}
 
-	if setting.AllowDisposableEmail && result.Disposable {
-		return true
+	// work only email takes precedence
+	if setting.WorkEmailOnly {
+		// we want to approve only non dispoable and free emails.
+		// at the same time we need to block the next evaluation if it is either free or disposable
+		return !result.Free && !result.Disposable, result.Free || result.Disposable
+	}
+
+	// we want to make sure all disposable addresses are explicitly allowed,
+	// so things like role like accounts at disposable addresses pass the check
+	if result.Disposable {
+		return setting.AllowDisposableEmail, !setting.AllowDisposableEmail
 	}
 
 	if setting.AllowRoleAccount && result.RoleAccount {
-		return true
-	}
-
-	if setting.WorkEmailOnly && !result.Free && !result.Disposable {
-		return true
+		return true, false
 	}
 
 	return false, false
