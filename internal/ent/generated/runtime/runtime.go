@@ -72,6 +72,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -6081,6 +6082,59 @@ func init() {
 	remediationDescID := remediationMixinFields4[0].Descriptor()
 	// remediation.DefaultID holds the default value on creation for the id field.
 	remediation.DefaultID = remediationDescID.Default.(func() string)
+	reportMixin := schema.Report{}.Mixin()
+	reportMixinHooks0 := reportMixin[0].Hooks()
+	reportMixinHooks1 := reportMixin[1].Hooks()
+	reportMixinHooks3 := reportMixin[3].Hooks()
+	reportMixinHooks6 := reportMixin[6].Hooks()
+	reportHooks := schema.Report{}.Hooks()
+	report.Hooks[0] = reportMixinHooks0[0]
+	report.Hooks[1] = reportMixinHooks1[0]
+	report.Hooks[2] = reportMixinHooks3[0]
+	report.Hooks[3] = reportMixinHooks6[0]
+	report.Hooks[4] = reportHooks[0]
+	reportMixinInters3 := reportMixin[3].Interceptors()
+	reportMixinInters6 := reportMixin[6].Interceptors()
+	report.Interceptors[0] = reportMixinInters3[0]
+	report.Interceptors[1] = reportMixinInters6[0]
+	reportMixinFields0 := reportMixin[0].Fields()
+	_ = reportMixinFields0
+	reportMixinFields4 := reportMixin[4].Fields()
+	_ = reportMixinFields4
+	reportMixinFields6 := reportMixin[6].Fields()
+	_ = reportMixinFields6
+	reportFields := schema.Report{}.Fields()
+	_ = reportFields
+	// reportDescCreatedAt is the schema descriptor for created_at field.
+	reportDescCreatedAt := reportMixinFields0[0].Descriptor()
+	// report.DefaultCreatedAt holds the default value on creation for the created_at field.
+	report.DefaultCreatedAt = reportDescCreatedAt.Default.(func() time.Time)
+	// reportDescUpdatedAt is the schema descriptor for updated_at field.
+	reportDescUpdatedAt := reportMixinFields0[1].Descriptor()
+	// report.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	report.DefaultUpdatedAt = reportDescUpdatedAt.Default.(func() time.Time)
+	// report.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	report.UpdateDefaultUpdatedAt = reportDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// reportDescOwnerID is the schema descriptor for owner_id field.
+	reportDescOwnerID := reportMixinFields6[0].Descriptor()
+	// report.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	report.OwnerIDValidator = reportDescOwnerID.Validators[0].(func(string) error)
+	// reportDescName is the schema descriptor for name field.
+	reportDescName := reportFields[0].Descriptor()
+	// report.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	report.NameValidator = reportDescName.Validators[0].(func(string) error)
+	// reportDescQuery is the schema descriptor for query field.
+	reportDescQuery := reportFields[1].Descriptor()
+	// report.QueryValidator is a validator for the "query" field. It is called by the builders before save.
+	report.QueryValidator = reportDescQuery.Validators[0].(func(string) error)
+	// reportDescUserID is the schema descriptor for user_id field.
+	reportDescUserID := reportFields[5].Descriptor()
+	// report.UserIDValidator is a validator for the "user_id" field. It is called by the builders before save.
+	report.UserIDValidator = reportDescUserID.Validators[0].(func(string) error)
+	// reportDescID is the schema descriptor for id field.
+	reportDescID := reportMixinFields4[0].Descriptor()
+	// report.DefaultID holds the default value on creation for the id field.
+	report.DefaultID = reportDescID.Default.(func() string)
 	reviewMixin := schema.Review{}.Mixin()
 	review.Policy = privacy.NewPolicies(reviewMixin[9], schema.Review{})
 	review.Hooks[0] = func(next ent.Mutator) ent.Mutator {

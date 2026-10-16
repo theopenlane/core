@@ -6557,6 +6557,56 @@ var (
 			},
 		},
 	}
+	// ReportsColumns holds the columns for the "reports" table.
+	ReportsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "query", Type: field.TypeString, Size: 2147483647},
+		{Name: "variables", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"DRAFT", "SAVED"}, Default: "DRAFT"},
+		{Name: "visibility", Type: field.TypeEnum, Enums: []string{"PRIVATE", "RESTRICTED", "ORGANIZATION"}, Default: "PRIVATE"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "user_id", Type: field.TypeString},
+	}
+	// ReportsTable holds the schema information for the "reports" table.
+	ReportsTable = &schema.Table{
+		Name:       "reports",
+		Columns:    ReportsColumns,
+		PrimaryKey: []*schema.Column{ReportsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "reports_organizations_reports",
+				Columns:    []*schema.Column{ReportsColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reports_users_reports",
+				Columns:    []*schema.Column{ReportsColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "report_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ReportsColumns[14]},
+			},
+			{
+				Name:    "report_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ReportsColumns[13]},
+			},
+		},
+	}
 	// ReviewsColumns holds the columns for the "reviews" table.
 	ReviewsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -15828,6 +15878,7 @@ var (
 		ProgramsTable,
 		ProgramMembershipsTable,
 		RemediationsTable,
+		ReportsTable,
 		ReviewsTable,
 		RisksTable,
 		SLADefinitionsTable,
@@ -16508,6 +16559,8 @@ func init() {
 	RemediationsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	RemediationsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	RemediationsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
+	ReportsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ReportsTable.ForeignKeys[1].RefTable = UsersTable
 	ReviewsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ReviewsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	ReviewsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable

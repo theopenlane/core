@@ -248,6 +248,7 @@ func (o Organization) Edges() []ent.Edge {
 		hiddenOwnerEdge(o, SLADefinition{}),
 		hiddenOwnerEdge(o, Subprocessor{}),
 		hiddenOwnerEdge(o, Export{}),
+		hiddenOwnerEdge(o, Report{}),
 		hiddenOwnerEdge(o, TrustCenterWatermarkConfig{}),
 		defaultEdgeToWithPagination(o, ImpersonationEvent{}),
 		hiddenOwnerEdge(o, Assessment{}),

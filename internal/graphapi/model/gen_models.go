@@ -2828,6 +2828,24 @@ type RemediationUpdatePayload struct {
 	Remediation *generated.Remediation `json:"remediation"`
 }
 
+// Return response for createReport mutation
+type ReportCreatePayload struct {
+	// Created report
+	Report *generated.Report `json:"report"`
+}
+
+// Return response for deleteReport mutation
+type ReportDeletePayload struct {
+	// Deleted report ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateReport mutation
+type ReportUpdatePayload struct {
+	// Updated report
+	Report *generated.Report `json:"report"`
+}
+
 // Input for resendCampaignIncompleteTargets mutation
 type ResendCampaignIncompleteInput struct {
 	// ID of the campaign
@@ -3069,6 +3087,7 @@ type SearchResults struct {
 	Procedures            *generated.ProcedureConnection            `json:"procedures,omitempty"`
 	Programs              *generated.ProgramConnection              `json:"programs,omitempty"`
 	Remediations          *generated.RemediationConnection          `json:"remediations,omitempty"`
+	Reports               *generated.ReportConnection               `json:"reports,omitempty"`
 	Reviews               *generated.ReviewConnection               `json:"reviews,omitempty"`
 	Risks                 *generated.RiskConnection                 `json:"risks,omitempty"`
 	Scans                 *generated.ScanConnection                 `json:"scans,omitempty"`

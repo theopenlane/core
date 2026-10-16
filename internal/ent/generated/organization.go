@@ -326,6 +326,8 @@ type OrganizationEdges struct {
 	Subprocessors []*Subprocessor `json:"subprocessors,omitempty"`
 	// Exports holds the value of the exports edge.
 	Exports []*Export `json:"exports,omitempty"`
+	// Reports holds the value of the reports edge.
+	Reports []*Report `json:"reports,omitempty"`
 	// TrustCenterWatermarkConfigs holds the value of the trust_center_watermark_configs edge.
 	TrustCenterWatermarkConfigs []*TrustCenterWatermarkConfig `json:"trust_center_watermark_configs,omitempty"`
 	// ImpersonationEvents holds the value of the impersonation_events edge.
@@ -382,7 +384,7 @@ type OrganizationEdges struct {
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [158]bool
+	loadedTypes [159]bool
 	// totalCount holds the count of the edges above.
 	totalCount [86]map[string]int
 
@@ -514,6 +516,7 @@ type OrganizationEdges struct {
 	namedSLADefinitions                     map[string][]*SLADefinition
 	namedSubprocessors                      map[string][]*Subprocessor
 	namedExports                            map[string][]*Export
+	namedReports                            map[string][]*Report
 	namedTrustCenterWatermarkConfigs        map[string][]*TrustCenterWatermarkConfig
 	namedImpersonationEvents                map[string][]*ImpersonationEvent
 	namedAssessments                        map[string][]*Assessment
@@ -1728,10 +1731,19 @@ func (e OrganizationEdges) ExportsOrErr() ([]*Export, error) {
 	return nil, &NotLoadedError{edge: "exports"}
 }
 
+// ReportsOrErr returns the Reports value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ReportsOrErr() ([]*Report, error) {
+	if e.loadedTypes[131] {
+		return e.Reports, nil
+	}
+	return nil, &NotLoadedError{edge: "reports"}
+}
+
 // TrustCenterWatermarkConfigsOrErr returns the TrustCenterWatermarkConfigs value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) TrustCenterWatermarkConfigsOrErr() ([]*TrustCenterWatermarkConfig, error) {
-	if e.loadedTypes[131] {
+	if e.loadedTypes[132] {
 		return e.TrustCenterWatermarkConfigs, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_watermark_configs"}
@@ -1740,7 +1752,7 @@ func (e OrganizationEdges) TrustCenterWatermarkConfigsOrErr() ([]*TrustCenterWat
 // ImpersonationEventsOrErr returns the ImpersonationEvents value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) ImpersonationEventsOrErr() ([]*ImpersonationEvent, error) {
-	if e.loadedTypes[132] {
+	if e.loadedTypes[133] {
 		return e.ImpersonationEvents, nil
 	}
 	return nil, &NotLoadedError{edge: "impersonation_events"}
@@ -1749,7 +1761,7 @@ func (e OrganizationEdges) ImpersonationEventsOrErr() ([]*ImpersonationEvent, er
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[133] {
+	if e.loadedTypes[134] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
@@ -1758,7 +1770,7 @@ func (e OrganizationEdges) AssessmentsOrErr() ([]*Assessment, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[134] {
+	if e.loadedTypes[135] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -1767,7 +1779,7 @@ func (e OrganizationEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, er
 // AssessmentPoliciesOrErr returns the AssessmentPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) AssessmentPoliciesOrErr() ([]*AssessmentPolicy, error) {
-	if e.loadedTypes[135] {
+	if e.loadedTypes[136] {
 		return e.AssessmentPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_policies"}
@@ -1776,7 +1788,7 @@ func (e OrganizationEdges) AssessmentPoliciesOrErr() ([]*AssessmentPolicy, error
 // CustomTypeEnumsOrErr returns the CustomTypeEnums value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) CustomTypeEnumsOrErr() ([]*CustomTypeEnum, error) {
-	if e.loadedTypes[136] {
+	if e.loadedTypes[137] {
 		return e.CustomTypeEnums, nil
 	}
 	return nil, &NotLoadedError{edge: "custom_type_enums"}
@@ -1785,7 +1797,7 @@ func (e OrganizationEdges) CustomTypeEnumsOrErr() ([]*CustomTypeEnum, error) {
 // TagDefinitionsOrErr returns the TagDefinitions value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) TagDefinitionsOrErr() ([]*TagDefinition, error) {
-	if e.loadedTypes[137] {
+	if e.loadedTypes[138] {
 		return e.TagDefinitions, nil
 	}
 	return nil, &NotLoadedError{edge: "tag_definitions"}
@@ -1794,7 +1806,7 @@ func (e OrganizationEdges) TagDefinitionsOrErr() ([]*TagDefinition, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[138] {
+	if e.loadedTypes[139] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -1803,7 +1815,7 @@ func (e OrganizationEdges) RemediationsOrErr() ([]*Remediation, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[139] {
+	if e.loadedTypes[140] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -1812,7 +1824,7 @@ func (e OrganizationEdges) FindingsOrErr() ([]*Finding, error) {
 // FindingControlsOrErr returns the FindingControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) FindingControlsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[140] {
+	if e.loadedTypes[141] {
 		return e.FindingControls, nil
 	}
 	return nil, &NotLoadedError{edge: "finding_controls"}
@@ -1821,7 +1833,7 @@ func (e OrganizationEdges) FindingControlsOrErr() ([]*FindingControl, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[141] {
+	if e.loadedTypes[142] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -1830,7 +1842,7 @@ func (e OrganizationEdges) ReviewsOrErr() ([]*Review, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[142] {
+	if e.loadedTypes[143] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -1839,7 +1851,7 @@ func (e OrganizationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // NotificationsOrErr returns the Notifications value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) NotificationsOrErr() ([]*Notification, error) {
-	if e.loadedTypes[143] {
+	if e.loadedTypes[144] {
 		return e.Notifications, nil
 	}
 	return nil, &NotLoadedError{edge: "notifications"}
@@ -1848,7 +1860,7 @@ func (e OrganizationEdges) NotificationsOrErr() ([]*Notification, error) {
 // WorkflowDefinitionsOrErr returns the WorkflowDefinitions value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowDefinitionsOrErr() ([]*WorkflowDefinition, error) {
-	if e.loadedTypes[144] {
+	if e.loadedTypes[145] {
 		return e.WorkflowDefinitions, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_definitions"}
@@ -1857,7 +1869,7 @@ func (e OrganizationEdges) WorkflowDefinitionsOrErr() ([]*WorkflowDefinition, er
 // WorkflowInstancesOrErr returns the WorkflowInstances value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowInstancesOrErr() ([]*WorkflowInstance, error) {
-	if e.loadedTypes[145] {
+	if e.loadedTypes[146] {
 		return e.WorkflowInstances, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_instances"}
@@ -1866,7 +1878,7 @@ func (e OrganizationEdges) WorkflowInstancesOrErr() ([]*WorkflowInstance, error)
 // WorkflowEventsOrErr returns the WorkflowEvents value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
-	if e.loadedTypes[146] {
+	if e.loadedTypes[147] {
 		return e.WorkflowEvents, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_events"}
@@ -1875,7 +1887,7 @@ func (e OrganizationEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
 // WorkflowAssignmentsOrErr returns the WorkflowAssignments value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowAssignmentsOrErr() ([]*WorkflowAssignment, error) {
-	if e.loadedTypes[147] {
+	if e.loadedTypes[148] {
 		return e.WorkflowAssignments, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_assignments"}
@@ -1884,7 +1896,7 @@ func (e OrganizationEdges) WorkflowAssignmentsOrErr() ([]*WorkflowAssignment, er
 // WorkflowAssignmentTargetsOrErr returns the WorkflowAssignmentTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowAssignmentTargetsOrErr() ([]*WorkflowAssignmentTarget, error) {
-	if e.loadedTypes[148] {
+	if e.loadedTypes[149] {
 		return e.WorkflowAssignmentTargets, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_assignment_targets"}
@@ -1893,7 +1905,7 @@ func (e OrganizationEdges) WorkflowAssignmentTargetsOrErr() ([]*WorkflowAssignme
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[149] {
+	if e.loadedTypes[150] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -1902,7 +1914,7 @@ func (e OrganizationEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, erro
 // WorkflowProposalsOrErr returns the WorkflowProposals value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowProposalsOrErr() ([]*WorkflowProposal, error) {
-	if e.loadedTypes[150] {
+	if e.loadedTypes[151] {
 		return e.WorkflowProposals, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_proposals"}
@@ -1911,7 +1923,7 @@ func (e OrganizationEdges) WorkflowProposalsOrErr() ([]*WorkflowProposal, error)
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[151] {
+	if e.loadedTypes[152] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -1920,7 +1932,7 @@ func (e OrganizationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error)
 // DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[152] {
+	if e.loadedTypes[153] {
 		return e.DirectoryGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_groups"}
@@ -1929,7 +1941,7 @@ func (e OrganizationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
 // DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[153] {
+	if e.loadedTypes[154] {
 		return e.DirectoryMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_memberships"}
@@ -1938,7 +1950,7 @@ func (e OrganizationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, 
 // DiscussionsOrErr returns the Discussions value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DiscussionsOrErr() ([]*Discussion, error) {
-	if e.loadedTypes[154] {
+	if e.loadedTypes[155] {
 		return e.Discussions, nil
 	}
 	return nil, &NotLoadedError{edge: "discussions"}
@@ -1947,7 +1959,7 @@ func (e OrganizationEdges) DiscussionsOrErr() ([]*Discussion, error) {
 // VendorScoringConfigsOrErr returns the VendorScoringConfigs value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) VendorScoringConfigsOrErr() ([]*VendorScoringConfig, error) {
-	if e.loadedTypes[155] {
+	if e.loadedTypes[156] {
 		return e.VendorScoringConfigs, nil
 	}
 	return nil, &NotLoadedError{edge: "vendor_scoring_configs"}
@@ -1956,7 +1968,7 @@ func (e OrganizationEdges) VendorScoringConfigsOrErr() ([]*VendorScoringConfig, 
 // VendorRiskScoresOrErr returns the VendorRiskScores value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) VendorRiskScoresOrErr() ([]*VendorRiskScore, error) {
-	if e.loadedTypes[156] {
+	if e.loadedTypes[157] {
 		return e.VendorRiskScores, nil
 	}
 	return nil, &NotLoadedError{edge: "vendor_risk_scores"}
@@ -1965,7 +1977,7 @@ func (e OrganizationEdges) VendorRiskScoresOrErr() ([]*VendorRiskScore, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[157] {
+	if e.loadedTypes[158] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -2786,6 +2798,11 @@ func (_m *Organization) QuerySubprocessors() *SubprocessorQuery {
 // QueryExports queries the "exports" edge of the Organization entity.
 func (_m *Organization) QueryExports() *ExportQuery {
 	return NewOrganizationClient(_m.config).QueryExports(_m)
+}
+
+// QueryReports queries the "reports" edge of the Organization entity.
+func (_m *Organization) QueryReports() *ReportQuery {
+	return NewOrganizationClient(_m.config).QueryReports(_m)
 }
 
 // QueryTrustCenterWatermarkConfigs queries the "trust_center_watermark_configs" edge of the Organization entity.
@@ -6082,6 +6099,30 @@ func (_m *Organization) appendNamedExports(name string, edges ...*Export) {
 		_m.Edges.namedExports[name] = []*Export{}
 	} else {
 		_m.Edges.namedExports[name] = append(_m.Edges.namedExports[name], edges...)
+	}
+}
+
+// NamedReports returns the Reports named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedReports(name string) ([]*Report, error) {
+	if _m.Edges.namedReports == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReports[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedReports(name string, edges ...*Report) {
+	if _m.Edges.namedReports == nil {
+		_m.Edges.namedReports = make(map[string][]*Report)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReports[name] = []*Report{}
+	} else {
+		_m.Edges.namedReports[name] = append(_m.Edges.namedReports[name], edges...)
 	}
 }
 

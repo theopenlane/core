@@ -61,6 +61,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -179,6 +180,8 @@ type Client struct {
 	ProgramMembershipHistory *ProgramMembershipHistoryClient
 	// RemediationHistory is the client for interacting with the RemediationHistory builders.
 	RemediationHistory *RemediationHistoryClient
+	// ReportHistory is the client for interacting with the ReportHistory builders.
+	ReportHistory *ReportHistoryClient
 	// ReviewHistory is the client for interacting with the ReviewHistory builders.
 	ReviewHistory *ReviewHistoryClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
@@ -289,6 +292,7 @@ func (c *Client) init() {
 	c.ProgramHistory = NewProgramHistoryClient(c.config)
 	c.ProgramMembershipHistory = NewProgramMembershipHistoryClient(c.config)
 	c.RemediationHistory = NewRemediationHistoryClient(c.config)
+	c.ReportHistory = NewReportHistoryClient(c.config)
 	c.ReviewHistory = NewReviewHistoryClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
 	c.SLADefinitionHistory = NewSLADefinitionHistoryClient(c.config)
@@ -466,6 +470,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ProgramHistory:                    NewProgramHistoryClient(cfg),
 		ProgramMembershipHistory:          NewProgramMembershipHistoryClient(cfg),
 		RemediationHistory:                NewRemediationHistoryClient(cfg),
+		ReportHistory:                     NewReportHistoryClient(cfg),
 		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
 		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
@@ -552,6 +557,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ProgramHistory:                    NewProgramHistoryClient(cfg),
 		ProgramMembershipHistory:          NewProgramMembershipHistoryClient(cfg),
 		RemediationHistory:                NewRemediationHistoryClient(cfg),
+		ReportHistory:                     NewReportHistoryClient(cfg),
 		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
 		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
@@ -620,15 +626,15 @@ func (c *Client) Use(hooks ...Hook) {
 		c.NotificationPreferenceHistory, c.NotificationTemplateHistory,
 		c.OrgMembershipHistory, c.OrganizationHistory, c.OrganizationSettingHistory,
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
-		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
-		c.RiskHistory, c.SLADefinitionHistory, c.StandardHistory, c.SubcontrolHistory,
-		c.SubprocessorHistory, c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
-		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
-		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
-		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
-		c.UserHistory, c.UserSettingHistory, c.VendorRiskScoreHistory,
-		c.VendorScoringConfigHistory, c.VulnerabilityHistory,
+		c.ProgramMembershipHistory, c.RemediationHistory, c.ReportHistory,
+		c.ReviewHistory, c.RiskHistory, c.SLADefinitionHistory, c.StandardHistory,
+		c.SubcontrolHistory, c.SubprocessorHistory, c.SystemDetailHistory,
+		c.TaskHistory, c.TemplateHistory, c.TrustCenterComplianceHistory,
+		c.TrustCenterDocHistory, c.TrustCenterEntityHistory, c.TrustCenterFAQHistory,
+		c.TrustCenterHistory, c.TrustCenterNDARequestHistory,
+		c.TrustCenterSettingHistory, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfigHistory, c.UserHistory, c.UserSettingHistory,
+		c.VendorRiskScoreHistory, c.VendorScoringConfigHistory, c.VulnerabilityHistory,
 		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
 		c.WorkflowDefinitionHistory,
 	} {
@@ -653,15 +659,15 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.NotificationPreferenceHistory, c.NotificationTemplateHistory,
 		c.OrgMembershipHistory, c.OrganizationHistory, c.OrganizationSettingHistory,
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
-		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
-		c.RiskHistory, c.SLADefinitionHistory, c.StandardHistory, c.SubcontrolHistory,
-		c.SubprocessorHistory, c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
-		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
-		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
-		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
-		c.UserHistory, c.UserSettingHistory, c.VendorRiskScoreHistory,
-		c.VendorScoringConfigHistory, c.VulnerabilityHistory,
+		c.ProgramMembershipHistory, c.RemediationHistory, c.ReportHistory,
+		c.ReviewHistory, c.RiskHistory, c.SLADefinitionHistory, c.StandardHistory,
+		c.SubcontrolHistory, c.SubprocessorHistory, c.SystemDetailHistory,
+		c.TaskHistory, c.TemplateHistory, c.TrustCenterComplianceHistory,
+		c.TrustCenterDocHistory, c.TrustCenterEntityHistory, c.TrustCenterFAQHistory,
+		c.TrustCenterHistory, c.TrustCenterNDARequestHistory,
+		c.TrustCenterSettingHistory, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfigHistory, c.UserHistory, c.UserSettingHistory,
+		c.VendorRiskScoreHistory, c.VendorScoringConfigHistory, c.VulnerabilityHistory,
 		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
 		c.WorkflowDefinitionHistory,
 	} {
@@ -806,6 +812,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ProgramMembershipHistory.mutate(ctx, m)
 	case *RemediationHistoryMutation:
 		return c.RemediationHistory.mutate(ctx, m)
+	case *ReportHistoryMutation:
+		return c.ReportHistory.mutate(ctx, m)
 	case *ReviewHistoryMutation:
 		return c.ReviewHistory.mutate(ctx, m)
 	case *RiskHistoryMutation:
@@ -6398,6 +6406,139 @@ func (c *RemediationHistoryClient) mutate(ctx context.Context, m *RemediationHis
 	}
 }
 
+// ReportHistoryClient is a client for the ReportHistory schema.
+type ReportHistoryClient struct {
+	config
+}
+
+// NewReportHistoryClient returns a client for the ReportHistory from the given config.
+func NewReportHistoryClient(c config) *ReportHistoryClient {
+	return &ReportHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `reporthistory.Hooks(f(g(h())))`.
+func (c *ReportHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ReportHistory = append(c.hooks.ReportHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `reporthistory.Intercept(f(g(h())))`.
+func (c *ReportHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ReportHistory = append(c.inters.ReportHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ReportHistory entity.
+func (c *ReportHistoryClient) Create() *ReportHistoryCreate {
+	mutation := newReportHistoryMutation(c.config, OpCreate)
+	return &ReportHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ReportHistory entities.
+func (c *ReportHistoryClient) CreateBulk(builders ...*ReportHistoryCreate) *ReportHistoryCreateBulk {
+	return &ReportHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ReportHistoryClient) MapCreateBulk(slice any, setFunc func(*ReportHistoryCreate, int)) *ReportHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ReportHistoryCreateBulk{err: fmt.Errorf("calling to ReportHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ReportHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ReportHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ReportHistory.
+func (c *ReportHistoryClient) Update() *ReportHistoryUpdate {
+	mutation := newReportHistoryMutation(c.config, OpUpdate)
+	return &ReportHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ReportHistoryClient) UpdateOne(_m *ReportHistory) *ReportHistoryUpdateOne {
+	mutation := newReportHistoryMutation(c.config, OpUpdateOne, withReportHistory(_m))
+	return &ReportHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ReportHistoryClient) UpdateOneID(id string) *ReportHistoryUpdateOne {
+	mutation := newReportHistoryMutation(c.config, OpUpdateOne, withReportHistoryID(id))
+	return &ReportHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ReportHistory.
+func (c *ReportHistoryClient) Delete() *ReportHistoryDelete {
+	mutation := newReportHistoryMutation(c.config, OpDelete)
+	return &ReportHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ReportHistoryClient) DeleteOne(_m *ReportHistory) *ReportHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ReportHistoryClient) DeleteOneID(id string) *ReportHistoryDeleteOne {
+	builder := c.Delete().Where(reporthistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ReportHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ReportHistory.
+func (c *ReportHistoryClient) Query() *ReportHistoryQuery {
+	return &ReportHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeReportHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ReportHistory entity by its id.
+func (c *ReportHistoryClient) Get(ctx context.Context, id string) (*ReportHistory, error) {
+	return c.Query().Where(reporthistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ReportHistoryClient) GetX(ctx context.Context, id string) *ReportHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ReportHistoryClient) Hooks() []Hook {
+	return c.hooks.ReportHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *ReportHistoryClient) Interceptors() []Interceptor {
+	return c.inters.ReportHistory
+}
+
+func (c *ReportHistoryClient) mutate(ctx context.Context, m *ReportHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ReportHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ReportHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ReportHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ReportHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown ReportHistory mutation op: %q", m.Op())
+	}
+}
+
 // ReviewHistoryClient is a client for the ReviewHistory schema.
 type ReviewHistoryClient struct {
 	config
@@ -9923,15 +10064,16 @@ type (
 		NotificationPreferenceHistory, NotificationTemplateHistory,
 		OrgMembershipHistory, OrganizationHistory, OrganizationSettingHistory,
 		PlatformHistory, ProcedureHistory, ProgramHistory, ProgramMembershipHistory,
-		RemediationHistory, ReviewHistory, RiskHistory, SLADefinitionHistory,
-		StandardHistory, SubcontrolHistory, SubprocessorHistory, SystemDetailHistory,
-		TaskHistory, TemplateHistory, TrustCenterComplianceHistory,
-		TrustCenterDocHistory, TrustCenterEntityHistory, TrustCenterFAQHistory,
-		TrustCenterHistory, TrustCenterNDARequestHistory, TrustCenterSettingHistory,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
-		UserSettingHistory, VendorRiskScoreHistory, VendorScoringConfigHistory,
-		VulnerabilityHistory, WorkflowAssignmentHistory,
-		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory []ent.Hook
+		RemediationHistory, ReportHistory, ReviewHistory, RiskHistory,
+		SLADefinitionHistory, StandardHistory, SubcontrolHistory, SubprocessorHistory,
+		SystemDetailHistory, TaskHistory, TemplateHistory,
+		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
+		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
+		VendorRiskScoreHistory, VendorScoringConfigHistory, VulnerabilityHistory,
+		WorkflowAssignmentHistory, WorkflowAssignmentTargetHistory,
+		WorkflowDefinitionHistory []ent.Hook
 	}
 	inters struct {
 		ActionPlanHistory, AssessmentHistory, AssessmentPolicyHistory,
@@ -9946,15 +10088,16 @@ type (
 		NotificationPreferenceHistory, NotificationTemplateHistory,
 		OrgMembershipHistory, OrganizationHistory, OrganizationSettingHistory,
 		PlatformHistory, ProcedureHistory, ProgramHistory, ProgramMembershipHistory,
-		RemediationHistory, ReviewHistory, RiskHistory, SLADefinitionHistory,
-		StandardHistory, SubcontrolHistory, SubprocessorHistory, SystemDetailHistory,
-		TaskHistory, TemplateHistory, TrustCenterComplianceHistory,
-		TrustCenterDocHistory, TrustCenterEntityHistory, TrustCenterFAQHistory,
-		TrustCenterHistory, TrustCenterNDARequestHistory, TrustCenterSettingHistory,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
-		UserSettingHistory, VendorRiskScoreHistory, VendorScoringConfigHistory,
-		VulnerabilityHistory, WorkflowAssignmentHistory,
-		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory []ent.Interceptor
+		RemediationHistory, ReportHistory, ReviewHistory, RiskHistory,
+		SLADefinitionHistory, StandardHistory, SubcontrolHistory, SubprocessorHistory,
+		SystemDetailHistory, TaskHistory, TemplateHistory,
+		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
+		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
+		VendorRiskScoreHistory, VendorScoringConfigHistory, VulnerabilityHistory,
+		WorkflowAssignmentHistory, WorkflowAssignmentTargetHistory,
+		WorkflowDefinitionHistory []ent.Interceptor
 	}
 )
 

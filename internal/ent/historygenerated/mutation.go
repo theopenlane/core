@@ -57,6 +57,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -136,6 +137,7 @@ const (
 	TypeProgramHistory                    = "ProgramHistory"
 	TypeProgramMembershipHistory          = "ProgramMembershipHistory"
 	TypeRemediationHistory                = "RemediationHistory"
+	TypeReportHistory                     = "ReportHistory"
 	TypeReviewHistory                     = "ReviewHistory"
 	TypeRiskHistory                       = "RiskHistory"
 	TypeSLADefinitionHistory              = "SLADefinitionHistory"
@@ -106691,6 +106693,1395 @@ func (m *RemediationHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *RemediationHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown RemediationHistory edge %s", name)
+}
+
+// ReportHistoryMutation represents an operation that mutates the ReportHistory nodes in the graph.
+type ReportHistoryMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	history_time            *time.Time
+	ref                     *string
+	operation               *history.OpType
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	deleted_at              *time.Time
+	deleted_by              *string
+	owner_id                *string
+	name                    *string
+	query                   *string
+	variables               *map[string]interface{}
+	status                  *enums.ReportStatus
+	visibility              *enums.ReportVisibility
+	user_id                 *string
+	clearedFields           map[string]struct{}
+	done                    bool
+	oldValue                func(context.Context) (*ReportHistory, error)
+	predicates              []predicate.ReportHistory
+}
+
+var _ ent.Mutation = (*ReportHistoryMutation)(nil)
+
+// reporthistoryOption allows management of the mutation configuration using functional options.
+type reporthistoryOption func(*ReportHistoryMutation)
+
+// newReportHistoryMutation creates new mutation for the ReportHistory entity.
+func newReportHistoryMutation(c config, op Op, opts ...reporthistoryOption) *ReportHistoryMutation {
+	m := &ReportHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeReportHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withReportHistoryID sets the ID field of the mutation.
+func withReportHistoryID(id string) reporthistoryOption {
+	return func(m *ReportHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ReportHistory
+		)
+		m.oldValue = func(ctx context.Context) (*ReportHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ReportHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withReportHistory sets the old ReportHistory of the mutation.
+func withReportHistory(node *ReportHistory) reporthistoryOption {
+	return func(m *ReportHistoryMutation) {
+		m.oldValue = func(context.Context) (*ReportHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ReportHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ReportHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("historygenerated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ReportHistory entities.
+func (m *ReportHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ReportHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ReportHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ReportHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *ReportHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *ReportHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *ReportHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *ReportHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *ReportHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *ReportHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[reporthistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *ReportHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *ReportHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, reporthistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *ReportHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *ReportHistoryMutation) Operation() (r history.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *ReportHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ReportHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ReportHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ReportHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[reporthistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ReportHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ReportHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, reporthistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ReportHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ReportHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ReportHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[reporthistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ReportHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ReportHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, reporthistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ReportHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ReportHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ReportHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[reporthistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ReportHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ReportHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, reporthistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ReportHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ReportHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ReportHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[reporthistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ReportHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ReportHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, reporthistory.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *ReportHistoryMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *ReportHistoryMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *ReportHistoryMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[reporthistory.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *ReportHistoryMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *ReportHistoryMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, reporthistory.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ReportHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ReportHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ReportHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[reporthistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ReportHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ReportHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, reporthistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ReportHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ReportHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ReportHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[reporthistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ReportHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ReportHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, reporthistory.FieldDeletedBy)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *ReportHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *ReportHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ReportHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[reporthistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ReportHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *ReportHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, reporthistory.FieldOwnerID)
+}
+
+// SetName sets the "name" field.
+func (m *ReportHistoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ReportHistoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ReportHistoryMutation) ResetName() {
+	m.name = nil
+}
+
+// SetQuery sets the "query" field.
+func (m *ReportHistoryMutation) SetQuery(s string) {
+	m.query = &s
+}
+
+// Query returns the value of the "query" field in the mutation.
+func (m *ReportHistoryMutation) Query() (r string, exists bool) {
+	v := m.query
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldQuery returns the old "query" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldQuery(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldQuery is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldQuery requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldQuery: %w", err)
+	}
+	return oldValue.Query, nil
+}
+
+// ResetQuery resets all changes to the "query" field.
+func (m *ReportHistoryMutation) ResetQuery() {
+	m.query = nil
+}
+
+// SetVariables sets the "variables" field.
+func (m *ReportHistoryMutation) SetVariables(value map[string]interface{}) {
+	m.variables = &value
+}
+
+// Variables returns the value of the "variables" field in the mutation.
+func (m *ReportHistoryMutation) Variables() (r map[string]interface{}, exists bool) {
+	v := m.variables
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVariables returns the old "variables" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldVariables(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVariables is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVariables requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVariables: %w", err)
+	}
+	return oldValue.Variables, nil
+}
+
+// ClearVariables clears the value of the "variables" field.
+func (m *ReportHistoryMutation) ClearVariables() {
+	m.variables = nil
+	m.clearedFields[reporthistory.FieldVariables] = struct{}{}
+}
+
+// VariablesCleared returns if the "variables" field was cleared in this mutation.
+func (m *ReportHistoryMutation) VariablesCleared() bool {
+	_, ok := m.clearedFields[reporthistory.FieldVariables]
+	return ok
+}
+
+// ResetVariables resets all changes to the "variables" field.
+func (m *ReportHistoryMutation) ResetVariables() {
+	m.variables = nil
+	delete(m.clearedFields, reporthistory.FieldVariables)
+}
+
+// SetStatus sets the "status" field.
+func (m *ReportHistoryMutation) SetStatus(es enums.ReportStatus) {
+	m.status = &es
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ReportHistoryMutation) Status() (r enums.ReportStatus, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldStatus(ctx context.Context) (v enums.ReportStatus, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ReportHistoryMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetVisibility sets the "visibility" field.
+func (m *ReportHistoryMutation) SetVisibility(ev enums.ReportVisibility) {
+	m.visibility = &ev
+}
+
+// Visibility returns the value of the "visibility" field in the mutation.
+func (m *ReportHistoryMutation) Visibility() (r enums.ReportVisibility, exists bool) {
+	v := m.visibility
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVisibility returns the old "visibility" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldVisibility(ctx context.Context) (v enums.ReportVisibility, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVisibility is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVisibility requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVisibility: %w", err)
+	}
+	return oldValue.Visibility, nil
+}
+
+// ResetVisibility resets all changes to the "visibility" field.
+func (m *ReportHistoryMutation) ResetVisibility() {
+	m.visibility = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *ReportHistoryMutation) SetUserID(s string) {
+	m.user_id = &s
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *ReportHistoryMutation) UserID() (r string, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the ReportHistory entity.
+// If the ReportHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReportHistoryMutation) OldUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *ReportHistoryMutation) ResetUserID() {
+	m.user_id = nil
+}
+
+// Where appends a list predicates to the ReportHistoryMutation builder.
+func (m *ReportHistoryMutation) Where(ps ...predicate.ReportHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ReportHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ReportHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ReportHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ReportHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ReportHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ReportHistory).
+func (m *ReportHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ReportHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 17)
+	if m.history_time != nil {
+		fields = append(fields, reporthistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, reporthistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, reporthistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, reporthistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, reporthistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, reporthistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, reporthistory.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, reporthistory.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, reporthistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, reporthistory.FieldDeletedBy)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, reporthistory.FieldOwnerID)
+	}
+	if m.name != nil {
+		fields = append(fields, reporthistory.FieldName)
+	}
+	if m.query != nil {
+		fields = append(fields, reporthistory.FieldQuery)
+	}
+	if m.variables != nil {
+		fields = append(fields, reporthistory.FieldVariables)
+	}
+	if m.status != nil {
+		fields = append(fields, reporthistory.FieldStatus)
+	}
+	if m.visibility != nil {
+		fields = append(fields, reporthistory.FieldVisibility)
+	}
+	if m.user_id != nil {
+		fields = append(fields, reporthistory.FieldUserID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ReportHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case reporthistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case reporthistory.FieldRef:
+		return m.Ref()
+	case reporthistory.FieldOperation:
+		return m.Operation()
+	case reporthistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case reporthistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case reporthistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case reporthistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case reporthistory.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case reporthistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case reporthistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case reporthistory.FieldOwnerID:
+		return m.OwnerID()
+	case reporthistory.FieldName:
+		return m.Name()
+	case reporthistory.FieldQuery:
+		return m.Query()
+	case reporthistory.FieldVariables:
+		return m.Variables()
+	case reporthistory.FieldStatus:
+		return m.Status()
+	case reporthistory.FieldVisibility:
+		return m.Visibility()
+	case reporthistory.FieldUserID:
+		return m.UserID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ReportHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case reporthistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case reporthistory.FieldRef:
+		return m.OldRef(ctx)
+	case reporthistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case reporthistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case reporthistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case reporthistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case reporthistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case reporthistory.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case reporthistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case reporthistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case reporthistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case reporthistory.FieldName:
+		return m.OldName(ctx)
+	case reporthistory.FieldQuery:
+		return m.OldQuery(ctx)
+	case reporthistory.FieldVariables:
+		return m.OldVariables(ctx)
+	case reporthistory.FieldStatus:
+		return m.OldStatus(ctx)
+	case reporthistory.FieldVisibility:
+		return m.OldVisibility(ctx)
+	case reporthistory.FieldUserID:
+		return m.OldUserID(ctx)
+	}
+	return nil, fmt.Errorf("unknown ReportHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ReportHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case reporthistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case reporthistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case reporthistory.FieldOperation:
+		v, ok := value.(history.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case reporthistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case reporthistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case reporthistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case reporthistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case reporthistory.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case reporthistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case reporthistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case reporthistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case reporthistory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case reporthistory.FieldQuery:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetQuery(v)
+		return nil
+	case reporthistory.FieldVariables:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVariables(v)
+		return nil
+	case reporthistory.FieldStatus:
+		v, ok := value.(enums.ReportStatus)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case reporthistory.FieldVisibility:
+		v, ok := value.(enums.ReportVisibility)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVisibility(v)
+		return nil
+	case reporthistory.FieldUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ReportHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ReportHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ReportHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ReportHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ReportHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ReportHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(reporthistory.FieldRef) {
+		fields = append(fields, reporthistory.FieldRef)
+	}
+	if m.FieldCleared(reporthistory.FieldCreatedAt) {
+		fields = append(fields, reporthistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(reporthistory.FieldUpdatedAt) {
+		fields = append(fields, reporthistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(reporthistory.FieldCreatedBy) {
+		fields = append(fields, reporthistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(reporthistory.FieldUpdatedBy) {
+		fields = append(fields, reporthistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(reporthistory.FieldUpdatedByImpersonator) {
+		fields = append(fields, reporthistory.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(reporthistory.FieldDeletedAt) {
+		fields = append(fields, reporthistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(reporthistory.FieldDeletedBy) {
+		fields = append(fields, reporthistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(reporthistory.FieldOwnerID) {
+		fields = append(fields, reporthistory.FieldOwnerID)
+	}
+	if m.FieldCleared(reporthistory.FieldVariables) {
+		fields = append(fields, reporthistory.FieldVariables)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ReportHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ReportHistoryMutation) ClearField(name string) error {
+	switch name {
+	case reporthistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case reporthistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case reporthistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case reporthistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case reporthistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case reporthistory.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case reporthistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case reporthistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case reporthistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case reporthistory.FieldVariables:
+		m.ClearVariables()
+		return nil
+	}
+	return fmt.Errorf("unknown ReportHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ReportHistoryMutation) ResetField(name string) error {
+	switch name {
+	case reporthistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case reporthistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case reporthistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case reporthistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case reporthistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case reporthistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case reporthistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case reporthistory.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case reporthistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case reporthistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case reporthistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case reporthistory.FieldName:
+		m.ResetName()
+		return nil
+	case reporthistory.FieldQuery:
+		m.ResetQuery()
+		return nil
+	case reporthistory.FieldVariables:
+		m.ResetVariables()
+		return nil
+	case reporthistory.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case reporthistory.FieldVisibility:
+		m.ResetVisibility()
+		return nil
+	case reporthistory.FieldUserID:
+		m.ResetUserID()
+		return nil
+	}
+	return fmt.Errorf("unknown ReportHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ReportHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ReportHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ReportHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ReportHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ReportHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ReportHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ReportHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ReportHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ReportHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ReportHistory edge %s", name)
 }
 
 // ReviewHistoryMutation represents an operation that mutates the ReviewHistory nodes in the graph.

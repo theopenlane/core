@@ -70,6 +70,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -1765,6 +1766,29 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	}
 
 	{
+		ids, err := FromContext(ctx).Report.Query().Where(report.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying report ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := ReportEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up report edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).Report.Query().Where((report.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if err := PurgeReportHistory(ctx, report.HasOwnerWith(organization.ID(id))); err != nil {
+			return err
+		}
+		if reportCount, err := FromContext(ctx).Report.Delete().Where(report.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", reportCount).Msg("error deleting report")
+			return err
+		}
+	}
+
+	{
 		ids, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where(trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id))).IDs(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcenterwatermarkconfig ids for cleanup")
@@ -2384,6 +2408,13 @@ func ProgramMembershipEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func RemediationEdgeCleanup(ctx context.Context, id string) error {
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
+
+	return nil
+}
+
+func ReportEdgeCleanup(ctx context.Context, id string) error {
 	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
 	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 

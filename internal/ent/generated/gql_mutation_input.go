@@ -20937,6 +20937,94 @@ func (c *RemediationUpdateOne) SetInput(i UpdateRemediationInput) *RemediationUp
 	return c
 }
 
+// CreateReportInput represents a mutation input for creating reports.
+type CreateReportInput struct {
+	Name       string                  `json:"name,omitempty"`
+	Query      string                  `json:"query,omitempty"`
+	Variables  map[string]interface{}  `json:"variables,omitempty"`
+	Status     *enums.ReportStatus     `json:"status,omitempty"`
+	Visibility *enums.ReportVisibility `json:"visibility,omitempty"`
+	OwnerID    *string                 `json:"owner_id,omitempty"`
+	UserID     string                  `json:"user_id,omitempty"`
+}
+
+// Mutate applies the CreateReportInput on the ReportMutation builder.
+func (i *CreateReportInput) Mutate(m *ReportMutation) {
+	m.SetName(i.Name)
+	m.SetQuery(i.Query)
+	if v := i.Variables; v != nil {
+		m.SetVariables(v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.Visibility; v != nil {
+		m.SetVisibility(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetUserID(i.UserID)
+}
+
+// SetInput applies the change-set in the CreateReportInput on the ReportCreate builder.
+func (c *ReportCreate) SetInput(i CreateReportInput) *ReportCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateReportInput represents a mutation input for updating reports.
+type UpdateReportInput struct {
+	Name           *string `json:"name,omitempty"`
+	Query          *string `json:"query,omitempty"`
+	ClearVariables bool
+	Variables      map[string]interface{}  `json:"variables,omitempty"`
+	Status         *enums.ReportStatus     `json:"status,omitempty"`
+	Visibility     *enums.ReportVisibility `json:"visibility,omitempty"`
+	ClearOwner     bool
+	OwnerID        *string `json:"owner_id,omitempty"`
+}
+
+// Mutate applies the UpdateReportInput on the ReportMutation builder.
+func (i *UpdateReportInput) Mutate(m *ReportMutation) {
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.Query; v != nil {
+		m.SetQuery(*v)
+	}
+	if i.ClearVariables {
+		m.ClearVariables()
+	}
+	if v := i.Variables; v != nil {
+		m.SetVariables(v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.Visibility; v != nil {
+		m.SetVisibility(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateReportInput on the ReportUpdate builder.
+func (c *ReportUpdate) SetInput(i UpdateReportInput) *ReportUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateReportInput on the ReportUpdateOne builder.
+func (c *ReportUpdateOne) SetInput(i UpdateReportInput) *ReportUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateReviewInput represents a mutation input for creating reviews.
 type CreateReviewInput struct {
 	Tags              []string               `json:"tags,omitempty"`
@@ -27751,6 +27839,7 @@ type CreateUserInput struct {
 	TfaSettingIDs            []string            `json:"tfa_setting_ids,omitempty"`
 	SettingID                string              `json:"setting_id,omitempty"`
 	SubscriberIDs            []string            `json:"subscriber_ids,omitempty"`
+	ReportIDs                []string            `json:"report_ids,omitempty"`
 	GroupIDs                 []string            `json:"group_ids,omitempty"`
 	OrganizationIDs          []string            `json:"organization_ids,omitempty"`
 	WebauthnIDs              []string            `json:"webauthn_ids,omitempty"`
@@ -27831,6 +27920,9 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	m.SetSettingID(i.SettingID)
 	if v := i.SubscriberIDs; len(v) > 0 {
 		m.AddSubscriberIDs(v...)
+	}
+	if v := i.ReportIDs; len(v) > 0 {
+		m.AddReportIDs(v...)
 	}
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
@@ -27937,6 +28029,9 @@ type UpdateUserInput struct {
 	ClearSubscribers               bool
 	AddSubscriberIDs               []string `json:"add_subscriber_ids,omitempty"`
 	RemoveSubscriberIDs            []string `json:"remove_subscriber_ids,omitempty"`
+	ClearReports                   bool
+	AddReportIDs                   []string `json:"add_report_ids,omitempty"`
+	RemoveReportIDs                []string `json:"remove_report_ids,omitempty"`
 	ClearGroups                    bool
 	AddGroupIDs                    []string `json:"add_group_ids,omitempty"`
 	RemoveGroupIDs                 []string `json:"remove_group_ids,omitempty"`
@@ -28122,6 +28217,15 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveSubscriberIDs; len(v) > 0 {
 		m.RemoveSubscriberIDs(v...)
+	}
+	if i.ClearReports {
+		m.ClearReports()
+	}
+	if v := i.AddReportIDs; len(v) > 0 {
+		m.AddReportIDs(v...)
+	}
+	if v := i.RemoveReportIDs; len(v) > 0 {
+		m.RemoveReportIDs(v...)
 	}
 	if i.ClearGroups {
 		m.ClearGroups()

@@ -84,6 +84,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -272,6 +273,8 @@ type Client struct {
 	ProgramMembership *ProgramMembershipClient
 	// Remediation is the client for interacting with the Remediation builders.
 	Remediation *RemediationClient
+	// Report is the client for interacting with the Report builders.
+	Report *ReportClient
 	// Review is the client for interacting with the Review builders.
 	Review *ReviewClient
 	// Risk is the client for interacting with the Risk builders.
@@ -427,6 +430,7 @@ func (c *Client) init() {
 	c.Program = NewProgramClient(c.config)
 	c.ProgramMembership = NewProgramMembershipClient(c.config)
 	c.Remediation = NewRemediationClient(c.config)
+	c.Report = NewReportClient(c.config)
 	c.Review = NewReviewClient(c.config)
 	c.Risk = NewRiskClient(c.config)
 	c.SLADefinition = NewSLADefinitionClient(c.config)
@@ -725,6 +729,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Program:                    NewProgramClient(cfg),
 		ProgramMembership:          NewProgramMembershipClient(cfg),
 		Remediation:                NewRemediationClient(cfg),
+		Report:                     NewReportClient(cfg),
 		Review:                     NewReviewClient(cfg),
 		Risk:                       NewRiskClient(cfg),
 		SLADefinition:              NewSLADefinitionClient(cfg),
@@ -844,6 +849,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Program:                    NewProgramClient(cfg),
 		ProgramMembership:          NewProgramMembershipClient(cfg),
 		Remediation:                NewRemediationClient(cfg),
+		Report:                     NewReportClient(cfg),
 		Review:                     NewReviewClient(cfg),
 		Risk:                       NewRiskClient(cfg),
 		SLADefinition:              NewSLADefinitionClient(cfg),
@@ -922,7 +928,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
 		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
-		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
+		c.Remediation, c.Report, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
 		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
 		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
@@ -954,7 +960,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
 		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
-		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
+		c.Remediation, c.Report, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
 		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
 		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
@@ -1173,6 +1179,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ProgramMembership.mutate(ctx, m)
 	case *RemediationMutation:
 		return c.Remediation.mutate(ctx, m)
+	case *ReportMutation:
+		return c.Report.mutate(ctx, m)
 	case *ReviewMutation:
 		return c.Review.mutate(ctx, m)
 	case *RiskMutation:
@@ -20899,6 +20907,22 @@ func (c *OrganizationClient) QueryExports(_m *Organization) *ExportQuery {
 	return query
 }
 
+// QueryReports queries the reports edge of a Organization.
+func (c *OrganizationClient) QueryReports(_m *Organization) *ReportQuery {
+	query := (&ReportClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ReportsTable, organization.ReportsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTrustCenterWatermarkConfigs queries the trust_center_watermark_configs edge of a Organization.
 func (c *OrganizationClient) QueryTrustCenterWatermarkConfigs(_m *Organization) *TrustCenterWatermarkConfigQuery {
 	query := (&TrustCenterWatermarkConfigClient{config: c.config}).Query()
@@ -24435,6 +24459,173 @@ func (c *RemediationClient) mutate(ctx context.Context, m *RemediationMutation) 
 		return (&RemediationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Remediation mutation op: %q", m.Op())
+	}
+}
+
+// ReportClient is a client for the Report schema.
+type ReportClient struct {
+	config
+}
+
+// NewReportClient returns a client for the Report from the given config.
+func NewReportClient(c config) *ReportClient {
+	return &ReportClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `report.Hooks(f(g(h())))`.
+func (c *ReportClient) Use(hooks ...Hook) {
+	c.hooks.Report = append(c.hooks.Report, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `report.Intercept(f(g(h())))`.
+func (c *ReportClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Report = append(c.inters.Report, interceptors...)
+}
+
+// Create returns a builder for creating a Report entity.
+func (c *ReportClient) Create() *ReportCreate {
+	mutation := newReportMutation(c.config, OpCreate)
+	return &ReportCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Report entities.
+func (c *ReportClient) CreateBulk(builders ...*ReportCreate) *ReportCreateBulk {
+	return &ReportCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ReportClient) MapCreateBulk(slice any, setFunc func(*ReportCreate, int)) *ReportCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ReportCreateBulk{err: fmt.Errorf("calling to ReportClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ReportCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ReportCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Report.
+func (c *ReportClient) Update() *ReportUpdate {
+	mutation := newReportMutation(c.config, OpUpdate)
+	return &ReportUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ReportClient) UpdateOne(_m *Report) *ReportUpdateOne {
+	mutation := newReportMutation(c.config, OpUpdateOne, withReport(_m))
+	return &ReportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ReportClient) UpdateOneID(id string) *ReportUpdateOne {
+	mutation := newReportMutation(c.config, OpUpdateOne, withReportID(id))
+	return &ReportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Report.
+func (c *ReportClient) Delete() *ReportDelete {
+	mutation := newReportMutation(c.config, OpDelete)
+	return &ReportDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ReportClient) DeleteOne(_m *Report) *ReportDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ReportClient) DeleteOneID(id string) *ReportDeleteOne {
+	builder := c.Delete().Where(report.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ReportDeleteOne{builder}
+}
+
+// Query returns a query builder for Report.
+func (c *ReportClient) Query() *ReportQuery {
+	return &ReportQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeReport},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Report entity by its id.
+func (c *ReportClient) Get(ctx context.Context, id string) (*Report, error) {
+	return c.Query().Where(report.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ReportClient) GetX(ctx context.Context, id string) *Report {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Report.
+func (c *ReportClient) QueryOwner(_m *Report) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(report.Table, report.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, report.OwnerTable, report.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a Report.
+func (c *ReportClient) QueryUser(_m *Report) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(report.Table, report.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, report.UserTable, report.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ReportClient) Hooks() []Hook {
+	hooks := c.hooks.Report
+	return append(hooks[:len(hooks):len(hooks)], report.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ReportClient) Interceptors() []Interceptor {
+	inters := c.inters.Report
+	return append(inters[:len(inters):len(inters)], report.Interceptors[:]...)
+}
+
+func (c *ReportClient) mutate(ctx context.Context, m *ReportMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ReportCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ReportUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ReportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ReportDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Report mutation op: %q", m.Op())
 	}
 }
 
@@ -31372,6 +31563,22 @@ func (c *UserClient) QuerySubscribers(_m *User) *SubscriberQuery {
 	return query
 }
 
+// QueryReports queries the reports edge of a User.
+func (c *UserClient) QueryReports(_m *User) *ReportQuery {
+	query := (&ReportClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ReportsTable, user.ReportsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryGroups queries the groups edge of a User.
 func (c *UserClient) QueryGroups(_m *User) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -35178,7 +35385,7 @@ type (
 		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
 		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
+		Procedure, Program, ProgramMembership, Remediation, Report, Review, Risk,
 		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
 		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
 		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
@@ -35201,7 +35408,7 @@ type (
 		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
 		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
+		Procedure, Program, ProgramMembership, Remediation, Report, Review, Risk,
 		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
 		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
 		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,

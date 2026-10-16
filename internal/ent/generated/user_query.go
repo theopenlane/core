@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
@@ -57,6 +58,7 @@ type UserQuery struct {
 	withFileDownloadTokens           *FileDownloadTokenQuery
 	withPasswordResetTokens          *PasswordResetTokenQuery
 	withSubscribers                  *SubscriberQuery
+	withReports                      *ReportQuery
 	withGroups                       *GroupQuery
 	withOrganizations                *OrganizationQuery
 	withWebauthns                    *WebauthnQuery
@@ -85,6 +87,7 @@ type UserQuery struct {
 	withNamedFileDownloadTokens      map[string]*FileDownloadTokenQuery
 	withNamedPasswordResetTokens     map[string]*PasswordResetTokenQuery
 	withNamedSubscribers             map[string]*SubscriberQuery
+	withNamedReports                 map[string]*ReportQuery
 	withNamedGroups                  map[string]*GroupQuery
 	withNamedOrganizations           map[string]*OrganizationQuery
 	withNamedWebauthns               map[string]*WebauthnQuery
@@ -287,6 +290,28 @@ func (_q *UserQuery) QuerySubscribers() *SubscriberQuery {
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(subscriber.Table, subscriber.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.SubscribersTable, user.SubscribersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReports chains the current query on the "reports" edge.
+func (_q *UserQuery) QueryReports() *ReportQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ReportsTable, user.ReportsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -933,6 +958,7 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withFileDownloadTokens:      _q.withFileDownloadTokens.Clone(),
 		withPasswordResetTokens:     _q.withPasswordResetTokens.Clone(),
 		withSubscribers:             _q.withSubscribers.Clone(),
+		withReports:                 _q.withReports.Clone(),
 		withGroups:                  _q.withGroups.Clone(),
 		withOrganizations:           _q.withOrganizations.Clone(),
 		withWebauthns:               _q.withWebauthns.Clone(),
@@ -1034,6 +1060,17 @@ func (_q *UserQuery) WithSubscribers(opts ...func(*SubscriberQuery)) *UserQuery 
 		opt(query)
 	}
 	_q.withSubscribers = query
+	return _q
+}
+
+// WithReports tells the query-builder to eager-load the nodes that are connected to
+// the "reports" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithReports(opts ...func(*ReportQuery)) *UserQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReports = query
 	return _q
 }
 
@@ -1341,7 +1378,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [28]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1349,6 +1386,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withFileDownloadTokens != nil,
 			_q.withPasswordResetTokens != nil,
 			_q.withSubscribers != nil,
+			_q.withReports != nil,
 			_q.withGroups != nil,
 			_q.withOrganizations != nil,
 			_q.withWebauthns != nil,
@@ -1445,6 +1483,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadSubscribers(ctx, query, nodes,
 			func(n *User) { n.Edges.Subscribers = []*Subscriber{} },
 			func(n *User, e *Subscriber) { n.Edges.Subscribers = append(n.Edges.Subscribers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReports; query != nil {
+		if err := _q.loadReports(ctx, query, nodes,
+			func(n *User) { n.Edges.Reports = []*Report{} },
+			func(n *User, e *Report) { n.Edges.Reports = append(n.Edges.Reports, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1634,6 +1679,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadSubscribers(ctx, query, nodes,
 			func(n *User) { n.appendNamedSubscribers(name) },
 			func(n *User, e *Subscriber) { n.appendNamedSubscribers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReports {
+		if err := _q.loadReports(ctx, query, nodes,
+			func(n *User) { n.appendNamedReports(name) },
+			func(n *User, e *Report) { n.appendNamedReports(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1971,6 +2023,36 @@ func (_q *UserQuery) loadSubscribers(ctx context.Context, query *SubscriberQuery
 	}
 	query.Where(predicate.Subscriber(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.SubscribersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *UserQuery) loadReports(ctx context.Context, query *ReportQuery, nodes []*User, init func(*User), assign func(*User, *Report)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(report.FieldUserID)
+	}
+	query.Where(predicate.Report(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.ReportsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -2930,6 +3012,20 @@ func (_q *UserQuery) WithNamedSubscribers(name string, opts ...func(*SubscriberQ
 		_q.withNamedSubscribers = make(map[string]*SubscriberQuery)
 	}
 	_q.withNamedSubscribers[name] = query
+	return _q
+}
+
+// WithNamedReports tells the query-builder to eager-load the nodes that are connected to the "reports"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedReports(name string, opts ...func(*ReportQuery)) *UserQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReports == nil {
+		_q.withNamedReports = make(map[string]*ReportQuery)
+	}
+	_q.withNamedReports[name] = query
 	return _q
 }
 

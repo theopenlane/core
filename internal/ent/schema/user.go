@@ -222,6 +222,7 @@ func (u User) Edges() []ent.Edge {
 			},
 		}),
 		defaultEdgeToWithPagination(u, Subscriber{}),
+		defaultEdgeToWithPagination(u, Report{}),
 
 		edge.To("groups", Group.Type).
 			Annotations(

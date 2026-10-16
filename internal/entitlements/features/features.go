@@ -59,6 +59,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Program":                    {models.CatalogComplianceModule, models.CatalogEntityManagementModule},
 	"ProgramMembership":          {models.CatalogComplianceModule},
 	"Remediation":                {models.CatalogVulnerabilityManagementModule, models.CatalogRiskManagementAddon, models.CatalogComplianceModule},
+	"Report":                     {models.CatalogAnyModule},
 	"Review":                     {models.CatalogComplianceModule, models.CatalogVulnerabilityManagementModule},
 	"Risk":                       {models.CatalogComplianceModule, models.CatalogRiskManagementAddon},
 	"Scan":                       {models.CatalogVulnerabilityManagementModule, models.CatalogComplianceModule},

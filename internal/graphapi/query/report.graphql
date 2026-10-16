@@ -1,0 +1,116 @@
+mutation CreateReport ($input: CreateReportInput!) {
+	createReport(input: $input) {
+		report {
+			createdAt
+			createdBy
+			id
+			name
+			ownerID
+			query
+			status
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+			variables
+			visibility
+		}
+	}
+}
+mutation DeleteReport ($deleteReportId: ID!) {
+	deleteReport(id: $deleteReportId) {
+		deletedID
+	}
+}
+query GetAllReports ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportOrder!]) {
+	reports(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				name
+				ownerID
+				query
+				status
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+				variables
+				visibility
+			}
+		}
+	}
+}
+query GetReportByID ($reportId: ID!) {
+	report(id: $reportId) {
+		createdAt
+		createdBy
+		id
+		name
+		ownerID
+		query
+		status
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		userID
+		variables
+		visibility
+	}
+}
+query GetReports ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportOrder!], $where: ReportWhereInput) {
+	reports(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				name
+				ownerID
+				query
+				status
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+				variables
+				visibility
+			}
+		}
+	}
+}
+mutation UpdateReport ($updateReportId: ID!, $input: UpdateReportInput!) {
+	updateReport(id: $updateReportId, input: $input) {
+		report {
+			createdAt
+			createdBy
+			id
+			name
+			ownerID
+			query
+			status
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+			variables
+			visibility
+		}
+	}
+}

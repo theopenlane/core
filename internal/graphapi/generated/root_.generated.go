@@ -3721,6 +3721,7 @@ type ComplexityRoot struct {
 		CreateProgramMembership              func(childComplexity int, input generated.CreateProgramMembershipInput) int
 		CreateProgramWithMembers             func(childComplexity int, input model.CreateProgramWithMembersInput) int
 		CreateRemediation                    func(childComplexity int, input generated.CreateRemediationInput) int
+		CreateReport                         func(childComplexity int, input generated.CreateReportInput) int
 		CreateReview                         func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateSLADefinition                  func(childComplexity int, input generated.CreateSLADefinitionInput) int
@@ -3864,6 +3865,7 @@ type ComplexityRoot struct {
 		DeleteProgram                        func(childComplexity int, id string) int
 		DeleteProgramMembership              func(childComplexity int, id string) int
 		DeleteRemediation                    func(childComplexity int, id string) int
+		DeleteReport                         func(childComplexity int, id string) int
 		DeleteReview                         func(childComplexity int, id string) int
 		DeleteRisk                           func(childComplexity int, id string) int
 		DeleteSLADefinition                  func(childComplexity int, id string) int
@@ -4068,6 +4070,7 @@ type ComplexityRoot struct {
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
 		UpdateRemediation                    func(childComplexity int, id string, input generated.UpdateRemediationInput) int
+		UpdateReport                         func(childComplexity int, id string, input generated.UpdateReportInput) int
 		UpdateReview                         func(childComplexity int, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
 		UpdateReviewComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
@@ -5374,6 +5377,9 @@ type ComplexityRoot struct {
 		Remediation                     func(childComplexity int, id string) int
 		RemediationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Remediations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Report                          func(childComplexity int, id string) int
+		ReportSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Reports                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) int
 		Review                          func(childComplexity int, id string) int
 		ReviewSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Reviews                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
@@ -5585,6 +5591,47 @@ type ComplexityRoot struct {
 
 	RemediationUpdatePayload struct {
 		Remediation func(childComplexity int) int
+	}
+
+	Report struct {
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Query                 func(childComplexity int) int
+		Status                func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		User                  func(childComplexity int) int
+		UserID                func(childComplexity int) int
+		Variables             func(childComplexity int) int
+		Visibility            func(childComplexity int) int
+	}
+
+	ReportConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ReportCreatePayload struct {
+		Report func(childComplexity int) int
+	}
+
+	ReportDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ReportEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ReportUpdatePayload struct {
+		Report func(childComplexity int) int
 	}
 
 	Review struct {
@@ -6019,6 +6066,7 @@ type ComplexityRoot struct {
 		Procedures            func(childComplexity int) int
 		Programs              func(childComplexity int) int
 		Remediations          func(childComplexity int) int
+		Reports               func(childComplexity int) int
 		Reviews               func(childComplexity int) int
 		Risks                 func(childComplexity int) int
 		Scans                 func(childComplexity int) int
@@ -7278,6 +7326,7 @@ type ComplexityRoot struct {
 		ProgramMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
 		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ProgramsOwned          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Reports                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) int
 		Role                   func(childComplexity int) int
 		ScimActive             func(childComplexity int) int
 		ScimExternalID         func(childComplexity int) int
@@ -26707,6 +26756,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateRemediation(childComplexity, args["input"].(generated.CreateRemediationInput)), true
+	case "Mutation.createReport":
+		if e.ComplexityRoot.Mutation.CreateReport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createReport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateReport(childComplexity, args["input"].(generated.CreateReportInput)), true
 	case "Mutation.createReview":
 		if e.ComplexityRoot.Mutation.CreateReview == nil {
 			break
@@ -28280,6 +28340,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteRemediation(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteReport":
+		if e.ComplexityRoot.Mutation.DeleteReport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteReport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteReport(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteReview":
 		if e.ComplexityRoot.Mutation.DeleteReview == nil {
 			break
@@ -30519,6 +30590,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateRemediation(childComplexity, args["id"].(string), args["input"].(generated.UpdateRemediationInput)), true
+	case "Mutation.updateReport":
+		if e.ComplexityRoot.Mutation.UpdateReport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateReport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateReport(childComplexity, args["id"].(string), args["input"].(generated.UpdateReportInput)), true
 	case "Mutation.updateReview":
 		if e.ComplexityRoot.Mutation.UpdateReview == nil {
 			break
@@ -38204,6 +38286,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+	case "Query.report":
+		if e.ComplexityRoot.Query.Report == nil {
+			break
+		}
+
+		args, err := ec.field_Query_report_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Report(childComplexity, args["id"].(string)), true
+	case "Query.reportSearch":
+		if e.ComplexityRoot.Query.ReportSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reportSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ReportSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+	case "Query.reports":
+		if e.ComplexityRoot.Query.Reports == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reports_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Reports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportOrder), args["where"].(*generated.ReportWhereInput)), true
 	case "Query.review":
 		if e.ComplexityRoot.Query.Review == nil {
 			break
@@ -39769,6 +39884,150 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationUpdatePayload.Remediation(childComplexity), true
+
+	case "Report.createdAt":
+		if e.ComplexityRoot.Report.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.CreatedAt(childComplexity), true
+	case "Report.createdBy":
+		if e.ComplexityRoot.Report.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.CreatedBy(childComplexity), true
+	case "Report.id":
+		if e.ComplexityRoot.Report.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.ID(childComplexity), true
+	case "Report.name":
+		if e.ComplexityRoot.Report.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Name(childComplexity), true
+	case "Report.owner":
+		if e.ComplexityRoot.Report.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Owner(childComplexity), true
+	case "Report.ownerID":
+		if e.ComplexityRoot.Report.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.OwnerID(childComplexity), true
+	case "Report.query":
+		if e.ComplexityRoot.Report.Query == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Query(childComplexity), true
+	case "Report.status":
+		if e.ComplexityRoot.Report.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Status(childComplexity), true
+	case "Report.updatedAt":
+		if e.ComplexityRoot.Report.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.UpdatedAt(childComplexity), true
+	case "Report.updatedBy":
+		if e.ComplexityRoot.Report.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.UpdatedBy(childComplexity), true
+	case "Report.updatedByImpersonator":
+		if e.ComplexityRoot.Report.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.UpdatedByImpersonator(childComplexity), true
+	case "Report.user":
+		if e.ComplexityRoot.Report.User == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.User(childComplexity), true
+	case "Report.userID":
+		if e.ComplexityRoot.Report.UserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.UserID(childComplexity), true
+	case "Report.variables":
+		if e.ComplexityRoot.Report.Variables == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Variables(childComplexity), true
+	case "Report.visibility":
+		if e.ComplexityRoot.Report.Visibility == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Visibility(childComplexity), true
+
+	case "ReportConnection.edges":
+		if e.ComplexityRoot.ReportConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportConnection.Edges(childComplexity), true
+	case "ReportConnection.pageInfo":
+		if e.ComplexityRoot.ReportConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportConnection.PageInfo(childComplexity), true
+	case "ReportConnection.totalCount":
+		if e.ComplexityRoot.ReportConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportConnection.TotalCount(childComplexity), true
+
+	case "ReportCreatePayload.report":
+		if e.ComplexityRoot.ReportCreatePayload.Report == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportCreatePayload.Report(childComplexity), true
+
+	case "ReportDeletePayload.deletedID":
+		if e.ComplexityRoot.ReportDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportDeletePayload.DeletedID(childComplexity), true
+
+	case "ReportEdge.cursor":
+		if e.ComplexityRoot.ReportEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportEdge.Cursor(childComplexity), true
+	case "ReportEdge.node":
+		if e.ComplexityRoot.ReportEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportEdge.Node(childComplexity), true
+
+	case "ReportUpdatePayload.report":
+		if e.ComplexityRoot.ReportUpdatePayload.Report == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportUpdatePayload.Report(childComplexity), true
 
 	case "Review.actionPlans":
 		if e.ComplexityRoot.Review.ActionPlans == nil {
@@ -42007,6 +42266,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SearchResults.Remediations(childComplexity), true
+	case "SearchResults.reports":
+		if e.ComplexityRoot.SearchResults.Reports == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResults.Reports(childComplexity), true
 	case "SearchResults.reviews":
 		if e.ComplexityRoot.SearchResults.Reviews == nil {
 			break
@@ -47475,6 +47740,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.User.ProgramsOwned(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+	case "User.reports":
+		if e.ComplexityRoot.User.Reports == nil {
+			break
+		}
+
+		args, err := ec.field_User_reports_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.User.Reports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportOrder), args["where"].(*generated.ReportWhereInput)), true
 	case "User.role":
 		if e.ComplexityRoot.User.Role == nil {
 			break
@@ -51301,6 +51577,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateProgramMembershipInput,
 		ec.unmarshalInputCreateProgramWithMembersInput,
 		ec.unmarshalInputCreateRemediationInput,
+		ec.unmarshalInputCreateReportInput,
 		ec.unmarshalInputCreateReviewInput,
 		ec.unmarshalInputCreateRiskInput,
 		ec.unmarshalInputCreateSLADefinitionInput,
@@ -51432,6 +51709,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputReassignWorkflowAssignmentInput,
 		ec.unmarshalInputRemediationOrder,
 		ec.unmarshalInputRemediationWhereInput,
+		ec.unmarshalInputReportOrder,
+		ec.unmarshalInputReportWhereInput,
 		ec.unmarshalInputResendCampaignIncompleteInput,
 		ec.unmarshalInputResolveVulnerabilityInput,
 		ec.unmarshalInputReviewOrder,
@@ -51533,6 +51812,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateProgramInput,
 		ec.unmarshalInputUpdateProgramMembershipInput,
 		ec.unmarshalInputUpdateRemediationInput,
+		ec.unmarshalInputUpdateReportInput,
 		ec.unmarshalInputUpdateReviewInput,
 		ec.unmarshalInputUpdateRiskInput,
 		ec.unmarshalInputUpdateSLADefinitionInput,
@@ -71606,6 +71886,25 @@ input CreateRemediationInput {
   workflowObjectRefIDs: [ID!]
 }
 """
+CreateReportInput is used for create Report object.
+Input was generated by ent.
+"""
+input CreateReportInput {
+  name: String!
+  """
+  the query for this report
+  """
+  query: String!
+  """
+  variables needed to pass into the query if needed
+  """
+  variables: Map
+  status: ReportReportStatus
+  visibility: ReportReportVisibility
+  ownerID: ID
+  userID: ID!
+}
+"""
 CreateReviewInput is used for create Review object.
 Input was generated by ent.
 """
@@ -73005,6 +73304,7 @@ input CreateUserInput {
   tfaSettingIDs: [ID!]
   settingID: ID!
   subscriberIDs: [ID!]
+  reportIDs: [ID!]
   groupIDs: [ID!]
   organizationIDs: [ID!]
   webauthnIDs: [ID!]
@@ -109473,6 +109773,37 @@ type Query {
     """
     where: RemediationWhereInput
   ): RemediationConnection!
+  reports(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reports returned from the connection.
+    """
+    orderBy: [ReportOrder!]
+
+    """
+    Filtering options for Reports returned from the connection.
+    """
+    where: ReportWhereInput
+  ): ReportConnection!
   reviews(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -111850,6 +112181,260 @@ input RemediationWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+}
+type Report implements Node @modules(names: ["any_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  name: String!
+  """
+  the query for this report
+  """
+  query: String!
+  """
+  variables needed to pass into the query if needed
+  """
+  variables: Map
+  status: ReportReportStatus!
+  visibility: ReportReportVisibility!
+  """
+  the user who created this report
+  """
+  userID: ID!
+  owner: Organization
+  user: User!
+}
+"""
+A connection to a list of items.
+"""
+type ReportConnection {
+  """
+  A list of edges.
+  """
+  edges: [ReportEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ReportEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Report
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for Report connections
+"""
+input ReportOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Reports.
+  """
+  field: ReportOrderField!
+}
+"""
+Properties by which Report connections can be ordered.
+"""
+enum ReportOrderField {
+  created_at
+  updated_at
+  name
+  STATUS
+  VISIBILITY
+}
+"""
+ReportReportStatus is enum for the field status
+"""
+enum ReportReportStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReportStatus") {
+  DRAFT
+  SAVED
+}
+"""
+ReportReportVisibility is enum for the field visibility
+"""
+enum ReportReportVisibility @goModel(model: "github.com/theopenlane/core/common/enums.ReportVisibility") {
+  PRIVATE
+  RESTRICTED
+  ORGANIZATION
+}
+"""
+ReportWhereInput is used for filtering Report objects.
+Input was generated by ent.
+"""
+input ReportWhereInput {
+  not: ReportWhereInput
+  and: [ReportWhereInput!]
+  or: [ReportWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  query field predicates
+  """
+  query: String
+  queryNEQ: String
+  queryIn: [String!]
+  queryNotIn: [String!]
+  queryContains: String
+  queryHasPrefix: String
+  queryHasSuffix: String
+  queryEqualFold: String
+  queryContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReportReportStatus
+  statusNEQ: ReportReportStatus
+  statusIn: [ReportReportStatus!]
+  statusNotIn: [ReportReportStatus!]
+  """
+  visibility field predicates
+  """
+  visibility: ReportReportVisibility
+  visibilityNEQ: ReportReportVisibility
+  visibilityIn: [ReportReportVisibility!]
+  visibilityNotIn: [ReportReportVisibility!]
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
 }
 type Review implements Node @modules(names: ["compliance_module","vulnerability_management_module"]) {
   id: ID!
@@ -131968,6 +132553,26 @@ input UpdateRemediationInput {
   clearWorkflowObjectRefs: Boolean
 }
 """
+UpdateReportInput is used for update Report object.
+Input was generated by ent.
+"""
+input UpdateReportInput {
+  name: String
+  """
+  the query for this report
+  """
+  query: String
+  """
+  variables needed to pass into the query if needed
+  """
+  variables: Map
+  clearVariables: Boolean
+  status: ReportReportStatus
+  visibility: ReportReportVisibility
+  ownerID: ID
+  clearOwner: Boolean
+}
+"""
 UpdateReviewInput is used for update Review object.
 Input was generated by ent.
 """
@@ -133949,6 +134554,9 @@ input UpdateUserInput {
   addSubscriberIDs: [ID!]
   removeSubscriberIDs: [ID!]
   clearSubscribers: Boolean
+  addReportIDs: [ID!]
+  removeReportIDs: [ID!]
+  clearReports: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
@@ -134750,6 +135358,37 @@ type User implements Node {
     """
     where: SubscriberWhereInput
   ): SubscriberConnection!
+  reports(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reports returned from the connection.
+    """
+    orderBy: [ReportOrder!]
+
+    """
+    Filtering options for Reports returned from the connection.
+    """
+    where: ReportWhereInput
+  ): ReportConnection!
   groups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -135957,6 +136596,11 @@ input UserWhereInput {
   """
   hasSubscribers: Boolean
   hasSubscribersWith: [SubscriberWhereInput!]
+  """
+  reports edge predicates
+  """
+  hasReports: Boolean
+  hasReportsWith: [ReportWhereInput!]
   """
   groups edge predicates
   """
@@ -148160,6 +148804,82 @@ type RemediationBulkDeletePayload {
     """
     error: String
 }`, BuiltIn: false},
+	{Name: "../schema/report.graphql", Input: `extend type Query {
+    """
+    Look up report by ID
+    """
+     report(
+        """
+        ID of the report
+        """
+        id: ID!
+    ):  Report!
+}
+
+extend type Mutation{
+    """
+    Create a new report
+    """
+    createReport(
+        """
+        values of the report
+        """
+        input: CreateReportInput!
+    ): ReportCreatePayload!
+    """
+    Update an existing report
+    """
+    updateReport(
+        """
+        ID of the report
+        """
+        id: ID!
+        """
+        New values for the report
+        """
+        input: UpdateReportInput!
+    ): ReportUpdatePayload!
+    """
+    Delete an existing report
+    """
+    deleteReport(
+        """
+        ID of the report
+        """
+        id: ID!
+    ): ReportDeletePayload!
+}
+
+"""
+Return response for createReport mutation
+"""
+type ReportCreatePayload {
+    """
+    Created report
+    """
+    report: Report!
+}
+
+"""
+Return response for updateReport mutation
+"""
+type ReportUpdatePayload {
+    """
+    Updated report
+    """
+    report: Report!
+}
+
+"""
+Return response for deleteReport mutation
+"""
+type ReportDeletePayload {
+    """
+    Deleted report ID
+    """
+    deletedID: ID!
+}
+`, BuiltIn: false},
 	{Name: "../schema/review.graphql", Input: `extend type Query {
     """
     Look up review by ID
@@ -149396,6 +150116,31 @@ type ScanBulkDeletePayload {
         last: Int
     ): RemediationConnection
     """
+    Search across Report objects
+    """
+    reportSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ReportConnection
+    """
     Search across Review objects
     """
     reviewSearch(
@@ -149756,6 +150501,7 @@ type SearchResults{
   procedures: ProcedureConnection
   programs: ProgramConnection
   remediations: RemediationConnection
+  reports: ReportConnection
   reviews: ReviewConnection
   risks: RiskConnection
   scans: ScanConnection
@@ -163808,6 +164554,88 @@ func (ec *executionContext) childFields_RemediationUpdatePayload(ctx context.Con
 	return nil, fmt.Errorf("no field named %q was found under type RemediationUpdatePayload", field.Name)
 }
 
+func (ec *executionContext) childFields_Report(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_Report_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_Report_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_Report_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_Report_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_Report_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_Report_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_Report_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_Report_name(ctx, field)
+	case "query":
+		return ec.fieldContext_Report_query(ctx, field)
+	case "variables":
+		return ec.fieldContext_Report_variables(ctx, field)
+	case "status":
+		return ec.fieldContext_Report_status(ctx, field)
+	case "visibility":
+		return ec.fieldContext_Report_visibility(ctx, field)
+	case "userID":
+		return ec.fieldContext_Report_userID(ctx, field)
+	case "owner":
+		return ec.fieldContext_Report_owner(ctx, field)
+	case "user":
+		return ec.fieldContext_Report_user(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Report", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ReportConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ReportConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ReportConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "report":
+		return ec.fieldContext_ReportCreatePayload_report(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_ReportDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ReportEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ReportEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "report":
+		return ec.fieldContext_ReportUpdatePayload_report(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportUpdatePayload", field.Name)
+}
+
 func (ec *executionContext) childFields_Review(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -164674,6 +165502,8 @@ func (ec *executionContext) childFields_SearchResults(ctx context.Context, field
 		return ec.fieldContext_SearchResults_programs(ctx, field)
 	case "remediations":
 		return ec.fieldContext_SearchResults_remediations(ctx, field)
+	case "reports":
+		return ec.fieldContext_SearchResults_reports(ctx, field)
 	case "reviews":
 		return ec.fieldContext_SearchResults_reviews(ctx, field)
 	case "risks":
@@ -167152,6 +167982,8 @@ func (ec *executionContext) childFields_User(ctx context.Context, field graphql.
 		return ec.fieldContext_User_setting(ctx, field)
 	case "subscribers":
 		return ec.fieldContext_User_subscribers(ctx, field)
+	case "reports":
+		return ec.fieldContext_User_reports(ctx, field)
 	case "groups":
 		return ec.fieldContext_User_groups(ctx, field)
 	case "organizations":

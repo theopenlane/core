@@ -78,6 +78,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -4613,6 +4614,29 @@ var (
 			return entity, nil
 		},
 	}
+	SchemaReport = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "Report",
+			Snake: "report",
+			Lower: "report",
+		},
+		OwnerField: report.FieldOwnerID,
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "report", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.Report.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
 	SchemaReview = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
 			Name:  "Review",
@@ -7650,6 +7674,22 @@ func init() {
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
+	}
+	SchemaReport.Fields = []FieldDescriptor{
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "query", Label: "Query", Type: "string", MatchKey: true},
+		{Name: "status", Label: "Status", Type: "enums.ReportStatus"},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
+		{Name: "variables", Label: "Variables", Type: "map[string]interface {}", Clearable: true},
+		{Name: "visibility", Label: "Visibility", Type: "enums.ReportVisibility"},
 	}
 	SchemaReview.Fields = []FieldDescriptor{
 		{Name: "approved", Label: "Approved", Type: "bool", Clearable: true},
@@ -14886,6 +14926,14 @@ func init() {
 			AddField:    "add_remediation_ids",
 		},
 		{
+			Name:        "reports",
+			Label:       "Reports",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			CreateField: "report_ids",
+			AddField:    "add_report_ids",
+		},
+		{
 			Name:        "review_creators",
 			Label:       "ReviewCreators",
 			Target:      SchemaGroup,
@@ -16436,6 +16484,26 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+		},
+	}
+	SchemaReport.Edges = []EdgeDescriptor{
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
+		{
+			Name:        "user",
+			Label:       "User",
+			Target:      SchemaUser,
+			TargetType:  "User",
+			Unique:      true,
+			CreateField: "user_id",
+			Field:       "user_id",
 		},
 	}
 	SchemaReview.Edges = []EdgeDescriptor{
@@ -18706,6 +18774,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "programs_owned_ids",
 			AddField:    "add_programs_owned_ids",
+		},
+		{
+			Name:        "reports",
+			Label:       "Reports",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			CreateField: "report_ids",
+			AddField:    "add_report_ids",
 		},
 		{
 			Name:        "setting",
@@ -23771,6 +23847,7 @@ var allSchemas = []*Schema{
 	SchemaProgram,
 	SchemaProgramMembership,
 	SchemaRemediation,
+	SchemaReport,
 	SchemaReview,
 	SchemaRisk,
 	SchemaSLADefinition,

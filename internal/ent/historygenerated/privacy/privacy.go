@@ -1097,6 +1097,30 @@ func (f RemediationHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m 
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.RemediationHistoryMutation", m)
 }
 
+// The ReportHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ReportHistoryQueryRuleFunc func(context.Context, *historygenerated.ReportHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ReportHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.ReportHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.ReportHistoryQuery", q)
+}
+
+// The ReportHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ReportHistoryMutationRuleFunc func(context.Context, *historygenerated.ReportHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ReportHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.ReportHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.ReportHistoryMutation", m)
+}
+
 // The ReviewHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ReviewHistoryQueryRuleFunc func(context.Context, *historygenerated.ReviewHistoryQuery) error
@@ -1838,6 +1862,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.RemediationHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.ReportHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.ReviewHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.RiskHistoryQuery:
@@ -1978,6 +2004,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.ProgramMembershipHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.RemediationHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.ReportHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.ReviewHistoryMutation:
 		return m.Filter(), nil

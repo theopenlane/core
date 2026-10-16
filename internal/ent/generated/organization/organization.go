@@ -313,6 +313,8 @@ const (
 	EdgeSubprocessors = "subprocessors"
 	// EdgeExports holds the string denoting the exports edge name in mutations.
 	EdgeExports = "exports"
+	// EdgeReports holds the string denoting the reports edge name in mutations.
+	EdgeReports = "reports"
 	// EdgeTrustCenterWatermarkConfigs holds the string denoting the trust_center_watermark_configs edge name in mutations.
 	EdgeTrustCenterWatermarkConfigs = "trust_center_watermark_configs"
 	// EdgeImpersonationEvents holds the string denoting the impersonation_events edge name in mutations.
@@ -1272,6 +1274,13 @@ const (
 	ExportsInverseTable = "exports"
 	// ExportsColumn is the table column denoting the exports relation/edge.
 	ExportsColumn = "owner_id"
+	// ReportsTable is the table that holds the reports relation/edge.
+	ReportsTable = "reports"
+	// ReportsInverseTable is the table name for the Report entity.
+	// It exists in this package in order to avoid circular dependency with the "report" package.
+	ReportsInverseTable = "reports"
+	// ReportsColumn is the table column denoting the reports relation/edge.
+	ReportsColumn = "owner_id"
 	// TrustCenterWatermarkConfigsTable is the table that holds the trust_center_watermark_configs relation/edge.
 	TrustCenterWatermarkConfigsTable = "trust_center_watermark_configs"
 	// TrustCenterWatermarkConfigsInverseTable is the table name for the TrustCenterWatermarkConfig entity.
@@ -3452,6 +3461,20 @@ func ByExports(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByReportsCount orders the results by reports count.
+func ByReportsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportsStep(), opts...)
+	}
+}
+
+// ByReports orders the results by reports terms.
+func ByReports(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByTrustCenterWatermarkConfigsCount orders the results by trust_center_watermark_configs count.
 func ByTrustCenterWatermarkConfigsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -4744,6 +4767,13 @@ func newExportsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ExportsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ExportsTable, ExportsColumn),
+	)
+}
+func newReportsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ReportsTable, ReportsColumn),
 	)
 }
 func newTrustCenterWatermarkConfigsStep() *sqlgraph.Step {
