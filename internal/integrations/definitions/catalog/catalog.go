@@ -34,7 +34,7 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		authentik.Builder(),
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),
-		azuresecuritycenter.Builder(),
+		azuresecuritycenter.Builder(cfg.AzureSecurityCenter),
 		cloudflare.Builder(&cfg.CloudflareRuntime),
 		email.Builder(&cfg.Email, devMode),
 		gcpscc.Builder(federationIssuer),

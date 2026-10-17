@@ -2,63 +2,75 @@ package azuresecuritycenter
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// Builder returns the Azure Security Center definition builder
-func Builder() registry.Builder {
+// Builder returns the Azure Security Center definition builder with the supplied operator config applied
+func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			ID:           definitionID.ID(),
-			Family:       "Azure",
-			DisplayName:  "Microsoft Defender for Cloud",
-			Description:  "Collect security assessment findings and vulnerability data from Microsoft Defender for Cloud across an Azure subscription.",
-			Category:     "security-posture",
-			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center",
-			Tags:         []string{"vulnerabilities", "assets"},
-			Active:       false,
-			Visible:      true,
+			ID:          definitionID.ID(),
+			Family:      "Azure",
+			DisplayName: "Microsoft Defender for Cloud",
+			Description: "Collect security assessment findings and vulnerability data from Microsoft Defender for Cloud across an Azure subscription.",
+			Category:    "security-posture",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center",
+			Tags:        []string{"vulnerabilities", "findings", "checks"},
+			Active:      true,
+			Visible:     true,
+			OperatorConfig: &types.OperatorConfigRegistration{
+				Schema: jsonx.SchemaFrom[Config](),
+			},
 			Installation: installation.Registration(),
 			Connections: []types.Connector{
 				securityCenterConnection.
-					Name("Azure Service Principal").
-					Description("Configure Defender for Cloud access using an Azure service principal.").
-					Provides(buildClient).
+					Name("Azure Admin Consent").
+					Description("Connect your Azure tenant using admin consent, then grant the Openlane app the read-only Security Reader role on your subscriptions.").
+					Meta(map[string]types.MetaInfo{
+						"Application ID": {Value: cfg.ApplicationID, AllowCopy: true},
+					}).
+					Authenticates(microsoft.AdminConsentFlow(cfg, newSecurityCenterCred)).
+					Provides(clientBuilder(cfg)).
 					Verified(verify).
-					Disconnects("Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.", nil),
+					Disconnects("Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure enterprise applications and its subscription role assignments.", nil),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[AssessmentsCollect]().
 					Ingests(runAssessmentsCollect).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
-					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
-					Description("Collect unhealthy security posture assessment findings for vulnerability ingestion").
+					Ingest(types.IngestContract{Schema: entityops.SchemaFinding.Name}).
+					HealthCheck(probeAssessments).
+					Permissions("User.Read", "SecurityReader").
+					Description("Collect unhealthy security posture assessment findings for finding ingestion").
 					Registration(),
-				types.OperationRefOf[SubAssessmentsCollect]().
-					Ingests(runSubAssessmentsCollect).
+				types.OperationRefOf[VulnerabilitiesCollect]().
+					Ingests(runVulnerabilitiesCollect).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
-					Description("Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)").
+					HealthCheck(probeAssessments).
+					Permissions("User.Read", "SecurityReader").
+					Description("Collect software update and service upgrade recommendations with their CVEs for vulnerability ingestion").
+					Registration(),
+				types.OperationRefOf[ComplianceAssessmentsCollect]().
+					Ingests(runComplianceAssessmentsCollect).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(
+						types.IngestContract{Schema: entityops.SchemaCheckResult.Name},
+						types.IngestContract{Schema: entityops.SchemaFinding.Name},
+					).
+					HealthCheck(probeAssessments).
+					Permissions("User.Read", "SecurityReader").
+					Description("Collect regulatory compliance assessments such as SOC 2 as checks linked to their controls, with failed assessments as findings").
 					Registration(),
 			},
 			Mappings: []types.MappingRegistration{
-				{
-					Schema:  entityops.SchemaVulnerability.Name,
-					Variant: variantAssessment,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprAssessment,
-					},
-				},
-				{
-					Schema:  entityops.SchemaVulnerability.Name,
-					Variant: variantSubAssessment,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprSubAssessment,
-					},
-				},
+				providerkit.VulnerabilityMapping(mapExprVulnerability),
+				providerkit.FindingMapping(mapExprFinding),
+				providerkit.CheckResultMapping(mapExprCheckResult),
 			},
 		}, nil
 	})

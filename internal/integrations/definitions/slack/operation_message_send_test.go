@@ -71,7 +71,7 @@ func TestResolveOperationTemplateNoop(t *testing.T) {
 		Text:    "hello",
 	}
 
-	err := templatekit.ResolveOperationTemplate(context.Background(), types.OperationRequest{}, cfg.TemplateID, cfg.TemplateKey, &cfg)
+	err := cfg.ResolveTemplate(context.Background(), types.OperationRequest{}, &cfg)
 	require.NoError(t, err)
 	require.Equal(t, "C11111", cfg.Channel)
 	require.Equal(t, "hello", cfg.Text)
@@ -87,7 +87,7 @@ func TestResolveOperationTemplateBothRefsUseResolutionPath(t *testing.T) {
 		Text:        "hello",
 	}
 
-	err := templatekit.ResolveOperationTemplate(context.Background(), types.OperationRequest{}, cfg.TemplateID, cfg.TemplateKey, &cfg)
+	err := cfg.ResolveTemplate(context.Background(), types.OperationRequest{}, &cfg)
 	require.ErrorIs(t, err, templatekit.ErrTemplateNotFound)
 }
 

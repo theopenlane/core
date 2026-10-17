@@ -15,6 +15,14 @@ var (
 	oauthConnection = types.ConnectionOf[teamsCred]()
 	// userInput is the installation user input layout for the Microsoft Teams definition
 	userInput = types.UserInputRefOf[UserInput]()
+	// teamsScopes are the delegated OAuth scopes requested for Teams installations
+	teamsScopes = []string{
+		"https://graph.microsoft.com/User.Read",
+		"https://graph.microsoft.com/ChannelMessage.Send",
+		"https://graph.microsoft.com/Team.ReadBasic.All",
+		"https://graph.microsoft.com/Channel.ReadBasic.All",
+		"offline_access",
+	}
 )
 
 // teamsCred holds the provider-owned credential material for a Microsoft Teams installation
