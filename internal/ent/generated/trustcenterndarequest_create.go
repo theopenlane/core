@@ -248,6 +248,20 @@ func (_c *TrustCenterNDARequestCreate) SetNillableApprovedByUserID(v *string) *T
 	return _c
 }
 
+// SetAutoApproved sets the "auto_approved" field.
+func (_c *TrustCenterNDARequestCreate) SetAutoApproved(v bool) *TrustCenterNDARequestCreate {
+	_c.mutation.SetAutoApproved(v)
+	return _c
+}
+
+// SetNillableAutoApproved sets the "auto_approved" field if the given value is not nil.
+func (_c *TrustCenterNDARequestCreate) SetNillableAutoApproved(v *bool) *TrustCenterNDARequestCreate {
+	if v != nil {
+		_c.SetAutoApproved(*v)
+	}
+	return _c
+}
+
 // SetSignedAt sets the "signed_at" field.
 func (_c *TrustCenterNDARequestCreate) SetSignedAt(v models.DateTime) *TrustCenterNDARequestCreate {
 	_c.mutation.SetSignedAt(v)
@@ -446,6 +460,10 @@ func (_c *TrustCenterNDARequestCreate) defaults() error {
 		v := trustcenterndarequest.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.AutoApproved(); !ok {
+		v := trustcenterndarequest.DefaultAutoApproved
+		_c.mutation.SetAutoApproved(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenterndarequest.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterndarequest.DefaultID (forgotten import generated/runtime?)")
@@ -595,6 +613,10 @@ func (_c *TrustCenterNDARequestCreate) createSpec() (*TrustCenterNDARequest, *sq
 	if value, ok := _c.mutation.ApprovedAt(); ok {
 		_spec.SetField(trustcenterndarequest.FieldApprovedAt, field.TypeTime, value)
 		_node.ApprovedAt = &value
+	}
+	if value, ok := _c.mutation.AutoApproved(); ok {
+		_spec.SetField(trustcenterndarequest.FieldAutoApproved, field.TypeBool, value)
+		_node.AutoApproved = value
 	}
 	if value, ok := _c.mutation.SignedAt(); ok {
 		_spec.SetField(trustcenterndarequest.FieldSignedAt, field.TypeTime, value)

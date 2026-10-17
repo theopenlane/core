@@ -179,6 +179,9 @@ models:
   TemplateProjectionConfig:
     model:
       - github.com/theopenlane/core/common/models.TemplateProjectionConfig
+  TrustCenterNDARequestSetting:
+    model:
+      - github.com/theopenlane/core/common/models.TrustCenterNDARequestSetting
   VendorScoringQuestionsConfig:
     model:
       - github.com/theopenlane/core/common/models.VendorScoringQuestionsConfig

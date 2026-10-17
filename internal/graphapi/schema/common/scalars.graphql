@@ -143,3 +143,5 @@ scalar RiskThresholdsConfig
 The `IntegrationHealth` scalar type records the runtime health state of an installed integration, including the unhealthy reason, per-operation failure reasons, and the last successful health check time
 """
 scalar IntegrationHealth
+
+scalar TrustCenterNDARequestSetting

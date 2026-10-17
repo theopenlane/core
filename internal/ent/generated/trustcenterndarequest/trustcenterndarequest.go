@@ -54,6 +54,8 @@ const (
 	FieldApprovedAt = "approved_at"
 	// FieldApprovedByUserID holds the string denoting the approved_by_user_id field in the database.
 	FieldApprovedByUserID = "approved_by_user_id"
+	// FieldAutoApproved holds the string denoting the auto_approved field in the database.
+	FieldAutoApproved = "auto_approved"
 	// FieldSignedAt holds the string denoting the signed_at field in the database.
 	FieldSignedAt = "signed_at"
 	// FieldDocumentDataID holds the string denoting the document_data_id field in the database.
@@ -148,6 +150,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldApprovedAt,
 	FieldApprovedByUserID,
+	FieldAutoApproved,
 	FieldSignedAt,
 	FieldDocumentDataID,
 	FieldFileID,
@@ -188,6 +191,8 @@ var (
 	LastNameValidator func(string) error
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	EmailValidator func(string) error
+	// DefaultAutoApproved holds the default value on creation for the "auto_approved" field.
+	DefaultAutoApproved bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -307,6 +312,11 @@ func ByApprovedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByApprovedByUserID orders the results by the approved_by_user_id field.
 func ByApprovedByUserID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldApprovedByUserID, opts...).ToFunc()
+}
+
+// ByAutoApproved orders the results by the auto_approved field.
+func ByAutoApproved(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAutoApproved, opts...).ToFunc()
 }
 
 // BySignedAt orders the results by the signed_at field.

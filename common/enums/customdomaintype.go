@@ -29,7 +29,9 @@ func (CustomDomainType) Values() []string { return stringValues(customDomainType
 func (r CustomDomainType) String() string { return string(r) }
 
 // ToCustomDomainType converts a string to its corresponding CustomDomainType enum value.
-func ToCustomDomainType(r string) *CustomDomainType { return parse(r, customDomainTypeValues, &CustomDomainTypeInvalid) }
+func ToCustomDomainType(r string) *CustomDomainType {
+	return parse(r, customDomainTypeValues, &CustomDomainTypeInvalid)
+}
 
 // MarshalGQL implements the gqlgen Marshaler interface.
 func (r CustomDomainType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }

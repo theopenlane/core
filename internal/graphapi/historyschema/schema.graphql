@@ -30205,6 +30205,7 @@ type TrustCenterNDARequestHistory implements Node {
 	ID of the user who approved the request
 	"""
 	approvedByUserID: String
+	autoApproved: Boolean
 	"""
 	timestamp when the NDA was signed
 	"""
@@ -30523,6 +30524,13 @@ input TrustCenterNDARequestHistoryWhereInput {
 	approvedByUserIDEqualFold: String
 	approvedByUserIDContainsFold: String
 	"""
+	auto_approved field predicates
+	"""
+	autoApproved: Boolean
+	autoApprovedNEQ: Boolean
+	autoApprovedIsNil: Boolean
+	autoApprovedNotNil: Boolean
+	"""
 	signed_at field predicates
 	"""
 	signedAt: DateTime
@@ -30561,6 +30569,7 @@ input TrustCenterNDARequestHistoryWhereInput {
 	fileIDEqualFold: String
 	fileIDContainsFold: String
 }
+scalar TrustCenterNDARequestSetting
 type TrustCenterSettingHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -30690,6 +30699,14 @@ type TrustCenterSettingHistory implements Node {
 	allow trustcenter to be indexed on google
 	"""
 	noindexDefaultDomain: Boolean
+	"""
+	enable auto approval rules provides configurable settings to skip manual approvals
+	"""
+	enableAutoApproval: Boolean
+	"""
+	rules for approving trust center NDA requests
+	"""
+	autoApprovalRules: TrustCenterNDARequestSetting
 }
 """
 A connection to a list of items.
@@ -31229,6 +31246,13 @@ input TrustCenterSettingHistoryWhereInput {
 	noindexDefaultDomainNEQ: Boolean
 	noindexDefaultDomainIsNil: Boolean
 	noindexDefaultDomainNotNil: Boolean
+	"""
+	enable_auto_approval field predicates
+	"""
+	enableAutoApproval: Boolean
+	enableAutoApprovalNEQ: Boolean
+	enableAutoApprovalIsNil: Boolean
+	enableAutoApprovalNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
 	id: ID!
