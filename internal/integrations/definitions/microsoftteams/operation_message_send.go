@@ -16,7 +16,7 @@ import (
 )
 
 // MessageSendOp is the operation ref for the Microsoft Teams message send operation
-var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(MessageSend{}.Run) //nolint:revive
+var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(sendMessage) //nolint:revive
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
@@ -25,18 +25,8 @@ type MessageSendOperation struct {
 	BodyFormat string `json:"bodyFormat,omitempty" jsonschema:"title=Body Format,enum=text,enum=html"`
 }
 
-// MessageSend sends a Microsoft Teams channel message
-type MessageSend struct {
-	// TeamID is the target team identifier
-	TeamID string `json:"teamId"`
-	// Channel is the target channel identifier
-	Channel string `json:"channel"`
-	// MessageID is the identifier of the created message
-	MessageID string `json:"messageId"`
-}
-
-// Run sends a Microsoft Teams channel message via Microsoft Graph
-func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *msgraphsdk.GraphServiceClient, cfg MessageSendOperation) (json.RawMessage, error) {
+// sendMessage sends a Microsoft Teams channel message via Microsoft Graph
+func sendMessage(ctx context.Context, req types.OperationRequest, c *msgraphsdk.GraphServiceClient, cfg MessageSendOperation) (json.RawMessage, error) {
 	if err := cfg.ResolveTemplate(ctx, req, &cfg); err != nil {
 		return nil, err
 	}
@@ -71,9 +61,9 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *msgra
 		return nil, ErrChannelMessageSendFailed
 	}
 
-	return providerkit.EncodeResult(MessageSend{
-		TeamID:    cfg.TeamID,
-		Channel:   cfg.Channel,
-		MessageID: lo.FromPtr(result.GetId()),
-	}, ErrResultEncode)
+	return providerkit.EncodeResult(operations.NewMessageSendResult([]operations.MessageDelivery{{
+		TeamID:  cfg.TeamID,
+		Channel: cfg.Channel,
+		ID:      lo.FromPtr(result.GetId()),
+	}}), ErrResultEncode)
 }

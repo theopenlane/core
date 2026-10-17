@@ -54,9 +54,9 @@ func Builder(cfg Config) registry.Builder {
 					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				MessageSendOp.Description("Send a Teams channel message via Microsoft Graph").Registration(),
-				operations.NewChannelsListOperation(listTeams, ErrResultEncode).Description("List the teams and channels the connected user can post to").Registration(),
-				operations.NewTestMessageOperation(MessageSend{}.Run).Description("Send a test message to a Teams channel to confirm the integration works").Registration(),
+				MessageSendOp.Permissions("ChannelMessage.Send").Description("Send a Teams channel message via Microsoft Graph").Registration(),
+				operations.NewChannelsListOperation(listTeams, ErrResultEncode).Permissions("Team.ReadBasic.All", "Channel.ReadBasic.All").Description("List the teams and channels the connected user can post to").Registration(),
+				operations.NewTestMessageOperation(sendMessage).Permissions("ChannelMessage.Send").Description("Send a test message to a Teams channel to confirm the integration works").Registration(),
 			},
 		}, nil
 	})

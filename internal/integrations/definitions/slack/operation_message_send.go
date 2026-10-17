@@ -15,7 +15,7 @@ import (
 )
 
 // MessageSendOp is the operation ref for the Slack message send operation
-var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(MessageSend{}.Run).Permissions(scopes...) //nolint:revive
+var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(sendMessage).Permissions(scopes...) //nolint:revive
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
@@ -30,26 +30,8 @@ type MessageSendOperation struct {
 	UnfurlLinks *bool `json:"unfurl_links,omitempty" jsonschema:"title=Unfurl Links"`
 }
 
-// MessageSend sends a Slack message via chat.postMessage
-type MessageSend struct {
-	// Channel is the first channel the message was posted to
-	Channel string `json:"channel,omitempty"`
-	// TS is the first message timestamp
-	TS string `json:"ts,omitempty"`
-	// Deliveries captures every channel delivery performed by the operation
-	Deliveries []MessageDelivery `json:"deliveries,omitempty"`
-}
-
-// MessageDelivery captures one Slack message delivery
-type MessageDelivery struct {
-	// Channel is the channel the message was posted to
-	Channel string `json:"channel"`
-	// TS is the message timestamp
-	TS string `json:"ts"`
-}
-
-// Run sends a Slack message via chat.postMessage
-func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *SlackClient, cfg MessageSendOperation) (json.RawMessage, error) {
+// sendMessage sends a Slack message via chat.postMessage
+func sendMessage(ctx context.Context, req types.OperationRequest, c *SlackClient, cfg MessageSendOperation) (json.RawMessage, error) {
 	if err := cfg.ResolveTemplate(ctx, req, &cfg); err != nil {
 		return nil, err
 	}
@@ -93,7 +75,7 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *Slack
 		opts = append(opts, slackgo.MsgOptionDisableLinkUnfurl())
 	}
 
-	deliveries := make([]MessageDelivery, 0, len(destinations))
+	deliveries := make([]operations.MessageDelivery, 0, len(destinations))
 	for _, destination := range destinations {
 		respChannel, ts, err := c.API.PostMessageContext(ctx, destination, opts...)
 		if err != nil {
@@ -101,19 +83,11 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *Slack
 			return nil, ErrMessageSendFailed
 		}
 
-		deliveries = append(deliveries, MessageDelivery{
+		deliveries = append(deliveries, operations.MessageDelivery{
 			Channel: respChannel,
-			TS:      ts,
+			ID:      ts,
 		})
 	}
 
-	result := MessageSend{
-		Deliveries: deliveries,
-	}
-	if len(deliveries) > 0 {
-		result.Channel = deliveries[0].Channel
-		result.TS = deliveries[0].TS
-	}
-
-	return providerkit.EncodeResult(result, ErrResultEncode)
+	return providerkit.EncodeResult(operations.NewMessageSendResult(deliveries), ErrResultEncode)
 }
