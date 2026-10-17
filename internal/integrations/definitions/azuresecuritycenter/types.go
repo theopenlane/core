@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 var (
@@ -14,7 +15,25 @@ var (
 	installation = types.InstallationOf[InstallationMetadata]()
 	// securityCenterConnection is the typed connection handle for the consented tenant credential
 	securityCenterConnection = types.ConnectionOf[securityCenterCred]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
+
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// SubscriptionIDs limits every operation to these subscriptions; when empty every accessible subscription is collected
+	SubscriptionIDs []string `json:"subscriptionIds,omitempty" jsonschema:"title=Subscription IDs,description=Optional list of Azure subscription IDs to collect from; leave empty to collect from every subscription Openlane has been granted access to"`
+}
+
+// requestedSubscriptions returns the subscription IDs the installation's user input limits collection to, empty for every accessible subscription
+func requestedSubscriptions(req types.OperationRequest) ([]string, error) {
+	var input UserInput
+	if err := jsonx.UnmarshalIfPresent(req.Integration.UserInput.Data, &input); err != nil {
+		return nil, err
+	}
+
+	return input.SubscriptionIDs, nil
+}
 
 // securityCenterCred holds the per-installation credential for one consented Azure tenant
 type securityCenterCred struct {
@@ -238,11 +257,6 @@ type CompliancePayload struct {
 	ObservedAt time.Time `json:"observed_at"`
 }
 
-// EnvelopeResource returns the compliance assessment ID as the ingest envelope resource
-func (p CompliancePayload) EnvelopeResource() string {
-	return p.ID
-}
-
 // cveDetail is one entry of a vulnerability recommendation's CvesDetails list
 type cveDetail struct {
 	// CveID is the CVE identifier
@@ -321,9 +335,4 @@ type AssessmentPayload struct {
 	CveID string `json:"cve_id,omitempty"`
 	// FixedVersion is the software version that resolves a vulnerability recommendation
 	FixedVersion string `json:"fixed_version,omitempty"`
-}
-
-// EnvelopeResource returns the assessment ID as the ingest envelope resource
-func (p AssessmentPayload) EnvelopeResource() string {
-	return p.ID
 }

@@ -97,10 +97,17 @@ func (c *Client) collect(ctx context.Context, query string, requested []string, 
 		payloads = append(payloads, payload)
 	}
 
-	envelopes, err := providerkit.MarshalEnvelopes(shape(payloads), ErrIngestPayloadEncode)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("azuresecuritycenter: failed marshal envelopes")
-		return nil, err
+	shaped := shape(payloads)
+	envelopes := make([]types.MappingEnvelope, 0, len(shaped))
+
+	for _, p := range shaped {
+		envelope, err := providerkit.MarshalEnvelope(p.ID, p, ErrIngestPayloadEncode)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("assessment_id", p.ID).Msg("azuresecuritycenter: failed marshal envelope")
+			return nil, ErrIngestPayloadEncode
+		}
+
+		envelopes = append(envelopes, envelope)
 	}
 
 	return envelopes, nil

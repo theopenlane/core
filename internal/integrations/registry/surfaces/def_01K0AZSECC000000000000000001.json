@@ -1,6 +1,6 @@
 {
-  "hash": "6eba01818de752479808f7d06a5a7be2cb7a0834290301a156769f108007e7fc",
-  "version": "01M55EXDEJ400JE49Q4H1DYJ8B",
+  "hash": "b58f14e1a9d8537ea9d4930cc614edab10ee874996be060dd87a5ec02e0ab826",
+  "version": "01M55G4ZG7SFKSXD1CJ6DJ0606",
   "surface": {
     "id": "def_01K0AZSECC000000000000000001",
     "credentials": [
@@ -28,6 +28,29 @@
         }
       }
     ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "subscriptionIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Subscription IDs",
+                "description": "Optional list of Azure subscription IDs to collect from; leave empty to collect from every subscription Openlane has been granted access to"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
     "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -69,14 +92,6 @@
                   "type": "string",
                   "title": "Filter Expression",
                   "description": "Optional CEL expression applied to records before ingesting"
-                },
-                "subscriptionIds": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array",
-                  "title": "Subscription IDs",
-                  "description": "Optional list of Azure subscription IDs to collect from; leave empty to collect from every subscription Openlane has been granted access to"
                 }
               },
               "additionalProperties": false,
@@ -104,14 +119,6 @@
                   "title": "Filter Expression",
                   "description": "Optional CEL expression applied to records before ingesting"
                 },
-                "subscriptionIds": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array",
-                  "title": "Subscription IDs",
-                  "description": "Optional list of Azure subscription IDs to collect from; leave empty to collect from every subscription Openlane has been granted access to"
-                },
                 "standards": {
                   "items": {
                     "type": "string"
@@ -123,7 +130,8 @@
                 "collectChecks": {
                   "type": "boolean",
                   "title": "Collect Checks",
-                  "description": "Record every compliance assessment as a check linked to its control; when off only failed assessments without a Defender recommendation are collected as findings"
+                  "description": "Record every compliance assessment as a check linked to its control; when off only failed assessments without a Defender recommendation are collected as findings",
+                  "default": false
                 }
               },
               "additionalProperties": false,
@@ -150,14 +158,6 @@
                   "type": "string",
                   "title": "Filter Expression",
                   "description": "Optional CEL expression applied to records before ingesting"
-                },
-                "subscriptionIds": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array",
-                  "title": "Subscription IDs",
-                  "description": "Optional list of Azure subscription IDs to collect from; leave empty to collect from every subscription Openlane has been granted access to"
                 }
               },
               "additionalProperties": false,
