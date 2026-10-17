@@ -52,6 +52,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -289,6 +290,11 @@ var remediationhistoryImplementors = []string{"RemediationHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*RemediationHistory) IsNode() {}
+
+var reporthistoryImplementors = []string{"ReportHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ReportHistory) IsNode() {}
 
 var reviewhistoryImplementors = []string{"ReviewHistory", "Node"}
 
@@ -843,6 +849,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(remediationhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, remediationhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case reporthistory.Table:
+		query := c.ReportHistory.Query().
+			Where(reporthistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, reporthistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1798,6 +1813,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.RemediationHistory.Query().
 			Where(remediationhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, remediationhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case reporthistory.Table:
+		query := c.ReportHistory.Query().
+			Where(reporthistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, reporthistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

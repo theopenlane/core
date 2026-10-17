@@ -142,6 +142,8 @@ type Tx struct {
 	ProgramMembership *ProgramMembershipClient
 	// Remediation is the client for interacting with the Remediation builders.
 	Remediation *RemediationClient
+	// Report is the client for interacting with the Report builders.
+	Report *ReportClient
 	// Review is the client for interacting with the Review builders.
 	Review *ReviewClient
 	// Risk is the client for interacting with the Risk builders.
@@ -408,6 +410,7 @@ func (tx *Tx) init() {
 	tx.Program = NewProgramClient(tx.config)
 	tx.ProgramMembership = NewProgramMembershipClient(tx.config)
 	tx.Remediation = NewRemediationClient(tx.config)
+	tx.Report = NewReportClient(tx.config)
 	tx.Review = NewReviewClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
 	tx.SLADefinition = NewSLADefinitionClient(tx.config)

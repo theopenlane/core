@@ -70,6 +70,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -237,6 +238,7 @@ type OrganizationQuery struct {
 	withSLADefinitions                          *SLADefinitionQuery
 	withSubprocessors                           *SubprocessorQuery
 	withExports                                 *ExportQuery
+	withReports                                 *ReportQuery
 	withTrustCenterWatermarkConfigs             *TrustCenterWatermarkConfigQuery
 	withImpersonationEvents                     *ImpersonationEventQuery
 	withAssessments                             *AssessmentQuery
@@ -394,6 +396,7 @@ type OrganizationQuery struct {
 	withNamedSLADefinitions                     map[string]*SLADefinitionQuery
 	withNamedSubprocessors                      map[string]*SubprocessorQuery
 	withNamedExports                            map[string]*ExportQuery
+	withNamedReports                            map[string]*ReportQuery
 	withNamedTrustCenterWatermarkConfigs        map[string]*TrustCenterWatermarkConfigQuery
 	withNamedImpersonationEvents                map[string]*ImpersonationEventQuery
 	withNamedAssessments                        map[string]*AssessmentQuery
@@ -3339,6 +3342,28 @@ func (_q *OrganizationQuery) QueryExports() *ExportQuery {
 	return query
 }
 
+// QueryReports chains the current query on the "reports" edge.
+func (_q *OrganizationQuery) QueryReports() *ReportQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ReportsTable, organization.ReportsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryTrustCenterWatermarkConfigs chains the current query on the "trust_center_watermark_configs" edge.
 func (_q *OrganizationQuery) QueryTrustCenterWatermarkConfigs() *TrustCenterWatermarkConfigQuery {
 	query := (&TrustCenterWatermarkConfigClient{config: _q.config}).Query()
@@ -4256,6 +4281,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withSLADefinitions:                     _q.withSLADefinitions.Clone(),
 		withSubprocessors:                      _q.withSubprocessors.Clone(),
 		withExports:                            _q.withExports.Clone(),
+		withReports:                            _q.withReports.Clone(),
 		withTrustCenterWatermarkConfigs:        _q.withTrustCenterWatermarkConfigs.Clone(),
 		withImpersonationEvents:                _q.withImpersonationEvents.Clone(),
 		withAssessments:                        _q.withAssessments.Clone(),
@@ -5731,6 +5757,17 @@ func (_q *OrganizationQuery) WithExports(opts ...func(*ExportQuery)) *Organizati
 	return _q
 }
 
+// WithReports tells the query-builder to eager-load the nodes that are connected to
+// the "reports" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithReports(opts ...func(*ReportQuery)) *OrganizationQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReports = query
+	return _q
+}
+
 // WithTrustCenterWatermarkConfigs tells the query-builder to eager-load the nodes that are connected to
 // the "trust_center_watermark_configs" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithTrustCenterWatermarkConfigs(opts ...func(*TrustCenterWatermarkConfigQuery)) *OrganizationQuery {
@@ -6112,7 +6149,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [158]bool{
+		loadedTypes = [159]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6244,6 +6281,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withSLADefinitions != nil,
 			_q.withSubprocessors != nil,
 			_q.withExports != nil,
+			_q.withReports != nil,
 			_q.withTrustCenterWatermarkConfigs != nil,
 			_q.withImpersonationEvents != nil,
 			_q.withAssessments != nil,
@@ -7293,6 +7331,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadExports(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Exports = []*Export{} },
 			func(n *Organization, e *Export) { n.Edges.Exports = append(n.Edges.Exports, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReports; query != nil {
+		if err := _q.loadReports(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Reports = []*Report{} },
+			func(n *Organization, e *Report) { n.Edges.Reports = append(n.Edges.Reports, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8406,6 +8451,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadExports(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedExports(name) },
 			func(n *Organization, e *Export) { n.appendNamedExports(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReports {
+		if err := _q.loadReports(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedReports(name) },
+			func(n *Organization, e *Report) { n.appendNamedReports(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -12756,6 +12808,36 @@ func (_q *OrganizationQuery) loadExports(ctx context.Context, query *ExportQuery
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadReports(ctx context.Context, query *ReportQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Report)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(report.FieldOwnerID)
+	}
+	query.Where(predicate.Report(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ReportsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadTrustCenterWatermarkConfigs(ctx context.Context, query *TrustCenterWatermarkConfigQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *TrustCenterWatermarkConfig)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -15464,6 +15546,20 @@ func (_q *OrganizationQuery) WithNamedExports(name string, opts ...func(*ExportQ
 		_q.withNamedExports = make(map[string]*ExportQuery)
 	}
 	_q.withNamedExports[name] = query
+	return _q
+}
+
+// WithNamedReports tells the query-builder to eager-load the nodes that are connected to the "reports"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedReports(name string, opts ...func(*ReportQuery)) *OrganizationQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReports == nil {
+		_q.withNamedReports = make(map[string]*ReportQuery)
+	}
+	_q.withNamedReports[name] = query
 	return _q
 }
 

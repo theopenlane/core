@@ -71,6 +71,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -26295,6 +26296,413 @@ func (_m *Remediation) ToEdge(order *RemediationOrder) *RemediationEdge {
 	}
 }
 
+// ReportEdge is the edge representation of Report.
+type ReportEdge struct {
+	Node   *Report `json:"node"`
+	Cursor Cursor  `json:"cursor"`
+}
+
+// ReportConnection is the connection containing edges to Report.
+type ReportConnection struct {
+	Edges      []*ReportEdge `json:"edges"`
+	PageInfo   PageInfo      `json:"pageInfo"`
+	TotalCount int           `json:"totalCount"`
+}
+
+func (c *ReportConnection) build(nodes []*Report, pager *reportPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Report
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Report {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Report {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ReportEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ReportEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ReportPaginateOption enables pagination customization.
+type ReportPaginateOption func(*reportPager) error
+
+// WithReportOrder configures pagination ordering.
+func WithReportOrder(order []*ReportOrder) ReportPaginateOption {
+	return func(pager *reportPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithReportFilter configures pagination filter.
+func WithReportFilter(filter func(*ReportQuery) (*ReportQuery, error)) ReportPaginateOption {
+	return func(pager *reportPager) error {
+		if filter == nil {
+			return errors.New("ReportQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type reportPager struct {
+	reverse bool
+	order   []*ReportOrder
+	filter  func(*ReportQuery) (*ReportQuery, error)
+}
+
+func newReportPager(opts []ReportPaginateOption, reverse bool) (*reportPager, error) {
+	pager := &reportPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *reportPager) applyFilter(query *ReportQuery) (*ReportQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *reportPager) toCursor(_m *Report) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *reportPager) applyCursors(query *ReportQuery, after, before *Cursor) (*ReportQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultReportOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *reportPager) applyOrder(query *ReportQuery) *ReportQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultReportOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultReportOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *reportPager) orderExpr(query *ReportQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultReportOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Report.
+func (_m *ReportQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ReportPaginateOption,
+) (*ReportConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newReportPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &ReportConnection{Edges: []*ReportEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ReportOrderFieldCreatedAt orders Report by created_at.
+	ReportOrderFieldCreatedAt = &ReportOrderField{
+		Value: func(_m *Report) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: report.FieldCreatedAt,
+		toTerm: report.ByCreatedAt,
+		toCursor: func(_m *Report) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// ReportOrderFieldUpdatedAt orders Report by updated_at.
+	ReportOrderFieldUpdatedAt = &ReportOrderField{
+		Value: func(_m *Report) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: report.FieldUpdatedAt,
+		toTerm: report.ByUpdatedAt,
+		toCursor: func(_m *Report) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// ReportOrderFieldName orders Report by name.
+	ReportOrderFieldName = &ReportOrderField{
+		Value: func(_m *Report) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: report.FieldName,
+		toTerm: report.ByName,
+		toCursor: func(_m *Report) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// ReportOrderFieldStatus orders Report by status.
+	ReportOrderFieldStatus = &ReportOrderField{
+		Value: func(_m *Report) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: report.FieldStatus,
+		toTerm: report.ByStatus,
+		toCursor: func(_m *Report) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// ReportOrderFieldVisibility orders Report by visibility.
+	ReportOrderFieldVisibility = &ReportOrderField{
+		Value: func(_m *Report) (ent.Value, error) {
+			return _m.Visibility, nil
+		},
+		column: report.FieldVisibility,
+		toTerm: report.ByVisibility,
+		toCursor: func(_m *Report) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Visibility,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ReportOrderField) String() string {
+	var str string
+	switch f.column {
+	case ReportOrderFieldCreatedAt.column:
+		str = "created_at"
+	case ReportOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case ReportOrderFieldName.column:
+		str = "name"
+	case ReportOrderFieldStatus.column:
+		str = "STATUS"
+	case ReportOrderFieldVisibility.column:
+		str = "VISIBILITY"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ReportOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ReportOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ReportOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *ReportOrderFieldCreatedAt
+	case "updated_at":
+		*f = *ReportOrderFieldUpdatedAt
+	case "name":
+		*f = *ReportOrderFieldName
+	case "STATUS":
+		*f = *ReportOrderFieldStatus
+	case "VISIBILITY":
+		*f = *ReportOrderFieldVisibility
+	default:
+		return fmt.Errorf("%s is not a valid ReportOrderField", str)
+	}
+	return nil
+}
+
+// ReportOrderField defines the ordering field of Report.
+type ReportOrderField struct {
+	// Value extracts the ordering value from the given Report.
+	Value    func(*Report) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) report.OrderOption
+	toCursor func(*Report) Cursor
+}
+
+// ReportOrder defines the ordering of Report.
+type ReportOrder struct {
+	Direction OrderDirection    `json:"direction"`
+	Field     *ReportOrderField `json:"field"`
+}
+
+// DefaultReportOrder is the default ordering of Report.
+var DefaultReportOrder = &ReportOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ReportOrderField{
+		Value: func(_m *Report) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: report.FieldID,
+		toTerm: report.ByID,
+		toCursor: func(_m *Report) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts Report into ReportEdge.
+func (_m *Report) ToEdge(order *ReportOrder) *ReportEdge {
+	if order == nil {
+		order = DefaultReportOrder
+	}
+	return &ReportEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // ReviewEdge is the edge representation of Review.
 type ReviewEdge struct {
 	Node   *Review `json:"node"`
@@ -45151,6 +45559,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedExports[name] = q.clonePage()
 		}
 	}
+	c.withReports = _q.withReports.clonePage()
+	if _q.withNamedReports != nil {
+		c.withNamedReports = make(map[string]*ReportQuery, len(_q.withNamedReports))
+		for name, q := range _q.withNamedReports {
+			c.withNamedReports[name] = q.clonePage()
+		}
+	}
 	c.withTrustCenterWatermarkConfigs = _q.withTrustCenterWatermarkConfigs.clonePage()
 	if _q.withNamedTrustCenterWatermarkConfigs != nil {
 		c.withNamedTrustCenterWatermarkConfigs = make(map[string]*TrustCenterWatermarkConfigQuery, len(_q.withNamedTrustCenterWatermarkConfigs))
@@ -46049,6 +46464,18 @@ func (_q *RemediationQuery) clonePage() *RemediationQuery {
 			c.withNamedWorkflowObjectRefs[name] = q.clonePage()
 		}
 	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ReportQuery) clonePage() *ReportQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withUser = _q.withUser.clonePage()
 	c.loadTotal = _q.loadTotal
 	return c
 }
@@ -47418,6 +47845,13 @@ func (_q *UserQuery) clonePage() *UserQuery {
 		c.withNamedSubscribers = make(map[string]*SubscriberQuery, len(_q.withNamedSubscribers))
 		for name, q := range _q.withNamedSubscribers {
 			c.withNamedSubscribers[name] = q.clonePage()
+		}
+	}
+	c.withReports = _q.withReports.clonePage()
+	if _q.withNamedReports != nil {
+		c.withNamedReports = make(map[string]*ReportQuery, len(_q.withNamedReports))
+		for name, q := range _q.withNamedReports {
+			c.withNamedReports[name] = q.clonePage()
 		}
 	}
 	c.withGroups = _q.withGroups.clonePage()

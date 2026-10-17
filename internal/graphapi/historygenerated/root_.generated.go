@@ -1888,6 +1888,7 @@ type ComplexityRoot struct {
 		ProgramHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramHistoryOrder, where *historygenerated.ProgramHistoryWhereInput) int
 		ProgramMembershipHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramMembershipHistoryOrder, where *historygenerated.ProgramMembershipHistoryWhereInput) int
 		RemediationHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RemediationHistoryOrder, where *historygenerated.RemediationHistoryWhereInput) int
+		ReportHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReportHistoryOrder, where *historygenerated.ReportHistoryWhereInput) int
 		ReviewHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReviewHistoryOrder, where *historygenerated.ReviewHistoryWhereInput) int
 		RiskHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RiskHistoryOrder, where *historygenerated.RiskHistoryWhereInput) int
 		SLADefinitionHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SLADefinitionHistoryOrder, where *historygenerated.SLADefinitionHistoryWhereInput) int
@@ -1966,6 +1967,36 @@ type ComplexityRoot struct {
 	}
 
 	RemediationHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ReportHistory struct {
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Query                 func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Status                func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UserID                func(childComplexity int) int
+		Variables             func(childComplexity int) int
+		Visibility            func(childComplexity int) int
+	}
+
+	ReportHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ReportHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -12324,6 +12355,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.RemediationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.RemediationHistoryOrder), args["where"].(*historygenerated.RemediationHistoryWhereInput)), true
+	case "Query.reportHistories":
+		if e.ComplexityRoot.Query.ReportHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reportHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ReportHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ReportHistoryOrder), args["where"].(*historygenerated.ReportHistoryWhereInput)), true
 	case "Query.reviewHistories":
 		if e.ComplexityRoot.Query.ReviewHistories == nil {
 			break
@@ -12883,6 +12925,135 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationHistoryEdge.Node(childComplexity), true
+
+	case "ReportHistory.createdAt":
+		if e.ComplexityRoot.ReportHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.CreatedAt(childComplexity), true
+	case "ReportHistory.createdBy":
+		if e.ComplexityRoot.ReportHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.CreatedBy(childComplexity), true
+	case "ReportHistory.historyTime":
+		if e.ComplexityRoot.ReportHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.HistoryTime(childComplexity), true
+	case "ReportHistory.id":
+		if e.ComplexityRoot.ReportHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.ID(childComplexity), true
+	case "ReportHistory.name":
+		if e.ComplexityRoot.ReportHistory.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.Name(childComplexity), true
+	case "ReportHistory.operation":
+		if e.ComplexityRoot.ReportHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.Operation(childComplexity), true
+	case "ReportHistory.ownerID":
+		if e.ComplexityRoot.ReportHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.OwnerID(childComplexity), true
+	case "ReportHistory.query":
+		if e.ComplexityRoot.ReportHistory.Query == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.Query(childComplexity), true
+	case "ReportHistory.ref":
+		if e.ComplexityRoot.ReportHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.Ref(childComplexity), true
+	case "ReportHistory.status":
+		if e.ComplexityRoot.ReportHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.Status(childComplexity), true
+	case "ReportHistory.updatedAt":
+		if e.ComplexityRoot.ReportHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.UpdatedAt(childComplexity), true
+	case "ReportHistory.updatedBy":
+		if e.ComplexityRoot.ReportHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.UpdatedBy(childComplexity), true
+	case "ReportHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ReportHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.UpdatedByImpersonator(childComplexity), true
+	case "ReportHistory.userID":
+		if e.ComplexityRoot.ReportHistory.UserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.UserID(childComplexity), true
+	case "ReportHistory.variables":
+		if e.ComplexityRoot.ReportHistory.Variables == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.Variables(childComplexity), true
+	case "ReportHistory.visibility":
+		if e.ComplexityRoot.ReportHistory.Visibility == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistory.Visibility(childComplexity), true
+
+	case "ReportHistoryConnection.edges":
+		if e.ComplexityRoot.ReportHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistoryConnection.Edges(childComplexity), true
+	case "ReportHistoryConnection.pageInfo":
+		if e.ComplexityRoot.ReportHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistoryConnection.PageInfo(childComplexity), true
+	case "ReportHistoryConnection.totalCount":
+		if e.ComplexityRoot.ReportHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistoryConnection.TotalCount(childComplexity), true
+
+	case "ReportHistoryEdge.cursor":
+		if e.ComplexityRoot.ReportHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistoryEdge.Cursor(childComplexity), true
+	case "ReportHistoryEdge.node":
+		if e.ComplexityRoot.ReportHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportHistoryEdge.Node(childComplexity), true
 
 	case "ReviewHistory.approved":
 		if e.ComplexityRoot.ReviewHistory.Approved == nil {
@@ -18056,6 +18227,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputProgramMembershipHistoryWhereInput,
 		ec.unmarshalInputRemediationHistoryOrder,
 		ec.unmarshalInputRemediationHistoryWhereInput,
+		ec.unmarshalInputReportHistoryOrder,
+		ec.unmarshalInputReportHistoryWhereInput,
 		ec.unmarshalInputReviewHistoryOrder,
 		ec.unmarshalInputReviewHistoryWhereInput,
 		ec.unmarshalInputRiskHistoryOrder,
@@ -40517,6 +40690,37 @@ type Query {
     """
     where: RemediationHistoryWhereInput
   ): RemediationHistoryConnection!
+  reportHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ReportHistories returned from the connection.
+    """
+    orderBy: ReportHistoryOrder
+
+    """
+    Filtering options for ReportHistories returned from the connection.
+    """
+    where: ReportHistoryWhereInput
+  ): ReportHistoryConnection!
   reviewHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -42017,6 +42221,289 @@ input RemediationHistoryWhereInput {
   externalURINotNil: Boolean
   externalURIEqualFold: String
   externalURIContainsFold: String
+}
+type ReportHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: ReportHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  name: String!
+  """
+  the query for this report
+  """
+  query: String!
+  """
+  variables needed to pass into the query if needed
+  """
+  variables: Map
+  status: ReportHistoryReportStatus!
+  visibility: ReportHistoryReportVisibility!
+  """
+  the user who created this report
+  """
+  userID: String!
+}
+"""
+A connection to a list of items.
+"""
+type ReportHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ReportHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ReportHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ReportHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ReportHistoryOpType is enum for the field operation
+"""
+enum ReportHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for ReportHistory connections
+"""
+input ReportHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ReportHistories.
+  """
+  field: ReportHistoryOrderField!
+}
+"""
+Properties by which ReportHistory connections can be ordered.
+"""
+enum ReportHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  name
+  STATUS
+  VISIBILITY
+}
+"""
+ReportHistoryReportStatus is enum for the field status
+"""
+enum ReportHistoryReportStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReportStatus") {
+  DRAFT
+  SAVED
+}
+"""
+ReportHistoryReportVisibility is enum for the field visibility
+"""
+enum ReportHistoryReportVisibility @goModel(model: "github.com/theopenlane/core/common/enums.ReportVisibility") {
+  PRIVATE
+  RESTRICTED
+  ORGANIZATION
+}
+"""
+ReportHistoryWhereInput is used for filtering ReportHistory objects.
+Input was generated by ent.
+"""
+input ReportHistoryWhereInput {
+  not: ReportHistoryWhereInput
+  and: [ReportHistoryWhereInput!]
+  or: [ReportHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: ReportHistoryOpType
+  operationNEQ: ReportHistoryOpType
+  operationIn: [ReportHistoryOpType!]
+  operationNotIn: [ReportHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  query field predicates
+  """
+  query: String
+  queryNEQ: String
+  queryIn: [String!]
+  queryNotIn: [String!]
+  queryContains: String
+  queryHasPrefix: String
+  queryHasSuffix: String
+  queryEqualFold: String
+  queryContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReportHistoryReportStatus
+  statusNEQ: ReportHistoryReportStatus
+  statusIn: [ReportHistoryReportStatus!]
+  statusNotIn: [ReportHistoryReportStatus!]
+  """
+  visibility field predicates
+  """
+  visibility: ReportHistoryReportVisibility
+  visibilityNEQ: ReportHistoryReportVisibility
+  visibilityIn: [ReportHistoryReportVisibility!]
+  visibilityNotIn: [ReportHistoryReportVisibility!]
+  """
+  user_id field predicates
+  """
+  userID: String
+  userIDNEQ: String
+  userIDIn: [String!]
+  userIDNotIn: [String!]
+  userIDContains: String
+  userIDHasPrefix: String
+  userIDHasSuffix: String
+  userIDEqualFold: String
+  userIDContainsFold: String
 }
 type ReviewHistory implements Node {
   id: ID!
@@ -57736,6 +58223,66 @@ func (ec *executionContext) childFields_RemediationHistoryEdge(ctx context.Conte
 		return ec.fieldContext_RemediationHistoryEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type RemediationHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ReportHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ReportHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ReportHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ReportHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ReportHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ReportHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ReportHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ReportHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ReportHistory_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ReportHistory_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_ReportHistory_name(ctx, field)
+	case "query":
+		return ec.fieldContext_ReportHistory_query(ctx, field)
+	case "variables":
+		return ec.fieldContext_ReportHistory_variables(ctx, field)
+	case "status":
+		return ec.fieldContext_ReportHistory_status(ctx, field)
+	case "visibility":
+		return ec.fieldContext_ReportHistory_visibility(ctx, field)
+	case "userID":
+		return ec.fieldContext_ReportHistory_userID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ReportHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ReportHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ReportHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ReportHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ReportHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportHistoryEdge", field.Name)
 }
 
 func (ec *executionContext) childFields_ReviewHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

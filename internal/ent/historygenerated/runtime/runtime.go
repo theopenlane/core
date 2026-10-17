@@ -50,6 +50,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -1919,6 +1920,24 @@ func init() {
 	remediationhistoryDescID := remediationhistoryFields[10].Descriptor()
 	// remediationhistory.DefaultID holds the default value on creation for the id field.
 	remediationhistory.DefaultID = remediationhistoryDescID.Default.(func() string)
+	reporthistoryFields := historyschema.ReportHistory{}.Fields()
+	_ = reporthistoryFields
+	// reporthistoryDescHistoryTime is the schema descriptor for history_time field.
+	reporthistoryDescHistoryTime := reporthistoryFields[0].Descriptor()
+	// reporthistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	reporthistory.DefaultHistoryTime = reporthistoryDescHistoryTime.Default.(func() time.Time)
+	// reporthistoryDescCreatedAt is the schema descriptor for created_at field.
+	reporthistoryDescCreatedAt := reporthistoryFields[3].Descriptor()
+	// reporthistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	reporthistory.DefaultCreatedAt = reporthistoryDescCreatedAt.Default.(func() time.Time)
+	// reporthistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	reporthistoryDescUpdatedAt := reporthistoryFields[4].Descriptor()
+	// reporthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	reporthistory.DefaultUpdatedAt = reporthistoryDescUpdatedAt.Default.(func() time.Time)
+	// reporthistoryDescID is the schema descriptor for id field.
+	reporthistoryDescID := reporthistoryFields[10].Descriptor()
+	// reporthistory.DefaultID holds the default value on creation for the id field.
+	reporthistory.DefaultID = reporthistoryDescID.Default.(func() string)
 	reviewhistory.Policy = privacy.NewPolicies(historyschema.ReviewHistory{})
 	reviewhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {

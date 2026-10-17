@@ -4273,6 +4273,29 @@ func HasExportsWith(preds ...predicate.Export) predicate.Organization {
 	})
 }
 
+// HasReports applies the HasEdge predicate on the "reports" edge.
+func HasReports() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReportsTable, ReportsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportsWith applies the HasEdge predicate on the "reports" edge with a given conditions (other predicates).
+func HasReportsWith(preds ...predicate.Report) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newReportsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasTrustCenterWatermarkConfigs applies the HasEdge predicate on the "trust_center_watermark_configs" edge.
 func HasTrustCenterWatermarkConfigs() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

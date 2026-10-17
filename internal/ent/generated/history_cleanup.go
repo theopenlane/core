@@ -50,6 +50,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
@@ -117,6 +118,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -1419,6 +1421,37 @@ func PurgeRemediationHistory(ctx context.Context, ps ...predicate.Remediation) e
 		s.Where(sql.In(remediationhistory.FieldRef, refs))
 	}).Exec(history.WithContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error purging remediation history")
+
+		return err
+	}
+
+	return nil
+}
+
+// PurgeReportHistory removes the history rows belonging to every report matching
+// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
+// deletes that should keep their audit trail are unaffected.
+// This has to run before the report records themselves are deleted, the rows are matched
+// with a sub-select against the report table
+func PurgeReportHistory(ctx context.Context, ps ...predicate.Report) error {
+	if !contextx.PurgeHistoryEnabled(ctx) {
+		return nil
+	}
+
+	client := FromContext(ctx)
+	if client == nil || client.HistoryClient == nil {
+		return nil
+	}
+
+	refs := sql.Select(report.FieldID).From(sql.Table(report.Table))
+	for _, p := range ps {
+		p(refs)
+	}
+
+	if _, err := client.HistoryClient.ReportHistory.Delete().Where(func(s *sql.Selector) {
+		s.Where(sql.In(reporthistory.FieldRef, refs))
+	}).Exec(history.WithContext(ctx)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error purging report history")
 
 		return err
 	}

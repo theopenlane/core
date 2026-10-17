@@ -1,0 +1,62 @@
+query GetAllReportHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportHistoryOrder!]) {
+	reportHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				query
+				ref
+				status
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+				variables
+				visibility
+			}
+		}
+	}
+}
+query GetReportHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportHistoryOrder!], $where: ReportHistoryWhereInput) {
+	reportHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				query
+				ref
+				status
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+				variables
+				visibility
+			}
+		}
+	}
+}
