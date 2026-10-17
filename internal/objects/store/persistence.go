@@ -8,12 +8,12 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/consts"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
@@ -193,7 +193,7 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 
 	// derive table name from correlated object type using snake_case to match DB naming
 	objectType := lo.SnakeCase(f.CorrelatedObjectType)
-	objectTable := pluralize.NewClient().Plural(objectType)
+	objectTable := utils.PluralizerClientFromContext(ctx).Plural(objectType)
 
 	var rows sql.Rows
 

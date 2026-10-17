@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -73,7 +74,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 
 	// if a standard is provided, clone those controls
 	if controls.FilterByStandard(filters) {
-		res, err := r.cloneControlsFromStandard(ctx, filters, input.ProgramID)
+		res, err := r.cloneControlsFromStandard(ctx, filters, input.ProgramID, lo.FromPtr(input.ImportTemplateMappings))
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 		}
@@ -99,7 +100,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, parseRequestError(ctx, generated.ErrPermissionDenied, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
-	createdControls, err := r.cloneControls(ctx, existingControls, input.ProgramID)
+	createdControls, err := r.cloneTemplateControls(ctx, existingControls, input.ProgramID, lo.FromPtr(input.ImportTemplateMappings))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}

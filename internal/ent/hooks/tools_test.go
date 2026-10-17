@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -139,6 +140,7 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 
 	opts := []generated.Option{
 		generated.Authz(*fgaClient),
+		generated.Pluralizer(pluralize.NewClient()),
 		generated.TokenManager(tm),
 		generated.SessionConfig(&sessionConfig),
 		generated.EntConfig(entCfg),

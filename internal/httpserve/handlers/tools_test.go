@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -209,6 +210,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	galaOpts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
+		ent.Pluralizer(pluralize.NewClient()),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&galaSessionConfig),
 		ent.EntConfig(&entconfig.Config{Modules: entconfig.Modules{Enabled: true, UseSandbox: true}}),
@@ -306,6 +308,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
+		ent.Pluralizer(pluralize.NewClient()),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{

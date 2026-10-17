@@ -7926,6 +7926,10 @@ input CloneControlInput {
 	optional program ID to associate to the controls
 	"""
 	programID: ID
+	"""
+	optionally choose to import existing template mappings for the cloned controls
+	"""
+	importTemplateMappings: Boolean
 }
 """
 CloneControlUploadInput is used to clone controls and their subcontrols

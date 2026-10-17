@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -187,6 +188,7 @@ func serve(ctx context.Context) error {
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
 		ent.ObjectManager(so.Config.StorageService),
 		ent.Summarizer(so.Config.Handler.Summarizer),
+		ent.Pluralizer(pluralize.NewClient()),
 		ent.Shortlinks(so.Config.Handler.ShortlinksClient),
 		ent.Pool(pool),
 		ent.EmailVerifier(verifier),

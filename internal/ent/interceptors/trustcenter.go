@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -18,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -76,7 +76,7 @@ func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interc
 
 				// only do this for anon trust center tokens
 				if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && graphql.HasOperationContext(ctx) {
-					entity := pluralize.NewClient().Plural(strings.ToLower(query.Type()))
+					entity := utils.PluralizerClientFromContext(ctx).Plural(strings.ToLower(query.Type()))
 
 					path := graphql.GetPath(ctx)
 

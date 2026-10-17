@@ -351,7 +351,7 @@ func queryForSystemOwned(ctx context.Context, m utils.SystemOwnedMutation, ids [
 		return false, nil
 	}
 
-	table := strcase.SnakeCase(pluralize.NewClient().Plural(m.Type()))
+	table := strcase.SnakeCase(m.Client().Pluralizer.Plural(m.Type()))
 
 	// Build placeholders for IN clause: $1, $2, $3, ...
 	placeholders := make([]string, len(ids))

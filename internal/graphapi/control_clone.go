@@ -7,11 +7,14 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -19,10 +22,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/schema"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -49,7 +54,7 @@ func hasStandardFilter[T createProgramRequest](value T) bool {
 
 // cloneControlsFromStandard clones all controls from a standard into an organization
 // if the controls already exist in the organization, they will not be cloned again
-func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filters controls.CloneFilterOptions, programID *string) ([]*generated.Control, error) {
+func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filters controls.CloneFilterOptions, programID *string, cloneTemplateMappings bool) ([]*generated.Control, error) {
 	logger := logx.FromContext(ctx)
 	// first check if the standard exists
 	stdWhereFilter := controls.StandardFilter(filters)
@@ -96,7 +101,33 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 		return nil, err
 	}
 
-	return r.cloneControls(ctx, controls, programID)
+	return r.cloneTemplateControls(ctx, controls, programID, cloneTemplateMappings)
+}
+
+func (r *mutationResolver) cloneTemplateControls(ctx context.Context, controlsToClone []*generated.Control,
+	programID *string, shouldCloneTemplates bool) ([]*generated.Control, error) {
+
+	clonedControls, err := r.cloneControls(ctx, controlsToClone, programID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !shouldCloneTemplates {
+		return clonedControls, nil
+	}
+
+	if r.integrationsRuntime == nil {
+		return nil, common.ErrInternalServerError
+	}
+
+	ids := make([]string, 0, len(controlsToClone))
+	for _, c := range controlsToClone {
+		if controls.IsOpenlaneBaseControl(c) {
+			ids = append(ids, c.ID)
+		}
+	}
+
+	return clonedControls, r.emitTemplateMappingsJob(ctx, ids, lo.FromPtr(programID))
 }
 
 // cloneControls clones the given controls into the organization in the context
@@ -104,6 +135,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 // if the controls already exist in the organization, they will not be cloned again
 // but will be updated to link to the program if needed
 func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []*generated.Control, programID *string) ([]*generated.Control, error) {
+
 	logger := logx.FromContext(ctx)
 	// keep track of the control IDs that already exist in the org to be updated to link to the program if needed
 	existingControlIDs := []string{}
@@ -203,10 +235,14 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// check program access if a program is specified
 	if programID != nil {
-		exists, err := r.db.Program.Query().Where(program.ID(*programID)).Exist(internalCtx)
+		exists, err := withTransactionalMutation(ctx).Program.Query().
+			Where(program.ID(*programID)).
+			Exist(internalCtx)
+
 		if err != nil {
 			return nil, err
 		}
+
 		if !exists {
 			return nil, generated.ErrPermissionDenied
 		}
@@ -281,6 +317,30 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	return query.All(internalCtx)
+}
+
+func (r *mutationResolver) emitTemplateMappingsJob(ctx context.Context, controlIDs []string, programID string) error {
+	if len(controlIDs) == 0 {
+		return nil
+	}
+
+	req := hooks.TemplateMappingRequest{
+		ControlIDs: controlIDs,
+		ProgramID:  programID,
+	}
+
+	var value = req.ProgramID
+
+	if value == "" {
+		value = ulids.New().String()
+	}
+
+	_, err := r.integrationsRuntime.Gala().
+		EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{
+			UniqueKey: "template-mapping-" + value,
+		})
+
+	return err
 }
 
 // checkProgramAccess checks the users access to the specific program id
