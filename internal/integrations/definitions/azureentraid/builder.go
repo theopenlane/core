@@ -1,6 +1,7 @@
 package azureentraid
 
 import (
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -30,7 +31,7 @@ func Builder(cfg Config) registry.Builder {
 				adminConsent.
 					Name("Azure Entra ID Admin Consent").
 					Description("Connect your Azure Entra ID tenant using admin consent.").
-					Authenticates(adminConsentFlow(cfg)).
+					Authenticates(microsoft.AdminConsentFlow(cfg, newEntraIDCred)).
 					Provides(tokenCredentialClient(cfg)).
 					Provides(graphClient(cfg)).
 					Verified(verify).

@@ -2,52 +2,32 @@ package microsoftteams
 
 import (
 	"context"
-	"time"
 
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
-	kiotaauth "github.com/microsoft/kiota-authentication-azure-go"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// teamsGraphScope is the Microsoft Graph scope used for Teams operations
-const teamsGraphScope = "https://graph.microsoft.com/.default"
+// clientBuilder returns the Microsoft Graph client builder bound to the operator config
+func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[teamsCred]) (*msgraphsdk.GraphServiceClient, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[teamsCred]) (*msgraphsdk.GraphServiceClient, error) {
+		cred := req.Credential
 
-// buildClient constructs the Microsoft Graph service client from the installation OAuth access token
-func buildClient(_ context.Context, req types.ConnectionRequest[teamsCred]) (*msgraphsdk.GraphServiceClient, error) {
-	if req.Credential.AccessToken == "" {
-		return nil, ErrOAuthTokenMissing
+		if cred.AccessToken == "" {
+			return nil, ErrOAuthTokenMissing
+		}
+
+		appCfg := microsoft.AppConfig{ApplicationID: cfg.ApplicationID, ClientSecret: cfg.ClientSecret}
+
+		graph, _, err := appCfg.NewDelegatedGraphClient(ctx, microsoft.OrganizationsTenant, teamsScopes, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error building microsoft teams client")
+			return nil, ErrClientBuildFailed
+		}
+
+		return graph, nil
 	}
-
-	cred := &staticTokenCredential{
-		token:  req.Credential.AccessToken,
-		expiry: time.Now().Add(time.Hour),
-	}
-
-	authProvider, err := kiotaauth.NewAzureIdentityAuthenticationProviderWithScopes(cred, []string{teamsGraphScope})
-	if err != nil {
-		return nil, ErrOAuthTokenMissing
-	}
-
-	adapter, err := msgraphsdk.NewGraphRequestAdapter(authProvider)
-	if err != nil {
-		return nil, ErrOAuthTokenMissing
-	}
-
-	return msgraphsdk.NewGraphServiceClient(adapter), nil
-}
-
-// staticTokenCredential wraps a pre-obtained bearer token as an azcore.TokenCredential
-type staticTokenCredential struct {
-	// token is the pre-obtained bearer token used for Microsoft Graph requests
-	token string
-	// expiry is the timestamp at which the bearer token expires
-	expiry time.Time
-}
-
-// GetToken returns the static bearer token
-func (s *staticTokenCredential) GetToken(_ context.Context, _ policy.TokenRequestOptions) (azcore.AccessToken, error) {
-	return azcore.AccessToken{Token: s.token, ExpiresOn: s.expiry}, nil
 }

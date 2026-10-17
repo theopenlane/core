@@ -1,48 +1,56 @@
 {
-  "hash": "ba0b8e59aa8c8a4629dfdc579f6b228520ce37a33955600f69f866a8d1f8911f",
-  "version": "01M49CHH2NPBMN1CMF8MRNP5HH",
+  "hash": "b58f14e1a9d8537ea9d4930cc614edab10ee874996be060dd87a5ec02e0ab826",
+  "version": "01M55G4ZG7SFKSXD1CJ6DJ0606",
   "surface": {
     "id": "def_01K0AZSECC000000000000000001",
     "credentials": [
       {
-        "ref": "CredentialSchema",
+        "ref": "securityCenterCred",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/credential-schema",
-          "$ref": "#/$defs/CredentialSchema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/security-center-cred",
+          "$ref": "#/$defs/securityCenterCred",
           "$defs": {
-            "CredentialSchema": {
+            "securityCenterCred": {
               "properties": {
                 "tenantId": {
                   "type": "string",
                   "title": "Tenant ID"
-                },
-                "clientId": {
-                  "type": "string",
-                  "title": "Client ID"
-                },
-                "clientSecret": {
-                  "type": "string",
-                  "title": "Client Secret"
-                },
-                "subscriptionId": {
-                  "type": "string",
-                  "title": "Subscription ID"
                 }
               },
               "additionalProperties": false,
               "type": "object",
               "required": [
-                "tenantId",
-                "clientId",
-                "clientSecret",
-                "subscriptionId"
+                "tenantId"
               ]
             }
           }
         }
       }
     ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "subscriptionIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Subscription IDs",
+                "description": "Optional list of Azure subscription IDs to collect from; leave empty to collect from every subscription Openlane has been granted access to"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
     "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -54,14 +62,6 @@
               "tenantId": {
                 "type": "string",
                 "title": "Tenant ID"
-              },
-              "clientId": {
-                "type": "string",
-                "title": "Client ID"
-              },
-              "subscriptionId": {
-                "type": "string",
-                "title": "Subscription ID"
               }
             },
             "additionalProperties": false,
@@ -71,7 +71,7 @@
       }
     },
     "connections": [
-      "CredentialSchema"
+      "securityCenterCred"
     ],
     "operations": [
       {
@@ -101,13 +101,53 @@
         }
       },
       {
-        "name": "SubAssessmentsCollect",
+        "name": "ComplianceAssessmentsCollect",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/sub-assessments-collect",
-          "$ref": "#/$defs/SubAssessmentsCollect",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/compliance-assessments-collect",
+          "$ref": "#/$defs/ComplianceAssessmentsCollect",
           "$defs": {
-            "SubAssessmentsCollect": {
+            "ComplianceAssessmentsCollect": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "standards": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Compliance Standards",
+                  "description": "Optional list of compliance standard names to collect such as Azure-SOC-2023; leave empty to collect every standard enabled in Defender for Cloud"
+                },
+                "collectChecks": {
+                  "type": "boolean",
+                  "title": "Collect Checks",
+                  "description": "Record every compliance assessment as a check linked to its control; when off only failed assessments without a Defender recommendation are collected as findings",
+                  "default": false
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "VulnerabilitiesCollect",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/vulnerabilities-collect",
+          "$ref": "#/$defs/VulnerabilitiesCollect",
+          "$defs": {
+            "VulnerabilitiesCollect": {
               "properties": {
                 "disable": {
                   "type": "boolean",
