@@ -55,12 +55,12 @@ func (c controlMappings) uniqueKey() dedupSetKey {
 
 // CloneTemplateMappings replaces template IDs with organization IDs in their mappings.
 // Framework controls keep their system IDs; reports resolve them to organization copies.
-func CloneTemplateMappings(ctx context.Context, client *generated.Client, ids []string, orgID string, program *generated.Program) error {
+func CloneTemplateMappings(ctx context.Context, ids []string, program *generated.Program) error {
 	if len(ids) == 0 {
 		return nil
 	}
 
-	mappings, err := fetchMappings(ctx, client, ids)
+	mappings, err := fetchMappings(ctx, ids)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func CloneTemplateMappings(ctx context.Context, client *generated.Client, ids []
 		return nil
 	}
 
-	matchedControls, err := loadMappingControls(ctx, client, controlIDs, ids, program)
+	matchedControls, err := loadMappingControls(ctx, controlIDs, ids, program)
 	if err != nil {
 		return err
 	}
@@ -93,7 +93,7 @@ func CloneTemplateMappings(ctx context.Context, client *generated.Client, ids []
 		return c.ID, c.RefCode
 	})
 
-	controlsToMap, err := fetchTemplateControls(ctx, client, templateControls, orgID)
+	controlsToMap, err := fetchTemplateControls(ctx, templateControls)
 	if err != nil {
 		return err
 	}
@@ -104,16 +104,18 @@ func CloneTemplateMappings(ctx context.Context, client *generated.Client, ids []
 
 	controlLookup, subcontrolLookup := computeMappingLookups(sourceRefCodes, sourceSubcontrols, controlsToMap, matchedControls)
 
-	existingMappings, err := computeExistingMappings(ctx, client, controlsToMap)
+	existingMappings, err := computeExistingMappings(ctx, controlsToMap)
 	if err != nil {
 		return err
 	}
 
-	return createMappings(ctx, client, orgID, mappings, sourceRefCodes, controlLookup, subcontrolLookup, existingMappings)
+	return createMappings(ctx, mappings, sourceRefCodes, controlLookup, subcontrolLookup, existingMappings)
 }
 
 // fetchMappings retrieves the system owned mappings that are mapped to the provided control ids
-func fetchMappings(ctx context.Context, client *generated.Client, ids []string) ([]*generated.MappedControl, error) {
+func fetchMappings(ctx context.Context, ids []string) ([]*generated.MappedControl, error) {
+	client := generated.FromContext(ctx)
+
 	controlIDsOnlyPredicate := func(q *generated.ControlQuery) {
 		q.Select(control.FieldID)
 	}
@@ -167,25 +169,15 @@ func collateReferencesFromMappings(mappings []*generated.MappedControl) ([]strin
 	return lo.Uniq(ids), sourceSubcontrols
 }
 
-func loadMappingControls(ctx context.Context, client *generated.Client, controlIDs, ids []string, program *generated.Program) ([]*generated.Control, error) {
+func loadMappingControls(ctx context.Context, controlIDs, ids []string, program *generated.Program) ([]*generated.Control, error) {
+	client := generated.FromContext(ctx)
+
 	// fetch controls that match the provided ids but if program is provided,
 	// make sure to include it as a filter too
 	controlsQuery := client.Control.Query().Where(control.IDIn(controlIDs...))
 
 	if program != nil {
-		controlsIDsPredicate := control.IDIn(ids...)
-
-		if program.FrameworkName == "" {
-
-			controlsQuery.Where(controlsIDsPredicate)
-		} else {
-
-			controlsQuery.Where(
-				control.Or(
-					controlsIDsPredicate,
-					control.ReferenceFramework(program.FrameworkName)),
-			)
-		}
+		controlsQuery.Where(control.IDIn(ids...))
 	}
 
 	return controlsQuery.
@@ -197,7 +189,9 @@ func loadMappingControls(ctx context.Context, client *generated.Client, controlI
 
 // fetchTemplateControls finds organization copies with matching template reference codes
 // and loads their subcontrols for the given organization.
-func fetchTemplateControls(ctx context.Context, client *generated.Client, templateControls []*generated.Control, orgID string) ([]*generated.Control, error) {
+func fetchTemplateControls(ctx context.Context, templateControls []*generated.Control) ([]*generated.Control, error) {
+	client := generated.FromContext(ctx)
+
 	refCodesToRetrieve := lo.Map(templateControls, func(c *generated.Control, _ int) string {
 		return c.RefCode
 	})
@@ -212,7 +206,6 @@ func fetchTemplateControls(ctx context.Context, client *generated.Client, templa
 		).
 		WithSubcontrols(func(q *generated.SubcontrolQuery) {
 			q.Where(
-				subcontrol.OwnerID(orgID),
 				subcontrol.SystemOwned(false),
 			).
 				Select(subcontrol.FieldID, subcontrol.FieldControlID, subcontrol.FieldRefCode)
@@ -238,7 +231,9 @@ func computeMappingLookups(sourceRefCodes map[string]string, sourceSubcontrols m
 	return controlLookup, subcontrolLookup
 }
 
-func computeExistingMappings(ctx context.Context, client *generated.Client, controlsToMap []*generated.Control) (map[dedupSetKey]struct{}, error) {
+func computeExistingMappings(ctx context.Context, controlsToMap []*generated.Control) (map[dedupSetKey]struct{}, error) {
+	client := generated.FromContext(ctx)
+
 	controlIDsOnlyPredicate := func(q *generated.ControlQuery) {
 		q.Select(control.FieldID)
 	}
@@ -278,7 +273,14 @@ func computeExistingMappings(ctx context.Context, client *generated.Client, cont
 
 // createMappings imports mappings that retain both sides and include a matched template copy.
 // It skips duplicate mappings and writes the accepted mappings in bounded batches.
-func createMappings(ctx context.Context, client *generated.Client, orgID string, mappings []*generated.MappedControl, sourceRefCodes, controlLookup, subcontrolLookup map[string]string, existingMappings map[dedupSetKey]struct{}) error {
+func createMappings(ctx context.Context, mappings []*generated.MappedControl, sourceRefCodes, controlLookup, subcontrolLookup map[string]string, existingMappings map[dedupSetKey]struct{}) error {
+	client := generated.FromContext(ctx)
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
+	}
+
 	writeCtx := auth.WithInternalOperationContext(ctx)
 	builders := make([]*generated.MappedControlCreate, 0, mappingWriteBatchSize)
 	for _, m := range mappings {

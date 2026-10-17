@@ -3,8 +3,6 @@ package hooks
 import (
 	"fmt"
 
-	"github.com/theopenlane/iam/auth"
-
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -28,10 +26,7 @@ var TemplateMappingTopic = gala.NamespacedTopic[TemplateMappingRequest](gala.Sys
 func TemplateMappingListeners() []gala.Registration {
 	return []gala.Registration{
 		gala.Definition[TemplateMappingRequest]{
-			Topic: TemplateMappingTopic,
-			Caller: func(restored *auth.Caller, _ TemplateMappingRequest) *auth.Caller {
-				return restored.WithCapabilities(auth.CapInternalOperation)
-			},
+			Topic:  TemplateMappingTopic,
 			Handle: handleTemplateMappings,
 		},
 	}
@@ -63,5 +58,5 @@ func handleTemplateMappings(hctx gala.HandlerContext, req TemplateMappingRequest
 		}
 	}
 
-	return controls.CloneTemplateMappings(hctx.Context, client, req.ControlIDs, hctx.Caller.OrganizationID, program)
+	return controls.CloneTemplateMappings(hctx.Context, req.ControlIDs, program)
 }
