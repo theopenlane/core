@@ -44,11 +44,6 @@ type driveItemPayload struct {
 	CreatedDateTime time.Time `json:"createdDateTime,omitempty"`
 }
 
-// EnvelopeResource returns the OneDrive item ID as the ingest envelope resource
-func (p driveItemPayload) EnvelopeResource() string {
-	return p.ID
-}
-
 // FolderSync lists OneDrive documents in a folder and emits ingest envelopes
 type FolderSync struct {
 	types.OperationSettings
@@ -70,14 +65,17 @@ func runFolderSync(ctx context.Context, _ types.OperationRequest, c *DriveClient
 		return nil, err
 	}
 
-	payloads := make([]driveItemPayload, 0, len(items))
-	for _, item := range items {
-		payloads = append(payloads, driveItemToPayload(item))
-	}
+	envelopes := make([]types.MappingEnvelope, 0, len(items))
 
-	envelopes, err := providerkit.MarshalEnvelopes(payloads, ErrPayloadEncode)
-	if err != nil {
-		return nil, err
+	for _, item := range items {
+		payload := driveItemToPayload(item)
+
+		envelope, err := providerkit.MarshalEnvelope(payload.ID, payload, ErrPayloadEncode)
+		if err != nil {
+			return nil, err
+		}
+
+		envelopes = append(envelopes, envelope)
 	}
 
 	return []types.IngestPayloadSet{

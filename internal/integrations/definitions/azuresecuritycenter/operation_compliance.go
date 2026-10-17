@@ -17,53 +17,27 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-const (
-	// complianceAssessmentsQuery selects every regulatory compliance assessment with its recommendation metadata, unhealthy resources, and latest status change,
-	// preferring the status recorded for the standard's initiative and falling back to the assessment's own status
-	complianceAssessmentsQuery = `securityresources
-| where type =~ "microsoft.security/regulatorycompliancestandards/regulatorycompliancecontrols/regulatorycomplianceassessments"
-| extend assessmentKey = name, initiative = replace("-", " ", tostring(split(id, "/")[6]))
-| join kind=leftouter (
-    securityresources
-    | where type =~ "microsoft.security/assessments"
-    | extend resourceId = tostring(split(tolower(id), "/providers/microsoft.security/assessments/")[0])
-    | mv-expand s = properties.statusPerInitiative
-    | summarize initiativeChanged = max(todatetime(s.assessmentStatus.statusChangeDate)), initiativeResources = make_set_if(resourceId, tostring(s.assessmentStatus.code) =~ "Unhealthy", 500) by subscriptionId, assessmentKey = name, initiative = tostring(s.policyInitiativeName)
-) on subscriptionId, assessmentKey, initiative
-| join kind=leftouter (
-    securityresources
-    | where type =~ "microsoft.security/assessments"
-    | extend resourceId = tostring(split(tolower(id), "/providers/microsoft.security/assessments/")[0])
-    | summarize assessmentCount = count(), statusChanged = max(todatetime(properties.status.statusChangeDate)), statusResources = make_set_if(resourceId, tostring(properties.status.code) =~ "Unhealthy", 500), metadata = take_any(properties.metadata) by subscriptionId, assessmentKey = name
-) on subscriptionId, assessmentKey
-| join kind=leftouter (
-    securityresources
-    | where type =~ "microsoft.security/assessments/governanceassignments"
-    | where isnotempty(tostring(properties.owner))
-    | extend assessmentKey = tostring(split(tolower(tostring(properties.assignedResourceId)), "/")[-1])
-    | summarize owners = make_set(tostring(properties.owner), 50) by subscriptionId, assessmentKey
-) on subscriptionId, assessmentKey
-| extend sourceUpdatedAt = coalesce(initiativeChanged, statusChanged), resources = iff(isnotnull(initiativeChanged), initiativeResources, statusResources), assessmentCount = coalesce(assessmentCount, 0)
-| project id, name, properties, metadata, resources, owners, sourceUpdatedAt, assessmentCount`
-	// categoryRollupAssessmentType is the assessment type of compliance assessments covering a whole recommendation category
-	categoryRollupAssessmentType = "AssessmentCategory"
-)
+// categoryRollupAssessmentType is the assessment type of compliance assessments covering a whole recommendation category
+const categoryRollupAssessmentType = "AssessmentCategory"
 
 // ComplianceAssessmentsCollect collects Defender for Cloud regulatory compliance assessments as checks, with failures as findings
 type ComplianceAssessmentsCollect struct {
 	types.OperationSettings
-	// SubscriptionIDs limits collection to these subscriptions; when empty every accessible subscription is collected
-	SubscriptionIDs []string `json:"subscriptionIds,omitempty" jsonschema:"title=Subscription IDs,description=Optional list of Azure subscription IDs to collect from; leave empty to collect from every subscription Openlane has been granted access to"`
 	// Standards limits collection to these compliance standards; when empty every enabled standard is collected
 	Standards []string `json:"standards,omitempty" jsonschema:"title=Compliance Standards,description=Optional list of compliance standard names to collect such as Azure-SOC-2023; leave empty to collect every standard enabled in Defender for Cloud"`
 	// CollectChecks records every compliance assessment as a check linked to its control; when off only failed policy-only assessments are collected, as findings
-	CollectChecks bool `json:"collectChecks,omitempty" jsonschema:"title=Collect Checks,description=Record every compliance assessment as a check linked to its control; when off only failed assessments without a Defender recommendation are collected as findings"`
+	CollectChecks bool `json:"collectChecks,omitempty" jsonschema:"title=Collect Checks,default=false,description=Record every compliance assessment as a check linked to its control; when off only failed assessments without a Defender recommendation are collected as findings"`
 }
 
 // runComplianceAssessmentsCollect emits a check result per compliance assessment when checks are collected; failures backed by a Defender recommendation
 // are already findings from AssessmentsCollect, so only failures with no recommendation become findings here
-func runComplianceAssessmentsCollect(ctx context.Context, _ types.OperationRequest, client *Client, cfg ComplianceAssessmentsCollect) ([]types.IngestPayloadSet, error) {
-	rows, err := client.queryRows[complianceAssessment](ctx, complianceAssessmentsQuery, cfg.SubscriptionIDs)
+func runComplianceAssessmentsCollect(ctx context.Context, req types.OperationRequest, client *Client, cfg ComplianceAssessmentsCollect) ([]types.IngestPayloadSet, error) {
+	subscriptionIDs, err := requestedSubscriptions(req)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := client.queryRows[complianceAssessment](ctx, complianceAssessmentsQuery, subscriptionIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +45,7 @@ func runComplianceAssessmentsCollect(ctx context.Context, _ types.OperationReque
 	observedAt := time.Now().UTC()
 
 	var (
-		checkPayloads  []CompliancePayload
+		checks         []types.MappingEnvelope
 		failedPolicies []CompliancePayload
 	)
 
@@ -82,7 +56,13 @@ func runComplianceAssessmentsCollect(ctx context.Context, _ types.OperationReque
 		}
 
 		if cfg.CollectChecks {
-			checkPayloads = append(checkPayloads, payload)
+			check, err := providerkit.MarshalEnvelope(payload.ID, payload, ErrIngestPayloadEncode)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("assessment_id", payload.ID).Msg("azuresecuritycenter: failed marshal check envelope")
+				return nil, ErrIngestPayloadEncode
+			}
+
+			checks = append(checks, check)
 		}
 
 		// category rollups such as SoftwareUpdate have no single recommendation to report, so they stay checks only
@@ -91,16 +71,17 @@ func runComplianceAssessmentsCollect(ctx context.Context, _ types.OperationReque
 		}
 	}
 
-	checks, err := providerkit.MarshalEnvelopes(checkPayloads, ErrIngestPayloadEncode)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("azuresecuritycenter: failed marshal check envelopes")
-		return nil, err
-	}
+	findingPayloads := complianceFindings(failedPolicies)
+	findings := make([]types.MappingEnvelope, 0, len(findingPayloads))
 
-	findings, err := providerkit.MarshalEnvelopes(complianceFindings(failedPolicies), ErrIngestPayloadEncode)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("azuresecuritycenter: failed marshal finding envelopes")
-		return nil, err
+	for _, payload := range findingPayloads {
+		finding, err := providerkit.MarshalEnvelope(payload.ID, payload, ErrIngestPayloadEncode)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("assessment_id", payload.ID).Msg("azuresecuritycenter: failed marshal finding envelope")
+			return nil, ErrIngestPayloadEncode
+		}
+
+		findings = append(findings, finding)
 	}
 
 	sets := []types.IngestPayloadSet{

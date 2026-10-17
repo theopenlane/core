@@ -25,6 +25,7 @@ func Builder(cfg Config) registry.Builder {
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
+			UserInput:    userInput.Registration(),
 			Installation: installation.Registration(),
 			Connections: []types.Connector{
 				securityCenterConnection.

@@ -10,13 +10,16 @@ import (
 // AssessmentsCollect collects Azure Defender for Cloud assessment findings for ingest
 type AssessmentsCollect struct {
 	types.OperationSettings
-	// SubscriptionIDs limits collection to these subscriptions; when empty every accessible subscription is collected
-	SubscriptionIDs []string `json:"subscriptionIds,omitempty" jsonschema:"title=Subscription IDs,description=Optional list of Azure subscription IDs to collect from; leave empty to collect from every subscription Openlane has been granted access to"`
 }
 
-// runAssessmentsCollect collects all unhealthy security posture assessments across the configured subscriptions
-func runAssessmentsCollect(ctx context.Context, _ types.OperationRequest, client *Client, cfg AssessmentsCollect) ([]types.IngestPayloadSet, error) {
-	envelopes, err := client.collect(ctx, findingsQuery, cfg.SubscriptionIDs, recommendationFindings)
+// runAssessmentsCollect collects all unhealthy security posture assessments across the installation's subscriptions
+func runAssessmentsCollect(ctx context.Context, req types.OperationRequest, client *Client, _ AssessmentsCollect) ([]types.IngestPayloadSet, error) {
+	subscriptionIDs, err := requestedSubscriptions(req)
+	if err != nil {
+		return nil, err
+	}
+
+	envelopes, err := client.collect(ctx, findingsQuery, subscriptionIDs, recommendationFindings)
 	if err != nil {
 		return nil, err
 	}
