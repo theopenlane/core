@@ -1,6 +1,6 @@
 {
-  "hash": "ebbe34900e6262459c3425362292bf204de8501c4e99eb5d3bebdefa67117b4d",
-  "version": "01M4FBBR14Z82SVFXS4YDRMJW7",
+  "hash": "4cc1f932bdd920e483d08ce0436c0b31f958b49522511cce0d78b132d7b0bc16",
+  "version": "01M55EXDENYFQSSPB3VB0T8V6B",
   "surface": {
     "id": "def_01K0SLACK000000000000000001",
     "credentials": [
@@ -115,6 +115,9 @@
     ],
     "operations": [
       {
+        "name": "ChannelsListOperation"
+      },
+      {
         "name": "DemoRequestMessage"
       },
       {
@@ -154,6 +157,9 @@
       },
       {
         "name": "OrganizationsPendingDeletionMessage"
+      },
+      {
+        "name": "TestMessageSendOperation"
       }
     ]
   }

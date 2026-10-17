@@ -1,6 +1,6 @@
 {
-  "hash": "130e24a171966dd6bede4d662d74597a191357afa688751ae22fb0bf17858078",
-  "version": "01M53682FRZ4AH60M1DN5GA7Z0",
+  "hash": "6eba01818de752479808f7d06a5a7be2cb7a0834290301a156769f108007e7fc",
+  "version": "01M55EXDEJ400JE49Q4H1DYJ8B",
   "surface": {
     "id": "def_01K0AZSECC000000000000000001",
     "credentials": [
@@ -119,6 +119,11 @@
                   "type": "array",
                   "title": "Compliance Standards",
                   "description": "Optional list of compliance standard names to collect such as Azure-SOC-2023; leave empty to collect every standard enabled in Defender for Cloud"
+                },
+                "collectChecks": {
+                  "type": "boolean",
+                  "title": "Collect Checks",
+                  "description": "Record every compliance assessment as a check linked to its control; when off only failed assessments without a Defender recommendation are collected as findings"
                 }
               },
               "additionalProperties": false,
