@@ -3,6 +3,7 @@ package schema
 import (
 	"net/mail"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
@@ -115,6 +117,12 @@ func (TrustCenterNDARequest) Fields() []ent.Field {
 			Comment("ID of the user who approved the request").
 			Optional().
 			Nillable(),
+		field.Bool("auto_approved").
+			Default(false).
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			),
 		field.Time("signed_at").
 			Comment("timestamp when the NDA was signed").
 			GoType(models.DateTime{}).

@@ -2070,6 +2070,7 @@ type ActionPlanMutation struct {
 	system_internal_id                      *string
 	action_plan_kind_name                   *string
 	workflow_eligible_marker                *bool
+	internal_owner                          *string
 	title                                   *string
 	description                             *string
 	due_date                                *time.Time
@@ -2102,6 +2103,12 @@ type ActionPlanMutation struct {
 	clearedviewers                          bool
 	action_plan_kind                        *string
 	clearedaction_plan_kind                 bool
+	internal_owner_user                     *string
+	clearedinternal_owner_user              bool
+	internal_owner_group                    *string
+	clearedinternal_owner_group             bool
+	internal_owner_identity_holder          *string
+	clearedinternal_owner_identity_holder   bool
 	risks                                   map[string]struct{}
 	removedrisks                            map[string]struct{}
 	clearedrisks                            bool
@@ -4419,6 +4426,202 @@ func (m *ActionPlanMutation) ResetWorkflowEligibleMarker() {
 	delete(m.clearedFields, actionplan.FieldWorkflowEligibleMarker)
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (m *ActionPlanMutation) SetInternalOwner(s string) {
+	m.internal_owner = &s
+}
+
+// InternalOwner returns the value of the "internal_owner" field in the mutation.
+func (m *ActionPlanMutation) InternalOwner() (r string, exists bool) {
+	v := m.internal_owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwner returns the old "internal_owner" field's value of the ActionPlan entity.
+// If the ActionPlan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanMutation) OldInternalOwner(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwner is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwner requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwner: %w", err)
+	}
+	return oldValue.InternalOwner, nil
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (m *ActionPlanMutation) ClearInternalOwner() {
+	m.internal_owner = nil
+	m.clearedFields[actionplan.FieldInternalOwner] = struct{}{}
+}
+
+// InternalOwnerCleared returns if the "internal_owner" field was cleared in this mutation.
+func (m *ActionPlanMutation) InternalOwnerCleared() bool {
+	_, ok := m.clearedFields[actionplan.FieldInternalOwner]
+	return ok
+}
+
+// ResetInternalOwner resets all changes to the "internal_owner" field.
+func (m *ActionPlanMutation) ResetInternalOwner() {
+	m.internal_owner = nil
+	delete(m.clearedFields, actionplan.FieldInternalOwner)
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (m *ActionPlanMutation) SetInternalOwnerUserID(s string) {
+	m.internal_owner_user = &s
+}
+
+// InternalOwnerUserID returns the value of the "internal_owner_user_id" field in the mutation.
+func (m *ActionPlanMutation) InternalOwnerUserID() (r string, exists bool) {
+	v := m.internal_owner_user
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerUserID returns the old "internal_owner_user_id" field's value of the ActionPlan entity.
+// If the ActionPlan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanMutation) OldInternalOwnerUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerUserID: %w", err)
+	}
+	return oldValue.InternalOwnerUserID, nil
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (m *ActionPlanMutation) ClearInternalOwnerUserID() {
+	m.internal_owner_user = nil
+	m.clearedFields[actionplan.FieldInternalOwnerUserID] = struct{}{}
+}
+
+// InternalOwnerUserIDCleared returns if the "internal_owner_user_id" field was cleared in this mutation.
+func (m *ActionPlanMutation) InternalOwnerUserIDCleared() bool {
+	_, ok := m.clearedFields[actionplan.FieldInternalOwnerUserID]
+	return ok
+}
+
+// ResetInternalOwnerUserID resets all changes to the "internal_owner_user_id" field.
+func (m *ActionPlanMutation) ResetInternalOwnerUserID() {
+	m.internal_owner_user = nil
+	delete(m.clearedFields, actionplan.FieldInternalOwnerUserID)
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (m *ActionPlanMutation) SetInternalOwnerGroupID(s string) {
+	m.internal_owner_group = &s
+}
+
+// InternalOwnerGroupID returns the value of the "internal_owner_group_id" field in the mutation.
+func (m *ActionPlanMutation) InternalOwnerGroupID() (r string, exists bool) {
+	v := m.internal_owner_group
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerGroupID returns the old "internal_owner_group_id" field's value of the ActionPlan entity.
+// If the ActionPlan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanMutation) OldInternalOwnerGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerGroupID: %w", err)
+	}
+	return oldValue.InternalOwnerGroupID, nil
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (m *ActionPlanMutation) ClearInternalOwnerGroupID() {
+	m.internal_owner_group = nil
+	m.clearedFields[actionplan.FieldInternalOwnerGroupID] = struct{}{}
+}
+
+// InternalOwnerGroupIDCleared returns if the "internal_owner_group_id" field was cleared in this mutation.
+func (m *ActionPlanMutation) InternalOwnerGroupIDCleared() bool {
+	_, ok := m.clearedFields[actionplan.FieldInternalOwnerGroupID]
+	return ok
+}
+
+// ResetInternalOwnerGroupID resets all changes to the "internal_owner_group_id" field.
+func (m *ActionPlanMutation) ResetInternalOwnerGroupID() {
+	m.internal_owner_group = nil
+	delete(m.clearedFields, actionplan.FieldInternalOwnerGroupID)
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *ActionPlanMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *ActionPlanMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the ActionPlan entity.
+// If the ActionPlan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *ActionPlanMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	m.clearedFields[actionplan.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *ActionPlanMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[actionplan.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *ActionPlanMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	delete(m.clearedFields, actionplan.FieldInternalOwnerIdentityHolderID)
+}
+
 // SetTitle sets the "title" field.
 func (m *ActionPlanMutation) SetTitle(s string) {
 	m.title = &s
@@ -5243,6 +5446,87 @@ func (m *ActionPlanMutation) ResetActionPlanKind() {
 	m.clearedaction_plan_kind = false
 }
 
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (m *ActionPlanMutation) ClearInternalOwnerUser() {
+	m.clearedinternal_owner_user = true
+	m.clearedFields[actionplan.FieldInternalOwnerUserID] = struct{}{}
+}
+
+// InternalOwnerUserCleared reports if the "internal_owner_user" edge to the User entity was cleared.
+func (m *ActionPlanMutation) InternalOwnerUserCleared() bool {
+	return m.InternalOwnerUserIDCleared() || m.clearedinternal_owner_user
+}
+
+// InternalOwnerUserIDs returns the "internal_owner_user" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalOwnerUserID instead. It exists only for internal usage by the builders.
+func (m *ActionPlanMutation) InternalOwnerUserIDs() (ids []string) {
+	if id := m.internal_owner_user; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalOwnerUser resets all changes to the "internal_owner_user" edge.
+func (m *ActionPlanMutation) ResetInternalOwnerUser() {
+	m.internal_owner_user = nil
+	m.clearedinternal_owner_user = false
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (m *ActionPlanMutation) ClearInternalOwnerGroup() {
+	m.clearedinternal_owner_group = true
+	m.clearedFields[actionplan.FieldInternalOwnerGroupID] = struct{}{}
+}
+
+// InternalOwnerGroupCleared reports if the "internal_owner_group" edge to the Group entity was cleared.
+func (m *ActionPlanMutation) InternalOwnerGroupCleared() bool {
+	return m.InternalOwnerGroupIDCleared() || m.clearedinternal_owner_group
+}
+
+// InternalOwnerGroupIDs returns the "internal_owner_group" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalOwnerGroupID instead. It exists only for internal usage by the builders.
+func (m *ActionPlanMutation) InternalOwnerGroupIDs() (ids []string) {
+	if id := m.internal_owner_group; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalOwnerGroup resets all changes to the "internal_owner_group" edge.
+func (m *ActionPlanMutation) ResetInternalOwnerGroup() {
+	m.internal_owner_group = nil
+	m.clearedinternal_owner_group = false
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *ActionPlanMutation) ClearInternalOwnerIdentityHolder() {
+	m.clearedinternal_owner_identity_holder = true
+	m.clearedFields[actionplan.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderCleared reports if the "internal_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *ActionPlanMutation) InternalOwnerIdentityHolderCleared() bool {
+	return m.InternalOwnerIdentityHolderIDCleared() || m.clearedinternal_owner_identity_holder
+}
+
+// InternalOwnerIdentityHolderIDs returns the "internal_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *ActionPlanMutation) InternalOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.internal_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalOwnerIdentityHolder resets all changes to the "internal_owner_identity_holder" edge.
+func (m *ActionPlanMutation) ResetInternalOwnerIdentityHolder() {
+	m.internal_owner_identity_holder = nil
+	m.clearedinternal_owner_identity_holder = false
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by ids.
 func (m *ActionPlanMutation) AddRiskIDs(ids ...string) {
 	if m.risks == nil {
@@ -5898,7 +6182,7 @@ func (m *ActionPlanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActionPlanMutation) Fields() []string {
-	fields := make([]string, 0, 53)
+	fields := make([]string, 0, 57)
 	if m.created_at != nil {
 		fields = append(fields, actionplan.FieldCreatedAt)
 	}
@@ -6025,6 +6309,18 @@ func (m *ActionPlanMutation) Fields() []string {
 	if m.workflow_eligible_marker != nil {
 		fields = append(fields, actionplan.FieldWorkflowEligibleMarker)
 	}
+	if m.internal_owner != nil {
+		fields = append(fields, actionplan.FieldInternalOwner)
+	}
+	if m.internal_owner_user != nil {
+		fields = append(fields, actionplan.FieldInternalOwnerUserID)
+	}
+	if m.internal_owner_group != nil {
+		fields = append(fields, actionplan.FieldInternalOwnerGroupID)
+	}
+	if m.internal_owner_identity_holder != nil {
+		fields = append(fields, actionplan.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.title != nil {
 		fields = append(fields, actionplan.FieldTitle)
 	}
@@ -6150,6 +6446,14 @@ func (m *ActionPlanMutation) Field(name string) (ent.Value, bool) {
 		return m.ActionPlanKindID()
 	case actionplan.FieldWorkflowEligibleMarker:
 		return m.WorkflowEligibleMarker()
+	case actionplan.FieldInternalOwner:
+		return m.InternalOwner()
+	case actionplan.FieldInternalOwnerUserID:
+		return m.InternalOwnerUserID()
+	case actionplan.FieldInternalOwnerGroupID:
+		return m.InternalOwnerGroupID()
+	case actionplan.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
 	case actionplan.FieldTitle:
 		return m.Title()
 	case actionplan.FieldDescription:
@@ -6265,6 +6569,14 @@ func (m *ActionPlanMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldActionPlanKindID(ctx)
 	case actionplan.FieldWorkflowEligibleMarker:
 		return m.OldWorkflowEligibleMarker(ctx)
+	case actionplan.FieldInternalOwner:
+		return m.OldInternalOwner(ctx)
+	case actionplan.FieldInternalOwnerUserID:
+		return m.OldInternalOwnerUserID(ctx)
+	case actionplan.FieldInternalOwnerGroupID:
+		return m.OldInternalOwnerGroupID(ctx)
+	case actionplan.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
 	case actionplan.FieldTitle:
 		return m.OldTitle(ctx)
 	case actionplan.FieldDescription:
@@ -6590,6 +6902,34 @@ func (m *ActionPlanMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetWorkflowEligibleMarker(v)
 		return nil
+	case actionplan.FieldInternalOwner:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwner(v)
+		return nil
+	case actionplan.FieldInternalOwnerUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerUserID(v)
+		return nil
+	case actionplan.FieldInternalOwnerGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerGroupID(v)
+		return nil
+	case actionplan.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
+		return nil
 	case actionplan.FieldTitle:
 		v, ok := value.(string)
 		if !ok {
@@ -6820,6 +7160,18 @@ func (m *ActionPlanMutation) ClearedFields() []string {
 	if m.FieldCleared(actionplan.FieldWorkflowEligibleMarker) {
 		fields = append(fields, actionplan.FieldWorkflowEligibleMarker)
 	}
+	if m.FieldCleared(actionplan.FieldInternalOwner) {
+		fields = append(fields, actionplan.FieldInternalOwner)
+	}
+	if m.FieldCleared(actionplan.FieldInternalOwnerUserID) {
+		fields = append(fields, actionplan.FieldInternalOwnerUserID)
+	}
+	if m.FieldCleared(actionplan.FieldInternalOwnerGroupID) {
+		fields = append(fields, actionplan.FieldInternalOwnerGroupID)
+	}
+	if m.FieldCleared(actionplan.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, actionplan.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.FieldCleared(actionplan.FieldDescription) {
 		fields = append(fields, actionplan.FieldDescription)
 	}
@@ -6981,6 +7333,18 @@ func (m *ActionPlanMutation) ClearField(name string) error {
 	case actionplan.FieldWorkflowEligibleMarker:
 		m.ClearWorkflowEligibleMarker()
 		return nil
+	case actionplan.FieldInternalOwner:
+		m.ClearInternalOwner()
+		return nil
+	case actionplan.FieldInternalOwnerUserID:
+		m.ClearInternalOwnerUserID()
+		return nil
+	case actionplan.FieldInternalOwnerGroupID:
+		m.ClearInternalOwnerGroupID()
+		return nil
+	case actionplan.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
+		return nil
 	case actionplan.FieldDescription:
 		m.ClearDescription()
 		return nil
@@ -7139,6 +7503,18 @@ func (m *ActionPlanMutation) ResetField(name string) error {
 	case actionplan.FieldWorkflowEligibleMarker:
 		m.ResetWorkflowEligibleMarker()
 		return nil
+	case actionplan.FieldInternalOwner:
+		m.ResetInternalOwner()
+		return nil
+	case actionplan.FieldInternalOwnerUserID:
+		m.ResetInternalOwnerUserID()
+		return nil
+	case actionplan.FieldInternalOwnerGroupID:
+		m.ResetInternalOwnerGroupID()
+		return nil
+	case actionplan.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
+		return nil
 	case actionplan.FieldTitle:
 		m.ResetTitle()
 		return nil
@@ -7178,7 +7554,7 @@ func (m *ActionPlanMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ActionPlanMutation) AddedEdges() []string {
-	edges := make([]string, 0, 20)
+	edges := make([]string, 0, 23)
 	if m.integration_runs != nil {
 		edges = append(edges, actionplan.EdgeIntegrationRuns)
 	}
@@ -7202,6 +7578,15 @@ func (m *ActionPlanMutation) AddedEdges() []string {
 	}
 	if m.action_plan_kind != nil {
 		edges = append(edges, actionplan.EdgeActionPlanKind)
+	}
+	if m.internal_owner_user != nil {
+		edges = append(edges, actionplan.EdgeInternalOwnerUser)
+	}
+	if m.internal_owner_group != nil {
+		edges = append(edges, actionplan.EdgeInternalOwnerGroup)
+	}
+	if m.internal_owner_identity_holder != nil {
+		edges = append(edges, actionplan.EdgeInternalOwnerIdentityHolder)
 	}
 	if m.risks != nil {
 		edges = append(edges, actionplan.EdgeRisks)
@@ -7286,6 +7671,18 @@ func (m *ActionPlanMutation) AddedIDs(name string) []ent.Value {
 		if id := m.action_plan_kind; id != nil {
 			return []ent.Value{*id}
 		}
+	case actionplan.EdgeInternalOwnerUser:
+		if id := m.internal_owner_user; id != nil {
+			return []ent.Value{*id}
+		}
+	case actionplan.EdgeInternalOwnerGroup:
+		if id := m.internal_owner_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case actionplan.EdgeInternalOwnerIdentityHolder:
+		if id := m.internal_owner_identity_holder; id != nil {
+			return []ent.Value{*id}
+		}
 	case actionplan.EdgeRisks:
 		ids := make([]ent.Value, 0, len(m.risks))
 		for id := range m.risks {
@@ -7362,7 +7759,7 @@ func (m *ActionPlanMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ActionPlanMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 20)
+	edges := make([]string, 0, 23)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, actionplan.EdgeIntegrationRuns)
 	}
@@ -7511,7 +7908,7 @@ func (m *ActionPlanMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ActionPlanMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 20)
+	edges := make([]string, 0, 23)
 	if m.clearedintegration_runs {
 		edges = append(edges, actionplan.EdgeIntegrationRuns)
 	}
@@ -7535,6 +7932,15 @@ func (m *ActionPlanMutation) ClearedEdges() []string {
 	}
 	if m.clearedaction_plan_kind {
 		edges = append(edges, actionplan.EdgeActionPlanKind)
+	}
+	if m.clearedinternal_owner_user {
+		edges = append(edges, actionplan.EdgeInternalOwnerUser)
+	}
+	if m.clearedinternal_owner_group {
+		edges = append(edges, actionplan.EdgeInternalOwnerGroup)
+	}
+	if m.clearedinternal_owner_identity_holder {
+		edges = append(edges, actionplan.EdgeInternalOwnerIdentityHolder)
 	}
 	if m.clearedrisks {
 		edges = append(edges, actionplan.EdgeRisks)
@@ -7595,6 +8001,12 @@ func (m *ActionPlanMutation) EdgeCleared(name string) bool {
 		return m.clearedviewers
 	case actionplan.EdgeActionPlanKind:
 		return m.clearedaction_plan_kind
+	case actionplan.EdgeInternalOwnerUser:
+		return m.clearedinternal_owner_user
+	case actionplan.EdgeInternalOwnerGroup:
+		return m.clearedinternal_owner_group
+	case actionplan.EdgeInternalOwnerIdentityHolder:
+		return m.clearedinternal_owner_identity_holder
 	case actionplan.EdgeRisks:
 		return m.clearedrisks
 	case actionplan.EdgeControls:
@@ -7639,6 +8051,15 @@ func (m *ActionPlanMutation) ClearEdge(name string) error {
 	case actionplan.EdgeActionPlanKind:
 		m.ClearActionPlanKind()
 		return nil
+	case actionplan.EdgeInternalOwnerUser:
+		m.ClearInternalOwnerUser()
+		return nil
+	case actionplan.EdgeInternalOwnerGroup:
+		m.ClearInternalOwnerGroup()
+		return nil
+	case actionplan.EdgeInternalOwnerIdentityHolder:
+		m.ClearInternalOwnerIdentityHolder()
+		return nil
 	case actionplan.EdgeFile:
 		m.ClearFile()
 		return nil
@@ -7673,6 +8094,15 @@ func (m *ActionPlanMutation) ResetEdge(name string) error {
 		return nil
 	case actionplan.EdgeActionPlanKind:
 		m.ResetActionPlanKind()
+		return nil
+	case actionplan.EdgeInternalOwnerUser:
+		m.ResetInternalOwnerUser()
+		return nil
+	case actionplan.EdgeInternalOwnerGroup:
+		m.ResetInternalOwnerGroup()
+		return nil
+	case actionplan.EdgeInternalOwnerIdentityHolder:
+		m.ResetInternalOwnerIdentityHolder()
 		return nil
 	case actionplan.EdgeRisks:
 		m.ResetRisks()
@@ -256747,6 +257177,7 @@ type TrustCenterNDARequestMutation struct {
 	access_level             *enums.TrustCenterNDARequestAccessLevel
 	status                   *enums.TrustCenterNDARequestStatus
 	approved_at              *models.DateTime
+	auto_approved            *bool
 	signed_at                *models.DateTime
 	clearedFields            map[string]struct{}
 	blocked_groups           map[string]struct{}
@@ -257734,6 +258165,55 @@ func (m *TrustCenterNDARequestMutation) ResetApprovedByUserID() {
 	delete(m.clearedFields, trustcenterndarequest.FieldApprovedByUserID)
 }
 
+// SetAutoApproved sets the "auto_approved" field.
+func (m *TrustCenterNDARequestMutation) SetAutoApproved(b bool) {
+	m.auto_approved = &b
+}
+
+// AutoApproved returns the value of the "auto_approved" field in the mutation.
+func (m *TrustCenterNDARequestMutation) AutoApproved() (r bool, exists bool) {
+	v := m.auto_approved
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAutoApproved returns the old "auto_approved" field's value of the TrustCenterNDARequest entity.
+// If the TrustCenterNDARequest object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestMutation) OldAutoApproved(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAutoApproved is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAutoApproved requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAutoApproved: %w", err)
+	}
+	return oldValue.AutoApproved, nil
+}
+
+// ClearAutoApproved clears the value of the "auto_approved" field.
+func (m *TrustCenterNDARequestMutation) ClearAutoApproved() {
+	m.auto_approved = nil
+	m.clearedFields[trustcenterndarequest.FieldAutoApproved] = struct{}{}
+}
+
+// AutoApprovedCleared returns if the "auto_approved" field was cleared in this mutation.
+func (m *TrustCenterNDARequestMutation) AutoApprovedCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequest.FieldAutoApproved]
+	return ok
+}
+
+// ResetAutoApproved resets all changes to the "auto_approved" field.
+func (m *TrustCenterNDARequestMutation) ResetAutoApproved() {
+	m.auto_approved = nil
+	delete(m.clearedFields, trustcenterndarequest.FieldAutoApproved)
+}
+
 // SetSignedAt sets the "signed_at" field.
 func (m *TrustCenterNDARequestMutation) SetSignedAt(mt models.DateTime) {
 	m.signed_at = &mt
@@ -258198,7 +258678,7 @@ func (m *TrustCenterNDARequestMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterNDARequestMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, trustcenterndarequest.FieldCreatedAt)
 	}
@@ -258253,6 +258733,9 @@ func (m *TrustCenterNDARequestMutation) Fields() []string {
 	if m.approved_by_user != nil {
 		fields = append(fields, trustcenterndarequest.FieldApprovedByUserID)
 	}
+	if m.auto_approved != nil {
+		fields = append(fields, trustcenterndarequest.FieldAutoApproved)
+	}
 	if m.signed_at != nil {
 		fields = append(fields, trustcenterndarequest.FieldSignedAt)
 	}
@@ -258306,6 +258789,8 @@ func (m *TrustCenterNDARequestMutation) Field(name string) (ent.Value, bool) {
 		return m.ApprovedAt()
 	case trustcenterndarequest.FieldApprovedByUserID:
 		return m.ApprovedByUserID()
+	case trustcenterndarequest.FieldAutoApproved:
+		return m.AutoApproved()
 	case trustcenterndarequest.FieldSignedAt:
 		return m.SignedAt()
 	case trustcenterndarequest.FieldDocumentDataID:
@@ -258357,6 +258842,8 @@ func (m *TrustCenterNDARequestMutation) OldField(ctx context.Context, name strin
 		return m.OldApprovedAt(ctx)
 	case trustcenterndarequest.FieldApprovedByUserID:
 		return m.OldApprovedByUserID(ctx)
+	case trustcenterndarequest.FieldAutoApproved:
+		return m.OldAutoApproved(ctx)
 	case trustcenterndarequest.FieldSignedAt:
 		return m.OldSignedAt(ctx)
 	case trustcenterndarequest.FieldDocumentDataID:
@@ -258498,6 +258985,13 @@ func (m *TrustCenterNDARequestMutation) SetField(name string, value ent.Value) e
 		}
 		m.SetApprovedByUserID(v)
 		return nil
+	case trustcenterndarequest.FieldAutoApproved:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAutoApproved(v)
+		return nil
 	case trustcenterndarequest.FieldSignedAt:
 		v, ok := value.(models.DateTime)
 		if !ok {
@@ -258594,6 +259088,9 @@ func (m *TrustCenterNDARequestMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcenterndarequest.FieldApprovedByUserID) {
 		fields = append(fields, trustcenterndarequest.FieldApprovedByUserID)
 	}
+	if m.FieldCleared(trustcenterndarequest.FieldAutoApproved) {
+		fields = append(fields, trustcenterndarequest.FieldAutoApproved)
+	}
 	if m.FieldCleared(trustcenterndarequest.FieldSignedAt) {
 		fields = append(fields, trustcenterndarequest.FieldSignedAt)
 	}
@@ -258661,6 +259158,9 @@ func (m *TrustCenterNDARequestMutation) ClearField(name string) error {
 		return nil
 	case trustcenterndarequest.FieldApprovedByUserID:
 		m.ClearApprovedByUserID()
+		return nil
+	case trustcenterndarequest.FieldAutoApproved:
+		m.ClearAutoApproved()
 		return nil
 	case trustcenterndarequest.FieldSignedAt:
 		m.ClearSignedAt()
@@ -258732,6 +259232,9 @@ func (m *TrustCenterNDARequestMutation) ResetField(name string) error {
 		return nil
 	case trustcenterndarequest.FieldApprovedByUserID:
 		m.ResetApprovedByUserID()
+		return nil
+	case trustcenterndarequest.FieldAutoApproved:
+		m.ResetAutoApproved()
 		return nil
 	case trustcenterndarequest.FieldSignedAt:
 		m.ResetSignedAt()
@@ -258992,6 +259495,8 @@ type TrustCenterSettingMutation struct {
 	subprocessors_notified_at                 *time.Time
 	status_page_url                           *string
 	noindex_default_domain                    *bool
+	enable_auto_approval                      *bool
+	auto_approval_rules                       *models.TrustCenterNDARequestSetting
 	clearedFields                             map[string]struct{}
 	blocked_groups                            map[string]struct{}
 	removedblocked_groups                     map[string]struct{}
@@ -260880,6 +261385,104 @@ func (m *TrustCenterSettingMutation) ResetNoindexDefaultDomain() {
 	delete(m.clearedFields, trustcentersetting.FieldNoindexDefaultDomain)
 }
 
+// SetEnableAutoApproval sets the "enable_auto_approval" field.
+func (m *TrustCenterSettingMutation) SetEnableAutoApproval(b bool) {
+	m.enable_auto_approval = &b
+}
+
+// EnableAutoApproval returns the value of the "enable_auto_approval" field in the mutation.
+func (m *TrustCenterSettingMutation) EnableAutoApproval() (r bool, exists bool) {
+	v := m.enable_auto_approval
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEnableAutoApproval returns the old "enable_auto_approval" field's value of the TrustCenterSetting entity.
+// If the TrustCenterSetting object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingMutation) OldEnableAutoApproval(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEnableAutoApproval is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEnableAutoApproval requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEnableAutoApproval: %w", err)
+	}
+	return oldValue.EnableAutoApproval, nil
+}
+
+// ClearEnableAutoApproval clears the value of the "enable_auto_approval" field.
+func (m *TrustCenterSettingMutation) ClearEnableAutoApproval() {
+	m.enable_auto_approval = nil
+	m.clearedFields[trustcentersetting.FieldEnableAutoApproval] = struct{}{}
+}
+
+// EnableAutoApprovalCleared returns if the "enable_auto_approval" field was cleared in this mutation.
+func (m *TrustCenterSettingMutation) EnableAutoApprovalCleared() bool {
+	_, ok := m.clearedFields[trustcentersetting.FieldEnableAutoApproval]
+	return ok
+}
+
+// ResetEnableAutoApproval resets all changes to the "enable_auto_approval" field.
+func (m *TrustCenterSettingMutation) ResetEnableAutoApproval() {
+	m.enable_auto_approval = nil
+	delete(m.clearedFields, trustcentersetting.FieldEnableAutoApproval)
+}
+
+// SetAutoApprovalRules sets the "auto_approval_rules" field.
+func (m *TrustCenterSettingMutation) SetAutoApprovalRules(mcnrs models.TrustCenterNDARequestSetting) {
+	m.auto_approval_rules = &mcnrs
+}
+
+// AutoApprovalRules returns the value of the "auto_approval_rules" field in the mutation.
+func (m *TrustCenterSettingMutation) AutoApprovalRules() (r models.TrustCenterNDARequestSetting, exists bool) {
+	v := m.auto_approval_rules
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAutoApprovalRules returns the old "auto_approval_rules" field's value of the TrustCenterSetting entity.
+// If the TrustCenterSetting object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingMutation) OldAutoApprovalRules(ctx context.Context) (v models.TrustCenterNDARequestSetting, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAutoApprovalRules is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAutoApprovalRules requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAutoApprovalRules: %w", err)
+	}
+	return oldValue.AutoApprovalRules, nil
+}
+
+// ClearAutoApprovalRules clears the value of the "auto_approval_rules" field.
+func (m *TrustCenterSettingMutation) ClearAutoApprovalRules() {
+	m.auto_approval_rules = nil
+	m.clearedFields[trustcentersetting.FieldAutoApprovalRules] = struct{}{}
+}
+
+// AutoApprovalRulesCleared returns if the "auto_approval_rules" field was cleared in this mutation.
+func (m *TrustCenterSettingMutation) AutoApprovalRulesCleared() bool {
+	_, ok := m.clearedFields[trustcentersetting.FieldAutoApprovalRules]
+	return ok
+}
+
+// ResetAutoApprovalRules resets all changes to the "auto_approval_rules" field.
+func (m *TrustCenterSettingMutation) ResetAutoApprovalRules() {
+	m.auto_approval_rules = nil
+	delete(m.clearedFields, trustcentersetting.FieldAutoApprovalRules)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by ids.
 func (m *TrustCenterSettingMutation) AddBlockedGroupIDs(ids ...string) {
 	if m.blocked_groups == nil {
@@ -261169,7 +261772,7 @@ func (m *TrustCenterSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterSettingMutation) Fields() []string {
-	fields := make([]string, 0, 36)
+	fields := make([]string, 0, 38)
 	if m.created_at != nil {
 		fields = append(fields, trustcentersetting.FieldCreatedAt)
 	}
@@ -261278,6 +261881,12 @@ func (m *TrustCenterSettingMutation) Fields() []string {
 	if m.noindex_default_domain != nil {
 		fields = append(fields, trustcentersetting.FieldNoindexDefaultDomain)
 	}
+	if m.enable_auto_approval != nil {
+		fields = append(fields, trustcentersetting.FieldEnableAutoApproval)
+	}
+	if m.auto_approval_rules != nil {
+		fields = append(fields, trustcentersetting.FieldAutoApprovalRules)
+	}
 	return fields
 }
 
@@ -261358,6 +261967,10 @@ func (m *TrustCenterSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.StatusPageURL()
 	case trustcentersetting.FieldNoindexDefaultDomain:
 		return m.NoindexDefaultDomain()
+	case trustcentersetting.FieldEnableAutoApproval:
+		return m.EnableAutoApproval()
+	case trustcentersetting.FieldAutoApprovalRules:
+		return m.AutoApprovalRules()
 	}
 	return nil, false
 }
@@ -261439,6 +262052,10 @@ func (m *TrustCenterSettingMutation) OldField(ctx context.Context, name string) 
 		return m.OldStatusPageURL(ctx)
 	case trustcentersetting.FieldNoindexDefaultDomain:
 		return m.OldNoindexDefaultDomain(ctx)
+	case trustcentersetting.FieldEnableAutoApproval:
+		return m.OldEnableAutoApproval(ctx)
+	case trustcentersetting.FieldAutoApprovalRules:
+		return m.OldAutoApprovalRules(ctx)
 	}
 	return nil, fmt.Errorf("unknown TrustCenterSetting field %s", name)
 }
@@ -261700,6 +262317,20 @@ func (m *TrustCenterSettingMutation) SetField(name string, value ent.Value) erro
 		}
 		m.SetNoindexDefaultDomain(v)
 		return nil
+	case trustcentersetting.FieldEnableAutoApproval:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEnableAutoApproval(v)
+		return nil
+	case trustcentersetting.FieldAutoApprovalRules:
+		v, ok := value.(models.TrustCenterNDARequestSetting)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAutoApprovalRules(v)
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting field %s", name)
 }
@@ -261838,6 +262469,12 @@ func (m *TrustCenterSettingMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcentersetting.FieldNoindexDefaultDomain) {
 		fields = append(fields, trustcentersetting.FieldNoindexDefaultDomain)
 	}
+	if m.FieldCleared(trustcentersetting.FieldEnableAutoApproval) {
+		fields = append(fields, trustcentersetting.FieldEnableAutoApproval)
+	}
+	if m.FieldCleared(trustcentersetting.FieldAutoApprovalRules) {
+		fields = append(fields, trustcentersetting.FieldAutoApprovalRules)
+	}
 	return fields
 }
 
@@ -261960,6 +262597,12 @@ func (m *TrustCenterSettingMutation) ClearField(name string) error {
 	case trustcentersetting.FieldNoindexDefaultDomain:
 		m.ClearNoindexDefaultDomain()
 		return nil
+	case trustcentersetting.FieldEnableAutoApproval:
+		m.ClearEnableAutoApproval()
+		return nil
+	case trustcentersetting.FieldAutoApprovalRules:
+		m.ClearAutoApprovalRules()
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting nullable field %s", name)
 }
@@ -262075,6 +262718,12 @@ func (m *TrustCenterSettingMutation) ResetField(name string) error {
 		return nil
 	case trustcentersetting.FieldNoindexDefaultDomain:
 		m.ResetNoindexDefaultDomain()
+		return nil
+	case trustcentersetting.FieldEnableAutoApproval:
+		m.ResetEnableAutoApproval()
+		return nil
+	case trustcentersetting.FieldAutoApprovalRules:
+		m.ResetAutoApprovalRules()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting field %s", name)

@@ -263,9 +263,12 @@ func (suite *HandlerTestSuite) SetupSuite() {
 			configTestProbeDefinitionBuilder(configTestProbeFailProviderID, errConfigTestProbeFailed),
 			definitionscim.Builder(),
 			webhookTestDefinitionBuilder(webhookTestDefinitionID),
+			staticWebhookTestDefinitionBuilder(staticWebhookTestDefinitionID),
+			operatorOnlyTestDefinitionBuilder(operatorOnlyTestDefinitionID),
 			githubTestDefinitionBuilder(disconnectTestDefinitionID),
 			operationTestDefinitionBuilder(operationTestDefinitionID, false),
 			operationTestDefinitionBuilder(operationTestInlineDefinitionID, true),
+			operationTestSystemDefinitionBuilder(operationTestSystemDefinitionID),
 			userInputOnlyTestDefinitionBuilder("def_01K0TESTUIONLY000000000001"),
 		},
 	})

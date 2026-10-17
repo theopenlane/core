@@ -49,8 +49,6 @@ type Surface struct {
 	Connections []string `json:"connections"`
 	// Operations lists every operation with its retired names and config schema, sorted by name
 	Operations []SurfaceOperation `json:"operations,omitempty"`
-	// Webhooks lists every webhook contract with its events, sorted by name
-	Webhooks []SurfaceWebhook `json:"webhooks,omitempty"`
 }
 
 // Snapshot is a definition's committed surface, its hash, and the version minted when the hash last changed
@@ -93,16 +91,6 @@ type SurfaceOperation struct {
 	Upgrade bool `json:"upgrade,omitempty"`
 }
 
-// SurfaceWebhook is one webhook contract with its events
-type SurfaceWebhook struct {
-	// Name is the stable webhook contract name
-	Name string `json:"name"`
-	// Replaces lists retired contract names whose webhook rows this contract takes over, sorted
-	Replaces []string `json:"replaces,omitempty"`
-	// Events lists the contract's event names, sorted
-	Events []string `json:"events,omitempty"`
-}
-
 // DefinitionSurface projects a definition onto its installation-facing surface
 func DefinitionSurface(def types.Definition) Surface {
 	declared := def.ConnectionList()
@@ -128,15 +116,8 @@ func DefinitionSurface(def types.Definition) Surface {
 		return surface
 	}, func(operation SurfaceOperation) string { return operation.Name })
 
-	webhooks := sortedProjection(def.Webhooks, func(webhook types.WebhookRegistration) SurfaceWebhook {
-		events := lo.Map(webhook.Events, func(event types.WebhookEventRegistration, _ int) string { return event.Name })
-
-		slices.Sort(events)
-
-		return SurfaceWebhook{Name: webhook.Name, Replaces: webhook.Replaces, Events: events}
-	}, func(webhook SurfaceWebhook) string { return webhook.Name })
-
-	surface := Surface{ID: def.ID, Credentials: credentials, Connections: connections, Operations: operations, Webhooks: webhooks}
+	// webhook contracts stay off the surface: builders register them from runtime config, so they vary per deployment rather than per definition version
+	surface := Surface{ID: def.ID, Credentials: credentials, Connections: connections, Operations: operations}
 
 	if def.UserInput != nil {
 		surface.UserInput = &SurfaceSchema{Schema: def.UserInput.Schema, Upgrade: def.UserInput.Upgrade != nil}

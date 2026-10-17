@@ -43,8 +43,12 @@ func buildMeta(result *url_scanner.ScanGetResponse) *Meta {
 			Country:     geo.Geoip.Country,
 			CountryName: geo.Geoip.CountryName,
 			Region:      geo.Geoip.Region,
-			Latitude:    geo.Geoip.Ll[0],
-			Longitude:   geo.Geoip.Ll[1],
+		}
+
+		// cloudflare can return a geoip record without coordinates
+		if len(geo.Geoip.Ll) >= 2 { //nolint:mnd
+			meta.Geolocation.Latitude = geo.Geoip.Ll[0]
+			meta.Geolocation.Longitude = geo.Geoip.Ll[1]
 		}
 	}
 

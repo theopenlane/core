@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
@@ -161,6 +162,10 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(a, withWorkflowEnumEdges()),
 			WorkflowApprovalMixin{},
+			newResponsibilityMixin(
+				a,
+				withInternalOwner(),
+			),
 		}}.getMixins(a)
 }
 

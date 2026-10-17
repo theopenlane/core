@@ -65,6 +65,8 @@ type TrustCenterNDARequestHistory struct {
 	ApprovedAt *models.DateTime `json:"approved_at,omitempty"`
 	// ID of the user who approved the request
 	ApprovedByUserID *string `json:"approved_by_user_id,omitempty"`
+	// AutoApproved holds the value of the "auto_approved" field.
+	AutoApproved bool `json:"auto_approved,omitempty"`
 	// timestamp when the NDA was signed
 	SignedAt *models.DateTime `json:"signed_at,omitempty"`
 	// ID of the signed NDA document data
@@ -85,6 +87,8 @@ func (*TrustCenterNDARequestHistory) scanValues(columns []string) ([]any, error)
 			values[i] = new([]byte)
 		case trustcenterndarequesthistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case trustcenterndarequesthistory.FieldAutoApproved:
+			values[i] = new(sql.NullBool)
 		case trustcenterndarequesthistory.FieldID, trustcenterndarequesthistory.FieldRef, trustcenterndarequesthistory.FieldCreatedBy, trustcenterndarequesthistory.FieldUpdatedBy, trustcenterndarequesthistory.FieldUpdatedByImpersonator, trustcenterndarequesthistory.FieldDeletedBy, trustcenterndarequesthistory.FieldTrustCenterID, trustcenterndarequesthistory.FieldFirstName, trustcenterndarequesthistory.FieldLastName, trustcenterndarequesthistory.FieldEmail, trustcenterndarequesthistory.FieldCompanyName, trustcenterndarequesthistory.FieldReason, trustcenterndarequesthistory.FieldAccessLevel, trustcenterndarequesthistory.FieldStatus, trustcenterndarequesthistory.FieldApprovedByUserID, trustcenterndarequesthistory.FieldDocumentDataID, trustcenterndarequesthistory.FieldFileID:
 			values[i] = new(sql.NullString)
 		case trustcenterndarequesthistory.FieldHistoryTime, trustcenterndarequesthistory.FieldCreatedAt, trustcenterndarequesthistory.FieldUpdatedAt, trustcenterndarequesthistory.FieldDeletedAt:
@@ -243,6 +247,12 @@ func (_m *TrustCenterNDARequestHistory) assignValues(columns []string, values []
 				_m.ApprovedByUserID = new(string)
 				*_m.ApprovedByUserID = value.String
 			}
+		case trustcenterndarequesthistory.FieldAutoApproved:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field auto_approved", values[i])
+			} else if value.Valid {
+				_m.AutoApproved = value.Bool
+			}
 		case trustcenterndarequesthistory.FieldSignedAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field signed_at", values[i])
@@ -372,6 +382,9 @@ func (_m *TrustCenterNDARequestHistory) String() string {
 		builder.WriteString("approved_by_user_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("auto_approved=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AutoApproved))
 	builder.WriteString(", ")
 	if v := _m.SignedAt; v != nil {
 		builder.WriteString("signed_at=")

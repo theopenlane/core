@@ -35,10 +35,11 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, db *ent.Cli
 		return err
 	}
 
+	// runtime-owned webhooks are received on static routes with no installation, so any row for one is stale
 	staleIDs := lo.FilterMap(existing, func(row *ent.IntegrationWebhook, _ int) (string, bool) {
-		_, _, current := def.ResolveWebhook(row.Name)
+		registration, _, current := def.ResolveWebhook(row.Name)
 
-		return row.ID, !current
+		return row.ID, !current || registration.RuntimeOwned()
 	})
 
 	if len(staleIDs) > 0 {
@@ -48,6 +49,10 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, db *ent.Cli
 	}
 
 	for _, webhook := range def.Webhooks {
+		if webhook.RuntimeOwned() {
+			continue
+		}
+
 		if _, err := r.ensureWebhook(ctx, db, integration, webhook, previousIntegrationID); err != nil {
 			return err
 		}
@@ -272,22 +277,15 @@ func (r *Runtime) ensureWebhook(ctx context.Context, db *ent.Client, intg *ent.I
 		endpointID := keygen.PrefixedSecret("tolwh")
 		endpointURL := webhookEndpointURL(registration, endpointID)
 
-		create := db.IntegrationWebhook.Create().
+		return db.IntegrationWebhook.Create().
 			SetOwnerID(intg.OwnerID).
 			SetIntegrationID(intg.ID).
 			SetProvider(intg.DefinitionID).
 			SetName(registration.Name).
 			SetAllowedEvents(allowedEvents).
 			SetEndpointID(endpointID).
-			SetEndpointURL(endpointURL)
-
-		if registration.SecretSource != nil {
-			if secret := registration.SecretSource(); secret != "" {
-				create.SetSecretToken(secret)
-			}
-		}
-
-		return create.Save(ctx)
+			SetEndpointURL(endpointURL).
+			Save(ctx)
 	}
 
 	row, renamed := lo.Find(rows, func(candidate *ent.IntegrationWebhook) bool {

@@ -99,6 +99,7 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "action_plan_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "internal_owner", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
@@ -113,6 +114,9 @@ var (
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "action_plan_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_action_plans", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -127,49 +131,67 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "action_plans_groups_approver",
-				Columns:    []*schema.Column{ActionPlansColumns[49]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "action_plans_groups_delegate",
 				Columns:    []*schema.Column{ActionPlansColumns[50]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "action_plans_custom_type_enums_action_plan_kind",
+				Symbol:     "action_plans_groups_delegate",
 				Columns:    []*schema.Column{ActionPlansColumns[51]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_custom_type_enums_action_plan_kind",
+				Columns:    []*schema.Column{ActionPlansColumns[52]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "action_plans_users_internal_owner_user",
+				Columns:    []*schema.Column{ActionPlansColumns[53]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_groups_internal_owner_group",
+				Columns:    []*schema.Column{ActionPlansColumns[54]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_identity_holders_internal_owner_identity_holder",
+				Columns:    []*schema.Column{ActionPlansColumns[55]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "action_plans_files_file",
-				Columns:    []*schema.Column{ActionPlansColumns[52]},
+				Columns:    []*schema.Column{ActionPlansColumns[56]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_custom_type_enums_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[53]},
+				Columns:    []*schema.Column{ActionPlansColumns[57]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_organizations_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[54]},
+				Columns:    []*schema.Column{ActionPlansColumns[58]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_subcontrols_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[55]},
+				Columns:    []*schema.Column{ActionPlansColumns[59]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_users_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[56]},
+				Columns:    []*schema.Column{ActionPlansColumns[60]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -178,7 +200,7 @@ var (
 			{
 				Name:    "action_plan_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ActionPlansColumns[52]},
+				Columns: []*schema.Column{ActionPlansColumns[56]},
 			},
 			{
 				Name:    "actionplan_source_instance_id",
@@ -193,7 +215,7 @@ var (
 			{
 				Name:    "actionplan_external_file_id_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ActionPlansColumns[31], ActionPlansColumns[54]},
+				Columns: []*schema.Column{ActionPlansColumns[31], ActionPlansColumns[58]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -201,7 +223,7 @@ var (
 			{
 				Name:    "action_plan_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ActionPlansColumns[54]},
+				Columns: []*schema.Column{ActionPlansColumns[58]},
 			},
 		},
 	}
@@ -8208,6 +8230,7 @@ var (
 		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
 		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
+		{Name: "auto_approved", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
@@ -8222,25 +8245,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_nda_requests_trust_centers_trust_center_nda_requests",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[18]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_document_data_document",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
 				RefColumns: []*schema.Column{DocumentDataColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_files_file",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_users_approved_by_user",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[22]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8249,22 +8272,22 @@ var (
 			{
 				Name:    "trust_center_nda_request_trust_center_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[18]},
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[19]},
 			},
 			{
 				Name:    "trust_center_nda_request_document_data_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[19]},
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[20]},
 			},
 			{
 				Name:    "trust_center_nda_request_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[20]},
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[21]},
 			},
 			{
 				Name:    "trust_center_nda_request_approved_by_user_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[21]},
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[22]},
 			},
 		},
 	}
@@ -8303,6 +8326,8 @@ var (
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "enable_auto_approval", Type: field.TypeBool, Nullable: true},
+		{Name: "auto_approval_rules", Type: field.TypeJSON, Nullable: true},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "hero_image_local_file_id", Type: field.TypeString, Nullable: true},
@@ -8316,25 +8341,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_files_logo_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[33]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_center_settings_files_favicon_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[34]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_center_settings_files_hero_image_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[35]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[36]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_files_hero_image_file",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[37]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[38]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8343,22 +8368,22 @@ var (
 			{
 				Name:    "trust_center_setting_logo_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[33]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
 			},
 			{
 				Name:    "trust_center_setting_favicon_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[34]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[36]},
 			},
 			{
 				Name:    "trust_center_setting_hero_image_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[37]},
 			},
 			{
 				Name:    "trust_center_setting_nda_approver_group_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[36]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[38]},
 			},
 			{
 				Name:    "trustcentersetting_trust_center_id_environment",
@@ -16077,11 +16102,14 @@ func init() {
 	ActionPlansTable.ForeignKeys[0].RefTable = GroupsTable
 	ActionPlansTable.ForeignKeys[1].RefTable = GroupsTable
 	ActionPlansTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
-	ActionPlansTable.ForeignKeys[3].RefTable = FilesTable
-	ActionPlansTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
-	ActionPlansTable.ForeignKeys[5].RefTable = OrganizationsTable
-	ActionPlansTable.ForeignKeys[6].RefTable = SubcontrolsTable
-	ActionPlansTable.ForeignKeys[7].RefTable = UsersTable
+	ActionPlansTable.ForeignKeys[3].RefTable = UsersTable
+	ActionPlansTable.ForeignKeys[4].RefTable = GroupsTable
+	ActionPlansTable.ForeignKeys[5].RefTable = IdentityHoldersTable
+	ActionPlansTable.ForeignKeys[6].RefTable = FilesTable
+	ActionPlansTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
+	ActionPlansTable.ForeignKeys[8].RefTable = OrganizationsTable
+	ActionPlansTable.ForeignKeys[9].RefTable = SubcontrolsTable
+	ActionPlansTable.ForeignKeys[10].RefTable = UsersTable
 	AssessmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	AssessmentsTable.ForeignKeys[1].RefTable = TemplatesTable
 	AssessmentPoliciesTable.ForeignKeys[0].RefTable = AssessmentsTable

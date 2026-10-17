@@ -1,12 +1,14 @@
 package types //nolint:revive
 
 import (
+	"context"
 	"encoding/json"
 	"slices"
 	"testing"
 
 	"github.com/samber/lo"
 
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
@@ -358,5 +360,74 @@ func TestWebhookEventTopic(t *testing.T) {
 	want := "integration.webhook.def_001.pull_request.opened"
 	if string(got) != want {
 		t.Fatalf("got %q, want %q", got, want)
+	}
+}
+
+func TestWebhookRegistrationRuntimeOwned(t *testing.T) {
+	t.Parallel()
+
+	resolve := func(context.Context, *generated.Client, WebhookInboundRequest) (*generated.Integration, error) {
+		return nil, nil
+	}
+
+	tests := []struct {
+		name string
+		reg  WebhookRegistration
+		want bool
+	}{
+		{name: "per-installation endpoint", reg: WebhookRegistration{}, want: false},
+		{name: "static route resolving an installation", reg: WebhookRegistration{StaticRoute: "/hook", ResolveIntegration: resolve}, want: false},
+		{name: "static route with no installation", reg: WebhookRegistration{StaticRoute: "/hook"}, want: true},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := tc.reg.RuntimeOwned(); got != tc.want {
+				t.Fatalf("RuntimeOwned() = %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestWebhookRegistrationHandlesEvent(t *testing.T) {
+	t.Parallel()
+
+	reg := WebhookRegistration{Events: []WebhookEventRegistration{{Name: "email.delivered"}}}
+
+	if !reg.HandlesEvent("email.delivered") {
+		t.Fatal("HandlesEvent(registered) = false, want true")
+	}
+
+	for _, name := range []string{"", "email.delivery_delayed"} {
+		if reg.HandlesEvent(name) {
+			t.Fatalf("HandlesEvent(%q) = true, want false", name)
+		}
+	}
+}
+
+func TestDefinitionInstallable(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name string
+		def  Definition
+		want bool
+	}{
+		{name: "operations only", def: Definition{Operations: []OperationRegistration{{Name: "sweep"}}}, want: false},
+		{name: "connection", def: Definition{Connections: []Connector{ConnectionOf[struct{}]()}}, want: true},
+		{name: "user input only", def: Definition{UserInput: &InputRegistration{}}, want: true},
+		{name: "installation layout only", def: Definition{Installation: &InstallationRegistration{}}, want: true},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := tc.def.Installable(); got != tc.want {
+				t.Fatalf("Installable() = %v, want %v", got, tc.want)
+			}
+		})
 	}
 }

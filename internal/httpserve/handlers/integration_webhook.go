@@ -73,7 +73,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 	if err := verifyIntegrationWebhook(webhookReg, req, payload, persistedWebhook, integration); err != nil {
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("webhook signature verification failed")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, errIntegrationWebhookVerificationFailed)
 	}
 
 	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, integration, webhookReg, persistedWebhook, payload)
@@ -233,22 +233,26 @@ func (h *Handler) IntegrationStaticWebhookHandler(definitionID, webhookName stri
 		// the owning org, if any, is not known until the integration resolves, so this is a cross-org internal context
 		webhookCtx := auth.WithInternalCrossOrgContext(req.Context())
 
-		if webhookReg.Verify != nil {
-			if err := webhookReg.Verify(types.WebhookInboundRequest{
-				Request: req,
-				Payload: payload,
-			}); err != nil {
-				logx.FromContext(webhookCtx).Error().Err(err).Msg("static webhook verification failed")
+		if webhookReg.Verify == nil {
+			logx.FromContext(webhookCtx).Error().Msg("static webhook registration missing verifier")
 
-				return h.BadRequest(ctx, err)
-			}
+			return h.BadRequest(ctx, errIntegrationWebhookVerificationFailed)
 		}
 
-		if webhookReg.ResolveIntegration != nil {
-			return h.handleStaticWebhookWithIntegration(webhookCtx, ctx, webhookName, webhookReg, req, payload)
+		if err := webhookReg.Verify(types.WebhookInboundRequest{
+			Request: req,
+			Payload: payload,
+		}); err != nil {
+			logx.FromContext(webhookCtx).Error().Err(err).Msg("static webhook verification failed")
+
+			return h.BadRequest(ctx, errIntegrationWebhookVerificationFailed)
 		}
 
-		return h.handleStaticWebhookRuntime(webhookCtx, ctx, definitionID, webhookName, webhookReg, req, payload)
+		if webhookReg.RuntimeOwned() {
+			return h.handleStaticWebhookRuntime(webhookCtx, ctx, definitionID, webhookName, webhookReg, req, payload)
+		}
+
+		return h.handleStaticWebhookWithIntegration(webhookCtx, ctx, webhookName, webhookReg, req, payload)
 	}
 }
 
@@ -299,7 +303,9 @@ func (h *Handler) handleStaticWebhookRuntime(webhookCtx context.Context, ctx ech
 		return h.BadRequest(ctx, err)
 	}
 
-	if event.Name == "" {
+	if !webhookReg.HandlesEvent(event.Name) {
+		logx.FromContext(webhookCtx).Debug().Str("event", event.Name).Msg("runtime webhook event not registered, skipped")
+		// the provider is told 200 so it does not retry an event type this webhook never handles
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
 

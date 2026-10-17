@@ -1166,12 +1166,6 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.slackruntime }}
       slackruntime:
-        {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.webhookURL }}
-        webhookURL: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.webhookURL | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.botToken }}
-        botToken: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.botToken | quote }}
-        {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.defaultChannel }}
         defaultChannel: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.defaultChannel | quote }}
         {{- end }}
@@ -1258,6 +1252,18 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.email.provider }}
         provider: {{ .Values.openlane.coreConfiguration.integrations.email.provider | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.postmark }}
+        postmark:
+          {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.messagestream }}
+          messagestream: {{ .Values.openlane.coreConfiguration.integrations.email.postmark.messagestream | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.trackopens }}
+          trackopens: {{ .Values.openlane.coreConfiguration.integrations.email.postmark.trackopens }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.tracklinks }}
+          tracklinks: {{ .Values.openlane.coreConfiguration.integrations.email.postmark.tracklinks | quote }}
+          {{- end }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.email.fromemail }}
         fromemail: {{ .Values.openlane.coreConfiguration.integrations.email.fromemail | quote }}

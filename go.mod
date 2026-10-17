@@ -123,7 +123,7 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.18.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.40.0
-	github.com/theopenlane/newman v0.4.4
+	github.com/theopenlane/newman v0.5.0
 	github.com/theopenlane/riverboat v0.14.3
 	github.com/theopenlane/utils v0.7.2
 	github.com/tmc/langchaingo v0.1.14
@@ -348,8 +348,6 @@ require (
 	github.com/scim2/filter-parser/v2 v2.3.1 // indirect
 	github.com/segmentio/asm v1.2.1 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect
-	github.com/sendgrid/rest v2.6.9+incompatible // indirect
-	github.com/sendgrid/sendgrid-go v3.16.1+incompatible // indirect
 	github.com/sethvargo/go-retry v0.4.0 // indirect
 	github.com/shirou/gopsutil/v4 v4.26.6 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect

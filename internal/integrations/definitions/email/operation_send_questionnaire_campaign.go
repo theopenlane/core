@@ -95,7 +95,7 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 	}
 
 	if isTest {
-		tags = append(tags, newman.Tag{Name: TagIsTest, Value: "true"})
+		tags = append(tags, newman.Tag{Name: TagIsTest, Value: TagTrueValue})
 	}
 
 	input := QuestionnaireAuthEmail{

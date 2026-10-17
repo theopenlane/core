@@ -169,8 +169,33 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 const (
 	operationTestDefinitionID       = "def_01K0TESTOPS00000000000001"
 	operationTestInlineDefinitionID = "def_01K0TESTOPS00000000000002"
+	operationTestSystemDefinitionID = "def_01K0TESTOPS00000000000003"
 	operationTestPath               = "/v1/integrations/:definitionID/operations"
 )
+
+// OperationTestSystemSweep is the config type for the system-style test sweep operation
+type OperationTestSystemSweep struct{}
+
+var opTestSystemSweepOperation = types.OperationPayloadOf[OperationTestSystemSweep]().Policy(types.ExecutionPolicy{Inline: true})
+
+// operationTestSystemDefinitionBuilder mirrors the system definition shape: no connections, user input, or installation layout, so it is never installable
+func operationTestSystemDefinitionBuilder(definitionID string) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
+		return types.Definition{
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          definitionID,
+				DisplayName: "Operation Test System",
+				Active:      true,
+				Visible:     false,
+			},
+			Operations: []types.OperationRegistration{
+				opTestSystemSweepOperation.Description("System sweep").HandlesRequest(func(context.Context, types.OperationRequest, OperationTestSystemSweep) (json.RawMessage, error) {
+					return json.RawMessage(`{"swept":true}`), nil
+				}).Registration(),
+			},
+		}, nil
+	})
+}
 
 // OperationTestHealthCheck is the config type for the test health check operation
 type OperationTestHealthCheck struct{}
@@ -368,6 +393,134 @@ func userInputOnlyTestDefinitionBuilder(definitionID string) registry.Builder {
 				Visible:     true,
 			},
 			UserInput: configTestUserInputRef.Registration(),
+		}, nil
+	})
+}
+
+const (
+	staticWebhookTestDefinitionID     = "def_01K0TESTSTWH0000000000001"
+	staticWebhookTestPath             = "/v1/integrations/static-test/webhook"
+	staticWebhookUnverifiedTestPath   = "/v1/integrations/static-test/webhook/unverified"
+	staticWebhookTestSignatureHeader  = "X-Static-Test-Signature"
+	staticWebhookTestVerifiedName     = "runtime.events"
+	staticWebhookTestUnverifiedName   = "runtime.unverified"
+	staticWebhookTestUnregisteredName = "alert.deleted"
+)
+
+var (
+	// staticWebhookUnverifiedEvent is the event registered on the unverified static test webhook; event topics are unique per definition
+	staticWebhookUnverifiedEvent = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.unverified")
+	// staticWebhookHiddenOperation is an operation hidden from customer surfaces on the static webhook test definition
+	staticWebhookHiddenOperation = types.OperationPayloadOf[WebhookTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true}).CustomerSelectable(false)
+)
+
+// operatorOnlyTestDefinitionID identifies an active definition that declares no connection, user input, or installation layout
+const operatorOnlyTestDefinitionID = "def_01K0TESTOPONLY00000000001"
+
+// operatorOnlyTestDefinitionBuilder returns a definition with operations only, mirroring the system sweep definition
+func operatorOnlyTestDefinitionBuilder(definitionID string) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
+		return types.Definition{
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          definitionID,
+				DisplayName: "Operator Only Test",
+				Active:      true,
+				Visible:     true,
+			},
+			Operations: []types.OperationRegistration{
+				staticWebhookHiddenOperation.Description("Hidden sweep").HandlesRequest(func(context.Context, types.OperationRequest, WebhookTestHealthCheck) (json.RawMessage, error) {
+					return json.RawMessage(`{"ok":true}`), nil
+				}).Registration(),
+			},
+		}, nil
+	})
+}
+
+// staticWebhookTestDefinitionBuilder returns an installable test definition whose webhooks are runtime-owned static routes;
+// the verified webhook checks a shared-secret header and the unverified one declares no verifier
+func staticWebhookTestDefinitionBuilder(definitionID string) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
+		connection := types.ConnectionOf[webhookTestCredential]().
+			Name("Static Webhook Test Connection").
+			Provides(func(context.Context, types.ConnectionRequest[webhookTestCredential]) (*webhookTestClient, error) {
+				return &webhookTestClient{}, nil
+			}).
+			Verified(func(context.Context, types.ConnectionRequest[webhookTestCredential], *webhookTestClient) (webhookTestInstallation, error) {
+				return webhookTestInstallation{}, nil
+			})
+
+		resolveEvent := func(req types.WebhookInboundRequest) (types.WebhookReceivedEvent, error) {
+			var envelope struct {
+				Event      string `json:"event"`
+				DeliveryID string `json:"delivery_id"`
+			}
+			if err := json.Unmarshal(req.Payload, &envelope); err != nil {
+				return types.WebhookReceivedEvent{}, err
+			}
+
+			return types.WebhookReceivedEvent{
+				Name:       envelope.Event,
+				DeliveryID: envelope.DeliveryID,
+				Payload:    req.Payload,
+			}, nil
+		}
+
+		events := []types.WebhookEventRegistration{
+			webhookAlertCreatedEvent.Registration(types.WebhookEventRegistration{
+				Handle: func(context.Context, types.WebhookHandleRequest) error {
+					return nil
+				},
+			}),
+		}
+
+		return types.Definition{
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          definitionID,
+				DisplayName: "Static Webhook Test",
+				Active:      true,
+				Visible:     true,
+			},
+			Installation: types.InstallationOf[webhookTestInstallation]().Registration(),
+			Connections:  []types.Connector{connection},
+			RuntimeIntegration: &types.RuntimeIntegrationRegistration{
+				Schema: json.RawMessage(`{"type":"object"}`),
+				Config: json.RawMessage(`{}`),
+				Build: func(context.Context, json.RawMessage) (any, error) {
+					return &webhookTestClient{}, nil
+				},
+			},
+			Operations: []types.OperationRegistration{
+				staticWebhookHiddenOperation.Description("Hidden operation").HandlesRequest(func(context.Context, types.OperationRequest, WebhookTestHealthCheck) (json.RawMessage, error) {
+					return json.RawMessage(`{"ok":true}`), nil
+				}).Registration(),
+			},
+			Webhooks: []types.WebhookRegistration{
+				{
+					Name:        staticWebhookTestVerifiedName,
+					StaticRoute: staticWebhookTestPath,
+					Verify: func(req types.WebhookInboundRequest) error {
+						if req.Request.Header.Get(staticWebhookTestSignatureHeader) != webhookTestSecret {
+							return errors.New("static test signature mismatch")
+						}
+
+						return nil
+					},
+					Event:  resolveEvent,
+					Events: events,
+				},
+				{
+					Name:        staticWebhookTestUnverifiedName,
+					StaticRoute: staticWebhookUnverifiedTestPath,
+					Event:       resolveEvent,
+					Events: []types.WebhookEventRegistration{
+						staticWebhookUnverifiedEvent.Registration(types.WebhookEventRegistration{
+							Handle: func(context.Context, types.WebhookHandleRequest) error {
+								return nil
+							},
+						}),
+					},
+				},
+			},
 		}, nil
 	})
 }
