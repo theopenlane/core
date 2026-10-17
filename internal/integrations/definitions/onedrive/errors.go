@@ -11,10 +11,10 @@ var (
 	ErrHealthCheckFailed = errors.New("onedrive: health check failed")
 	// ErrCredentialEncode indicates the credential could not be serialized
 	ErrCredentialEncode = errors.New("onedrive: credential encode failed")
-	// ErrTenantUnresolved indicates the access token did not carry a tenant identifier
-	ErrTenantUnresolved = errors.New("onedrive: tenant unresolved")
 	// ErrExportFailed indicates the file download request failed
 	ErrExportFailed = errors.New("onedrive: file export failed")
+	// ErrFolderIDMissing indicates the folder is not configured
+	ErrFolderIDMissing = errors.New("onedrive: folder missing from user input")
 	// ErrFolderListFailed indicates the folder children listing request failed
 	ErrFolderListFailed = errors.New("onedrive: folder list failed")
 	// ErrPayloadEncode indicates a provider payload could not be serialized

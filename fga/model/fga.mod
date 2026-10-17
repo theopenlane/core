@@ -19,6 +19,7 @@ contents:
     - compliance/exposure.fga
 
     - automation/assessments.fga
+    - automation/checkresult.fga
     - automation/directory.fga
     - automation/integrations.fga
     - automation/notifications.fga

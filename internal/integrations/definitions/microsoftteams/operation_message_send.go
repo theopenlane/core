@@ -9,50 +9,43 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
-	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
+
+// MessageSendOp is the operation ref for the Microsoft Teams message send operation
+var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(MessageSend{}.Run) //nolint:revive
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
-	// TemplateID references a notification template by database ID
-	TemplateID string `json:"templateId,omitempty" jsonschema:"title=Template ID"`
-	// TemplateKey references a notification template by key
-	TemplateKey string `json:"templateKey,omitempty" jsonschema:"title=Template Key"`
-	// TeamID is the target Microsoft Teams team identifier
-	TeamID string `json:"teamId,omitempty" jsonschema:"title=Team ID"`
-	// ChannelID is the target Teams channel identifier
-	ChannelID string `json:"channelId,omitempty" jsonschema:"title=Channel ID"`
-	// Body is the message body content
-	Body string `json:"body,omitempty" jsonschema:"title=Message Body"`
+	operations.MessageContent
 	// BodyFormat controls the content type: text or html
 	BodyFormat string `json:"bodyFormat,omitempty" jsonschema:"title=Body Format,enum=text,enum=html"`
-	// Subject is an optional message subject
-	Subject string `json:"subject,omitempty" jsonschema:"title=Subject"`
 }
 
 // MessageSend sends a Microsoft Teams channel message
 type MessageSend struct {
 	// TeamID is the target team identifier
 	TeamID string `json:"teamId"`
-	// ChannelID is the target channel identifier
-	ChannelID string `json:"channelId"`
+	// Channel is the target channel identifier
+	Channel string `json:"channel"`
 	// MessageID is the identifier of the created message
 	MessageID string `json:"messageId"`
 }
 
 // Run sends a Microsoft Teams channel message via Microsoft Graph
 func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *msgraphsdk.GraphServiceClient, cfg MessageSendOperation) (json.RawMessage, error) {
-	if err := templatekit.ResolveOperationTemplate(ctx, req, cfg.TemplateID, cfg.TemplateKey, &cfg); err != nil {
+	if err := cfg.ResolveTemplate(ctx, req, &cfg); err != nil {
 		return nil, err
 	}
 
-	if cfg.TeamID == "" || cfg.ChannelID == "" {
+	if cfg.TeamID == "" || cfg.Channel == "" {
 		return nil, ErrChannelMissing
 	}
 
-	if cfg.Body == "" {
+	if cfg.Text == "" {
 		return nil, ErrMessageEmpty
 	}
 
@@ -62,7 +55,7 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *msgra
 	}
 
 	msgBody := models.NewItemBody()
-	msgBody.SetContent(&cfg.Body)
+	msgBody.SetContent(&cfg.Text)
 	msgBody.SetContentType(&contentType)
 
 	msg := models.NewChatMessage()
@@ -72,14 +65,15 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *msgra
 		msg.SetSubject(&cfg.Subject)
 	}
 
-	result, err := c.Teams().ByTeamId(cfg.TeamID).Channels().ByChannelId(cfg.ChannelID).Messages().Post(ctx, msg, nil)
+	result, err := c.Teams().ByTeamId(cfg.TeamID).Channels().ByChannelId(cfg.Channel).Messages().Post(ctx, msg, nil)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("team_id", cfg.TeamID).Str("channel", cfg.Channel).Msg("microsoftteams: channel message send failed")
 		return nil, ErrChannelMessageSendFailed
 	}
 
 	return providerkit.EncodeResult(MessageSend{
 		TeamID:    cfg.TeamID,
-		ChannelID: cfg.ChannelID,
+		Channel:   cfg.Channel,
 		MessageID: lo.FromPtr(result.GetId()),
 	}, ErrResultEncode)
 }

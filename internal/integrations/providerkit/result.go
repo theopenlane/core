@@ -23,6 +23,28 @@ func MarshalEnvelope(resource string, payload any, encodeErr error) (types.Mappi
 	return MarshalEnvelopeVariant("", resource, payload, encodeErr)
 }
 
+// EnvelopePayload is a provider payload that names its own mapping envelope resource
+type EnvelopePayload interface {
+	// EnvelopeResource returns the resource identifier of the payload's envelope
+	EnvelopeResource() string
+}
+
+// MarshalEnvelopes serializes each provider payload into a mapping envelope keyed by its resource
+func MarshalEnvelopes[T EnvelopePayload](payloads []T, encodeErr error) ([]types.MappingEnvelope, error) {
+	envelopes := make([]types.MappingEnvelope, 0, len(payloads))
+
+	for _, payload := range payloads {
+		envelope, err := MarshalEnvelope(payload.EnvelopeResource(), payload, encodeErr)
+		if err != nil {
+			return nil, err
+		}
+
+		envelopes = append(envelopes, envelope)
+	}
+
+	return envelopes, nil
+}
+
 // MarshalEnvelopeVariant serializes a provider payload into a variant-specific mapping envelope
 func MarshalEnvelopeVariant(variant string, resource string, payload any, encodeErr error) (types.MappingEnvelope, error) {
 	raw, err := jsonx.ToRawMessage(payload)

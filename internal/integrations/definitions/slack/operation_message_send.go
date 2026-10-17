@@ -8,9 +8,10 @@ import (
 	"github.com/samber/lo"
 	slackgo "github.com/slack-go/slack"
 
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
-	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // MessageSendOp is the operation ref for the Slack message send operation
@@ -18,16 +19,9 @@ var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(Mes
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
-	// TemplateID references a notification template by database ID
-	TemplateID string `json:"templateId,omitempty" jsonschema:"title=Template ID"`
-	// TemplateKey references a notification template by key
-	TemplateKey string `json:"templateKey,omitempty" jsonschema:"title=Template Key"`
-	// Channel is the Slack channel identifier to post to
-	Channel string `json:"channel,omitempty" jsonschema:"title=Channel"`
+	operations.MessageContent
 	// Destinations are Slack channel identifiers to post the same message to
 	Destinations []string `json:"destinations,omitempty" jsonschema:"title=Destinations"`
-	// Text is the plain-text message content
-	Text string `json:"text,omitempty" jsonschema:"title=Message Text"`
 	// Blocks is a Block Kit payload for rich messages
 	Blocks []json.RawMessage `json:"blocks,omitempty" jsonschema:"title=Block Kit Payload"`
 	// ThreadTS is the thread timestamp for replies
@@ -56,7 +50,7 @@ type MessageDelivery struct {
 
 // Run sends a Slack message via chat.postMessage
 func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *SlackClient, cfg MessageSendOperation) (json.RawMessage, error) {
-	if err := templatekit.ResolveOperationTemplate(ctx, req, cfg.TemplateID, cfg.TemplateKey, &cfg); err != nil {
+	if err := cfg.ResolveTemplate(ctx, req, &cfg); err != nil {
 		return nil, err
 	}
 
@@ -103,6 +97,7 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *Slack
 	for _, destination := range destinations {
 		respChannel, ts, err := c.API.PostMessageContext(ctx, destination, opts...)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("channel", destination).Msg("slack: message send failed")
 			return nil, ErrMessageSendFailed
 		}
 

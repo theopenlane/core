@@ -149,6 +149,7 @@ Config contains the configuration for the core server
         "googledrive": {},
         "googleworkspace": {},
         "azureentraid": {},
+        "azuresecuritycenter": {},
         "microsoftteams": {},
         "onedrive": {},
         "oidclocal": {},
@@ -1834,7 +1835,8 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**slackruntime**](#defsslackruntimeslackconfig)|`object`|||
 |[**googledrive**](#defsgoogledriveconfig)|`object`|||
 |[**googleworkspace**](#defsgoogleworkspaceconfig)|`object`|||
-|[**azureentraid**](#defsazureentraidconfig)|`object`|||
+|[**azureentraid**](#defsmicrosoftappconfig)|`object`|||
+|[**azuresecuritycenter**](#defsmicrosoftappconfig)|`object`|||
 |[**microsoftteams**](#defsmicrosoftteamsconfig)|`object`|||
 |[**onedrive**](#defsonedriveconfig)|`object`|||
 |[**oidclocal**](#defsoidclocalconfig)|`object`|||
@@ -1858,6 +1860,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "googledrive": {},
     "googleworkspace": {},
     "azureentraid": {},
+    "azuresecuritycenter": {},
     "microsoftteams": {},
     "onedrive": {},
     "oidclocal": {},
@@ -2005,18 +2008,17 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 **Additional Properties:** not allowed   
    
-<a name="defsazureentraidconfig"></a>
-### $defs/azureentraid\.Config: object
+<a name="defsmicrosoftappconfig"></a>
+### $defs/microsoft\.AppConfig: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientid**|`string`|||
+|**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**defaulttenant**|`string`|||
-|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2027,10 +2029,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientid**|`string`|||
+|**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
-|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2041,11 +2042,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientid**|`string`|||
+|**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**contentmode**|`string`|||
-|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed   
    

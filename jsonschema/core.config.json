@@ -61,27 +61,6 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "azureentraid.Config": {
-      "properties": {
-        "clientid": {
-          "type": "string"
-        },
-        "clientsecret": {
-          "type": "string"
-        },
-        "redirecturl": {
-          "type": "string"
-        },
-        "defaulttenant": {
-          "type": "string"
-        },
-        "applicationid": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
     "cache.Config": {
       "properties": {
         "enabled": {
@@ -172,7 +151,10 @@
           "$ref": "#/$defs/googleworkspace.Config"
         },
         "azureentraid": {
-          "$ref": "#/$defs/azureentraid.Config"
+          "$ref": "#/$defs/microsoft.AppConfig"
+        },
+        "azuresecuritycenter": {
+          "$ref": "#/$defs/microsoft.AppConfig"
         },
         "microsoftteams": {
           "$ref": "#/$defs/microsoftteams.Config"
@@ -1225,9 +1207,9 @@
       },
       "type": "object"
     },
-    "microsoftteams.Config": {
+    "microsoft.AppConfig": {
       "properties": {
-        "clientid": {
+        "applicationid": {
           "type": "string"
         },
         "clientsecret": {
@@ -1236,7 +1218,22 @@
         "redirecturl": {
           "type": "string"
         },
+        "defaulttenant": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "microsoftteams.Config": {
+      "properties": {
         "applicationid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
           "type": "string"
         }
       },
@@ -1285,7 +1282,7 @@
     },
     "onedrive.Config": {
       "properties": {
-        "clientid": {
+        "applicationid": {
           "type": "string"
         },
         "clientsecret": {
@@ -1295,9 +1292,6 @@
           "type": "string"
         },
         "contentmode": {
-          "type": "string"
-        },
-        "applicationid": {
           "type": "string"
         }
       },
