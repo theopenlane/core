@@ -72,9 +72,9 @@ func newTestInstallation() *integrationtypes.InstallationRegistration {
 // connectionDefinition returns a definition declaring the given connections beside the test installation layout
 func connectionDefinition(id string, connections ...integrationtypes.Connector) integrationtypes.Definition {
 	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: id},
-		Connections:    connections,
-		Installation:   newTestInstallation(),
+		ID:           id,
+		Connections:  connections,
+		Installation: newTestInstallation(),
 	}
 }
 
@@ -100,12 +100,10 @@ func newTestIngestHandler() integrationtypes.IngestHandler {
 // minimalDefinition returns a valid definition with one connection, installation layout, and operation
 func minimalDefinition(id string) integrationtypes.Definition {
 	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          id,
-			DisplayName: "Test",
-			Active:      true,
-			Visible:     true,
-		},
+		ID:           id,
+		DisplayName:  "Test",
+		Active:       true,
+		Visible:      true,
 		Connections:  []integrationtypes.Connector{testConnectionOf[testCredential]()},
 		Installation: newTestInstallation(),
 		Operations: []integrationtypes.OperationRegistration{
@@ -252,7 +250,7 @@ func TestDuplicateOperationNameRejected(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_dup_op"},
+		ID: "def_dup_op",
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "sync", Topic: gala.TopicName("def_dup_op.sync.a"), Handle: newTestHandler()},
 			{Name: "sync", Topic: gala.TopicName("def_dup_op.sync.b"), Handle: newTestHandler()},
@@ -268,7 +266,7 @@ func TestDuplicateWebhookNameRejected(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_dup_webhook"},
+		ID: "def_dup_webhook",
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{Name: "hooks"},
 			{Name: "hooks"},
@@ -286,7 +284,7 @@ func TestDuplicateWebhookEventNameRejected(t *testing.T) {
 	handle := func(context.Context, integrationtypes.WebhookHandleRequest) error { return nil }
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_dup_event"},
+		ID: "def_dup_event",
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
 				Name: "hooks",
@@ -310,7 +308,7 @@ func TestValidateOperatorConfigSchemaRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_opconfig"},
+		ID:             "def_opconfig",
 		OperatorConfig: &integrationtypes.OperatorConfigRegistration{Schema: nil},
 	}
 
@@ -343,8 +341,8 @@ func TestValidateUserInputSchemaRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_userinput"},
-		UserInput:      &integrationtypes.InputRegistration{Name: "UserInput"},
+		ID:        "def_userinput",
+		UserInput: &integrationtypes.InputRegistration{Name: "UserInput"},
 	}
 
 	err := reg.Register(def)
@@ -359,7 +357,7 @@ func TestIndexOperationsHandlerRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_nohandler"},
+		ID: "def_nohandler",
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "bad", Topic: gala.TopicName("bad")},
 		},
@@ -377,7 +375,7 @@ func TestIndexOperationsHandlerAmbiguous(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_ambiguous"},
+		ID: "def_ambiguous",
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:         "both",
@@ -400,7 +398,7 @@ func TestIndexOperationsIngestContractsRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_noingest"},
+		ID: "def_noingest",
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:         "ingest_no_contracts",
@@ -422,7 +420,7 @@ func TestIndexOperationsIngestHandlerWithContracts(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_ingest_ok"},
+		ID: "def_ingest_ok",
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:         "ingest_ok",
@@ -444,7 +442,7 @@ func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badsnapshot"},
+		ID: "def_badsnapshot",
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:   "bad_snapshot",
@@ -467,7 +465,7 @@ func TestIndexOperationsSnapshotWithIngestHandle(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_goodsnapshot"},
+		ID: "def_goodsnapshot",
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:         "good_snapshot",
@@ -491,7 +489,7 @@ func TestIndexOperationsClientRefNotFound(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_ghostclient"},
+		ID: "def_ghostclient",
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:      "bad",
@@ -545,7 +543,7 @@ func TestIndexOperationsClientRefWithRuntimeIntegration(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_clientref"},
+		ID: "def_runtime_clientref",
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Schema: testRuntimeSchema,
 			Build:  func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
@@ -566,7 +564,7 @@ func TestIndexWebhooksEventResolverRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_noresolver"},
+		ID: "def_noresolver",
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
 				Name: "hooks",
@@ -593,7 +591,7 @@ func TestIndexWebhooksEventHandlerRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_noevthandler"},
+		ID: "def_noevthandler",
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
 				Name: "hooks",
@@ -619,7 +617,7 @@ func TestWebhookRegistrationAndLookup(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_webhooks"},
+		ID: "def_webhooks",
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
 				Name: "github",
@@ -750,7 +748,7 @@ func TestDefinitionsReturnsSortedByID(t *testing.T) {
 
 	for _, id := range ids {
 		def := integrationtypes.Definition{
-			DefinitionSpec: integrationtypes.DefinitionSpec{ID: id, DisplayName: id},
+			ID: id, DisplayName: id,
 			Operations: []integrationtypes.OperationRegistration{
 				{Name: "h", Topic: gala.TopicName(id + ".h"), Handle: newTestHandler()},
 			},
@@ -779,7 +777,7 @@ func TestCatalogReturnsSortedByID(t *testing.T) {
 
 	for _, id := range ids {
 		def := integrationtypes.Definition{
-			DefinitionSpec: integrationtypes.DefinitionSpec{ID: id, DisplayName: id},
+			ID: id, DisplayName: id,
 			Operations: []integrationtypes.OperationRegistration{
 				{Name: "h", Topic: gala.TopicName(id + ".h"), Handle: newTestHandler()},
 			},
@@ -805,7 +803,7 @@ func TestListenersReturnsSortedByTopic(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_listeners"},
+		ID: "def_listeners",
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "b_op", Topic: gala.TopicName("topic.bravo"), Handle: newTestHandler()},
 			{Name: "a_op", Topic: gala.TopicName("topic.alpha"), Handle: newTestHandler()},
@@ -838,7 +836,7 @@ func TestRegisterAllSuccess(t *testing.T) {
 
 	b2 := func() (integrationtypes.Definition, error) {
 		return integrationtypes.Definition{
-			DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_all_2", DisplayName: "Two"},
+			ID: "def_all_2", DisplayName: "Two",
 			Operations: []integrationtypes.OperationRegistration{
 				{Name: "h", Topic: gala.TopicName("def_all_2.h"), Handle: newTestHandler()},
 			},
@@ -890,7 +888,7 @@ func TestRegisterAllRegistrationError(t *testing.T) {
 	reg := New()
 
 	b := func() (integrationtypes.Definition, error) {
-		return integrationtypes.Definition{DefinitionSpec: integrationtypes.DefinitionSpec{ID: ""}}, nil
+		return integrationtypes.Definition{ID: ""}, nil
 	}
 
 	err := reg.RegisterAll(b)
@@ -995,12 +993,10 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          "def_runtime",
-			DisplayName: "Runtime Test",
-			Active:      true,
-			Visible:     true,
-		},
+		ID:          "def_runtime",
+		DisplayName: "Runtime Test",
+		Active:      true,
+		Visible:     true,
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{"key":"val"}`),
@@ -1039,11 +1035,9 @@ func TestRuntimeIntegrationNilConfig(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          "def_runtime_nocfg",
-			DisplayName: "Runtime No Config",
-			Active:      true,
-		},
+		ID:          "def_runtime_nocfg",
+		DisplayName: "Runtime No Config",
+		Active:      true,
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Schema: testRuntimeSchema,
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
@@ -1076,7 +1070,7 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_creds", Active: true, Visible: true},
+		ID: "def_runtime_creds", Active: true, Visible: true,
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{"key":"val"}`),
@@ -1121,7 +1115,7 @@ func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_opconf"},
+		ID: "def_runtime_opconf",
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Schema: testRuntimeSchema,
 			Build:  func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
@@ -1144,7 +1138,7 @@ func TestRuntimeBuildRequired(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_nobuild"},
+		ID: "def_runtime_nobuild",
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Schema: testRuntimeSchema,
 		},
@@ -1167,7 +1161,7 @@ func TestRuntimeBuildError(t *testing.T) {
 	buildErr := errors.New("provider init failed")
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_buildfail"},
+		ID: "def_runtime_buildfail",
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{}`),

@@ -12,8 +12,6 @@ import (
 	githubOAuth2 "golang.org/x/oauth2/github"
 	googleOAuth2 "golang.org/x/oauth2/google"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/iam/providers/github"
 	"github.com/theopenlane/iam/providers/google"
 	oauth "github.com/theopenlane/iam/providers/oauth2"
@@ -251,7 +249,7 @@ func parseName(name string) (c ent.CreateUserInput) {
 	c.FirstName = &parts[0]
 
 	if len(parts) > 1 {
-		c.LastName = lo.ToPtr(strings.Join(parts[1:], " "))
+		c.LastName = new(strings.Join(parts[1:], " "))
 	}
 
 	return

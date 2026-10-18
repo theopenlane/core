@@ -32,11 +32,9 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 	}
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILEDB000000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket: "test-bucket",
-			Key:    "object.txt",
-		},
+		ID:     "01HZZTESTFILEDB000000",
+		Bucket: "test-bucket",
+		Key:    "object.txt",
 	}
 
 	url, err := provider.GetPresignedURL(context.Background(), file, &storagetypes.PresignedURLOptions{Duration: time.Minute})

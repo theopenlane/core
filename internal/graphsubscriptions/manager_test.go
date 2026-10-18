@@ -182,10 +182,10 @@ func TestConcurrentPublish(t *testing.T) {
 	wg.Add(numGoroutines)
 
 	// Publish notifications concurrently
-	for i := 0; i < numGoroutines; i++ {
+	for i := range numGoroutines {
 		go func(goroutineID int) {
 			defer wg.Done()
-			for j := 0; j < numNotificationsPerGoroutine; j++ {
+			for j := range numNotificationsPerGoroutine {
 				notification := &generated.Notification{
 					ID:    "notification-" + string(rune(goroutineID)) + "-" + string(rune(j)),
 					Title: "Concurrent Notification",
@@ -226,7 +226,7 @@ func TestPublishToFullChannel(t *testing.T) {
 	manager.Subscribe(userID, orgID, notificationChan)
 
 	// Fill the channel
-	for i := 0; i < 2; i++ {
+	for i := range 2 {
 		notification := &generated.Notification{
 			ID:    "notification-fill-" + string(rune(i)),
 			Title: "Fill Notification",

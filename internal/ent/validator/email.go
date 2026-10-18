@@ -2,6 +2,7 @@ package validator
 
 import (
 	"errors"
+	"slices"
 
 	emailverifier "github.com/AfterShip/email-verifier"
 	"github.com/rs/zerolog/log"
@@ -146,11 +147,5 @@ func (c *EmailVerifier) IncludesFreeDomain(domains []string) bool {
 		return false
 	}
 
-	for _, domain := range domains {
-		if c.Client.IsFreeDomain(domain) {
-			return true
-		}
-	}
-
-	return false
+	return slices.ContainsFunc(domains, c.Client.IsFreeDomain)
 }

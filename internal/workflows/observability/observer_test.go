@@ -128,8 +128,8 @@ func TestEmitTypedNoRuntime(t *testing.T) {
 func findLogEntry(t *testing.T, buf *bytes.Buffer, msg string) map[string]any {
 	t.Helper()
 
-	lines := strings.Split(strings.TrimSpace(buf.String()), "\n")
-	for _, line := range lines {
+	lines := strings.SplitSeq(strings.TrimSpace(buf.String()), "\n")
+	for line := range lines {
 		if strings.TrimSpace(line) == "" {
 			continue
 		}

@@ -3,7 +3,6 @@ package email
 import (
 	"encoding/json"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -108,7 +107,7 @@ var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 	Op:                 BrandedMessageOp,
 	Theme:              baseTheme,
 	Description:        "Customer-authored branded message with headline, body paragraphs, and an optional call-to-action",
-	CustomerSelectable: lo.ToPtr(true),
+	CustomerSelectable: new(true),
 	Example:            brandedMessageExample,
 	UISchema:           brandedMessageUISchema,
 	Subject: func(_ RuntimeEmailConfig, req BrandedMessageRequest) string {

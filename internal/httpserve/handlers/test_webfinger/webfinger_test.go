@@ -78,10 +78,10 @@ func (h *Handler) WebfingerHandler(c echo.Context) error {
 	orgID, _ := h.DB.GetUserDefaultOrgID(u.ID)
 	status, _ := h.DB.FetchSSOStatus(orgID, u.ID)
 
-	resp := map[string]interface{}{
+	resp := map[string]any{
 		"subject": resource,
-		"links": []interface{}{
-			map[string]interface{}{
+		"links": []any{
+			map[string]any{
 				"href":         "https://example.com/sso",
 				"rel":          "self",
 				"ssoStatus":    status,
@@ -118,7 +118,7 @@ func TestWebfingerHandler(t *testing.T) {
 
 			if tc.status == http.StatusOK {
 				require.NoError(t, err)
-				var resp map[string]interface{}
+				var resp map[string]any
 				require.NoError(t, json.NewDecoder(rec.Body).Decode(&resp))
 				require.Equal(t, tc.resource, resp["subject"])
 				require.NotEmpty(t, resp["links"])

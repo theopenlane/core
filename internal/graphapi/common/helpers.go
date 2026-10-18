@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"reflect"
 	"strings"
 
@@ -442,8 +443,8 @@ func walkCSVStructFields(t reflect.Type, prefixes []string, visitor csvFieldVisi
 		prefixes = []string{""}
 	}
 
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
+	for field := range t.Fields() {
+		field := field
 		if field.PkgPath != "" {
 			continue
 		}
@@ -547,8 +548,8 @@ func csvEmbeddedHeaderSet(t reflect.Type) map[string]struct{} {
 		return set
 	}
 
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
+	for field := range t.Fields() {
+		field := field
 		if field.Anonymous {
 			collectCSVHeaderNames(field.Type, set, []string{""})
 			continue
@@ -742,8 +743,8 @@ func normalizeCSVEnumValue(v reflect.Value, cache map[reflect.Type]enumInfo) {
 		return
 	}
 
-	for i := 0; i < v.NumField(); i++ {
-		field := v.Field(i)
+	for _, field := range v.Fields() {
+		field := field
 		if !field.CanSet() {
 			// Skip unexported or non-settable fields to avoid reflection panics
 			continue
@@ -1235,9 +1236,7 @@ func applyUploadMetadataFromVariables(variables map[string]any, uploadArg string
 	}
 
 	if rawMetadata, ok := metadata["metadata"].(map[string]any); ok {
-		for k, v := range rawMetadata {
-			upload.Metadata[k] = v
-		}
+		maps.Copy(upload.Metadata, rawMetadata)
 	}
 }
 

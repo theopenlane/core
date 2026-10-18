@@ -3,8 +3,6 @@ package handlers
 import (
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -80,12 +78,10 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 	}
 
 	out := &models.RefreshResponse{
-		Reply:   rout.Reply{Success: true},
-		Message: "success",
-		AuthData: models.AuthData{
-			AccessToken:  accessToken,
-			RefreshToken: refreshToken,
-		},
+		Success:      true,
+		Message:      "success",
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	}
 
 	return h.Success(ctx, out)

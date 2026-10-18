@@ -386,7 +386,7 @@ func sendResponseEmail(ctx context.Context, client *generated.Client, assessment
 	}
 
 	return sendSystemEmail(ctx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
-		RecipientInfo:  emaildef.RecipientInfo{Email: email},
+		Email:          email,
 		AssessmentName: assessmentObj.Name,
 		AuthURL:        authURL,
 	})

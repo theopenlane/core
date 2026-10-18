@@ -36,7 +36,7 @@ func TestSubprocessorNotificationListUnsubscribeHeader(t *testing.T) {
 	t.Parallel()
 
 	req := SubprocessorNotificationRequest{
-		RecipientInfo:  RecipientInfo{Email: "dolores@example.com"},
+		Email:          "dolores@example.com",
 		Subprocessors:  sampleSubprocessorEntries(),
 		UnsubscribeURL: "https://trust.openlane.io/securecorp/unsubscribe?token=tok_abc123",
 	}
@@ -74,7 +74,7 @@ func TestSubprocessorNotificationSubject(t *testing.T) {
 	cfg := *MockRuntimeConfig()
 
 	branded := dispatcher.Subject(cfg, SubprocessorNotificationRequest{
-		TrustCenterBranding: TrustCenterBranding{CompanyName: "SecureCorp"},
+		CompanyName: "SecureCorp",
 	})
 	assert.Equal(t, "SecureCorp Trust Center Subprocessor Update", branded)
 
@@ -87,12 +87,10 @@ func TestSubprocessorNotificationSubject(t *testing.T) {
 // vendor (name and change) without a logo, and resolves the per-recipient unsubscribe link from the token
 func TestSubprocessorNotificationBrandingOverride(t *testing.T) {
 	req := SubprocessorNotificationRequest{
-		RecipientInfo: RecipientInfo{Email: "dolores@example.com", FirstName: "Dolores", UnsubscribeToken: "tok_dolores"},
-		TrustCenterBranding: TrustCenterBranding{
-			CompanyName: "SecureCorp",
-			LogoURL:     "https://securecorp.example.com/logo.png",
-			AccentColor: "#3fc2b4",
-		},
+		Email: "dolores@example.com", FirstName: "Dolores", UnsubscribeToken: "tok_dolores",
+		CompanyName:    "SecureCorp",
+		LogoURL:        "https://securecorp.example.com/logo.png",
+		AccentColor:    "#3fc2b4",
 		Subprocessors:  sampleSubprocessorEntries(),
 		TrustCenterURL: "https://securecorp.example.com/trust",
 		UnsubscribeURL: "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
@@ -139,7 +137,7 @@ func TestSubprocessorNotificationSystemBrandingFallback(t *testing.T) {
 	cfg := MockRuntimeConfig()
 
 	req := SubprocessorNotificationRequest{
-		RecipientInfo: RecipientInfo{Email: "dolores@example.com", FirstName: "Dolores"},
+		Email: "dolores@example.com", FirstName: "Dolores",
 		Subprocessors: sampleSubprocessorEntries(),
 	}
 

@@ -12,7 +12,6 @@ import (
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 )
 
 // WebfingerHandler is a simple protocol which allows you to publicly query a well-know
@@ -94,7 +93,7 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 	}
 
 	out := models.SSOStatusResponse{
-		Reply:          rout.Reply{Success: true},
+		Success:        true,
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
 		OrgTFAEnforced: setting.MultifactorAuthEnforced,

@@ -29,12 +29,10 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 	require.NoError(t, err)
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILE00000000000000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:  "test-bucket",
-			Key:     "path/to/object.txt",
-			FullURI: "s3://test-bucket/path/to/object.txt",
-		},
+		ID:      "01HZZTESTFILE00000000000000",
+		Bucket:  "test-bucket",
+		Key:     "path/to/object.txt",
+		FullURI: "s3://test-bucket/path/to/object.txt",
 	}
 
 	url, err := proxy.GenerateDownloadURLWithSecret(file, secret, time.Minute, cfg)
@@ -80,11 +78,9 @@ func TestProvider_GetPresignedURL_FallbackToNative(t *testing.T) {
 	require.NotNil(t, provider)
 
 	url, err := provider.GetPresignedURL(t.Context(), &storagetypes.File{
-		ID: "01HZZTESTFILE00000000000000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket: "test-bucket",
-			Key:    "path/to/object.txt",
-		},
+		ID:     "01HZZTESTFILE00000000000000",
+		Bucket: "test-bucket",
+		Key:    "path/to/object.txt",
 	}, &storagetypes.PresignedURLOptions{Duration: time.Minute})
 
 	require.NoError(t, err, "with proxy presign enabled but no ent client, should fall back to native S3 presigning")

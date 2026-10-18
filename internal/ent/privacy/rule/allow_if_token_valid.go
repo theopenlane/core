@@ -106,7 +106,7 @@ func HasPublicFlowToken(ctx context.Context) bool {
 func privacyTokenFromContext[T any](ctx context.Context) (T, bool) {
 	var zero T
 
-	tokenType := reflect.TypeOf((*T)(nil)).Elem()
+	tokenType := reflect.TypeFor[T]()
 	rawToken, ok := privacyTokenFromContextByType(ctx, tokenType)
 	if !ok {
 		return zero, false
@@ -122,22 +122,22 @@ func privacyTokenFromContext[T any](ctx context.Context) (T, bool) {
 
 func privacyTokenFromContextByType(ctx context.Context, tokenType reflect.Type) (any, bool) {
 	switch tokenType {
-	case reflect.TypeOf(&token.VerifyToken{}):
+	case reflect.TypeFor[*token.VerifyToken]():
 		t := token.VerifyTokenFromContext(ctx)
 		return t, t != nil
-	case reflect.TypeOf(&token.OrgInviteToken{}):
+	case reflect.TypeFor[*token.OrgInviteToken]():
 		t := token.OrgInviteTokenFromContext(ctx)
 		return t, t != nil
-	case reflect.TypeOf(&token.SignUpToken{}):
+	case reflect.TypeFor[*token.SignUpToken]():
 		t := token.EmailSignUpTokenFromContext(ctx)
 		return t, t != nil
-	case reflect.TypeOf(&token.OauthTooToken{}):
+	case reflect.TypeFor[*token.OauthTooToken]():
 		t := token.OauthTooTokenFromContext(ctx)
 		return t, t != nil
-	case reflect.TypeOf(&token.ResetToken{}):
+	case reflect.TypeFor[*token.ResetToken]():
 		t := token.ResetTokenFromContext(ctx)
 		return t, t != nil
-	case reflect.TypeOf(&token.DownloadToken{}):
+	case reflect.TypeFor[*token.DownloadToken]():
 		t := token.DownloadTokenFromContext(ctx)
 		return t, t != nil
 	default:

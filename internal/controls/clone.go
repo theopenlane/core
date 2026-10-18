@@ -5,8 +5,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -262,7 +260,7 @@ func CreateCloneSubcontrolInput(subcontrol *generated.Subcontrol, orgID string, 
 		ReferenceFrameworkRevision: refFrameworkRevision,
 		OwnerID:                    &orgID,
 		// set to empty string to avoid a second query, we know the control owner ID is not set
-		ControlOwnerID: lo.ToPtr(""),
+		ControlOwnerID: new(""),
 	}
 }
 

@@ -7,8 +7,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/utils/passwd"
@@ -115,7 +113,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	}
 
 	out := models.LoginResponse{
-		Reply:            rout.Reply{Success: true},
+		Success:          true,
 		TFAEnabled:       user.Edges.Setting.IsTfaEnabled,
 		TFASetupRequired: tfaSetupRequired,
 		Message:          "success",

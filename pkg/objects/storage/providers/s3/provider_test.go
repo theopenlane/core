@@ -183,9 +183,7 @@ func TestS3Provider_Download_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		downloadOpts := &storagetypes.DownloadFileOptions{
 			FileName: "test.txt",
@@ -204,9 +202,7 @@ func TestS3Provider_Delete_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		err = provider.Delete(context.Background(), file, nil)
 		assert.Error(t, err)
@@ -222,9 +218,7 @@ func TestS3Provider_GetPresignedURL_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		urlOpts := &storagetypes.PresignedURLOptions{
 			Duration: 15 * time.Minute,
@@ -243,9 +237,7 @@ func TestS3Provider_Exists_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		_, err = provider.Exists(context.Background(), file)
 		assert.Error(t, err)
@@ -312,11 +304,9 @@ func TestS3ProviderPresignURLProxyDisabled(t *testing.T) {
 	require.NoError(t, err)
 
 	url, err := provider.GetPresignedURL(ctx, &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:      minioBucket,
-			Key:         "folder/object.txt",
-			ContentType: "text/plain",
-		},
+		Bucket:      minioBucket,
+		Key:         "folder/object.txt",
+		ContentType: "text/plain",
 	}, &storagetypes.PresignedURLOptions{Duration: time.Minute})
 	require.NoError(t, err)
 	require.True(t, strings.HasPrefix(url, "http://"), "expected upstream S3 URL, got %q", url)
@@ -372,12 +362,10 @@ func TestS3ProviderPresignURLProxyEnabled(t *testing.T) {
 	require.NoError(t, err)
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILE00000000000000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:  minioBucket,
-			Key:     "folder/object.txt",
-			FullURI: "s3://" + minioBucket + "/folder/object.txt",
-		},
+		ID:      "01HZZTESTFILE00000000000000",
+		Bucket:  minioBucket,
+		Key:     "folder/object.txt",
+		FullURI: "s3://" + minioBucket + "/folder/object.txt",
 	}
 
 	secret := make([]byte, 128)
@@ -437,8 +425,7 @@ func createBucket(t *testing.T, ctx context.Context, endpoint, bucket string) {
 
 	_, err := client.CreateBucket(ctx, &awss3.CreateBucketInput{Bucket: aws.String(bucket)})
 	if err != nil {
-		var existsErr *types.BucketAlreadyOwnedByYou
-		if !errors.As(err, &existsErr) {
+		if _, ok := errors.AsType[*types.BucketAlreadyOwnedByYou](err); !ok {
 			require.NoError(t, err)
 		}
 	}

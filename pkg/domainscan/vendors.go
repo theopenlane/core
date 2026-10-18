@@ -348,7 +348,7 @@ func domainVendorName(domain string) string {
 		return override
 	}
 
-	label := strings.SplitN(domain, ".", 2)[0] //nolint:mnd
+	label, _, _ := strings.Cut(domain, ".") //nolint:mnd
 	if label == "" {
 		return domain
 	}

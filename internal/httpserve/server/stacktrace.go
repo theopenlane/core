@@ -22,7 +22,7 @@ func CustomHTTPErrorHandler(c echo.Context, err error) {
 	}
 
 	// Create a custom error response
-	errorResponse := map[string]interface{}{
+	errorResponse := map[string]any{
 		"error": err.Error(),
 		"query": c.QueryParams(),
 		"url":   c.Request().URL.String(),

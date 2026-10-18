@@ -8,7 +8,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
-	"github.com/samber/lo"
 	"github.com/vektah/gqlparser/v2/ast"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -105,9 +104,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 			},
 			expected: &pkgobjects.File{
 				CorrelatedObjectType: "User",
-				FileMetadata: pkgobjects.FileMetadata{
-					Key: "file",
-				},
+				Key:                  "file",
 			},
 			expectedErr: nil,
 		},
@@ -280,9 +277,9 @@ func TestGetOrgOwnerFromInput(t *testing.T) {
 			name: "Valid input with owner ID",
 			input: generated.CreateProcedureInput{
 				Name:    "Test Procedure",
-				OwnerID: lo.ToPtr("owner123"),
+				OwnerID: new("owner123"),
 			},
-			expected:    lo.ToPtr("owner123"),
+			expected:    new("owner123"),
 			expectedErr: nil,
 		},
 		{
@@ -339,14 +336,14 @@ func TestGetBulkUploadOwnerInput(t *testing.T) {
 			input: []*generated.CreateProcedureInput{
 				{
 					Name:    "Test Procedure 1",
-					OwnerID: lo.ToPtr("owner123"),
+					OwnerID: new("owner123"),
 				},
 				{
 					Name:    "Test Procedure 2",
-					OwnerID: lo.ToPtr("owner123"),
+					OwnerID: new("owner123"),
 				},
 			},
-			expected:    lo.ToPtr("owner123"),
+			expected:    new("owner123"),
 			expectedErr: nil,
 		},
 		{
@@ -354,11 +351,11 @@ func TestGetBulkUploadOwnerInput(t *testing.T) {
 			input: []*generated.CreateProcedureInput{
 				{
 					Name:    "Test Procedure 1",
-					OwnerID: lo.ToPtr("owner123"),
+					OwnerID: new("owner123"),
 				},
 				{
 					Name:    "Test Procedure 2",
-					OwnerID: lo.ToPtr("owner456"),
+					OwnerID: new("owner456"),
 				},
 			},
 			expected:    nil,

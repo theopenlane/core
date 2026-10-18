@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"slices"
 	"strings"
 )
 
@@ -126,11 +127,8 @@ func probeDKIMSelectors(ctx context.Context, host string) []string {
 			continue
 		}
 
-		for _, record := range records {
-			if isDKIMRecord(record) {
-				found = append(found, selector.label)
-				break
-			}
+		if slices.ContainsFunc(records, isDKIMRecord) {
+			found = append(found, selector.label)
 		}
 	}
 
@@ -276,7 +274,7 @@ func fqdn(host string) string {
 
 // dmarcTagValue extracts the value of a tag (e.g. "p" for policy) from a semicolon-delimited DMARC record
 func dmarcTagValue(record, tag string) string {
-	for _, part := range strings.Split(record, ";") {
+	for part := range strings.SplitSeq(record, ";") {
 		name, value, ok := strings.Cut(strings.TrimSpace(part), "=")
 		if ok && strings.EqualFold(strings.TrimSpace(name), tag) {
 			return strings.TrimSpace(value)
@@ -290,7 +288,7 @@ func dmarcTagValue(record, tag string) string {
 func spfIncludeHosts(record string) []string {
 	var hosts []string
 
-	for _, field := range strings.Fields(record) {
+	for field := range strings.FieldsSeq(record) {
 		if host, ok := strings.CutPrefix(field, "include:"); ok {
 			hosts = append(hosts, host)
 		}
@@ -314,7 +312,7 @@ func vendorNameFromHostname(host string) (name, domain string) {
 	} else if override, ok := vendorDomainNames[domain]; ok {
 		name = override
 	} else {
-		label := strings.SplitN(domain, ".", 2)[0] //nolint:mnd
+		label, _, _ := strings.Cut(domain, ".") //nolint:mnd
 		if label == "" {
 			return domain, domain
 		}

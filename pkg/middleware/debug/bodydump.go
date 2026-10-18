@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"slices"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -61,7 +62,7 @@ func shouldLogBody(ctx context.Context, logger zerolog.Logger, reqBody []byte) b
 	}
 
 	// if we can json unmarshal the request body, it is not a file upload
-	var bodymap map[string]interface{}
+	var bodymap map[string]any
 	if err := json.Unmarshal(reqBody, &bodymap); err == nil {
 		return true
 	}
@@ -74,7 +75,7 @@ func shouldLogBody(ctx context.Context, logger zerolog.Logger, reqBody []byte) b
 
 // logRequestBody logs the request body to the logger
 func logRequestBody(logger zerolog.Logger, reqBody []byte) {
-	var bodymap map[string]interface{}
+	var bodymap map[string]any
 	if err := json.Unmarshal(reqBody, &bodymap); err == nil {
 		bodymap = redactSecretFields(bodymap)
 
@@ -87,16 +88,13 @@ func logRequestBody(logger zerolog.Logger, reqBody []byte) {
 var secretFields = []string{"new_password", "old_password", "password", "access_token", "refresh_token", "private_key", "serviceAccountKey"}
 
 // redactSecretFields redacts sensitive fields from the request body, recursing into nested maps
-func redactSecretFields(bodymap map[string]interface{}) map[string]interface{} {
+func redactSecretFields(bodymap map[string]any) map[string]any {
 	for k, v := range bodymap {
-		for _, secret := range secretFields {
-			if k == secret {
-				bodymap[k] = "********"
-				break
-			}
+		if slices.Contains(secretFields, k) {
+			bodymap[k] = "********"
 		}
 
-		if nested, ok := v.(map[string]interface{}); ok {
+		if nested, ok := v.(map[string]any); ok {
 			bodymap[k] = redactSecretFields(nested)
 		}
 	}

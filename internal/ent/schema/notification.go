@@ -70,7 +70,7 @@ func (Notification) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
-		field.JSON("data", map[string]interface{}{}).
+		field.JSON("data", map[string]any{}).
 			Comment("structured payload containing IDs, links, and other notification data").
 			Optional().
 			Immutable().

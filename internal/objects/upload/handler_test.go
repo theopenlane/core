@@ -22,10 +22,8 @@ func TestBuildUploadOptionsInitialisesHints(t *testing.T) {
 		Metadata: map[string]any{
 			"custom": "value",
 		},
-		FileMetadata: pkgobjects.FileMetadata{
-			Bucket: "bucket",
-			Folder: "folder",
-		},
+		Bucket: "bucket",
+		Folder: "folder",
 	}
 
 	ctx := auth.WithCaller(context.Background(), &auth.Caller{
@@ -48,7 +46,7 @@ func TestBuildUploadOptionsDetectsContentType(t *testing.T) {
 		OriginalName: "notes.txt",
 		FieldName:    "notes",
 		RawFile:      bytes.NewReader([]byte(content)),
-		FileMetadata: pkgobjects.FileMetadata{ContentType: ""},
+		ContentType:  "",
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)
@@ -61,7 +59,7 @@ func TestBuildUploadOptionsBufferedDetection(t *testing.T) {
 		OriginalName: "data.bin",
 		FieldName:    "upload",
 		RawFile:      strings.NewReader("000000"),
-		FileMetadata: pkgobjects.FileMetadata{ContentType: "application/octet-stream"},
+		ContentType:  "application/octet-stream",
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)
@@ -81,7 +79,7 @@ func TestBuildUploadOptionsPreservesExplicitContentType(t *testing.T) {
 	file := &pkgobjects.File{
 		OriginalName: "photo.jpg",
 		FieldName:    "avatarFile",
-		FileMetadata: pkgobjects.FileMetadata{ContentType: "image/jpeg"},
+		ContentType:  "image/jpeg",
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)

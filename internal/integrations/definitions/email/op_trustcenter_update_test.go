@@ -99,12 +99,10 @@ func renderTrustCenterUpdateMessage(t *testing.T, client *Client, req TrustCente
 // applies the branding overlay, and links back to the trust center
 func TestTrustCenterUpdateRender(t *testing.T) {
 	req := TrustCenterUpdateRequest{
-		RecipientInfo: RecipientInfo{Email: "dolores@example.com", FirstName: "Dolores", UnsubscribeToken: "tok_dolores"},
-		TrustCenterBranding: TrustCenterBranding{
-			CompanyName: "SecureCorp",
-			LogoURL:     "https://securecorp.example.com/logo.png",
-			AccentColor: "#3fc2b4",
-		},
+		Email: "dolores@example.com", FirstName: "Dolores", UnsubscribeToken: "tok_dolores",
+		CompanyName:    "SecureCorp",
+		LogoURL:        "https://securecorp.example.com/logo.png",
+		AccentColor:    "#3fc2b4",
 		PostTitle:      "SOC 2 report published",
 		PostText:       "Our latest SOC 2 Type II report is now available.\nRequest access to review the full report.",
 		TrustCenterURL: "https://securecorp.example.com/trust",
@@ -140,9 +138,9 @@ func TestTrustCenterUpdateRender(t *testing.T) {
 // emphasis preserved) with dangerous content stripped by the email scrubber
 func TestTrustCenterUpdateRenderHTMLPost(t *testing.T) {
 	req := TrustCenterUpdateRequest{
-		RecipientInfo: RecipientInfo{Email: "dolores@example.com"},
-		PostTitle:     "June update",
-		PostText:      `<p>We shipped:</p><ul><li>New <strong>SOC 2</strong> report</li><li>Refreshed policies</li></ul><script>alert("x")</script>`,
+		Email:     "dolores@example.com",
+		PostTitle: "June update",
+		PostText:  `<p>We shipped:</p><ul><li>New <strong>SOC 2</strong> report</li><li>Refreshed policies</li></ul><script>alert("x")</script>`,
 	}
 
 	msg := renderTrustCenterUpdateMessage(t, &Client{Config: *MockRuntimeConfig()}, req)
@@ -163,8 +161,8 @@ func TestTrustCenterUpdateRenderFallbacks(t *testing.T) {
 	cfg := MockRuntimeConfig()
 
 	req := TrustCenterUpdateRequest{
-		RecipientInfo: RecipientInfo{Email: "dolores@example.com"},
-		PostText:      "We published a new update.",
+		Email:    "dolores@example.com",
+		PostText: "We published a new update.",
 	}
 
 	msg := renderTrustCenterUpdateMessage(t, &Client{Config: *cfg}, req)

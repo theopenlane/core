@@ -107,7 +107,7 @@ func TestR2ProviderPresignedURL(t *testing.T) {
 	}
 	defer provider.Close()
 
-	file := &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "test-file.txt"}}
+	file := &storagetypes.File{Key: "test-file.txt"}
 	url, err := provider.GetPresignedURL(context.Background(), file, &storagetypes.PresignedURLOptions{Duration: time.Minute})
 	if err != nil {
 		t.Skip("Skipping presigned URL test without R2 environment")
@@ -153,9 +153,7 @@ func TestR2Provider_Download_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		downloadOpts := &storagetypes.DownloadFileOptions{
 			FileName: "test.txt",
@@ -174,9 +172,7 @@ func TestR2Provider_Delete_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		err = provider.Delete(context.Background(), file, nil)
 		assert.Error(t, err)
@@ -192,9 +188,7 @@ func TestR2Provider_Exists_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		_, err = provider.Exists(context.Background(), file)
 		assert.Error(t, err)
@@ -259,10 +253,8 @@ func TestR2ProviderPresignURLProxyDisabled(t *testing.T) {
 	require.NoError(t, err)
 
 	url, err := provider.GetPresignedURL(ctx, &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket: minioBucket,
-			Key:    "folder/object.txt",
-		},
+		Bucket: minioBucket,
+		Key:    "folder/object.txt",
 	}, &storagetypes.PresignedURLOptions{Duration: time.Minute})
 	require.NoError(t, err)
 	require.True(t, strings.HasPrefix(url, "http://"), "expected upstream R2/S3 URL, got %q", url)
@@ -324,12 +316,10 @@ func TestR2ProviderPresignURLProxyEnabled(t *testing.T) {
 	require.NoError(t, err)
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILER2BBBBBB",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:  minioBucket,
-			Key:     "folder/object.txt",
-			FullURI: "r2://" + minioBucket + "/folder/object.txt",
-		},
+		ID:      "01HZZTESTFILER2BBBBBB",
+		Bucket:  minioBucket,
+		Key:     "folder/object.txt",
+		FullURI: "r2://" + minioBucket + "/folder/object.txt",
 	}
 
 	secret := make([]byte, 128)
@@ -389,8 +379,7 @@ func createBucket(t *testing.T, ctx context.Context, endpoint, bucket string) {
 
 	_, err := client.CreateBucket(ctx, &awss3.CreateBucketInput{Bucket: aws.String(bucket)})
 	if err != nil {
-		var existsErr *types.BucketAlreadyOwnedByYou
-		if !errors.As(err, &existsErr) {
+		if _, ok := errors.AsType[*types.BucketAlreadyOwnedByYou](err); !ok {
 			require.NoError(t, err)
 		}
 	}

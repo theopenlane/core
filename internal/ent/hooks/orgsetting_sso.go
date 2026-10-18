@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -112,7 +111,7 @@ func stringPtrFromOld(ctx context.Context, old func(ctx context.Context) (string
 		return nil, err
 	}
 
-	return lo.ToPtr(val), nil
+	return new(val), nil
 }
 
 // missingProvider checks if the SSO provider is missing or set to None

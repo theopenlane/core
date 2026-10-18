@@ -99,10 +99,8 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 	}
 
 	input := QuestionnaireAuthEmail{
-		RecipientInfo: RecipientInfo{
-			Email: email,
-			Tags:  tags,
-		},
+		Email:          email,
+		Tags:           tags,
 		AssessmentName: assessmentName,
 		AuthURL:        authURL,
 	}

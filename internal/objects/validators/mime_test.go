@@ -11,10 +11,8 @@ import (
 func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 	t.Run("allows configured avatar file types", func(t *testing.T) {
 		file := storage.File{
-			FieldName: "avatarFile",
-			FileMetadata: storage.FileMetadata{
-				ContentType: "image/png",
-			},
+			FieldName:   "avatarFile",
+			ContentType: "image/png",
 		}
 
 		assert.NoError(t, mimeTypeValidator(file))
@@ -22,10 +20,8 @@ func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 
 	t.Run("rejects disallowed avatar mime types", func(t *testing.T) {
 		file := storage.File{
-			FieldName: "avatarFile",
-			FileMetadata: storage.FileMetadata{
-				ContentType: "text/plain",
-			},
+			FieldName:   "avatarFile",
+			ContentType: "text/plain",
 		}
 
 		assert.Error(t, mimeTypeValidator(file))
@@ -35,10 +31,8 @@ func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 	t.Run("uses shared defaults for unknown fields", func(t *testing.T) {
 		file := storage.File{
-			FieldName: "customUpload",
-			FileMetadata: storage.FileMetadata{
-				ContentType: "application/pdf",
-			},
+			FieldName:   "customUpload",
+			ContentType: "application/pdf",
 		}
 
 		assert.NoError(t, mimeTypeValidator(file))
@@ -46,10 +40,8 @@ func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 
 	t.Run("shared defaults reject unsupported types", func(t *testing.T) {
 		file := storage.File{
-			FieldName: "customUpload",
-			FileMetadata: storage.FileMetadata{
-				ContentType: "application/x-malware",
-			},
+			FieldName:   "customUpload",
+			ContentType: "application/x-malware",
 		}
 
 		assert.Error(t, mimeTypeValidator(file))
@@ -93,10 +85,8 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 		for _, mime := range allowedTypes {
 			t.Run(field+" allows "+mime, func(t *testing.T) {
 				file := storage.File{
-					FieldName: field,
-					FileMetadata: storage.FileMetadata{
-						ContentType: mime,
-					},
+					FieldName:   field,
+					ContentType: mime,
 				}
 				assert.NoError(t, mimeTypeValidator(file))
 			})
@@ -105,10 +95,8 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 		for _, mime := range rejectedTypes {
 			t.Run(field+" rejects "+mime, func(t *testing.T) {
 				file := storage.File{
-					FieldName: field,
-					FileMetadata: storage.FileMetadata{
-						ContentType: mime,
-					},
+					FieldName:   field,
+					ContentType: mime,
 				}
 				assert.Error(t, mimeTypeValidator(file))
 			})

@@ -111,7 +111,7 @@ func ErrorPresenter(ctx context.Context, e error) *gqlerror.Error {
 
 	// Add custom error code and message to the extensions
 	if err.Extensions == nil {
-		err.Extensions = make(map[string]interface{})
+		err.Extensions = make(map[string]any)
 	}
 
 	// add the code to the extensions

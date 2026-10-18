@@ -95,7 +95,7 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription) *ent.OrgSubsc
 		StripeSubscriptionID:     sub.ID,
 		StripeSubscriptionStatus: status,
 		Active:                   entitlements.IsSubscriptionActive(sub.Status),
-		TrialExpiresAt:           timePtr(time.Unix(sub.TrialEnd, 0)),
+		TrialExpiresAt:           new(time.Unix(sub.TrialEnd, 0)),
 		DaysUntilDue:             int64ToStringPtr(sub.DaysUntilDue),
 	}
 
@@ -149,8 +149,9 @@ func int64ToStringPtr(i int64) *string {
 	return &s
 }
 
+//go:fix inline
 func timePtr(t time.Time) *time.Time {
-	return &t
+	return new(t)
 }
 
 // OrgPriceSetter defines the methods needed to set OrgPrice fields on ent builders.

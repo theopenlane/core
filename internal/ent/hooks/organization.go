@@ -553,7 +553,7 @@ func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationM
 		emailDomain := strings.SplitAfter(user.Email, "@")[1]
 
 		input.AllowedEmailDomains = []string{emailDomain}
-		input.AllowMatchingDomainsAutojoin = lo.ToPtr(true)
+		input.AllowMatchingDomainsAutojoin = new(true)
 	}
 
 	organizationSetting, err := m.Client().OrganizationSetting.Create().SetInput(input).Save(ctx)

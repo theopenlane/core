@@ -8,8 +8,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/v2/internal/ent/validator"
@@ -108,7 +106,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	}
 
 	out := &models.RegisterResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		ID:      meowuser.ID,
 		Email:   meowuser.Email,
 		Message: "Welcome to Openlane!",
@@ -172,8 +170,8 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 	}
 
 	if err := h.sendEmail(ctx, email.VerifyEmailOp.Name(), email.VerifyEmailRequest{
-		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
-		Token:         meowtoken.Token,
+		Email: user.Email, FirstName: user.FirstName, LastName: user.LastName,
+		Token: meowtoken.Token,
 	}); err != nil {
 		return nil, err
 	}

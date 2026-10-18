@@ -44,12 +44,10 @@ func TestDomainScanSubmitGate(t *testing.T) {
 			MutationType: generated.TypeScan,
 			Operation:    entityops.OpCreate,
 			EntityID:     "scan-1",
-			ChangeSet: entityops.ChangeSet{
-				ProposedChanges: map[string]any{
-					scan.FieldScanType:    scanType,
-					scan.FieldStatus:      status,
-					scan.FieldPerformedBy: performedBy,
-				},
+			ProposedChanges: map[string]any{
+				scan.FieldScanType:    scanType,
+				scan.FieldStatus:      status,
+				scan.FieldPerformedBy: performedBy,
 			},
 		}
 	}

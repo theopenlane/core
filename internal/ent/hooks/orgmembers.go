@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
@@ -140,10 +141,8 @@ func HookBlockOwnerRoleChange() ent.Hook {
 				return nil, ErrOrgOwnerCannotBeUpdated
 			}
 
-			for _, oldRole := range oldRoles {
-				if oldRole == enums.RoleOwner {
-					return nil, ErrOrgOwnerCannotBeUpdated
-				}
+			if slices.Contains(oldRoles, enums.RoleOwner) {
+				return nil, ErrOrgOwnerCannotBeUpdated
 			}
 
 			return next.Mutate(ctx, m)

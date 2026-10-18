@@ -52,9 +52,9 @@ type cloudflareGroupPayload struct {
 	// Description is the description of the group
 	Description string `json:"description,omitempty"`
 	// LastModifiedTime is the last update timestamp of the group from the source
-	LastModifiedTime time.Time `json:"last_modified_time,omitempty"`
+	LastModifiedTime time.Time `json:"last_modified_time"`
 	// CreatedTime is the timestamp the group was created from the source
-	CreatedTime time.Time `json:"created_time,omitempty"`
+	CreatedTime time.Time `json:"created_time"`
 	// Payload is the full profile from the source
 	Payload any `json:"payload"`
 }

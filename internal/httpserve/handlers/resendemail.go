@@ -5,8 +5,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
@@ -26,7 +24,7 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 	ctxWithToken := token.NewContextWithSignUpToken(reqCtx, in.Email)
 
 	out := &models.ResendResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Message: "We've received your request to be resent an email to complete verification. Please check your email.",
 	}
 

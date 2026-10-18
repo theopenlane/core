@@ -172,5 +172,5 @@ func highestCVSSScore(cvss map[string]*armsecurity.CVSS) *float32 {
 		return nil
 	}
 
-	return lo.ToPtr(best)
+	return new(best)
 }

@@ -93,7 +93,7 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 	case enums.TrustCenterNDARequestStatusRequested, enums.TrustCenterNDARequestStatusApproved:
 
 		err := sendSystemEmail(inv.Context, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
-			RecipientInfo: emaildef.RecipientInfo{Email: req.Email},
+			Email:         req.Email,
 			RequestID:     req.ID,
 			TrustCenterID: req.TrustCenterID,
 		})
@@ -125,7 +125,7 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 	case enums.TrustCenterNDARequestStatusSigned:
 
 		err := sendSystemEmail(inv.Context, emaildef.TCAuthOp.Name(), emaildef.TrustCenterAuthEmail{
-			RecipientInfo: emaildef.RecipientInfo{Email: req.Email},
+			Email:         req.Email,
 			RequestID:     req.ID,
 			TrustCenterID: req.TrustCenterID,
 		})

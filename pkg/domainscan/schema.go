@@ -310,7 +310,7 @@ type Report struct {
 	// Branding is the first non-empty branding section found across completed domains
 	Branding *Branding `json:"branding,omitempty"`
 	// Findings is the union of findings across every completed domain
-	Findings Findings `json:"findings,omitempty"`
+	Findings Findings `json:"findings"`
 	// Meta is the first non-empty meta section found across completed domains
 	Meta *Meta `json:"meta,omitempty"`
 	// Platform is the first non-empty platform section found across completed domains

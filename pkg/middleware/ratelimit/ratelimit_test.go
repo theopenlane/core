@@ -33,7 +33,7 @@ func TestRateLimiterWithConfigBlocksAfterLimit(t *testing.T) {
 		return c.NoContent(http.StatusOK)
 	})
 
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		req.Header.Set("True-Client-IP", "10.0.0.1")
 		rec := httptest.NewRecorder()
@@ -124,7 +124,7 @@ func TestRateLimiterWithDryRunAllowsRequests(t *testing.T) {
 		return c.NoContent(http.StatusOK)
 	})
 
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		req.Header.Set("True-Client-IP", "192.0.2.1")
 		rec := httptest.NewRecorder()

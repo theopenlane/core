@@ -7,7 +7,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -37,7 +36,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 	readCtx := auth.WithInternalReadCrossOrgContext(reqCtx)
 
 	out := &models.ResendResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Message: "If the email address is associated with an active assessment, a new link has been sent to access this",
 	}
 
@@ -115,7 +114,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 	}
 
 	if err := h.sendEmail(reqCtx, email.QuestionnaireAuthOp.Name(), email.QuestionnaireAuthEmail{
-		RecipientInfo:  email.RecipientInfo{Email: in.Email},
+		Email:          in.Email,
 		AssessmentName: assessmentData.Name,
 		AuthURL:        result.URL,
 	}); err != nil {

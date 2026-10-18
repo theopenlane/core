@@ -7,7 +7,6 @@ import (
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -68,7 +67,7 @@ func (h *Handler) CheckIntegrationHealth(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, IntegrationHealthResponse{
-		Reply:         rout.Reply{Success: true},
+		Success:       true,
 		Provider:      installation.DefinitionID,
 		IntegrationID: installation.ID,
 		Status:        assessment.Status.String(),

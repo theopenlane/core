@@ -88,9 +88,7 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context) error {
 
 	downloadToken := &tokens.DownloadToken{
 		ObjectURI: objectURI,
-		SigningInfo: tokens.SigningInfo{
-			ExpiresAt: expiresAt,
-		},
+		ExpiresAt: expiresAt,
 	}
 
 	if downloadTokenRecord != nil {
@@ -184,14 +182,12 @@ func buildStorageFile(fileEntity *ent.File) *storagetypes.File {
 		ID:           fileEntity.ID,
 		OriginalName: fileEntity.ProvidedFileName,
 		ProviderType: storagetypes.ProviderType(fileEntity.StorageProvider),
-		FileMetadata: storagetypes.FileMetadata{
-			Key:         fileEntity.StoragePath,
-			Bucket:      fileEntity.StorageVolume,
-			ContentType: fileEntity.DetectedContentType,
-			FullURI:     fileEntity.URI,
-			ProviderHints: &storagetypes.ProviderHints{
-				KnownProvider: storagetypes.ProviderType(fileEntity.StorageProvider),
-			},
+		Key:          fileEntity.StoragePath,
+		Bucket:       fileEntity.StorageVolume,
+		ContentType:  fileEntity.DetectedContentType,
+		FullURI:      fileEntity.URI,
+		ProviderHints: &storagetypes.ProviderHints{
+			KnownProvider: storagetypes.ProviderType(fileEntity.StorageProvider),
 		},
 		BackupLocation: fileEntity.BackupState.Location(),
 	}

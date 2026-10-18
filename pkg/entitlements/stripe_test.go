@@ -108,10 +108,8 @@ func TestCreateCustomer(t *testing.T) {
 		OrganizationID:         "org_123",
 		OrganizationSettingsID: "settings_123",
 		OrganizationName:       "Test Organization",
-		ContactInfo: entitlements.ContactInfo{
-			Email: "test@example.com",
-			Phone: "1234567890",
-		},
+		Email:                  "test@example.com",
+		Phone:                  "1234567890",
 	}
 
 	stripeBackendMock := new(mocks.MockStripeBackend)

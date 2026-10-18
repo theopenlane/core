@@ -6,7 +6,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/rout"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/fga/generate/modelparse"
@@ -26,8 +25,8 @@ func (h *Handler) RolesHandler(ctx echo.Context) error {
 			}
 
 			resp := &models.RolesResponse{
-				Reply: rout.Reply{Success: true},
-				Roles: convertOrgRolesToOpenAPI(roles),
+				Success: true,
+				Roles:   convertOrgRolesToOpenAPI(roles),
 			}
 
 			return resp, nil
@@ -91,7 +90,7 @@ func (h *Handler) AccountRolesMeHandler(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, models.AccountRolesMeResponse{
-		Reply:          rout.Reply{Success: true},
+		Success:        true,
 		Roles:          convertOrgRolesToOpenAPI(fgamodel.FilterOrganizationRoles(roles, assignedRoles)),
 		OrganizationID: orgID,
 	})
@@ -138,7 +137,7 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, isDeleteOp bool) error {
 	}
 
 	return h.Success(ctx, models.OrganizationRolesResponse{
-		Reply:          rout.Reply{Success: true},
+		Success:        true,
 		OrganizationID: orgID,
 		Role:           in.Role,
 	})

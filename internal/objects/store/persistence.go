@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"fmt"
+	"maps"
 	"path/filepath"
 	"strings"
 
@@ -40,9 +41,7 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 
 	if len(fileData.Metadata) > 0 {
 		metadata := make(map[string]any)
-		for k, v := range fileData.Metadata {
-			metadata[k] = v
-		}
+		maps.Copy(metadata, fileData.Metadata)
 
 		update = update.SetMetadata(metadata)
 	}
@@ -70,20 +69,20 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	}
 
 	set := ent.CreateFileInput{
-		Name:                  lo.ToPtr(retrieveFileName(f)),
+		Name:                  new(retrieveFileName(f)),
 		ProvidedFileName:      f.OriginalName,
 		ProvidedFileExtension: resolveProvidedExtension(f),
 		ProvidedFileSize:      &f.Size,
 		DetectedMimeType:      &f.ContentType,
 		DetectedContentType:   contentType,
 		StoreKey:              &f.Key,
-		StorageProvider:       lo.ToPtr(string(f.ProviderType)),
+		StorageProvider:       new(string(f.ProviderType)),
 		StorageVolume:         &f.Bucket,
 		StoragePath:           &f.Folder,
 	}
 
 	if len(f.MD5) > 0 {
-		set.Md5Hash = lo.ToPtr(string(f.MD5))
+		set.Md5Hash = new(string(f.MD5))
 	}
 
 	if name := getCategoryNameForSchema(f); name != "" {
