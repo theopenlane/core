@@ -1,0 +1,5 @@
+mutation ImportReportScan($input: ImportReportScanInput!) {
+  importReportScan(input: $input) {
+    accepted
+  }
+}

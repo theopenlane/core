@@ -21,6 +21,8 @@ extend type Mutation{
         values of the scan
         """
         input: CreateScanInput!
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanCreatePayload!
     """
     Create multiple new scans
@@ -65,6 +67,8 @@ extend type Mutation{
         New values for the scan
         """
         input: UpdateScanInput!
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanUpdatePayload!
     """
     Delete an existing scan

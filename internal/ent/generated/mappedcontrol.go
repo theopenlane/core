@@ -36,6 +36,16 @@ type MappedControl struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -52,6 +62,8 @@ type MappedControl struct {
 	Confidence *int `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
 	Source enums.MappingSource `json:"source,omitempty"`
+	// stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+	ExternalID string `json:"external_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MappedControlQuery when eager-loading is set.
 	Edges        MappedControlEdges `json:"edges"`
@@ -60,6 +72,8 @@ type MappedControl struct {
 
 // MappedControlEdges holds the relations/edges for other nodes in the graph.
 type MappedControlEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -76,10 +90,11 @@ type MappedControlEdges struct {
 	ToSubcontrols []*Subcontrol `json:"to_subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
+	namedIntegrationRuns map[string][]*IntegrationRun
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
 	namedFromControls    map[string][]*Control
@@ -88,12 +103,21 @@ type MappedControlEdges struct {
 	namedToSubcontrols   map[string][]*Subcontrol
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e MappedControlEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e MappedControlEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -102,7 +126,7 @@ func (e MappedControlEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -111,7 +135,7 @@ func (e MappedControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -120,7 +144,7 @@ func (e MappedControlEdges) EditorsOrErr() ([]*Group, error) {
 // FromControlsOrErr returns the FromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) FromControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.FromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "from_controls"}
@@ -129,7 +153,7 @@ func (e MappedControlEdges) FromControlsOrErr() ([]*Control, error) {
 // ToControlsOrErr returns the ToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) ToControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.ToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "to_controls"}
@@ -138,7 +162,7 @@ func (e MappedControlEdges) ToControlsOrErr() ([]*Control, error) {
 // FromSubcontrolsOrErr returns the FromSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) FromSubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.FromSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "from_subcontrols"}
@@ -147,7 +171,7 @@ func (e MappedControlEdges) FromSubcontrolsOrErr() ([]*Subcontrol, error) {
 // ToSubcontrolsOrErr returns the ToSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) ToSubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.ToSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "to_subcontrols"}
@@ -164,7 +188,7 @@ func (*MappedControl) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case mappedcontrol.FieldConfidence:
 			values[i] = new(sql.NullInt64)
-		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldUpdatedByImpersonator, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldInternalNotes, mappedcontrol.FieldSystemInternalID, mappedcontrol.FieldOwnerID, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldSource:
+		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldUpdatedByImpersonator, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldSourceDefinitionID, mappedcontrol.FieldSourceDefinitionVersion, mappedcontrol.FieldSourceInstanceID, mappedcontrol.FieldManagedBy, mappedcontrol.FieldIntegrationRunID, mappedcontrol.FieldInternalNotes, mappedcontrol.FieldSystemInternalID, mappedcontrol.FieldOwnerID, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldSource, mappedcontrol.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case mappedcontrol.FieldCreatedAt, mappedcontrol.FieldUpdatedAt, mappedcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -240,6 +264,36 @@ func (_m *MappedControl) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case mappedcontrol.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case mappedcontrol.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case mappedcontrol.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case mappedcontrol.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case mappedcontrol.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
 		case mappedcontrol.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
@@ -291,6 +345,12 @@ func (_m *MappedControl) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Source = enums.MappingSource(value.String)
 			}
+		case mappedcontrol.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -302,6 +362,11 @@ func (_m *MappedControl) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *MappedControl) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryIntegrationRuns queries the "integration_runs" edge of the MappedControl entity.
+func (_m *MappedControl) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewMappedControlClient(_m.config).QueryIntegrationRuns(_m)
 }
 
 // QueryOwner queries the "owner" edge of the MappedControl entity.
@@ -388,6 +453,21 @@ func (_m *MappedControl) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
@@ -417,8 +497,35 @@ func (_m *MappedControl) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Source))
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *MappedControl) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *MappedControl) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

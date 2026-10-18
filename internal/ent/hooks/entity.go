@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
@@ -213,4 +214,21 @@ func getNameMatches(m *generated.EntityMutation) []string {
 	}
 
 	return names
+}
+
+// vendorEntityTypeName is the entity type an organization's vendors are created with
+const vendorEntityTypeName = "vendor"
+
+// orgVendorEntityTypeID is the organization's vendor entity type, reporting false when it has none
+func orgVendorEntityTypeID(ctx context.Context, client *generated.Client, organizationID string) (string, bool, error) {
+	id, err := client.EntityType.Query().Where(entitytype.OwnerIDEQ(organizationID), entitytype.NameEqualFold(vendorEntityTypeName)).FirstID(ctx)
+
+	switch {
+	case generated.IsNotFound(err):
+		return "", false, nil
+	case err != nil:
+		return "", false, err
+	default:
+		return id, true, nil
+	}
 }

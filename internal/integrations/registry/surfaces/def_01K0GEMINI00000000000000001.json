@@ -1,0 +1,26 @@
+{
+  "hash": "afcd889b234e3839d0730922ad489fc9a4369f9be92065fd8c7291baa4f1ac6f",
+  "version": "01M4VCXNX55SZNQXV85XQX3YDC",
+  "surface": {
+    "id": "def_01K0GEMINI00000000000000001",
+    "credentials": [],
+    "connections": [],
+    "operations": [
+      {
+        "name": "ReportScanImport"
+      },
+      {
+        "name": "ReportScanPartRequest"
+      },
+      {
+        "name": "ReportScanReleaseRequest"
+      },
+      {
+        "name": "ReportScanRequest"
+      },
+      {
+        "name": "VendorReportScanRequest"
+      }
+    ]
+  }
+}

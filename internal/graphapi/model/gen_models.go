@@ -2053,6 +2053,31 @@ type ImportDomainScanReviewVendorInput struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
+// The accepted items of a parsed report to import into the organization
+type ImportReportScanInput struct {
+	// the report scan whose parsed results are imported
+	ScanID string `json:"scanID"`
+	// the accepted items, by section; when the programs section accepts the program, the imported records are linked to it
+	Sections []*ImportReportScanSectionInput `json:"sections"`
+}
+
+type ImportReportScanPayload struct {
+	// whether the report was accepted for import
+	Accepted bool `json:"accepted"`
+}
+
+// The items a reviewer accepted from one section of a parsed report, by the key each item is imported by:
+// name for programs, domains, entities, assets, groups and platforms, ref_code for controls, system_name for
+// systemdetails, email for contacts, and external_id for reviews and findings
+type ImportReportScanSectionInput struct {
+	// the section name, e.g. programs, controls, reviews, findings
+	Section string `json:"section"`
+	// the keys of the accepted items in the section
+	Keys []string `json:"keys"`
+	// reviewer-edited items, each replacing the stored item with the same key
+	Edited []map[string]any `json:"edited,omitempty"`
+}
+
 // Return response for deleteIntegration mutation
 type IntegrationDeletePayload struct {
 	// Deleted integration ID

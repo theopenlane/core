@@ -1,11 +1,6 @@
 package validators
 
 import (
-	"errors"
-
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/common/enums"
@@ -26,15 +21,10 @@ func ndaValidator(f storage.File) error {
 		return err
 	}
 
-	if f.RawFile == nil {
-		return nil
-	}
-
-	_, err := api.ReadContext(f.RawFile, model.NewDefaultConfiguration())
-	if errors.Is(err, pdfcpu.ErrWrongPassword) {
+	if isPasswordProtected(f) {
 		log.Warn().Str("file", f.OriginalName).Msg("rejected password protected nda upload")
 
-		return ErrPasswordProtectedNDA
+		return ErrPasswordProtectedPDF
 	}
 
 	return nil

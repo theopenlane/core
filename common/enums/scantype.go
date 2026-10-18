@@ -9,10 +9,11 @@ var (
 	ScanTypeVulnerability ScanType = "VULNERABILITY"
 	ScanTypeVendor        ScanType = "VENDOR"
 	ScanTypeProvider      ScanType = "PROVIDER"
+	ScanTypeReport        ScanType = "REPORT"
 	ScanTypeInvalid       ScanType = "INVALID"
 )
 
-var scanTypeValues = []ScanType{ScanTypeDomain, ScanTypeVulnerability, ScanTypeVendor, ScanTypeProvider}
+var scanTypeValues = []ScanType{ScanTypeDomain, ScanTypeVulnerability, ScanTypeVendor, ScanTypeProvider, ScanTypeReport}
 
 // Values returns a slice of strings that represents all the possible values of the ScanType enum.
 func (ScanType) Values() []string { return stringValues(scanTypeValues) }

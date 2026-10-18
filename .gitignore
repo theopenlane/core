@@ -75,7 +75,7 @@ results.txt
 *.env-dev
 *.config.yaml
 *.config*yaml
-.hermit
+config/prompts/*.yaml
 
 junit*.xml
 

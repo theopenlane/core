@@ -380,8 +380,12 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return finish(bootstrapErr, false, nil, operations.IngestResult{})
 	}
 
-	if integration != nil {
+	switch {
+	case integration != nil:
 		ctx = auth.EnsureIntegrationCaller(ctx, integration.OwnerID)
+	case oc.OwnerID != "":
+		// runtime operations queued on behalf of an organization write as that organization
+		ctx = auth.EnsureIntegrationCaller(ctx, oc.OwnerID)
 	}
 
 	if tracked {
@@ -527,17 +531,30 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 	payloadSets, err := operation.IngestHandle(ctx, req)
 	if err != nil {
-		return nil, operations.IngestResult{}, err
+		return nil, operations.IngestResult{}, errors.Join(err, runAfterIngest(ctx, operation, req, operations.IngestResult{}, err))
 	}
 
 	logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", lo.SumBy(payloadSets, func(ps types.IngestPayloadSet) int { return len(ps.Envelopes) })).Msg("ingest handle completed")
 
-	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
+	ingestCtx := operations.IngestContext{
 		Registry:    r.Registry(),
 		DB:          r.DB(),
 		Runtime:     r.Gala(),
 		Integration: integration,
-	}, operation.Name, operation.Ingest, operation.Policy, payloadSets, ingestOptions)
+	}
+
+	if integration == nil {
+		oc, _ := gala.OperationContextFromContext(ctx)
+		ingestCtx.OwnerID = oc.OwnerID
+		ingestCtx.DefinitionID = types.IntegrationSourceFrom(oc).DefinitionID
+	}
+
+	result, err := operations.ProcessPayloadSets(ctx, ingestCtx, operation.Name, operation.Ingest, operation.Policy, payloadSets, ingestOptions)
+
+	if afterErr := runAfterIngest(ctx, operation, req, result, err); afterErr != nil {
+		err = errors.Join(err, afterErr)
+	}
+
 	if err != nil {
 		return nil, result, err
 	}
@@ -548,6 +565,21 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	}
 
 	return response, result, nil
+}
+
+// runAfterIngest hands the ingest outcome to the operation's AfterIngest hook when it declares one
+func runAfterIngest(ctx context.Context, operation types.OperationRegistration, req types.OperationRequest, result operations.IngestResult, ingestErr error) error {
+	if operation.AfterIngest == nil {
+		return nil
+	}
+
+	outcome := types.IngestOutcome{Attempted: result.Attempted, Succeeded: result.Succeeded, Failed: result.Failed, Err: ingestErr}
+
+	if len(result.Failures) > 0 {
+		outcome.FailureSummary = RecordFailureSummary(result)
+	}
+
+	return operation.AfterIngest(ctx, req, outcome)
 }
 
 // SeedReconcileJobs resets recurring loops for installations with a reconcilable operation

@@ -34,6 +34,9 @@ type LinkRule struct {
 	SourceField string `json:"sourceField,omitempty" jsonschema:"title=Source Field,description=Field on the ingested record to match against the target field"`
 	// SourceList is the source list input key whose elements are additional match values
 	SourceList string `json:"sourceList,omitempty" jsonschema:"title=Source List Field,description=List field on the ingested record providing additional match values"`
+	// PayloadKeys marks SourceField and SourceList as keys the mapping writes into the payload only to carry the
+	// match values, rather than input fields on the source schema
+	PayloadKeys bool `json:"payloadKeys,omitempty" jsonschema:"title=Payload Keys,description=Source fields are payload keys carrying match values rather than fields on the ingested record"`
 	// Expression is a CEL match expression evaluated per candidate; "target" is the candidate and
 	// "source" is the ingested record. Used instead of a field match for non-equality conditions
 	Expression string `json:"expression,omitempty" jsonschema:"title=Match Expression,description=CEL expression matching target to source for non-equality conditions"`
@@ -117,4 +120,6 @@ type IngestPayloadSet struct {
 	// SnapshotComplete marks this payload set as the provider's complete record set for its
 	// schema; only complete membership sets authorize removal inference
 	SnapshotComplete bool `json:"snapshotComplete,omitempty"`
+	// SourceInstanceID is the source instance stamped on runtime ingest records, ignored when an installation is ingesting
+	SourceInstanceID string `json:"sourceInstanceId,omitempty"`
 }

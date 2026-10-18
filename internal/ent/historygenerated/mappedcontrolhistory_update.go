@@ -97,6 +97,21 @@ func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -117,6 +132,9 @@ func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSource, field.TypeEnum)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldExternalID, field.TypeString)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -236,6 +254,21 @@ func (_u *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ma
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -256,6 +289,9 @@ func (_u *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ma
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSource, field.TypeEnum)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldExternalID, field.TypeString)
 	}
 	_node = &MappedControlHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -211,6 +211,7 @@ func (g Group) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "GRP",
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: g},
 			newOrgOwnedMixin(g),
 			// Add the reverse edges for m:m relationships permissions based on the groups
 			newGroupPermissionsEdgesMixin(
@@ -260,6 +261,9 @@ func (g Group) Annotations() []schema.Annotation {
 			),
 			oscalgen.WithOSCALAssembly("responsible-party"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative("name"),
 	}
 }
 

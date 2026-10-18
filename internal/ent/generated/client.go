@@ -4658,6 +4658,22 @@ func (c *ControlClient) GetX(ctx context.Context, id string) *Control {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Control.
+func (c *ControlClient) QueryIntegrationRuns(_m *Control) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, control.IntegrationRunsTable, control.IntegrationRunsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvidence queries the evidence edge of a Control.
 func (c *ControlClient) QueryEvidence(_m *Control) *EvidenceQuery {
 	query := (&EvidenceClient{config: c.config}).Query()
@@ -11931,6 +11947,22 @@ func (c *GroupClient) GetX(ctx context.Context, id string) *Group {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Group.
+func (c *GroupClient) QueryIntegrationRuns(_m *Group) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, group.IntegrationRunsTable, group.IntegrationRunsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a Group.
 func (c *GroupClient) QueryOwner(_m *Group) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -16237,6 +16269,22 @@ func (c *MappedControlClient) GetX(ctx context.Context, id string) *MappedContro
 		panic(err)
 	}
 	return obj
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a MappedControl.
+func (c *MappedControlClient) QueryIntegrationRuns(_m *MappedControl) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.IntegrationRunsTable, mappedcontrol.IntegrationRunsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryOwner queries the owner edge of a MappedControl.
@@ -21967,6 +22015,22 @@ func (c *PlatformClient) GetX(ctx context.Context, id string) *Platform {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Platform.
+func (c *PlatformClient) QueryIntegrationRuns(_m *Platform) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.IntegrationRunsTable, platform.IntegrationRunsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a Platform.
 func (c *PlatformClient) QueryOwner(_m *Platform) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -23357,6 +23421,22 @@ func (c *ProgramClient) GetX(ctx context.Context, id string) *Program {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Program.
+func (c *ProgramClient) QueryIntegrationRuns(_m *Program) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, program.IntegrationRunsTable, program.IntegrationRunsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a Program.
 func (c *ProgramClient) QueryOwner(_m *Program) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -24544,6 +24624,22 @@ func (c *ReviewClient) GetX(ctx context.Context, id string) *Review {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a Review.
+func (c *ReviewClient) QueryIntegrationRuns(_m *Review) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.IntegrationRunsTable, review.IntegrationRunsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryOwner queries the owner edge of a Review.
@@ -26064,6 +26160,22 @@ func (c *ScanClient) QueryScope(_m *Scan) *CustomTypeEnumQuery {
 			sqlgraph.From(scan.Table, scan.FieldID, id),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.ScopeTable, scan.ScopeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDocumentKind queries the document_kind edge of a Scan.
+func (c *ScanClient) QueryDocumentKind(_m *Scan) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.DocumentKindTable, scan.DocumentKindColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -27688,6 +27800,22 @@ func (c *SystemDetailClient) GetX(ctx context.Context, id string) *SystemDetail 
 		panic(err)
 	}
 	return obj
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a SystemDetail.
+func (c *SystemDetailClient) QueryIntegrationRuns(_m *SystemDetail) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, systemdetail.IntegrationRunsTable, systemdetail.IntegrationRunsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryOwner queries the owner edge of a SystemDetail.

@@ -971,9 +971,12 @@ type ComplexityRoot struct {
 		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		ImplementationStatus       func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
+		IntegrationRuns            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		InternalNotes              func(childComplexity int) int
 		InternalPolicies           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		IsTrustCenterControl       func(childComplexity int) int
+		ManagedBy                  func(childComplexity int) int
 		MappedCategories           func(childComplexity int) int
 		Narratives                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                      func(childComplexity int) int
@@ -998,6 +1001,9 @@ type ComplexityRoot struct {
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceDefinitionID         func(childComplexity int) int
+		SourceDefinitionVersion    func(childComplexity int) int
+		SourceInstanceID           func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
 		Standard                   func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
@@ -2688,11 +2694,14 @@ type ComplexityRoot struct {
 		FindingEditors                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		GravatarLogoURL                    func(childComplexity int) int
 		ID                                 func(childComplexity int) int
+		IntegrationRunID                   func(childComplexity int) int
+		IntegrationRuns                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicyBlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		InternalPolicyEditors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		IsManaged                          func(childComplexity int) int
 		LogoURL                            func(childComplexity int) int
+		ManagedBy                          func(childComplexity int) int
 		MappedControlBlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		MappedControlEditors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Members                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
@@ -2728,6 +2737,9 @@ type ComplexityRoot struct {
 		ScimExternalID                     func(childComplexity int) int
 		ScimGroupMailing                   func(childComplexity int) int
 		Setting                            func(childComplexity int) int
+		SourceDefinitionID                 func(childComplexity int) int
+		SourceDefinitionVersion            func(childComplexity int) int
+		SourceInstanceID                   func(childComplexity int) int
 		Tags                               func(childComplexity int) int
 		Tasks                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt                          func(childComplexity int) int
@@ -3084,6 +3096,10 @@ type ComplexityRoot struct {
 	}
 
 	ImportDomainScanReviewPayload struct {
+		Accepted func(childComplexity int) int
+	}
+
+	ImportReportScanPayload struct {
 		Accepted func(childComplexity int) int
 	}
 
@@ -3451,28 +3467,35 @@ type ComplexityRoot struct {
 	}
 
 	MappedControl struct {
-		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Confidence            func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		FromControls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		FromSubcontrols       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		ID                    func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		MappingType           func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Relation              func(childComplexity int) int
-		Source                func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		ToControls            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		ToSubcontrols         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Confidence              func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ExternalID              func(childComplexity int) int
+		FromControls            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		FromSubcontrols         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
+		InternalNotes           func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		MappingType             func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Relation                func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		ToControls              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ToSubcontrols           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	MappedControlBulkCreatePayload struct {
@@ -3724,7 +3747,7 @@ type ComplexityRoot struct {
 		CreateReview                         func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateSLADefinition                  func(childComplexity int, input generated.CreateSLADefinitionInput) int
-		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
+		CreateScan                           func(childComplexity int, input generated.CreateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
 		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
@@ -3894,6 +3917,7 @@ type ComplexityRoot struct {
 		DenyNDARequests                      func(childComplexity int, ids []string) int
 		ForceCompleteWorkflowInstance        func(childComplexity int, id string, applyProposal *bool) int
 		ImportDomainScanReview               func(childComplexity int, input model.ImportDomainScanReviewInput) int
+		ImportReportScan                     func(childComplexity int, input model.ImportReportScanInput) int
 		LaunchCampaign                       func(childComplexity int, input model.LaunchCampaignInput) int
 		LeaveOrganization                    func(childComplexity int, organizationID string) int
 		MarkNotificationsAsRead              func(childComplexity int, ids []string) int
@@ -4073,7 +4097,7 @@ type ComplexityRoot struct {
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateSLADefinition                  func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
-		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
+		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
@@ -4859,6 +4883,8 @@ type ComplexityRoot struct {
 		HasWorkflowHistory             func(childComplexity int) int
 		ID                             func(childComplexity int) int
 		IdentityHolders                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		IntegrationRunID               func(childComplexity int) int
+		IntegrationRuns                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalOwner                  func(childComplexity int) int
 		InternalOwnerGroup             func(childComplexity int) int
@@ -4867,6 +4893,7 @@ type ComplexityRoot struct {
 		InternalOwnerIdentityHolderID  func(childComplexity int) int
 		InternalOwnerUser              func(childComplexity int) int
 		InternalOwnerUserID            func(childComplexity int) int
+		ManagedBy                      func(childComplexity int) int
 		Metadata                       func(childComplexity int) int
 		Name                           func(childComplexity int) int
 		OutOfScopeAssets               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
@@ -4901,8 +4928,11 @@ type ComplexityRoot struct {
 		SecurityTierID                 func(childComplexity int) int
 		SecurityTierName               func(childComplexity int) int
 		SourceAssets                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		SourceDefinitionID             func(childComplexity int) int
+		SourceDefinitionVersion        func(childComplexity int) int
 		SourceEntities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		SourceIdentifier               func(childComplexity int) int
+		SourceInstanceID               func(childComplexity int) int
 		SourceType                     func(childComplexity int) int
 		Status                         func(childComplexity int) int
 		SystemDetails                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) int
@@ -5098,7 +5128,10 @@ type ComplexityRoot struct {
 		Findings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		FrameworkName              func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
+		IntegrationRuns            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		InternalPolicies           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		ManagedBy                  func(childComplexity int) int
 		Members                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
 		Name                       func(childComplexity int) int
 		Narratives                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
@@ -5116,6 +5149,9 @@ type ComplexityRoot struct {
 		Remediations               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		Reviews                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		SourceDefinitionID         func(childComplexity int) int
+		SourceDefinitionVersion    func(childComplexity int) int
+		SourceInstanceID           func(childComplexity int) int
 		StartDate                  func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcontrols                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -5588,61 +5624,67 @@ type ComplexityRoot struct {
 	}
 
 	Review struct {
-		ActionPlans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Approved              func(childComplexity int) int
-		ApprovedAt            func(childComplexity int) int
-		Assets                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Category              func(childComplexity int) int
-		Classification        func(childComplexity int) int
-		Comments              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Controls              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Details               func(childComplexity int) int
-		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Environment           func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		ExternalID            func(childComplexity int) int
-		ExternalOwnerID       func(childComplexity int) int
-		ExternalURI           func(childComplexity int) int
-		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID                    func(childComplexity int) int
-		Integrations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalNotes         func(childComplexity int) int
-		InternalPolicies      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		Metadata              func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Programs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RawPayload            func(childComplexity int) int
-		Remediations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		ReportedAt            func(childComplexity int) int
-		Reporter              func(childComplexity int) int
-		ReviewedAt            func(childComplexity int) int
-		Reviewer              func(childComplexity int) int
-		ReviewerID            func(childComplexity int) int
-		Risks                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scope                 func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		Source                func(childComplexity int) int
-		State                 func(childComplexity int) int
-		Status                func(childComplexity int) int
-		Subcontrols           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary               func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		Tasks                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		Title                 func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		Vulnerabilities       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		ActionPlans             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Approved                func(childComplexity int) int
+		ApprovedAt              func(childComplexity int) int
+		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Category                func(childComplexity int) int
+		Classification          func(childComplexity int) int
+		Comments                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Details                 func(childComplexity int) int
+		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment             func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ExternalOwnerID         func(childComplexity int) int
+		ExternalURI             func(childComplexity int) int
+		Files                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
+		Integrations            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes           func(childComplexity int) int
+		InternalPolicies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		ManagedBy               func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RawPayload              func(childComplexity int) int
+		Remediations            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ReportedAt              func(childComplexity int) int
+		Reporter                func(childComplexity int) int
+		ReviewedAt              func(childComplexity int) int
+		Reviewer                func(childComplexity int) int
+		ReviewerID              func(childComplexity int) int
+		Risks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scope                   func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		State                   func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary                 func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title                   func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		Vulnerabilities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	ReviewBulkCreatePayload struct {
@@ -5895,6 +5937,9 @@ type ComplexityRoot struct {
 		CreatedAt                  func(childComplexity int) int
 		CreatedBy                  func(childComplexity int) int
 		DiscoveredVulnerabilityIds func(childComplexity int) int
+		DocumentKind               func(childComplexity int) int
+		DocumentKindID             func(childComplexity int) int
+		DocumentKindName           func(childComplexity int) int
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment                func(childComplexity int) int
@@ -6349,28 +6394,34 @@ type ComplexityRoot struct {
 	}
 
 	SystemDetail struct {
-		Assets                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		AuthorizationBoundary func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Description           func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		Entities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		ID                    func(childComplexity int) int
-		LastReviewed          func(childComplexity int) int
-		OscalMetadataJSON     func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Platforms             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
-		Programs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RevisionHistory       func(childComplexity int) int
-		SensitivityLevel      func(childComplexity int) int
-		SystemName            func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		Version               func(childComplexity int) int
+		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AuthorizationBoundary   func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		Entities                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
+		LastReviewed            func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		OscalMetadataJSON       func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RevisionHistory         func(childComplexity int) int
+		SensitivityLevel        func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SystemName              func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		Version                 func(childComplexity int) int
 	}
 
 	SystemDetailBulkCreatePayload struct {
@@ -12405,6 +12456,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.ImplementationStatus(childComplexity), true
+	case "Control.integrationRunID":
+		if e.ComplexityRoot.Control.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.IntegrationRunID(childComplexity), true
+	case "Control.integrationRuns":
+		if e.ComplexityRoot.Control.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Control_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Control.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Control.internalNotes":
 		if e.ComplexityRoot.Control.InternalNotes == nil {
 			break
@@ -12428,6 +12496,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.IsTrustCenterControl(childComplexity), true
+	case "Control.managedBy":
+		if e.ComplexityRoot.Control.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ManagedBy(childComplexity), true
 	case "Control.mappedCategories":
 		if e.ComplexityRoot.Control.MappedCategories == nil {
 			break
@@ -12612,6 +12686,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.Source(childComplexity), true
+	case "Control.sourceDefinitionID":
+		if e.ComplexityRoot.Control.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.SourceDefinitionID(childComplexity), true
+	case "Control.sourceDefinitionVersion":
+		if e.ComplexityRoot.Control.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.SourceDefinitionVersion(childComplexity), true
+	case "Control.sourceInstanceID":
+		if e.ComplexityRoot.Control.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.SourceInstanceID(childComplexity), true
 	case "Control.sourceName":
 		if e.ComplexityRoot.Control.SourceName == nil {
 			break
@@ -20461,6 +20553,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Group.ID(childComplexity), true
+	case "Group.integrationRunID":
+		if e.ComplexityRoot.Group.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.IntegrationRunID(childComplexity), true
+	case "Group.integrationRuns":
+		if e.ComplexityRoot.Group.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Group_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Group.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Group.integrations":
 		if e.ComplexityRoot.Group.Integrations == nil {
 			break
@@ -20506,6 +20615,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Group.LogoURL(childComplexity), true
+	case "Group.managedBy":
+		if e.ComplexityRoot.Group.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.ManagedBy(childComplexity), true
 	case "Group.mappedControlBlockedGroups":
 		if e.ComplexityRoot.Group.MappedControlBlockedGroups == nil {
 			break
@@ -20836,6 +20951,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Group.Setting(childComplexity), true
+	case "Group.sourceDefinitionID":
+		if e.ComplexityRoot.Group.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.SourceDefinitionID(childComplexity), true
+	case "Group.sourceDefinitionVersion":
+		if e.ComplexityRoot.Group.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.SourceDefinitionVersion(childComplexity), true
+	case "Group.sourceInstanceID":
+		if e.ComplexityRoot.Group.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.SourceInstanceID(childComplexity), true
 	case "Group.tags":
 		if e.ComplexityRoot.Group.Tags == nil {
 			break
@@ -22292,6 +22425,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ImportDomainScanReviewPayload.Accepted(childComplexity), true
+
+	case "ImportReportScanPayload.accepted":
+		if e.ComplexityRoot.ImportReportScanPayload.Accepted == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ImportReportScanPayload.Accepted(childComplexity), true
 
 	case "Integration.actionPlans":
 		if e.ComplexityRoot.Integration.ActionPlans == nil {
@@ -24228,6 +24368,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControl.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "MappedControl.externalID":
+		if e.ComplexityRoot.MappedControl.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControl.ExternalID(childComplexity), true
 	case "MappedControl.fromControls":
 		if e.ComplexityRoot.MappedControl.FromControls == nil {
 			break
@@ -24256,12 +24402,35 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControl.ID(childComplexity), true
+	case "MappedControl.integrationRunID":
+		if e.ComplexityRoot.MappedControl.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControl.IntegrationRunID(childComplexity), true
+	case "MappedControl.integrationRuns":
+		if e.ComplexityRoot.MappedControl.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_MappedControl_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.MappedControl.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "MappedControl.internalNotes":
 		if e.ComplexityRoot.MappedControl.InternalNotes == nil {
 			break
 		}
 
 		return e.ComplexityRoot.MappedControl.InternalNotes(childComplexity), true
+	case "MappedControl.managedBy":
+		if e.ComplexityRoot.MappedControl.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControl.ManagedBy(childComplexity), true
 	case "MappedControl.mappingType":
 		if e.ComplexityRoot.MappedControl.MappingType == nil {
 			break
@@ -24292,6 +24461,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControl.Source(childComplexity), true
+	case "MappedControl.sourceDefinitionID":
+		if e.ComplexityRoot.MappedControl.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControl.SourceDefinitionID(childComplexity), true
+	case "MappedControl.sourceDefinitionVersion":
+		if e.ComplexityRoot.MappedControl.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControl.SourceDefinitionVersion(childComplexity), true
+	case "MappedControl.sourceInstanceID":
+		if e.ComplexityRoot.MappedControl.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControl.SourceInstanceID(childComplexity), true
 	case "MappedControl.systemInternalID":
 		if e.ComplexityRoot.MappedControl.SystemInternalID == nil {
 			break
@@ -26753,7 +26940,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput)), true
+		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createStandard":
 		if e.ComplexityRoot.Mutation.CreateStandard == nil {
 			break
@@ -28613,6 +28800,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.ImportDomainScanReview(childComplexity, args["input"].(model.ImportDomainScanReviewInput)), true
+	case "Mutation.importReportScan":
+		if e.ComplexityRoot.Mutation.ImportReportScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_importReportScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.ImportReportScan(childComplexity, args["input"].(model.ImportReportScanInput)), true
 	case "Mutation.launchCampaign":
 		if e.ComplexityRoot.Mutation.LaunchCampaign == nil {
 			break
@@ -30587,7 +30785,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput)), true
+		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateStandard":
 		if e.ComplexityRoot.Mutation.UpdateStandard == nil {
 			break
@@ -34736,6 +34934,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+	case "Platform.integrationRunID":
+		if e.ComplexityRoot.Platform.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Platform.IntegrationRunID(childComplexity), true
+	case "Platform.integrationRuns":
+		if e.ComplexityRoot.Platform.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Platform.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Platform.integrations":
 		if e.ComplexityRoot.Platform.Integrations == nil {
 			break
@@ -34789,6 +35004,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.InternalOwnerUserID(childComplexity), true
+	case "Platform.managedBy":
+		if e.ComplexityRoot.Platform.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Platform.ManagedBy(childComplexity), true
 	case "Platform.metadata":
 		if e.ComplexityRoot.Platform.Metadata == nil {
 			break
@@ -35018,6 +35239,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.SourceAssets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+	case "Platform.sourceDefinitionID":
+		if e.ComplexityRoot.Platform.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Platform.SourceDefinitionID(childComplexity), true
+	case "Platform.sourceDefinitionVersion":
+		if e.ComplexityRoot.Platform.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Platform.SourceDefinitionVersion(childComplexity), true
 	case "Platform.sourceEntities":
 		if e.ComplexityRoot.Platform.SourceEntities == nil {
 			break
@@ -35035,6 +35268,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.SourceIdentifier(childComplexity), true
+	case "Platform.sourceInstanceID":
+		if e.ComplexityRoot.Platform.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Platform.SourceInstanceID(childComplexity), true
 	case "Platform.sourceType":
 		if e.ComplexityRoot.Platform.SourceType == nil {
 			break
@@ -36056,6 +36295,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Program.ID(childComplexity), true
+	case "Program.integrationRunID":
+		if e.ComplexityRoot.Program.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Program.IntegrationRunID(childComplexity), true
+	case "Program.integrationRuns":
+		if e.ComplexityRoot.Program.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Program_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Program.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Program.internalPolicies":
 		if e.ComplexityRoot.Program.InternalPolicies == nil {
 			break
@@ -36067,6 +36323,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Program.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+	case "Program.managedBy":
+		if e.ComplexityRoot.Program.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Program.ManagedBy(childComplexity), true
 	case "Program.members":
 		if e.ComplexityRoot.Program.Members == nil {
 			break
@@ -36204,6 +36466,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Program.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+	case "Program.sourceDefinitionID":
+		if e.ComplexityRoot.Program.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Program.SourceDefinitionID(childComplexity), true
+	case "Program.sourceDefinitionVersion":
+		if e.ComplexityRoot.Program.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Program.SourceDefinitionVersion(childComplexity), true
+	case "Program.sourceInstanceID":
+		if e.ComplexityRoot.Program.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Program.SourceInstanceID(childComplexity), true
 	case "Program.startDate":
 		if e.ComplexityRoot.Program.StartDate == nil {
 			break
@@ -39956,6 +40236,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.ID(childComplexity), true
+	case "Review.integrationRunID":
+		if e.ComplexityRoot.Review.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.IntegrationRunID(childComplexity), true
+	case "Review.integrationRuns":
+		if e.ComplexityRoot.Review.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Review_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Review.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Review.integrations":
 		if e.ComplexityRoot.Review.Integrations == nil {
 			break
@@ -39984,6 +40281,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+	case "Review.managedBy":
+		if e.ComplexityRoot.Review.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ManagedBy(childComplexity), true
 	case "Review.metadata":
 		if e.ComplexityRoot.Review.Metadata == nil {
 			break
@@ -40095,6 +40398,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.Source(childComplexity), true
+	case "Review.sourceDefinitionID":
+		if e.ComplexityRoot.Review.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.SourceDefinitionID(childComplexity), true
+	case "Review.sourceDefinitionVersion":
+		if e.ComplexityRoot.Review.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.SourceDefinitionVersion(childComplexity), true
+	case "Review.sourceInstanceID":
+		if e.ComplexityRoot.Review.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.SourceInstanceID(childComplexity), true
 	case "Review.state":
 		if e.ComplexityRoot.Review.State == nil {
 			break
@@ -41386,6 +41707,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Scan.DiscoveredVulnerabilityIds(childComplexity), true
+	case "Scan.documentKind":
+		if e.ComplexityRoot.Scan.DocumentKind == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKind(childComplexity), true
+	case "Scan.documentKindID":
+		if e.ComplexityRoot.Scan.DocumentKindID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKindID(childComplexity), true
+	case "Scan.documentKindName":
+		if e.ComplexityRoot.Scan.DocumentKindName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKindName(childComplexity), true
 	case "Scan.editors":
 		if e.ComplexityRoot.Scan.Editors == nil {
 			break
@@ -43581,12 +43920,35 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetail.ID(childComplexity), true
+	case "SystemDetail.integrationRunID":
+		if e.ComplexityRoot.SystemDetail.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.IntegrationRunID(childComplexity), true
+	case "SystemDetail.integrationRuns":
+		if e.ComplexityRoot.SystemDetail.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_SystemDetail_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SystemDetail.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "SystemDetail.lastReviewed":
 		if e.ComplexityRoot.SystemDetail.LastReviewed == nil {
 			break
 		}
 
 		return e.ComplexityRoot.SystemDetail.LastReviewed(childComplexity), true
+	case "SystemDetail.managedBy":
+		if e.ComplexityRoot.SystemDetail.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.ManagedBy(childComplexity), true
 	case "SystemDetail.oscalMetadataJSON":
 		if e.ComplexityRoot.SystemDetail.OscalMetadataJSON == nil {
 			break
@@ -43639,6 +44001,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetail.SensitivityLevel(childComplexity), true
+	case "SystemDetail.sourceDefinitionID":
+		if e.ComplexityRoot.SystemDetail.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.SourceDefinitionID(childComplexity), true
+	case "SystemDetail.sourceDefinitionVersion":
+		if e.ComplexityRoot.SystemDetail.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.SourceDefinitionVersion(childComplexity), true
+	case "SystemDetail.sourceInstanceID":
+		if e.ComplexityRoot.SystemDetail.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.SourceInstanceID(childComplexity), true
 	case "SystemDetail.systemName":
 		if e.ComplexityRoot.SystemDetail.SystemName == nil {
 			break
@@ -51408,6 +51788,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputImportDomainScanReviewPlatformInput,
 		ec.unmarshalInputImportDomainScanReviewSystemInput,
 		ec.unmarshalInputImportDomainScanReviewVendorInput,
+		ec.unmarshalInputImportReportScanInput,
+		ec.unmarshalInputImportReportScanSectionInput,
 		ec.unmarshalInputIntegrationOrder,
 		ec.unmarshalInputIntegrationRunOrder,
 		ec.unmarshalInputIntegrationRunWhereInput,
@@ -64313,6 +64695,26 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
@@ -64492,6 +64894,37 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   indicates the control is derived from the trust center standard, set by the system during control clone
   """
   isTrustCenterControl: Boolean
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -66922,6 +67355,76 @@ input ControlWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   external_uuid field predicates
   """
   externalUUID: String
@@ -67354,6 +67857,11 @@ input ControlWhereInput {
   isTrustCenterControlNEQ: Boolean
   isTrustCenterControlIsNil: Boolean
   isTrustCenterControlNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   evidence edge predicates
   """
@@ -68497,6 +69005,7 @@ input CreateControlInput {
   visibility of the control on the trust center, controls the publishing state for trust center display
   """
   trustCenterVisibility: ControlTrustCenterControlVisibility
+  integrationRunIDs: [ID!]
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -69955,6 +70464,7 @@ input CreateGroupInput {
   the SCIM group mailing list email
   """
   scimGroupMailing: String
+  integrationRunIDs: [ID!]
   ownerID: ID
   programEditorIDs: [ID!]
   programBlockedGroupIDs: [ID!]
@@ -70443,6 +70953,11 @@ input CreateMappedControlInput {
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
+  """
+  stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+  """
+  externalID: String
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -71207,6 +71722,7 @@ input CreatePlatformInput {
   additional metadata about the platform
   """
   metadata: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -71464,6 +71980,7 @@ input CreateProgramInput {
   the email of the auditor conducting the audit
   """
   auditorEmail: String
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -71725,6 +72242,7 @@ input CreateReviewInput {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -71960,6 +72478,10 @@ input CreateScanInput {
   """
   scopeName: String
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -72006,6 +72528,7 @@ input CreateScanInput {
   assignedToIdentityHolderID: ID
   environmentID: ID
   scopeID: ID
+  documentKindID: ID
   assetIDs: [ID!]
   entityIDs: [ID!]
   evidenceIDs: [ID!]
@@ -72373,6 +72896,7 @@ input CreateSystemDetailInput {
   optional escape hatch for additional OSCAL metadata fields
   """
   oscalMetadataJSON: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   programIDs: [ID!]
   platformIDs: [ID!]
@@ -86474,6 +86998,26 @@ type Group implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -86533,6 +87077,37 @@ type Group implements Node {
   the SCIM group mailing list email
   """
   scimGroupMailing: String
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   programEditors(
     """
@@ -88648,6 +89223,76 @@ input GroupWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -88783,6 +89428,11 @@ input GroupWhereInput {
   scimGroupMailingNotNil: Boolean
   scimGroupMailingEqualFold: String
   scimGroupMailingContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -95190,6 +95840,26 @@ type MappedControl implements Node @modules(names: ["compliance_module"]) {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -95221,6 +95891,41 @@ type MappedControl implements Node @modules(names: ["compliance_module"]) {
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
+  """
+  stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+  """
+  externalID: String
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -95559,6 +96264,76 @@ input MappedControlWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -95648,6 +96423,25 @@ input MappedControlWhereInput {
   sourceNotIn: [MappedControlMappingSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -96779,6 +97573,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
   EXPORT
   STANDARD_UPDATE
   DOMAIN_SCAN
+  REPORT_SCAN
   IMPORT_COMPLETE
   ORGANIZATION_READY
   INTEGRATION
@@ -102854,6 +103649,26 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -103065,6 +103880,37 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
   additional metadata about the platform
   """
   metadata: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -104131,6 +104977,76 @@ input PlatformWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -104781,6 +105697,11 @@ input PlatformWhereInput {
   externalReferenceIDNotNil: Boolean
   externalReferenceIDEqualFold: String
   externalReferenceIDContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -106324,6 +107245,26 @@ type Program implements Node @modules(names: ["compliance_module","entity_manage
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -106407,6 +107348,37 @@ type Program implements Node @modules(names: ["compliance_module","entity_manage
   the id of the user who is responsible for this program
   """
   programOwnerID: ID
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -107417,6 +108389,76 @@ input ProgramWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -107650,6 +108692,11 @@ input ProgramWhereInput {
   programOwnerIDNotNil: Boolean
   programOwnerIDEqualFold: ID
   programOwnerIDContainsFold: ID
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -111897,6 +112944,26 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -112004,6 +113071,37 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -112683,6 +113781,76 @@ input ReviewWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -112999,6 +114167,11 @@ input ReviewWhereInput {
   externalURINotNil: Boolean
   externalURIEqualFold: String
   externalURIContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -115349,6 +116522,14 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   scopeID: ID
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
+  the document_kind of the scan
+  """
+  documentKindID: ID
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -115467,6 +116648,7 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   assignedToIdentityHolder: IdentityHolder
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  documentKind: CustomTypeEnum
   assets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -115914,6 +117096,7 @@ enum ScanScanType @goModel(model: "github.com/theopenlane/core/common/enums.Scan
   VULNERABILITY
   VENDOR
   PROVIDER
+  REPORT
 }
 """
 ScanWhereInput is used for filtering Scan objects.
@@ -116212,6 +117395,34 @@ input ScanWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  document_kind_name field predicates
+  """
+  documentKindName: String
+  documentKindNameNEQ: String
+  documentKindNameIn: [String!]
+  documentKindNameNotIn: [String!]
+  documentKindNameContains: String
+  documentKindNameHasPrefix: String
+  documentKindNameHasSuffix: String
+  documentKindNameIsNil: Boolean
+  documentKindNameNotNil: Boolean
+  documentKindNameEqualFold: String
+  documentKindNameContainsFold: String
+  """
+  document_kind_id field predicates
+  """
+  documentKindID: ID
+  documentKindIDNEQ: ID
+  documentKindIDIn: [ID!]
+  documentKindIDNotIn: [ID!]
+  documentKindIDContains: ID
+  documentKindIDHasPrefix: ID
+  documentKindIDHasSuffix: ID
+  documentKindIDIsNil: Boolean
+  documentKindIDNotNil: Boolean
+  documentKindIDEqualFold: ID
+  documentKindIDContainsFold: ID
+  """
   target field predicates
   """
   target: String
@@ -116368,6 +117579,11 @@ input ScanWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  document_kind edge predicates
+  """
+  hasDocumentKind: Boolean
+  hasDocumentKindWith: [CustomTypeEnumWhereInput!]
   """
   assets edge predicates
   """
@@ -119367,6 +120583,26 @@ type SystemDetail implements Node @modules(names: ["compliance_module","registry
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -119402,6 +120638,37 @@ type SystemDetail implements Node @modules(names: ["compliance_module","registry
   optional escape hatch for additional OSCAL metadata fields
   """
   oscalMetadataJSON: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   programs(
     """
@@ -119680,6 +120947,76 @@ input SystemDetailWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -119766,6 +121103,11 @@ input SystemDetailWhereInput {
   lastReviewedLTE: DateTime
   lastReviewedIsNil: Boolean
   lastReviewedNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -127516,6 +128858,9 @@ input UpdateControlInput {
   """
   trustCenterVisibility: ControlTrustCenterControlVisibility
   clearTrustCenterVisibility: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -129553,6 +130898,9 @@ input UpdateGroupInput {
   """
   scimGroupMailing: String
   clearScimGroupMailing: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addProgramEditorIDs: [ID!]
@@ -130302,6 +131650,14 @@ input UpdateMappedControlInput {
   """
   source: MappedControlMappingSource
   clearSource: Boolean
+  """
+  stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+  """
+  externalID: String
+  clearExternalID: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -131341,6 +132697,9 @@ input UpdatePlatformInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -131752,6 +133111,9 @@ input UpdateProgramInput {
   """
   auditorEmail: String
   clearAuditorEmail: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -132141,6 +133503,9 @@ input UpdateReviewInput {
   """
   rawPayload: Map
   clearRawPayload: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -132516,6 +133881,11 @@ input UpdateScanInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  clearDocumentKindName: Boolean
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String
@@ -132580,6 +133950,8 @@ input UpdateScanInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  documentKindID: ID
+  clearDocumentKind: Boolean
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
@@ -133109,6 +134481,9 @@ input UpdateSystemDetailInput {
   """
   oscalMetadataJSON: Map
   clearOscalMetadataJSON: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
@@ -148224,6 +149599,61 @@ type RemediationBulkDeletePayload {
     """
     error: String
 }`, BuiltIn: false},
+	{Name: "../schema/reportscanextended.graphql", Input: `"""
+The items a reviewer accepted from one section of a parsed report, by the key each item is imported by:
+name for programs, domains, entities, assets, groups and platforms, ref_code for controls, system_name for
+systemdetails, email for contacts, and external_id for reviews and findings
+"""
+input ImportReportScanSectionInput {
+    """
+    the section name, e.g. programs, controls, reviews, findings
+    """
+    section: String!
+    """
+    the keys of the accepted items in the section
+    """
+    keys: [String!]!
+    """
+    reviewer-edited items, each replacing the stored item with the same key
+    """
+    edited: [Map!]
+}
+
+"""
+The accepted items of a parsed report to import into the organization
+"""
+input ImportReportScanInput {
+    """
+    the report scan whose parsed results are imported
+    """
+    scanID: ID!
+    """
+    the accepted items, by section; when the programs section accepts the program, the imported records are linked to it
+    """
+    sections: [ImportReportScanSectionInput!]!
+}
+
+type ImportReportScanPayload {
+    """
+    whether the report was accepted for import
+    """
+    accepted: Boolean!
+}
+
+extend type Mutation {
+    """
+    Accept the reviewed results of a parsed SOC 2 report and asynchronously import them: the program and its
+    framework controls for the tested categories, then the report's controls, vendors, assets, groups, platforms,
+    systems, contacts, reviews, findings and the mappings from its controls to the framework
+    """
+    importReportScan(
+        """
+        the accepted report results
+        """
+        input: ImportReportScanInput!
+    ): ImportReportScanPayload!
+}
+`, BuiltIn: false},
 	{Name: "../schema/review.graphql", Input: `extend type Query {
     """
     Look up review by ID
@@ -148655,6 +150085,8 @@ extend type Mutation{
         values of the scan
         """
         input: CreateScanInput!
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanCreatePayload!
     """
     Create multiple new scans
@@ -148699,6 +150131,8 @@ extend type Mutation{
         New values for the scan
         """
         input: UpdateScanInput!
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanUpdatePayload!
     """
     Delete an existing scan
@@ -156286,6 +157720,16 @@ func (ec *executionContext) childFields_Control(ctx context.Context, field graph
 		return ec.fieldContext_Control_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_Control_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_Control_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_Control_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_Control_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_Control_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Control_integrationRunID(ctx, field)
 	case "externalUUID":
 		return ec.fieldContext_Control_externalUUID(ctx, field)
 	case "title":
@@ -156376,6 +157820,8 @@ func (ec *executionContext) childFields_Control(ctx context.Context, field graph
 		return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
 	case "isTrustCenterControl":
 		return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Control_integrationRuns(ctx, field)
 	case "evidence":
 		return ec.fieldContext_Control_evidence(ctx, field)
 	case "controlObjectives":
@@ -159730,6 +161176,16 @@ func (ec *executionContext) childFields_Group(ctx context.Context, field graphql
 		return ec.fieldContext_Group_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_Group_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_Group_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_Group_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_Group_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_Group_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Group_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Group_ownerID(ctx, field)
 	case "name":
@@ -159760,6 +161216,8 @@ func (ec *executionContext) childFields_Group(ctx context.Context, field graphql
 		return ec.fieldContext_Group_scimActive(ctx, field)
 	case "scimGroupMailing":
 		return ec.fieldContext_Group_scimGroupMailing(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Group_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Group_owner(ctx, field)
 	case "programEditors":
@@ -160576,6 +162034,14 @@ func (ec *executionContext) childFields_ImportDomainScanReviewPayload(ctx contex
 	return nil, fmt.Errorf("no field named %q was found under type ImportDomainScanReviewPayload", field.Name)
 }
 
+func (ec *executionContext) childFields_ImportReportScanPayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "accepted":
+		return ec.fieldContext_ImportReportScanPayload_accepted(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ImportReportScanPayload", field.Name)
+}
+
 func (ec *executionContext) childFields_Integration(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -161318,6 +162784,16 @@ func (ec *executionContext) childFields_MappedControl(ctx context.Context, field
 		return ec.fieldContext_MappedControl_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_MappedControl_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_MappedControl_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_MappedControl_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_MappedControl_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_MappedControl_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_MappedControl_integrationRunID(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_MappedControl_systemOwned(ctx, field)
 	case "internalNotes":
@@ -161334,6 +162810,10 @@ func (ec *executionContext) childFields_MappedControl(ctx context.Context, field
 		return ec.fieldContext_MappedControl_confidence(ctx, field)
 	case "source":
 		return ec.fieldContext_MappedControl_source(ctx, field)
+	case "externalID":
+		return ec.fieldContext_MappedControl_externalID(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_MappedControl_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_MappedControl_owner(ctx, field)
 	case "blockedGroups":
@@ -162832,6 +164312,16 @@ func (ec *executionContext) childFields_Platform(ctx context.Context, field grap
 		return ec.fieldContext_Platform_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_Platform_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_Platform_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_Platform_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_Platform_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_Platform_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Platform_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Platform_ownerID(ctx, field)
 	case "internalOwner":
@@ -162938,6 +164428,8 @@ func (ec *executionContext) childFields_Platform(ctx context.Context, field grap
 		return ec.fieldContext_Platform_externalReferenceID(ctx, field)
 	case "metadata":
 		return ec.fieldContext_Platform_metadata(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Platform_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Platform_owner(ctx, field)
 	case "blockedGroups":
@@ -163362,6 +164854,16 @@ func (ec *executionContext) childFields_Program(ctx context.Context, field graph
 		return ec.fieldContext_Program_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_Program_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_Program_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_Program_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_Program_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_Program_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Program_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Program_ownerID(ctx, field)
 	case "programKindName":
@@ -163404,6 +164906,8 @@ func (ec *executionContext) childFields_Program(ctx context.Context, field graph
 		return ec.fieldContext_Program_auditorEmail(ctx, field)
 	case "programOwnerID":
 		return ec.fieldContext_Program_programOwnerID(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Program_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Program_owner(ctx, field)
 	case "blockedGroups":
@@ -163888,6 +165392,16 @@ func (ec *executionContext) childFields_Review(ctx context.Context, field graphq
 		return ec.fieldContext_Review_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_Review_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_Review_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_Review_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_Review_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_Review_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Review_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Review_ownerID(ctx, field)
 	case "systemOwned":
@@ -163942,6 +165456,8 @@ func (ec *executionContext) childFields_Review(ctx context.Context, field graphq
 		return ec.fieldContext_Review_metadata(ctx, field)
 	case "rawPayload":
 		return ec.fieldContext_Review_rawPayload(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Review_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Review_owner(ctx, field)
 	case "blockedGroups":
@@ -164506,6 +166022,10 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_scopeName(ctx, field)
 	case "scopeID":
 		return ec.fieldContext_Scan_scopeID(ctx, field)
+	case "documentKindName":
+		return ec.fieldContext_Scan_documentKindName(ctx, field)
+	case "documentKindID":
+		return ec.fieldContext_Scan_documentKindID(ctx, field)
 	case "target":
 		return ec.fieldContext_Scan_target(ctx, field)
 	case "scanType":
@@ -164552,6 +166072,8 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_environment(ctx, field)
 	case "scope":
 		return ec.fieldContext_Scan_scope(ctx, field)
+	case "documentKind":
+		return ec.fieldContext_Scan_documentKind(ctx, field)
 	case "assets":
 		return ec.fieldContext_Scan_assets(ctx, field)
 	case "entities":
@@ -165396,6 +166918,16 @@ func (ec *executionContext) childFields_SystemDetail(ctx context.Context, field 
 		return ec.fieldContext_SystemDetail_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_SystemDetail_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_SystemDetail_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_SystemDetail_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_SystemDetail_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_SystemDetail_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_SystemDetail_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_SystemDetail_ownerID(ctx, field)
 	case "systemName":
@@ -165414,6 +166946,8 @@ func (ec *executionContext) childFields_SystemDetail(ctx context.Context, field 
 		return ec.fieldContext_SystemDetail_revisionHistory(ctx, field)
 	case "oscalMetadataJSON":
 		return ec.fieldContext_SystemDetail_oscalMetadataJSON(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_SystemDetail_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_SystemDetail_owner(ctx, field)
 	case "programs":

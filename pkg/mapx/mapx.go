@@ -230,3 +230,43 @@ func SortedProjection[K comparable, V any, T any, S cmp.Ordered](m map[K]V, proj
 
 	return out
 }
+
+// Value returns the value at key as T, the zero value when it is missing or another type
+func Value[T any](m map[string]any, key string) T {
+	value, _ := m[key].(T)
+
+	return value
+}
+
+// Maps returns the objects in the list at key, read from either []any or []map[string]any; the
+// returned maps are the stored ones, so changes to them land in m
+func Maps(m map[string]any, key string) []map[string]any {
+	switch list := m[key].(type) {
+	case []map[string]any:
+		return list
+	case []any:
+		return lo.FilterMap(list, func(item any, _ int) (map[string]any, bool) {
+			value, ok := item.(map[string]any)
+
+			return value, ok
+		})
+	default:
+		return nil
+	}
+}
+
+// Strings returns the non-empty strings in the list at key, read from either []any or []string
+func Strings(m map[string]any, key string) []string {
+	switch list := m[key].(type) {
+	case []string:
+		return lo.Compact(list)
+	case []any:
+		return lo.Compact(lo.FilterMap(list, func(item any, _ int) (string, bool) {
+			value, ok := item.(string)
+
+			return value, ok
+		}))
+	default:
+		return nil
+	}
+}

@@ -41268,6 +41268,13 @@ func (_q *ControlQuery) clonePage() *ControlQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withEvidence = _q.withEvidence.clonePage()
 	if _q.withNamedEvidence != nil {
 		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
@@ -42825,6 +42832,13 @@ func (_q *GroupQuery) clonePage() *GroupQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withProgramEditors = _q.withProgramEditors.clonePage()
 	if _q.withNamedProgramEditors != nil {
@@ -43911,6 +43925,13 @@ func (_q *MappedControlQuery) clonePage() *MappedControlQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -45404,6 +45425,13 @@ func (_q *PlatformQuery) clonePage() *PlatformQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -45740,6 +45768,13 @@ func (_q *ProgramQuery) clonePage() *ProgramQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -46059,6 +46094,13 @@ func (_q *ReviewQuery) clonePage() *ReviewQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -46417,6 +46459,7 @@ func (_q *ScanQuery) clonePage() *ScanQuery {
 	c.withAssignedToIdentityHolder = _q.withAssignedToIdentityHolder.clonePage()
 	c.withEnvironment = _q.withEnvironment.clonePage()
 	c.withScope = _q.withScope.clonePage()
+	c.withDocumentKind = _q.withDocumentKind.clonePage()
 	c.withAssets = _q.withAssets.clonePage()
 	if _q.withNamedAssets != nil {
 		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
@@ -46778,6 +46821,13 @@ func (_q *SystemDetailQuery) clonePage() *SystemDetailQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withPrograms = _q.withPrograms.clonePage()
 	if _q.withNamedPrograms != nil {

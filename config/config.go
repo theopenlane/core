@@ -16,6 +16,7 @@ import (
 	"github.com/knadh/koanf/v2"
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
@@ -307,9 +308,10 @@ func applyDomain(v reflect.Value, domain string) {
 	}
 }
 
-// Load is responsible for loading the configuration from a YAML file and environment variables.
-// If the `cfgFile` is empty or nil, it sets the default configuration file path.
-// Config settings are taken from default values, then from the config file, and finally from environment
+// Load is responsible for loading the configuration from YAML files and environment variables.
+// If the `cfgFile` is empty or nil, it sets the default configuration file path; it may list several
+// files separated by commas, each merged over the ones before it.
+// Config settings are taken from default values, then from the config files, and finally from environment
 // the later overwriting the former.
 func Load(cfgFile *string) (*Config, error) {
 	k := koanf.New(".")
@@ -318,21 +320,7 @@ func Load(cfgFile *string) (*Config, error) {
 		*cfgFile = defaultConfigFilePath
 	}
 
-	if _, err := os.Stat(*cfgFile); err != nil {
-		if os.IsNotExist(err) {
-			log.Warn().Err(err).Msg("config file not found, proceeding with default configuration")
-		}
-	}
-
-	// parse yaml config
-	if err := k.Load(file.Provider(*cfgFile), yaml.Parser()); err != nil {
-		// if it's an  unmarshal errors, panic now instead of continuing
-		if strings.Contains(err.Error(), "yaml: unmarshal errors") {
-			log.Fatal().Err(err).Msg("failed to unmarshal config file - ensure the .config.yaml is valid")
-		} else {
-			log.Warn().Err(err).Msg("failed to load config file - ensure the .config.yaml is present and valid or use environment variables to set the configuration")
-		}
-	}
+	loadConfigFiles(k, configFilePaths(*cfgFile))
 
 	// load env vars
 	if err := k.Load(env.Provider(".", env.Opt{
@@ -372,6 +360,29 @@ func Load(cfgFile *string) (*Config, error) {
 	}
 
 	return conf, nil
+}
+
+// configFilePaths splits a comma separated list of config files, dropping empty entries
+func configFilePaths(cfgFile string) []string {
+	return lo.Compact(lo.Map(strings.Split(cfgFile, ","), func(path string, _ int) string { return strings.TrimSpace(path) }))
+}
+
+// loadConfigFiles parses each yaml config file in order, so a later file overrides the keys it sets in an earlier one
+func loadConfigFiles(k *koanf.Koanf, paths []string) {
+	for _, path := range paths {
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			log.Warn().Err(err).Str("file", path).Msg("config file not found, proceeding without it")
+		}
+
+		if err := k.Load(file.Provider(path), yaml.Parser()); err != nil {
+			// if it's an  unmarshal errors, panic now instead of continuing
+			if strings.Contains(err.Error(), "yaml: unmarshal errors") {
+				log.Fatal().Err(err).Str("file", path).Msg("failed to unmarshal config file - ensure the .config.yaml is valid")
+			} else {
+				log.Warn().Err(err).Str("file", path).Msg("failed to load config file - ensure the .config.yaml is present and valid or use environment variables to set the configuration")
+			}
+		}
+	}
 }
 
 // validate performs cross-field validation on the loaded configuration

@@ -527,16 +527,31 @@ func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeD
 		return fmt.Errorf("%w: %s is not a match-key field on %s", ErrLinkTargetFieldInvalid, rule.TargetField, edge.TargetType)
 	}
 
+	validate := lo.Ternary(rule.PayloadKeys, validatePayloadKey, validateSourceKey)
+
 	if rule.SourceField != "" {
-		if err := validateSourceKey(sourceSchema, rule.SourceField, false); err != nil {
+		if err := validate(sourceSchema, rule.SourceField, false); err != nil {
 			return err
 		}
 	}
 
 	if rule.SourceList != "" {
-		if err := validateSourceKey(sourceSchema, rule.SourceList, true); err != nil {
+		if err := validate(sourceSchema, rule.SourceList, true); err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+// validatePayloadKey checks a payload-carried key collides with no input field or edge key on the source schema,
+// which ingest would otherwise write the unresolved match values into
+func validatePayloadKey(sourceSchema *entityops.Schema, key string, _ bool) error {
+	fieldKey := lo.ContainsBy(sourceSchema.Fields, func(f entityops.FieldDescriptor) bool { return f.InputKey == key })
+	edgeKey := lo.ContainsBy(sourceSchema.Edges, func(e entityops.EdgeDescriptor) bool { return e.CreateField == key })
+
+	if fieldKey || edgeKey {
+		return fmt.Errorf("%w: payload key %s collides with an input key on %s", ErrLinkSourceFieldInvalid, key, sourceSchema.Name)
 	}
 
 	return nil
@@ -592,6 +607,8 @@ func indexOperations(definitionID string, operations []types.OperationRegistrati
 			return nil, ErrIngestContractsRequired
 		case operation.Policy.Snapshot && operation.IngestHandle == nil:
 			return nil, ErrIngestSnapshotRequiresIngestHandle
+		case operation.AfterIngest != nil && operation.IngestHandle == nil:
+			return nil, ErrAfterIngestRequiresIngestHandle
 		case operation.ClientConflict != "":
 			return nil, fmt.Errorf("%w: definition %s operation %s clients %s and %s", ErrOperationClientConflict, definitionID, operation.Name, operation.ClientRef, operation.ClientConflict)
 		case operation.ClientRef == "":

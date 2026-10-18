@@ -496,15 +496,15 @@ func init() {
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
 	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
 	// controlhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlhistoryDescSystemOwned := controlhistoryFields[44].Descriptor()
+	controlhistoryDescSystemOwned := controlhistoryFields[49].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[53].Descriptor()
+	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[58].Descriptor()
 	// controlhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	controlhistory.DefaultWorkflowEligibleMarker = controlhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// controlhistoryDescIsTrustCenterControl is the schema descriptor for is_trust_center_control field.
-	controlhistoryDescIsTrustCenterControl := controlhistoryFields[57].Descriptor()
+	controlhistoryDescIsTrustCenterControl := controlhistoryFields[62].Descriptor()
 	// controlhistory.DefaultIsTrustCenterControl holds the default value on creation for the is_trust_center_control field.
 	controlhistory.DefaultIsTrustCenterControl = controlhistoryDescIsTrustCenterControl.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -1065,15 +1065,15 @@ func init() {
 	// grouphistory.DefaultTags holds the default value on creation for the tags field.
 	grouphistory.DefaultTags = grouphistoryDescTags.Default.([]string)
 	// grouphistoryDescIsManaged is the schema descriptor for is_managed field.
-	grouphistoryDescIsManaged := grouphistoryFields[16].Descriptor()
+	grouphistoryDescIsManaged := grouphistoryFields[21].Descriptor()
 	// grouphistory.DefaultIsManaged holds the default value on creation for the is_managed field.
 	grouphistory.DefaultIsManaged = grouphistoryDescIsManaged.Default.(bool)
 	// grouphistoryDescDisplayName is the schema descriptor for display_name field.
-	grouphistoryDescDisplayName := grouphistoryFields[20].Descriptor()
+	grouphistoryDescDisplayName := grouphistoryFields[25].Descriptor()
 	// grouphistory.DefaultDisplayName holds the default value on creation for the display_name field.
 	grouphistory.DefaultDisplayName = grouphistoryDescDisplayName.Default.(string)
 	// grouphistoryDescScimActive is the schema descriptor for scim_active field.
-	grouphistoryDescScimActive := grouphistoryFields[26].Descriptor()
+	grouphistoryDescScimActive := grouphistoryFields[31].Descriptor()
 	// grouphistory.DefaultScimActive holds the default value on creation for the scim_active field.
 	grouphistory.DefaultScimActive = grouphistoryDescScimActive.Default.(bool)
 	// grouphistoryDescID is the schema descriptor for id field.
@@ -1368,7 +1368,7 @@ func init() {
 	// mappedcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	mappedcontrolhistory.DefaultTags = mappedcontrolhistoryDescTags.Default.([]string)
 	// mappedcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	mappedcontrolhistoryDescSystemOwned := mappedcontrolhistoryFields[12].Descriptor()
+	mappedcontrolhistoryDescSystemOwned := mappedcontrolhistoryFields[17].Descriptor()
 	// mappedcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	mappedcontrolhistory.DefaultSystemOwned = mappedcontrolhistoryDescSystemOwned.Default.(bool)
 	// mappedcontrolhistoryDescID is the schema descriptor for id field.
@@ -1716,11 +1716,11 @@ func init() {
 	// platformhistory.DefaultTags holds the default value on creation for the tags field.
 	platformhistory.DefaultTags = platformhistoryDescTags.Default.([]string)
 	// platformhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	platformhistoryDescWorkflowEligibleMarker := platformhistoryFields[46].Descriptor()
+	platformhistoryDescWorkflowEligibleMarker := platformhistoryFields[51].Descriptor()
 	// platformhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	platformhistory.DefaultWorkflowEligibleMarker = platformhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// platformhistoryDescContainsPii is the schema descriptor for contains_pii field.
-	platformhistoryDescContainsPii := platformhistoryFields[57].Descriptor()
+	platformhistoryDescContainsPii := platformhistoryFields[62].Descriptor()
 	// platformhistory.DefaultContainsPii holds the default value on creation for the contains_pii field.
 	platformhistory.DefaultContainsPii = platformhistoryDescContainsPii.Default.(bool)
 	// platformhistoryDescID is the schema descriptor for id field.
@@ -1834,15 +1834,15 @@ func init() {
 	// programhistory.DefaultTags holds the default value on creation for the tags field.
 	programhistory.DefaultTags = programhistoryDescTags.Default.([]string)
 	// programhistoryDescAuditorReady is the schema descriptor for auditor_ready field.
-	programhistoryDescAuditorReady := programhistoryFields[27].Descriptor()
+	programhistoryDescAuditorReady := programhistoryFields[32].Descriptor()
 	// programhistory.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
 	programhistory.DefaultAuditorReady = programhistoryDescAuditorReady.Default.(bool)
 	// programhistoryDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
-	programhistoryDescAuditorWriteComments := programhistoryFields[28].Descriptor()
+	programhistoryDescAuditorWriteComments := programhistoryFields[33].Descriptor()
 	// programhistory.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
 	programhistory.DefaultAuditorWriteComments = programhistoryDescAuditorWriteComments.Default.(bool)
 	// programhistoryDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
-	programhistoryDescAuditorReadComments := programhistoryFields[29].Descriptor()
+	programhistoryDescAuditorReadComments := programhistoryFields[34].Descriptor()
 	// programhistory.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	programhistory.DefaultAuditorReadComments = programhistoryDescAuditorReadComments.Default.(bool)
 	// programhistoryDescID is the schema descriptor for id field.
@@ -1949,11 +1949,11 @@ func init() {
 	// reviewhistory.DefaultTags holds the default value on creation for the tags field.
 	reviewhistory.DefaultTags = reviewhistoryDescTags.Default.([]string)
 	// reviewhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	reviewhistoryDescSystemOwned := reviewhistoryFields[13].Descriptor()
+	reviewhistoryDescSystemOwned := reviewhistoryFields[18].Descriptor()
 	// reviewhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	reviewhistory.DefaultSystemOwned = reviewhistoryDescSystemOwned.Default.(bool)
 	// reviewhistoryDescApproved is the schema descriptor for approved field.
-	reviewhistoryDescApproved := reviewhistoryFields[30].Descriptor()
+	reviewhistoryDescApproved := reviewhistoryFields[35].Descriptor()
 	// reviewhistory.DefaultApproved holds the default value on creation for the approved field.
 	reviewhistory.DefaultApproved = reviewhistoryDescApproved.Default.(bool)
 	// reviewhistoryDescID is the schema descriptor for id field.

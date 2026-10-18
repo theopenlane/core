@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
@@ -48,6 +49,7 @@ type ProgramQuery struct {
 	order                      []program.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.Program
+	withIntegrationRuns        *IntegrationRunQuery
 	withOwner                  *OrganizationQuery
 	withBlockedGroups          *GroupQuery
 	withEditors                *GroupQuery
@@ -76,6 +78,7 @@ type ProgramQuery struct {
 	withFKs                    bool
 	loadTotal                  []func(context.Context, []*Program) error
 	modifiers                  []func(*sql.Selector)
+	withNamedIntegrationRuns   map[string]*IntegrationRunQuery
 	withNamedBlockedGroups     map[string]*GroupQuery
 	withNamedEditors           map[string]*GroupQuery
 	withNamedViewers           map[string]*GroupQuery
@@ -132,6 +135,28 @@ func (_q *ProgramQuery) Unique(unique bool) *ProgramQuery {
 func (_q *ProgramQuery) Order(o ...program.OrderOption) *ProgramQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *ProgramQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, program.IntegrationRunsTable, program.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -876,6 +901,7 @@ func (_q *ProgramQuery) Clone() *ProgramQuery {
 		order:                 append([]program.OrderOption{}, _q.order...),
 		inters:                append([]Interceptor{}, _q.inters...),
 		predicates:            append([]predicate.Program{}, _q.predicates...),
+		withIntegrationRuns:   _q.withIntegrationRuns.Clone(),
 		withOwner:             _q.withOwner.Clone(),
 		withBlockedGroups:     _q.withBlockedGroups.Clone(),
 		withEditors:           _q.withEditors.Clone(),
@@ -906,6 +932,17 @@ func (_q *ProgramQuery) Clone() *ProgramQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProgramQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *ProgramQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -1268,7 +1305,8 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 		nodes       = []*Program{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [25]bool{
+		loadedTypes = [26]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1319,6 +1357,13 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Program) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Program, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -1494,6 +1539,13 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Program) { n.appendNamedIntegrationRuns(name) },
+			func(n *Program, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Program) { n.appendNamedBlockedGroups(name) },
@@ -1656,6 +1708,37 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	return nodes, nil
 }
 
+func (_q *ProgramQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Program, init func(*Program), assign func(*Program, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Program)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(program.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.program_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "program_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "program_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *ProgramQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Program, init func(*Program), assign func(*Program, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Program)
@@ -3097,6 +3180,20 @@ func (_q *ProgramQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *ProgramQuery) Modify(modifiers ...func(s *sql.Selector)) *ProgramSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProgramQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *ProgramQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

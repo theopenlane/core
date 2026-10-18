@@ -151,7 +151,7 @@ func TestBrandedMessageConfigSchemaScoping(t *testing.T) {
 	assert.True(t, ok, "BrandedMessageRequest should have properties")
 
 	// per-send fields promoted from RecipientInfo / CampaignContext are excluded from authoring
-	for _, perSend := range []string{"email", "recipients", "firstName", "lastName", "tags", "campaignId", "campaignName"} {
+	for _, perSend := range []string{"email", "recipients", "firstName", "lastName", "tags", "campaignId", "campaignName", "tables"} {
 		assert.NotContains(t, props, perSend, "per-send field %q should be excluded from the authorable schema", perSend)
 	}
 
@@ -163,8 +163,13 @@ func TestBrandedMessageConfigSchemaScoping(t *testing.T) {
 	// format hints are reflected so the UI selects widgets from the schema, not a hand-written uiSchema
 	assertSchemaFormat(t, props, "primaryColor", "color")
 	assertSchemaFormat(t, props, "buttonColor", "color")
-	assertSchemaFormat(t, props, "buttonLink", "uri")
 	assertSchemaFormat(t, props, "logoURL", "uri")
+
+	buttonLink, ok := props["buttonLink"].(map[string]any)
+	assert.True(t, ok)
+	assert.NotContains(t, buttonLink, "format", "buttonLink accepts product-relative paths")
+
+	assert.Equal(t, true, entry["additionalProperties"], "dispatch validation must tolerate per-send fields")
 }
 
 // assertSchemaFormat asserts a reflected property carries the expected JSON Schema format
