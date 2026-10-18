@@ -38368,9 +38368,10 @@ type EntityHistoryMutation struct {
 	system_owned                              *bool
 	internal_notes                            *string
 	system_internal_id                        *string
-	catalog_entity_id                         *string
+	catalog_id                                *string
 	externally_visible                        *bool
-	catalog_entity_key                        *string
+	catalog_key                               *string
+	raw_ingest_payload                        *map[string]interface{}
 	entity_relationship_state_name            *string
 	entity_relationship_state_id              *string
 	entity_security_questionnaire_status_name *string
@@ -39948,53 +39949,53 @@ func (m *EntityHistoryMutation) ResetSystemInternalID() {
 	delete(m.clearedFields, entityhistory.FieldSystemInternalID)
 }
 
-// SetCatalogEntityID sets the "catalog_entity_id" field.
-func (m *EntityHistoryMutation) SetCatalogEntityID(s string) {
-	m.catalog_entity_id = &s
+// SetCatalogID sets the "catalog_id" field.
+func (m *EntityHistoryMutation) SetCatalogID(s string) {
+	m.catalog_id = &s
 }
 
-// CatalogEntityID returns the value of the "catalog_entity_id" field in the mutation.
-func (m *EntityHistoryMutation) CatalogEntityID() (r string, exists bool) {
-	v := m.catalog_entity_id
+// CatalogID returns the value of the "catalog_id" field in the mutation.
+func (m *EntityHistoryMutation) CatalogID() (r string, exists bool) {
+	v := m.catalog_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCatalogEntityID returns the old "catalog_entity_id" field's value of the EntityHistory entity.
+// OldCatalogID returns the old "catalog_id" field's value of the EntityHistory entity.
 // If the EntityHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntityHistoryMutation) OldCatalogEntityID(ctx context.Context) (v string, err error) {
+func (m *EntityHistoryMutation) OldCatalogID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCatalogEntityID is only allowed on UpdateOne operations")
+		return v, errors.New("OldCatalogID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCatalogEntityID requires an ID field in the mutation")
+		return v, errors.New("OldCatalogID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCatalogEntityID: %w", err)
+		return v, fmt.Errorf("querying old value for OldCatalogID: %w", err)
 	}
-	return oldValue.CatalogEntityID, nil
+	return oldValue.CatalogID, nil
 }
 
-// ClearCatalogEntityID clears the value of the "catalog_entity_id" field.
-func (m *EntityHistoryMutation) ClearCatalogEntityID() {
-	m.catalog_entity_id = nil
-	m.clearedFields[entityhistory.FieldCatalogEntityID] = struct{}{}
+// ClearCatalogID clears the value of the "catalog_id" field.
+func (m *EntityHistoryMutation) ClearCatalogID() {
+	m.catalog_id = nil
+	m.clearedFields[entityhistory.FieldCatalogID] = struct{}{}
 }
 
-// CatalogEntityIDCleared returns if the "catalog_entity_id" field was cleared in this mutation.
-func (m *EntityHistoryMutation) CatalogEntityIDCleared() bool {
-	_, ok := m.clearedFields[entityhistory.FieldCatalogEntityID]
+// CatalogIDCleared returns if the "catalog_id" field was cleared in this mutation.
+func (m *EntityHistoryMutation) CatalogIDCleared() bool {
+	_, ok := m.clearedFields[entityhistory.FieldCatalogID]
 	return ok
 }
 
-// ResetCatalogEntityID resets all changes to the "catalog_entity_id" field.
-func (m *EntityHistoryMutation) ResetCatalogEntityID() {
-	m.catalog_entity_id = nil
-	delete(m.clearedFields, entityhistory.FieldCatalogEntityID)
+// ResetCatalogID resets all changes to the "catalog_id" field.
+func (m *EntityHistoryMutation) ResetCatalogID() {
+	m.catalog_id = nil
+	delete(m.clearedFields, entityhistory.FieldCatalogID)
 }
 
 // SetExternallyVisible sets the "externally_visible" field.
@@ -40046,53 +40047,102 @@ func (m *EntityHistoryMutation) ResetExternallyVisible() {
 	delete(m.clearedFields, entityhistory.FieldExternallyVisible)
 }
 
-// SetCatalogEntityKey sets the "catalog_entity_key" field.
-func (m *EntityHistoryMutation) SetCatalogEntityKey(s string) {
-	m.catalog_entity_key = &s
+// SetCatalogKey sets the "catalog_key" field.
+func (m *EntityHistoryMutation) SetCatalogKey(s string) {
+	m.catalog_key = &s
 }
 
-// CatalogEntityKey returns the value of the "catalog_entity_key" field in the mutation.
-func (m *EntityHistoryMutation) CatalogEntityKey() (r string, exists bool) {
-	v := m.catalog_entity_key
+// CatalogKey returns the value of the "catalog_key" field in the mutation.
+func (m *EntityHistoryMutation) CatalogKey() (r string, exists bool) {
+	v := m.catalog_key
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCatalogEntityKey returns the old "catalog_entity_key" field's value of the EntityHistory entity.
+// OldCatalogKey returns the old "catalog_key" field's value of the EntityHistory entity.
 // If the EntityHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntityHistoryMutation) OldCatalogEntityKey(ctx context.Context) (v string, err error) {
+func (m *EntityHistoryMutation) OldCatalogKey(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCatalogEntityKey is only allowed on UpdateOne operations")
+		return v, errors.New("OldCatalogKey is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCatalogEntityKey requires an ID field in the mutation")
+		return v, errors.New("OldCatalogKey requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCatalogEntityKey: %w", err)
+		return v, fmt.Errorf("querying old value for OldCatalogKey: %w", err)
 	}
-	return oldValue.CatalogEntityKey, nil
+	return oldValue.CatalogKey, nil
 }
 
-// ClearCatalogEntityKey clears the value of the "catalog_entity_key" field.
-func (m *EntityHistoryMutation) ClearCatalogEntityKey() {
-	m.catalog_entity_key = nil
-	m.clearedFields[entityhistory.FieldCatalogEntityKey] = struct{}{}
+// ClearCatalogKey clears the value of the "catalog_key" field.
+func (m *EntityHistoryMutation) ClearCatalogKey() {
+	m.catalog_key = nil
+	m.clearedFields[entityhistory.FieldCatalogKey] = struct{}{}
 }
 
-// CatalogEntityKeyCleared returns if the "catalog_entity_key" field was cleared in this mutation.
-func (m *EntityHistoryMutation) CatalogEntityKeyCleared() bool {
-	_, ok := m.clearedFields[entityhistory.FieldCatalogEntityKey]
+// CatalogKeyCleared returns if the "catalog_key" field was cleared in this mutation.
+func (m *EntityHistoryMutation) CatalogKeyCleared() bool {
+	_, ok := m.clearedFields[entityhistory.FieldCatalogKey]
 	return ok
 }
 
-// ResetCatalogEntityKey resets all changes to the "catalog_entity_key" field.
-func (m *EntityHistoryMutation) ResetCatalogEntityKey() {
-	m.catalog_entity_key = nil
-	delete(m.clearedFields, entityhistory.FieldCatalogEntityKey)
+// ResetCatalogKey resets all changes to the "catalog_key" field.
+func (m *EntityHistoryMutation) ResetCatalogKey() {
+	m.catalog_key = nil
+	delete(m.clearedFields, entityhistory.FieldCatalogKey)
+}
+
+// SetRawIngestPayload sets the "raw_ingest_payload" field.
+func (m *EntityHistoryMutation) SetRawIngestPayload(value map[string]interface{}) {
+	m.raw_ingest_payload = &value
+}
+
+// RawIngestPayload returns the value of the "raw_ingest_payload" field in the mutation.
+func (m *EntityHistoryMutation) RawIngestPayload() (r map[string]interface{}, exists bool) {
+	v := m.raw_ingest_payload
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRawIngestPayload returns the old "raw_ingest_payload" field's value of the EntityHistory entity.
+// If the EntityHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityHistoryMutation) OldRawIngestPayload(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRawIngestPayload is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRawIngestPayload requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRawIngestPayload: %w", err)
+	}
+	return oldValue.RawIngestPayload, nil
+}
+
+// ClearRawIngestPayload clears the value of the "raw_ingest_payload" field.
+func (m *EntityHistoryMutation) ClearRawIngestPayload() {
+	m.raw_ingest_payload = nil
+	m.clearedFields[entityhistory.FieldRawIngestPayload] = struct{}{}
+}
+
+// RawIngestPayloadCleared returns if the "raw_ingest_payload" field was cleared in this mutation.
+func (m *EntityHistoryMutation) RawIngestPayloadCleared() bool {
+	_, ok := m.clearedFields[entityhistory.FieldRawIngestPayload]
+	return ok
+}
+
+// ResetRawIngestPayload resets all changes to the "raw_ingest_payload" field.
+func (m *EntityHistoryMutation) ResetRawIngestPayload() {
+	m.raw_ingest_payload = nil
+	delete(m.clearedFields, entityhistory.FieldRawIngestPayload)
 }
 
 // SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
@@ -42596,7 +42646,7 @@ func (m *EntityHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EntityHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 79)
+	fields := make([]string, 0, 80)
 	if m.history_time != nil {
 		fields = append(fields, entityhistory.FieldHistoryTime)
 	}
@@ -42684,14 +42734,17 @@ func (m *EntityHistoryMutation) Fields() []string {
 	if m.system_internal_id != nil {
 		fields = append(fields, entityhistory.FieldSystemInternalID)
 	}
-	if m.catalog_entity_id != nil {
-		fields = append(fields, entityhistory.FieldCatalogEntityID)
+	if m.catalog_id != nil {
+		fields = append(fields, entityhistory.FieldCatalogID)
 	}
 	if m.externally_visible != nil {
 		fields = append(fields, entityhistory.FieldExternallyVisible)
 	}
-	if m.catalog_entity_key != nil {
-		fields = append(fields, entityhistory.FieldCatalogEntityKey)
+	if m.catalog_key != nil {
+		fields = append(fields, entityhistory.FieldCatalogKey)
+	}
+	if m.raw_ingest_payload != nil {
+		fields = append(fields, entityhistory.FieldRawIngestPayload)
 	}
 	if m.entity_relationship_state_name != nil {
 		fields = append(fields, entityhistory.FieldEntityRelationshipStateName)
@@ -42900,12 +42953,14 @@ func (m *EntityHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.InternalNotes()
 	case entityhistory.FieldSystemInternalID:
 		return m.SystemInternalID()
-	case entityhistory.FieldCatalogEntityID:
-		return m.CatalogEntityID()
+	case entityhistory.FieldCatalogID:
+		return m.CatalogID()
 	case entityhistory.FieldExternallyVisible:
 		return m.ExternallyVisible()
-	case entityhistory.FieldCatalogEntityKey:
-		return m.CatalogEntityKey()
+	case entityhistory.FieldCatalogKey:
+		return m.CatalogKey()
+	case entityhistory.FieldRawIngestPayload:
+		return m.RawIngestPayload()
 	case entityhistory.FieldEntityRelationshipStateName:
 		return m.EntityRelationshipStateName()
 	case entityhistory.FieldEntityRelationshipStateID:
@@ -43067,12 +43122,14 @@ func (m *EntityHistoryMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldInternalNotes(ctx)
 	case entityhistory.FieldSystemInternalID:
 		return m.OldSystemInternalID(ctx)
-	case entityhistory.FieldCatalogEntityID:
-		return m.OldCatalogEntityID(ctx)
+	case entityhistory.FieldCatalogID:
+		return m.OldCatalogID(ctx)
 	case entityhistory.FieldExternallyVisible:
 		return m.OldExternallyVisible(ctx)
-	case entityhistory.FieldCatalogEntityKey:
-		return m.OldCatalogEntityKey(ctx)
+	case entityhistory.FieldCatalogKey:
+		return m.OldCatalogKey(ctx)
+	case entityhistory.FieldRawIngestPayload:
+		return m.OldRawIngestPayload(ctx)
 	case entityhistory.FieldEntityRelationshipStateName:
 		return m.OldEntityRelationshipStateName(ctx)
 	case entityhistory.FieldEntityRelationshipStateID:
@@ -43379,12 +43436,12 @@ func (m *EntityHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSystemInternalID(v)
 		return nil
-	case entityhistory.FieldCatalogEntityID:
+	case entityhistory.FieldCatalogID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCatalogEntityID(v)
+		m.SetCatalogID(v)
 		return nil
 	case entityhistory.FieldExternallyVisible:
 		v, ok := value.(bool)
@@ -43393,12 +43450,19 @@ func (m *EntityHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternallyVisible(v)
 		return nil
-	case entityhistory.FieldCatalogEntityKey:
+	case entityhistory.FieldCatalogKey:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCatalogEntityKey(v)
+		m.SetCatalogKey(v)
+		return nil
+	case entityhistory.FieldRawIngestPayload:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRawIngestPayload(v)
 		return nil
 	case entityhistory.FieldEntityRelationshipStateName:
 		v, ok := value.(string)
@@ -43891,14 +43955,17 @@ func (m *EntityHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(entityhistory.FieldSystemInternalID) {
 		fields = append(fields, entityhistory.FieldSystemInternalID)
 	}
-	if m.FieldCleared(entityhistory.FieldCatalogEntityID) {
-		fields = append(fields, entityhistory.FieldCatalogEntityID)
+	if m.FieldCleared(entityhistory.FieldCatalogID) {
+		fields = append(fields, entityhistory.FieldCatalogID)
 	}
 	if m.FieldCleared(entityhistory.FieldExternallyVisible) {
 		fields = append(fields, entityhistory.FieldExternallyVisible)
 	}
-	if m.FieldCleared(entityhistory.FieldCatalogEntityKey) {
-		fields = append(fields, entityhistory.FieldCatalogEntityKey)
+	if m.FieldCleared(entityhistory.FieldCatalogKey) {
+		fields = append(fields, entityhistory.FieldCatalogKey)
+	}
+	if m.FieldCleared(entityhistory.FieldRawIngestPayload) {
+		fields = append(fields, entityhistory.FieldRawIngestPayload)
 	}
 	if m.FieldCleared(entityhistory.FieldEntityRelationshipStateName) {
 		fields = append(fields, entityhistory.FieldEntityRelationshipStateName)
@@ -44136,14 +44203,17 @@ func (m *EntityHistoryMutation) ClearField(name string) error {
 	case entityhistory.FieldSystemInternalID:
 		m.ClearSystemInternalID()
 		return nil
-	case entityhistory.FieldCatalogEntityID:
-		m.ClearCatalogEntityID()
+	case entityhistory.FieldCatalogID:
+		m.ClearCatalogID()
 		return nil
 	case entityhistory.FieldExternallyVisible:
 		m.ClearExternallyVisible()
 		return nil
-	case entityhistory.FieldCatalogEntityKey:
-		m.ClearCatalogEntityKey()
+	case entityhistory.FieldCatalogKey:
+		m.ClearCatalogKey()
+		return nil
+	case entityhistory.FieldRawIngestPayload:
+		m.ClearRawIngestPayload()
 		return nil
 	case entityhistory.FieldEntityRelationshipStateName:
 		m.ClearEntityRelationshipStateName()
@@ -44381,14 +44451,17 @@ func (m *EntityHistoryMutation) ResetField(name string) error {
 	case entityhistory.FieldSystemInternalID:
 		m.ResetSystemInternalID()
 		return nil
-	case entityhistory.FieldCatalogEntityID:
-		m.ResetCatalogEntityID()
+	case entityhistory.FieldCatalogID:
+		m.ResetCatalogID()
 		return nil
 	case entityhistory.FieldExternallyVisible:
 		m.ResetExternallyVisible()
 		return nil
-	case entityhistory.FieldCatalogEntityKey:
-		m.ResetCatalogEntityKey()
+	case entityhistory.FieldCatalogKey:
+		m.ResetCatalogKey()
+		return nil
+	case entityhistory.FieldRawIngestPayload:
+		m.ResetRawIngestPayload()
 		return nil
 	case entityhistory.FieldEntityRelationshipStateName:
 		m.ResetEntityRelationshipStateName()

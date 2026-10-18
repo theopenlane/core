@@ -679,8 +679,8 @@ type EntityProjection struct {
 	ApprovedForUse                        bool                   `json:"approved_for_use,omitempty"`
 	AutoRenews                            bool                   `json:"auto_renews,omitempty"`
 	BillingModel                          string                 `json:"billing_model,omitempty"`
-	CatalogEntityID                       string                 `json:"catalog_entity_id,omitempty"`
-	CatalogEntityKey                      string                 `json:"catalog_entity_key,omitempty"`
+	CatalogID                             string                 `json:"catalog_id,omitempty"`
+	CatalogKey                            string                 `json:"catalog_key,omitempty"`
 	ContractEndDate                       models.DateTime        `json:"contract_end_date,omitempty"`
 	ContractRenewalAt                     models.DateTime        `json:"contract_renewal_at,omitempty"`
 	ContractStartDate                     models.DateTime        `json:"contract_start_date,omitempty"`
@@ -720,6 +720,7 @@ type EntityProjection struct {
 	ObservedAt                            models.DateTime        `json:"observed_at,omitempty"`
 	OwnerID                               string                 `json:"owner_id,omitempty"`
 	ProvidedServices                      []string               `json:"provided_services,omitempty"`
+	RawIngestPayload                      map[string]interface{} `json:"raw_ingest_payload,omitempty"`
 	RenewalRisk                           string                 `json:"renewal_risk,omitempty"`
 	ReviewFrequency                       enums.Frequency        `json:"review_frequency,omitempty"`
 	ReviewedBy                            string                 `json:"reviewed_by,omitempty"`

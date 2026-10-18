@@ -28,6 +28,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	CatalogManaged   func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
 	ExternalReadOnly func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
 	ExternalSource   func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
 	Hidden           func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
@@ -704,8 +705,8 @@ type ComplexityRoot struct {
 		ApprovedForUse                        func(childComplexity int) int
 		AutoRenews                            func(childComplexity int) int
 		BillingModel                          func(childComplexity int) int
-		CatalogEntityID                       func(childComplexity int) int
-		CatalogEntityKey                      func(childComplexity int) int
+		CatalogID                             func(childComplexity int) int
+		CatalogKey                            func(childComplexity int) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
 		ContractStartDate                     func(childComplexity int) int
@@ -748,6 +749,7 @@ type ComplexityRoot struct {
 		Operation                             func(childComplexity int) int
 		OwnerID                               func(childComplexity int) int
 		ProvidedServices                      func(childComplexity int) int
+		RawIngestPayload                      func(childComplexity int) int
 		Ref                                   func(childComplexity int) int
 		RenewalRisk                           func(childComplexity int) int
 		ReviewFrequency                       func(childComplexity int) int
@@ -6299,18 +6301,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.BillingModel(childComplexity), true
-	case "EntityHistory.catalogEntityID":
-		if e.ComplexityRoot.EntityHistory.CatalogEntityID == nil {
+	case "EntityHistory.catalogID":
+		if e.ComplexityRoot.EntityHistory.CatalogID == nil {
 			break
 		}
 
-		return e.ComplexityRoot.EntityHistory.CatalogEntityID(childComplexity), true
-	case "EntityHistory.catalogEntityKey":
-		if e.ComplexityRoot.EntityHistory.CatalogEntityKey == nil {
+		return e.ComplexityRoot.EntityHistory.CatalogID(childComplexity), true
+	case "EntityHistory.catalogKey":
+		if e.ComplexityRoot.EntityHistory.CatalogKey == nil {
 			break
 		}
 
-		return e.ComplexityRoot.EntityHistory.CatalogEntityKey(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.CatalogKey(childComplexity), true
 	case "EntityHistory.contractEndDate":
 		if e.ComplexityRoot.EntityHistory.ContractEndDate == nil {
 			break
@@ -6563,6 +6565,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.ProvidedServices(childComplexity), true
+	case "EntityHistory.rawIngestPayload":
+		if e.ComplexityRoot.EntityHistory.RawIngestPayload == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.RawIngestPayload(childComplexity), true
 	case "EntityHistory.ref":
 		if e.ComplexityRoot.EntityHistory.Ref == nil {
 			break
@@ -18212,6 +18220,10 @@ This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
 """
+Indicates the field's value is copied from the catalog row on adopt and rewritten on refresh while the row stays linked
+"""
+directive @catalogManaged on FIELD_DEFINITION
+"""
 Indicates the modules an organization must have enabled to access this object,
 at least one of the listed modules is required
 """
@@ -26148,17 +26160,21 @@ type EntityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
-  the system-owned catalog entity this entity was adopted from
+  the system-owned catalog row this row was adopted from
   """
-  catalogEntityID: String
+  catalogID: String
   """
   whether this system-owned row is published for organizations to adopt
   """
   externallyVisible: Boolean
   """
-  the lookup key of the catalog entity this entity was adopted from
+  the lookup key of the catalog row this row was adopted from
   """
-  catalogEntityKey: String
+  catalogKey: String
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
   """
   the relationship_state of the entity
   """
@@ -26822,19 +26838,19 @@ input EntityHistoryWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
-  catalog_entity_id field predicates
+  catalog_id field predicates
   """
-  catalogEntityID: String
-  catalogEntityIDNEQ: String
-  catalogEntityIDIn: [String!]
-  catalogEntityIDNotIn: [String!]
-  catalogEntityIDContains: String
-  catalogEntityIDHasPrefix: String
-  catalogEntityIDHasSuffix: String
-  catalogEntityIDIsNil: Boolean
-  catalogEntityIDNotNil: Boolean
-  catalogEntityIDEqualFold: String
-  catalogEntityIDContainsFold: String
+  catalogID: String
+  catalogIDNEQ: String
+  catalogIDIn: [String!]
+  catalogIDNotIn: [String!]
+  catalogIDContains: String
+  catalogIDHasPrefix: String
+  catalogIDHasSuffix: String
+  catalogIDIsNil: Boolean
+  catalogIDNotNil: Boolean
+  catalogIDEqualFold: String
+  catalogIDContainsFold: String
   """
   externally_visible field predicates
   """
@@ -26843,19 +26859,19 @@ input EntityHistoryWhereInput {
   externallyVisibleIsNil: Boolean
   externallyVisibleNotNil: Boolean
   """
-  catalog_entity_key field predicates
+  catalog_key field predicates
   """
-  catalogEntityKey: String
-  catalogEntityKeyNEQ: String
-  catalogEntityKeyIn: [String!]
-  catalogEntityKeyNotIn: [String!]
-  catalogEntityKeyContains: String
-  catalogEntityKeyHasPrefix: String
-  catalogEntityKeyHasSuffix: String
-  catalogEntityKeyIsNil: Boolean
-  catalogEntityKeyNotNil: Boolean
-  catalogEntityKeyEqualFold: String
-  catalogEntityKeyContainsFold: String
+  catalogKey: String
+  catalogKeyNEQ: String
+  catalogKeyIn: [String!]
+  catalogKeyNotIn: [String!]
+  catalogKeyContains: String
+  catalogKeyHasPrefix: String
+  catalogKeyHasSuffix: String
+  catalogKeyIsNil: Boolean
+  catalogKeyNotNil: Boolean
+  catalogKeyEqualFold: String
+  catalogKeyContainsFold: String
   """
   entity_relationship_state_name field predicates
   """
@@ -55442,12 +55458,14 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_EntityHistory_systemInternalID(ctx, field)
-	case "catalogEntityID":
-		return ec.fieldContext_EntityHistory_catalogEntityID(ctx, field)
+	case "catalogID":
+		return ec.fieldContext_EntityHistory_catalogID(ctx, field)
 	case "externallyVisible":
 		return ec.fieldContext_EntityHistory_externallyVisible(ctx, field)
-	case "catalogEntityKey":
-		return ec.fieldContext_EntityHistory_catalogEntityKey(ctx, field)
+	case "catalogKey":
+		return ec.fieldContext_EntityHistory_catalogKey(ctx, field)
+	case "rawIngestPayload":
+		return ec.fieldContext_EntityHistory_rawIngestPayload(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_EntityHistory_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":

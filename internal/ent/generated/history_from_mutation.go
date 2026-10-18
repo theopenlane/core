@@ -6511,16 +6511,20 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
-	if catalogEntityID, exists := m.CatalogEntityID(); exists {
-		create = create.SetCatalogEntityID(catalogEntityID)
+	if catalogID, exists := m.CatalogID(); exists {
+		create = create.SetCatalogID(catalogID)
 	}
 
 	if externallyVisible, exists := m.ExternallyVisible(); exists {
 		create = create.SetExternallyVisible(externallyVisible)
 	}
 
-	if catalogEntityKey, exists := m.CatalogEntityKey(); exists {
-		create = create.SetCatalogEntityKey(catalogEntityKey)
+	if catalogKey, exists := m.CatalogKey(); exists {
+		create = create.SetCatalogKey(catalogKey)
+	}
+
+	if rawIngestPayload, exists := m.RawIngestPayload(); exists {
+		create = create.SetRawIngestPayload(rawIngestPayload)
 	}
 
 	if entityRelationshipStateName, exists := m.EntityRelationshipStateName(); exists {
@@ -6901,10 +6905,10 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableSystemInternalID(entity.SystemInternalID)
 		}
 
-		if catalogEntityID, exists := m.CatalogEntityID(); exists {
-			create = create.SetCatalogEntityID(catalogEntityID)
+		if catalogID, exists := m.CatalogID(); exists {
+			create = create.SetCatalogID(catalogID)
 		} else {
-			create = create.SetCatalogEntityID(entity.CatalogEntityID)
+			create = create.SetCatalogID(entity.CatalogID)
 		}
 
 		if externallyVisible, exists := m.ExternallyVisible(); exists {
@@ -6913,10 +6917,16 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetExternallyVisible(entity.ExternallyVisible)
 		}
 
-		if catalogEntityKey, exists := m.CatalogEntityKey(); exists {
-			create = create.SetCatalogEntityKey(catalogEntityKey)
+		if catalogKey, exists := m.CatalogKey(); exists {
+			create = create.SetCatalogKey(catalogKey)
 		} else {
-			create = create.SetCatalogEntityKey(entity.CatalogEntityKey)
+			create = create.SetCatalogKey(entity.CatalogKey)
+		}
+
+		if rawIngestPayload, exists := m.RawIngestPayload(); exists {
+			create = create.SetRawIngestPayload(rawIngestPayload)
+		} else {
+			create = create.SetRawIngestPayload(entity.RawIngestPayload)
 		}
 
 		if entityRelationshipStateName, exists := m.EntityRelationshipStateName(); exists {
@@ -7265,9 +7275,10 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSystemOwned(entity.SystemOwned).
 			SetNillableInternalNotes(entity.InternalNotes).
 			SetNillableSystemInternalID(entity.SystemInternalID).
-			SetCatalogEntityID(entity.CatalogEntityID).
+			SetCatalogID(entity.CatalogID).
 			SetExternallyVisible(entity.ExternallyVisible).
-			SetCatalogEntityKey(entity.CatalogEntityKey).
+			SetCatalogKey(entity.CatalogKey).
+			SetRawIngestPayload(entity.RawIngestPayload).
 			SetEntityRelationshipStateName(entity.EntityRelationshipStateName).
 			SetEntityRelationshipStateID(entity.EntityRelationshipStateID).
 			SetEntitySecurityQuestionnaireStatusName(entity.EntitySecurityQuestionnaireStatusName).

@@ -209,6 +209,22 @@ func TestProviderOptions_Extra(t *testing.T) {
 	})
 }
 
+func TestProviderOptions_BucketFor(t *testing.T) {
+	opts := NewProviderOptions(WithBucket("own-bucket"))
+
+	t.Run("explicit bucket wins", func(t *testing.T) {
+		assert.Equal(t, "other-bucket", opts.BucketFor("other-bucket"))
+	})
+
+	t.Run("empty bucket falls back to the provider bucket", func(t *testing.T) {
+		assert.Equal(t, "own-bucket", opts.BucketFor(""))
+	})
+
+	t.Run("no provider bucket", func(t *testing.T) {
+		assert.Empty(t, NewProviderOptions().BucketFor(""))
+	})
+}
+
 func TestProviderOptions_CombinedOptions(t *testing.T) {
 	t.Run("all options together", func(t *testing.T) {
 		creds := ProviderCredentials{
