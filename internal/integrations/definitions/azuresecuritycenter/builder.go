@@ -35,11 +35,11 @@ func Builder(cfg Config) registry.Builder {
 			Connections: []types.Connector{
 				lighthouseConnection.
 					Name("Azure Lighthouse").
-					Description("Delegate read-only Defender for Cloud access with Azure Lighthouse. In the Azure portal open Service providers, choose Add offer, Add via template, and deploy the template below on each subscription using the connection code from this form. Nothing is installed in your tenant.").
+					Description("Grant Openlane read-only Defender for Cloud access with Azure Lighthouse. Requires a one-time step in Azure: a subscription Owner deploys the template below on each subscription (Service providers → Service provider offers → Add offer → Add via template), entering the connection code from this form. Submit this form once the Openlane offer appears under Service provider offers. Nothing is installed in your tenant.").
 					Recommended().
 					Meta(map[string]types.MetaInfo{
-						"Managing Tenant ID":      {Value: cfg.Lighthouse.ManagingTenantID, AllowCopy: true},
-						"Lighthouse ARM Template": {Value: template, AllowCopy: true},
+						"Managing Tenant ID":                    {Value: cfg.Lighthouse.ManagingTenantID, AllowCopy: true},
+						"Lighthouse Template (deploy in Azure)": {Value: template, AllowCopy: true},
 					}).
 					Provides(lighthouseClientBuilder(cfg)).
 					Verified(verifyLighthouse).
