@@ -302,7 +302,6 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         key: "go_test_graph"
-        parallelism: 4
         cancel_on_build_failing: true
         if_changed:
           include:
@@ -312,10 +311,13 @@ steps:
             - cli/**
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+          TEST_SHARD: "{{matrix.shard}}"
+          TEST_SHARD_COUNT: "4" # must match the number of shard values below
         matrix:
           setup:
             version:
               - 18-alpine
+            shard: ["0", "1", "2", "3"]
         plugins:
           - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -333,8 +335,8 @@ steps:
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
                 - "CGO_ENABLED=0"
-                - "BUILDKITE_PARALLEL_JOB"
-                - "BUILDKITE_PARALLEL_JOB_COUNT"
+                - "TEST_SHARD"
+                - "TEST_SHARD_COUNT"
         artifact_paths: ["coverage-graph-*.out", "junit-graph-*.xml"]
       - label: ":golang: go test - events only"
         agents:
