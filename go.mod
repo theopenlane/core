@@ -14,7 +14,7 @@ require (
 	ariga.io/atlas v1.3.0
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.47.0
-	cloud.google.com/go/storage v1.68.0
+	cloud.google.com/go/storage v1.69.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6
 	github.com/99designs/gqlgen v0.17.95
@@ -164,7 +164,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.12.0 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.9.0 // indirect
-	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.34.0 // indirect
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.35.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.57.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.57.0 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
@@ -251,7 +251,7 @@ require (
 	github.com/google/s2a-go v0.1.10 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.22 // indirect
-	github.com/googleapis/gax-go/v2 v2.24.1 // indirect
+	github.com/googleapis/gax-go/v2 v2.26.2 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/handlers v1.5.2 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
@@ -394,7 +394,7 @@ require (
 	github.com/zitadel/schema v1.3.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/contrib/detectors/gcp v1.44.0 // indirect
+	go.opentelemetry.io/contrib/detectors/gcp v1.45.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.70.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.71.0 // indirect
 	go.opentelemetry.io/otel v1.46.0 // indirect
