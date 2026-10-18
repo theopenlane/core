@@ -1,9 +1,40 @@
 {
-  "hash": "b58f14e1a9d8537ea9d4930cc614edab10ee874996be060dd87a5ec02e0ab826",
-  "version": "01M55G4ZG7SFKSXD1CJ6DJ0606",
+  "hash": "c7bf5867dc02bb9fbd05ff615f6709418e3665c1b164fe860687cc21e31a8b35",
+  "version": "01M561MGXCC9MD3915JV4J9Z7F",
   "surface": {
     "id": "def_01K0AZSECC000000000000000001",
     "credentials": [
+      {
+        "ref": "lighthouseCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/lighthouse-cred",
+          "$ref": "#/$defs/lighthouseCred",
+          "$defs": {
+            "lighthouseCred": {
+              "properties": {
+                "tenantId": {
+                  "type": "string",
+                  "title": "Tenant ID",
+                  "description": "Your Microsoft Entra tenant ID."
+                },
+                "connectionCode": {
+                  "type": "string",
+                  "title": "Connection Code",
+                  "description": "Enter this code as the connectionCode parameter when deploying the Lighthouse template.",
+                  "generate": true
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "tenantId",
+                "connectionCode"
+              ]
+            }
+          }
+        }
+      },
       {
         "ref": "securityCenterCred",
         "schema": {
@@ -71,6 +102,7 @@
       }
     },
     "connections": [
+      "lighthouseCred",
       "securityCenterCred"
     ],
     "operations": [

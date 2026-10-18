@@ -37,6 +37,8 @@ const (
 type MockSubscription struct {
 	// ID is the subscription identifier
 	ID string
+	// TenantID is the tenant that owns the subscription, MockTenantID when empty
+	TenantID string
 	// State is the subscription lifecycle state
 	State string
 }
@@ -54,6 +56,18 @@ type MockMicrosoftProvider struct {
 	subscriptions        []MockSubscription
 	subscriptionPageSize int
 	subscriptionStatus   int
+	delegations          map[string][]MockDelegation
+	deletedDelegations   []string
+}
+
+// MockDelegation is one Lighthouse registration assignment returned for a subscription
+type MockDelegation struct {
+	// Name is the registration assignment name, assigned by SetDelegations when empty
+	Name string
+	// OfferName is the registration definition name
+	OfferName string
+	// ManagedByTenantID is the managing tenant the subscription is delegated to
+	ManagedByTenantID string
 }
 
 // NewMockMicrosoftProvider creates a mock Microsoft provider that issues MockAccessToken for any tenant
@@ -68,6 +82,8 @@ func NewMockMicrosoftProvider() *MockMicrosoftProvider {
 	m.mux.HandleFunc("GET /{tenant}/v2.0/.well-known/openid-configuration", m.serveOpenIDConfiguration)
 	m.mux.HandleFunc("POST /{tenant}/oauth2/v2.0/token", m.serveToken)
 	m.mux.Handle("GET /subscriptions", bearerRequired(m.serveSubscriptions))
+	m.mux.Handle("GET /subscriptions/{subscriptionId}/providers/Microsoft.ManagedServices/registrationAssignments", bearerRequired(m.serveRegistrationAssignments))
+	m.mux.Handle("DELETE /subscriptions/{subscriptionId}/providers/Microsoft.ManagedServices/registrationAssignments/{assignmentName}", bearerRequired(m.serveRegistrationAssignmentDelete))
 
 	m.Server = httptest.NewTLSServer(m.mux)
 
@@ -130,6 +146,35 @@ func (m *MockMicrosoftProvider) SetSubscriptions(subscriptions ...MockSubscripti
 	defer m.mu.Unlock()
 
 	m.subscriptions = subscriptions
+}
+
+// SetDelegations sets the Lighthouse registration assignments returned for a subscription
+func (m *MockMicrosoftProvider) SetDelegations(subscriptionID string, delegations ...MockDelegation) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if m.delegations == nil {
+		m.delegations = map[string][]MockDelegation{}
+	}
+
+	named := make([]MockDelegation, 0, len(delegations))
+	for i, d := range delegations {
+		if d.Name == "" {
+			d.Name = "assignment-" + strconv.Itoa(i)
+		}
+
+		named = append(named, d)
+	}
+
+	m.delegations[subscriptionID] = named
+}
+
+// DeletedDelegations returns the ARM path of every registration assignment the mock has deleted, in order
+func (m *MockMicrosoftProvider) DeletedDelegations() []string {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	return append([]string(nil), m.deletedDelegations...)
 }
 
 // SetSubscriptionPageSize splits the subscriptions listing into pages of size n linked by nextLink; zero disables paging
@@ -218,7 +263,12 @@ func (m *MockMicrosoftProvider) serveSubscriptions(w http.ResponseWriter, req *h
 
 	page := subscriptionListPage{Value: []subscription{}}
 	for _, sub := range subscriptions[start:end] {
-		page.Value = append(page.Value, subscription{SubscriptionID: sub.ID, State: sub.State})
+		tenantID := sub.TenantID
+		if tenantID == "" {
+			tenantID = MockTenantID
+		}
+
+		page.Value = append(page.Value, subscription{SubscriptionID: sub.ID, TenantID: tenantID, State: sub.State})
 	}
 
 	if end < len(subscriptions) {
@@ -226,6 +276,55 @@ func (m *MockMicrosoftProvider) serveSubscriptions(w http.ResponseWriter, req *h
 	}
 
 	WriteJSON(w, http.StatusOK, page)
+}
+
+func (m *MockMicrosoftProvider) serveRegistrationAssignments(w http.ResponseWriter, req *http.Request) {
+	m.mu.Lock()
+	subscriptionID := req.PathValue("subscriptionId")
+	delegations := m.delegations[subscriptionID]
+	m.mu.Unlock()
+
+	page := registrationAssignmentPage{Value: []registrationAssignment{}}
+	for _, d := range delegations {
+		page.Value = append(page.Value, registrationAssignment{
+			ID: mockAssignmentPath(subscriptionID, d.Name),
+			Properties: registrationAssignmentProperties{
+				RegistrationDefinition: &registrationDefinition{
+					Properties: registrationDefinitionProperties{
+						RegistrationDefinitionName: d.OfferName,
+						ManagedByTenantID:          d.ManagedByTenantID,
+					},
+				},
+			},
+		})
+	}
+
+	WriteJSON(w, http.StatusOK, page)
+}
+
+func (m *MockMicrosoftProvider) serveRegistrationAssignmentDelete(w http.ResponseWriter, req *http.Request) {
+	subscriptionID := req.PathValue("subscriptionId")
+	name := req.PathValue("assignmentName")
+
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	remaining := make([]MockDelegation, 0, len(m.delegations[subscriptionID]))
+	for _, d := range m.delegations[subscriptionID] {
+		if d.Name != name {
+			remaining = append(remaining, d)
+		}
+	}
+
+	m.delegations[subscriptionID] = remaining
+	m.deletedDelegations = append(m.deletedDelegations, mockAssignmentPath(subscriptionID, name))
+
+	w.WriteHeader(http.StatusOK)
+}
+
+// mockAssignmentPath returns the ARM path of a mock registration assignment
+func mockAssignmentPath(subscriptionID, name string) string {
+	return "/subscriptions/" + subscriptionID + "/providers/Microsoft.ManagedServices/registrationAssignments/" + name
 }
 
 // MockTokenCredential is a static azcore.TokenCredential for tests that do not need the token endpoint

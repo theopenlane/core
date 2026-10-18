@@ -690,6 +690,9 @@ coreConfiguration:
       applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       defaulttenant: ""  # @schema type:string
+      lighthouse:
+        managingtenantid: ""  # @schema type:string
+        principalid: ""  # @schema type:string
     microsoftteams:
       applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback

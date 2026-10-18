@@ -51,6 +51,18 @@ const (
 type Client struct {
 	// arm calls Resource Manager and Resource Graph with the tenant credential
 	arm *microsoft.ARMClient
+	// tenantID is the customer tenant whose subscriptions this installation may query
+	tenantID string
+	// delegation limits a Lighthouse installation to the subscriptions delegated with its offer, zero for admin consent
+	delegation lighthouseDelegation
+}
+
+// lighthouseDelegation identifies the Lighthouse delegations that belong to one installation
+type lighthouseDelegation struct {
+	// managingTenantID is the Openlane tenant the subscriptions are delegated to
+	managingTenantID string
+	// offerName is the offer name the installation's template deployment registers
+	offerName string
 }
 
 // clientBuilder returns the Azure Security Center client builder bound to the operator config
@@ -60,22 +72,53 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[sec
 			return nil, ErrTenantIDMissing
 		}
 
-		ctx = logx.WithField(ctx, "tenant_id", req.Credential.TenantID)
-
-		azCred, err := microsoft.NewTokenCredential(cfg, req.Credential.TenantID)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to create client secret credential")
-			return nil, ErrCredentialBuildFailed
-		}
-
-		armClient, err := microsoft.NewARMClient(cfg, azCred)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to create arm client")
-			return nil, ErrCredentialBuildFailed
-		}
-
-		return &Client{arm: armClient}, nil
+		return newClient(ctx, cfg.AppConfig, req.Credential.TenantID, req.Credential.TenantID)
 	}
+}
+
+// lighthouseClientBuilder returns the client builder for subscriptions delegated to the managing tenant through Azure Lighthouse
+func lighthouseClientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[lighthouseCred]) (*Client, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[lighthouseCred]) (*Client, error) {
+		switch {
+		case cfg.Lighthouse.ManagingTenantID == "":
+			return nil, ErrLighthouseNotConfigured
+		case req.Credential.TenantID == "":
+			return nil, ErrTenantIDMissing
+		case req.Credential.ConnectionCode == "":
+			return nil, ErrConnectionCodeMissing
+		}
+
+		client, err := newClient(ctx, cfg.AppConfig, cfg.Lighthouse.ManagingTenantID, req.Credential.TenantID)
+		if err != nil {
+			return nil, err
+		}
+
+		client.delegation = lighthouseDelegation{
+			managingTenantID: cfg.Lighthouse.ManagingTenantID,
+			offerName:        lighthouseOffer.OfferName(req.Credential.ConnectionCode),
+		}
+
+		return client, nil
+	}
+}
+
+// newClient builds a client whose token is issued in tokenTenantID and whose queries are limited to customerTenantID
+func newClient(ctx context.Context, cfg microsoft.AppConfig, tokenTenantID, customerTenantID string) (*Client, error) {
+	ctx = logx.WithField(ctx, "tenant_id", customerTenantID)
+
+	azCred, err := microsoft.NewTokenCredential(cfg, tokenTenantID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create client secret credential")
+		return nil, ErrCredentialBuildFailed
+	}
+
+	armClient, err := microsoft.NewARMClient(cfg, azCred)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create arm client")
+		return nil, ErrCredentialBuildFailed
+	}
+
+	return &Client{arm: armClient, tenantID: customerTenantID}, nil
 }
 
 // collect runs an assessments query and returns the ingest envelopes shape produces from the assessment payloads

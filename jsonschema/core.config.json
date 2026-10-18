@@ -61,6 +61,27 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "azuresecuritycenter.Config": {
+      "properties": {
+        "applicationid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        },
+        "defaulttenant": {
+          "type": "string"
+        },
+        "lighthouse": {
+          "$ref": "#/$defs/microsoft.LighthouseConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "cache.Config": {
       "properties": {
         "enabled": {
@@ -154,7 +175,7 @@
           "$ref": "#/$defs/microsoft.AppConfig"
         },
         "azuresecuritycenter": {
-          "$ref": "#/$defs/microsoft.AppConfig"
+          "$ref": "#/$defs/azuresecuritycenter.Config"
         },
         "microsoftteams": {
           "$ref": "#/$defs/microsoftteams.Config"
@@ -1219,6 +1240,18 @@
           "type": "string"
         },
         "defaulttenant": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "microsoft.LighthouseConfig": {
+      "properties": {
+        "managingtenantid": {
+          "type": "string"
+        },
+        "principalid": {
           "type": "string"
         }
       },

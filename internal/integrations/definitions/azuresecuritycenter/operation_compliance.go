@@ -180,13 +180,13 @@ func complianceFindingPayload(id string, p CompliancePayload) AssessmentPayload 
 		ExternalURI: p.ExternalURI,
 		UpdatedAt:   p.SourceUpdatedAt,
 		Resources:   p.Resources,
-		Metadata: map[string]any{
-			"assessment_key":    p.AssessmentKey,
-			"state":             p.State,
-			"passed_resources":  p.PassedResources,
-			"failed_resources":  p.FailedResources,
-			"skipped_resources": p.SkippedResources,
-			"owners":            p.Owners,
+		Metadata: complianceFindingMetadata{
+			AssessmentKey:    p.AssessmentKey,
+			State:            p.State,
+			PassedResources:  p.PassedResources,
+			FailedResources:  p.FailedResources,
+			SkippedResources: p.SkippedResources,
+			Owners:           p.Owners,
 		},
 	}
 

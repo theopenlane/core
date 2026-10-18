@@ -12,6 +12,11 @@ import (
 // Builder returns the Azure Security Center definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		template, err := cfg.Lighthouse.Template(lighthouseOffer)
+		if err != nil {
+			return types.Definition{}, err
+		}
+
 		return types.Definition{
 			ID:          definitionID.ID(),
 			Family:      "Azure",
@@ -28,13 +33,24 @@ func Builder(cfg Config) registry.Builder {
 			UserInput:    userInput.Registration(),
 			Installation: installation.Registration(),
 			Connections: []types.Connector{
+				lighthouseConnection.
+					Name("Azure Lighthouse").
+					Description("Delegate read-only Defender for Cloud access with Azure Lighthouse. In the Azure portal open Service providers, choose Add offer, Add via template, and deploy the template below on each subscription using the connection code from this form. Nothing is installed in your tenant.").
+					Recommended().
+					Meta(map[string]types.MetaInfo{
+						"Managing Tenant ID":      {Value: cfg.Lighthouse.ManagingTenantID, AllowCopy: true},
+						"Lighthouse ARM Template": {Value: template, AllowCopy: true},
+					}).
+					Provides(lighthouseClientBuilder(cfg)).
+					Verified(verifyLighthouse).
+					Disconnects("Removes the stored connection from Openlane and removes the Openlane Lighthouse delegation from each subscription delegated with this connection code. If removal fails, remove the Openlane Defender for Cloud offer from Service providers in the Azure portal.", disconnectLighthouse(cfg)),
 				securityCenterConnection.
 					Name("Azure Admin Consent").
 					Description("Connect your Azure tenant using admin consent, then grant the Openlane app the read-only Security Reader role on your subscriptions.").
 					Meta(map[string]types.MetaInfo{
 						"Application ID": {Value: cfg.ApplicationID, AllowCopy: true},
 					}).
-					Authenticates(microsoft.AdminConsentFlow(cfg, newSecurityCenterCred)).
+					Authenticates(microsoft.AdminConsentFlow(cfg.AppConfig, newSecurityCenterCred)).
 					Provides(clientBuilder(cfg)).
 					Verified(verify).
 					Disconnects("Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure enterprise applications and its subscription role assignments.", nil),
@@ -45,7 +61,7 @@ func Builder(cfg Config) registry.Builder {
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaFinding.Name}).
 					HealthCheck(probeAssessments).
-					Permissions("User.Read", "SecurityReader").
+					Permissions("SecurityReader").
 					Description("Collect unhealthy security posture assessment findings for finding ingestion").
 					Registration(),
 				types.OperationRefOf[VulnerabilitiesCollect]().
@@ -53,7 +69,7 @@ func Builder(cfg Config) registry.Builder {
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
 					HealthCheck(probeAssessments).
-					Permissions("User.Read", "SecurityReader").
+					Permissions("SecurityReader").
 					Description("Collect software update and service upgrade recommendations with their CVEs for vulnerability ingestion").
 					Registration(),
 				types.OperationRefOf[ComplianceAssessmentsCollect]().
@@ -64,7 +80,7 @@ func Builder(cfg Config) registry.Builder {
 						types.IngestContract{Schema: entityops.SchemaFinding.Name},
 					).
 					HealthCheck(probeAssessments).
-					Permissions("User.Read", "SecurityReader").
+					Permissions("SecurityReader").
 					Description("Collect regulatory compliance assessments such as SOC 2 as checks linked to their controls, with failed assessments as findings").
 					Registration(),
 			},

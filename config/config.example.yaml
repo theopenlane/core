@@ -169,6 +169,9 @@ integrations:
         applicationid: ""
         clientsecret: ""
         defaulttenant: ""
+        lighthouse:
+            managingtenantid: ""
+            principalid: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     cloudflareruntime:
         accountid: ""

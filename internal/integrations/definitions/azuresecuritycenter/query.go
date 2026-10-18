@@ -3,7 +3,9 @@ package azuresecuritycenter
 import (
 	"context"
 	"encoding/json"
+	"strings"
 
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -53,16 +55,43 @@ const (
 | project id, name, properties, metadata, resources, owners, sourceUpdatedAt, assessmentCount`
 )
 
-// subscriptions returns the requested subscription IDs, or every accessible subscription when none are requested
+// subscriptions returns the requested subscription IDs, or every accessible subscription when none are requested,
+// rejecting any requested subscription not owned by the installation's tenant
 func (c *Client) subscriptions(ctx context.Context, requested []string) ([]string, error) {
-	if len(requested) > 0 {
-		return requested, nil
+	ids, err := c.accessibleSubscriptions(ctx)
+	if err != nil {
+		return nil, err
 	}
 
-	ids, err := c.arm.ListSubscriptionIDs(ctx)
+	if len(requested) == 0 {
+		return ids, nil
+	}
+
+	accessible := make(map[string]bool, len(ids))
+	for _, id := range ids {
+		accessible[strings.ToLower(id)] = true
+	}
+
+	for _, id := range requested {
+		if !accessible[strings.ToLower(id)] {
+			logx.FromContext(ctx).Error().Str("subscription_id", id).Msg("azuresecuritycenter: requested subscription not accessible in tenant")
+			return nil, ErrSubscriptionNotAccessible
+		}
+	}
+
+	return requested, nil
+}
+
+// accessibleSubscriptions returns the tenant's subscriptions the app can read, limited to the installation's offer for Lighthouse installations
+func (c *Client) accessibleSubscriptions(ctx context.Context) ([]string, error) {
+	ids, err := c.arm.ListSubscriptionIDs(ctx, c.tenantID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Msg("azuresecuritycenter: error getting subscriptions")
+		logx.FromContext(ctx).Error().Err(err).Msg("azuresecuritycenter: error getting subscriptions")
 		return nil, ErrNoSubscriptions
+	}
+
+	if c.delegation.offerName != "" {
+		return c.delegatedSubscriptions(ctx, ids)
 	}
 
 	if len(ids) == 0 {
@@ -71,6 +100,47 @@ func (c *Client) subscriptions(ctx context.Context, requested []string) ([]strin
 	}
 
 	return ids, nil
+}
+
+// delegatedSubscriptions returns the subscriptions whose Lighthouse delegation to the managing tenant carries the installation's offer name
+func (c *Client) delegatedSubscriptions(ctx context.Context, ids []string) ([]string, error) {
+	if len(ids) == 0 {
+		logx.FromContext(ctx).Error().Str("tenant_id", c.tenantID).Msg("azuresecuritycenter: no subscriptions in tenant are delegated to the managing tenant")
+		return nil, ErrNoTenantSubscriptionsDelegated
+	}
+
+	var matched []string
+
+	for _, id := range ids {
+		_, ok, err := c.findDelegation(ctx, id)
+		if err != nil {
+			return nil, err
+		}
+
+		if ok {
+			matched = append(matched, id)
+		}
+	}
+
+	if len(matched) == 0 {
+		logx.FromContext(ctx).Error().Str("tenant_id", c.tenantID).Int("listed", len(ids)).Str("offer_name", c.delegation.offerName).Msg("azuresecuritycenter: no subscriptions delegated with connection code")
+		return nil, ErrNoDelegatedSubscriptions
+	}
+
+	return matched, nil
+}
+
+// findDelegation returns the subscription's Lighthouse delegation that carries the installation's offer name, if any
+func (c *Client) findDelegation(ctx context.Context, subscriptionID string) (microsoft.Delegation, bool, error) {
+	delegations, err := c.arm.ListDelegations(ctx, subscriptionID, c.delegation.managingTenantID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("subscription_id", subscriptionID).Msg("azuresecuritycenter: error reading lighthouse delegations")
+		return microsoft.Delegation{}, false, ErrDelegationLookupFailed
+	}
+
+	delegation, ok := microsoft.FindDelegation(delegations, c.delegation.offerName)
+
+	return delegation, ok, nil
 }
 
 // queryRows runs a Resource Graph query over the requested subscriptions, or every accessible one, and decodes each row into T

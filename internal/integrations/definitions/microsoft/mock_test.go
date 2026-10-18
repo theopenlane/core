@@ -5,6 +5,7 @@ package microsoft
 import (
 	"context"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
@@ -58,10 +59,43 @@ func TestListSubscriptionIDsPagesAndFiltersStates(t *testing.T) {
 	client, err := NewARMClient(cfg, cred)
 	assert.NilError(t, err)
 
-	ids, err := client.ListSubscriptionIDs(context.Background())
+	ids, err := client.ListSubscriptionIDs(context.Background(), MockTenantID)
 	assert.NilError(t, err)
 	assert.Check(t, len(ids) == 3)
 	assert.Check(t, ids[0] == "sub-1" && ids[1] == "sub-3" && ids[2] == "sub-5")
+}
+
+func TestListSubscriptionIDsFiltersTenant(t *testing.T) {
+	mock := NewMockMicrosoftProvider()
+	t.Cleanup(mock.Close)
+
+	otherTenant := "00000000-0000-0000-0000-000000000002"
+
+	mock.SetSubscriptions(
+		MockSubscription{ID: "sub-1", State: "Enabled"},
+		MockSubscription{ID: "sub-2", TenantID: otherTenant, State: "Enabled"},
+		MockSubscription{ID: "sub-3", TenantID: strings.ToUpper(MockTenantID), State: "Enabled"},
+	)
+
+	cfg := mock.AppConfig()
+
+	cred, err := NewTokenCredential(cfg, MockTenantID)
+	assert.NilError(t, err)
+
+	client, err := NewARMClient(cfg, cred)
+	assert.NilError(t, err)
+
+	ids, err := client.ListSubscriptionIDs(context.Background(), MockTenantID)
+	assert.NilError(t, err)
+	assert.Check(t, len(ids) == 2)
+	assert.Check(t, ids[0] == "sub-1" && ids[1] == "sub-3")
+
+	ids, err = client.ListSubscriptionIDs(context.Background(), otherTenant)
+	assert.NilError(t, err)
+	assert.Check(t, len(ids) == 1 && ids[0] == "sub-2")
+
+	_, err = client.ListSubscriptionIDs(context.Background(), "")
+	assert.ErrorIs(t, err, ErrTenantIDRequired)
 }
 
 func TestListSubscriptionIDsFailure(t *testing.T) {
@@ -78,7 +112,7 @@ func TestListSubscriptionIDsFailure(t *testing.T) {
 	client, err := NewARMClient(cfg, cred)
 	assert.NilError(t, err)
 
-	_, err = client.ListSubscriptionIDs(context.Background())
+	_, err = client.ListSubscriptionIDs(context.Background(), MockTenantID)
 	assert.ErrorIs(t, err, ErrSubscriptionListFailed)
 }
 

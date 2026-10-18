@@ -15,6 +15,8 @@ var (
 	installation = types.InstallationOf[InstallationMetadata]()
 	// securityCenterConnection is the typed connection handle for the consented tenant credential
 	securityCenterConnection = types.ConnectionOf[securityCenterCred]()
+	// lighthouseConnection is the typed connection handle for subscriptions delegated through Azure Lighthouse
+	lighthouseConnection = types.ConnectionOf[lighthouseCred]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )
@@ -44,6 +46,14 @@ type securityCenterCred struct {
 // newSecurityCenterCred builds the Security Center credential for a consented tenant
 func newSecurityCenterCred(tenantID string) securityCenterCred {
 	return securityCenterCred{TenantID: tenantID}
+}
+
+// lighthouseCred holds the per-installation credential for subscriptions delegated through Azure Lighthouse
+type lighthouseCred struct {
+	// TenantID is the customer tenant that owns the delegated subscriptions
+	TenantID string `json:"tenantId" jsonschema:"required,title=Tenant ID,description=Your Microsoft Entra tenant ID."`
+	// ConnectionCode ties the Lighthouse delegation to this installation through the offer name
+	ConnectionCode string `json:"connectionCode" jsonschema:"required,title=Connection Code,description=Enter this code as the connectionCode parameter when deploying the Lighthouse template." jsonschema_extras:"generate=true"`
 }
 
 // InstallationMetadata holds the stable Azure tenant identity for one installation
@@ -255,6 +265,22 @@ type CompliancePayload struct {
 	SourceUpdatedAt *time.Time `json:"source_updated_at,omitempty"`
 	// ObservedAt is when the result was collected
 	ObservedAt time.Time `json:"observed_at"`
+}
+
+// complianceFindingMetadata is the finding metadata recorded for a failed compliance assessment
+type complianceFindingMetadata struct {
+	// AssessmentKey is the assessment key shared with the matching Defender recommendation
+	AssessmentKey string `json:"assessment_key"`
+	// State is Passed, Failed, Skipped, or Unsupported
+	State string `json:"state"`
+	// PassedResources is the number of resources that passed
+	PassedResources int `json:"passed_resources"`
+	// FailedResources is the number of resources that failed
+	FailedResources int `json:"failed_resources"`
+	// SkippedResources is the number of resources that were skipped
+	SkippedResources int `json:"skipped_resources"`
+	// Owners are the governance assignment owners of the underlying assessment
+	Owners []string `json:"owners"`
 }
 
 // cveDetail is one entry of a vulnerability recommendation's CvesDetails list

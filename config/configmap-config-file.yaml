@@ -1211,6 +1211,15 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.defaulttenant }}
         defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.defaulttenant | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse }}
+        lighthouse:
+          {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.managingtenantid }}
+          managingtenantid: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.managingtenantid | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.principalid }}
+          principalid: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.principalid | quote }}
+          {{- end }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams }}
       microsoftteams:

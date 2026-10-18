@@ -149,7 +149,9 @@ Config contains the configuration for the core server
         "googledrive": {},
         "googleworkspace": {},
         "azureentraid": {},
-        "azuresecuritycenter": {},
+        "azuresecuritycenter": {
+            "lighthouse": {}
+        },
         "microsoftteams": {},
         "onedrive": {},
         "oidclocal": {},
@@ -1836,7 +1838,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**googledrive**](#defsgoogledriveconfig)|`object`|||
 |[**googleworkspace**](#defsgoogleworkspaceconfig)|`object`|||
 |[**azureentraid**](#defsmicrosoftappconfig)|`object`|||
-|[**azuresecuritycenter**](#defsmicrosoftappconfig)|`object`|||
+|[**azuresecuritycenter**](#defsazuresecuritycenterconfig)|`object`|||
 |[**microsoftteams**](#defsmicrosoftteamsconfig)|`object`|||
 |[**onedrive**](#defsonedriveconfig)|`object`|||
 |[**oidclocal**](#defsoidclocalconfig)|`object`|||
@@ -1860,7 +1862,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "googledrive": {},
     "googleworkspace": {},
     "azureentraid": {},
-    "azuresecuritycenter": {},
+    "azuresecuritycenter": {
+        "lighthouse": {}
+    },
     "microsoftteams": {},
     "onedrive": {},
     "oidclocal": {},
@@ -2019,6 +2023,41 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**defaulttenant**|`string`|||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsazuresecuritycenterconfig"></a>
+### $defs/azuresecuritycenter\.Config: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**applicationid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
+|[**lighthouse**](#defsmicrosoftlighthouseconfig)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "lighthouse": {}
+}
+```
+
+   
+<a name="defsmicrosoftlighthouseconfig"></a>
+#### $defs/microsoft\.LighthouseConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**managingtenantid**|`string`|||
+|**principalid**|`string`|||
 
 **Additional Properties:** not allowed   
    
