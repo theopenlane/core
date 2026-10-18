@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/export"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -122,8 +123,24 @@ func Listeners() []gala.Registration {
 			Concern:    entityops.MutationConcernNotification,
 			Schema:     entityops.SchemaProgram,
 			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
-			Caller:     notificationCaller,
-			Handle:     handleProgramMutation,
+			Fields:     []string{program.FieldAuditorReady},
+			RowMatch: []entityops.FieldMatch{{
+				Field: program.FieldAuditorReady,
+				In:    []string{"true"},
+			}},
+			Caller: notificationCaller,
+			Notify: &entityops.NotifySpec{
+				Recipients: programAuditorRecipients,
+				Content: entityops.NotificationContent{
+					Type:          enums.NotificationTypeOrganization,
+					Topic:         enums.NotificationTopicApproval,
+					TitleTemplate: "Program ready for auditor",
+					BodyTemplate:  "{{ if .Name }}{{ .Name }} is ready for auditor review{{ else }}Program is ready for auditor review{{ end }}",
+					Data: map[string]any{
+						"program_id": "{{ .EntityID }}",
+					},
+				},
+			},
 		},
 	)
 }
