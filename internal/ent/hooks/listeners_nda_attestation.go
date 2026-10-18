@@ -104,7 +104,7 @@ func handleNDAAttestationCreated(inv entityops.Invocation, payload entityops.Mut
 	}
 
 	if err := sendSystemEmail(inv.Context, emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
-		RecipientInfo:      emaildef.RecipientInfo{Email: inv.Caller.SubjectEmail},
+		Email:              inv.Caller.SubjectEmail,
 		OrgName:            result.OrgName,
 		RequestID:          requestID,
 		TrustCenterID:      tcID,

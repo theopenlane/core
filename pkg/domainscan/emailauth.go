@@ -155,7 +155,7 @@ func dmarcReportingURIs(record string) []string {
 
 	var uris []string
 
-	for _, uri := range strings.Split(raw, ",") {
+	for uri := range strings.SplitSeq(raw, ",") {
 		if uri = strings.TrimSpace(uri); uri != "" {
 			uris = append(uris, uri)
 		}
@@ -167,7 +167,7 @@ func dmarcReportingURIs(record string) []string {
 // spfAllQualifier finds the qualifier on the record's all mechanism. The first one wins,
 // since evaluation stops at the first match and anything after it is unreachable
 func spfAllQualifier(record string) SPFPolicy {
-	for _, field := range strings.Fields(record) {
+	for field := range strings.FieldsSeq(record) {
 		switch strings.ToLower(field) {
 		case "-all":
 			return SPFPolicyHardFail

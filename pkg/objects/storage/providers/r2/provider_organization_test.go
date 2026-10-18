@@ -54,10 +54,8 @@ func TestR2Provider_UploadAndDownload_EmptyFile(t *testing.T) {
 
 	// Download and verify empty content
 	downloadedFile, err := provider.Download(ctx, &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:    path.Join(folder, fileName),
-			Bucket: minioBucket,
-		},
+		Key:    path.Join(folder, fileName),
+		Bucket: minioBucket,
 	}, &storagetypes.DownloadFileOptions{
 		FileName: fileName,
 	})
@@ -92,10 +90,8 @@ func TestR2Provider_Download_NonExistentFile(t *testing.T) {
 
 	// Attempt to download a non-existent file
 	_, err = provider.Download(ctx, &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:    "does/not/exist.txt",
-			Bucket: minioBucket,
-		},
+		Key:    "does/not/exist.txt",
+		Bucket: minioBucket,
 	}, &storagetypes.DownloadFileOptions{
 		FileName: "does-not-exist.txt",
 	})
@@ -159,10 +155,8 @@ func TestR2Provider_OrganizationFolderStructure(t *testing.T) {
 
 	// Verify file can be downloaded using the organization-prefixed key
 	downloadedFile, err := provider.Download(ctx, &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:    expectedKey,
-			Bucket: minioBucket,
-		},
+		Key:    expectedKey,
+		Bucket: minioBucket,
 	}, &storagetypes.DownloadFileOptions{})
 	require.NoError(t, err)
 	require.NotNil(t, downloadedFile)

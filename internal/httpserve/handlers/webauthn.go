@@ -228,7 +228,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	}
 
 	out := &models.WebauthnRegistrationResponse{
-		Reply:    rout.Reply{Success: true},
+		Success:  true,
 		Message:  "passkey successfully created",
 		AuthData: *auth,
 	}
@@ -386,7 +386,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 	}
 
 	out := &models.WebauthnLoginResponse{
-		Reply:    rout.Reply{Success: true},
+		Success:  true,
 		Message:  "passkey successfully created",
 		AuthData: *auth,
 	}

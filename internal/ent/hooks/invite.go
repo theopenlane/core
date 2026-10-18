@@ -114,12 +114,12 @@ func HookInvite() ent.Hook {
 			}
 
 			if err := sendSystemEmail(ctx, emaildef.InviteOp.Name(), emaildef.InviteRequest{
-				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
-				InviterName:   inviterName,
-				OrgName:       orgName,
-				Role:          string(role),
-				Token:         tokenValue,
-				NewUser:       !recipientExists,
+				Email:       emailAddress,
+				InviterName: inviterName,
+				OrgName:     orgName,
+				Role:        string(role),
+				Token:       tokenValue,
+				NewUser:     !recipientExists,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
 

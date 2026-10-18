@@ -119,17 +119,17 @@ func TestLogger_SetLevel(t *testing.T) {
 
 type SimpleLog struct {
 	Level zerolog.Level
-	Fn    func(i ...interface{})
+	Fn    func(i ...any)
 }
 
 type FormattedLog struct {
 	Level zerolog.Level
-	Fn    func(format string, i ...interface{})
+	Fn    func(format string, i ...any)
 }
 
 type JSONLog struct {
 	Level zerolog.Level
-	Fn    func(fields map[string]interface{})
+	Fn    func(fields map[string]any)
 }
 
 func TestLogger(t *testing.T) {
@@ -139,19 +139,19 @@ func TestLogger(t *testing.T) {
 	simpleLogs := []SimpleLog{
 		{
 			Level: zerolog.DebugLevel,
-			Fn:    func(i ...interface{}) { l.Debug().Msg(fmt.Sprint(i...)) },
+			Fn:    func(i ...any) { l.Debug().Msg(fmt.Sprint(i...)) },
 		},
 		{
 			Level: zerolog.InfoLevel,
-			Fn:    func(i ...interface{}) { l.Info().Msg(fmt.Sprint(i...)) },
+			Fn:    func(i ...any) { l.Info().Msg(fmt.Sprint(i...)) },
 		},
 		{
 			Level: zerolog.WarnLevel,
-			Fn:    func(i ...interface{}) { l.Warn().Msg(fmt.Sprint(i...)) },
+			Fn:    func(i ...any) { l.Warn().Msg(fmt.Sprint(i...)) },
 		},
 		{
 			Level: zerolog.ErrorLevel,
-			Fn:    func(i ...interface{}) { l.Error().Msg(fmt.Sprint(i...)) },
+			Fn:    func(i ...any) { l.Error().Msg(fmt.Sprint(i...)) },
 		},
 	}
 
@@ -195,26 +195,26 @@ func TestLogger(t *testing.T) {
 	jsonLogs := []JSONLog{
 		{
 			Level: zerolog.DebugLevel,
-			Fn:    func(fields map[string]interface{}) { l.Debug().Fields(fields).Send() },
+			Fn:    func(fields map[string]any) { l.Debug().Fields(fields).Send() },
 		},
 		{
 			Level: zerolog.InfoLevel,
-			Fn:    func(fields map[string]interface{}) { l.Info().Fields(fields).Send() },
+			Fn:    func(fields map[string]any) { l.Info().Fields(fields).Send() },
 		},
 		{
 			Level: zerolog.WarnLevel,
-			Fn:    func(fields map[string]interface{}) { l.Warn().Fields(fields).Send() },
+			Fn:    func(fields map[string]any) { l.Warn().Fields(fields).Send() },
 		},
 		{
 			Level: zerolog.ErrorLevel,
-			Fn:    func(fields map[string]interface{}) { l.Error().Fields(fields).Send() },
+			Fn:    func(fields map[string]any) { l.Error().Fields(fields).Send() },
 		},
 	}
 
 	for _, log := range jsonLogs {
 		b.Reset()
 
-		log.Fn(map[string]interface{}{
+		log.Fn(map[string]any{
 			"message": "foobar",
 		})
 		assert.Equal(t, fmt.Sprintf(`{"level":"%s","message":"foobar"}

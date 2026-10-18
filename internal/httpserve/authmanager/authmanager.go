@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/golang-jwt/jwt/v5"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
@@ -108,9 +106,7 @@ func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http
 	anonUserID := fmt.Sprintf("%s%s", AnonTrustCenterJWTPrefix, ulids.New().String())
 
 	claims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
+		Subject:       anonUserID,
 		UserID:        anonUserID,
 		OrgID:         targetOrgID,
 		TrustCenterID: targetTrustCenterID,
@@ -151,9 +147,7 @@ func createClaimsWithOrg(ctx context.Context, u *generated.User, targetOrgID str
 	}
 
 	return &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: u.ID,
-		},
+		Subject: u.ID,
 		UserID:  u.ID,
 		OrgID:   targetOrgID,
 		Modules: modules,

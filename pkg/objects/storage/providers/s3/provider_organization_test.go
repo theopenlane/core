@@ -69,10 +69,8 @@ func TestS3Provider_OrganizationFolderStructure(t *testing.T) {
 
 	// Verify file can be downloaded using the organization-prefixed key
 	downloadedFile, err := provider.Download(ctx, &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:    expectedKey,
-			Bucket: minioBucket,
-		},
+		Key:    expectedKey,
+		Bucket: minioBucket,
 	}, &storagetypes.DownloadFileOptions{})
 	require.NoError(t, err)
 	require.Equal(t, fileContent, downloadedFile.File)

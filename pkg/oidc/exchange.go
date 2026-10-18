@@ -96,10 +96,7 @@ func (s *federationTokenSource) Token() (*oauth2.Token, error) {
 		return nil, fmt.Errorf("%w: %w", ErrExchangeFailed, err)
 	}
 
-	expiresIn := resp.ExpiresIn
-	if expiresIn > math.MaxInt32 {
-		expiresIn = math.MaxInt32
-	}
+	expiresIn := min(resp.ExpiresIn, math.MaxInt32)
 
 	return &oauth2.Token{
 		AccessToken: resp.AccessToken,

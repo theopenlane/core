@@ -2,6 +2,7 @@ package domainscan
 
 import (
 	"context"
+	"maps"
 	"net/http"
 	"slices"
 	"strconv"
@@ -252,7 +253,7 @@ func probeSecurityTxt(ctx context.Context, base string) *SecurityTxt {
 func parseSecurityTxt(body string) *SecurityTxt {
 	out := &SecurityTxt{}
 
-	for _, line := range strings.Split(body, "\n") {
+	for line := range strings.SplitSeq(body, "\n") {
 		line = strings.TrimSpace(line)
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
@@ -280,7 +281,7 @@ func parseSecurityTxt(body string) *SecurityTxt {
 				out.Encryption = value
 			}
 		case "preferred-languages":
-			for _, lang := range strings.Split(value, ",") {
+			for lang := range strings.SplitSeq(value, ",") {
 				if lang = strings.TrimSpace(lang); lang != "" {
 					out.PreferredLanguages = append(out.PreferredLanguages, lang)
 				}
@@ -329,7 +330,7 @@ func parseRobotsTxt(body string) *RobotsTxt {
 		disallowed   = map[string]bool{}
 	)
 
-	for _, line := range strings.Split(body, "\n") {
+	for line := range strings.SplitSeq(body, "\n") {
 		if idx := strings.Index(line, "#"); idx >= 0 {
 			line = line[:idx]
 		}
@@ -377,9 +378,7 @@ func parseRobotsTxt(body string) *RobotsTxt {
 		case "content-signal":
 			inAgentBlock = false
 
-			for key, val := range parseContentSignal(value) {
-				out.ContentSignals[key] = val
-			}
+			maps.Copy(out.ContentSignals, parseContentSignal(value))
 
 		case "sitemap":
 			inAgentBlock = false
@@ -422,7 +421,7 @@ func matchAICrawler(agent string) (string, bool) {
 func parseContentSignal(value string) map[string]string {
 	out := map[string]string{}
 
-	for _, part := range strings.Split(value, ",") {
+	for part := range strings.SplitSeq(value, ",") {
 		key, val, found := strings.Cut(part, "=")
 		if !found {
 			continue
@@ -435,12 +434,8 @@ func parseContentSignal(value string) map[string]string {
 			continue
 		}
 
-		for _, known := range contentSignalKeys {
-			if key == known {
-				out[key] = val
-
-				break
-			}
+		if slices.Contains(contentSignalKeys, key) {
+			out[key] = val
 		}
 	}
 
@@ -490,7 +485,7 @@ func parseLLMsTxt(body string) *LLMsTxt {
 
 	var sawTitle bool
 
-	for _, line := range strings.Split(body, "\n") {
+	for line := range strings.SplitSeq(body, "\n") {
 		trimmed := strings.TrimSpace(line)
 
 		switch {
@@ -547,7 +542,7 @@ func parseHSTS(header string, out *TransportSecurity) {
 		return
 	}
 
-	for _, directive := range strings.Split(header, ";") {
+	for directive := range strings.SplitSeq(header, ";") {
 		directive = strings.ToLower(strings.TrimSpace(directive))
 
 		switch {

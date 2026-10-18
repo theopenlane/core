@@ -12,7 +12,7 @@ import (
 	structpb "google.golang.org/protobuf/types/known/structpb"
 )
 
-var jsonValueType = reflect.TypeOf(&structpb.Value{})
+var jsonValueType = reflect.TypeFor[*structpb.Value]()
 
 // paragraphSeparatorRe matches runs of three or more spaces used as a paragraph separator in
 // single-line provider descriptions

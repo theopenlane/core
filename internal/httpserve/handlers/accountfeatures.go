@@ -6,8 +6,6 @@ import (
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
@@ -56,7 +54,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 	sort.Strings(features)
 
 	return h.Success(ctx, models.AccountFeaturesResponse{
-		Reply:          rout.Reply{Success: true},
+		Success:        true,
 		Features:       features,
 		OrganizationID: in.ID,
 	})

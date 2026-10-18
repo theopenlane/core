@@ -48,7 +48,7 @@ func ndaUpload(content []byte, contentType string) storage.File {
 		OriginalName: "nda.pdf",
 		FieldName:    "templateFiles",
 		RawFile:      bytes.NewReader(content),
-		FileMetadata: storage.FileMetadata{ContentType: contentType},
+		ContentType:  contentType,
 	}
 
 	objects.SetTemplateKindHint(&file, enums.TemplateKindTrustCenterNda)

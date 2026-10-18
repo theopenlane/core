@@ -289,8 +289,8 @@ func TestAccessKeyCredentialsProviderCredentials(t *testing.T) {
 
 func TestR2CredentialsProviderCredentials(t *testing.T) {
 	creds := R2Credentials{
-		AccessKeyCredentials: AccessKeyCredentials{AccessKeyID: "key", SecretAccessKey: "secret"},
-		AccountID:            "account",
+		AccessKeyID: "key", SecretAccessKey: "secret",
+		AccountID: "account",
 	}
 
 	assert.Equal(t, ProviderCredentials{AccessKeyID: "key", SecretAccessKey: "secret", AccountID: "account"}, creds.ProviderCredentials())

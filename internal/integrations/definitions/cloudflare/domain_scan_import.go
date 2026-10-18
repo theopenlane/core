@@ -426,7 +426,7 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 			Name:           &entityName,
 			DisplayName:    &vendor.Name,
 			OwnerID:        &ownerID,
-			ApprovedForUse: lo.ToPtr(true),
+			ApprovedForUse: new(true),
 			EntityTypeID:   &vendorEntityTypeID,
 			ScanIDs:        scanIDs,
 			Tags:           vendor.Categories,

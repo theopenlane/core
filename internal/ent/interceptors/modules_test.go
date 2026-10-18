@@ -3,7 +3,6 @@ package interceptors
 import (
 	"testing"
 
-	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
@@ -27,12 +26,12 @@ func TestInterceptorModules(t *testing.T) {
 	}{
 		{
 			title:            "modules enabled - should continue processing",
-			entConfigEnabled: lo.ToPtr(true),
+			entConfigEnabled: new(true),
 			expectedSkip:     true,
 		},
 		{
 			title:            "modules disabled - should skip",
-			entConfigEnabled: lo.ToPtr(false),
+			entConfigEnabled: new(false),
 			expectedSkip:     false,
 		},
 		{

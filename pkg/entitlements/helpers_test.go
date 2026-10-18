@@ -13,31 +13,27 @@ import (
 func TestGetUpdatedFields(t *testing.T) {
 	tests := []struct {
 		name           string
-		props          map[string]interface{}
+		props          map[string]any
 		stripeCustomer *entitlements.OrganizationCustomer
 		expectedParams *stripe.CustomerUpdateParams
 	}{
 		{
 			name:  "No updates",
-			props: map[string]interface{}{},
+			props: map[string]any{},
 			stripeCustomer: &entitlements.OrganizationCustomer{
-				ContactInfo: entitlements.ContactInfo{
-					Email: "test@example.com",
-					Phone: "1234567890",
-				},
+				Email: "test@example.com",
+				Phone: "1234567890",
 			},
 			expectedParams: &stripe.CustomerUpdateParams{},
 		},
 		{
 			name: "Update email",
-			props: map[string]interface{}{
+			props: map[string]any{
 				"billing_email": "new@example.com",
 			},
 			stripeCustomer: &entitlements.OrganizationCustomer{
-				ContactInfo: entitlements.ContactInfo{
-					Email: "test@example.com",
-					Phone: "1234567890",
-				},
+				Email: "test@example.com",
+				Phone: "1234567890",
 			},
 			expectedParams: &stripe.CustomerUpdateParams{
 				Email: stripe.String("test@example.com"),
@@ -45,14 +41,12 @@ func TestGetUpdatedFields(t *testing.T) {
 		},
 		{
 			name: "Update phone",
-			props: map[string]interface{}{
+			props: map[string]any{
 				"billing_phone": "1234567890",
 			},
 			stripeCustomer: &entitlements.OrganizationCustomer{
-				ContactInfo: entitlements.ContactInfo{
-					Email: "test@example.com",
-					Phone: "1234567890",
-				},
+				Email: "test@example.com",
+				Phone: "1234567890",
 			},
 			expectedParams: &stripe.CustomerUpdateParams{
 				Phone: stripe.String("1234567890"),

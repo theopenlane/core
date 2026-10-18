@@ -2,6 +2,7 @@ package workflows
 
 import (
 	"context"
+	"slices"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -78,8 +79,8 @@ func RegisterCELContextBuilder(builder CELContextBuilder) {
 // BuildCELVars constructs the activation map for CEL evaluation, allowing generated builders
 // to provide typed contexts instead of ad-hoc maps
 func BuildCELVars(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
-	for i := len(celContextBuilders) - 1; i >= 0; i-- {
-		if vars := celContextBuilders[i](obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges); vars != nil {
+	for _, celContextBuilder := range slices.Backward(celContextBuilders) {
+		if vars := celContextBuilder(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges); vars != nil {
 			return vars
 		}
 	}

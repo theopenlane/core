@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
-	"github.com/theopenlane/utils/rout"
 )
 
 const (
@@ -26,7 +25,7 @@ func (h *Handler) SnapshotHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	out := &models.SnapshotResponse{
-		Reply: rout.Reply{Success: true},
+		Success: true,
 	}
 
 	opts := []option.RequestOption{

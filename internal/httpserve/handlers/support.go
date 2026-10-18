@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/rout"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 	"golang.org/x/oauth2"
@@ -81,7 +80,7 @@ func (h *Handler) supportFirstFactor(ctx echo.Context, req *apimodels.LoginReque
 	}
 
 	return h.Success(ctx, apimodels.LoginResponse{
-		Reply:       rout.Reply{Success: true},
+		Success:     true,
 		RedirectURI: authURL,
 	})
 }
@@ -236,8 +235,8 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 		supportPendingCookie, supportStateCookie, supportNonceCookie, supportOrgCookie, supportReasonCookie)
 
 	return h.Success(ctx, apimodels.SupportAccessResponse{
-		Reply:          rout.Reply{Success: true},
-		AuthData:       apimodels.AuthData{Session: sessionToken},
+		Success:        true,
+		Session:        sessionToken,
 		Token:          token,
 		ExpiresAt:      time.Now().Add(duration),
 		SessionID:      sessionID,

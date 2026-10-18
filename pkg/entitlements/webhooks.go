@@ -169,7 +169,7 @@ func (sc *StripeClient) UpdateWebhookEndpoint(ctx context.Context, id string, pa
 // DisableWebhookEndpoint disables a webhook endpoint in Stripe
 func (sc *StripeClient) DisableWebhookEndpoint(ctx context.Context, id string) (*stripe.WebhookEndpoint, error) {
 	params := &stripe.WebhookEndpointUpdateParams{
-		Disabled: stripe.Bool(true),
+		Disabled: new(true),
 	}
 
 	return sc.UpdateWebhookEndpoint(ctx, id, params)
@@ -178,7 +178,7 @@ func (sc *StripeClient) DisableWebhookEndpoint(ctx context.Context, id string) (
 // EnableWebhookEndpoint enables a webhook endpoint in Stripe
 func (sc *StripeClient) EnableWebhookEndpoint(ctx context.Context, id string) (*stripe.WebhookEndpoint, error) {
 	params := &stripe.WebhookEndpointUpdateParams{
-		Disabled: stripe.Bool(false),
+		Disabled: new(false),
 	}
 
 	return sc.UpdateWebhookEndpoint(ctx, id, params)

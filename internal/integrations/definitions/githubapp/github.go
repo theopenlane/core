@@ -86,7 +86,7 @@ func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int, 
 			break
 		}
 
-		after = githubv4.NewString(githubv4.String(query.Viewer.Repositories.PageInfo.EndCursor))
+		after = new(githubv4.String(query.Viewer.Repositories.PageInfo.EndCursor))
 	}
 
 	return repositories, nil

@@ -96,7 +96,7 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
 	}
 
-	params.TrialPeriodDays = stripe.Int64(trialdays)
+	params.TrialPeriodDays = new(trialdays)
 	params.TrialSettings = &stripe.SubscriptionCreateTrialSettingsParams{
 		EndBehavior: &stripe.SubscriptionCreateTrialSettingsEndBehaviorParams{
 			// stripe does not allow you to use subscription schedules with a trial that ends in a "pause" status so we have to cancel instead
@@ -333,7 +333,7 @@ func buildOnlyPricesItems(sub *stripe.Subscription, priceIDs []string) []*stripe
 
 		items = append(items, &stripe.SubscriptionUpdateItemParams{
 			ID:      stripe.String(item.ID),
-			Deleted: stripe.Bool(true),
+			Deleted: new(true),
 		})
 	}
 

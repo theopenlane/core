@@ -3,6 +3,7 @@ package controls
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
@@ -247,10 +248,8 @@ func GetControlIDFromRefCode(refCode string, controls []*generated.Control) (*st
 	}
 
 	for _, c := range controls {
-		for _, alias := range c.Aliases {
-			if alias == refCode {
-				return &c.ID, false
-			}
+		if slices.Contains(c.Aliases, refCode) {
+			return &c.ID, false
 		}
 	}
 
@@ -265,10 +264,8 @@ func GetControlIDFromRefCode(refCode string, controls []*generated.Control) (*st
 				return &c.ID, true
 			}
 
-			for _, alias := range s.Aliases {
-				if alias == refCode {
-					return &c.ID, true
-				}
+			if slices.Contains(s.Aliases, refCode) {
+				return &c.ID, true
 			}
 		}
 	}

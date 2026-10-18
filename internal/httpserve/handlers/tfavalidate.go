@@ -9,7 +9,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/rout"
 )
 
 // ValidateTOTP validates a user's TOTP code
@@ -59,7 +58,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 			}
 
 			return h.Success(ctx, models.TFAResponse{
-				Reply: rout.Reply{Success: true},
+				Success: true,
 			})
 		}
 
@@ -80,6 +79,6 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, models.TFAResponse{
-		Reply: rout.Reply{Success: true},
+		Success: true,
 	})
 }

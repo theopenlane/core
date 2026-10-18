@@ -2,6 +2,7 @@ package modelparse
 
 import (
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/samber/lo"
@@ -136,29 +137,20 @@ func (r *RoleInfo) AddInheritedRoles() {
 	for role, inherited := range r.InheritRoles {
 		for _, in := range inherited {
 			for obj := range r.CrudRoles {
-				for _, rr := range r.CrudRoles[obj] {
-					if rr == in {
-						r.CrudRoles[obj] = append(r.CrudRoles[obj], role)
-						break
-					}
+				if slices.Contains(r.CrudRoles[obj], in) {
+					r.CrudRoles[obj] = append(r.CrudRoles[obj], role)
 				}
 			}
 
 			for obj := range r.ViewRoles {
-				for _, rr := range r.ViewRoles[obj] {
-					if rr == in {
-						r.ViewRoles[obj] = append(r.ViewRoles[obj], role)
-						break
-					}
+				if slices.Contains(r.ViewRoles[obj], in) {
+					r.ViewRoles[obj] = append(r.ViewRoles[obj], role)
 				}
 			}
 
 			for obj := range r.CreateRoles {
-				for _, rr := range r.CreateRoles[obj] {
-					if rr == in {
-						r.CreateRoles[obj] = append(r.CreateRoles[obj], role)
-						break
-					}
+				if slices.Contains(r.CreateRoles[obj], in) {
+					r.CreateRoles[obj] = append(r.CreateRoles[obj], role)
 				}
 			}
 		}

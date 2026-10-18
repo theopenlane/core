@@ -2,6 +2,7 @@ package gala
 
 import (
 	"context"
+	"slices"
 	"testing"
 	"time"
 
@@ -166,8 +167,8 @@ func NewTestGala(t *testing.T, opts ...TestGalaOption) *TestGalaFixture {
 
 // Close cleans up the test fixture
 func (f *TestGalaFixture) Close() {
-	for i := len(f.cleanupFuncs) - 1; i >= 0; i-- {
-		f.cleanupFuncs[i]()
+	for _, v := range slices.Backward(f.cleanupFuncs) {
+		v()
 	}
 }
 

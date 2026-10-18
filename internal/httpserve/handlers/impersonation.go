@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -130,7 +129,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 	}
 
 	response := models.StartImpersonationResponse{
-		Reply:     rout.Reply{Success: true},
+		Success:   true,
 		Token:     token,
 		ExpiresAt: time.Now().Add(duration),
 		SessionID: sessionID,
@@ -185,7 +184,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context) error {
 	}
 
 	response := models.EndImpersonationResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Message: "Impersonation session ended successfully",
 	}
 

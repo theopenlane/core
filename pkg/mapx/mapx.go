@@ -20,7 +20,7 @@ func ValueAtPath(data map[string]any, path string) (any, bool) {
 
 	current := any(data)
 
-	for _, part := range strings.Split(path, ".") {
+	for part := range strings.SplitSeq(path, ".") {
 		if part == "" {
 			return nil, false
 		}

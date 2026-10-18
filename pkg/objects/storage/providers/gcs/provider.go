@@ -109,15 +109,13 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 	metrics.RecordStorageUpload(string(storage.GCSProvider), size)
 
 	return &storagetypes.UploadedFileMetadata{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:          objectKey,
-			Size:         size,
-			Folder:       opts.FolderDestination,
-			Bucket:       p.bucket,
-			ContentType:  opts.ContentType,
-			ProviderType: storage.GCSProvider,
-			FullURI:      scheme + p.bucket + "/" + objectKey,
-		},
+		Key:          objectKey,
+		Size:         size,
+		Folder:       opts.FolderDestination,
+		Bucket:       p.bucket,
+		ContentType:  opts.ContentType,
+		ProviderType: storage.GCSProvider,
+		FullURI:      scheme + p.bucket + "/" + objectKey,
 	}, nil
 }
 

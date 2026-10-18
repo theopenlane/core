@@ -284,7 +284,7 @@ func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.Operati
 	}
 
 	config, err := json.Marshal(SendBrandedCampaignRequest{
-		CampaignDispatchInput: CampaignDispatchInput{CampaignID: camp.ID},
+		CampaignID: camp.ID,
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed marshaling campaign dispatch config")

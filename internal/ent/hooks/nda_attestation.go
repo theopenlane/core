@@ -168,11 +168,9 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 			ID:   docData.ID,
 			Type: generated.TypeDocumentData,
 		},
-		FileMetadata: pkgobjects.FileMetadata{
-			ContentType: "application/pdf",
-			Size:        int64(len(attestedPDF)),
-			Key:         "documentDataFile",
-		},
+		ContentType: "application/pdf",
+		Size:        int64(len(attestedPDF)),
+		Key:         "documentDataFile",
 	}
 
 	uploadCtx, uploadedFiles, err := upload.HandleUploads(ctx, client.ObjectManager, []pkgobjects.File{file})

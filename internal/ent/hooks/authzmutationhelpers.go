@@ -380,7 +380,7 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 		return nil, nil
 	}
 
-	var v map[string]interface{}
+	var v map[string]any
 	if err := jsonx.RoundTrip(input, &v); err != nil {
 		return nil, err
 	}

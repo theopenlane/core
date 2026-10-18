@@ -10,7 +10,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/utils/rout"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 )
@@ -58,7 +57,7 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 	})
 
 	out := apimodels.SSOLoginResponse{
-		Reply:       rout.Reply{Success: true},
+		Success:     true,
 		RedirectURI: authURL,
 	}
 
@@ -161,7 +160,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 	h.clearAuthFlowCookies(ctx.Response().Writer, "token_id", "token_type", "organization_id", "state", "nonce")
 
 	out := apimodels.SSOTokenAuthorizeResponse{
-		Reply:          rout.Reply{Success: true},
+		Success:        true,
 		OrganizationID: orgCookie.Value,
 		TokenID:        tokenIDCookie.Value,
 		Message:        "authorized",

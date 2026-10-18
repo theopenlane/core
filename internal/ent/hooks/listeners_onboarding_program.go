@@ -69,7 +69,7 @@ func generateProgramName(standards []*generated.Standard, year int) string {
 	return fmt.Sprintf("Compliance Program %d", year)
 }
 
-func createProgram(ctx context.Context, client *generated.Client, orgID string, complianceData map[string]interface{}) error {
+func createProgram(ctx context.Context, client *generated.Client, orgID string, complianceData map[string]any) error {
 	standards, labels, err := resolveOnboardingStandards(ctx, client, complianceData)
 	if err != nil || len(labels) == 0 {
 		return err
@@ -137,7 +137,7 @@ func createProgram(ctx context.Context, client *generated.Client, orgID string, 
 	return nil
 }
 
-func getOnboardingFrameworks(complianceData map[string]interface{}) ([]string, error) {
+func getOnboardingFrameworks(complianceData map[string]any) ([]string, error) {
 	var frameworks []string
 	if err := jsonx.RoundTrip(complianceData["frameworks"], &frameworks); err != nil {
 		return nil, fmt.Errorf("invalid onboarding frameworks: %w", err)
@@ -146,7 +146,7 @@ func getOnboardingFrameworks(complianceData map[string]interface{}) ([]string, e
 	return frameworks, nil
 }
 
-func resolveOnboardingStandards(ctx context.Context, client *generated.Client, complianceData map[string]interface{}) ([]*generated.Standard, []string, error) {
+func resolveOnboardingStandards(ctx context.Context, client *generated.Client, complianceData map[string]any) ([]*generated.Standard, []string, error) {
 	frameworks, err := getOnboardingFrameworks(complianceData)
 	if err != nil || len(frameworks) == 0 {
 		return nil, nil, err

@@ -26,7 +26,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
-	"github.com/theopenlane/utils/rout"
 )
 
 const (
@@ -73,7 +72,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 	}
 
 	out := apimodels.SSOLoginResponse{
-		Reply:       rout.Reply{Success: true},
+		Success:     true,
 		RedirectURI: authURL,
 	}
 
@@ -111,7 +110,7 @@ func (h *Handler) SSOInitiateHandler(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, apimodels.SSOLoginResponse{
-		Reply:       rout.Reply{Success: true},
+		Success:     true,
 		RedirectURI: authURL,
 	})
 }
@@ -273,7 +272,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	}
 
 	out := apimodels.LoginResponse{
-		Reply:      rout.Reply{Success: true},
+		Success:    true,
 		TFAEnabled: entUser.Edges.Setting.IsTfaEnabled,
 		Message:    "success",
 		AuthData:   *authData,

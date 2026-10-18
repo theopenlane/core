@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/enums"
@@ -37,7 +36,7 @@ func TestCreateUserInput(t *testing.T) {
 				LastName:        &lastName,
 				Email:           email,
 				AuthProvider:    &enums.AuthProviderGitHub,
-				LastSeen:        lo.ToPtr(time.Now().UTC()),
+				LastSeen:        new(time.Now().UTC()),
 				AvatarRemoteURL: &image,
 			},
 			image: image,
@@ -48,10 +47,10 @@ func TestCreateUserInput(t *testing.T) {
 			email:    email,
 			provider: enums.AuthProviderGitHub,
 			expected: ent.CreateUserInput{
-				FirstName:       lo.ToPtr("meow"),
+				FirstName:       new("meow"),
 				Email:           email,
 				AuthProvider:    &enums.AuthProviderGitHub,
-				LastSeen:        lo.ToPtr(time.Now().UTC()),
+				LastSeen:        new(time.Now().UTC()),
 				AvatarRemoteURL: &image,
 			},
 			image: image,
@@ -66,7 +65,7 @@ func TestCreateUserInput(t *testing.T) {
 				LastName:        &lastName,
 				Email:           email,
 				AuthProvider:    &enums.AuthProviderGoogle,
-				LastSeen:        lo.ToPtr(time.Now().UTC()),
+				LastSeen:        new(time.Now().UTC()),
 				AvatarRemoteURL: &image,
 			},
 			image: image,
@@ -81,7 +80,7 @@ func TestCreateUserInput(t *testing.T) {
 				LastName:        &lastName,
 				Email:           email,
 				AuthProvider:    &enums.AuthProviderWebauthn,
-				LastSeen:        lo.ToPtr(time.Now().UTC()),
+				LastSeen:        new(time.Now().UTC()),
 				AvatarRemoteURL: nil,
 			},
 			image: "",
@@ -92,11 +91,11 @@ func TestCreateUserInput(t *testing.T) {
 			email:    "wmaximoff@marvel.com",
 			provider: enums.AuthProviderWebauthn,
 			expected: ent.CreateUserInput{
-				FirstName:       lo.ToPtr("Wanda"),
-				LastName:        lo.ToPtr("Maximoff"),
+				FirstName:       new("Wanda"),
+				LastName:        new("Maximoff"),
 				Email:           "wmaximoff@marvel.com",
 				AuthProvider:    &enums.AuthProviderWebauthn,
-				LastSeen:        lo.ToPtr(time.Now().UTC()),
+				LastSeen:        new(time.Now().UTC()),
 				AvatarRemoteURL: nil,
 			},
 			image: "",

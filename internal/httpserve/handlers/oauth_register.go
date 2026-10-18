@@ -8,8 +8,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/providers/github"
 	"github.com/theopenlane/iam/providers/google"
 
@@ -71,7 +69,7 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 	}
 
 	out := models.LoginResponse{
-		Reply:      rout.Reply{Success: true},
+		Success:    true,
 		TFAEnabled: user.Edges.Setting.IsTfaEnabled,
 		Message:    "success",
 		AuthData:   *auth,

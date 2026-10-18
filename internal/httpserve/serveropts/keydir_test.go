@@ -121,7 +121,7 @@ func tokenKID(t *testing.T, tks string) string {
 }
 
 func testClaims() *tokens.Claims {
-	return &tokens.Claims{RegisteredClaims: jwt.RegisteredClaims{Subject: "user"}}
+	return &tokens.Claims{Subject: "user"}
 }
 
 func TestKeyDirThumbprintKIDs(t *testing.T) {

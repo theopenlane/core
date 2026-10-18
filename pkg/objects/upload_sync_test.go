@@ -94,7 +94,7 @@ func TestUploadSync_Concurrent(t *testing.T) {
 
 	const numGoroutines = 10
 
-	for i := 0; i < numGoroutines; i++ {
+	for range numGoroutines {
 		AddUpload()
 	}
 
@@ -110,7 +110,7 @@ func TestUploadSync_Concurrent(t *testing.T) {
 	case <-time.After(100 * time.Millisecond):
 	}
 
-	for i := 0; i < numGoroutines; i++ {
+	for range numGoroutines {
 		DoneUpload()
 	}
 

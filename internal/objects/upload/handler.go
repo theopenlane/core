@@ -198,10 +198,8 @@ func BuildUploadOptions(ctx context.Context, f *pkgobjects.File) *pkgobjects.Upl
 		ContentType:       contentType,
 		Bucket:            f.Bucket,
 		FolderDestination: f.Folder,
-		FileMetadata: pkgobjects.FileMetadata{
-			Key:           f.FieldName,
-			ProviderHints: f.ProviderHints,
-		},
+		Key:               f.FieldName,
+		ProviderHints:     f.ProviderHints,
 	}
 }
 

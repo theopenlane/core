@@ -149,11 +149,9 @@ func TestCreateImpersonatedCaller(t *testing.T) {
 	middleware := &Middleware{}
 
 	claims := &tokens.ImpersonationClaims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject:   "user-123",
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
-		},
+		Subject:           "user-123",
+		IssuedAt:          jwt.NewNumericDate(time.Now()),
+		ExpiresAt:         jwt.NewNumericDate(time.Now().Add(time.Hour)),
 		UserID:            "user-123",
 		TargetUserEmail:   "user@example.com",
 		OrgID:             "org-456",

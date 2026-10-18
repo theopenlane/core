@@ -53,8 +53,8 @@ func TestSystemEmailSubjects(t *testing.T) {
 		{
 			name: "verify email",
 			subject: verify.Subject(cfg, VerifyEmailRequest{
-				RecipientInfo: RecipientInfo{Email: "a@b.com"},
-				Token:         "tok123",
+				Email: "a@b.com",
+				Token: "tok123",
 			}),
 			contains: []string{"verify", "Acme"},
 		},
@@ -169,8 +169,8 @@ func TestVerifyEmailURLConstruction(t *testing.T) {
 	}
 
 	req := VerifyEmailRequest{
-		RecipientInfo: RecipientInfo{FirstName: "Alice"},
-		Token:         "abc123",
+		FirstName: "Alice",
+		Token:     "abc123",
 	}
 
 	body := testDispatcher[VerifyEmailRequest](t, "VerifyEmailRequest").Build(cfg, req)
@@ -189,11 +189,11 @@ func TestInviteEmailURLConstruction(t *testing.T) {
 	}
 
 	req := InviteRequest{
-		RecipientInfo: RecipientInfo{FirstName: "Bob", Email: "bob@example.com"},
-		InviterName:   "Alice",
-		OrgName:       "Engineering",
-		Role:          "admin",
-		Token:         "inv-tok-456",
+		FirstName: "Bob", Email: "bob@example.com",
+		InviterName: "Alice",
+		OrgName:     "Engineering",
+		Role:        "admin",
+		Token:       "inv-tok-456",
 	}
 
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
@@ -288,8 +288,8 @@ func TestPasswordResetURLConstruction(t *testing.T) {
 	}
 
 	req := PasswordResetEmailRequest{
-		RecipientInfo: RecipientInfo{FirstName: "Charlie"},
-		Token:         "reset-xyz",
+		FirstName: "Charlie",
+		Token:     "reset-xyz",
 	}
 
 	body := testDispatcher[PasswordResetEmailRequest](t, "PasswordResetEmailRequest").Build(cfg, req)
@@ -308,10 +308,10 @@ func TestSubscribeVerifyURLTrustCenterDomain(t *testing.T) {
 	}
 
 	req := SubscribeRequest{
-		RecipientInfo: RecipientInfo{FirstName: "Dana"},
-		OrgName:       "SubOrg",
-		Token:         "sub-tok",
-		VerifyURL:     "https://trust.suborg.com/subscribe/verify?token=sub-tok",
+		FirstName: "Dana",
+		OrgName:   "SubOrg",
+		Token:     "sub-tok",
+		VerifyURL: "https://trust.suborg.com/subscribe/verify?token=sub-tok",
 	}
 
 	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)
@@ -330,9 +330,9 @@ func TestSubscribeVerifyURLFallback(t *testing.T) {
 	}
 
 	req := SubscribeRequest{
-		RecipientInfo: RecipientInfo{FirstName: "Dana"},
-		OrgName:       "SubOrg",
-		Token:         "sub-tok",
+		FirstName: "Dana",
+		OrgName:   "SubOrg",
+		Token:     "sub-tok",
 	}
 
 	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)

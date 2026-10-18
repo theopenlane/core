@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/utils/rout"
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
@@ -110,7 +109,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
 	return h.Success(ctx, openapi.OAuthFlowResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		AuthURL: begin.AuthURL,
 		State:   begin.State,
 	})

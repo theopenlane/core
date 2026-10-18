@@ -129,7 +129,7 @@ func TestService_BeginAuthNoAuthRegistration(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "no-auth"},
+		ID: "no-auth",
 		Connections: []types.Connector{
 			types.NewConnection[keymakerTestCredential](keymakerTestConnection).
 				Name(keymakerTestConnection),
@@ -352,7 +352,7 @@ type fakeAuthFlow struct {
 
 func authTestDefinition(definitionID string, flow *fakeAuthFlow) types.Definition {
 	return types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: definitionID},
+		ID: definitionID,
 		Connections: []types.Connector{
 			types.NewConnection[keymakerTestCredential](keymakerTestConnection).
 				Name(keymakerTestConnection).

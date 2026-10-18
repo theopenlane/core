@@ -97,16 +97,16 @@ func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 	_, err = os.Stat(fullPath)
 	assert.NoError(t, err)
 
-	downloadResult, err := provider.Download(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: uploadResult.Key}}, &storagetypes.DownloadFileOptions{})
+	downloadResult, err := provider.Download(ctx, &storagetypes.File{Key: uploadResult.Key}, &storagetypes.DownloadFileOptions{})
 	require.NoError(t, err)
 	require.NotNil(t, downloadResult)
 	assert.Equal(t, []byte(content), downloadResult.File)
 
-	exists, err := provider.Exists(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: uploadResult.Key}})
+	exists, err := provider.Exists(ctx, &storagetypes.File{Key: uploadResult.Key})
 	assert.NoError(t, err)
 	assert.True(t, exists)
 
-	err = provider.Delete(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: uploadResult.Key}}, &storagetypes.DeleteFileOptions{})
+	err = provider.Delete(ctx, &storagetypes.File{Key: uploadResult.Key}, &storagetypes.DeleteFileOptions{})
 	assert.NoError(t, err)
 
 	_, err = os.Stat(fullPath)
@@ -122,7 +122,7 @@ func TestDiskProviderGetPresignedURL(t *testing.T) {
 	require.NoError(t, err)
 	defer provider.Close()
 
-	file := &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "test-file.txt"}}
+	file := &storagetypes.File{Key: "test-file.txt"}
 	url, err := provider.GetPresignedURL(context.Background(), file, &storagetypes.PresignedURLOptions{Duration: time.Hour})
 	require.NoError(t, err)
 	assert.Contains(t, url, "http://localhost:8080/files/test-file.txt")
@@ -178,7 +178,7 @@ func TestDiskProviderExistsMissingFile(t *testing.T) {
 	require.NoError(t, err)
 	defer provider.Close()
 
-	exists, err := provider.Exists(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "missing.txt"}})
+	exists, err := provider.Exists(context.Background(), &storagetypes.File{Key: "missing.txt"})
 	assert.NoError(t, err)
 	assert.False(t, exists)
 }

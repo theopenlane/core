@@ -99,16 +99,14 @@ func (p *Provider) Upload(_ context.Context, reader io.Reader, opts *storagetype
 	metrics.RecordStorageUpload("disk", size)
 
 	return &storagetypes.UploadedFileMetadata{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:          filepath.ToSlash(objectKey),
-			Size:         size,
-			Folder:       filepath.ToSlash(opts.FolderDestination),
-			Bucket:       p.options.Bucket,
-			Region:       p.options.Region,
-			ContentType:  opts.ContentType,
-			ProviderType: storagetypes.DiskProvider,
-			FullURI:      fmt.Sprintf("%s%s", p.Scheme, filepath.ToSlash(targetPath)),
-		},
+		Key:          filepath.ToSlash(objectKey),
+		Size:         size,
+		Folder:       filepath.ToSlash(opts.FolderDestination),
+		Bucket:       p.options.Bucket,
+		Region:       p.options.Region,
+		ContentType:  opts.ContentType,
+		ProviderType: storagetypes.DiskProvider,
+		FullURI:      fmt.Sprintf("%s%s", p.Scheme, filepath.ToSlash(targetPath)),
 	}, nil
 }
 

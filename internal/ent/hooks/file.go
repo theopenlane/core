@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"errors"
+	"maps"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/common/storagetypes"
@@ -63,23 +64,19 @@ func HookFileDelete() ent.Hook {
 					if f.StoragePath != "" && m.ObjectManager != nil {
 						// Convert ent File to storagetypes.File
 						storageFile := &storagetypes.File{
-							ID:           f.ID,
-							OriginalName: f.ProvidedFileName,
-							FileMetadata: storagetypes.FileMetadata{
-								Key:           f.StoragePath,
-								ContentType:   f.DetectedContentType,
-								Size:          f.PersistedFileSize,
-								Bucket:        f.StorageVolume,
-								Region:        f.StorageRegion,
-								ProviderHints: &storagetypes.ProviderHints{},
-							},
+							ID:            f.ID,
+							OriginalName:  f.ProvidedFileName,
+							Key:           f.StoragePath,
+							ContentType:   f.DetectedContentType,
+							Size:          f.PersistedFileSize,
+							Bucket:        f.StorageVolume,
+							Region:        f.StorageRegion,
+							ProviderHints: &storagetypes.ProviderHints{},
 						}
 
 						if f.Metadata != nil {
 							metadata := make(map[string]any)
-							for k, v := range f.Metadata {
-								metadata[k] = v
-							}
+							maps.Copy(metadata, f.Metadata)
 							storageFile.Metadata = metadata
 						}
 

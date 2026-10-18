@@ -171,11 +171,9 @@ func TestDownload_GetDownloadExpires(t *testing.T) {
 		{
 			name: "valid expiration",
 			download: &Download{
-				DownloadToken: DownloadToken{
-					Expires: sql.NullString{
-						String: time.Now().Add(1 * time.Hour).Format(time.RFC3339Nano),
-						Valid:  true,
-					},
+				Expires: sql.NullString{
+					String: time.Now().Add(1 * time.Hour).Format(time.RFC3339Nano),
+					Valid:  true,
 				},
 			},
 			expectError: false,
@@ -184,9 +182,7 @@ func TestDownload_GetDownloadExpires(t *testing.T) {
 		{
 			name: "invalid expiration",
 			download: &Download{
-				DownloadToken: DownloadToken{
-					Expires: sql.NullString{Valid: false},
-				},
+				Expires: sql.NullString{Valid: false},
 			},
 			expectError: false,
 			checkZero:   true,
@@ -194,11 +190,9 @@ func TestDownload_GetDownloadExpires(t *testing.T) {
 		{
 			name: "malformed expiration",
 			download: &Download{
-				DownloadToken: DownloadToken{
-					Expires: sql.NullString{
-						String: "not-a-valid-time",
-						Valid:  true,
-					},
+				Expires: sql.NullString{
+					String: "not-a-valid-time",
+					Valid:  true,
 				},
 			},
 			expectError: true,
@@ -327,9 +321,7 @@ func TestBuildObjectURI_FromEntFile(t *testing.T) {
 func TestBuildObjectURI_FromStorageFile(t *testing.T) {
 	fullURI := "database://volume/path"
 	storageFile := &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			FullURI: fullURI,
-		},
+		FullURI: fullURI,
 	}
 
 	result := buildObjectURI(storageFile, nil)
@@ -345,9 +337,7 @@ func TestBuildObjectURI_PreferEntFile(t *testing.T) {
 	}
 
 	storageFile := &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			FullURI: storageURI,
-		},
+		FullURI: storageURI,
 	}
 
 	result := buildObjectURI(storageFile, entFile)
@@ -362,9 +352,7 @@ func TestBuildObjectURI_EmptyEntFileURI(t *testing.T) {
 	}
 
 	storageFile := &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			FullURI: storageURI,
-		},
+		FullURI: storageURI,
 	}
 
 	result := buildObjectURI(storageFile, entFile)
@@ -382,9 +370,7 @@ func TestBuildObjectURI_EmptyBoth(t *testing.T) {
 	}
 
 	storageFile := &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			FullURI: "",
-		},
+		FullURI: "",
 	}
 
 	result := buildObjectURI(storageFile, entFile)

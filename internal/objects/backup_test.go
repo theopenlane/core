@@ -85,10 +85,8 @@ func TestServiceBackupReplicatesToDestination(t *testing.T) {
 	dest := &fakeProvider{
 		id: string(storage.S3Provider),
 		uploadMetadata: &storagetypes.UploadedFileMetadata{
-			FileMetadata: storagetypes.FileMetadata{
-				Bucket:  "backup-bucket",
-				FullURI: "s3://backup-bucket/org/file/name",
-			},
+			Bucket:  "backup-bucket",
+			FullURI: "s3://backup-bucket/org/file/name",
 		},
 	}
 
@@ -104,12 +102,10 @@ func TestServiceBackupReplicatesToDestination(t *testing.T) {
 	file := &storagetypes.File{
 		ID:           "file",
 		ProviderType: storage.R2Provider,
-		FileMetadata: storagetypes.FileMetadata{
-			Key:         "org/file/name",
-			ContentType: "text/plain",
-			ProviderHints: &storagetypes.ProviderHints{
-				KnownProvider: storage.R2Provider,
-			},
+		Key:          "org/file/name",
+		ContentType:  "text/plain",
+		ProviderHints: &storagetypes.ProviderHints{
+			KnownProvider: storage.R2Provider,
 		},
 	}
 
@@ -144,12 +140,10 @@ func TestServiceBackupRecordsDestinationKeyAndRegion(t *testing.T) {
 	dest := &fakeProvider{
 		id: string(storage.S3Provider),
 		uploadMetadata: &storagetypes.UploadedFileMetadata{
-			FileMetadata: storagetypes.FileMetadata{
-				Bucket:  "backup-bucket",
-				Key:     "backup/prefix/org/file/name",
-				Region:  "us-west-2",
-				FullURI: "s3://backup-bucket/backup/prefix/org/file/name",
-			},
+			Bucket:  "backup-bucket",
+			Key:     "backup/prefix/org/file/name",
+			Region:  "us-west-2",
+			FullURI: "s3://backup-bucket/backup/prefix/org/file/name",
 		},
 	}
 
@@ -165,11 +159,9 @@ func TestServiceBackupRecordsDestinationKeyAndRegion(t *testing.T) {
 	file := &storagetypes.File{
 		ID:           "file",
 		ProviderType: storage.R2Provider,
-		FileMetadata: storagetypes.FileMetadata{
-			Key: "org/file/name",
-			ProviderHints: &storagetypes.ProviderHints{
-				KnownProvider: storage.R2Provider,
-			},
+		Key:          "org/file/name",
+		ProviderHints: &storagetypes.ProviderHints{
+			KnownProvider: storage.R2Provider,
 		},
 	}
 
@@ -222,11 +214,9 @@ func TestServiceBackupDownloadErrorSkipsUpload(t *testing.T) {
 	file := &storagetypes.File{
 		ID:           "file",
 		ProviderType: storage.R2Provider,
-		FileMetadata: storagetypes.FileMetadata{
-			Key: "org/file/name",
-			ProviderHints: &storagetypes.ProviderHints{
-				KnownProvider: storage.R2Provider,
-			},
+		Key:          "org/file/name",
+		ProviderHints: &storagetypes.ProviderHints{
+			KnownProvider: storage.R2Provider,
 		},
 	}
 
@@ -248,12 +238,10 @@ func fileWithReplica() *storagetypes.File {
 			Region:       "us-west-2",
 			FullURI:      "s3://backup-bucket/backup/prefix/org/file/name",
 		},
-		FileMetadata: storagetypes.FileMetadata{
-			Key:    "org/file/name",
-			Bucket: "source-bucket",
-			ProviderHints: &storagetypes.ProviderHints{
-				KnownProvider: storage.R2Provider,
-			},
+		Key:    "org/file/name",
+		Bucket: "source-bucket",
+		ProviderHints: &storagetypes.ProviderHints{
+			KnownProvider: storage.R2Provider,
 		},
 	}
 }

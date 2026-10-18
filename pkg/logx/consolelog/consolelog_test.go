@@ -32,7 +32,7 @@ func TestConsolelog(t *testing.T) {
 	t.Run("SetFormatter", func(t *testing.T) {
 		w := consolelog.NewConsoleWriter()
 
-		w.SetFormatter("time", func(i interface{}) string { return "FOOBAR" })
+		w.SetFormatter("time", func(i any) string { return "FOOBAR" })
 
 		d := time.Unix(0, 0).UTC().Format(time.RFC3339)
 		o := w.Formatter("time")(d)
@@ -44,7 +44,7 @@ func TestConsolelog(t *testing.T) {
 	t.Run("New with options", func(t *testing.T) {
 		w := consolelog.NewConsoleWriter(
 			func(w *consolelog.ConsoleWriter) {
-				w.SetFormatter("time", func(i interface{}) string { return "FOOBAR" })
+				w.SetFormatter("time", func(i any) string { return "FOOBAR" })
 			},
 		)
 

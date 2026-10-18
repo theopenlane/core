@@ -4,8 +4,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
@@ -56,7 +54,7 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, models.AccountRolesOrganizationResponse{
-		Reply:          rout.Reply{Success: true},
+		Success:        true,
 		Roles:          roles,
 		OrganizationID: req.ObjectID,
 	})
