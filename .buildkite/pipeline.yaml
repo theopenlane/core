@@ -503,13 +503,13 @@ steps:
             -F "run_env[url]=$BUILDKITE_BUILD_URL" \
             https://analytics-api.buildkite.com/v1/uploads
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-graph-*.xml"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-no-api.xml"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-handlers.xml"
               step: "go_test_handlers"
       - label: ":github: upload PR reports"
@@ -527,29 +527,29 @@ steps:
         if: build.pull_request.id != null
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-handlers.out"
               step: "go_test_handlers"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-no-api.out"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-graph-*.out"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-handlers.xml"
               step: "go_test_handlers"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-no-api.xml"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-graph-*.xml"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-events.out"
               step: "go_test_events"
               ignore_missing: true
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-events.xml"
               step: "go_test_events"
               ignore_missing: true
@@ -579,29 +579,29 @@ steps:
         if: build.branch == "main" && build.tag == null
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-no-api.out"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-graph-*.out"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-handlers.out"
               step: "go_test_handlers"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-handlers.xml"
               step: "go_test_handlers"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-no-api.xml"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-graph-*.xml"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-events.out"
               step: "go_test_events"
               ignore_missing: true
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-events.xml"
               step: "go_test_events"
               ignore_missing: true
@@ -806,7 +806,7 @@ steps:
           #!/bin/bash
           chmod +x ${APP_NAME}
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
@@ -840,7 +840,7 @@ steps:
           #!/bin/bash
           chmod +x ${APP_NAME}
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
