@@ -1366,11 +1366,8 @@ data:
           {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.prefix }}
           prefix: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.prefix | quote }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.schema }}
-          schema: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.schema | quote }}
-          {{- end }}
-          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.variant }}
-          variant: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.variant | quote }}
+          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.moveprocessed }}
+          moveprocessed: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.moveprocessed }}
           {{- end }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.runonstartup }}

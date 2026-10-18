@@ -5,65 +5,115 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
-// runImportRecords imports the records under the installation's configured prefix
-func runImportRecords(ctx context.Context, request types.OperationRequest, client *Client, cfg ImportRecords) ([]types.IngestPayloadSet, error) {
-	if err := cfg.ensureLinkTargets(ctx, request); err != nil {
+var (
+	// importPolicy is the execution policy of the record import
+	importPolicy = types.ExecutionPolicy{Reconcile: true}
+	// importContracts lists the schemas the record import ingests
+	importContracts = []types.IngestContract{{Schema: entityMapping.Schema}}
+)
+
+// runImportRecords ingests the JSON objects under the configured prefix one object at a time and moves each object whose
+// records imported without failure into the processed directory when the spec asks for it; the ownerless runtime path
+// fills an empty spec from the runtime config
+func runImportRecords(ctx context.Context, request types.OperationRequest, client *Client, cfg ImportRecords) (json.RawMessage, error) {
+	spec := cfg.ImportSpec
+
+	if request.Integration == nil && spec.Prefix == "" {
+		spec = client.Import
+	}
+
+	if spec.Prefix == "" {
+		return nil, ErrPrefixRequired
+	}
+
+	if err := ensureLinkTargets(ctx, request); err != nil {
 		return nil, err
 	}
 
-	return cfg.Run(ctx, client.Provider)
-}
-
-// runSystemImport imports the platform-owned records under the runtime prefix with the trigger's overrides applied
-func runSystemImport(ctx context.Context, request types.OperationRequest, client *Client, cfg SystemImport) ([]types.IngestPayloadSet, error) {
-	spec := cfg.spec(client.Import)
-
-	if err := spec.ensureLinkTargets(ctx, request); err != nil {
+	keys, err := listRecordObjects(ctx, client.Provider, spec.Prefix)
+	if err != nil {
 		return nil, err
 	}
 
-	return spec.Run(ctx, client.Provider)
+	oc, _ := gala.OperationContextFromContext(ctx)
+
+	ingest := operations.IngestContext{
+		Registry:     request.Services.Definitions(),
+		DB:           request.DB,
+		Runtime:      request.Services.Gala(),
+		Integration:  request.Integration,
+		DefinitionID: DefinitionID.ID(),
+	}
+	options := operations.IngestOptionsFromOperationContext(oc)
+	result := ImportRecordsResult{Objects: len(keys)}
+
+	for _, key := range keys {
+		payloadSet, err := loadPayloadSet(ctx, client.Provider, key)
+		if err != nil {
+			return nil, err
+		}
+
+		ingested, err := operations.ProcessPayloadSets(ctx, ingest, ImportRecordsOp.Name(), importContracts, importPolicy, []types.IngestPayloadSet{payloadSet}, options)
+		result.Merge(ingested)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if !spec.MoveProcessed || ingested.Failed > 0 {
+			continue
+		}
+
+		if err := moveProcessed(ctx, client.Provider, key, processedKey(spec.Prefix, key)); err != nil {
+			return nil, err
+		}
+
+		result.Moved++
+	}
+
+	logx.FromContext(ctx).Info().Str("prefix", spec.Prefix).Int("objects", result.Objects).Int("attempted", result.Attempted).Int("failed", result.Failed).Int("moved", result.Moved).Msg("objectstore: record import completed")
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
-// validateImportRecords rejects a stored import whose schema this definition cannot emit
+// validateImportRecords rejects a stored import without a prefix to read
 func validateImportRecords(_ context.Context, _ types.InstallationRequest, cfg *ImportRecords) error {
-	if !lo.Contains(importSchemas, cfg.Schema) {
-		return ErrSchemaUnsupported
+	if cfg.Prefix == "" {
+		return ErrPrefixRequired
 	}
 
 	return nil
 }
 
-// ensureLinkTargets creates the entity type the vendor mapping variant links records to when it does not exist in the
-// scope the link resolver searches: system-owned for the ownerless runtime import, the installation's organization otherwise
-func (i ImportSpec) ensureLinkTargets(ctx context.Context, request types.OperationRequest) error {
-	if i.Variant != variantVendor {
-		return nil
-	}
-
+// ensureLinkTargets creates the entity type the mapping links records to when it does not exist in the scope the link
+// resolver searches: system-owned for the ownerless runtime import, the installation's organization otherwise
+func ensureLinkTargets(ctx context.Context, request types.OperationRequest) error {
 	ownerScope := entitytype.SystemOwned(true)
-	create := request.DB.EntityType.Create().SetName(variantVendor)
+	create := request.DB.EntityType.Create().SetName(vendorEntityTypeName)
 
 	if request.Integration != nil {
 		ownerScope = entitytype.OwnerID(request.Integration.OwnerID)
 		create = create.SetOwnerID(request.Integration.OwnerID)
 	}
 
-	exists, err := request.DB.EntityType.Query().Where(entitytype.NameEqualFold(variantVendor), ownerScope).Exist(ctx)
+	exists, err := request.DB.EntityType.Query().Where(entitytype.NameEqualFold(vendorEntityTypeName), ownerScope).Exist(ctx)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrVendorEntityTypeSeed, err)
+		return fmt.Errorf("%w: %w", ErrEntityTypeSeed, err)
 	}
 
 	if exists {
@@ -72,67 +122,80 @@ func (i ImportSpec) ensureLinkTargets(ctx context.Context, request types.Operati
 
 	created, err := create.Save(ctx)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrVendorEntityTypeSeed, err)
+		return fmt.Errorf("%w: %w", ErrEntityTypeSeed, err)
 	}
 
-	logx.FromContext(ctx).Info().Str("entity_type_id", created.ID).Bool("system_owned", created.SystemOwned).Msg("objectstore: created vendor entity type for import link")
+	logx.FromContext(ctx).Info().Str("entity_type_id", created.ID).Bool("system_owned", created.SystemOwned).Msg("objectstore: created entity type for import link")
 
 	return nil
 }
 
-// Run lists the JSON objects under the prefix and returns their records as one ingest payload set
-func (i ImportSpec) Run(ctx context.Context, client storage.Provider) ([]types.IngestPayloadSet, error) {
-	if !lo.Contains(importSchemas, i.Schema) {
-		logx.FromContext(ctx).Error().Str("schema", i.Schema).Strs("supported", importSchemas).Msg("objectstore: import schema unsupported")
-
-		return nil, ErrSchemaUnsupported
-	}
-
-	if i.Prefix == "" {
-		return nil, ErrPrefixRequired
-	}
-
-	keys, err := client.ListObjects(ctx, i.Prefix, 0)
+// listRecordObjects lists the JSON objects under the prefix, leaving out the processed directory
+func listRecordObjects(ctx context.Context, client storage.Provider, prefix string) ([]string, error) {
+	keys, err := client.ListObjects(ctx, prefix, 0)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("prefix", i.Prefix).Msg("objectstore: list objects failed")
+		logx.FromContext(ctx).Error().Err(err).Str("prefix", prefix).Msg("objectstore: list objects failed")
 
 		return nil, fmt.Errorf("%w: %w", ErrListObjectsFailed, err)
 	}
 
+	processed := path.Join(prefix, processedDir) + "/"
+
 	keys = lo.Filter(keys, func(key string, _ int) bool {
-		return strings.HasSuffix(key, jsonObjectSuffix)
+		return strings.HasSuffix(key, jsonObjectSuffix) && !strings.HasPrefix(key, processed)
 	})
 
 	if len(keys) == 0 {
-		logx.FromContext(ctx).Info().Str("prefix", i.Prefix).Msg("objectstore: no json objects under prefix")
-
-		return nil, nil
+		logx.FromContext(ctx).Info().Str("prefix", prefix).Msg("objectstore: no json objects under prefix")
 	}
 
-	var envelopes []types.MappingEnvelope
-
-	for _, key := range keys {
-		records, err := loadRecords(ctx, client, key)
-		if err != nil {
-			return nil, err
-		}
-
-		envelopes = append(envelopes, lo.Map(records, func(record json.RawMessage, idx int) types.MappingEnvelope {
-			return providerkit.RawEnvelopeVariant(i.Variant, fmt.Sprintf("%s#%d", key, idx), record)
-		})...)
-	}
-
-	logx.FromContext(ctx).Info().Str("prefix", i.Prefix).Str("schema", i.Schema).Str("variant", i.Variant).Int("objects", len(keys)).Int("records", len(envelopes)).Msg("objectstore: bucket records loaded for ingest")
-
-	return []types.IngestPayloadSet{
-		{
-			Schema:    i.Schema,
-			Envelopes: envelopes,
-		},
-	}, nil
+	return keys, nil
 }
 
-// loadRecords downloads one object and decodes its records
+// processedKey returns the key an imported object moves to: its path under the prefix, re-rooted under the processed directory
+func processedKey(prefix, key string) string {
+	return path.Join(prefix, processedDir, strings.TrimPrefix(key, prefix))
+}
+
+// moveProcessed copies the object to the destination key and deletes the original
+func moveProcessed(ctx context.Context, client storage.Provider, key, destination string) error {
+	copier, ok := client.(storage.Copier)
+	if !ok {
+		return ErrProviderCannotCopy
+	}
+
+	file := &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: key}}
+
+	if err := copier.Copy(ctx, file, &storage.CopyOptions{Key: destination}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("key", key).Str("destination", destination).Msg("objectstore: processed object copy failed")
+
+		return fmt.Errorf("%w: %s: %w", ErrObjectMoveFailed, key, err)
+	}
+
+	if err := client.Delete(ctx, file, &storagetypes.DeleteFileOptions{}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("key", key).Msg("objectstore: processed object delete failed")
+
+		return fmt.Errorf("%w: %s: %w", ErrObjectMoveFailed, key, err)
+	}
+
+	return nil
+}
+
+// loadPayloadSet reads one object and wraps its records as the ingest payload set of the import schema
+func loadPayloadSet(ctx context.Context, client storage.Provider, key string) (types.IngestPayloadSet, error) {
+	records, err := loadRecords(ctx, client, key)
+	if err != nil {
+		return types.IngestPayloadSet{}, err
+	}
+
+	envelopes := lo.Map(records, func(record json.RawMessage, idx int) types.MappingEnvelope {
+		return providerkit.RawEnvelope(fmt.Sprintf("%s#%d", key, idx), record)
+	})
+
+	return types.IngestPayloadSet{Schema: entityMapping.Schema, Envelopes: envelopes}, nil
+}
+
+// loadRecords reads one object and decodes its records
 func loadRecords(ctx context.Context, client storage.Provider, key string) ([]json.RawMessage, error) {
 	downloaded, err := client.Download(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: key}}, &storagetypes.DownloadFileOptions{})
 	if err != nil {

@@ -1320,22 +1320,16 @@
           "title": "Prefix",
           "description": "Object key prefix (directory) whose JSON files hold arrays of records"
         },
-        "schema": {
-          "type": "string",
-          "title": "Schema",
-          "description": "Internal model the records are mapped and upserted into (e.g. Entity)"
-        },
-        "variant": {
-          "type": "string",
-          "title": "Variant",
-          "description": "Mapping variant to apply such as vendor to link imported entities to the vendor entity type"
+        "moveprocessed": {
+          "type": "boolean",
+          "title": "Move Processed",
+          "description": "Move each object into the processed directory under the prefix once its records import without failure"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "prefix",
-        "schema"
+        "prefix"
       ]
     },
     "objectstore.RuntimeConfig": {
@@ -1346,11 +1340,11 @@
         },
         "import": {
           "$ref": "#/$defs/objectstore.ImportSpec",
-          "description": "Bucket prefix with the schema and mapping variant the system import reads unless a trigger overrides them"
+          "description": "Bucket prefix and record kind the runtime import reads when the operation config leaves them empty"
         },
         "runonstartup": {
           "type": "boolean",
-          "description": "Run the system import once when the server starts"
+          "description": "Run the runtime import once when the server starts"
         }
       },
       "additionalProperties": false,

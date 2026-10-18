@@ -61,8 +61,10 @@ type RecordFailure struct {
 	Schema string
 	// Resource is the provider resource identifier
 	Resource string
-	// Err is the underlying failure
-	Err error
+	// Message is the failure text carried in the serialized result
+	Message string
+	// Err is the underlying failure, available in process only
+	Err error `json:"-"`
 }
 
 // IngestResult reports record-level work completed by a payload batch
@@ -86,6 +88,20 @@ type IngestResult struct {
 	Removed int
 	// Failures lists each failed record with its cause
 	Failures []RecordFailure
+}
+
+// Merge adds the counts and failures of other onto r
+func (r *IngestResult) Merge(other IngestResult) {
+	r.Attempted += other.Attempted
+	r.Persisted += other.Persisted
+	r.Filtered += other.Filtered
+	r.Succeeded += other.Succeeded
+	r.Changed += other.Changed
+	r.Skipped += other.Skipped
+	r.Failed += other.Failed
+	r.Excluded += other.Excluded
+	r.Removed += other.Removed
+	r.Failures = append(r.Failures, other.Failures...)
 }
 
 // IngestOptionsFromOperationContext derives ingest options from an integration operation context
@@ -301,7 +317,7 @@ func newPayloadRun(ctx context.Context, ic IngestContext, batch ingestBatch, han
 // fail records one record failure on the result
 func (run *payloadRun) fail(schema, resource string, err error) {
 	run.result.Failed++
-	run.result.Failures = append(run.result.Failures, RecordFailure{Schema: schema, Resource: resource, Err: err})
+	run.result.Failures = append(run.result.Failures, RecordFailure{Schema: schema, Resource: resource, Message: err.Error(), Err: err})
 }
 
 // applySet prepares, links, and persists one payload set

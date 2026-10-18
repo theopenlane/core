@@ -33,7 +33,6 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
@@ -335,7 +334,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	suite.ObjectStoreRuntime = objectstore.RuntimeConfig{
 		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: objectStoreFixtureDir}}},
-		Import:    objectstore.ImportSpec{Prefix: "vendors/", Schema: entityops.SchemaEntity.Name, Variant: "vendor"},
+		Import:    objectstore.ImportSpec{Prefix: "vendors/"},
 	}
 
 	reg, err := testint.VersionedRegistry(

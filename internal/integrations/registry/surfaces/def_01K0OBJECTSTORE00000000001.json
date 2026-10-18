@@ -1,6 +1,6 @@
 {
-  "hash": "6d3fc809ac64af0be90a5172bda9e4201c638ab2f7d237f8b0262f6ad00ca0fd",
-  "version": "01M4RFP5CJTFKY2P23Q963YD4C",
+  "hash": "71fa668d9b4046e60b918a27b309ee0e60104bd3dd57ce6ed3d06adde81ca29a",
+  "version": "01M57YKN8AP10H4H7S0XB24EG0",
   "surface": {
     "id": "def_01K0OBJECTSTORE00000000001",
     "credentials": [
@@ -276,29 +276,20 @@
                   "title": "Prefix",
                   "description": "Object key prefix (directory) whose JSON files hold arrays of records"
                 },
-                "schema": {
-                  "type": "string",
-                  "title": "Schema",
-                  "description": "Internal model the records are mapped and upserted into (e.g. Entity)"
-                },
-                "variant": {
-                  "type": "string",
-                  "title": "Variant",
-                  "description": "Mapping variant to apply such as vendor to link imported entities to the vendor entity type"
+                "moveProcessed": {
+                  "type": "boolean",
+                  "title": "Move Processed",
+                  "description": "Move each object into the processed directory under the prefix once its records import without failure"
                 }
               },
               "additionalProperties": false,
               "type": "object",
               "required": [
-                "prefix",
-                "schema"
+                "prefix"
               ]
             }
           }
         }
-      },
-      {
-        "name": "SystemImport"
       },
       {
         "name": "WriteObject"

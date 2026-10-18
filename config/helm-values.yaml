@@ -820,15 +820,13 @@ coreConfiguration:
             region: ""  # @schema type:string
           # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)
           baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-      # -- Bucket prefix with the schema and mapping variant the system import reads unless a trigger overrides them
+      # -- Bucket prefix and record kind the runtime import reads when the operation config leaves them empty
       import:
         # -- Object key prefix (directory) whose JSON files hold arrays of records
         prefix: ""  # @schema type:string
-        # -- Internal model the records are mapped and upserted into (e.g. Entity)
-        schema: ""  # @schema type:string
-        # -- Mapping variant to apply such as vendor to link imported entities to the vendor entity type
-        variant: ""  # @schema type:string
-      # -- Run the system import once when the server starts
+        # -- Move each object into the processed directory under the prefix once its records import without failure
+        moveProcessed: false  # @schema type:boolean
+      # -- Run the runtime import once when the server starts
       runonstartup: false  # @schema type:boolean
     googledrive:
       clientid: ""  # @schema type:string

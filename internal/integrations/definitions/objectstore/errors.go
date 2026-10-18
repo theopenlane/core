@@ -3,8 +3,6 @@ package objectstore
 import "errors"
 
 var (
-	// ErrSchemaUnsupported indicates the requested import schema is not one this definition can emit
-	ErrSchemaUnsupported = errors.New("objectstore: import schema unsupported")
 	// ErrPrefixRequired indicates no bucket prefix was configured for the record import
 	ErrPrefixRequired = errors.New("objectstore: import prefix required")
 	// ErrBucketRequired indicates no bucket was configured for the installation
@@ -35,6 +33,10 @@ var (
 	ErrObjectUploadFailed = errors.New("objectstore: object upload failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("objectstore: result encode failed")
-	// ErrVendorEntityTypeSeed indicates the vendor entity type the vendor variant links to could not be found or created
-	ErrVendorEntityTypeSeed = errors.New("objectstore: vendor entity type seed failed")
+	// ErrEntityTypeSeed indicates the entity type the mapping links to could not be found or created
+	ErrEntityTypeSeed = errors.New("objectstore: entity type seed failed")
+	// ErrObjectMoveFailed indicates a processed object could not be moved into the processed directory
+	ErrObjectMoveFailed = errors.New("objectstore: object move failed")
+	// ErrProviderCannotCopy indicates the storage provider does not copy objects server side
+	ErrProviderCannotCopy = errors.New("objectstore: storage provider cannot copy objects")
 )

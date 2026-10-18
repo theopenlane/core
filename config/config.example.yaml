@@ -248,9 +248,8 @@ integrations:
         secretaccesskey: ""
     objectstoreruntime:
         import:
+            moveprocessed: false
             prefix: ""
-            schema: ""
-            variant: ""
         providers:
             database:
                 backup: null

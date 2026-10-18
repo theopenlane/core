@@ -515,7 +515,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		oc, _ := gala.OperationContextFromContext(ctx)
 		definitionID = types.IntegrationSourceFrom(oc).DefinitionID
 
-		if operation.IngestHandle != nil {
+		if operation.IngestHandle != nil || len(operation.Ingest) > 0 {
 			ctx = systemIngestContext(ctx)
 		}
 	}

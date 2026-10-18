@@ -16,15 +16,28 @@ import (
 	"github.com/theopenlane/core/v2/pkg/celx"
 )
 
+// vendorMappingSpec returns the vendor kind's mapping as the builder registers it
+func vendorMappingSpec(t *testing.T) types.MappingOverride {
+	t.Helper()
+
+	def, err := Builder(&RuntimeConfig{}, "", Config{})()
+	assert.NilError(t, err)
+
+	mapping, found := lo.Find(def.Mappings, func(m types.MappingRegistration) bool {
+		return m.Schema == entityMapping.Schema && m.Variant == ""
+	})
+	assert.Assert(t, found, "expected the builder to register the Entity mapping")
+	assert.DeepEqual(t, entityMapping.Spec, mapping.Spec)
+
+	return mapping.Spec
+}
+
 func TestMappingExpressionsValid(t *testing.T) {
 	def, err := Builder(&RuntimeConfig{}, "", Config{})()
 	assert.NilError(t, err)
 
 	for _, m := range def.Mappings {
 		name := m.Schema
-		if m.Variant != "" {
-			name += "/" + m.Variant
-		}
 
 		t.Run(name+"/filter", func(t *testing.T) {
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
@@ -37,17 +50,14 @@ func TestMappingExpressionsValid(t *testing.T) {
 }
 
 func TestEntityMapping(t *testing.T) {
-	def, err := Builder(&RuntimeConfig{}, "", Config{})()
-	assert.NilError(t, err)
-
-	spec := mappingtest.MappingSpec(t, def.Mappings, "Entity")
+	spec := vendorMappingSpec(t)
 
 	envelope := types.MappingEnvelope{
 		Resource: "vendors/1password-vendor.json#0",
 		Payload:  mappingtest.LoadExample(t, "examples", "1password-vendor.json"),
 	}
 
-	assert.Assert(t, mappingtest.AssertFiltered(t, spec, envelope), "expected the vendor record to pass the Entity filter")
+	assert.Assert(t, mappingtest.AssertFiltered(t, spec, envelope), "expected the vendor record to pass the vendor kind filter")
 
 	mapped := mappingtest.EvalMap(t, spec, envelope)
 
@@ -60,6 +70,7 @@ func TestEntityMapping(t *testing.T) {
 	assert.Equal(t, "https://www.google.com/s2/favicons?domain=1password.com&sz=128", mapped["logo_remote_url"])
 	assert.Equal(t, true, mapped["externally_visible"])
 	assert.Assert(t, mapped["description"] != nil)
+	assert.Assert(t, mapped["aliases"] == nil)
 
 	mapped = mappingtest.EvalMap(t, spec, types.MappingEnvelope{
 		Resource: "vendors/minimal.json#0",
@@ -71,48 +82,35 @@ func TestEntityMapping(t *testing.T) {
 	assert.Assert(t, mapped["display_name"] == nil)
 	assert.Assert(t, mapped["description"] == nil)
 	assert.Assert(t, mapped["domains"] == nil)
+	assert.Assert(t, mapped["aliases"] == nil)
 	assert.Assert(t, mapped["tags"] == nil)
 	assert.Assert(t, mapped["logo_remote_url"] == nil)
 	assert.Equal(t, false, mapped["externally_visible"])
 
 	mapped = mappingtest.EvalMap(t, spec, types.MappingEnvelope{
-		Resource: "vendors/visible.json#0",
-		Payload:  json.RawMessage(`{"systemInternalID":"entity::visible","name":"visible","externallyVisible":true}`),
+		Resource: "vendors/aliased.json#0",
+		Payload:  json.RawMessage(`{"systemInternalID":"entity::aliased","name":"aliased","aliases":["alias-one","alias-two"],"externallyVisible":true}`),
 	})
 
+	assert.DeepEqual(t, []any{"alias-one", "alias-two"}, mapped["aliases"])
 	assert.Equal(t, true, mapped["externally_visible"])
 }
 
-func TestVendorVariantFilter(t *testing.T) {
-	def, err := Builder(&RuntimeConfig{}, "", Config{})()
-	assert.NilError(t, err)
+func TestEntityMappingFilter(t *testing.T) {
+	spec := vendorMappingSpec(t)
 
-	variant, found := lo.Find(def.Mappings, func(m types.MappingRegistration) bool {
-		return m.Schema == entityops.SchemaEntity.Name && m.Variant == variantVendor
-	})
-	assert.Assert(t, found, "expected a vendor mapping variant for Entity")
+	vendor := types.MappingEnvelope{Payload: mappingtest.LoadExample(t, "examples", "adobe.json")}
+	assert.Assert(t, mappingtest.AssertFiltered(t, spec, vendor), "expected a vendor record to pass the filter")
 
-	vendor := types.MappingEnvelope{Variant: variantVendor, Payload: mappingtest.LoadExample(t, "examples", "adobe.json")}
-	assert.Assert(t, mappingtest.AssertFiltered(t, variant.Spec, vendor), "expected a vendor-typed record to pass the vendor filter")
-
-	customer := types.MappingEnvelope{Variant: variantVendor, Payload: json.RawMessage(`{"systemInternalID":"entity::c","name":"c","entityTypeName":"customer"}`)}
-	assert.Assert(t, !mappingtest.AssertFiltered(t, variant.Spec, customer), "expected a non-vendor record to be filtered out")
-
-	untyped := types.MappingEnvelope{Variant: variantVendor, Payload: json.RawMessage(`{"systemInternalID":"entity::u","name":"u"}`)}
-	assert.Assert(t, !mappingtest.AssertFiltered(t, variant.Spec, untyped), "expected an untyped record to be filtered out")
+	minimal := types.MappingEnvelope{Payload: json.RawMessage(`{"systemInternalID":"entity::u","name":"u"}`)}
+	assert.Assert(t, mappingtest.AssertFiltered(t, spec, minimal), "the Entity mapping filters nothing")
 }
 
-func TestVendorVariantLinkExpression(t *testing.T) {
-	def, err := Builder(&RuntimeConfig{}, "", Config{})()
-	assert.NilError(t, err)
-
-	variant, found := lo.Find(def.Mappings, func(m types.MappingRegistration) bool {
-		return m.Schema == entityops.SchemaEntity.Name && m.Variant == variantVendor
-	})
-	assert.Assert(t, found, "expected a vendor mapping variant for Entity")
-	assert.Equal(t, mapExprEntity, variant.Spec.MapExpr)
-	assert.Equal(t, 1, len(variant.Spec.Links))
-	assert.Equal(t, entityops.SchemaEntityType.Name, variant.Spec.Links[0].TargetSchema)
+func TestEntityMappingLinkExpression(t *testing.T) {
+	spec := vendorMappingSpec(t)
+	assert.Equal(t, mapExprEntity, spec.MapExpr)
+	assert.Equal(t, 1, len(spec.Links))
+	assert.Equal(t, entityops.SchemaEntityType.Name, spec.Links[0].TargetSchema)
 
 	envCfg := celx.StrictEnvConfig()
 	envCfg.CrossTypeNumericComparisons = true
@@ -124,11 +122,11 @@ func TestVendorVariantLinkExpression(t *testing.T) {
 	customerType := json.RawMessage(`{"id":"et_02","name":"customer"}`)
 	source := json.RawMessage(`{"external_id":"vendor:okta","name":"Okta"}`)
 
-	matched, err := eval.EvaluateBoolWithSource(context.Background(), variant.Spec.Links[0].Expression, vendorType, source)
+	matched, err := eval.EvaluateBoolWithSource(context.Background(), spec.Links[0].Expression, vendorType, source)
 	assert.NilError(t, err)
 	assert.Assert(t, matched, "expected the vendor entity type to match")
 
-	matched, err = eval.EvaluateBoolWithSource(context.Background(), variant.Spec.Links[0].Expression, customerType, source)
+	matched, err = eval.EvaluateBoolWithSource(context.Background(), spec.Links[0].Expression, customerType, source)
 	assert.NilError(t, err)
 	assert.Assert(t, !matched, "expected the customer entity type not to match")
 }

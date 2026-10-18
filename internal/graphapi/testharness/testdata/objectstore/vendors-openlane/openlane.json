@@ -1,6 +1,5 @@
 {
   "systemInternalID": "entity::fixture-openlane",
-  "entityTypeName": "vendor",
   "externallyVisible": true,
   "name": "Openlane",
   "displayName": "Openlane Fixture",

@@ -3,9 +3,6 @@ package objectstore
 import (
 	"fmt"
 
-	"github.com/samber/lo"
-
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -13,24 +10,23 @@ import (
 
 // Builder returns the object storage definition builder advertising the supplied federation issuer and using
 // cfg as the operator config carrying the AWS source identity; the definition registers hidden so organizations
-// cannot install it, and when runtime.Provisioned() is true a RuntimeIntegration is included so a triggered system
-// import can read the platform-owned bucket
+// cannot install it, and when runtime.Provisioned() is true a RuntimeIntegration is included so the record import
+// can read the platform-owned bucket
 func Builder(runtime *RuntimeConfig, federationIssuer string, cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
-		ingest := lo.Map(importSchemas, func(schema string, _ int) types.IngestContract {
-			return types.IngestContract{Schema: schema}
-		})
-
 		def := types.Definition{
-			ID:           DefinitionID.ID(),
-			Family:       "storage",
-			DisplayName:  "Object Storage",
-			Description:  "Read and write objects in your cloud storage bucket and import its JSON records.",
-			Category:     "data",
-			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/object-storage",
-			Tags:         []string{"files", "import"},
-			Active:       true,
-			Visible:      false,
+			ID:          DefinitionID.ID(),
+			Family:      "storage",
+			DisplayName: "Object Storage",
+			Description: "Read and write objects in your cloud storage bucket and import its JSON records.",
+			Category:    "data",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/object-storage",
+			Tags:        []string{"files", "import"},
+			Active:      true,
+			Visible:     false,
+			OperatorConfig: &types.OperatorConfigRegistration{
+				Schema: jsonx.SchemaFrom[Config](),
+			},
 			Installation: installation.Registration(),
 			Connections: []types.Connector{
 				workloadIdentity.
@@ -78,53 +74,21 @@ func Builder(runtime *RuntimeConfig, federationIssuer string, cfg Config) regist
 					Disconnects("Removes the stored R2 keys from Openlane. If the R2 API token is no longer needed, revoke it in your Cloudflare account.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				types.OperationRefOf[ImportRecords]().
-					Ingests(runImportRecords).
+				ImportRecordsOp.
+					Handles(runImportRecords).
 					Validated(validateImportRecords).
-					Policy(types.ExecutionPolicy{Reconcile: true}).
-					Ingest(ingest...).
+					Policy(importPolicy).
+					Ingest(importContracts...).
 					SkipDefaultLookback().
-					Description("Import the JSON records under a bucket prefix through the definition's mappings").
+					Description("Import the JSON records under a bucket prefix object by object, moving each imported object aside when configured").
 					Registration(),
 				types.OperationPayloadOf[WriteObject]().
 					Handles(runWriteObject).
 					Policy(types.ExecutionPolicy{Inline: true}).
 					Description("Write a document into the bucket under a key").
 					Registration(),
-				SystemImportOp.
-					Ingests(runSystemImport).
-					Policy(types.ExecutionPolicy{Inline: true}).
-					Ingest(ingest...).
-					Internal().
-					CustomerSelectable(false).
-					DisabledForAll(!runtime.Provisioned()).
-					SkipDefaultLookback().
-					Description("Import platform-owned JSON records from the runtime bucket prefix as system-owned rows when triggered").
-					Registration(),
 			},
-			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaEntity.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprEntity,
-					},
-				},
-				{
-					Schema:  entityops.SchemaEntity.Name,
-					Variant: variantVendor,
-					Spec: types.MappingOverride{
-						FilterExpr: filterExprVendor,
-						MapExpr:    mapExprEntity,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaEntityType.Name,
-								Expression:   linkExprVendorEntityType,
-							},
-						},
-					},
-				},
-			},
+			Mappings: []types.MappingRegistration{entityMapping},
 		}
 
 		if runtime.Provisioned() {

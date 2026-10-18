@@ -22,7 +22,8 @@ func TestObjectStoreSystemImportCreatesVendors(t *testing.T) {
 	vendorType := systemVendorEntityType(t)
 
 	rows, result := importFixtureVendors(t, systemCtx, fixturePrefixDefault, fixtureAlpha, fixtureBeta, fixtureHidden)
-	assert.Check(t, is.Equal(1, result.Filtered), "the customer record must be filtered out by the vendor variant")
+	assert.Check(t, is.Equal(3, result.Attempted), "every schema-valid vendor record reaches ingest")
+	assert.Check(t, is.Equal(0, result.Filtered), "the vendor kind maps every schema-valid record")
 
 	for _, vendor := range []fixtureVendor{fixtureAlpha, fixtureBeta} {
 		row := rows[vendor.ExternalID]
@@ -32,7 +33,7 @@ func TestObjectStoreSystemImportCreatesVendors(t *testing.T) {
 		assert.Check(t, is.Equal("", row.OwnerID), "a system-owned row carries no owner")
 		assert.Check(t, is.Equal(vendor.ExternalID, row.ExternalID))
 		assert.Check(t, is.Equal(vendor.ExternalID, lo.FromPtr(row.SystemInternalID)))
-		assert.Check(t, is.Equal(vendorType.ID, row.EntityTypeID), "the vendor variant links the system-owned vendor entity type")
+		assert.Check(t, is.Equal(vendorType.ID, row.EntityTypeID), "the import links the system-owned vendor entity type")
 		assert.Check(t, is.Equal(objectstore.DefinitionID.ID(), row.SourceDefinitionID))
 		assert.Check(t, is.Equal(vendor.Name, row.Name))
 		assert.Check(t, is.Equal(vendor.DisplayName, row.DisplayName))
@@ -45,15 +46,26 @@ func TestObjectStoreSystemImportCreatesVendors(t *testing.T) {
 	hidden := rows[fixtureHidden.ExternalID]
 	assert.Check(t, hidden.SystemOwned)
 	assert.Check(t, !hidden.ExternallyVisible, "an unpublished catalogue record must not be externally visible")
-
-	filtered, err := suite.Client.DB.Entity.Query().
-		Where(entity.ExternalID(fixtureCustomer.ExternalID)).
-		Count(systemCtx)
-	th.RequireNoError(t, err)
-	assert.Check(t, is.Equal(0, filtered), "a record with another entity type must not be created")
 }
 
-// TestObjectStoreSystemImportSeedsVendorEntityType verifies the vendor variant creates the system-owned vendor
+// TestObjectStoreSystemImportReportsInvalidRecord verifies a record the mapping cannot apply is reported as a failed
+// record by ingest and is never created
+func TestObjectStoreSystemImportReportsInvalidRecord(t *testing.T) {
+	systemCtx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+	systemVendorEntityType(t)
+
+	result := runSystemImport(t, systemCtx, fixturePrefixInvalid)
+	assert.Check(t, is.Equal(1, result.Attempted))
+	assert.Check(t, is.Equal(1, result.Failed), "the record without a systemInternalID must fail mapping: %+v", result.Failures)
+
+	created, err := suite.Client.DB.Entity.Query().
+		Where(entity.NameEqualFold(fixtureInvalid.Name)).
+		Count(systemCtx)
+	th.RequireNoError(t, err)
+	assert.Check(t, is.Equal(0, created), "an invalid record must not be created")
+}
+
+// TestObjectStoreSystemImportSeedsVendorEntityType verifies the import creates the system-owned vendor
 // entity type when none exists and links the imported rows to it
 func TestObjectStoreSystemImportSeedsVendorEntityType(t *testing.T) {
 	systemCtx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)

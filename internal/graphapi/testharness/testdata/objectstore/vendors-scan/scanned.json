@@ -1,6 +1,5 @@
 {
   "systemInternalID": "entity::fixture-scan",
-  "entityTypeName": "vendor",
   "externallyVisible": true,
   "name": "fixture-scan-vendor",
   "displayName": "Fixture Scan",

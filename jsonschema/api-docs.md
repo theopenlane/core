@@ -2056,7 +2056,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |[**providers**](#defsstorageproviders)|`object`|Providers contains the configuration for each storage provider<br/>||
 |[**import**](#defsobjectstoreimportspec)|`object`||yes|
-|**runonstartup**|`boolean`|Run the system import once when the server starts<br/>||
+|**runonstartup**|`boolean`|Run the runtime import once when the server starts<br/>||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -2407,8 +2407,7 @@ supplies the region, endpoint, and credentials
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**prefix**|`string`|Object key prefix (directory) whose JSON files hold arrays of records<br/>|yes|
-|**schema**|`string`|Internal model the records are mapped and upserted into (e.g. Entity)<br/>|yes|
-|**variant**|`string`|Mapping variant to apply such as vendor to link imported entities to the vendor entity type<br/>|no|
+|**moveprocessed**<br/>(Move Processed)|`boolean`|Move each object into the processed directory under the prefix once its records import without failure<br/>|no|
 
 **Additional Properties:** not allowed   
    

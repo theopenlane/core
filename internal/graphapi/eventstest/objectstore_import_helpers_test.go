@@ -23,9 +23,12 @@ import (
 const (
 	fixturePrefixDefault = ""
 	fixturePrefixUpdated = "vendors-updated/"
+	fixturePrefixInvalid = "vendors-invalid/"
 )
 
-const vendorEntityTypeName = "vendor"
+const (
+	vendorEntityTypeName = "vendor"
+)
 
 // fixtureVendor mirrors one committed catalogue record
 type fixtureVendor struct {
@@ -79,9 +82,8 @@ var (
 		Description: "Fixture Hidden is a vendor record organizations must not see or adopt.",
 		Domain:      "fixture-hidden.example.com",
 	}
-	fixtureCustomer = fixtureVendor{
-		ExternalID:  "entity::fixture-gamma-customer",
-		Name:        "fixture-gamma-customer",
+	fixtureInvalid = fixtureVendor{
+		Name:        "fixture-gamma-invalid",
 		DisplayName: "Fixture Gamma",
 		Domain:      "fixture-gamma.example.com",
 	}
@@ -109,20 +111,28 @@ func systemVendorEntityType(t *testing.T) *ent.EntityType {
 	return created
 }
 
-// runSystemImport runs the objectstore system import on the harness runtime for the prefix
-func runSystemImport(t *testing.T, ctx context.Context, prefix string) operations.IngestResult {
+// executeSystemImport runs the objectstore record import on the harness runtime, naming the prefix and vendor kind
+// when prefix is set and leaving the runtime config to fill both otherwise
+func executeSystemImport(t *testing.T, ctx context.Context, prefix string) (json.RawMessage, error) {
 	t.Helper()
 
 	var config json.RawMessage
 
 	if prefix != "" {
-		raw, err := json.Marshal(objectstore.SystemImport{Prefix: prefix})
+		raw, err := json.Marshal(objectstore.ImportSpec{Prefix: prefix})
 		th.RequireNoError(t, err)
 
 		config = raw
 	}
 
-	raw, err := suite.IntegrationsRT.ExecuteRuntimeOperation(ctx, objectstore.DefinitionID.ID(), objectstore.SystemImportOp.Name(), config)
+	return suite.IntegrationsRT.ExecuteRuntimeOperation(ctx, objectstore.DefinitionID.ID(), objectstore.ImportRecordsOp.Name(), config)
+}
+
+// runSystemImport runs the objectstore record import on the harness runtime for the prefix and decodes its result
+func runSystemImport(t *testing.T, ctx context.Context, prefix string) operations.IngestResult {
+	t.Helper()
+
+	raw, err := executeSystemImport(t, ctx, prefix)
 	th.RequireNoError(t, err)
 
 	var result operations.IngestResult

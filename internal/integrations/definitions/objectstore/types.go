@@ -3,7 +3,7 @@ package objectstore
 import (
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
@@ -11,10 +11,12 @@ import (
 const (
 	// defaultContentType is the MIME type used when the write operation does not specify one
 	defaultContentType = "application/json"
-	// variantVendor is the mapping variant that links imported entities to the vendor entity type
-	variantVendor = "vendor"
+	// vendorEntityTypeName is the entity type the Entity mapping links imported rows to
+	vendorEntityTypeName = "vendor"
 	// jsonObjectSuffix selects the objects under a prefix that hold JSON records
 	jsonObjectSuffix = ".json"
+	// processedDir is the directory under the import prefix that receives objects whose records imported without failure
+	processedDir = "processed"
 )
 
 var (
@@ -32,17 +34,15 @@ var (
 	awsAccessKey = types.ConnectionOf[AWSAccessKeyCredentialSchema]()
 	// r2 is the connection for Cloudflare R2 keys
 	r2 = types.ConnectionOf[R2CredentialSchema]()
-	// SystemImportOp is the operation ref for the triggered system record import
-	SystemImportOp = types.OperationPayloadOf[SystemImport]() //nolint:revive
-	// importSchemas lists the entityops schemas the record import operations can emit
-	importSchemas = []string{entityops.SchemaEntity.Name}
+	// ImportRecordsOp is the operation ref for the record import shared by installations and the runtime
+	ImportRecordsOp = types.OperationRefOf[ImportRecords]() //nolint:revive
 )
 
 // Client is the storage provider for one bucket with the import spec the runtime path reads
 type Client struct {
 	// Provider is the storage provider scoped to the bucket
 	Provider storage.Provider
-	// Import is the prefix and schema the system import reads unless the trigger overrides them, zero for installations
+	// Import is the prefix and kind the runtime import reads when the operation config leaves them empty, zero for installations
 	Import ImportSpec
 }
 
@@ -50,10 +50,10 @@ type Client struct {
 type RuntimeConfig struct {
 	// Providers holds the storage providers, exactly one enabled, holding the platform-owned bucket
 	Providers storage.Providers `json:"providers" koanf:"providers" jsonschema:"description=Storage providers, exactly one enabled, holding the platform-owned bucket"`
-	// Import selects the prefix and schema the system import reads unless a trigger overrides them
-	Import ImportSpec `json:"import" koanf:"import" jsonschema:"description=Bucket prefix with the schema and mapping variant the system import reads unless a trigger overrides them"`
-	// RunOnStartup runs the system import once when the server starts
-	RunOnStartup bool `json:"runonstartup" koanf:"runonstartup" jsonschema:"description=Run the system import once when the server starts"`
+	// Import selects the prefix and record kind the runtime import reads when the operation config leaves them empty
+	Import ImportSpec `json:"import" koanf:"import" jsonschema:"description=Bucket prefix and record kind the runtime import reads when the operation config leaves them empty"`
+	// RunOnStartup runs the runtime import once when the server starts
+	RunOnStartup bool `json:"runonstartup" koanf:"runonstartup" jsonschema:"description=Run the runtime import once when the server starts"`
 }
 
 // enabledProvider returns the single enabled provider, failing when none or more than one is enabled
@@ -74,7 +74,7 @@ func (c RuntimeConfig) enabledProvider() (storage.ProviderType, storage.Provider
 	}
 }
 
-// Provisioned reports whether the runtime config enables exactly one provider with a bucket and an import prefix
+// Provisioned reports whether the runtime config enables exactly one provider with a bucket, an import prefix and a record kind
 func (c RuntimeConfig) Provisioned() bool {
 	_, providerCfg, err := c.enabledProvider()
 
@@ -167,40 +167,28 @@ func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallati
 	return types.IntegrationInstallationIdentity{ExternalID: storage.Scheme(m.Provider) + m.Bucket}
 }
 
-// ImportSpec selects the objects under a bucket prefix to map and upsert
+// ImportSpec selects the objects under a bucket prefix
 type ImportSpec struct {
 	// Prefix is the object key prefix whose JSON files hold arrays of records
 	Prefix string `json:"prefix" koanf:"prefix" jsonschema:"required,title=Prefix,description=Object key prefix (directory) whose JSON files hold arrays of records"`
-	// Schema is the internal model the records map to
-	Schema string `json:"schema" koanf:"schema" jsonschema:"required,title=Schema,description=Internal model the records are mapped and upserted into (e.g. Entity)"`
-	// Variant selects a mapping variant shipped by the definition, such as vendor to link entities to the vendor entity type
-	Variant string `json:"variant,omitempty" koanf:"variant" jsonschema:"title=Variant,description=Mapping variant to apply such as vendor to link imported entities to the vendor entity type"`
+	// MoveProcessed moves each object under the processed directory of the prefix once its records import without failure
+	MoveProcessed bool `json:"moveProcessed,omitempty" koanf:"moveprocessed" jsonschema:"title=Move Processed,description=Move each object into the processed directory under the prefix once its records import without failure"`
 }
 
-// ImportRecords is the stored input of the installation record import
+// ImportRecordsResult reports the record import across every object under the prefix
+type ImportRecordsResult struct {
+	operations.IngestResult
+	// Objects is the number of JSON objects read under the prefix
+	Objects int
+	// Moved is the number of objects moved into the processed directory
+	Moved int
+}
+
+// ImportRecords is the stored input of the record import
 type ImportRecords struct {
 	types.OperationSettings
-	// ImportSpec selects the prefix and schema the installation imports
+	// ImportSpec selects the prefix to import
 	ImportSpec
-}
-
-// SystemImport is the config for one triggered system import; every field is optional and overrides the runtime config's import spec
-type SystemImport struct {
-	// Prefix overrides the object key prefix to read
-	Prefix string `json:"prefix,omitempty" jsonschema:"title=Prefix,description=Object key prefix to read instead of the configured one"`
-	// Schema overrides the internal model the records map to
-	Schema string `json:"schema,omitempty" jsonschema:"title=Schema,description=Internal model to map the records into instead of the configured one"`
-	// Variant overrides the mapping variant to apply
-	Variant string `json:"variant,omitempty" jsonschema:"title=Variant,description=Mapping variant to apply instead of the configured one"`
-}
-
-// spec merges the trigger's overrides over the configured import spec
-func (s SystemImport) spec(configured ImportSpec) ImportSpec {
-	return ImportSpec{
-		Prefix:  lo.CoalesceOrEmpty(s.Prefix, configured.Prefix),
-		Schema:  lo.CoalesceOrEmpty(s.Schema, configured.Schema),
-		Variant: lo.CoalesceOrEmpty(s.Variant, configured.Variant),
-	}
 }
 
 // WriteObject writes a document to the bucket under a key

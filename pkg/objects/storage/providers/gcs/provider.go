@@ -134,7 +134,7 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 
 // Download implements storagetypes.Provider
 func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
-	r, err := p.client.Bucket(p.bucketFor(file)).Object(file.Key).NewReader(ctx)
+	r, err := p.client.Bucket(p.options.BucketFor(file.Bucket)).Object(file.Key).NewReader(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *sto
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
-	err := p.client.Bucket(p.bucketFor(file)).Object(file.Key).Delete(ctx)
+	err := p.client.Bucket(p.options.BucketFor(file.Bucket)).Object(file.Key).Delete(ctx)
 	if err != nil && !errors.Is(err, gstorage.ErrObjectNotExist) {
 		return err
 	}
@@ -166,6 +166,15 @@ func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *stora
 	metrics.RecordStorageDelete(string(storage.GCSProvider))
 
 	return nil
+}
+
+// Copy implements storage.Copier through a server-side object copy
+func (p *Provider) Copy(ctx context.Context, file *storagetypes.File, opts *storage.CopyOptions) error {
+	source := p.client.Bucket(p.options.BucketFor(file.Bucket)).Object(file.Key)
+
+	_, err := p.client.Bucket(p.options.BucketFor(opts.Bucket)).Object(opts.Key).CopierFrom(source).Run(ctx)
+
+	return err
 }
 
 // GetPresignedURL implements storagetypes.Provider
@@ -179,7 +188,7 @@ func (p *Provider) GetPresignedURL(_ context.Context, file *storagetypes.File, o
 		duration = DefaultPresignedURLExpiry
 	}
 
-	return p.client.Bucket(p.bucketFor(file)).SignedURL(file.Key, &gstorage.SignedURLOptions{
+	return p.client.Bucket(p.options.BucketFor(file.Bucket)).SignedURL(file.Key, &gstorage.SignedURLOptions{
 		Method:  http.MethodGet,
 		Expires: time.Now().Add(duration),
 		Scheme:  gstorage.SigningSchemeV4,
@@ -188,7 +197,7 @@ func (p *Provider) GetPresignedURL(_ context.Context, file *storagetypes.File, o
 
 // Exists implements storagetypes.Provider
 func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
-	_, err := p.client.Bucket(p.bucketFor(file)).Object(file.Key).Attrs(ctx)
+	_, err := p.client.Bucket(p.options.BucketFor(file.Bucket)).Object(file.Key).Attrs(ctx)
 
 	switch {
 	case errors.Is(err, gstorage.ErrObjectNotExist):
@@ -261,13 +270,4 @@ func (p *Provider) ListObjects(ctx context.Context, prefix string, limit int) ([
 // Close implements storagetypes.Provider
 func (p *Provider) Close() error {
 	return p.client.Close()
-}
-
-// bucketFor returns the bucket recorded on the file, falling back to the provider bucket
-func (p *Provider) bucketFor(file *storagetypes.File) string {
-	if file.Bucket != "" {
-		return file.Bucket
-	}
-
-	return p.bucket
 }

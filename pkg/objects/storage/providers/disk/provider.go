@@ -131,12 +131,7 @@ func (p *Provider) Download(_ context.Context, file *storagetypes.File, _ *stora
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(_ context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
-	bucket := file.Bucket
-	if bucket == "" {
-		bucket = p.options.Bucket
-	}
-
-	err := os.Remove(filepath.Join(bucket, file.Key))
+	err := os.Remove(filepath.Join(p.options.BucketFor(file.Bucket), file.Key))
 	if os.IsNotExist(err) {
 		metrics.RecordStorageDelete(string(storagetypes.DiskProvider))
 		return nil
@@ -148,6 +143,35 @@ func (p *Provider) Delete(_ context.Context, file *storagetypes.File, _ *storage
 	metrics.RecordStorageDelete(string(storagetypes.DiskProvider))
 
 	return nil
+}
+
+// Copy implements storage.Copier by copying the file within the local bucket directories
+func (p *Provider) Copy(_ context.Context, file *storagetypes.File, opts *storage.CopyOptions) error {
+	source, err := os.Open(filepath.Join(p.options.BucketFor(file.Bucket), file.Key))
+	if err != nil {
+		return err
+	}
+
+	defer source.Close()
+
+	targetPath := filepath.Join(p.options.BucketFor(opts.Bucket), opts.Key)
+
+	if err := os.MkdirAll(filepath.Dir(targetPath), DefaultDirPermissions); err != nil {
+		return err
+	}
+
+	target, err := os.Create(targetPath)
+	if err != nil {
+		return err
+	}
+
+	if _, err := io.Copy(target, source); err != nil {
+		target.Close()
+
+		return err
+	}
+
+	return target.Close()
 }
 
 // GetPresignedURL implements storagetypes.Provider

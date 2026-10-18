@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // IngestContext holds the stable per-integration dependencies shared across all ingest call paths
 type IngestContext struct {
-	// Registry is the integration definition registry used to resolve mappings and definitions
-	Registry *registry.Registry
+	// Registry resolves the definition whose mappings the batch is ingested through
+	Registry types.DefinitionLookup
 	// DB is the ent client used for persistence
 	DB *ent.Client
 	// Runtime is the Gala instance used for async emit; nil on the synchronous persist path

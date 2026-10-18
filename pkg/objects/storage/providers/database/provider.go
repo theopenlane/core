@@ -131,6 +131,33 @@ func (p *Provider) Delete(ctx context.Context, fileRef *storagetypes.File, _ *st
 	return nil
 }
 
+// Copy implements storage.Copier by copying the stored bytes onto the file row named by the destination key
+func (p *Provider) Copy(ctx context.Context, fileRef *storagetypes.File, opts *storage.CopyOptions) error {
+	client, err := p.entClient(ctx)
+	if err != nil {
+		return err
+	}
+
+	if fileRef.ID == "" || opts.Key == "" {
+		return ErrMissingFileIdentifier
+	}
+
+	internalCtx := auth.WithInternalOperationContext(ctx)
+
+	record, err := client.File.Get(internalCtx, fileRef.ID)
+	if err != nil {
+		return err
+	}
+
+	if len(record.FileContents) == 0 {
+		return ErrFileNotFound
+	}
+
+	return client.File.UpdateOneID(opts.Key).
+		SetFileContents(record.FileContents).
+		Exec(internalCtx)
+}
+
 // Exists checks whether file bytes are present in the database.
 func (p *Provider) Exists(ctx context.Context, fileRef *storagetypes.File) (bool, error) {
 	client, err := p.entClient(ctx)

@@ -111,6 +111,11 @@ func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
 }
 
+// Definitions implements types.RuntimeServices
+func (r *Runtime) Definitions() types.DefinitionLookup {
+	return r.Registry()
+}
+
 // NewForTesting constructs a Runtime backed by the supplied registry and a stub DB client
 func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()

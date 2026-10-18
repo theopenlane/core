@@ -484,6 +484,15 @@ func WithExtra(key string, value any) ProviderOption {
 	}
 }
 
+// BucketFor returns bucket, or the provider's own bucket when it is empty
+func (p *ProviderOptions) BucketFor(bucket string) string {
+	if bucket != "" {
+		return bucket
+	}
+
+	return p.Bucket
+}
+
 // Extra returns provider specific metadata
 func (p *ProviderOptions) Extra(key string) (any, bool) {
 	if p == nil || len(p.extras) == 0 {

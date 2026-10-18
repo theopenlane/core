@@ -9,6 +9,7 @@ import (
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -20,8 +21,8 @@ func TestBuilderRegisters(t *testing.T) {
 	def, err := Builder(&RuntimeConfig{}, "", Config{})()
 	assert.NilError(t, err)
 	assert.Equal(t, DefinitionID.ID(), def.ID)
-	assert.Equal(t, 3, len(def.Operations))
-	assert.Equal(t, 2, len(def.Mappings))
+	assert.Equal(t, 2, len(def.Operations))
+	assert.Equal(t, 1, len(def.Mappings))
 	assert.Equal(t, 5, len(def.ConnectionList()))
 	assert.Assert(t, def.RuntimeIntegration == nil)
 
@@ -30,20 +31,23 @@ func TestBuilderRegisters(t *testing.T) {
 		assert.Assert(t, connection.Verify.Handle != nil, "connection %s must verify", connection.Credential.Name)
 	}
 
-	systemImport, found := lo.Find(def.Operations, func(op types.OperationRegistration) bool {
-		return op.Name == SystemImportOp.Name()
-	})
-	assert.Assert(t, found, "expected the system import operation to be registered")
-	assert.Assert(t, systemImport.DisabledForAll, "expected the system import to be disabled when the runtime is unprovisioned")
-	assert.Assert(t, systemImport.Internal)
-	assert.Assert(t, !systemImport.Stored, "the system import takes its overrides per trigger")
+	assert.Equal(t, entityops.SchemaEntity.Name, def.Mappings[0].Schema)
+	assert.Equal(t, "", def.Mappings[0].Variant)
 
 	importRecords, found := lo.Find(def.Operations, func(op types.OperationRegistration) bool {
-		return op.Name == "ImportRecords"
+		return op.Name == ImportRecordsOp.Name()
 	})
 	assert.Assert(t, found, "expected the record import operation to be registered")
 	assert.Assert(t, importRecords.Stored, "the record import keeps its prefix per installation")
 	assert.Assert(t, importRecords.Policy.Reconcile)
+	assert.Assert(t, !importRecords.Internal, "the runtime shares the customer-selectable import")
+	assert.Assert(t, !importRecords.DisabledForAll)
+	assert.DeepEqual(t, []types.IngestContract{{Schema: entityops.SchemaEntity.Name}}, importRecords.Ingest)
+
+	_, found = lo.Find(def.Operations, func(op types.OperationRegistration) bool {
+		return op.Name == "SystemImport"
+	})
+	assert.Assert(t, !found, "the runtime import is the record import, not a second operation")
 
 	assert.NilError(t, reg.Register(def))
 }
@@ -55,33 +59,21 @@ func TestBuilderHiddenButActive(t *testing.T) {
 	assert.Assert(t, !def.Visible, "organizations must not see or install the definition")
 }
 
-func TestSystemImportSpecOverrides(t *testing.T) {
-	configured := ImportSpec{Prefix: "entities/", Schema: "Entity", Variant: "vendor"}
-
-	assert.Equal(t, configured, SystemImport{}.spec(configured))
-	assert.Equal(t, ImportSpec{Prefix: "customers/", Schema: "Entity", Variant: "vendor"}, SystemImport{Prefix: "customers/"}.spec(configured))
-	assert.Equal(t, ImportSpec{Prefix: "entities/", Schema: "Entity", Variant: "other"}, SystemImport{Variant: "other"}.spec(configured))
-}
-
-func TestImportSpecRejectsUnsupportedSchema(t *testing.T) {
-	cfg := ImportSpec{Prefix: "records/", Schema: "Nope"}
-
-	sets, err := cfg.Run(context.Background(), nil)
-	assert.Assert(t, errors.Is(err, ErrSchemaUnsupported))
-	assert.Assert(t, sets == nil)
-}
-
-func TestImportSpecRejectsEmptyPrefix(t *testing.T) {
-	sets, err := ImportSpec{Schema: "Entity"}.Run(context.Background(), nil)
-	assert.Assert(t, errors.Is(err, ErrPrefixRequired))
-	assert.Assert(t, sets == nil)
-}
-
 func TestValidateImportRecords(t *testing.T) {
-	assert.NilError(t, validateImportRecords(context.Background(), types.InstallationRequest{}, &ImportRecords{ImportSpec: ImportSpec{Prefix: "records/", Schema: "Entity"}}))
+	assert.NilError(t, validateImportRecords(context.Background(), types.InstallationRequest{}, &ImportRecords{ImportSpec: ImportSpec{Prefix: "records/"}}))
 
-	err := validateImportRecords(context.Background(), types.InstallationRequest{}, &ImportRecords{ImportSpec: ImportSpec{Prefix: "records/", Schema: "Nope"}})
-	assert.Assert(t, errors.Is(err, ErrSchemaUnsupported))
+	err := validateImportRecords(context.Background(), types.InstallationRequest{}, &ImportRecords{})
+	assert.Assert(t, errors.Is(err, ErrPrefixRequired))
+}
+
+func TestRuntimeConfigProvisionedRequiresPrefix(t *testing.T) {
+	cfg := RuntimeConfig{
+		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "records"}}},
+	}
+	assert.Assert(t, !cfg.Provisioned(), "a runtime config without an import prefix is not provisioned")
+
+	cfg.Import.Prefix = "records/"
+	assert.Assert(t, cfg.Provisioned())
 }
 
 func TestDecodeRecords(t *testing.T) {
@@ -145,7 +137,7 @@ func TestClientBuildR2(t *testing.T) {
 func TestRuntimeClientBuilderDisk(t *testing.T) {
 	cfg := RuntimeConfig{
 		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: t.TempDir()}}},
-		Import:    ImportSpec{Prefix: "records/", Schema: "Entity", Variant: "vendor"},
+		Import:    ImportSpec{Prefix: "records/"},
 	}
 
 	config, err := json.Marshal(cfg)
@@ -163,7 +155,7 @@ func TestRuntimeClientBuilderDisk(t *testing.T) {
 func TestRuntimeClientBuilderRejectsNoEnabledProvider(t *testing.T) {
 	config, err := json.Marshal(RuntimeConfig{
 		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Bucket: "records"}}},
-		Import:    ImportSpec{Prefix: "records/", Schema: "Entity"},
+		Import:    ImportSpec{Prefix: "records/"},
 	})
 	assert.NilError(t, err)
 
@@ -177,7 +169,7 @@ func TestRuntimeClientBuilderRejectsAmbiguousProviders(t *testing.T) {
 			S3:   storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "records"}},
 			Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "records"}},
 		},
-		Import: ImportSpec{Prefix: "records/", Schema: "Entity"},
+		Import: ImportSpec{Prefix: "records/"},
 	})
 	assert.NilError(t, err)
 

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/version"
 )
@@ -59,7 +60,7 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 
 		runtime.SetDefault(rt)
 
-		runStartupSystemImport(ctx, rt, s.Config.Settings.Integrations.ObjectStoreRuntime)
+		runStartupImport(ctx, rt, s.Config.Settings.Integrations.ObjectStoreRuntime)
 
 		if err := galaInstance.Attach(gala.WithValue(rt)); err != nil {
 			log.Panic().Err(err).Msg("failed to attach integration runtime to gala injector")
@@ -93,20 +94,27 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 	})
 }
 
-// runStartupSystemImport runs the object storage system import once when the runtime config asks for it
-func runStartupSystemImport(ctx context.Context, rt *runtime.Runtime, cfg objectstore.RuntimeConfig) {
+// runStartupImport runs the object storage record import against the runtime bucket once when the runtime config asks for it
+func runStartupImport(ctx context.Context, rt *runtime.Runtime, cfg objectstore.RuntimeConfig) {
 	if !cfg.Provisioned() || !cfg.RunOnStartup {
 		return
 	}
 
-	result, err := rt.ExecuteRuntimeOperation(ctx, objectstore.DefinitionID.ID(), objectstore.SystemImportOp.Name(), nil)
+	payload, err := jsonx.ToRawMessage(cfg.Import)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("startup object storage system import failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("startup object storage import config encode failed")
 
 		return
 	}
 
-	logx.FromContext(ctx).Info().RawJSON("result", result).Msg("startup object storage system import completed")
+	result, err := rt.ExecuteRuntimeOperation(ctx, objectstore.DefinitionID.ID(), objectstore.ImportRecordsOp.Name(), payload)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("startup object storage import failed")
+
+		return
+	}
+
+	logx.FromContext(ctx).Info().RawJSON("result", result).Msg("startup object storage import completed")
 }
 
 // integrationQueues are the integration job kinds paused during the startup sweep

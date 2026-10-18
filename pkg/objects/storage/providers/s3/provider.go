@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"io"
+	"net/url"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -272,11 +274,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *
 	buf := make([]byte, int(*head.ContentLength))
 	w := manager.NewWriteAtBuffer(buf)
 
-	// Use bucket from options if provided, otherwise use default
-	bucket := p.options.Bucket
-	if opts.Bucket != "" {
-		bucket = opts.Bucket
-	}
+	bucket := p.options.BucketFor(opts.Bucket)
 
 	_, err = p.downloader.DownloadObject(ctx, &transfermanager.DownloadObjectInput{
 		Bucket:   aws.String(bucket),
@@ -298,10 +296,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
-	bucket := file.Bucket
-	if bucket == "" {
-		bucket = p.options.Bucket
-	}
+	bucket := p.options.BucketFor(file.Bucket)
 
 	_, err := p.client.DeleteObject(ctx, &s3.DeleteObjectInput{
 		Bucket: aws.String(bucket),
@@ -314,6 +309,26 @@ func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *stora
 	metrics.RecordStorageDelete("s3")
 
 	return nil
+}
+
+// Copy implements storage.Copier through a server-side object copy
+func (p *Provider) Copy(ctx context.Context, file *storagetypes.File, opts *storage.CopyOptions) error {
+	_, err := p.client.CopyObject(ctx, &s3.CopyObjectInput{
+		Bucket:     aws.String(p.options.BucketFor(opts.Bucket)),
+		Key:        aws.String(opts.Key),
+		CopySource: aws.String(CopySource(p.options.BucketFor(file.Bucket), file.Key)),
+	})
+
+	return err
+}
+
+// CopySource renders the bucket and key as the escaped source reference the S3 copy API expects
+func CopySource(bucket, key string) string {
+	segments := lo.Map(strings.Split(key, "/"), func(segment string, _ int) string {
+		return url.PathEscape(segment)
+	})
+
+	return bucket + "/" + strings.Join(segments, "/")
 }
 
 // GetPresignedURL implements storagetypes.Provider
