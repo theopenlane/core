@@ -920,6 +920,11 @@ steps:
               step: migrate
               atlas-env: dev
               config: "file://db/atlas.hcl"
+      - label: ":test_tube: Trigger UI E2E pipeline tests"
+        trigger: openlane-ui-e2e
+        depends_on: "docker-build-and-tag"
+        if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
+        async: true
       - label: ":go: go-client schema update"
         trigger: go-client
         depends_on: "apollo-publish-schema"
