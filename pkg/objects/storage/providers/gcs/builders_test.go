@@ -77,6 +77,20 @@ func TestBuilderWithOptions(t *testing.T) {
 	assert.ElementsMatch(t, []string{testBucket, otherBucket}, buckets)
 }
 
+func TestWithServiceAccountKey(t *testing.T) {
+	opt, err := gcs.WithServiceAccountKey(context.Background(), serviceAccountJSON(t))
+	require.NoError(t, err)
+	assert.NotNil(t, opt)
+
+	opt, err = gcs.WithServiceAccountKey(context.Background(), []byte(`{"type":"authorized_user"}`))
+	assert.ErrorIs(t, err, gcs.ErrServiceAccountKeyInvalid)
+	assert.Nil(t, opt)
+
+	opt, err = gcs.WithServiceAccountKey(context.Background(), nil)
+	assert.ErrorIs(t, err, gcs.ErrServiceAccountKeyInvalid)
+	assert.Nil(t, opt)
+}
+
 func TestBuilderProviderType(t *testing.T) {
 	builder := gcs.NewBuilder()
 	assert.Equal(t, string(storage.GCSProvider), builder.ProviderType())

@@ -38,6 +38,24 @@ const (
 	PresignModeProxy    = storagetypes.PresignModeProxy
 )
 
+// Scheme returns the URI scheme a provider type writes into FullURI and reports from GetScheme
+func Scheme(provider ProviderType) string {
+	switch provider {
+	case S3Provider:
+		return "s3://"
+	case R2Provider:
+		return "r2://"
+	case GCSProvider:
+		return "gs://"
+	case DiskProvider:
+		return "file://"
+	case DatabaseProvider:
+		return "database://"
+	default:
+		return ""
+	}
+}
+
 // Configuration constants
 const (
 	DefaultMaxFileSize   = 32 << 20 // 32MB
@@ -464,6 +482,15 @@ func WithExtra(key string, value any) ProviderOption {
 		}
 		p.extras[key] = value
 	}
+}
+
+// BucketFor returns bucket, or the provider's own bucket when it is empty
+func (p *ProviderOptions) BucketFor(bucket string) string {
+	if bucket != "" {
+		return bucket
+	}
+
+	return p.Bucket
 }
 
 // Extra returns provider specific metadata

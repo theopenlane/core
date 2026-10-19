@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
 )
 
@@ -175,7 +176,7 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 			Region:       p.options.Region,
 			ContentType:  opts.ContentType,
 			ProviderType: storagetypes.R2Provider,
-			FullURI:      fmt.Sprintf("r2://%s/%s", p.options.Bucket, objectKey),
+			FullURI:      storage.Scheme(storagetypes.R2Provider) + p.options.Bucket + "/" + objectKey,
 		},
 	}, nil
 }
@@ -213,10 +214,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *sto
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
-	bucket := file.Bucket
-	if bucket == "" {
-		bucket = p.options.Bucket
-	}
+	bucket := p.options.BucketFor(file.Bucket)
 
 	_, err := p.client.DeleteObject(ctx, &s3.DeleteObjectInput{
 		Bucket: aws.String(bucket),
@@ -229,6 +227,17 @@ func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *stora
 	metrics.RecordStorageDelete("r2")
 
 	return nil
+}
+
+// Copy implements storage.Copier through a server-side object copy
+func (p *Provider) Copy(ctx context.Context, file *storagetypes.File, opts *storage.CopyOptions) error {
+	_, err := p.client.CopyObject(ctx, &s3.CopyObjectInput{
+		Bucket:     aws.String(p.options.BucketFor(opts.Bucket)),
+		Key:        aws.String(opts.Key),
+		CopySource: aws.String(s3provider.CopySource(p.options.BucketFor(file.Bucket), file.Key)),
+	})
+
+	return err
 }
 
 // GetPresignedURL implements storagetypes.Provider
@@ -320,7 +329,7 @@ func (p *Provider) ListObjects(ctx context.Context, prefix string, limit int) ([
 
 // GetScheme returns the URI scheme for R2
 func (p *Provider) GetScheme() *string {
-	scheme := "r2://"
+	scheme := storage.Scheme(storagetypes.R2Provider)
 
 	return &scheme
 }

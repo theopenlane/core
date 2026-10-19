@@ -7196,6 +7196,8 @@ type CreateEntityInput struct {
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// whether this system-owned row is published for organizations to adopt
 	ExternallyVisible *bool `json:"externallyVisible,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawIngestPayload map[string]any `json:"rawIngestPayload,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName *string `json:"entityRelationshipStateName,omitempty"`
 	// the security_questionnaire_status of the entity
@@ -13307,12 +13309,14 @@ type Entity struct {
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
-	// the system-owned catalog entity this entity was adopted from
-	CatalogEntityID *string `json:"catalogEntityID,omitempty"`
+	// the system-owned catalog row this row was adopted from
+	CatalogID *string `json:"catalogID,omitempty"`
 	// whether this system-owned row is published for organizations to adopt
 	ExternallyVisible *bool `json:"externallyVisible,omitempty"`
-	// the lookup key of the catalog entity this entity was adopted from
-	CatalogEntityKey *string `json:"catalogEntityKey,omitempty"`
+	// the lookup key of the catalog row this row was adopted from
+	CatalogKey *string `json:"catalogKey,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawIngestPayload map[string]any `json:"rawIngestPayload,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName *string `json:"entityRelationshipStateName,omitempty"`
 	// the relationship_state of the entity
@@ -13417,9 +13421,9 @@ type Entity struct {
 	ReviewedByUser              *User                     `json:"reviewedByUser,omitempty"`
 	ReviewedByGroup             *Group                    `json:"reviewedByGroup,omitempty"`
 	ReviewedByIdentityHolder    *IdentityHolder           `json:"reviewedByIdentityHolder,omitempty"`
-	// the system-owned catalog entity this entity was adopted from
-	CatalogEntity                     *Entity                       `json:"catalogEntity,omitempty"`
-	AdoptedEntities                   *EntityConnection             `json:"adoptedEntities"`
+	// the system-owned catalog row this row was adopted from
+	Catalog                           *Entity                       `json:"catalog,omitempty"`
+	Adopted                           *EntityConnection             `json:"adopted"`
 	EntityRelationshipState           *CustomTypeEnum               `json:"entityRelationshipState,omitempty"`
 	EntitySecurityQuestionnaireStatus *CustomTypeEnum               `json:"entitySecurityQuestionnaireStatus,omitempty"`
 	EntitySourceType                  *CustomTypeEnum               `json:"entitySourceType,omitempty"`
@@ -14022,35 +14026,35 @@ type EntityWhereInput struct {
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
-	// catalog_entity_id field predicates
-	CatalogEntityID             *string  `json:"catalogEntityID,omitempty"`
-	CatalogEntityIdneq          *string  `json:"catalogEntityIDNEQ,omitempty"`
-	CatalogEntityIDIn           []string `json:"catalogEntityIDIn,omitempty"`
-	CatalogEntityIDNotIn        []string `json:"catalogEntityIDNotIn,omitempty"`
-	CatalogEntityIDContains     *string  `json:"catalogEntityIDContains,omitempty"`
-	CatalogEntityIDHasPrefix    *string  `json:"catalogEntityIDHasPrefix,omitempty"`
-	CatalogEntityIDHasSuffix    *string  `json:"catalogEntityIDHasSuffix,omitempty"`
-	CatalogEntityIDIsNil        *bool    `json:"catalogEntityIDIsNil,omitempty"`
-	CatalogEntityIDNotNil       *bool    `json:"catalogEntityIDNotNil,omitempty"`
-	CatalogEntityIDEqualFold    *string  `json:"catalogEntityIDEqualFold,omitempty"`
-	CatalogEntityIDContainsFold *string  `json:"catalogEntityIDContainsFold,omitempty"`
+	// catalog_id field predicates
+	CatalogID             *string  `json:"catalogID,omitempty"`
+	CatalogIdneq          *string  `json:"catalogIDNEQ,omitempty"`
+	CatalogIDIn           []string `json:"catalogIDIn,omitempty"`
+	CatalogIDNotIn        []string `json:"catalogIDNotIn,omitempty"`
+	CatalogIDContains     *string  `json:"catalogIDContains,omitempty"`
+	CatalogIDHasPrefix    *string  `json:"catalogIDHasPrefix,omitempty"`
+	CatalogIDHasSuffix    *string  `json:"catalogIDHasSuffix,omitempty"`
+	CatalogIDIsNil        *bool    `json:"catalogIDIsNil,omitempty"`
+	CatalogIDNotNil       *bool    `json:"catalogIDNotNil,omitempty"`
+	CatalogIDEqualFold    *string  `json:"catalogIDEqualFold,omitempty"`
+	CatalogIDContainsFold *string  `json:"catalogIDContainsFold,omitempty"`
 	// externally_visible field predicates
 	ExternallyVisible       *bool `json:"externallyVisible,omitempty"`
 	ExternallyVisibleNeq    *bool `json:"externallyVisibleNEQ,omitempty"`
 	ExternallyVisibleIsNil  *bool `json:"externallyVisibleIsNil,omitempty"`
 	ExternallyVisibleNotNil *bool `json:"externallyVisibleNotNil,omitempty"`
-	// catalog_entity_key field predicates
-	CatalogEntityKey             *string  `json:"catalogEntityKey,omitempty"`
-	CatalogEntityKeyNeq          *string  `json:"catalogEntityKeyNEQ,omitempty"`
-	CatalogEntityKeyIn           []string `json:"catalogEntityKeyIn,omitempty"`
-	CatalogEntityKeyNotIn        []string `json:"catalogEntityKeyNotIn,omitempty"`
-	CatalogEntityKeyContains     *string  `json:"catalogEntityKeyContains,omitempty"`
-	CatalogEntityKeyHasPrefix    *string  `json:"catalogEntityKeyHasPrefix,omitempty"`
-	CatalogEntityKeyHasSuffix    *string  `json:"catalogEntityKeyHasSuffix,omitempty"`
-	CatalogEntityKeyIsNil        *bool    `json:"catalogEntityKeyIsNil,omitempty"`
-	CatalogEntityKeyNotNil       *bool    `json:"catalogEntityKeyNotNil,omitempty"`
-	CatalogEntityKeyEqualFold    *string  `json:"catalogEntityKeyEqualFold,omitempty"`
-	CatalogEntityKeyContainsFold *string  `json:"catalogEntityKeyContainsFold,omitempty"`
+	// catalog_key field predicates
+	CatalogKey             *string  `json:"catalogKey,omitempty"`
+	CatalogKeyNeq          *string  `json:"catalogKeyNEQ,omitempty"`
+	CatalogKeyIn           []string `json:"catalogKeyIn,omitempty"`
+	CatalogKeyNotIn        []string `json:"catalogKeyNotIn,omitempty"`
+	CatalogKeyContains     *string  `json:"catalogKeyContains,omitempty"`
+	CatalogKeyHasPrefix    *string  `json:"catalogKeyHasPrefix,omitempty"`
+	CatalogKeyHasSuffix    *string  `json:"catalogKeyHasSuffix,omitempty"`
+	CatalogKeyIsNil        *bool    `json:"catalogKeyIsNil,omitempty"`
+	CatalogKeyNotNil       *bool    `json:"catalogKeyNotNil,omitempty"`
+	CatalogKeyEqualFold    *string  `json:"catalogKeyEqualFold,omitempty"`
+	CatalogKeyContainsFold *string  `json:"catalogKeyContainsFold,omitempty"`
 	// entity_relationship_state_name field predicates
 	EntityRelationshipStateName             *string  `json:"entityRelationshipStateName,omitempty"`
 	EntityRelationshipStateNameNeq          *string  `json:"entityRelationshipStateNameNEQ,omitempty"`
@@ -14482,12 +14486,12 @@ type EntityWhereInput struct {
 	// reviewed_by_identity_holder edge predicates
 	HasReviewedByIdentityHolder     *bool                       `json:"hasReviewedByIdentityHolder,omitempty"`
 	HasReviewedByIdentityHolderWith []*IdentityHolderWhereInput `json:"hasReviewedByIdentityHolderWith,omitempty"`
-	// catalog_entity edge predicates
-	HasCatalogEntity     *bool               `json:"hasCatalogEntity,omitempty"`
-	HasCatalogEntityWith []*EntityWhereInput `json:"hasCatalogEntityWith,omitempty"`
-	// adopted_entities edge predicates
-	HasAdoptedEntities     *bool               `json:"hasAdoptedEntities,omitempty"`
-	HasAdoptedEntitiesWith []*EntityWhereInput `json:"hasAdoptedEntitiesWith,omitempty"`
+	// catalog edge predicates
+	HasCatalog     *bool               `json:"hasCatalog,omitempty"`
+	HasCatalogWith []*EntityWhereInput `json:"hasCatalogWith,omitempty"`
+	// adopted edge predicates
+	HasAdopted     *bool               `json:"hasAdopted,omitempty"`
+	HasAdoptedWith []*EntityWhereInput `json:"hasAdoptedWith,omitempty"`
 	// entity_relationship_state edge predicates
 	HasEntityRelationshipState     *bool                       `json:"hasEntityRelationshipState,omitempty"`
 	HasEntityRelationshipStateWith []*CustomTypeEnumWhereInput `json:"hasEntityRelationshipStateWith,omitempty"`
@@ -37621,6 +37625,9 @@ type UpdateEntityInput struct {
 	// whether this system-owned row is published for organizations to adopt
 	ExternallyVisible      *bool `json:"externallyVisible,omitempty"`
 	ClearExternallyVisible *bool `json:"clearExternallyVisible,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawIngestPayload      map[string]any `json:"rawIngestPayload,omitempty"`
+	ClearRawIngestPayload *bool          `json:"clearRawIngestPayload,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName      *string `json:"entityRelationshipStateName,omitempty"`
 	ClearEntityRelationshipStateName *bool   `json:"clearEntityRelationshipStateName,omitempty"`

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	gstorage "cloud.google.com/go/storage"
+	"golang.org/x/oauth2/google"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
@@ -21,8 +22,8 @@ import (
 const (
 	// DefaultPresignedURLExpiry defines the default expiry time for signed URLs
 	DefaultPresignedURLExpiry = 15 * time.Minute
-	// scheme is the URI scheme for Google Cloud Storage objects
-	scheme = "gs://"
+	// ReadWriteScope is the OAuth scope granting object reads and writes in a bucket
+	ReadWriteScope = "https://www.googleapis.com/auth/devstorage.read_write"
 )
 
 // Provider implements storagetypes.Provider against Google Cloud Storage
@@ -46,6 +47,16 @@ func WithClientOptions(opts ...option.ClientOption) Option {
 	return func(cfg *providerConfig) {
 		cfg.clientOptions = append(cfg.clientOptions, opts...)
 	}
+}
+
+// WithServiceAccountKey authenticates the client with a service account key JSON under ReadWriteScope
+func WithServiceAccountKey(ctx context.Context, key []byte) (Option, error) {
+	creds, err := google.CredentialsFromJSONWithType(ctx, key, google.ServiceAccount, ReadWriteScope)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrServiceAccountKeyInvalid, err)
+	}
+
+	return WithClientOptions(option.WithCredentials(creds)), nil
 }
 
 // NewProvider creates a GCS provider for the bucket in options, authenticating with application default credentials unless client options say otherwise
@@ -116,14 +127,14 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 			Bucket:       p.bucket,
 			ContentType:  opts.ContentType,
 			ProviderType: storage.GCSProvider,
-			FullURI:      scheme + p.bucket + "/" + objectKey,
+			FullURI:      storage.Scheme(storage.GCSProvider) + p.bucket + "/" + objectKey,
 		},
 	}, nil
 }
 
 // Download implements storagetypes.Provider
 func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
-	r, err := p.client.Bucket(p.bucketFor(file)).Object(file.Key).NewReader(ctx)
+	r, err := p.client.Bucket(p.options.BucketFor(file.Bucket)).Object(file.Key).NewReader(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +158,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *sto
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
-	err := p.client.Bucket(p.bucketFor(file)).Object(file.Key).Delete(ctx)
+	err := p.client.Bucket(p.options.BucketFor(file.Bucket)).Object(file.Key).Delete(ctx)
 	if err != nil && !errors.Is(err, gstorage.ErrObjectNotExist) {
 		return err
 	}
@@ -155,6 +166,15 @@ func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *stora
 	metrics.RecordStorageDelete(string(storage.GCSProvider))
 
 	return nil
+}
+
+// Copy implements storage.Copier through a server-side object copy
+func (p *Provider) Copy(ctx context.Context, file *storagetypes.File, opts *storage.CopyOptions) error {
+	source := p.client.Bucket(p.options.BucketFor(file.Bucket)).Object(file.Key)
+
+	_, err := p.client.Bucket(p.options.BucketFor(opts.Bucket)).Object(opts.Key).CopierFrom(source).Run(ctx)
+
+	return err
 }
 
 // GetPresignedURL implements storagetypes.Provider
@@ -168,7 +188,7 @@ func (p *Provider) GetPresignedURL(_ context.Context, file *storagetypes.File, o
 		duration = DefaultPresignedURLExpiry
 	}
 
-	return p.client.Bucket(p.bucketFor(file)).SignedURL(file.Key, &gstorage.SignedURLOptions{
+	return p.client.Bucket(p.options.BucketFor(file.Bucket)).SignedURL(file.Key, &gstorage.SignedURLOptions{
 		Method:  http.MethodGet,
 		Expires: time.Now().Add(duration),
 		Scheme:  gstorage.SigningSchemeV4,
@@ -177,7 +197,7 @@ func (p *Provider) GetPresignedURL(_ context.Context, file *storagetypes.File, o
 
 // Exists implements storagetypes.Provider
 func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
-	_, err := p.client.Bucket(p.bucketFor(file)).Object(file.Key).Attrs(ctx)
+	_, err := p.client.Bucket(p.options.BucketFor(file.Bucket)).Object(file.Key).Attrs(ctx)
 
 	switch {
 	case errors.Is(err, gstorage.ErrObjectNotExist):
@@ -191,7 +211,7 @@ func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, e
 
 // GetScheme implements storagetypes.Provider
 func (p *Provider) GetScheme() *string {
-	s := scheme
+	s := storage.Scheme(storage.GCSProvider)
 
 	return &s
 }
@@ -250,13 +270,4 @@ func (p *Provider) ListObjects(ctx context.Context, prefix string, limit int) ([
 // Close implements storagetypes.Provider
 func (p *Provider) Close() error {
 	return p.client.Close()
-}
-
-// bucketFor returns the bucket recorded on the file, falling back to the provider bucket
-func (p *Provider) bucketFor(file *storagetypes.File) string {
-	if file.Bucket != "" {
-		return file.Bucket
-	}
-
-	return p.bucket
 }

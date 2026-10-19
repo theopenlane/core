@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"time"
 
@@ -60,7 +59,7 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 			Size:         size,
 			Bucket:       bucket,
 			ProviderType: storagetypes.DatabaseProvider,
-			FullURI:      fmt.Sprintf("database://%s/%s", bucket, fileID),
+			FullURI:      storage.Scheme(storagetypes.DatabaseProvider) + bucket + "/" + fileID,
 		},
 	}
 
@@ -132,6 +131,31 @@ func (p *Provider) Delete(ctx context.Context, fileRef *storagetypes.File, _ *st
 	return nil
 }
 
+// Copy implements storage.Copier by copying the stored bytes onto the file row named by the destination key
+func (p *Provider) Copy(ctx context.Context, fileRef *storagetypes.File, opts *storage.CopyOptions) error {
+	client, err := p.entClient(ctx)
+	if err != nil {
+		return err
+	}
+
+	if fileRef.ID == "" || opts.Key == "" {
+		return ErrMissingFileIdentifier
+	}
+
+	record, err := client.File.Get(ctx, fileRef.ID)
+	if err != nil {
+		return err
+	}
+
+	if len(record.FileContents) == 0 {
+		return ErrFileNotFound
+	}
+
+	return client.File.UpdateOneID(opts.Key).
+		SetFileContents(record.FileContents).
+		Exec(ctx)
+}
+
 // Exists checks whether file bytes are present in the database.
 func (p *Provider) Exists(ctx context.Context, fileRef *storagetypes.File) (bool, error) {
 	client, err := p.entClient(ctx)
@@ -183,7 +207,7 @@ func (p *Provider) ListBuckets() ([]string, error) {
 
 // GetScheme identifies the provider URI scheme.
 func (p *Provider) GetScheme() *string {
-	scheme := "database://"
+	scheme := storage.Scheme(storagetypes.DatabaseProvider)
 	return &scheme
 }
 

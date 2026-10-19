@@ -3684,20 +3684,25 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldSystemInternalID)
 				fieldSeen[entityhistory.FieldSystemInternalID] = struct{}{}
 			}
-		case "catalogEntityID":
-			if _, ok := fieldSeen[entityhistory.FieldCatalogEntityID]; !ok {
-				selectedFields = append(selectedFields, entityhistory.FieldCatalogEntityID)
-				fieldSeen[entityhistory.FieldCatalogEntityID] = struct{}{}
+		case "catalogID":
+			if _, ok := fieldSeen[entityhistory.FieldCatalogID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldCatalogID)
+				fieldSeen[entityhistory.FieldCatalogID] = struct{}{}
 			}
 		case "externallyVisible":
 			if _, ok := fieldSeen[entityhistory.FieldExternallyVisible]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldExternallyVisible)
 				fieldSeen[entityhistory.FieldExternallyVisible] = struct{}{}
 			}
-		case "catalogEntityKey":
-			if _, ok := fieldSeen[entityhistory.FieldCatalogEntityKey]; !ok {
-				selectedFields = append(selectedFields, entityhistory.FieldCatalogEntityKey)
-				fieldSeen[entityhistory.FieldCatalogEntityKey] = struct{}{}
+		case "catalogKey":
+			if _, ok := fieldSeen[entityhistory.FieldCatalogKey]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldCatalogKey)
+				fieldSeen[entityhistory.FieldCatalogKey] = struct{}{}
+			}
+		case "rawIngestPayload":
+			if _, ok := fieldSeen[entityhistory.FieldRawIngestPayload]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldRawIngestPayload)
+				fieldSeen[entityhistory.FieldRawIngestPayload] = struct{}{}
 			}
 		case "entityRelationshipStateName":
 			if _, ok := fieldSeen[entityhistory.FieldEntityRelationshipStateName]; !ok {

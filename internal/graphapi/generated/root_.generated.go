@@ -81,6 +81,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	CatalogManaged   func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
 	ExternalReadOnly func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
 	ExternalSource   func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
 	Hidden           func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
@@ -1937,7 +1938,7 @@ type ComplexityRoot struct {
 	}
 
 	Entity struct {
-		AdoptedEntities                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Adopted                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Aliases                               func(childComplexity int) int
 		AnnualSpend                           func(childComplexity int) int
 		ApprovedForUse                        func(childComplexity int) int
@@ -1948,9 +1949,9 @@ type ComplexityRoot struct {
 		BillingModel                          func(childComplexity int) int
 		BlockedGroups                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Campaigns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
-		CatalogEntity                         func(childComplexity int) int
-		CatalogEntityID                       func(childComplexity int) int
-		CatalogEntityKey                      func(childComplexity int) int
+		Catalog                               func(childComplexity int) int
+		CatalogID                             func(childComplexity int) int
+		CatalogKey                            func(childComplexity int) int
 		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
@@ -2015,6 +2016,7 @@ type ComplexityRoot struct {
 		OwnerID                               func(childComplexity int) int
 		Platforms                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		ProvidedServices                      func(childComplexity int) int
+		RawIngestPayload                      func(childComplexity int) int
 		Remediations                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		RenewalRisk                           func(childComplexity int) int
 		ReviewFrequency                       func(childComplexity int) int
@@ -16532,17 +16534,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateUpdatePayload.EmailTemplate(childComplexity), true
 
-	case "Entity.adoptedEntities":
-		if e.ComplexityRoot.Entity.AdoptedEntities == nil {
+	case "Entity.adopted":
+		if e.ComplexityRoot.Entity.Adopted == nil {
 			break
 		}
 
-		args, err := ec.field_Entity_adoptedEntities_args(ctx, rawArgs)
+		args, err := ec.field_Entity_adopted_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Entity.AdoptedEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+		return e.ComplexityRoot.Entity.Adopted(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Entity.aliases":
 		if e.ComplexityRoot.Entity.Aliases == nil {
 			break
@@ -16628,24 +16630,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
-	case "Entity.catalogEntity":
-		if e.ComplexityRoot.Entity.CatalogEntity == nil {
+	case "Entity.catalog":
+		if e.ComplexityRoot.Entity.Catalog == nil {
 			break
 		}
 
-		return e.ComplexityRoot.Entity.CatalogEntity(childComplexity), true
-	case "Entity.catalogEntityID":
-		if e.ComplexityRoot.Entity.CatalogEntityID == nil {
+		return e.ComplexityRoot.Entity.Catalog(childComplexity), true
+	case "Entity.catalogID":
+		if e.ComplexityRoot.Entity.CatalogID == nil {
 			break
 		}
 
-		return e.ComplexityRoot.Entity.CatalogEntityID(childComplexity), true
-	case "Entity.catalogEntityKey":
-		if e.ComplexityRoot.Entity.CatalogEntityKey == nil {
+		return e.ComplexityRoot.Entity.CatalogID(childComplexity), true
+	case "Entity.catalogKey":
+		if e.ComplexityRoot.Entity.CatalogKey == nil {
 			break
 		}
 
-		return e.ComplexityRoot.Entity.CatalogEntityKey(childComplexity), true
+		return e.ComplexityRoot.Entity.CatalogKey(childComplexity), true
 	case "Entity.contacts":
 		if e.ComplexityRoot.Entity.Contacts == nil {
 			break
@@ -17100,6 +17102,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.ProvidedServices(childComplexity), true
+	case "Entity.rawIngestPayload":
+		if e.ComplexityRoot.Entity.RawIngestPayload == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.RawIngestPayload(childComplexity), true
 	case "Entity.remediations":
 		if e.ComplexityRoot.Entity.Remediations == nil {
 			break
@@ -51723,6 +51731,10 @@ This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
 """
+Indicates the field's value is copied from the catalog row on adopt and rewritten on refresh while the row stays linked
+"""
+directive @catalogManaged on FIELD_DEFINITION
+"""
 Indicates the modules an organization must have enabled to access this object,
 at least one of the listed modules is required
 """
@@ -69166,6 +69178,10 @@ input CreateEntityInput {
   """
   externallyVisible: Boolean
   """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -78678,17 +78694,21 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   systemInternalID: String @hidden(if: true)
   """
-  the system-owned catalog entity this entity was adopted from
+  the system-owned catalog row this row was adopted from
   """
-  catalogEntityID: ID
+  catalogID: ID
   """
   whether this system-owned row is published for organizations to adopt
   """
   externallyVisible: Boolean
   """
-  the lookup key of the catalog entity this entity was adopted from
+  the lookup key of the catalog row this row was adopted from
   """
-  catalogEntityKey: String
+  catalogKey: String
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
   """
   the relationship_state of the entity
   """
@@ -78978,10 +78998,10 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   reviewedByGroup: Group
   reviewedByIdentityHolder: IdentityHolder
   """
-  the system-owned catalog entity this entity was adopted from
+  the system-owned catalog row this row was adopted from
   """
-  catalogEntity: Entity
-  adoptedEntities(
+  catalog: Entity
+  adopted(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -80504,19 +80524,19 @@ input EntityWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
-  catalog_entity_id field predicates
+  catalog_id field predicates
   """
-  catalogEntityID: ID
-  catalogEntityIDNEQ: ID
-  catalogEntityIDIn: [ID!]
-  catalogEntityIDNotIn: [ID!]
-  catalogEntityIDContains: ID
-  catalogEntityIDHasPrefix: ID
-  catalogEntityIDHasSuffix: ID
-  catalogEntityIDIsNil: Boolean
-  catalogEntityIDNotNil: Boolean
-  catalogEntityIDEqualFold: ID
-  catalogEntityIDContainsFold: ID
+  catalogID: ID
+  catalogIDNEQ: ID
+  catalogIDIn: [ID!]
+  catalogIDNotIn: [ID!]
+  catalogIDContains: ID
+  catalogIDHasPrefix: ID
+  catalogIDHasSuffix: ID
+  catalogIDIsNil: Boolean
+  catalogIDNotNil: Boolean
+  catalogIDEqualFold: ID
+  catalogIDContainsFold: ID
   """
   externally_visible field predicates
   """
@@ -80525,19 +80545,19 @@ input EntityWhereInput {
   externallyVisibleIsNil: Boolean
   externallyVisibleNotNil: Boolean
   """
-  catalog_entity_key field predicates
+  catalog_key field predicates
   """
-  catalogEntityKey: String
-  catalogEntityKeyNEQ: String
-  catalogEntityKeyIn: [String!]
-  catalogEntityKeyNotIn: [String!]
-  catalogEntityKeyContains: String
-  catalogEntityKeyHasPrefix: String
-  catalogEntityKeyHasSuffix: String
-  catalogEntityKeyIsNil: Boolean
-  catalogEntityKeyNotNil: Boolean
-  catalogEntityKeyEqualFold: String
-  catalogEntityKeyContainsFold: String
+  catalogKey: String
+  catalogKeyNEQ: String
+  catalogKeyIn: [String!]
+  catalogKeyNotIn: [String!]
+  catalogKeyContains: String
+  catalogKeyHasPrefix: String
+  catalogKeyHasSuffix: String
+  catalogKeyIsNil: Boolean
+  catalogKeyNotNil: Boolean
+  catalogKeyEqualFold: String
+  catalogKeyContainsFold: String
   """
   entity_relationship_state_name field predicates
   """
@@ -81072,15 +81092,15 @@ input EntityWhereInput {
   hasReviewedByIdentityHolder: Boolean
   hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
   """
-  catalog_entity edge predicates
+  catalog edge predicates
   """
-  hasCatalogEntity: Boolean
-  hasCatalogEntityWith: [EntityWhereInput!]
+  hasCatalog: Boolean
+  hasCatalogWith: [EntityWhereInput!]
   """
-  adopted_entities edge predicates
+  adopted edge predicates
   """
-  hasAdoptedEntities: Boolean
-  hasAdoptedEntitiesWith: [EntityWhereInput!]
+  hasAdopted: Boolean
+  hasAdoptedWith: [EntityWhereInput!]
   """
   entity_relationship_state edge predicates
   """
@@ -128403,6 +128423,11 @@ input UpdateEntityInput {
   externallyVisible: Boolean
   clearExternallyVisible: Boolean
   """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
+  clearRawIngestPayload: Boolean
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -158334,12 +158359,14 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_Entity_systemInternalID(ctx, field)
-	case "catalogEntityID":
-		return ec.fieldContext_Entity_catalogEntityID(ctx, field)
+	case "catalogID":
+		return ec.fieldContext_Entity_catalogID(ctx, field)
 	case "externallyVisible":
 		return ec.fieldContext_Entity_externallyVisible(ctx, field)
-	case "catalogEntityKey":
-		return ec.fieldContext_Entity_catalogEntityKey(ctx, field)
+	case "catalogKey":
+		return ec.fieldContext_Entity_catalogKey(ctx, field)
+	case "rawIngestPayload":
+		return ec.fieldContext_Entity_rawIngestPayload(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":
@@ -158454,10 +158481,10 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
 	case "reviewedByIdentityHolder":
 		return ec.fieldContext_Entity_reviewedByIdentityHolder(ctx, field)
-	case "catalogEntity":
-		return ec.fieldContext_Entity_catalogEntity(ctx, field)
-	case "adoptedEntities":
-		return ec.fieldContext_Entity_adoptedEntities(ctx, field)
+	case "catalog":
+		return ec.fieldContext_Entity_catalog(ctx, field)
+	case "adopted":
+		return ec.fieldContext_Entity_adopted(ctx, field)
 	case "entityRelationshipState":
 		return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
 	case "entitySecurityQuestionnaireStatus":

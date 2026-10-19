@@ -541,6 +541,7 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 			ID:          testAuthDefinitionID,
 			DisplayName: "Test OAuth",
 			Active:      true,
+			Visible:     true,
 		},
 		Installation: types.InstallationOf[testOAuthInstallation]().Registration(),
 		Connections:  []types.Connector{connection},

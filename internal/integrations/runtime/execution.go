@@ -509,6 +509,17 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		return nil, operations.IngestResult{}, ErrOperationRateLimited
 	}
 
+	var definitionID string
+
+	if integration == nil {
+		oc, _ := gala.OperationContextFromContext(ctx)
+		definitionID = types.IntegrationSourceFrom(oc).DefinitionID
+
+		if operation.IngestHandle != nil || len(operation.Ingest) > 0 {
+			ctx = systemIngestContext(ctx)
+		}
+	}
+
 	req := types.OperationRequest{
 		Integration: integration,
 		Client:      client,
@@ -533,10 +544,11 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", lo.SumBy(payloadSets, func(ps types.IngestPayloadSet) int { return len(ps.Envelopes) })).Msg("ingest handle completed")
 
 	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
-		Registry:    r.Registry(),
-		DB:          r.DB(),
-		Runtime:     r.Gala(),
-		Integration: integration,
+		Registry:     r.Registry(),
+		DB:           r.DB(),
+		Runtime:      r.Gala(),
+		Integration:  integration,
+		DefinitionID: definitionID,
 	}, operation.Name, operation.Ingest, operation.Policy, payloadSets, ingestOptions)
 	if err != nil {
 		return nil, result, err
@@ -626,6 +638,15 @@ func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID strin
 	}
 
 	return purged, nil
+}
+
+// systemIngestContext installs the caller runtime ingest writes system-owned rows as: system admin so the
+// system-owned hook marks rows and no owner is stamped, with audit-log bypass matching integration callers
+func systemIngestContext(ctx context.Context) context.Context {
+	caller := auth.NewSystemAdminCaller(auth.IntegrationSubjectID, auth.IntegrationDisplayName, auth.IntegrationEmail)
+	caller.Capabilities |= auth.CapBypassAuditLog
+
+	return auth.WithCaller(ctx, caller)
 }
 
 // resolveOperationClient resolves the client an operation runs with
