@@ -142,7 +142,7 @@ func (w WorkflowProposal) Mixin() []ent.Mixin {
 
 // Modules this schema has access to.
 func (WorkflowProposal) Modules() []models.OrgModule {
-	return []models.OrgModule{models.CatalogAnyModule}
+	return []models.OrgModule{models.CatalogWorkflowAddon}
 }
 
 // Hooks returns the hooks for the WorkflowProposal schema

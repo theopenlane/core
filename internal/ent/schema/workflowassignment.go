@@ -163,7 +163,7 @@ func (WorkflowAssignment) Mixin() []ent.Mixin {
 
 // Modules this schema has access to
 func (WorkflowAssignment) Modules() []models.OrgModule {
-	return []models.OrgModule{models.CatalogAnyModule}
+	return []models.OrgModule{models.CatalogWorkflowAddon}
 }
 
 // Annotations of the WorkflowAssignment

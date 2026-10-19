@@ -24,8 +24,8 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users for workflow testing
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	approver := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	approver := suite.WorkflowUserBuilder(context.Background(), t)
 
 	// Add approver to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
@@ -208,9 +208,9 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users
-	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	approver1 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	approver2 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	initiator := suite.WorkflowUserBuilder(context.Background(), t)
+	approver1 := suite.WorkflowUserBuilder(context.Background(), t)
+	approver2 := suite.WorkflowUserBuilder(context.Background(), t)
 
 	// Add approvers to initiator's organization
 	suite.AddUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
