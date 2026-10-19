@@ -309,6 +309,26 @@ func (_u *TrustCenterNDARequestUpdate) ClearApprovedByUserID() *TrustCenterNDARe
 	return _u
 }
 
+// SetAutoApproved sets the "auto_approved" field.
+func (_u *TrustCenterNDARequestUpdate) SetAutoApproved(v bool) *TrustCenterNDARequestUpdate {
+	_u.mutation.SetAutoApproved(v)
+	return _u
+}
+
+// SetNillableAutoApproved sets the "auto_approved" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdate) SetNillableAutoApproved(v *bool) *TrustCenterNDARequestUpdate {
+	if v != nil {
+		_u.SetAutoApproved(*v)
+	}
+	return _u
+}
+
+// ClearAutoApproved clears the value of the "auto_approved" field.
+func (_u *TrustCenterNDARequestUpdate) ClearAutoApproved() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearAutoApproved()
+	return _u
+}
+
 // SetSignedAt sets the "signed_at" field.
 func (_u *TrustCenterNDARequestUpdate) SetSignedAt(v models.DateTime) *TrustCenterNDARequestUpdate {
 	_u.mutation.SetSignedAt(v)
@@ -704,6 +724,12 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.ApprovedAtCleared() {
 		_spec.ClearField(trustcenterndarequest.FieldApprovedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AutoApproved(); ok {
+		_spec.SetField(trustcenterndarequest.FieldAutoApproved, field.TypeBool, value)
+	}
+	if _u.mutation.AutoApprovedCleared() {
+		_spec.ClearField(trustcenterndarequest.FieldAutoApproved, field.TypeBool)
 	}
 	if value, ok := _u.mutation.SignedAt(); ok {
 		_spec.SetField(trustcenterndarequest.FieldSignedAt, field.TypeTime, value)
@@ -1227,6 +1253,26 @@ func (_u *TrustCenterNDARequestUpdateOne) ClearApprovedByUserID() *TrustCenterND
 	return _u
 }
 
+// SetAutoApproved sets the "auto_approved" field.
+func (_u *TrustCenterNDARequestUpdateOne) SetAutoApproved(v bool) *TrustCenterNDARequestUpdateOne {
+	_u.mutation.SetAutoApproved(v)
+	return _u
+}
+
+// SetNillableAutoApproved sets the "auto_approved" field if the given value is not nil.
+func (_u *TrustCenterNDARequestUpdateOne) SetNillableAutoApproved(v *bool) *TrustCenterNDARequestUpdateOne {
+	if v != nil {
+		_u.SetAutoApproved(*v)
+	}
+	return _u
+}
+
+// ClearAutoApproved clears the value of the "auto_approved" field.
+func (_u *TrustCenterNDARequestUpdateOne) ClearAutoApproved() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearAutoApproved()
+	return _u
+}
+
 // SetSignedAt sets the "signed_at" field.
 func (_u *TrustCenterNDARequestUpdateOne) SetSignedAt(v models.DateTime) *TrustCenterNDARequestUpdateOne {
 	_u.mutation.SetSignedAt(v)
@@ -1652,6 +1698,12 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if _u.mutation.ApprovedAtCleared() {
 		_spec.ClearField(trustcenterndarequest.FieldApprovedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AutoApproved(); ok {
+		_spec.SetField(trustcenterndarequest.FieldAutoApproved, field.TypeBool, value)
+	}
+	if _u.mutation.AutoApprovedCleared() {
+		_spec.ClearField(trustcenterndarequest.FieldAutoApproved, field.TypeBool)
 	}
 	if value, ok := _u.mutation.SignedAt(); ok {
 		_spec.SetField(trustcenterndarequest.FieldSignedAt, field.TypeTime, value)

@@ -28,37 +28,18 @@ type application struct {
 //	  ]
 //	}
 func (h *Handler) MSFTIdentityWellKnownHandler(ctx echo.Context) error {
-	entraAppID := h.IntegrationsConfig.AzureEntraID.ApplicationID
-	oneDriveAppID := h.IntegrationsConfig.OneDrive.ApplicationID
-	teamsAppID := h.IntegrationsConfig.MicrosoftTeams.ApplicationID
-
-	applications := []application{}
-
-	if entraAppID != "" {
-		if _, err := uuid.Parse(entraAppID); err == nil {
-			applications = append(applications, application{
-				ApplicationID: entraAppID,
-			})
-		}
-
+	appIDs := []string{
+		h.IntegrationsConfig.AzureEntraID.ApplicationID,
+		h.IntegrationsConfig.AzureSecurityCenter.ApplicationID,
+		h.IntegrationsConfig.OneDrive.ApplicationID,
+		h.IntegrationsConfig.MicrosoftTeams.ApplicationID,
 	}
 
-	if oneDriveAppID != "" {
-		if _, err := uuid.Parse(oneDriveAppID); err == nil {
-			applications = append(applications, application{
-				ApplicationID: oneDriveAppID,
-			})
-		}
+	applications := lo.FilterMap(appIDs, func(appID string, _ int) (application, bool) {
+		_, err := uuid.Parse(appID)
 
-	}
-
-	if teamsAppID != "" {
-		if _, err := uuid.Parse(teamsAppID); err == nil {
-			applications = append(applications, application{
-				ApplicationID: teamsAppID,
-			})
-		}
-	}
+		return application{ApplicationID: appID}, err == nil
+	})
 
 	// ensure we do not have duplicate application ids
 	applications = lo.Uniq(applications)

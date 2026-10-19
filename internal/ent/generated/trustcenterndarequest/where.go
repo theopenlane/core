@@ -142,6 +142,11 @@ func ApprovedByUserID(v string) predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldApprovedByUserID, v))
 }
 
+// AutoApproved applies equality check predicate on the "auto_approved" field. It's identical to AutoApprovedEQ.
+func AutoApproved(v bool) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldAutoApproved, v))
+}
+
 // SignedAt applies equality check predicate on the "signed_at" field. It's identical to SignedAtEQ.
 func SignedAt(v models.DateTime) predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldSignedAt, v))
@@ -1240,6 +1245,26 @@ func ApprovedByUserIDEqualFold(v string) predicate.TrustCenterNDARequest {
 // ApprovedByUserIDContainsFold applies the ContainsFold predicate on the "approved_by_user_id" field.
 func ApprovedByUserIDContainsFold(v string) predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.FieldContainsFold(FieldApprovedByUserID, v))
+}
+
+// AutoApprovedEQ applies the EQ predicate on the "auto_approved" field.
+func AutoApprovedEQ(v bool) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldEQ(FieldAutoApproved, v))
+}
+
+// AutoApprovedNEQ applies the NEQ predicate on the "auto_approved" field.
+func AutoApprovedNEQ(v bool) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNEQ(FieldAutoApproved, v))
+}
+
+// AutoApprovedIsNil applies the IsNil predicate on the "auto_approved" field.
+func AutoApprovedIsNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldIsNull(FieldAutoApproved))
+}
+
+// AutoApprovedNotNil applies the NotNil predicate on the "auto_approved" field.
+func AutoApprovedNotNil() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(sql.FieldNotNull(FieldAutoApproved))
 }
 
 // SignedAtEQ applies the EQ predicate on the "signed_at" field.

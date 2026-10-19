@@ -4,6 +4,7 @@ import (
 	"time"
 
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
+	"github.com/samber/lo"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -52,6 +53,10 @@ type InstallationMetadata struct {
 	TenantID string `json:"tenantId,omitempty" jsonschema:"title=Tenant ID"`
 	// Domain is the primary domain of the Microsoft tenant
 	Domain string `json:"domain,omitempty" jsonschema:"title=Domain"`
+	// DriveID is the OneDrive drive identifier, the identity for personal accounts that carry no tenant
+	DriveID string `json:"driveId,omitempty" jsonschema:"title=Drive ID"`
+	// OwnerName is the display name of the drive owner
+	OwnerName string `json:"ownerName,omitempty" jsonschema:"title=Owner Name"`
 }
 
 // DefinitionID returns the stable definition identifier for the OneDrive integration
@@ -67,7 +72,7 @@ func ExportOperationName() string {
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
-		ExternalName: m.Domain,
-		ExternalID:   m.TenantID,
+		ExternalName: lo.CoalesceOrEmpty(m.Domain, m.OwnerName),
+		ExternalID:   lo.CoalesceOrEmpty(m.TenantID, m.DriveID),
 	}
 }

@@ -57,5 +57,6 @@ extend-ignore-words-re = [
   "(?i)entitys",
   "eis",
   "Lits",
+  "Driveable",
 ]
 extend-ignore-re = ["(?Rm)^.*//\\s*spellchecker:disable-line$"]

@@ -500,6 +500,16 @@ func (ec *executionContext) marshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenl
 	return ret
 }
 
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx context.Context, v any) (models.TrustCenterNDARequestSetting, error) {
+	var res models.TrustCenterNDARequestSetting
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx context.Context, sel ast.SelectionSet, v models.TrustCenterNDARequestSetting) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOWorkflowAssignmentApproval2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowAssignmentApproval(ctx context.Context, v any) (models.WorkflowAssignmentApproval, error) {
 	var res models.WorkflowAssignmentApproval
 	err := res.UnmarshalGQL(v)

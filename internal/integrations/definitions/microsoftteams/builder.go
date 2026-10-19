@@ -2,6 +2,8 @@ package microsoftteams
 
 import (
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -18,7 +20,7 @@ func Builder(cfg Config) registry.Builder {
 			Category:    "collaboration",
 			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
 			Tags:        []string{"messaging"},
-			Active:      false,
+			Active:      true,
 			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
@@ -31,14 +33,16 @@ func Builder(cfg Config) registry.Builder {
 					Description("Connect your Microsoft Teams workspace using OAuth.").
 					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
-							ClientID:     cfg.ClientID,
+							ClientID:     cfg.ApplicationID,
 							ClientSecret: cfg.ClientSecret,
-							AuthURL:      "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-							TokenURL:     "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+							AuthURL:      microsoft.AuthorizeURL(microsoft.OrganizationsTenant),
+							TokenURL:     microsoft.TokenURL(microsoft.OrganizationsTenant),
 							RedirectURL:  cfg.RedirectURL,
 							Scopes: []string{
 								"https://graph.microsoft.com/User.Read",
 								"https://graph.microsoft.com/ChannelMessage.Send",
+								"https://graph.microsoft.com/Team.ReadBasic.All",
+								"https://graph.microsoft.com/Channel.ReadBasic.All",
 								"offline_access",
 							},
 						},
@@ -51,15 +55,14 @@ func Builder(cfg Config) registry.Builder {
 						},
 						EncodeCredentialError: ErrCredentialEncode,
 					})).
-					Provides(buildClient).
+					Provides(clientBuilder(cfg)).
 					Verified(verify).
 					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				types.OperationPayloadOf[MessageSendOperation]().
-					Handles(MessageSend{}.Run).
-					Description("Send a Teams channel message via Microsoft Graph").
-					Registration(),
+				MessageSendOp.Permissions("ChannelMessage.Send").Description("Send a Teams channel message via Microsoft Graph").Registration(),
+				operations.NewChannelsListOperation(listTeams, ErrResultEncode).Permissions("Team.ReadBasic.All", "Channel.ReadBasic.All").Description("List the teams and channels the connected user can post to").Registration(),
+				operations.NewTestMessageOperation(sendMessage).Permissions("ChannelMessage.Send").Description("Send a test message to a Teams channel to confirm the integration works").Registration(),
 			},
 		}, nil
 	})

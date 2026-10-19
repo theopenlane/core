@@ -1190,8 +1190,8 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.azureentraid }}
       azureentraid:
-        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.clientid | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.applicationid }}
+        applicationid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.applicationid | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl | quote }}
@@ -1199,35 +1199,47 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant }}
         defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.applicationid }}
-        applicationid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.applicationid | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter }}
+      azuresecuritycenter:
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.applicationid }}
+        applicationid: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.applicationid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.redirecturl | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.defaulttenant }}
+        defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.defaulttenant | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse }}
+        lighthouse:
+          {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.managingtenantid }}
+          managingtenantid: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.managingtenantid | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.principalid }}
+          principalid: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.principalid | quote }}
+          {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams }}
       microsoftteams:
-        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.clientid | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.applicationid }}
+        applicationid: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.applicationid | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.applicationid }}
-        applicationid: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.applicationid | quote }}
-        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.onedrive }}
       onedrive:
-        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.clientid | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.applicationid }}
+        applicationid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.applicationid | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.contentmode }}
         contentmode: {{ .Values.openlane.coreConfiguration.integrations.onedrive.contentmode | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.applicationid }}
-        applicationid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.applicationid | quote }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.oidclocal }}

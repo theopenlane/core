@@ -81,6 +81,7 @@ func buildEnvelopeEnv() (*cel.Env, error) {
 		ParserExpressionSizeLimit:   celExpressionSizeLimit,
 		ExtendedValidations:         true,
 		CrossTypeNumericComparisons: true,
+		OptionalTypes:               true,
 	}
 
 	return celx.NewEnv(cfg, cel.VariableDecls(

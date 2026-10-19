@@ -36,8 +36,8 @@ func (c RuntimeSlackConfig) Provisioned() bool {
 	return c.WebhookURL != "" || c.BotToken != ""
 }
 
-// SlackClient is the unified Slack client used by every Slack operation
-type SlackClient struct { //nolint:revive
+// Client is the unified Slack client used by every Slack operation
+type Client struct {
 	// API is the Slack Web API client (present for bot-token runtime and customer installations)
 	API *slackgo.Client
 	// WebhookURL is the Slack incoming webhook used as a fallback when no API client is configured

@@ -279,6 +279,20 @@ func (_c *TrustCenterNDARequestHistoryCreate) SetNillableApprovedByUserID(v *str
 	return _c
 }
 
+// SetAutoApproved sets the "auto_approved" field.
+func (_c *TrustCenterNDARequestHistoryCreate) SetAutoApproved(v bool) *TrustCenterNDARequestHistoryCreate {
+	_c.mutation.SetAutoApproved(v)
+	return _c
+}
+
+// SetNillableAutoApproved sets the "auto_approved" field if the given value is not nil.
+func (_c *TrustCenterNDARequestHistoryCreate) SetNillableAutoApproved(v *bool) *TrustCenterNDARequestHistoryCreate {
+	if v != nil {
+		_c.SetAutoApproved(*v)
+	}
+	return _c
+}
+
 // SetSignedAt sets the "signed_at" field.
 func (_c *TrustCenterNDARequestHistoryCreate) SetSignedAt(v models.DateTime) *TrustCenterNDARequestHistoryCreate {
 	_c.mutation.SetSignedAt(v)
@@ -404,6 +418,10 @@ func (_c *TrustCenterNDARequestHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Status(); !ok {
 		v := trustcenterndarequesthistory.DefaultStatus
 		_c.mutation.SetStatus(v)
+	}
+	if _, ok := _c.mutation.AutoApproved(); !ok {
+		v := trustcenterndarequesthistory.DefaultAutoApproved
+		_c.mutation.SetAutoApproved(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenterndarequesthistory.DefaultID == nil {
@@ -565,6 +583,10 @@ func (_c *TrustCenterNDARequestHistoryCreate) createSpec() (*TrustCenterNDAReque
 	if value, ok := _c.mutation.ApprovedByUserID(); ok {
 		_spec.SetField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString, value)
 		_node.ApprovedByUserID = &value
+	}
+	if value, ok := _c.mutation.AutoApproved(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldAutoApproved, field.TypeBool, value)
+		_node.AutoApproved = value
 	}
 	if value, ok := _c.mutation.SignedAt(); ok {
 		_spec.SetField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime, value)

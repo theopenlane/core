@@ -1,0 +1,39 @@
+{
+  "id": "/subscriptions/359fcb95-1c6d-453b-9140-5a8254ec83fd/providers/Microsoft.Security/assessments/00000000-0000-0000-0000-000000000000",
+  "name": "00000000-0000-0000-0000-000000000000",
+  "type": "Microsoft.Security/assessments",
+  "properties": {
+    "resourceDetails": {
+      "Id": "/subscriptions/359fcb95-1c6d-453b-9140-5a8254ec83fd",
+      "ResourceId": "/subscriptions/359fcb95-1c6d-453b-9140-5a8254ec83fd",
+      "ResourceName": "359fcb95-1c6d-453b-9140-5a8254ec83fd",
+      "ResourceType": "subscription",
+      "Source": "azure",
+      "ConnectorId": "",
+      "ResourceProvider": "",
+      "NativeCloudUniqueId": "",
+      "ResourceUrl": "",
+      "HierarchyId": "",
+      "Region": ""
+    },
+    "metadata": {
+      "recommendationCategory": "Unknown",
+      "policyDefinitionId": "/providers/microsoft.authorization/policyDefinitions/640d2586-54d2-465f-877f-9ffc1d2109f4",
+      "managementProvider": "AzurePolicy",
+      "displayName": "Microsoft Defender for Storage plan should be enabled with Malware Scanning and Sensitive Data Threat Detection",
+      "assessmentType": "BuiltIn",
+      "description": "<a target=\"_blank\" href=\"https://learn.microsoft.com/azure/defender-for-cloud/defender-for-storage-introduction\">Microsoft Defender for Storage</a> detects potential threats to your storage accounts. It helps prevent the three major impacts on your data and workload: malicious file uploads, sensitive data exfiltration, and data corruption.<br><br>The new Defender for Storage plan includes <a target=\"_blank\" href=\"https://learn.microsoft.com/azure/defender-for-cloud/defender-for-storage-malware-scan\">Malware Scanning</a> and <a target=\"_blank\" href=\"https://learn.microsoft.com/azure/defender-for-cloud/defender-for-storage-data-sensitivity\">Sensitive Data Threat Detection</a>. This plan also provides a predictable pricing structure (per storage account) for control over coverage and costs.<br><br>With a simple agentless setup at scale, when enabled at the subscription level, all existing and newly created storage accounts under that subscription will be automatically protected. You can also exclude specific storage accounts from protected subscriptions.<br><br>Notes:<ol type=\"1\"><li>Malware Scanning is charged on a per-gigabyte basis for scanned data. To ensure cost predictability, a monthly malware scanning cap of 5TB is established for each storage account's scanned data volume, calculated per month.</li><li>If you already have a Defender for Storage (classic) policy enabled and want to migrate to the new plan, disable that policy. You can see classic policies <a target=\"_blank\" href=\"https://learn.microsoft.com/azure/storage/common/azure-defender-storage-configure?toc=%2Fazure%2Fdefender-for-cloud%2Ftoc.json&tabs=enable-subscription#set-up-microsoft-defender-for-storage\">here</a>.</li></ol>Learn more about the pricing and cost controls <a target=\"_blank\" href=\"https://learn.microsoft.com/azure/defender-for-cloud/defender-for-storage-introduction#pricing-and-cost-controls\">here</a>.",
+      "remediationDescription": "To enable this plan across all Azure Storage accounts within a subscription, please follow the steps outlined below:<ol type=\"1\"><li>Navigate to the Azure portal and select 'Defender for Cloud'.</li><li>Once on the 'Defender for Cloud' page, choose 'Environment Settings' and select the relevant subscription.</li><li>On the 'Defender plans' page, enable Defender for Storage by toggling the 'Storage' plan to 'On'.</li><li>If the Defender for Storage (classic) plan is already enabled, locate the 'New plan available' button under the pricing column and click on it. Then, in the side menu, select 'Upgrade subscription'.</li><li>To save these changes, click' Save' in the 'Defender plans' menu.</li></ol><b>Note:</b> To enable Malware Scanning and Sensitive Data Threat Detection, you need either Owner or specific roles with appropriate data actions. For Activity Monitoring, 'Security Admin' permissions are required. Make sure you have these before proceeding."
+    },
+    "status": {
+      "code": "Unhealthy",
+      "cause": "",
+      "description": "",
+      "statusChangeDate": "2025-05-10T20:55:18.9938171Z",
+      "firstEvaluationDate": "2025-05-10T20:55:18.9938171Z"
+    },
+    "initiativeData": {
+      "policyDefinitionReferenceId": ""
+    }
+  }
+}

@@ -11,7 +11,7 @@ import (
 )
 
 // verify probes the Cloudflare token and returns the account metadata it is scoped to
-func verify(ctx context.Context, _ types.ConnectionRequest[CredentialSchema], c *CloudflareClient) (InstallationMetadata, error) {
+func verify(ctx context.Context, _ types.ConnectionRequest[CredentialSchema], c *Client) (InstallationMetadata, error) {
 	res, err := c.Accounts.Tokens.Verify(ctx, accounts.TokenVerifyParams{
 		AccountID: cf.F(c.Config.AccountID),
 	})

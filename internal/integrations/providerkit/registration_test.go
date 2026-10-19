@@ -10,6 +10,11 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -52,12 +57,76 @@ func TestFindingMapping(t *testing.T) {
 	t.Parallel()
 
 	got := FindingMapping("finding")
-	if got.Schema != entityops.SchemaFinding.Name || got.Spec.MapExpr != "finding" || len(got.Spec.Links) != 1 {
+	if got.Schema != entityops.SchemaFinding.Name || got.Spec.MapExpr != "finding" || got.Spec.FilterExpr != matchAllFilterExpr {
 		t.Fatalf("unexpected registration %+v", got)
 	}
 
-	if got.Spec.Links[0].TargetSchema != entityops.SchemaControl.Name {
-		t.Fatalf("expected control link, got %q", got.Spec.Links[0].TargetSchema)
+	want := []types.LinkRule{
+		{
+			TargetSchema: entityops.SchemaControl.Name,
+			TargetField:  control.FieldRefCode,
+			SourceField:  entityops.FindingFields.Category.InputKey,
+			SourceList:   entityops.FindingFields.Categories.InputKey,
+		},
+		{
+			TargetSchema: entityops.SchemaAsset.Name,
+			TargetField:  asset.FieldName,
+			SourceField:  entityops.FindingFields.ResourceName.InputKey,
+			SourceList:   entityops.FindingFields.Targets.InputKey,
+		},
+		{
+			TargetSchema: entityops.SchemaIdentityHolder.Name,
+			Edge:         finding.EdgeInternalOwnerIdentityHolder,
+			TargetField:  identityholder.FieldEmail,
+			SourceField:  entityops.FindingFields.InternalOwner.InputKey,
+		},
+	}
+
+	if !slices.Equal(got.Spec.Links, want) {
+		t.Fatalf("expected links %+v, got %+v", want, got.Spec.Links)
+	}
+}
+
+func TestCheckResultMapping(t *testing.T) {
+	t.Parallel()
+
+	got := CheckResultMapping("check")
+	if got.Schema != entityops.SchemaCheckResult.Name || got.Spec.MapExpr != "check" || got.Spec.FilterExpr != matchAllFilterExpr {
+		t.Fatalf("unexpected registration %+v", got)
+	}
+
+	want := []types.LinkRule{
+		{
+			TargetSchema: entityops.SchemaControl.Name,
+			TargetField:  control.FieldRefCode,
+			SourceList:   entityops.CheckResultFields.Tags.InputKey,
+		},
+	}
+
+	if !slices.Equal(got.Spec.Links, want) {
+		t.Fatalf("expected links %+v, got %+v", want, got.Spec.Links)
+	}
+}
+
+func TestVulnerabilityMapping(t *testing.T) {
+	t.Parallel()
+
+	got := VulnerabilityMapping("vulnerability")
+	if got.Schema != entityops.SchemaVulnerability.Name || got.Spec.MapExpr != "vulnerability" || got.Spec.FilterExpr != matchAllFilterExpr {
+		t.Fatalf("unexpected registration %+v", got)
+	}
+
+	want := []types.LinkRule{
+		{
+			TargetSchema: entityops.SchemaIdentityHolder.Name,
+			Edge:         vulnerability.EdgeInternalOwnerIdentityHolder,
+			TargetField:  identityholder.FieldEmail,
+			SourceField:  entityops.VulnerabilityFields.InternalOwner.InputKey,
+		},
+	}
+
+	if !slices.Equal(got.Spec.Links, want) {
+		t.Fatalf("expected links %+v, got %+v", want, got.Spec.Links)
 	}
 }
 

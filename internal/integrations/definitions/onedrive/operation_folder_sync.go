@@ -47,13 +47,20 @@ type driveItemPayload struct {
 // FolderSync lists OneDrive documents in a folder and emits ingest envelopes
 type FolderSync struct {
 	types.OperationSettings
-	// FolderID is the folder path relative to the drive root; empty syncs the root
-	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."`
+	// FolderID is the folder path relative to the drive root
+	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies) containing policy documents,required"`
 }
 
 // runFolderSync lists document files in the configured folder and returns payload sets
 func runFolderSync(ctx context.Context, _ types.OperationRequest, c *DriveClient, cfg FolderSync) ([]types.IngestPayloadSet, error) {
-	items, err := listFolderDocs(ctx, c, parseFolderID(cfg.FolderID))
+	folderPath := parseFolderPath(cfg.FolderID)
+	if folderPath == "" {
+		logx.FromContext(ctx).Error().Bool("folder_id_present", cfg.FolderID != "").Msg("onedrive: no folder in the installation user input, the integration needs to be reconfigured with a folder selected")
+
+		return nil, ErrFolderIDMissing
+	}
+
+	items, err := listFolderDocs(ctx, c, folderPath)
 	if err != nil {
 		return nil, err
 	}
@@ -79,17 +86,10 @@ func runFolderSync(ctx context.Context, _ types.OperationRequest, c *DriveClient
 	}, nil
 }
 
-const (
-	meDriveRootChildrenURL = "https://graph.microsoft.com/v1.0/me/drive/root/children"
-	meDrivePathChildrenURL = "https://graph.microsoft.com/v1.0/me/drive/root:/%s:/children"
-)
+const meDrivePathChildrenURL = "https://graph.microsoft.com/v1.0/me/drive/root:/%s:/children"
 
 // folderChildrenURL returns the Graph API URL for listing children of the given folder
 func folderChildrenURL(folderPath string) string {
-	if folderPath == "" {
-		return meDriveRootChildrenURL
-	}
-
 	return fmt.Sprintf(meDrivePathChildrenURL, folderPath)
 }
 
