@@ -37,6 +37,14 @@ import (
 const (
 	// SystemOwnedMixinName is the name of the SystemOwnedMixin
 	SystemOwnedMixinName = "SystemOwnedMixin"
+	// catalogPointerField is the foreign key naming the catalog row an adopted row came from
+	catalogPointerField = "catalog_id"
+	// catalogKeyField holds the catalog row's lookup key on adopted rows
+	catalogKeyField = "catalog_key"
+	// catalogEdgeName is the edge from an adopted row to its catalog row
+	catalogEdgeName = "catalog"
+	// adoptedEdgeName is the edge from a catalog row to the rows adopted from it
+	adoptedEdgeName = "adopted"
 )
 
 // SystemOwnedMixin implements the revision pattern for schemas.
@@ -134,11 +142,9 @@ func (d SystemOwnedMixin) Fields() []ent.Field {
 		return fields
 	}
 
-	name := d.catalogName()
-
 	return append(fields,
-		field.String("catalog_"+name+"_id").
-			Comment("the system-owned catalog "+name+" this "+name+" was adopted from").
+		field.String(catalogPointerField).
+			Comment("the system-owned catalog row this row was adopted from").
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
@@ -150,13 +156,18 @@ func (d SystemOwnedMixin) Fields() []ent.Field {
 			Annotations(
 				entx.CatalogVisibilityField(),
 			),
-		field.String("catalog_"+name+"_key").
+		field.String(catalogKeyField).
 			Optional().
-			Immutable().
-			Comment("the lookup key of the catalog "+name+" this "+name+" was adopted from").
+			Comment("the lookup key of the catalog row this row was adopted from").
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entx.CatalogKeyField(),
+			),
+		field.JSON("raw_ingest_payload", map[string]any{}).
+			Comment("raw payload received from the integration for auditing and troubleshooting").
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
 			),
 	)
 }
@@ -167,24 +178,21 @@ func (d SystemOwnedMixin) Edges() []ent.Edge {
 		return nil
 	}
 
-	name := d.catalogName()
-	plural := pluralize.NewClient().Plural(name)
-
 	return []ent.Edge{
-		edge.To("adopted_"+plural, d.catalogSchemaType).
-			Comment("organization "+plural+" adopted from this catalog "+name).
+		edge.To(adoptedEdgeName, d.catalogSchemaType).
+			Comment("organization rows adopted from this catalog row").
 			Annotations(
 				entgql.RelayConnection(),
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				accessmap.EdgeNoAuthCheck(),
 			).
-			From("catalog_"+name).
-			Comment("the system-owned catalog "+name+" this "+name+" was adopted from").
-			Field("catalog_"+name+"_id").
+			From(catalogEdgeName).
+			Comment("the system-owned catalog row this row was adopted from").
+			Field(catalogPointerField).
 			Unique().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-				accessmap.EdgeViewCheck(name),
+				accessmap.EdgeViewCheck(d.catalogName()),
 				entx.CatalogEdge(),
 			),
 	}
@@ -201,7 +209,7 @@ func (d SystemOwnedMixin) Indexes() []ent.Index {
 	}
 
 	return []ent.Index{
-		index.Fields("catalog_"+d.catalogName()+"_id", d.ownerFieldName).
+		index.Fields(catalogPointerField, d.ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
@@ -229,11 +237,18 @@ func (d SystemOwnedMixin) Policy() ent.Policy {
 	}
 }
 
-// Annotations of the SystemOwnedMixin
+// Annotations of the SystemOwnedMixin; a catalog schema also keeps its pointer and key out of the integration
+// mapping so no provider mapping can link or relink a row
 func (d SystemOwnedMixin) Annotations() []schema.Annotation {
-	return []schema.Annotation{
+	annotations := []schema.Annotation{
 		entx.SystemOwnedSchema{},
 	}
+
+	if d.catalogSchemaType == nil {
+		return annotations
+	}
+
+	return append(annotations, entx.IntegrationMappingSchema().Exclude(catalogPointerField, catalogKeyField))
 }
 
 // HookSystemOwnedCreate will automatically set the system_owned field to true if the user is a system admin

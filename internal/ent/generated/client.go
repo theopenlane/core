@@ -8828,15 +8828,15 @@ func (c *EntityClient) QueryReviewedByIdentityHolder(_m *Entity) *IdentityHolder
 	return query
 }
 
-// QueryCatalogEntity queries the catalog_entity edge of a Entity.
-func (c *EntityClient) QueryCatalogEntity(_m *Entity) *EntityQuery {
+// QueryCatalog queries the catalog edge of a Entity.
+func (c *EntityClient) QueryCatalog(_m *Entity) *EntityQuery {
 	query := (&EntityClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entity.Table, entity.FieldID, id),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, entity.CatalogEntityTable, entity.CatalogEntityColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, entity.CatalogTable, entity.CatalogColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -8844,15 +8844,15 @@ func (c *EntityClient) QueryCatalogEntity(_m *Entity) *EntityQuery {
 	return query
 }
 
-// QueryAdoptedEntities queries the adopted_entities edge of a Entity.
-func (c *EntityClient) QueryAdoptedEntities(_m *Entity) *EntityQuery {
+// QueryAdopted queries the adopted edge of a Entity.
+func (c *EntityClient) QueryAdopted(_m *Entity) *EntityQuery {
 	query := (&EntityClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entity.Table, entity.FieldID, id),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, entity.AdoptedEntitiesTable, entity.AdoptedEntitiesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.AdoptedTable, entity.AdoptedColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

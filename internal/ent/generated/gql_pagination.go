@@ -42402,12 +42402,12 @@ func (_q *EntityQuery) clonePage() *EntityQuery {
 	c.withReviewedByUser = _q.withReviewedByUser.clonePage()
 	c.withReviewedByGroup = _q.withReviewedByGroup.clonePage()
 	c.withReviewedByIdentityHolder = _q.withReviewedByIdentityHolder.clonePage()
-	c.withCatalogEntity = _q.withCatalogEntity.clonePage()
-	c.withAdoptedEntities = _q.withAdoptedEntities.clonePage()
-	if _q.withNamedAdoptedEntities != nil {
-		c.withNamedAdoptedEntities = make(map[string]*EntityQuery, len(_q.withNamedAdoptedEntities))
-		for name, q := range _q.withNamedAdoptedEntities {
-			c.withNamedAdoptedEntities[name] = q.clonePage()
+	c.withCatalog = _q.withCatalog.clonePage()
+	c.withAdopted = _q.withAdopted.clonePage()
+	if _q.withNamedAdopted != nil {
+		c.withNamedAdopted = make(map[string]*EntityQuery, len(_q.withNamedAdopted))
+		for name, q := range _q.withNamedAdopted {
+			c.withNamedAdopted[name] = q.clonePage()
 		}
 	}
 	c.withEntityRelationshipState = _q.withEntityRelationshipState.clonePage()

@@ -187,8 +187,8 @@ query GetEntityByID ($entityId: ID!) {
 		approvedForUse
 		autoRenews
 		billingModel
-		catalogEntityID
-		catalogEntityKey
+		catalogID
+		catalogKey
 		contractEndDate
 		contractRenewalAt
 		contractStartDate
@@ -229,6 +229,7 @@ query GetEntityByID ($entityId: ID!) {
 		observedAt
 		ownerID
 		providedServices
+		rawIngestPayload
 		renewalRisk
 		reviewFrequency
 		reviewedBy

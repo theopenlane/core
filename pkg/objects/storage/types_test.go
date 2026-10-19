@@ -7,6 +7,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestScheme(t *testing.T) {
+	assert.Equal(t, "s3://", Scheme(S3Provider))
+	assert.Equal(t, "r2://", Scheme(R2Provider))
+	assert.Equal(t, "gs://", Scheme(GCSProvider))
+	assert.Equal(t, "file://", Scheme(DiskProvider))
+	assert.Equal(t, "database://", Scheme(DatabaseProvider))
+	assert.Empty(t, Scheme(ProviderType("ftp")))
+}
+
 func TestNewProviderOptions(t *testing.T) {
 	t.Run("no options", func(t *testing.T) {
 		opts := NewProviderOptions()
@@ -197,6 +206,22 @@ func TestProviderOptions_Extra(t *testing.T) {
 		val, ok := opts.Extra("key")
 		assert.False(t, ok)
 		assert.Nil(t, val)
+	})
+}
+
+func TestProviderOptions_BucketFor(t *testing.T) {
+	opts := NewProviderOptions(WithBucket("own-bucket"))
+
+	t.Run("explicit bucket wins", func(t *testing.T) {
+		assert.Equal(t, "other-bucket", opts.BucketFor("other-bucket"))
+	})
+
+	t.Run("empty bucket falls back to the provider bucket", func(t *testing.T) {
+		assert.Equal(t, "own-bucket", opts.BucketFor(""))
+	})
+
+	t.Run("no provider bucket", func(t *testing.T) {
+		assert.Empty(t, NewProviderOptions().BucketFor(""))
 	})
 }
 

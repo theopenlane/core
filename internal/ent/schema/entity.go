@@ -65,7 +65,6 @@ func (Entity) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 				entx.IntegrationMappingField(),
-				entx.FieldSourceManaged(),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -229,17 +228,13 @@ func (Entity) Fields() []ent.Field {
 		field.Strings("provided_services").
 			Comment("services provided by the entity").
 			Optional().
-			Annotations(
-				entx.FieldSourceManaged(),
-			).
+			Annotations(entx.FieldSourceManaged()).
 			Default([]string{}),
 		field.Strings("links").
 			Comment("external links associated with the entity").
 			Validate(validator.ValidateURLs()).
 			Optional().
-			Annotations(
-				entx.FieldSourceManaged(),
-			).
+			Annotations(entx.FieldSourceManaged()).
 			Default([]string{}),
 		field.String("risk_rating").
 			Comment("the risk rating label for the entity").
@@ -304,9 +299,7 @@ func (Entity) Fields() []ent.Field {
 			MaxLen(urlMaxLen).
 			Validate(validator.ValidateURL()).
 			Optional().
-			Annotations(
-				entx.FieldSourceManaged(),
-			).
+			Annotations(entx.FieldSourceManaged()).
 			Nillable(),
 		field.String("logo_file_id").
 			Comment("The logo file id for the entity").
@@ -439,11 +432,9 @@ func (e Entity) Edges() []ent.Edge {
 func (Entity) Indexes() []ent.Index {
 	return []ent.Index{
 		// names should be unique, but ignore deleted names
-		index.Fields("name", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("name", ownerFieldName).Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("reviewed_by_user_id"),
-		index.Fields("external_id", ownerFieldName).
-			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("external_id", ownerFieldName).Annotations(entsql.IndexWhere("deleted_at is NULL AND external_id IS NOT NULL")),
 	}
 }
 
@@ -476,7 +467,7 @@ func (e Entity) Annotations() []schema.Annotation {
 		entx.NewExportable(),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			Exclude("entity_type_id", "linked_asset_ids", "catalog_entity_id"),
+			Exclude("entity_type_id", "linked_asset_ids"),
 	}
 }
 

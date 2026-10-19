@@ -78,12 +78,14 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
-	// FieldCatalogEntityID holds the string denoting the catalog_entity_id field in the database.
-	FieldCatalogEntityID = "catalog_entity_id"
+	// FieldCatalogID holds the string denoting the catalog_id field in the database.
+	FieldCatalogID = "catalog_id"
 	// FieldExternallyVisible holds the string denoting the externally_visible field in the database.
 	FieldExternallyVisible = "externally_visible"
-	// FieldCatalogEntityKey holds the string denoting the catalog_entity_key field in the database.
-	FieldCatalogEntityKey = "catalog_entity_key"
+	// FieldCatalogKey holds the string denoting the catalog_key field in the database.
+	FieldCatalogKey = "catalog_key"
+	// FieldRawIngestPayload holds the string denoting the raw_ingest_payload field in the database.
+	FieldRawIngestPayload = "raw_ingest_payload"
 	// FieldEntityRelationshipStateName holds the string denoting the entity_relationship_state_name field in the database.
 	FieldEntityRelationshipStateName = "entity_relationship_state_name"
 	// FieldEntityRelationshipStateID holds the string denoting the entity_relationship_state_id field in the database.
@@ -214,9 +216,10 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
-	FieldCatalogEntityID,
+	FieldCatalogID,
 	FieldExternallyVisible,
-	FieldCatalogEntityKey,
+	FieldCatalogKey,
+	FieldRawIngestPayload,
 	FieldEntityRelationshipStateName,
 	FieldEntityRelationshipStateID,
 	FieldEntitySecurityQuestionnaireStatusName,
@@ -515,9 +518,9 @@ func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
-// ByCatalogEntityID orders the results by the catalog_entity_id field.
-func ByCatalogEntityID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCatalogEntityID, opts...).ToFunc()
+// ByCatalogID orders the results by the catalog_id field.
+func ByCatalogID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCatalogID, opts...).ToFunc()
 }
 
 // ByExternallyVisible orders the results by the externally_visible field.
@@ -525,9 +528,9 @@ func ByExternallyVisible(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternallyVisible, opts...).ToFunc()
 }
 
-// ByCatalogEntityKey orders the results by the catalog_entity_key field.
-func ByCatalogEntityKey(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCatalogEntityKey, opts...).ToFunc()
+// ByCatalogKey orders the results by the catalog_key field.
+func ByCatalogKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCatalogKey, opts...).ToFunc()
 }
 
 // ByEntityRelationshipStateName orders the results by the entity_relationship_state_name field.

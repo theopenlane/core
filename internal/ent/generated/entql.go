@@ -1093,9 +1093,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldSystemOwned:                           {Type: field.TypeBool, Column: entity.FieldSystemOwned},
 			entity.FieldInternalNotes:                         {Type: field.TypeString, Column: entity.FieldInternalNotes},
 			entity.FieldSystemInternalID:                      {Type: field.TypeString, Column: entity.FieldSystemInternalID},
-			entity.FieldCatalogEntityID:                       {Type: field.TypeString, Column: entity.FieldCatalogEntityID},
+			entity.FieldCatalogID:                             {Type: field.TypeString, Column: entity.FieldCatalogID},
 			entity.FieldExternallyVisible:                     {Type: field.TypeBool, Column: entity.FieldExternallyVisible},
-			entity.FieldCatalogEntityKey:                      {Type: field.TypeString, Column: entity.FieldCatalogEntityKey},
+			entity.FieldCatalogKey:                            {Type: field.TypeString, Column: entity.FieldCatalogKey},
+			entity.FieldRawIngestPayload:                      {Type: field.TypeJSON, Column: entity.FieldRawIngestPayload},
 			entity.FieldEntityRelationshipStateName:           {Type: field.TypeString, Column: entity.FieldEntityRelationshipStateName},
 			entity.FieldEntityRelationshipStateID:             {Type: field.TypeString, Column: entity.FieldEntityRelationshipStateID},
 			entity.FieldEntitySecurityQuestionnaireStatusName: {Type: field.TypeString, Column: entity.FieldEntitySecurityQuestionnaireStatusName},
@@ -7132,24 +7133,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"IdentityHolder",
 	)
 	graph.MustAddE(
-		"catalog_entity",
+		"catalog",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   entity.CatalogEntityTable,
-			Columns: []string{entity.CatalogEntityColumn},
+			Table:   entity.CatalogTable,
+			Columns: []string{entity.CatalogColumn},
 			Bidi:    false,
 		},
 		"Entity",
 		"Entity",
 	)
 	graph.MustAddE(
-		"adopted_entities",
+		"adopted",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   entity.AdoptedEntitiesTable,
-			Columns: []string{entity.AdoptedEntitiesColumn},
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
 			Bidi:    false,
 		},
 		"Entity",
@@ -27151,9 +27152,9 @@ func (f *EntityFilter) WhereSystemInternalID(p entql.StringP) {
 	f.Where(p.Field(entity.FieldSystemInternalID))
 }
 
-// WhereCatalogEntityID applies the entql string predicate on the catalog_entity_id field.
-func (f *EntityFilter) WhereCatalogEntityID(p entql.StringP) {
-	f.Where(p.Field(entity.FieldCatalogEntityID))
+// WhereCatalogID applies the entql string predicate on the catalog_id field.
+func (f *EntityFilter) WhereCatalogID(p entql.StringP) {
+	f.Where(p.Field(entity.FieldCatalogID))
 }
 
 // WhereExternallyVisible applies the entql bool predicate on the externally_visible field.
@@ -27161,9 +27162,14 @@ func (f *EntityFilter) WhereExternallyVisible(p entql.BoolP) {
 	f.Where(p.Field(entity.FieldExternallyVisible))
 }
 
-// WhereCatalogEntityKey applies the entql string predicate on the catalog_entity_key field.
-func (f *EntityFilter) WhereCatalogEntityKey(p entql.StringP) {
-	f.Where(p.Field(entity.FieldCatalogEntityKey))
+// WhereCatalogKey applies the entql string predicate on the catalog_key field.
+func (f *EntityFilter) WhereCatalogKey(p entql.StringP) {
+	f.Where(p.Field(entity.FieldCatalogKey))
+}
+
+// WhereRawIngestPayload applies the entql json.RawMessage predicate on the raw_ingest_payload field.
+func (f *EntityFilter) WhereRawIngestPayload(p entql.BytesP) {
+	f.Where(p.Field(entity.FieldRawIngestPayload))
 }
 
 // WhereEntityRelationshipStateName applies the entql string predicate on the entity_relationship_state_name field.
@@ -27541,28 +27547,28 @@ func (f *EntityFilter) WhereHasReviewedByIdentityHolderWith(preds ...predicate.I
 	})))
 }
 
-// WhereHasCatalogEntity applies a predicate to check if query has an edge catalog_entity.
-func (f *EntityFilter) WhereHasCatalogEntity() {
-	f.Where(entql.HasEdge("catalog_entity"))
+// WhereHasCatalog applies a predicate to check if query has an edge catalog.
+func (f *EntityFilter) WhereHasCatalog() {
+	f.Where(entql.HasEdge("catalog"))
 }
 
-// WhereHasCatalogEntityWith applies a predicate to check if query has an edge catalog_entity with a given conditions (other predicates).
-func (f *EntityFilter) WhereHasCatalogEntityWith(preds ...predicate.Entity) {
-	f.Where(entql.HasEdgeWith("catalog_entity", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasCatalogWith applies a predicate to check if query has an edge catalog with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasCatalogWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("catalog", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasAdoptedEntities applies a predicate to check if query has an edge adopted_entities.
-func (f *EntityFilter) WhereHasAdoptedEntities() {
-	f.Where(entql.HasEdge("adopted_entities"))
+// WhereHasAdopted applies a predicate to check if query has an edge adopted.
+func (f *EntityFilter) WhereHasAdopted() {
+	f.Where(entql.HasEdge("adopted"))
 }
 
-// WhereHasAdoptedEntitiesWith applies a predicate to check if query has an edge adopted_entities with a given conditions (other predicates).
-func (f *EntityFilter) WhereHasAdoptedEntitiesWith(preds ...predicate.Entity) {
-	f.Where(entql.HasEdgeWith("adopted_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasAdoptedWith applies a predicate to check if query has an edge adopted with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasAdoptedWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("adopted", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

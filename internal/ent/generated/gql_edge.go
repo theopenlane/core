@@ -4059,15 +4059,15 @@ func (_m *Entity) ReviewedByIdentityHolder(ctx context.Context) (*IdentityHolder
 	return result, MaskNotFound(err)
 }
 
-func (_m *Entity) CatalogEntity(ctx context.Context) (*Entity, error) {
-	result, err := _m.Edges.CatalogEntityOrErr()
+func (_m *Entity) Catalog(ctx context.Context) (*Entity, error) {
+	result, err := _m.Edges.CatalogOrErr()
 	if IsNotLoaded(err) {
-		result, err = _m.QueryCatalogEntity().Only(ctx)
+		result, err = _m.QueryCatalog().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (_m *Entity) AdoptedEntities(
+func (_m *Entity) Adopted(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EntityOrder, where *EntityWhereInput,
 ) (*EntityConnection, error) {
 	opts := []EntityPaginateOption{
@@ -4076,7 +4076,7 @@ func (_m *Entity) AdoptedEntities(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := _m.Edges.totalCount[11][alias]
-	if nodes, err := _m.NamedAdoptedEntities(alias); err == nil || hasTotalCount {
+	if nodes, err := _m.NamedAdopted(alias); err == nil || hasTotalCount {
 		pager, err := newEntityPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -4085,7 +4085,7 @@ func (_m *Entity) AdoptedEntities(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return _m.QueryAdoptedEntities().Paginate(ctx, after, first, before, last, opts...)
+	return _m.QueryAdopted().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Entity) EntityRelationshipState(ctx context.Context) (*CustomTypeEnum, error) {

@@ -44,6 +44,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/config"
 	cloudflaredef "github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	systemdef "github.com/theopenlane/core/v2/internal/integrations/definitions/system"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
@@ -94,6 +95,7 @@ type GraphTestSuite struct {
 	WorkflowEngine     *engine.WorkflowEngine
 	SlackMock          *slackdef.MockSlackRuntime
 	CloudflareMock     *cloudflaredef.MockCloudflareRuntime
+	ObjectStoreRuntime objectstore.RuntimeConfig
 }
 
 // Client contains all the clients the test need to interact with
@@ -122,6 +124,9 @@ func repoRoot() string {
 
 // fgaModuleFile is the fga model the test containers are seeded with
 var fgaModuleFile = filepath.Join(repoRoot(), "fga", "model", "fga.mod")
+
+// objectStoreFixtureDir is the committed record bucket the objectstore runtime reads in tests
+var objectStoreFixtureDir = filepath.Join(repoRoot(), "internal", "graphapi", "testharness", "testdata", "objectstore")
 
 // Suite is the shared harness instance used by each graphapi test suite
 var Suite = &GraphTestSuite{}
@@ -327,11 +332,17 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	suite.SlackMock = slackdef.NewMockSlackRuntime()
 	suite.CloudflareMock = cloudflaredef.NewMockCloudflareRuntime()
 
+	suite.ObjectStoreRuntime = objectstore.RuntimeConfig{
+		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: objectStoreFixtureDir}}},
+		Import:    objectstore.ImportSpec{Prefix: "vendors/"},
+	}
+
 	reg, err := testint.VersionedRegistry(
 		emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 		suite.SlackMock.Builder(),
 		suite.CloudflareMock.Builder(),
 		systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
+		objectstore.Builder(&suite.ObjectStoreRuntime, "", objectstore.Config{}),
 		testint.Builder(),
 		testint.MockHTTPBuilder(),
 	)

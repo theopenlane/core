@@ -70031,7 +70031,8 @@ type EntityMutation struct {
 	internal_notes                              *string
 	system_internal_id                          *string
 	externally_visible                          *bool
-	catalog_entity_key                          *string
+	catalog_key                                 *string
+	raw_ingest_payload                          *map[string]interface{}
 	entity_relationship_state_name              *string
 	entity_security_questionnaire_status_name   *string
 	entity_source_type_name                     *string
@@ -70105,11 +70106,11 @@ type EntityMutation struct {
 	clearedreviewed_by_group                    bool
 	reviewed_by_identity_holder                 *string
 	clearedreviewed_by_identity_holder          bool
-	catalog_entity                              *string
-	clearedcatalog_entity                       bool
-	adopted_entities                            map[string]struct{}
-	removedadopted_entities                     map[string]struct{}
-	clearedadopted_entities                     bool
+	catalog                                     *string
+	clearedcatalog                              bool
+	adopted                                     map[string]struct{}
+	removedadopted                              map[string]struct{}
+	clearedadopted                              bool
 	entity_relationship_state                   *string
 	clearedentity_relationship_state            bool
 	entity_security_questionnaire_status        *string
@@ -71598,53 +71599,53 @@ func (m *EntityMutation) ResetSystemInternalID() {
 	delete(m.clearedFields, entity.FieldSystemInternalID)
 }
 
-// SetCatalogEntityID sets the "catalog_entity_id" field.
-func (m *EntityMutation) SetCatalogEntityID(s string) {
-	m.catalog_entity = &s
+// SetCatalogID sets the "catalog_id" field.
+func (m *EntityMutation) SetCatalogID(s string) {
+	m.catalog = &s
 }
 
-// CatalogEntityID returns the value of the "catalog_entity_id" field in the mutation.
-func (m *EntityMutation) CatalogEntityID() (r string, exists bool) {
-	v := m.catalog_entity
+// CatalogID returns the value of the "catalog_id" field in the mutation.
+func (m *EntityMutation) CatalogID() (r string, exists bool) {
+	v := m.catalog
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCatalogEntityID returns the old "catalog_entity_id" field's value of the Entity entity.
+// OldCatalogID returns the old "catalog_id" field's value of the Entity entity.
 // If the Entity object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntityMutation) OldCatalogEntityID(ctx context.Context) (v string, err error) {
+func (m *EntityMutation) OldCatalogID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCatalogEntityID is only allowed on UpdateOne operations")
+		return v, errors.New("OldCatalogID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCatalogEntityID requires an ID field in the mutation")
+		return v, errors.New("OldCatalogID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCatalogEntityID: %w", err)
+		return v, fmt.Errorf("querying old value for OldCatalogID: %w", err)
 	}
-	return oldValue.CatalogEntityID, nil
+	return oldValue.CatalogID, nil
 }
 
-// ClearCatalogEntityID clears the value of the "catalog_entity_id" field.
-func (m *EntityMutation) ClearCatalogEntityID() {
-	m.catalog_entity = nil
-	m.clearedFields[entity.FieldCatalogEntityID] = struct{}{}
+// ClearCatalogID clears the value of the "catalog_id" field.
+func (m *EntityMutation) ClearCatalogID() {
+	m.catalog = nil
+	m.clearedFields[entity.FieldCatalogID] = struct{}{}
 }
 
-// CatalogEntityIDCleared returns if the "catalog_entity_id" field was cleared in this mutation.
-func (m *EntityMutation) CatalogEntityIDCleared() bool {
-	_, ok := m.clearedFields[entity.FieldCatalogEntityID]
+// CatalogIDCleared returns if the "catalog_id" field was cleared in this mutation.
+func (m *EntityMutation) CatalogIDCleared() bool {
+	_, ok := m.clearedFields[entity.FieldCatalogID]
 	return ok
 }
 
-// ResetCatalogEntityID resets all changes to the "catalog_entity_id" field.
-func (m *EntityMutation) ResetCatalogEntityID() {
-	m.catalog_entity = nil
-	delete(m.clearedFields, entity.FieldCatalogEntityID)
+// ResetCatalogID resets all changes to the "catalog_id" field.
+func (m *EntityMutation) ResetCatalogID() {
+	m.catalog = nil
+	delete(m.clearedFields, entity.FieldCatalogID)
 }
 
 // SetExternallyVisible sets the "externally_visible" field.
@@ -71696,53 +71697,102 @@ func (m *EntityMutation) ResetExternallyVisible() {
 	delete(m.clearedFields, entity.FieldExternallyVisible)
 }
 
-// SetCatalogEntityKey sets the "catalog_entity_key" field.
-func (m *EntityMutation) SetCatalogEntityKey(s string) {
-	m.catalog_entity_key = &s
+// SetCatalogKey sets the "catalog_key" field.
+func (m *EntityMutation) SetCatalogKey(s string) {
+	m.catalog_key = &s
 }
 
-// CatalogEntityKey returns the value of the "catalog_entity_key" field in the mutation.
-func (m *EntityMutation) CatalogEntityKey() (r string, exists bool) {
-	v := m.catalog_entity_key
+// CatalogKey returns the value of the "catalog_key" field in the mutation.
+func (m *EntityMutation) CatalogKey() (r string, exists bool) {
+	v := m.catalog_key
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCatalogEntityKey returns the old "catalog_entity_key" field's value of the Entity entity.
+// OldCatalogKey returns the old "catalog_key" field's value of the Entity entity.
 // If the Entity object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntityMutation) OldCatalogEntityKey(ctx context.Context) (v string, err error) {
+func (m *EntityMutation) OldCatalogKey(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCatalogEntityKey is only allowed on UpdateOne operations")
+		return v, errors.New("OldCatalogKey is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCatalogEntityKey requires an ID field in the mutation")
+		return v, errors.New("OldCatalogKey requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCatalogEntityKey: %w", err)
+		return v, fmt.Errorf("querying old value for OldCatalogKey: %w", err)
 	}
-	return oldValue.CatalogEntityKey, nil
+	return oldValue.CatalogKey, nil
 }
 
-// ClearCatalogEntityKey clears the value of the "catalog_entity_key" field.
-func (m *EntityMutation) ClearCatalogEntityKey() {
-	m.catalog_entity_key = nil
-	m.clearedFields[entity.FieldCatalogEntityKey] = struct{}{}
+// ClearCatalogKey clears the value of the "catalog_key" field.
+func (m *EntityMutation) ClearCatalogKey() {
+	m.catalog_key = nil
+	m.clearedFields[entity.FieldCatalogKey] = struct{}{}
 }
 
-// CatalogEntityKeyCleared returns if the "catalog_entity_key" field was cleared in this mutation.
-func (m *EntityMutation) CatalogEntityKeyCleared() bool {
-	_, ok := m.clearedFields[entity.FieldCatalogEntityKey]
+// CatalogKeyCleared returns if the "catalog_key" field was cleared in this mutation.
+func (m *EntityMutation) CatalogKeyCleared() bool {
+	_, ok := m.clearedFields[entity.FieldCatalogKey]
 	return ok
 }
 
-// ResetCatalogEntityKey resets all changes to the "catalog_entity_key" field.
-func (m *EntityMutation) ResetCatalogEntityKey() {
-	m.catalog_entity_key = nil
-	delete(m.clearedFields, entity.FieldCatalogEntityKey)
+// ResetCatalogKey resets all changes to the "catalog_key" field.
+func (m *EntityMutation) ResetCatalogKey() {
+	m.catalog_key = nil
+	delete(m.clearedFields, entity.FieldCatalogKey)
+}
+
+// SetRawIngestPayload sets the "raw_ingest_payload" field.
+func (m *EntityMutation) SetRawIngestPayload(value map[string]interface{}) {
+	m.raw_ingest_payload = &value
+}
+
+// RawIngestPayload returns the value of the "raw_ingest_payload" field in the mutation.
+func (m *EntityMutation) RawIngestPayload() (r map[string]interface{}, exists bool) {
+	v := m.raw_ingest_payload
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRawIngestPayload returns the old "raw_ingest_payload" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldRawIngestPayload(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRawIngestPayload is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRawIngestPayload requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRawIngestPayload: %w", err)
+	}
+	return oldValue.RawIngestPayload, nil
+}
+
+// ClearRawIngestPayload clears the value of the "raw_ingest_payload" field.
+func (m *EntityMutation) ClearRawIngestPayload() {
+	m.raw_ingest_payload = nil
+	m.clearedFields[entity.FieldRawIngestPayload] = struct{}{}
+}
+
+// RawIngestPayloadCleared returns if the "raw_ingest_payload" field was cleared in this mutation.
+func (m *EntityMutation) RawIngestPayloadCleared() bool {
+	_, ok := m.clearedFields[entity.FieldRawIngestPayload]
+	return ok
+}
+
+// ResetRawIngestPayload resets all changes to the "raw_ingest_payload" field.
+func (m *EntityMutation) ResetRawIngestPayload() {
+	m.raw_ingest_payload = nil
+	delete(m.clearedFields, entity.FieldRawIngestPayload)
 }
 
 // SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
@@ -74563,85 +74613,85 @@ func (m *EntityMutation) ResetReviewedByIdentityHolder() {
 	m.clearedreviewed_by_identity_holder = false
 }
 
-// ClearCatalogEntity clears the "catalog_entity" edge to the Entity entity.
-func (m *EntityMutation) ClearCatalogEntity() {
-	m.clearedcatalog_entity = true
-	m.clearedFields[entity.FieldCatalogEntityID] = struct{}{}
+// ClearCatalog clears the "catalog" edge to the Entity entity.
+func (m *EntityMutation) ClearCatalog() {
+	m.clearedcatalog = true
+	m.clearedFields[entity.FieldCatalogID] = struct{}{}
 }
 
-// CatalogEntityCleared reports if the "catalog_entity" edge to the Entity entity was cleared.
-func (m *EntityMutation) CatalogEntityCleared() bool {
-	return m.CatalogEntityIDCleared() || m.clearedcatalog_entity
+// CatalogCleared reports if the "catalog" edge to the Entity entity was cleared.
+func (m *EntityMutation) CatalogCleared() bool {
+	return m.CatalogIDCleared() || m.clearedcatalog
 }
 
-// CatalogEntityIDs returns the "catalog_entity" edge IDs in the mutation.
+// CatalogIDs returns the "catalog" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// CatalogEntityID instead. It exists only for internal usage by the builders.
-func (m *EntityMutation) CatalogEntityIDs() (ids []string) {
-	if id := m.catalog_entity; id != nil {
+// CatalogID instead. It exists only for internal usage by the builders.
+func (m *EntityMutation) CatalogIDs() (ids []string) {
+	if id := m.catalog; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetCatalogEntity resets all changes to the "catalog_entity" edge.
-func (m *EntityMutation) ResetCatalogEntity() {
-	m.catalog_entity = nil
-	m.clearedcatalog_entity = false
+// ResetCatalog resets all changes to the "catalog" edge.
+func (m *EntityMutation) ResetCatalog() {
+	m.catalog = nil
+	m.clearedcatalog = false
 }
 
-// AddAdoptedEntityIDs adds the "adopted_entities" edge to the Entity entity by ids.
-func (m *EntityMutation) AddAdoptedEntityIDs(ids ...string) {
-	if m.adopted_entities == nil {
-		m.adopted_entities = make(map[string]struct{})
+// AddAdoptedIDs adds the "adopted" edge to the Entity entity by ids.
+func (m *EntityMutation) AddAdoptedIDs(ids ...string) {
+	if m.adopted == nil {
+		m.adopted = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.adopted_entities[ids[i]] = struct{}{}
+		m.adopted[ids[i]] = struct{}{}
 	}
 }
 
-// ClearAdoptedEntities clears the "adopted_entities" edge to the Entity entity.
-func (m *EntityMutation) ClearAdoptedEntities() {
-	m.clearedadopted_entities = true
+// ClearAdopted clears the "adopted" edge to the Entity entity.
+func (m *EntityMutation) ClearAdopted() {
+	m.clearedadopted = true
 }
 
-// AdoptedEntitiesCleared reports if the "adopted_entities" edge to the Entity entity was cleared.
-func (m *EntityMutation) AdoptedEntitiesCleared() bool {
-	return m.clearedadopted_entities
+// AdoptedCleared reports if the "adopted" edge to the Entity entity was cleared.
+func (m *EntityMutation) AdoptedCleared() bool {
+	return m.clearedadopted
 }
 
-// RemoveAdoptedEntityIDs removes the "adopted_entities" edge to the Entity entity by IDs.
-func (m *EntityMutation) RemoveAdoptedEntityIDs(ids ...string) {
-	if m.removedadopted_entities == nil {
-		m.removedadopted_entities = make(map[string]struct{})
+// RemoveAdoptedIDs removes the "adopted" edge to the Entity entity by IDs.
+func (m *EntityMutation) RemoveAdoptedIDs(ids ...string) {
+	if m.removedadopted == nil {
+		m.removedadopted = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.adopted_entities, ids[i])
-		m.removedadopted_entities[ids[i]] = struct{}{}
+		delete(m.adopted, ids[i])
+		m.removedadopted[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedAdoptedEntities returns the removed IDs of the "adopted_entities" edge to the Entity entity.
-func (m *EntityMutation) RemovedAdoptedEntitiesIDs() (ids []string) {
-	for id := range m.removedadopted_entities {
+// RemovedAdopted returns the removed IDs of the "adopted" edge to the Entity entity.
+func (m *EntityMutation) RemovedAdoptedIDs() (ids []string) {
+	for id := range m.removedadopted {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// AdoptedEntitiesIDs returns the "adopted_entities" edge IDs in the mutation.
-func (m *EntityMutation) AdoptedEntitiesIDs() (ids []string) {
-	for id := range m.adopted_entities {
+// AdoptedIDs returns the "adopted" edge IDs in the mutation.
+func (m *EntityMutation) AdoptedIDs() (ids []string) {
+	for id := range m.adopted {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetAdoptedEntities resets all changes to the "adopted_entities" edge.
-func (m *EntityMutation) ResetAdoptedEntities() {
-	m.adopted_entities = nil
-	m.clearedadopted_entities = false
-	m.removedadopted_entities = nil
+// ResetAdopted resets all changes to the "adopted" edge.
+func (m *EntityMutation) ResetAdopted() {
+	m.adopted = nil
+	m.clearedadopted = false
+	m.removedadopted = nil
 }
 
 // ClearEntityRelationshipState clears the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -76217,7 +76267,7 @@ func (m *EntityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EntityMutation) Fields() []string {
-	fields := make([]string, 0, 76)
+	fields := make([]string, 0, 77)
 	if m.created_at != nil {
 		fields = append(fields, entity.FieldCreatedAt)
 	}
@@ -76296,14 +76346,17 @@ func (m *EntityMutation) Fields() []string {
 	if m.system_internal_id != nil {
 		fields = append(fields, entity.FieldSystemInternalID)
 	}
-	if m.catalog_entity != nil {
-		fields = append(fields, entity.FieldCatalogEntityID)
+	if m.catalog != nil {
+		fields = append(fields, entity.FieldCatalogID)
 	}
 	if m.externally_visible != nil {
 		fields = append(fields, entity.FieldExternallyVisible)
 	}
-	if m.catalog_entity_key != nil {
-		fields = append(fields, entity.FieldCatalogEntityKey)
+	if m.catalog_key != nil {
+		fields = append(fields, entity.FieldCatalogKey)
+	}
+	if m.raw_ingest_payload != nil {
+		fields = append(fields, entity.FieldRawIngestPayload)
 	}
 	if m.entity_relationship_state_name != nil {
 		fields = append(fields, entity.FieldEntityRelationshipStateName)
@@ -76506,12 +76559,14 @@ func (m *EntityMutation) Field(name string) (ent.Value, bool) {
 		return m.InternalNotes()
 	case entity.FieldSystemInternalID:
 		return m.SystemInternalID()
-	case entity.FieldCatalogEntityID:
-		return m.CatalogEntityID()
+	case entity.FieldCatalogID:
+		return m.CatalogID()
 	case entity.FieldExternallyVisible:
 		return m.ExternallyVisible()
-	case entity.FieldCatalogEntityKey:
-		return m.CatalogEntityKey()
+	case entity.FieldCatalogKey:
+		return m.CatalogKey()
+	case entity.FieldRawIngestPayload:
+		return m.RawIngestPayload()
 	case entity.FieldEntityRelationshipStateName:
 		return m.EntityRelationshipStateName()
 	case entity.FieldEntityRelationshipStateID:
@@ -76667,12 +76722,14 @@ func (m *EntityMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldInternalNotes(ctx)
 	case entity.FieldSystemInternalID:
 		return m.OldSystemInternalID(ctx)
-	case entity.FieldCatalogEntityID:
-		return m.OldCatalogEntityID(ctx)
+	case entity.FieldCatalogID:
+		return m.OldCatalogID(ctx)
 	case entity.FieldExternallyVisible:
 		return m.OldExternallyVisible(ctx)
-	case entity.FieldCatalogEntityKey:
-		return m.OldCatalogEntityKey(ctx)
+	case entity.FieldCatalogKey:
+		return m.OldCatalogKey(ctx)
+	case entity.FieldRawIngestPayload:
+		return m.OldRawIngestPayload(ctx)
 	case entity.FieldEntityRelationshipStateName:
 		return m.OldEntityRelationshipStateName(ctx)
 	case entity.FieldEntityRelationshipStateID:
@@ -76958,12 +77015,12 @@ func (m *EntityMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSystemInternalID(v)
 		return nil
-	case entity.FieldCatalogEntityID:
+	case entity.FieldCatalogID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCatalogEntityID(v)
+		m.SetCatalogID(v)
 		return nil
 	case entity.FieldExternallyVisible:
 		v, ok := value.(bool)
@@ -76972,12 +77029,19 @@ func (m *EntityMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternallyVisible(v)
 		return nil
-	case entity.FieldCatalogEntityKey:
+	case entity.FieldCatalogKey:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCatalogEntityKey(v)
+		m.SetCatalogKey(v)
+		return nil
+	case entity.FieldRawIngestPayload:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRawIngestPayload(v)
 		return nil
 	case entity.FieldEntityRelationshipStateName:
 		v, ok := value.(string)
@@ -77467,14 +77531,17 @@ func (m *EntityMutation) ClearedFields() []string {
 	if m.FieldCleared(entity.FieldSystemInternalID) {
 		fields = append(fields, entity.FieldSystemInternalID)
 	}
-	if m.FieldCleared(entity.FieldCatalogEntityID) {
-		fields = append(fields, entity.FieldCatalogEntityID)
+	if m.FieldCleared(entity.FieldCatalogID) {
+		fields = append(fields, entity.FieldCatalogID)
 	}
 	if m.FieldCleared(entity.FieldExternallyVisible) {
 		fields = append(fields, entity.FieldExternallyVisible)
 	}
-	if m.FieldCleared(entity.FieldCatalogEntityKey) {
-		fields = append(fields, entity.FieldCatalogEntityKey)
+	if m.FieldCleared(entity.FieldCatalogKey) {
+		fields = append(fields, entity.FieldCatalogKey)
+	}
+	if m.FieldCleared(entity.FieldRawIngestPayload) {
+		fields = append(fields, entity.FieldRawIngestPayload)
 	}
 	if m.FieldCleared(entity.FieldEntityRelationshipStateName) {
 		fields = append(fields, entity.FieldEntityRelationshipStateName)
@@ -77709,14 +77776,17 @@ func (m *EntityMutation) ClearField(name string) error {
 	case entity.FieldSystemInternalID:
 		m.ClearSystemInternalID()
 		return nil
-	case entity.FieldCatalogEntityID:
-		m.ClearCatalogEntityID()
+	case entity.FieldCatalogID:
+		m.ClearCatalogID()
 		return nil
 	case entity.FieldExternallyVisible:
 		m.ClearExternallyVisible()
 		return nil
-	case entity.FieldCatalogEntityKey:
-		m.ClearCatalogEntityKey()
+	case entity.FieldCatalogKey:
+		m.ClearCatalogKey()
+		return nil
+	case entity.FieldRawIngestPayload:
+		m.ClearRawIngestPayload()
 		return nil
 	case entity.FieldEntityRelationshipStateName:
 		m.ClearEntityRelationshipStateName()
@@ -77945,14 +78015,17 @@ func (m *EntityMutation) ResetField(name string) error {
 	case entity.FieldSystemInternalID:
 		m.ResetSystemInternalID()
 		return nil
-	case entity.FieldCatalogEntityID:
-		m.ResetCatalogEntityID()
+	case entity.FieldCatalogID:
+		m.ResetCatalogID()
 		return nil
 	case entity.FieldExternallyVisible:
 		m.ResetExternallyVisible()
 		return nil
-	case entity.FieldCatalogEntityKey:
-		m.ResetCatalogEntityKey()
+	case entity.FieldCatalogKey:
+		m.ResetCatalogKey()
+		return nil
+	case entity.FieldRawIngestPayload:
+		m.ResetRawIngestPayload()
 		return nil
 	case entity.FieldEntityRelationshipStateName:
 		m.ResetEntityRelationshipStateName()
@@ -78132,11 +78205,11 @@ func (m *EntityMutation) AddedEdges() []string {
 	if m.reviewed_by_identity_holder != nil {
 		edges = append(edges, entity.EdgeReviewedByIdentityHolder)
 	}
-	if m.catalog_entity != nil {
-		edges = append(edges, entity.EdgeCatalogEntity)
+	if m.catalog != nil {
+		edges = append(edges, entity.EdgeCatalog)
 	}
-	if m.adopted_entities != nil {
-		edges = append(edges, entity.EdgeAdoptedEntities)
+	if m.adopted != nil {
+		edges = append(edges, entity.EdgeAdopted)
 	}
 	if m.entity_relationship_state != nil {
 		edges = append(edges, entity.EdgeEntityRelationshipState)
@@ -78287,13 +78360,13 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 		if id := m.reviewed_by_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
-	case entity.EdgeCatalogEntity:
-		if id := m.catalog_entity; id != nil {
+	case entity.EdgeCatalog:
+		if id := m.catalog; id != nil {
 			return []ent.Value{*id}
 		}
-	case entity.EdgeAdoptedEntities:
-		ids := make([]ent.Value, 0, len(m.adopted_entities))
-		for id := range m.adopted_entities {
+	case entity.EdgeAdopted:
+		ids := make([]ent.Value, 0, len(m.adopted))
+		for id := range m.adopted {
 			ids = append(ids, id)
 		}
 		return ids
@@ -78491,8 +78564,8 @@ func (m *EntityMutation) RemovedEdges() []string {
 	if m.removededitors != nil {
 		edges = append(edges, entity.EdgeEditors)
 	}
-	if m.removedadopted_entities != nil {
-		edges = append(edges, entity.EdgeAdoptedEntities)
+	if m.removedadopted != nil {
+		edges = append(edges, entity.EdgeAdopted)
 	}
 	if m.removedcontacts != nil {
 		edges = append(edges, entity.EdgeContacts)
@@ -78594,9 +78667,9 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case entity.EdgeAdoptedEntities:
-		ids := make([]ent.Value, 0, len(m.removedadopted_entities))
-		for id := range m.removedadopted_entities {
+	case entity.EdgeAdopted:
+		ids := make([]ent.Value, 0, len(m.removedadopted))
+		for id := range m.removedadopted {
 			ids = append(ids, id)
 		}
 		return ids
@@ -78787,11 +78860,11 @@ func (m *EntityMutation) ClearedEdges() []string {
 	if m.clearedreviewed_by_identity_holder {
 		edges = append(edges, entity.EdgeReviewedByIdentityHolder)
 	}
-	if m.clearedcatalog_entity {
-		edges = append(edges, entity.EdgeCatalogEntity)
+	if m.clearedcatalog {
+		edges = append(edges, entity.EdgeCatalog)
 	}
-	if m.clearedadopted_entities {
-		edges = append(edges, entity.EdgeAdoptedEntities)
+	if m.clearedadopted {
+		edges = append(edges, entity.EdgeAdopted)
 	}
 	if m.clearedentity_relationship_state {
 		edges = append(edges, entity.EdgeEntityRelationshipState)
@@ -78916,10 +78989,10 @@ func (m *EntityMutation) EdgeCleared(name string) bool {
 		return m.clearedreviewed_by_group
 	case entity.EdgeReviewedByIdentityHolder:
 		return m.clearedreviewed_by_identity_holder
-	case entity.EdgeCatalogEntity:
-		return m.clearedcatalog_entity
-	case entity.EdgeAdoptedEntities:
-		return m.clearedadopted_entities
+	case entity.EdgeCatalog:
+		return m.clearedcatalog
+	case entity.EdgeAdopted:
+		return m.clearedadopted
 	case entity.EdgeEntityRelationshipState:
 		return m.clearedentity_relationship_state
 	case entity.EdgeEntitySecurityQuestionnaireStatus:
@@ -79013,8 +79086,8 @@ func (m *EntityMutation) ClearEdge(name string) error {
 	case entity.EdgeReviewedByIdentityHolder:
 		m.ClearReviewedByIdentityHolder()
 		return nil
-	case entity.EdgeCatalogEntity:
-		m.ClearCatalogEntity()
+	case entity.EdgeCatalog:
+		m.ClearCatalog()
 		return nil
 	case entity.EdgeEntityRelationshipState:
 		m.ClearEntityRelationshipState()
@@ -79075,11 +79148,11 @@ func (m *EntityMutation) ResetEdge(name string) error {
 	case entity.EdgeReviewedByIdentityHolder:
 		m.ResetReviewedByIdentityHolder()
 		return nil
-	case entity.EdgeCatalogEntity:
-		m.ResetCatalogEntity()
+	case entity.EdgeCatalog:
+		m.ResetCatalog()
 		return nil
-	case entity.EdgeAdoptedEntities:
-		m.ResetAdoptedEntities()
+	case entity.EdgeAdopted:
+		m.ResetAdopted()
 		return nil
 	case entity.EdgeEntityRelationshipState:
 		m.ResetEntityRelationshipState()
