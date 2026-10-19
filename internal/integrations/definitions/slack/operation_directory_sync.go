@@ -51,7 +51,7 @@ type slackUserPayload struct {
 }
 
 // runDirectorySync collects Slack workspace users and emits directory account ingest payloads
-func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *SlackClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *Client, _ DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := client.API.GetUsersContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("slack directory sync: failed to fetch users")

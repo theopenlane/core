@@ -22,7 +22,7 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[tea
 
 		appCfg := microsoft.AppConfig{ApplicationID: cfg.ApplicationID, ClientSecret: cfg.ClientSecret}
 
-		graph, _, err := appCfg.NewDelegatedGraphClient(ctx, microsoft.OrganizationsTenant, teamsScopes, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+		graph, _, err := appCfg.NewDelegatedGraphClient(ctx, microsoft.OrganizationsTenant, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error building microsoft teams client")
 			return nil, ErrClientBuildFailed

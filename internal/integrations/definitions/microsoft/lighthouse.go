@@ -18,10 +18,12 @@ const (
 	// RegistrationAssignmentDeleteRoleID is the Azure built-in role that lets the managing tenant read and remove its own Lighthouse delegations
 	RegistrationAssignmentDeleteRoleID = "91c1777a-f3dc-4fae-b103-61d183457e46"
 	// registrationAssignmentsPathFormat is the ARM path listing a subscription's Lighthouse registration assignments with their definitions
-	registrationAssignmentsPathFormat = "/subscriptions/%s/providers/Microsoft.ManagedServices/registrationAssignments?api-version=2022-10-01&$expandRegistrationDefinition=true"
+	registrationAssignmentsPathFormat = "/subscriptions/%s/providers/Microsoft.ManagedServices/registrationAssignments?api-version=" + lighthouseAPIVersion + "&$expandRegistrationDefinition=true"
 	// lighthouseTemplateSchema is the ARM schema for subscription-scope deployments
 	lighthouseTemplateSchema = "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#"
-	// lighthouseAPIVersion is the Microsoft.ManagedServices API version the template deploys with
+	// lighthouseTemplateContentVersion is our version of the Lighthouse template, bumped when the template changes
+	lighthouseTemplateContentVersion = "1.0.0.0"
+	// lighthouseAPIVersion is the Microsoft.ManagedServices API version used for Lighthouse requests
 	lighthouseAPIVersion = "2022-10-01"
 	// registrationDefinitionType is the ARM resource type of a Lighthouse registration definition
 	registrationDefinitionType = "Microsoft.ManagedServices/registrationDefinitions"
@@ -167,7 +169,7 @@ func (c LighthouseConfig) Template(offer LighthouseOffer) (string, error) {
 
 	template := armTemplate{
 		Schema:         lighthouseTemplateSchema,
-		ContentVersion: "1.0.0.0",
+		ContentVersion: lighthouseTemplateContentVersion,
 		Parameters: map[string]armParameter{
 			connectionCodeParameter: {Type: "string", Metadata: armMetadata{Description: "Connection code shown in Openlane"}},
 		},

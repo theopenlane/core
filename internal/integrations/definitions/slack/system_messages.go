@@ -63,10 +63,10 @@ type OrganizationsPendingDeletionMessage struct {
 }
 
 var (
-	NewUserOp                      = types.OperationPayloadOf[NewUserMessage]()                      //nolint:revive
-	IntegrationInstalledOp         = types.OperationPayloadOf[IntegrationInstalledMessage]()         //nolint:revive
-	DemoRequestOp                  = types.OperationPayloadOf[DemoRequestMessage]()                  //nolint:revive
-	OrganizationsPendingDeletionOp = types.OperationPayloadOf[OrganizationsPendingDeletionMessage]() //nolint:revive
+	NewUserOp = types.OperationPayloadOf[NewUserMessage]()
+
+	DemoRequestOp                  = types.OperationPayloadOf[DemoRequestMessage]()
+	OrganizationsPendingDeletionOp = types.OperationPayloadOf[OrganizationsPendingDeletionMessage]()
 )
 
 var (
@@ -112,7 +112,7 @@ Organizations marked for deletion: {{ .Count }}
 
 // systemMessageRegistration builds an OperationRegistration for a system message
 func systemMessageRegistration[T any](op types.OperationRef[T], description string, tmpl *template.Template) types.OperationRegistration {
-	return op.Handles(func(ctx context.Context, _ types.OperationRequest, c *SlackClient, cfg T) (json.RawMessage, error) {
+	return op.Handles(func(ctx context.Context, _ types.OperationRequest, c *Client, cfg T) (json.RawMessage, error) {
 		return nil, renderAndSendSystemMessage(ctx, c, tmpl, cfg)
 	}).
 		CustomerSelectable(false).
@@ -122,7 +122,7 @@ func systemMessageRegistration[T any](op types.OperationRef[T], description stri
 }
 
 // renderAndSendSystemMessage executes tmpl against input and posts the result through c's transport
-func renderAndSendSystemMessage[T any](ctx context.Context, c *SlackClient, tmpl *template.Template, input T) error {
+func renderAndSendSystemMessage[T any](ctx context.Context, c *Client, tmpl *template.Template, input T) error {
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, input); err != nil {
 		return fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)

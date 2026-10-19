@@ -11,8 +11,10 @@ import (
 )
 
 const (
+	// resourceGraphAPIVersion is the Microsoft.ResourceGraph API version used for Resource Graph queries
+	resourceGraphAPIVersion = "2022-10-01"
 	// resourceGraphQueryPath is the ARM path for Azure Resource Graph queries
-	resourceGraphQueryPath = "/providers/Microsoft.ResourceGraph/resources?api-version=2022-10-01"
+	resourceGraphQueryPath = "/providers/Microsoft.ResourceGraph/resources?api-version=" + resourceGraphAPIVersion
 	// resourceGraphPageSize is the maximum number of rows Resource Graph returns per page
 	resourceGraphPageSize = 1000
 	// resourceGraphResultFormat returns each row as a JSON object keyed by column name

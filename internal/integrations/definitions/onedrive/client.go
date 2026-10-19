@@ -20,7 +20,7 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[one
 
 		appCfg := microsoft.AppConfig{ApplicationID: cfg.ApplicationID, ClientSecret: cfg.ClientSecret}
 
-		graph, ts, err := appCfg.NewDelegatedGraphClient(ctx, microsoft.CommonTenant, oneDriveScopes, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+		graph, ts, err := appCfg.NewDelegatedGraphClient(ctx, microsoft.CommonTenant, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error building onedrive client")
 			return nil, ErrClientBuildFailed

@@ -36,8 +36,8 @@ func (c AppConfig) NewGraphClient(cred azcore.TokenCredential) (*msgraphsdk.Grap
 }
 
 // NewDelegatedGraphClient builds a Graph client from stored delegated OAuth material, returning the refreshing token source for plain HTTP calls
-func (c AppConfig) NewDelegatedGraphClient(ctx context.Context, tenant string, scopes []string, token *oauth2.Token) (*msgraphsdk.GraphServiceClient, oauth2.TokenSource, error) {
-	ts := c.delegatedTokenSource(ctx, tenant, scopes, token)
+func (c AppConfig) NewDelegatedGraphClient(ctx context.Context, tenant string, token *oauth2.Token) (*msgraphsdk.GraphServiceClient, oauth2.TokenSource, error) {
+	ts := c.delegatedTokenSource(ctx, tenant, token)
 
 	graph, err := c.NewGraphClient(NewOAuthTokenCredential(ts))
 	if err != nil {

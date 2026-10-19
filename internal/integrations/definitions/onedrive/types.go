@@ -19,12 +19,6 @@ var (
 	oauthConnection = types.ConnectionOf[oneDriveCred]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
-	// oneDriveScopes are the delegated OAuth scopes requested for OneDrive installations
-	oneDriveScopes = []string{
-		"https://graph.microsoft.com/Files.Read",
-		"https://graph.microsoft.com/User.Read",
-		"offline_access",
-	}
 )
 
 // oneDriveCred holds the provider-owned credential material for a OneDrive installation

@@ -42,7 +42,7 @@ func TestCustomerClientBuilder_SenderError(t *testing.T) {
 }
 
 func TestEmailScrubber_NotNil(t *testing.T) {
-	assert.NotNil(t, EmailScrubber())
+	assert.NotNil(t, Scrubber())
 }
 
 func TestDevModeRuntimeClient_SendsWelcomeEmail(t *testing.T) {

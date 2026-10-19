@@ -38,7 +38,13 @@ func Builder(cfg Config) registry.Builder {
 							AuthURL:      microsoft.AuthorizeURL(microsoft.OrganizationsTenant),
 							TokenURL:     microsoft.TokenURL(microsoft.OrganizationsTenant),
 							RedirectURL:  cfg.RedirectURL,
-							Scopes:       teamsScopes,
+							Scopes: []string{
+								"https://graph.microsoft.com/User.Read",
+								"https://graph.microsoft.com/ChannelMessage.Send",
+								"https://graph.microsoft.com/Team.ReadBasic.All",
+								"https://graph.microsoft.com/Channel.ReadBasic.All",
+								"offline_access",
+							},
 						},
 						Material: func(material auth.OAuthMaterial) (teamsCred, error) {
 							return teamsCred{

@@ -37,7 +37,7 @@ var DomainScanBuildReportOp = types.OperationPayloadOf[DomainScanBuildReport]().
 	Internal()
 
 // runDomainScanBuildReport builds the structured scan report and encodes it
-func runDomainScanBuildReport(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanBuildReport) (json.RawMessage, error) {
+func runDomainScanBuildReport(ctx context.Context, _ types.OperationRequest, client *Client, cfg DomainScanBuildReport) (json.RawMessage, error) {
 	result, err := DomainScanBuildReport{}.Run(ctx, client, cfg)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func runDomainScanBuildReport(ctx context.Context, _ types.OperationRequest, cli
 }
 
 // Run builds the structured scan report from the URL Scanner result plus gathered enrichment
-func (DomainScanBuildReport) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanBuildReport) (DomainScanBuildReportResult, error) {
+func (DomainScanBuildReport) Run(ctx context.Context, client *Client, cfg DomainScanBuildReport) (DomainScanBuildReportResult, error) {
 	var scanResult *url_scanner.ScanGetResponse
 
 	if len(cfg.Result) > 0 {

@@ -10,7 +10,7 @@ import (
 )
 
 // delegatedTokenSource builds a token source that refreshes stored delegated OAuth material against the given tenant segment
-func (c AppConfig) delegatedTokenSource(ctx context.Context, tenant string, scopes []string, token *oauth2.Token) oauth2.TokenSource {
+func (c AppConfig) delegatedTokenSource(ctx context.Context, tenant string, token *oauth2.Token) oauth2.TokenSource {
 	oauthCfg := &oauth2.Config{
 		ClientID:     c.ApplicationID,
 		ClientSecret: c.ClientSecret,
@@ -18,7 +18,6 @@ func (c AppConfig) delegatedTokenSource(ctx context.Context, tenant string, scop
 			AuthURL:  AuthorizeURL(tenant),
 			TokenURL: TokenURL(tenant),
 		},
-		Scopes: scopes,
 	}
 
 	return oauthCfg.TokenSource(ctx, token)

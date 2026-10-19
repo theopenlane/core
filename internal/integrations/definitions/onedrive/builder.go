@@ -39,7 +39,11 @@ func Builder(cfg Config) registry.Builder {
 							AuthURL:      microsoft.AuthorizeURL(microsoft.CommonTenant),
 							TokenURL:     microsoft.TokenURL(microsoft.CommonTenant),
 							RedirectURL:  cfg.RedirectURL,
-							Scopes:       oneDriveScopes,
+							Scopes: []string{
+								"https://graph.microsoft.com/Files.Read",
+								"https://graph.microsoft.com/User.Read",
+								"offline_access",
+							},
 						},
 						Material: func(material auth.OAuthMaterial) (oneDriveCred, error) {
 							return oneDriveCred{

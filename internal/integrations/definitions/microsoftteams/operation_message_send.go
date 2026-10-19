@@ -16,7 +16,7 @@ import (
 )
 
 // MessageSendOp is the operation ref for the Microsoft Teams message send operation
-var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(sendMessage) //nolint:revive
+var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(sendMessage)
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {

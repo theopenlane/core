@@ -13,7 +13,7 @@ import (
 const channelsListPageSize = 1000
 
 // listTeams lists the connected workspace's non-archived public and private channels for choosing a message destination
-func listTeams(ctx context.Context, c *SlackClient) ([]operations.Team, error) {
+func listTeams(ctx context.Context, c *Client) ([]operations.Team, error) {
 	info, err := c.API.GetTeamInfoContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("slack: team info lookup failed")

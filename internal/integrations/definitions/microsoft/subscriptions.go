@@ -11,8 +11,10 @@ import (
 )
 
 const (
+	// subscriptionsAPIVersion is the Microsoft.Resources subscriptions API version used for listing subscriptions
+	subscriptionsAPIVersion = "2022-12-01"
 	// subscriptionsListPath is the ARM path for listing subscriptions visible to the caller
-	subscriptionsListPath = "/subscriptions?api-version=2022-12-01"
+	subscriptionsListPath = "/subscriptions?api-version=" + subscriptionsAPIVersion
 )
 
 // subscriptionStatesExcluded are subscription states that cannot be queried for resources

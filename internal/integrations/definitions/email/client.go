@@ -91,8 +91,8 @@ func postmarkSender(cred PostmarkCredential) (newman.EmailSender, error) {
 // EmailHTMLScrubber is the shared scrubber instance used by email providers for render-time HTML sanitization, preserving email-safe layout elements while stripping dangerous content
 var EmailHTMLScrubber = scrubber.NewPolicyScrubber(scrubber.WithEmailDefaults())
 
-// EmailScrubber returns the shared HTML scrubber instance used for email content sanitization, the canonical policy for both storage-time and render-time processing
-func EmailScrubber() scrubber.Scrubber { //nolint:revive
+// Scrubber returns the shared HTML scrubber instance used for email content sanitization, the canonical policy for both storage-time and render-time processing
+func Scrubber() scrubber.Scrubber {
 	return EmailHTMLScrubber
 }
 

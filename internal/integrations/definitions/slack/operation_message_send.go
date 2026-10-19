@@ -15,7 +15,7 @@ import (
 )
 
 // MessageSendOp is the operation ref for the Slack message send operation
-var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(sendMessage).Permissions(scopes...) //nolint:revive
+var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(sendMessage).Permissions(scopes...)
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
@@ -31,7 +31,7 @@ type MessageSendOperation struct {
 }
 
 // sendMessage sends a Slack message via chat.postMessage
-func sendMessage(ctx context.Context, req types.OperationRequest, c *SlackClient, cfg MessageSendOperation) (json.RawMessage, error) {
+func sendMessage(ctx context.Context, req types.OperationRequest, c *Client, cfg MessageSendOperation) (json.RawMessage, error) {
 	if err := cfg.ResolveTemplate(ctx, req, &cfg); err != nil {
 		return nil, err
 	}
