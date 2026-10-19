@@ -19568,7 +19568,7 @@ type ImportReportScanPayload struct {
 }
 
 // The items a reviewer accepted from one section of a parsed report, by the key each item is imported by:
-// name for programs, domains, entities, assets, groups and platforms, ref_code for controls, system_name for
+// name for programs, entities, assets, groups and platforms, ref_code for controls, system_name for
 // systemdetails, email for contacts, and external_id for reviews and findings
 type ImportReportScanSectionInput struct {
 	// the section name, e.g. programs, controls, reviews, findings

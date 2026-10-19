@@ -105,8 +105,8 @@ type TestGraphClient interface {
 	GetContacts(ctx context.Context, where *ContactWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContacts, error)
 	UpdateBulkContact(ctx context.Context, ids []string, input UpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkContact, error)
 	UpdateContact(ctx context.Context, updateContactID string, input UpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateContact, error)
-	CreateBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControl, error)
 	CreateBulkControl(ctx context.Context, input []*CreateControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControl, error)
+	CreateBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControl, error)
 	CreateControl(ctx context.Context, input CreateControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControl, error)
 	DeleteBulkControl(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkControl, error)
 	DeleteControl(ctx context.Context, deleteControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControl, error)
@@ -19022,427 +19022,6 @@ func (t *UpdateContact_UpdateContact) GetContact() *UpdateContact_UpdateContact_
 	return &t.Contact
 }
 
-type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
-	Aliases                    []string                            "json:\"aliases,omitempty\" graphql:\"aliases\""
-	AssessmentMethods          []*models.AssessmentMethod          "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
-	AssessmentObjectives       []*models.AssessmentObjective       "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
-	AuditorReferenceID         *string                             "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
-	Category                   *string                             "json:\"category,omitempty\" graphql:\"category\""
-	CategoryID                 *string                             "json:\"categoryID,omitempty\" graphql:\"categoryID\""
-	ControlKindID              *string                             "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
-	ControlKindName            *string                             "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
-	ControlOwnerID             *string                             "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
-	ControlQuestions           []string                            "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
-	CreatedAt                  *time.Time                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                  *string                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DelegateID                 *string                             "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	Description                *string                             "json:\"description,omitempty\" graphql:\"description\""
-	DescriptionJSON            []any                               "json:\"descriptionJSON,omitempty\" graphql:\"descriptionJSON\""
-	DisplayID                  string                              "json:\"displayID\" graphql:\"displayID\""
-	EnvironmentID              *string                             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName            *string                             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	EvidenceRequests           []*models.EvidenceRequests          "json:\"evidenceRequests,omitempty\" graphql:\"evidenceRequests\""
-	ExampleEvidence            []*models.ExampleEvidence           "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
-	ExternalUUID               *string                             "json:\"externalUUID,omitempty\" graphql:\"externalUUID\""
-	ID                         string                              "json:\"id\" graphql:\"id\""
-	ImplementationDescription  *string                             "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
-	ImplementationGuidance     []*models.ImplementationGuidance    "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
-	ImplementationStatus       *enums.ControlImplementationStatus  "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
-	IntegrationRunID           *string                             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	InternalNotes              *string                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	IsTrustCenterControl       *bool                               "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
-	ManagedBy                  *string                             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
-	MappedCategories           []string                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
-	OwnerID                    *string                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PublicRepresentation       *string                             "json:\"publicRepresentation,omitempty\" graphql:\"publicRepresentation\""
-	RefCode                    string                              "json:\"refCode\" graphql:\"refCode\""
-	ReferenceFramework         *string                             "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
-	ReferenceFrameworkRevision *string                             "json:\"referenceFrameworkRevision,omitempty\" graphql:\"referenceFrameworkRevision\""
-	ReferenceID                *string                             "json:\"referenceID,omitempty\" graphql:\"referenceID\""
-	References                 []*models.Reference                 "json:\"references,omitempty\" graphql:\"references\""
-	ResponsiblePartyID         *string                             "json:\"responsiblePartyID,omitempty\" graphql:\"responsiblePartyID\""
-	ScopeID                    *string                             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName                  *string                             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	Source                     *enums.ControlSource                "json:\"source,omitempty\" graphql:\"source\""
-	SourceDefinitionID         *string                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
-	SourceDefinitionVersion    *string                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
-	SourceInstanceID           *string                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
-	SourceName                 *string                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
-	StandardID                 *string                             "json:\"standardID,omitempty\" graphql:\"standardID\""
-	Status                     *enums.ControlStatus                "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory                *string                             "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	SystemInternalID           *string                             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned                *bool                               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                       []string                            "json:\"tags,omitempty\" graphql:\"tags\""
-	TestingProcedures          []*models.TestingProcedures         "json:\"testingProcedures,omitempty\" graphql:\"testingProcedures\""
-	Title                      *string                             "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterVisibility      *enums.TrustCenterControlVisibility "json:\"trustCenterVisibility,omitempty\" graphql:\"trustCenterVisibility\""
-	UpdatedAt                  *time.Time                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                  *string                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator      *string                             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	WorkflowEligibleMarker     *bool                               "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
-}
-
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAliases() []string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Aliases
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAssessmentMethods() []*models.AssessmentMethod {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.AssessmentMethods
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAssessmentObjectives() []*models.AssessmentObjective {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.AssessmentObjectives
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAuditorReferenceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.AuditorReferenceID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCategory() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Category
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCategoryID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.CategoryID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlKindID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ControlKindID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlKindName() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ControlKindName
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ControlOwnerID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlQuestions() []string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ControlQuestions
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDelegateID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.DelegateID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDescriptionJSON() []any {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.DescriptionJSON
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDisplayID() string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.DisplayID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetEnvironmentID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.EnvironmentID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetEnvironmentName() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.EnvironmentName
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetEvidenceRequests() []*models.EvidenceRequests {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.EvidenceRequests
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetExampleEvidence() []*models.ExampleEvidence {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ExampleEvidence
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetExternalUUID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ExternalUUID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetImplementationDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ImplementationDescription
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetImplementationGuidance() []*models.ImplementationGuidance {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ImplementationGuidance
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetImplementationStatus() *enums.ControlImplementationStatus {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ImplementationStatus
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetIntegrationRunID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.IntegrationRunID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetInternalNotes() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.InternalNotes
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetIsTrustCenterControl() *bool {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.IsTrustCenterControl
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetManagedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ManagedBy
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetMappedCategories() []string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.MappedCategories
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetPublicRepresentation() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.PublicRepresentation
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetRefCode() string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.RefCode
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetReferenceFramework() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ReferenceFramework
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetReferenceFrameworkRevision() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ReferenceFrameworkRevision
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetReferenceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ReferenceID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetReferences() []*models.Reference {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.References
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetResponsiblePartyID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ResponsiblePartyID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetScopeID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ScopeID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetScopeName() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ScopeName
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSource() *enums.ControlSource {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Source
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceDefinitionID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.SourceDefinitionID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceDefinitionVersion() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.SourceDefinitionVersion
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.SourceInstanceID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceName() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.SourceName
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetStandardID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.StandardID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetStatus() *enums.ControlStatus {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Status
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSubcategory() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Subcategory
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSystemInternalID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.SystemInternalID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSystemOwned() *bool {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.SystemOwned
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTestingProcedures() []*models.TestingProcedures {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.TestingProcedures
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTitle() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Title
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTrustCenterVisibility() *enums.TrustCenterControlVisibility {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.TrustCenterVisibility
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetWorkflowEligibleMarker() *bool {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.WorkflowEligibleMarker
-}
-
-type CreateBulkCSVControl_CreateBulkCSVControl struct {
-	Controls []*CreateBulkCSVControl_CreateBulkCSVControl_Controls "json:\"controls,omitempty\" graphql:\"controls\""
-}
-
-func (t *CreateBulkCSVControl_CreateBulkCSVControl) GetControls() []*CreateBulkCSVControl_CreateBulkCSVControl_Controls {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl{}
-	}
-	return t.Controls
-}
-
 type CreateBulkControl_CreateBulkControl_Controls struct {
 	Aliases                    []string                            "json:\"aliases,omitempty\" graphql:\"aliases\""
 	AssessmentMethods          []*models.AssessmentMethod          "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
@@ -19860,6 +19439,427 @@ type CreateBulkControl_CreateBulkControl struct {
 func (t *CreateBulkControl_CreateBulkControl) GetControls() []*CreateBulkControl_CreateBulkControl_Controls {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl{}
+	}
+	return t.Controls
+}
+
+type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
+	Aliases                    []string                            "json:\"aliases,omitempty\" graphql:\"aliases\""
+	AssessmentMethods          []*models.AssessmentMethod          "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
+	AssessmentObjectives       []*models.AssessmentObjective       "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
+	AuditorReferenceID         *string                             "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
+	Category                   *string                             "json:\"category,omitempty\" graphql:\"category\""
+	CategoryID                 *string                             "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlKindID              *string                             "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
+	ControlKindName            *string                             "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
+	ControlOwnerID             *string                             "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
+	ControlQuestions           []string                            "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
+	CreatedAt                  *time.Time                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                  *string                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DelegateID                 *string                             "json:\"delegateID,omitempty\" graphql:\"delegateID\""
+	Description                *string                             "json:\"description,omitempty\" graphql:\"description\""
+	DescriptionJSON            []any                               "json:\"descriptionJSON,omitempty\" graphql:\"descriptionJSON\""
+	DisplayID                  string                              "json:\"displayID\" graphql:\"displayID\""
+	EnvironmentID              *string                             "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName            *string                             "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	EvidenceRequests           []*models.EvidenceRequests          "json:\"evidenceRequests,omitempty\" graphql:\"evidenceRequests\""
+	ExampleEvidence            []*models.ExampleEvidence           "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
+	ExternalUUID               *string                             "json:\"externalUUID,omitempty\" graphql:\"externalUUID\""
+	ID                         string                              "json:\"id\" graphql:\"id\""
+	ImplementationDescription  *string                             "json:\"implementationDescription,omitempty\" graphql:\"implementationDescription\""
+	ImplementationGuidance     []*models.ImplementationGuidance    "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
+	ImplementationStatus       *enums.ControlImplementationStatus  "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	IntegrationRunID           *string                             "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes              *string                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	IsTrustCenterControl       *bool                               "json:\"isTrustCenterControl,omitempty\" graphql:\"isTrustCenterControl\""
+	ManagedBy                  *string                             "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	MappedCategories           []string                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
+	OwnerID                    *string                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PublicRepresentation       *string                             "json:\"publicRepresentation,omitempty\" graphql:\"publicRepresentation\""
+	RefCode                    string                              "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework         *string                             "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+	ReferenceFrameworkRevision *string                             "json:\"referenceFrameworkRevision,omitempty\" graphql:\"referenceFrameworkRevision\""
+	ReferenceID                *string                             "json:\"referenceID,omitempty\" graphql:\"referenceID\""
+	References                 []*models.Reference                 "json:\"references,omitempty\" graphql:\"references\""
+	ResponsiblePartyID         *string                             "json:\"responsiblePartyID,omitempty\" graphql:\"responsiblePartyID\""
+	ScopeID                    *string                             "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName                  *string                             "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Source                     *enums.ControlSource                "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID         *string                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion    *string                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID           *string                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceName                 *string                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
+	StandardID                 *string                             "json:\"standardID,omitempty\" graphql:\"standardID\""
+	Status                     *enums.ControlStatus                "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory                *string                             "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	SystemInternalID           *string                             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                *bool                               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                       []string                            "json:\"tags,omitempty\" graphql:\"tags\""
+	TestingProcedures          []*models.TestingProcedures         "json:\"testingProcedures,omitempty\" graphql:\"testingProcedures\""
+	Title                      *string                             "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterVisibility      *enums.TrustCenterControlVisibility "json:\"trustCenterVisibility,omitempty\" graphql:\"trustCenterVisibility\""
+	UpdatedAt                  *time.Time                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                  *string                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator      *string                             "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	WorkflowEligibleMarker     *bool                               "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
+}
+
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAliases() []string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Aliases
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAssessmentMethods() []*models.AssessmentMethod {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.AssessmentMethods
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAssessmentObjectives() []*models.AssessmentObjective {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.AssessmentObjectives
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetAuditorReferenceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.AuditorReferenceID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCategory() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Category
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCategoryID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.CategoryID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlKindID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ControlKindID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlKindName() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ControlKindName
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ControlOwnerID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlQuestions() []string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ControlQuestions
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDelegateID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.DelegateID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDescriptionJSON() []any {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.DescriptionJSON
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetEnvironmentID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.EnvironmentID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetEnvironmentName() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.EnvironmentName
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetEvidenceRequests() []*models.EvidenceRequests {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.EvidenceRequests
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetExampleEvidence() []*models.ExampleEvidence {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ExampleEvidence
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetExternalUUID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ExternalUUID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetImplementationDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ImplementationDescription
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetImplementationGuidance() []*models.ImplementationGuidance {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ImplementationGuidance
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetImplementationStatus() *enums.ControlImplementationStatus {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ImplementationStatus
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.IntegrationRunID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.InternalNotes
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetIsTrustCenterControl() *bool {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.IsTrustCenterControl
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ManagedBy
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetMappedCategories() []string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.MappedCategories
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetPublicRepresentation() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.PublicRepresentation
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetRefCode() string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.RefCode
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetReferenceFramework() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ReferenceFramework
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetReferenceFrameworkRevision() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ReferenceFrameworkRevision
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetReferenceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ReferenceID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetReferences() []*models.Reference {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.References
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetResponsiblePartyID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ResponsiblePartyID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetScopeID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ScopeID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetScopeName() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ScopeName
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSource() *enums.ControlSource {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Source
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceName() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SourceName
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetStandardID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.StandardID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetStatus() *enums.ControlStatus {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Status
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSubcategory() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Subcategory
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTestingProcedures() []*models.TestingProcedures {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.TestingProcedures
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTitle() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Title
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetTrustCenterVisibility() *enums.TrustCenterControlVisibility {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.TrustCenterVisibility
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetWorkflowEligibleMarker() *bool {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.WorkflowEligibleMarker
+}
+
+type CreateBulkCSVControl_CreateBulkCSVControl struct {
+	Controls []*CreateBulkCSVControl_CreateBulkCSVControl_Controls "json:\"controls,omitempty\" graphql:\"controls\""
+}
+
+func (t *CreateBulkCSVControl_CreateBulkCSVControl) GetControls() []*CreateBulkCSVControl_CreateBulkCSVControl_Controls {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl{}
 	}
 	return t.Controls
 }
@@ -169012,17 +169012,6 @@ func (t *UpdateContact) GetUpdateContact() *UpdateContact_UpdateContact {
 	return &t.UpdateContact
 }
 
-type CreateBulkCSVControl struct {
-	CreateBulkCSVControl CreateBulkCSVControl_CreateBulkCSVControl "json:\"createBulkCSVControl\" graphql:\"createBulkCSVControl\""
-}
-
-func (t *CreateBulkCSVControl) GetCreateBulkCSVControl() *CreateBulkCSVControl_CreateBulkCSVControl {
-	if t == nil {
-		t = &CreateBulkCSVControl{}
-	}
-	return &t.CreateBulkCSVControl
-}
-
 type CreateBulkControl struct {
 	CreateBulkControl CreateBulkControl_CreateBulkControl "json:\"createBulkControl\" graphql:\"createBulkControl\""
 }
@@ -169032,6 +169021,17 @@ func (t *CreateBulkControl) GetCreateBulkControl() *CreateBulkControl_CreateBulk
 		t = &CreateBulkControl{}
 	}
 	return &t.CreateBulkControl
+}
+
+type CreateBulkCSVControl struct {
+	CreateBulkCSVControl CreateBulkCSVControl_CreateBulkCSVControl "json:\"createBulkCSVControl\" graphql:\"createBulkCSVControl\""
+}
+
+func (t *CreateBulkCSVControl) GetCreateBulkCSVControl() *CreateBulkCSVControl_CreateBulkCSVControl {
+	if t == nil {
+		t = &CreateBulkCSVControl{}
+	}
+	return &t.CreateBulkCSVControl
 }
 
 type CreateControl struct {
@@ -181168,89 +181168,6 @@ func (c *Client) UpdateContact(ctx context.Context, updateContactID string, inpu
 	return &res, nil
 }
 
-const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upload!) {
-	createBulkCSVControl(input: $input) {
-		controls {
-			aliases
-			assessmentMethods
-			assessmentObjectives
-			auditorReferenceID
-			category
-			categoryID
-			controlKindID
-			controlKindName
-			controlOwnerID
-			controlQuestions
-			createdAt
-			createdBy
-			delegateID
-			description
-			descriptionJSON
-			displayID
-			environmentID
-			environmentName
-			evidenceRequests
-			exampleEvidence
-			externalUUID
-			id
-			implementationDescription
-			implementationGuidance
-			implementationStatus
-			integrationRunID
-			internalNotes
-			isTrustCenterControl
-			managedBy
-			mappedCategories
-			ownerID
-			publicRepresentation
-			refCode
-			referenceFramework
-			referenceFrameworkRevision
-			referenceID
-			references
-			responsiblePartyID
-			scopeID
-			scopeName
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			sourceName
-			standardID
-			status
-			subcategory
-			systemInternalID
-			systemOwned
-			tags
-			testingProcedures
-			title
-			trustCenterVisibility
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			workflowEligibleMarker
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControl, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVControl
-	if err := c.Client.Post(ctx, "CreateBulkCSVControl", CreateBulkCSVControlDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateControlInput!]) {
 	createBulkControl(input: $input) {
 		controls {
@@ -181324,6 +181241,89 @@ func (c *Client) CreateBulkControl(ctx context.Context, input []*CreateControlIn
 
 	var res CreateBulkControl
 	if err := c.Client.Post(ctx, "CreateBulkControl", CreateBulkControlDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upload!) {
+	createBulkCSVControl(input: $input) {
+		controls {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlKindID
+			controlKindName
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			environmentID
+			environmentName
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			integrationRunID
+			internalNotes
+			isTrustCenterControl
+			managedBy
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			scopeID
+			scopeName
+			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceName
+			standardID
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			trustCenterVisibility
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			workflowEligibleMarker
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControl, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVControl
+	if err := c.Client.Post(ctx, "CreateBulkCSVControl", CreateBulkCSVControlDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -219083,8 +219083,8 @@ var DocumentOperationNames = map[string]string{
 	GetContactsDocument:                           "GetContacts",
 	UpdateBulkContactDocument:                     "UpdateBulkContact",
 	UpdateContactDocument:                         "UpdateContact",
-	CreateBulkCSVControlDocument:                  "CreateBulkCSVControl",
 	CreateBulkControlDocument:                     "CreateBulkControl",
+	CreateBulkCSVControlDocument:                  "CreateBulkCSVControl",
 	CreateControlDocument:                         "CreateControl",
 	DeleteBulkControlDocument:                     "DeleteBulkControl",
 	DeleteControlDocument:                         "DeleteControl",
