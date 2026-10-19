@@ -10,8 +10,6 @@ tool (
 	gotest.tools/gotestsum
 )
 
-replace github.com/theopenlane/entx => ../entx
-
 require (
 	ariga.io/atlas v1.3.0
 	ariga.io/entcache v0.1.0
@@ -39,7 +37,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.3
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.84.1
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.1
-	github.com/brianvoe/gofakeit/v7 v7.17.1
+	github.com/brianvoe/gofakeit/v7 v7.18.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.10.0
 	github.com/coder/websocket v1.8.15
@@ -121,7 +119,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.36.2
+	github.com/theopenlane/entx v0.36.3-0.20261018211913-5606d125d55a
 	github.com/theopenlane/go-client v0.14.0
 	github.com/theopenlane/gqlgen-plugins v0.18.3
 	github.com/theopenlane/httpsling v0.3.0
@@ -131,7 +129,7 @@ require (
 	github.com/theopenlane/utils v0.7.3
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.13.0
-	github.com/vektah/gqlparser/v2 v2.5.58
+	github.com/vektah/gqlparser/v2 v2.5.62
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/wundergraph/astjson v1.1.0
 	github.com/xeipuuv/gojsonschema v1.2.0
@@ -140,13 +138,13 @@ require (
 	github.com/zitadel/zitadel-go/v3 v3.29.3
 	goauthentik.io/api/v3 v3.2026020.16
 	gocloud.dev v0.46.0
-	golang.org/x/crypto v0.57.0
-	golang.org/x/mod v0.41.0
-	golang.org/x/net v0.60.0
+	golang.org/x/crypto v0.58.0
+	golang.org/x/mod v0.42.0
+	golang.org/x/net v0.61.0
 	golang.org/x/oauth2 v0.37.0
-	golang.org/x/sync v0.23.0
-	golang.org/x/text v0.42.0
-	golang.org/x/tools v0.51.0
+	golang.org/x/sync v0.24.0
+	golang.org/x/text v0.43.0
+	golang.org/x/tools v0.52.0
 	google.golang.org/api v0.299.0
 	google.golang.org/genai v1.71.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260921155816-b14227669459
@@ -414,8 +412,8 @@ require (
 	go.yaml.in/yaml/v4 v4.0.0-rc.2 // indirect
 	golang.org/x/exp v0.0.0-20260908205506-85c1c2202aba // indirect
 	golang.org/x/image v0.45.0 // indirect
-	golang.org/x/sys v0.48.0 // indirect
-	golang.org/x/term v0.46.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/term v0.47.0 // indirect
 	golang.org/x/time v0.16.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
