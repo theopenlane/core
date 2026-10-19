@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	programquery "github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 )
@@ -177,7 +179,30 @@ func loadMappingControls(ctx context.Context, controlIDs, ids []string, program 
 	controlsQuery := client.Control.Query().Where(control.IDIn(controlIDs...))
 
 	if program != nil {
-		controlsQuery.Where(control.IDIn(ids...))
+		c, err := client.Control.Query().
+			Where(
+				control.HasProgramsWith(programquery.IDEQ(program.ID)),
+				control.StandardIDNotNil(),
+				control.StandardIDNEQ(""),
+			).
+			Select(control.FieldStandardID, control.FieldRefCode).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		controlsToQuery := []predicate.Control{control.IDIn(ids...)}
+
+		mapped := lo.Map(c, func(c *generated.Control, _ int) predicate.Control {
+			return control.And(
+				control.StandardID(c.StandardID),
+				control.RefCode(c.RefCode),
+			)
+		})
+
+		controlsToQuery = append(controlsToQuery, mapped...)
+
+		controlsQuery.Where(control.Or(controlsToQuery...))
 	}
 
 	return controlsQuery.
