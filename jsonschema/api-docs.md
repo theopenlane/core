@@ -2056,7 +2056,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |[**providers**](#defsstorageproviders)|`object`|Providers contains the configuration for each storage provider<br/>||
 |[**import**](#defsobjectstoreimportspec)|`object`||yes|
-|**runonstartup**|`boolean`|Run the runtime import once when the server starts<br/>||
 
 **Additional Properties:** not allowed   
 **Example**

@@ -3,17 +3,22 @@
 package eventstest_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // TestObjectStoreSystemImportCreatesVendors verifies the import creates system-owned vendors with provenance
@@ -46,6 +51,56 @@ func TestObjectStoreSystemImportCreatesVendors(t *testing.T) {
 	hidden := rows[fixtureHidden.ExternalID]
 	assert.Check(t, hidden.SystemOwned)
 	assert.Check(t, !hidden.ExternallyVisible, "an unpublished catalogue record must not be externally visible")
+}
+
+// TestObjectStoreSystemImportRunsAsScheduledCycle verifies the scheduled runtime cycle the server seeds imports the
+// bucket through gala dispatch, with no caller or ent client on the emitting context
+func TestObjectStoreSystemImportRunsAsScheduledCycle(t *testing.T) {
+	systemCtx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+	vendors := []fixtureVendor{fixtureAlpha, fixtureBeta, fixtureHidden}
+
+	systemVendorEntityType(t)
+	deleteSystemVendors(t, vendors...)
+
+	t.Cleanup(func() {
+		deleteSystemVendors(t, vendors...)
+	})
+
+	oc := types.NewOperationContext("", objectstore.ImportRecordsOp.Name(), types.IntegrationSource{
+		DefinitionID: objectstore.DefinitionID.ID(),
+		RunType:      enums.IntegrationRunTypeScheduled,
+		Runtime:      true,
+	})
+
+	fragment, err := types.PropertiesFragment(map[string]string{
+		"definitionId": objectstore.DefinitionID.ID(),
+		"operation":    objectstore.ImportRecordsOp.Name(),
+		"runType":      enums.IntegrationRunTypeScheduled.String(),
+	})
+	th.RequireNoError(t, err)
+
+	t.Cleanup(func() {
+		_, err := suite.GalaRuntime.PurgeActiveJobsWithMetadata(context.Background(), fragment)
+		th.RequireNoError(t, err)
+	})
+
+	emitCtx, headers := intobvs.EmitContext(context.Background(), oc)
+	headers.SkipUniqueKey = true
+
+	_, err = suite.GalaRuntime.EmitWithHeaders(emitCtx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
+	th.RequireNoError(t, err)
+
+	waitForEvents()
+
+	assert.Check(t, is.Equal(1, activeReconcileJobs(t, fragment)), "the cycle must re-arm itself as a recurring loop")
+
+	for _, vendor := range vendors {
+		count, err := suite.Client.DB.Entity.Query().
+			Where(entity.ExternalID(vendor.ExternalID), entity.SystemOwned(true)).
+			Count(systemCtx)
+		th.RequireNoError(t, err)
+		assert.Check(t, is.Equal(1, count), "the scheduled cycle must import %s", vendor.ExternalID)
+	}
 }
 
 // TestObjectStoreSystemImportReportsInvalidRecord verifies a record the mapping cannot apply is reported as a failed

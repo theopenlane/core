@@ -7,12 +7,10 @@ import (
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	runtime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/version"
 )
@@ -60,8 +58,6 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 
 		runtime.SetDefault(rt)
 
-		runStartupImport(ctx, rt, s.Config.Settings.Integrations.ObjectStoreRuntime)
-
 		if err := galaInstance.Attach(gala.WithValue(rt)); err != nil {
 			log.Panic().Err(err).Msg("failed to attach integration runtime to gala injector")
 		}
@@ -92,29 +88,6 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 			log.Panic().Err(err).Msg("failed to wire integration deps into workflow engine")
 		}
 	})
-}
-
-// runStartupImport runs the object storage record import against the runtime bucket once when the runtime config asks for it
-func runStartupImport(ctx context.Context, rt *runtime.Runtime, cfg objectstore.RuntimeConfig) {
-	if !cfg.Provisioned() || !cfg.RunOnStartup {
-		return
-	}
-
-	payload, err := jsonx.ToRawMessage(cfg.Import)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("startup object storage import config encode failed")
-
-		return
-	}
-
-	result, err := rt.ExecuteRuntimeOperation(ctx, objectstore.DefinitionID.ID(), objectstore.ImportRecordsOp.Name(), payload)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("startup object storage import failed")
-
-		return
-	}
-
-	logx.FromContext(ctx).Info().RawJSON("result", result).Msg("startup object storage import completed")
 }
 
 // integrationQueues are the integration job kinds paused during the startup sweep

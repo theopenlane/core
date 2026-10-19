@@ -298,7 +298,6 @@ integrations:
                 ensureavailable: false
                 proxypresignenabled: false
                 region: ""
-        runonstartup: false
     oidclocal:
         clientid: local-core-oidc
         clientsecret: local-core-oidc-secret

@@ -40,6 +40,8 @@ func TestBuilderRegisters(t *testing.T) {
 	assert.Assert(t, found, "expected the record import operation to be registered")
 	assert.Assert(t, importRecords.Stored, "the record import keeps its prefix per installation")
 	assert.Assert(t, importRecords.Policy.Reconcile)
+	assert.Assert(t, importRecords.Policy.Scheduled, "the runtime seeds the import only once a runtime client is provisioned")
+	assert.Assert(t, importRecords.Schedule == nil, "the import runs on the default adaptive schedule")
 	assert.Assert(t, !importRecords.Internal, "the runtime shares the customer-selectable import")
 	assert.Assert(t, !importRecords.DisabledForAll)
 	assert.DeepEqual(t, []types.IngestContract{{Schema: entityops.SchemaEntity.Name}}, importRecords.Ingest)
@@ -50,6 +52,15 @@ func TestBuilderRegisters(t *testing.T) {
 	assert.Assert(t, !found, "the runtime import is the record import, not a second operation")
 
 	assert.NilError(t, reg.Register(def))
+}
+
+func TestBuilderProvisionsRuntimeIntegration(t *testing.T) {
+	def, err := Builder(&RuntimeConfig{
+		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "records"}}},
+		Import:    ImportSpec{Prefix: "records/"},
+	}, "", Config{})()
+	assert.NilError(t, err)
+	assert.Assert(t, def.RuntimeIntegration != nil, "a provisioned bucket registers the runtime client the scheduled import binds")
 }
 
 func TestBuilderHiddenButActive(t *testing.T) {

@@ -21,8 +21,8 @@ import (
 )
 
 var (
-	// importPolicy is the execution policy of the record import
-	importPolicy = types.ExecutionPolicy{Reconcile: true}
+	// importPolicy runs the record import per installation and as a recurring system cycle against the runtime bucket
+	importPolicy = types.ExecutionPolicy{Reconcile: true, Scheduled: true}
 	// importContracts lists the schemas the record import ingests
 	importContracts = []types.IngestContract{{Schema: entityMapping.Schema}}
 )

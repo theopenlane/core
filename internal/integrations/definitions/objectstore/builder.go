@@ -10,8 +10,8 @@ import (
 
 // Builder returns the object storage definition builder advertising the supplied federation issuer and using
 // cfg as the operator config carrying the AWS source identity; the definition registers hidden so organizations
-// cannot install it, and when runtime.Provisioned() is true a RuntimeIntegration is included so the record import
-// can read the platform-owned bucket
+// cannot install it, and when runtime.Provisioned() is true a RuntimeIntegration is included so the scheduled
+// record import cycle reads the platform-owned bucket
 func Builder(runtime *RuntimeConfig, federationIssuer string, cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{

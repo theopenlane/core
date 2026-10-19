@@ -826,8 +826,6 @@ coreConfiguration:
         prefix: ""  # @schema type:string
         # -- Move each object into the processed directory under the prefix once its records import without failure
         moveProcessed: false  # @schema type:boolean
-      # -- Run the runtime import once when the server starts
-      runonstartup: false  # @schema type:boolean
     googledrive:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback

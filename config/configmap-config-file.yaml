@@ -1370,9 +1370,6 @@ data:
           moveprocessed: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.moveprocessed }}
           {{- end }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.runonstartup }}
-        runonstartup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.runonstartup }}
-        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.googledrive }}
       googledrive:

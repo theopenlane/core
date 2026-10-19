@@ -38,7 +38,7 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 	var processed int
 
 	switch {
-	case operation.IngestHandle != nil:
+	case operation.IngestHandle != nil || len(operation.Ingest) > 0:
 		var result operations.IngestResult
 		if err := jsonx.UnmarshalIfPresent(response, &result); err != nil {
 			return 0, err
@@ -79,6 +79,12 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 
 			if op.DisabledFor(nil) {
 				logx.FromContext(intobvs.WithContext(ctx, oc)).Info().Msg("scheduled operation disabled, skipping seed")
+
+				continue
+			}
+
+			if op.ClientRef != "" && def.RuntimeIntegration == nil {
+				logx.FromContext(intobvs.WithContext(ctx, oc)).Info().Msg("scheduled operation has no runtime client, skipping seed")
 
 				continue
 			}

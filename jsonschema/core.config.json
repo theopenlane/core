@@ -1341,10 +1341,6 @@
         "import": {
           "$ref": "#/$defs/objectstore.ImportSpec",
           "description": "Bucket prefix and record kind the runtime import reads when the operation config leaves them empty"
-        },
-        "runonstartup": {
-          "type": "boolean",
-          "description": "Run the runtime import once when the server starts"
         }
       },
       "additionalProperties": false,

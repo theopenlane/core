@@ -52,8 +52,6 @@ type RuntimeConfig struct {
 	Providers storage.Providers `json:"providers" koanf:"providers" jsonschema:"description=Storage providers, exactly one enabled, holding the platform-owned bucket"`
 	// Import selects the prefix and record kind the runtime import reads when the operation config leaves them empty
 	Import ImportSpec `json:"import" koanf:"import" jsonschema:"description=Bucket prefix and record kind the runtime import reads when the operation config leaves them empty"`
-	// RunOnStartup runs the runtime import once when the server starts
-	RunOnStartup bool `json:"runonstartup" koanf:"runonstartup" jsonschema:"description=Run the runtime import once when the server starts"`
 }
 
 // enabledProvider returns the single enabled provider, failing when none or more than one is enabled
