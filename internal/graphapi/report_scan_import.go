@@ -6,11 +6,13 @@ import (
 	"errors"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/docextract/soc2"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -54,7 +56,13 @@ func (r *mutationResolver) importReportScan(ctx context.Context, input model.Imp
 		return nil, ErrCampaignDispatchRuntimeRequired
 	}
 
-	config, err := json.Marshal(buildReportScanImportEnvelope(organizationID, input))
+	envelope, err := buildReportScanImportEnvelope(organizationID, input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("report scan import: failed to read import input")
+		return nil, ErrReportScanImportFailed
+	}
+
+	config, err := json.Marshal(envelope)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("report scan import: failed to encode import config")
 		return nil, ErrReportScanImportFailed
@@ -75,22 +83,72 @@ func (r *mutationResolver) importReportScan(ctx context.Context, input model.Imp
 	return &model.ImportReportScanPayload{Accepted: true}, nil
 }
 
-// buildReportScanImportEnvelope translates the GraphQL input into the envelope the async import handler consumes
-func buildReportScanImportEnvelope(organizationID string, input model.ImportReportScanInput) gemini.ReportScanImport {
+// buildReportScanImportEnvelope translates the GraphQL input into the envelope the async import handler consumes;
+// edited items are create inputs, which encode under the same field names the import reads
+func buildReportScanImportEnvelope(organizationID string, input model.ImportReportScanInput) (gemini.ReportScanImport, error) {
 	envelope := gemini.ReportScanImport{
 		OrganizationID: organizationID,
 		ScanID:         input.ScanID,
-		Accepted:       make(map[string][]string, len(input.Sections)),
+		Accepted:       map[string][]string{},
 		Edited:         map[string][]map[string]any{},
 	}
 
-	for _, section := range input.Sections {
-		envelope.Accepted[section.Section] = append(envelope.Accepted[section.Section], section.Keys...)
+	sections := map[string]*model.ImportReportScanSectionInput{
+		soc2.ProgramsPart: input.Programs,
+		soc2.ControlsPart: input.Controls,
+		soc2.EntitiesPart: input.Entities,
+		soc2.AssetsPart:   input.Assets,
+		soc2.GroupsPart:   input.Groups,
+		soc2.ContactsPart: input.Contacts,
+		soc2.ReviewsPart:  input.Reviews,
+		soc2.FindingsPart: input.Findings,
+	}
 
-		if len(section.Edited) > 0 {
-			envelope.Edited[section.Section] = append(envelope.Edited[section.Section], section.Edited...)
+	for section, accepted := range sections {
+		if accepted != nil {
+			envelope.Accepted[section] = accepted.Keys
 		}
 	}
 
-	return envelope
+	if input.Platforms != nil {
+		envelope.Accepted[soc2.PlatformsPart] = input.Platforms.Keys
+
+		var edited []map[string]any
+		if err := jsonx.RoundTrip(input.Platforms.Edited, &edited); err != nil {
+			return envelope, err
+		}
+
+		if len(edited) > 0 {
+			envelope.Edited[soc2.PlatformsPart] = edited
+		}
+	}
+
+	if input.SystemDetails != nil {
+		envelope.Accepted[soc2.SystemDetailsPart] = input.SystemDetails.Keys
+
+		for _, edit := range input.SystemDetails.Edited {
+			item, err := systemDetailEditItem(edit)
+			if err != nil {
+				return envelope, err
+			}
+
+			envelope.Edited[soc2.SystemDetailsPart] = append(envelope.Edited[soc2.SystemDetailsPart], item)
+		}
+	}
+
+	return envelope, nil
+}
+
+// systemDetailEditItem encodes an edited system detail with the platform it runs on, as the import reads it
+func systemDetailEditItem(edit *model.ReportScanSystemDetailEdit) (map[string]any, error) {
+	var item map[string]any
+	if err := jsonx.RoundTrip(edit.SystemDetail, &item); err != nil {
+		return nil, err
+	}
+
+	if edit.PlatformName != nil {
+		item[soc2.PlatformNameKey] = *edit.PlatformName
+	}
+
+	return item, nil
 }

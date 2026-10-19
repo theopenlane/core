@@ -51789,7 +51789,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputImportDomainScanReviewSystemInput,
 		ec.unmarshalInputImportDomainScanReviewVendorInput,
 		ec.unmarshalInputImportReportScanInput,
+		ec.unmarshalInputImportReportScanPlatformsInput,
 		ec.unmarshalInputImportReportScanSectionInput,
+		ec.unmarshalInputImportReportScanSystemDetailsInput,
 		ec.unmarshalInputIntegrationOrder,
 		ec.unmarshalInputIntegrationRunOrder,
 		ec.unmarshalInputIntegrationRunWhereInput,
@@ -51835,6 +51837,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputReassignWorkflowAssignmentInput,
 		ec.unmarshalInputRemediationOrder,
 		ec.unmarshalInputRemediationWhereInput,
+		ec.unmarshalInputReportScanSystemDetailEdit,
 		ec.unmarshalInputResendCampaignIncompleteInput,
 		ec.unmarshalInputResolveVulnerabilityInput,
 		ec.unmarshalInputReviewOrder,
@@ -149602,21 +149605,55 @@ type RemediationBulkDeletePayload {
 	{Name: "../schema/reportscanextended.graphql", Input: `"""
 The items a reviewer accepted from one section of a parsed report, by the key each item is imported by:
 name for programs, entities, assets, groups and platforms, ref_code for controls, system_name for
-systemdetails, email for contacts, and external_id for reviews and findings
+system details, email for contacts, and external_id for reviews and findings
 """
 input ImportReportScanSectionInput {
-    """
-    the section name, e.g. programs, controls, reviews, findings
-    """
-    section: String!
     """
     the keys of the accepted items in the section
     """
     keys: [String!]!
+}
+
+"""
+The platforms a reviewer accepted, by name
+"""
+input ImportReportScanPlatformsInput {
     """
-    reviewer-edited items, each replacing the stored item with the same key
+    the names of the accepted platforms
     """
-    edited: [Map!]
+    keys: [String!]!
+    """
+    reviewer-edited platforms, each replacing the parsed platform with the same name
+    """
+    edited: [CreatePlatformInput!]
+}
+
+"""
+A reviewer-edited system detail and the platform it runs on
+"""
+input ReportScanSystemDetailEdit {
+    """
+    the edited system detail, replacing the parsed one with the same system name
+    """
+    systemDetail: CreateSystemDetailInput!
+    """
+    the name of the platform the system runs on
+    """
+    platformName: String
+}
+
+"""
+The system details a reviewer accepted, by system name
+"""
+input ImportReportScanSystemDetailsInput {
+    """
+    the system names of the accepted system details
+    """
+    keys: [String!]!
+    """
+    reviewer-edited system details
+    """
+    edited: [ReportScanSystemDetailEdit!]
 }
 
 """
@@ -149628,9 +149665,18 @@ input ImportReportScanInput {
     """
     scanID: ID!
     """
-    the accepted items, by section; when the programs section accepts the program, the imported records are linked to it
+    the accepted program; when given, the imported records are linked to it
     """
-    sections: [ImportReportScanSectionInput!]!
+    programs: ImportReportScanSectionInput
+    controls: ImportReportScanSectionInput
+    entities: ImportReportScanSectionInput
+    assets: ImportReportScanSectionInput
+    groups: ImportReportScanSectionInput
+    platforms: ImportReportScanPlatformsInput
+    systemDetails: ImportReportScanSystemDetailsInput
+    contacts: ImportReportScanSectionInput
+    reviews: ImportReportScanSectionInput
+    findings: ImportReportScanSectionInput
 }
 
 type ImportReportScanPayload {

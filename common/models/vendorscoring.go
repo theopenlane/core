@@ -190,7 +190,7 @@ var customCategoryPrefix = map[enums.VendorScoringCategory]string{
 	enums.VendorScoringCategoryOperationalDependency: "CUST-OD",
 }
 
-// ReviewOutcomeQuestionKey is the default question a vendor report review answers with its overall outcome; only a
+// ReviewOutcomeQuestionKey is the default question a vendor report review answers with its overall outcome. Only a
 // report review answers it, so it never counts as unanswered
 const ReviewOutcomeQuestionKey = "OL-RPT-01.1"
 

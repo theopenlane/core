@@ -479869,41 +479869,6 @@ func (ec *executionContext) marshalOMap2map(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalOMap2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]map[string]any, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNMap2map(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalOMap2ᚕmapᚄ(ctx context.Context, sel ast.SelectionSet, v []map[string]any) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	for i := range v {
-		ret[i] = ec.marshalNMap2map(ctx, sel, v[i])
-	}
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
 func (ec *executionContext) marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.MappableDomain) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null

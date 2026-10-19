@@ -2057,8 +2057,17 @@ type ImportDomainScanReviewVendorInput struct {
 type ImportReportScanInput struct {
 	// the report scan whose parsed results are imported
 	ScanID string `json:"scanID"`
-	// the accepted items, by section; when the programs section accepts the program, the imported records are linked to it
-	Sections []*ImportReportScanSectionInput `json:"sections"`
+	// the accepted program; when given, the imported records are linked to it
+	Programs      *ImportReportScanSectionInput       `json:"programs,omitempty"`
+	Controls      *ImportReportScanSectionInput       `json:"controls,omitempty"`
+	Entities      *ImportReportScanSectionInput       `json:"entities,omitempty"`
+	Assets        *ImportReportScanSectionInput       `json:"assets,omitempty"`
+	Groups        *ImportReportScanSectionInput       `json:"groups,omitempty"`
+	Platforms     *ImportReportScanPlatformsInput     `json:"platforms,omitempty"`
+	SystemDetails *ImportReportScanSystemDetailsInput `json:"systemDetails,omitempty"`
+	Contacts      *ImportReportScanSectionInput       `json:"contacts,omitempty"`
+	Reviews       *ImportReportScanSectionInput       `json:"reviews,omitempty"`
+	Findings      *ImportReportScanSectionInput       `json:"findings,omitempty"`
 }
 
 type ImportReportScanPayload struct {
@@ -2066,16 +2075,28 @@ type ImportReportScanPayload struct {
 	Accepted bool `json:"accepted"`
 }
 
+// The platforms a reviewer accepted, by name
+type ImportReportScanPlatformsInput struct {
+	// the names of the accepted platforms
+	Keys []string `json:"keys"`
+	// reviewer-edited platforms, each replacing the parsed platform with the same name
+	Edited []*generated.CreatePlatformInput `json:"edited,omitempty"`
+}
+
 // The items a reviewer accepted from one section of a parsed report, by the key each item is imported by:
 // name for programs, entities, assets, groups and platforms, ref_code for controls, system_name for
-// systemdetails, email for contacts, and external_id for reviews and findings
+// system details, email for contacts, and external_id for reviews and findings
 type ImportReportScanSectionInput struct {
-	// the section name, e.g. programs, controls, reviews, findings
-	Section string `json:"section"`
 	// the keys of the accepted items in the section
 	Keys []string `json:"keys"`
-	// reviewer-edited items, each replacing the stored item with the same key
-	Edited []map[string]any `json:"edited,omitempty"`
+}
+
+// The system details a reviewer accepted, by system name
+type ImportReportScanSystemDetailsInput struct {
+	// the system names of the accepted system details
+	Keys []string `json:"keys"`
+	// reviewer-edited system details
+	Edited []*ReportScanSystemDetailEdit `json:"edited,omitempty"`
 }
 
 // Return response for deleteIntegration mutation
@@ -2851,6 +2872,14 @@ type RemediationDeletePayload struct {
 type RemediationUpdatePayload struct {
 	// Updated remediation
 	Remediation *generated.Remediation `json:"remediation"`
+}
+
+// A reviewer-edited system detail and the platform it runs on
+type ReportScanSystemDetailEdit struct {
+	// the edited system detail, replacing the parsed one with the same system name
+	SystemDetail *generated.CreateSystemDetailInput `json:"systemDetail"`
+	// the name of the platform the system runs on
+	PlatformName *string `json:"platformName,omitempty"`
 }
 
 // Input for resendCampaignIncompleteTargets mutation

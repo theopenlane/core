@@ -62,7 +62,7 @@ func (ec *executionContext) unmarshalInputImportReportScanInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"scanID", "sections"}
+	fieldsInOrder := [...]string{"scanID", "programs", "controls", "entities", "assets", "groups", "platforms", "systemDetails", "contacts", "reviews", "findings"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -76,13 +76,113 @@ func (ec *executionContext) unmarshalInputImportReportScanInput(ctx context.Cont
 				return it, err
 			}
 			it.ScanID = data
-		case "sections":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sections"))
-			data, err := ec.unmarshalNImportReportScanSectionInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInputᚄ(ctx, v)
+		case "programs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("programs"))
+			data, err := ec.unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Sections = data
+			it.Programs = data
+		case "controls":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controls"))
+			data, err := ec.unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Controls = data
+		case "entities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entities"))
+			data, err := ec.unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Entities = data
+		case "assets":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assets"))
+			data, err := ec.unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Assets = data
+		case "groups":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("groups"))
+			data, err := ec.unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Groups = data
+		case "platforms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("platforms"))
+			data, err := ec.unmarshalOImportReportScanPlatformsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanPlatformsInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Platforms = data
+		case "systemDetails":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemDetails"))
+			data, err := ec.unmarshalOImportReportScanSystemDetailsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSystemDetailsInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemDetails = data
+		case "contacts":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contacts"))
+			data, err := ec.unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Contacts = data
+		case "reviews":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviews"))
+			data, err := ec.unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Reviews = data
+		case "findings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findings"))
+			data, err := ec.unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Findings = data
+		}
+	}
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputImportReportScanPlatformsInput(ctx context.Context, obj any) (model.ImportReportScanPlatformsInput, error) {
+	var it model.ImportReportScanPlatformsInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"keys", "edited"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "keys":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keys"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Keys = data
+		case "edited":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("edited"))
+			data, err := ec.unmarshalOCreatePlatformInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreatePlatformInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Edited = data
 		}
 	}
 	return it, nil
@@ -99,20 +199,43 @@ func (ec *executionContext) unmarshalInputImportReportScanSectionInput(ctx conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"section", "keys", "edited"}
+	fieldsInOrder := [...]string{"keys"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "section":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("section"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+		case "keys":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keys"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Section = data
+			it.Keys = data
+		}
+	}
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputImportReportScanSystemDetailsInput(ctx context.Context, obj any) (model.ImportReportScanSystemDetailsInput, error) {
+	var it model.ImportReportScanSystemDetailsInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"keys", "edited"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
 		case "keys":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keys"))
 			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
@@ -122,11 +245,48 @@ func (ec *executionContext) unmarshalInputImportReportScanSectionInput(ctx conte
 			it.Keys = data
 		case "edited":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("edited"))
-			data, err := ec.unmarshalOMap2ᚕmapᚄ(ctx, v)
+			data, err := ec.unmarshalOReportScanSystemDetailEdit2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportScanSystemDetailEditᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Edited = data
+		}
+	}
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputReportScanSystemDetailEdit(ctx context.Context, obj any) (model.ReportScanSystemDetailEdit, error) {
+	var it model.ReportScanSystemDetailEdit
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"systemDetail", "platformName"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "systemDetail":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemDetail"))
+			data, err := ec.unmarshalNCreateSystemDetailInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateSystemDetailInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemDetail = data
+		case "platformName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("platformName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PlatformName = data
 		}
 	}
 	return it, nil
@@ -197,23 +357,50 @@ func (ec *executionContext) marshalNImportReportScanPayload2ᚖgithubᚗcomᚋth
 	return ec._ImportReportScanPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNImportReportScanSectionInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInputᚄ(ctx context.Context, v any) ([]*model.ImportReportScanSectionInput, error) {
+func (ec *executionContext) unmarshalNReportScanSystemDetailEdit2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportScanSystemDetailEdit(ctx context.Context, v any) (*model.ReportScanSystemDetailEdit, error) {
+	res, err := ec.unmarshalInputReportScanSystemDetailEdit(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOImportReportScanPlatformsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanPlatformsInput(ctx context.Context, v any) (*model.ImportReportScanPlatformsInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputImportReportScanPlatformsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx context.Context, v any) (*model.ImportReportScanSectionInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputImportReportScanSectionInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOImportReportScanSystemDetailsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSystemDetailsInput(ctx context.Context, v any) (*model.ImportReportScanSystemDetailsInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputImportReportScanSystemDetailsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOReportScanSystemDetailEdit2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportScanSystemDetailEditᚄ(ctx context.Context, v any) ([]*model.ReportScanSystemDetailEdit, error) {
+	if v == nil {
+		return nil, nil
+	}
 	vSlice := graphql.CoerceList(v)
 	var err error
-	res := make([]*model.ImportReportScanSectionInput, len(vSlice))
+	res := make([]*model.ReportScanSystemDetailEdit, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNReportScanSystemDetailEdit2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportScanSystemDetailEdit(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
 	}
 	return res, nil
-}
-
-func (ec *executionContext) unmarshalNImportReportScanSectionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportReportScanSectionInput(ctx context.Context, v any) (*model.ImportReportScanSectionInput, error) {
-	res, err := ec.unmarshalInputImportReportScanSectionInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 // endregion ***************************** type.gotpl *****************************

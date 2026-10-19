@@ -24,8 +24,8 @@ const (
 	entityNameKey = "entity_name"
 	// entityNamesKey names the vendors a contact works for
 	entityNamesKey = "entity_names"
-	// platformNameKey names the platform a system belongs to
-	platformNameKey = "platform_name"
+	// PlatformNameKey names the platform a system belongs to
+	PlatformNameKey = "platform_name"
 )
 
 // ProgramSchema asks for the audited program the report covers
@@ -97,7 +97,7 @@ var PlatformSchema = schema.Section(PlatformsPart,
 var SystemDetailsSchema = schema.Section(SystemDetailsPart,
 	schema.From(entityops.SystemDetailFields.SystemName).Required(),
 	schema.From(entityops.SystemDetailFields.Description).Required(),
-	schema.Extra(platformNameKey, docextract.TypeString).Required(),
+	schema.Extra(PlatformNameKey, docextract.TypeString).Required(),
 )
 
 // ContactSchema asks for the people the report names and the vendors they work for
