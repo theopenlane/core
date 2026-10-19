@@ -10,6 +10,8 @@ import (
 	"github.com/samber/lo"
 	strcase "github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
@@ -19,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/mapx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // GraphQL field name constants for ControlReport are used in field-presence checks and
@@ -314,7 +315,9 @@ func collectAllEntityIDs(reports []*model.ControlReport) (controlIDs, subcontrol
 
 // buildEvidenceMap fetches all evidence linked to the given entity IDs in one query
 // and returns a map of entity ID to the evidence records linked to that entity.
-func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string) (map[string][]*generated.Evidence, error) {
+func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string,
+	programsFilter []*generated.ProgramWhereInput) (map[string][]*generated.Evidence, error) {
+
 	if len(controlIDs) == 0 && len(subcontrolIDs) == 0 {
 		return map[string][]*generated.Evidence{}, nil
 	}
@@ -324,11 +327,12 @@ func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 		return nil, err
 	}
 
-	// crate evidence edges for controls and subcontrols
+	// create evidence edges for controls and subcontrols
 	edgePredicates := make([]predicate.Evidence, 0, 2) //nolint:mnd
 	if len(controlIDs) > 0 {
 		edgePredicates = append(edgePredicates, evidence.HasControlsWith(control.IDIn(controlIDs...)))
 	}
+
 	if len(subcontrolIDs) > 0 {
 		edgePredicates = append(edgePredicates, evidence.HasSubcontrolsWith(subcontrol.IDIn(subcontrolIDs...)))
 	}
@@ -336,10 +340,18 @@ func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 	// the report only exposes aggregate counts and statuses, so it covers all evidence linked to the controls
 	internalCtx := auth.WithInternalReadContext(ctx)
 
-	evidenceList, err := withTransactionalMutation(ctx).Evidence.Query().Where(
+	q := withTransactionalMutation(ctx).Evidence.Query().Where(
 		evidence.OwnerIDIn(orgIDs...),
 		evidence.Or(edgePredicates...),
-	).WithControls(func(q *generated.ControlQuery) {
+	)
+
+	whereFilter := &generated.EvidenceWhereInput{HasProgramsWith: programsFilter}
+	q, err = whereFilter.Filter(q)
+	if err != nil {
+		return nil, err
+	}
+
+	evidenceList, err := q.WithControls(func(q *generated.ControlQuery) {
 		q.Where(control.IDIn(controlIDs...)).Select(control.FieldID)
 	}).WithSubcontrols(func(q *generated.SubcontrolQuery) {
 		q.Where(subcontrol.IDIn(subcontrolIDs...)).Select(subcontrol.FieldID)
@@ -1095,7 +1107,7 @@ func relatedControlsFromSubcontrols(ctx context.Context, controlID string, frame
 
 // enrichControlReports populates computed fields on reports in two passes: related controls first,
 // then evidence and policies in batched queries across all entities
-func enrichControlReports(ctx context.Context, reports []*model.ControlReport) error {
+func enrichControlReports(ctx context.Context, reports []*model.ControlReport, whereInput *generated.ControlWhereInput) error {
 	var (
 		err             error
 		frameworksInOrg []string
@@ -1166,7 +1178,12 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 		controlIDs, subcontrolIDs := collectAllEntityIDs(reports)
 
 		if wantsEvidence || wantsScEvidence {
-			evidenceMap, err := buildEvidenceMap(ctx, controlIDs, subcontrolIDs)
+			var programsFilter []*generated.ProgramWhereInput
+			if whereInput != nil {
+				programsFilter = whereInput.HasProgramsWith
+			}
+
+			evidenceMap, err := buildEvidenceMap(ctx, controlIDs, subcontrolIDs, programsFilter)
 			if err != nil {
 				return err
 			}

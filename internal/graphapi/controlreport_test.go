@@ -12,9 +12,10 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/testutils"
-	"github.com/theopenlane/utils/ulids"
 )
 
 // controlReportTestData holds entity IDs seeded by seedControlReportTestData
@@ -326,6 +327,92 @@ func TestQueryControlReports(t *testing.T) {
 
 	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
 	th.CleanupOrganizationDataWithContext(orgUser.Owner.UserCtx, t)
+}
+
+func TestControlReportEvidence_ProgramFilters(t *testing.T) {
+	t.Parallel()
+
+	org := suite.SeedOrgOwner(t)
+	ctx := org.Owner.UserCtx
+
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(ctx, t)
+
+	secondProgram := (&th.ProgramBuilder{Client: suite.Client}).MustNew(ctx, t)
+
+	control := (&th.ControlBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(ctx, t)
+	secondControl := (&th.ControlBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(ctx, t)
+
+	selectedControl := (&th.ControlBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(ctx, t)
+
+	(&th.EvidenceBuilder{
+		Client:    suite.Client,
+		ControlID: control.ID,
+	}).MustNew(ctx, t)
+
+	(&th.EvidenceBuilder{
+		Client:    suite.Client,
+		ControlID: secondControl.ID,
+		ProgramID: secondProgram.ID,
+	}).MustNew(ctx, t)
+
+	(&th.EvidenceBuilder{
+		Client:    suite.Client,
+		ControlID: selectedControl.ID,
+		ProgramID: program.ID,
+	}).MustNew(ctx, t)
+
+	tt := []struct {
+		name          string
+		controlID     string
+		shouldFilter  bool
+		expectedCount int64
+	}{
+		{
+			name:          "unassigned evidence should be counted without a program filter",
+			controlID:     control.ID,
+			expectedCount: 1,
+		},
+		{
+			name:         "unassigned evidence must be excluded if filtering by program",
+			controlID:    control.ID,
+			shouldFilter: true,
+		},
+		{
+			name:         "evidence in the second program must be excluded",
+			controlID:    secondControl.ID,
+			shouldFilter: true,
+		},
+		{
+			name:          "evidence in the selected program must be counted",
+			controlID:     selectedControl.ID,
+			shouldFilter:  true,
+			expectedCount: 1,
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+
+			where := &testclient.ControlWhereInput{ID: lo.ToPtr(tc.controlID)}
+			if tc.shouldFilter {
+				where.HasProgramsWith = []*testclient.ProgramWhereInput{{IDIn: []string{program.ID}}}
+			}
+
+			resp, err := suite.Client.API.GetControlReports(ctx, nil, nil, nil, nil, nil, where)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, is.Len(resp.ControlReports.Edges, 1))
+
+			report := resp.ControlReports.Edges[0].Node
+
+			assert.Check(t, is.Equal(tc.controlID, report.ID))
+			assert.Assert(t, report.EvidenceStatus != nil)
+			assert.Check(t, is.Equal(tc.expectedCount, report.EvidenceStatus.TotalCount))
+			assert.Check(t, is.Len(report.EvidenceStatus.CountByStatus, int(tc.expectedCount)))
+		})
+	}
+
+	th.CleanupOrganizationDataWithContext(ctx, t)
 }
 
 func TestQueryControlReportsByCategory(t *testing.T) {
