@@ -142,9 +142,7 @@ func (p *Provider) Copy(ctx context.Context, fileRef *storagetypes.File, opts *s
 		return ErrMissingFileIdentifier
 	}
 
-	internalCtx := auth.WithInternalOperationContext(ctx)
-
-	record, err := client.File.Get(internalCtx, fileRef.ID)
+	record, err := client.File.Get(ctx, fileRef.ID)
 	if err != nil {
 		return err
 	}
@@ -155,7 +153,7 @@ func (p *Provider) Copy(ctx context.Context, fileRef *storagetypes.File, opts *s
 
 	return client.File.UpdateOneID(opts.Key).
 		SetFileContents(record.FileContents).
-		Exec(internalCtx)
+		Exec(ctx)
 }
 
 // Exists checks whether file bytes are present in the database.
