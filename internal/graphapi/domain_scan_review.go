@@ -94,6 +94,7 @@ func (r *mutationResolver) importDomainScanReview(ctx context.Context, input mod
 
 	if _, err := rt.Dispatch(ctx, types.DispatchRequest{
 		DefinitionID: cloudflare.DefinitionID.ID(),
+		OwnerID:      organizationID,
 		Operation:    cloudflare.DomainScanImportOp.Name(),
 		Config:       config,
 		RunType:      enums.IntegrationRunTypeEvent,

@@ -347,6 +347,22 @@ func runParallelPostGenHooks(g *gen.Graph) {
 
 	fileCategoryGen := filecategorygen.New(schemaPath, "internal/objects/store/file_category_generated.go")
 
+	entityOpsExt := entityops.New(
+		entityops.WithOutputDir(entityOpsGeneratedPath),
+		entityops.WithPackageName("entityops"),
+		entityops.WithEntPackage("github.com/theopenlane/core/v2/"+entGeneratedPath),
+		entityops.WithGalaPackage("github.com/theopenlane/core/v2/pkg/gala"),
+		entityops.WithJsonxPackage("github.com/theopenlane/core/v2/pkg/jsonx"),
+		entityops.WithLogxPackage("github.com/theopenlane/core/v2/pkg/logx"),
+		entityops.WithCelxPackage("github.com/theopenlane/core/v2/pkg/celx"),
+		entityops.WithMapxPackage("github.com/theopenlane/core/v2/pkg/mapx"),
+		entityops.WithEnumsPackage("github.com/theopenlane/core/common/enums"),
+		entityops.WithSlateparserPackage("github.com/theopenlane/core/v2/pkg/slateparser"),
+		entityops.WithIntegrationTypesPackage("github.com/theopenlane/core/v2/internal/integrations/types"),
+		entityops.WithEnumsOutputDir(enumsDir),
+		entityops.WithEnumsPackageName("enums"),
+	)
+
 	hooks := []gen.Hook{
 		genhooks.GenCSVSchema(
 			genhooks.WithCSVOutputDir(csvGeneratedPath),

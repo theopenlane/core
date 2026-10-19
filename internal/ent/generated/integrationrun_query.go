@@ -56,6 +56,7 @@ type IntegrationRunQuery struct {
 	withProcedures                *ProcedureQuery
 	withRisks                     *RiskQuery
 	withVulnerabilities           *VulnerabilityQuery
+	withFKs                       bool
 	loadTotal                     []func(context.Context, []*IntegrationRun) error
 	modifiers                     []func(*sql.Selector)
 	withNamedActionPlans          map[string]*ActionPlanQuery
@@ -899,6 +900,7 @@ func (_q *IntegrationRunQuery) prepareQuery(ctx context.Context) error {
 func (_q *IntegrationRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*IntegrationRun, error) {
 	var (
 		nodes       = []*IntegrationRun{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [15]bool{
 			_q.withOwner != nil,
@@ -918,6 +920,9 @@ func (_q *IntegrationRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withVulnerabilities != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, integrationrun.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*IntegrationRun).scanValues(nil, columns)
 	}

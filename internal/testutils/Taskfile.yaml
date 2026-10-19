@@ -1,0 +1,17 @@
+version: "3"
+
+tasks:
+  default:
+    silent: false
+    cmds:
+      - task --list
+
+  reportscan:
+    desc: serves the report scan test page at http://localhost:5500/reportscan/
+    cmds:
+      - go run -tags examples internal/testutils/reportscan/main.go
+
+  webauthn:
+    desc: serves the webauthn login test page at http://localhost:5500
+    cmds:
+      - go run -tags examples internal/testutils/login/webauthn/main.go

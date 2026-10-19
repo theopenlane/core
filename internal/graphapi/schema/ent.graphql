@@ -7835,6 +7835,26 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
@@ -8014,6 +8034,37 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   indicates the control is derived from the trust center standard, set by the system during control clone
   """
   isTrustCenterControl: Boolean
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -10444,6 +10495,76 @@ input ControlWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   external_uuid field predicates
   """
   externalUUID: String
@@ -10876,6 +10997,11 @@ input ControlWhereInput {
   isTrustCenterControlNEQ: Boolean
   isTrustCenterControlIsNil: Boolean
   isTrustCenterControlNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   evidence edge predicates
   """
@@ -12019,6 +12145,7 @@ input CreateControlInput {
   visibility of the control on the trust center, controls the publishing state for trust center display
   """
   trustCenterVisibility: ControlTrustCenterControlVisibility
+  integrationRunIDs: [ID!]
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -13481,6 +13608,7 @@ input CreateGroupInput {
   the SCIM group mailing list email
   """
   scimGroupMailing: String
+  integrationRunIDs: [ID!]
   ownerID: ID
   programEditorIDs: [ID!]
   programBlockedGroupIDs: [ID!]
@@ -13969,6 +14097,11 @@ input CreateMappedControlInput {
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
+  """
+  stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+  """
+  externalID: String
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -14733,6 +14866,7 @@ input CreatePlatformInput {
   additional metadata about the platform
   """
   metadata: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -14990,6 +15124,7 @@ input CreateProgramInput {
   the email of the auditor conducting the audit
   """
   auditorEmail: String
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -15251,6 +15386,7 @@ input CreateReviewInput {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -15486,6 +15622,10 @@ input CreateScanInput {
   """
   scopeName: String
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -15532,6 +15672,7 @@ input CreateScanInput {
   assignedToIdentityHolderID: ID
   environmentID: ID
   scopeID: ID
+  documentKindID: ID
   assetIDs: [ID!]
   entityIDs: [ID!]
   evidenceIDs: [ID!]
@@ -15899,6 +16040,7 @@ input CreateSystemDetailInput {
   optional escape hatch for additional OSCAL metadata fields
   """
   oscalMetadataJSON: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   programIDs: [ID!]
   platformIDs: [ID!]
@@ -30004,6 +30146,26 @@ type Group implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -30063,6 +30225,37 @@ type Group implements Node {
   the SCIM group mailing list email
   """
   scimGroupMailing: String
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   programEditors(
     """
@@ -32178,6 +32371,76 @@ input GroupWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -32313,6 +32576,11 @@ input GroupWhereInput {
   scimGroupMailingNotNil: Boolean
   scimGroupMailingEqualFold: String
   scimGroupMailingContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -38720,6 +38988,26 @@ type MappedControl implements Node @modules(names: ["compliance_module"]) {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -38751,6 +39039,41 @@ type MappedControl implements Node @modules(names: ["compliance_module"]) {
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
+  """
+  stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+  """
+  externalID: String
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -39089,6 +39412,76 @@ input MappedControlWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -39178,6 +39571,25 @@ input MappedControlWhereInput {
   sourceNotIn: [MappedControlMappingSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -40309,6 +40721,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
   EXPORT
   STANDARD_UPDATE
   DOMAIN_SCAN
+  REPORT_SCAN
   IMPORT_COMPLETE
   ORGANIZATION_READY
   INTEGRATION
@@ -46384,6 +46797,26 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -46595,6 +47028,37 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
   additional metadata about the platform
   """
   metadata: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -47661,6 +48125,76 @@ input PlatformWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -48311,6 +48845,11 @@ input PlatformWhereInput {
   externalReferenceIDNotNil: Boolean
   externalReferenceIDEqualFold: String
   externalReferenceIDContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -49854,6 +50393,26 @@ type Program implements Node @modules(names: ["compliance_module","entity_manage
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -49937,6 +50496,37 @@ type Program implements Node @modules(names: ["compliance_module","entity_manage
   the id of the user who is responsible for this program
   """
   programOwnerID: ID
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -50947,6 +51537,76 @@ input ProgramWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -51180,6 +51840,11 @@ input ProgramWhereInput {
   programOwnerIDNotNil: Boolean
   programOwnerIDEqualFold: ID
   programOwnerIDContainsFold: ID
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -55427,6 +56092,26 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -55534,6 +56219,37 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -56213,6 +56929,76 @@ input ReviewWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -56529,6 +57315,11 @@ input ReviewWhereInput {
   externalURINotNil: Boolean
   externalURIEqualFold: String
   externalURIContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -58879,6 +59670,14 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   scopeID: ID
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
+  the document_kind of the scan
+  """
+  documentKindID: ID
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -58997,6 +59796,7 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   assignedToIdentityHolder: IdentityHolder
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  documentKind: CustomTypeEnum
   assets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -59444,6 +60244,7 @@ enum ScanScanType @goModel(model: "github.com/theopenlane/core/common/enums.Scan
   VULNERABILITY
   VENDOR
   PROVIDER
+  REPORT
 }
 """
 ScanWhereInput is used for filtering Scan objects.
@@ -59742,6 +60543,34 @@ input ScanWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  document_kind_name field predicates
+  """
+  documentKindName: String
+  documentKindNameNEQ: String
+  documentKindNameIn: [String!]
+  documentKindNameNotIn: [String!]
+  documentKindNameContains: String
+  documentKindNameHasPrefix: String
+  documentKindNameHasSuffix: String
+  documentKindNameIsNil: Boolean
+  documentKindNameNotNil: Boolean
+  documentKindNameEqualFold: String
+  documentKindNameContainsFold: String
+  """
+  document_kind_id field predicates
+  """
+  documentKindID: ID
+  documentKindIDNEQ: ID
+  documentKindIDIn: [ID!]
+  documentKindIDNotIn: [ID!]
+  documentKindIDContains: ID
+  documentKindIDHasPrefix: ID
+  documentKindIDHasSuffix: ID
+  documentKindIDIsNil: Boolean
+  documentKindIDNotNil: Boolean
+  documentKindIDEqualFold: ID
+  documentKindIDContainsFold: ID
+  """
   target field predicates
   """
   target: String
@@ -59898,6 +60727,11 @@ input ScanWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  document_kind edge predicates
+  """
+  hasDocumentKind: Boolean
+  hasDocumentKindWith: [CustomTypeEnumWhereInput!]
   """
   assets edge predicates
   """
@@ -62897,6 +63731,26 @@ type SystemDetail implements Node @modules(names: ["compliance_module","registry
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -62932,6 +63786,37 @@ type SystemDetail implements Node @modules(names: ["compliance_module","registry
   optional escape hatch for additional OSCAL metadata fields
   """
   oscalMetadataJSON: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   programs(
     """
@@ -63210,6 +64095,76 @@ input SystemDetailWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -63296,6 +64251,11 @@ input SystemDetailWhereInput {
   lastReviewedLTE: DateTime
   lastReviewedIsNil: Boolean
   lastReviewedNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -71046,6 +72006,9 @@ input UpdateControlInput {
   """
   trustCenterVisibility: ControlTrustCenterControlVisibility
   clearTrustCenterVisibility: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -73088,6 +74051,9 @@ input UpdateGroupInput {
   """
   scimGroupMailing: String
   clearScimGroupMailing: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addProgramEditorIDs: [ID!]
@@ -73837,6 +74803,14 @@ input UpdateMappedControlInput {
   """
   source: MappedControlMappingSource
   clearSource: Boolean
+  """
+  stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+  """
+  externalID: String
+  clearExternalID: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -74876,6 +75850,9 @@ input UpdatePlatformInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -75287,6 +76264,9 @@ input UpdateProgramInput {
   """
   auditorEmail: String
   clearAuditorEmail: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -75676,6 +76656,9 @@ input UpdateReviewInput {
   """
   rawPayload: Map
   clearRawPayload: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -76051,6 +77034,11 @@ input UpdateScanInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  clearDocumentKindName: Boolean
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String
@@ -76115,6 +77103,8 @@ input UpdateScanInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  documentKindID: ID
+  clearDocumentKind: Boolean
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
@@ -76644,6 +77634,9 @@ input UpdateSystemDetailInput {
   """
   oscalMetadataJSON: Map
   clearOscalMetadataJSON: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean

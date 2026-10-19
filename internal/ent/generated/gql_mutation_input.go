@@ -3549,6 +3549,7 @@ type CreateControlInput struct {
 	WorkflowEligibleMarker     *bool                               `json:"workflow_eligible_marker,omitempty"`
 	RefCode                    string                              `json:"ref_code,omitempty"`
 	TrustCenterVisibility      *enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
+	IntegrationRunIDs          []string                            `json:"integration_run_ids,omitempty"`
 	EvidenceIDs                []string                            `json:"evidence_ids,omitempty"`
 	ControlObjectiveIDs        []string                            `json:"control_objective_ids,omitempty"`
 	TaskIDs                    []string                            `json:"task_ids,omitempty"`
@@ -3692,6 +3693,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	m.SetRefCode(i.RefCode)
 	if v := i.TrustCenterVisibility; v != nil {
 		m.SetTrustCenterVisibility(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
@@ -3886,6 +3890,9 @@ type UpdateControlInput struct {
 	RefCode                         *string `json:"ref_code,omitempty"`
 	ClearTrustCenterVisibility      bool
 	TrustCenterVisibility           *enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
+	ClearIntegrationRuns            bool
+	AddIntegrationRunIDs            []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs         []string `json:"remove_integration_run_ids,omitempty"`
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string `json:"add_evidence_ids,omitempty"`
 	RemoveEvidenceIDs               []string `json:"remove_evidence_ids,omitempty"`
@@ -4224,6 +4231,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.TrustCenterVisibility; v != nil {
 		m.SetTrustCenterVisibility(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()
@@ -11377,6 +11393,7 @@ type CreateGroupInput struct {
 	ScimDisplayName                      *string  `json:"scim_display_name,omitempty"`
 	ScimActive                           *bool    `json:"scim_active,omitempty"`
 	ScimGroupMailing                     *string  `json:"scim_group_mailing,omitempty"`
+	IntegrationRunIDs                    []string `json:"integration_run_ids,omitempty"`
 	OwnerID                              *string  `json:"owner_id,omitempty"`
 	ProgramEditorIDs                     []string `json:"program_editor_ids,omitempty"`
 	ProgramBlockedGroupIDs               []string `json:"program_blocked_group_ids,omitempty"`
@@ -11465,6 +11482,9 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ScimGroupMailing; v != nil {
 		m.SetScimGroupMailing(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -11653,6 +11673,9 @@ type UpdateGroupInput struct {
 	ScimActive                                 *bool `json:"scim_active,omitempty"`
 	ClearScimGroupMailing                      bool
 	ScimGroupMailing                           *string `json:"scim_group_mailing,omitempty"`
+	ClearIntegrationRuns                       bool
+	AddIntegrationRunIDs                       []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs                    []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                                 bool
 	OwnerID                                    *string `json:"owner_id,omitempty"`
 	ClearProgramEditors                        bool
@@ -11878,6 +11901,15 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ScimGroupMailing; v != nil {
 		m.SetScimGroupMailing(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -14388,6 +14420,8 @@ type CreateMappedControlInput struct {
 	Relation          *string              `json:"relation,omitempty"`
 	Confidence        *int                 `json:"confidence,omitempty"`
 	Source            *enums.MappingSource `json:"source,omitempty"`
+	ExternalID        *string              `json:"external_id,omitempty"`
+	IntegrationRunIDs []string             `json:"integration_run_ids,omitempty"`
 	OwnerID           *string              `json:"owner_id,omitempty"`
 	BlockedGroupIDs   []string             `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string             `json:"editor_ids,omitempty"`
@@ -14419,6 +14453,12 @@ func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -14465,6 +14505,11 @@ type UpdateMappedControlInput struct {
 	Confidence              *int `json:"confidence,omitempty"`
 	ClearSource             bool
 	Source                  *enums.MappingSource `json:"source,omitempty"`
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner              bool
 	OwnerID                 *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups      bool
@@ -14530,6 +14575,21 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -17923,6 +17983,7 @@ type CreatePlatformInput struct {
 	PurchaseDate                   *models.DateTime       `json:"purchase_date,omitempty"`
 	ExternalReferenceID            *string                `json:"external_reference_id,omitempty"`
 	Metadata                       map[string]interface{} `json:"metadata,omitempty"`
+	IntegrationRunIDs              []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                        *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs                []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs                      []string               `json:"editor_ids,omitempty"`
@@ -18069,6 +18130,9 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -18289,6 +18353,9 @@ type UpdatePlatformInput struct {
 	ExternalReferenceID                 *string `json:"external_reference_id,omitempty"`
 	ClearMetadata                       bool
 	Metadata                            map[string]interface{} `json:"metadata,omitempty"`
+	ClearIntegrationRuns                bool
+	AddIntegrationRunIDs                []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs             []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups                  bool
 	AddBlockedGroupIDs                  []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs               []string `json:"remove_blocked_group_ids,omitempty"`
@@ -18601,6 +18668,15 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -19658,6 +19734,7 @@ type CreateProgramInput struct {
 	AuditFirm                  *string              `json:"audit_firm,omitempty"`
 	Auditor                    *string              `json:"auditor,omitempty"`
 	AuditorEmail               *string              `json:"auditor_email,omitempty"`
+	IntegrationRunIDs          []string             `json:"integration_run_ids,omitempty"`
 	OwnerID                    *string              `json:"owner_id,omitempty"`
 	BlockedGroupIDs            []string             `json:"blocked_group_ids,omitempty"`
 	EditorIDs                  []string             `json:"editor_ids,omitempty"`
@@ -19739,6 +19816,9 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.AuditorEmail; v != nil {
 		m.SetAuditorEmail(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -19853,6 +19933,9 @@ type UpdateProgramInput struct {
 	Auditor                         *string `json:"auditor,omitempty"`
 	ClearAuditorEmail               bool
 	AuditorEmail                    *string `json:"auditor_email,omitempty"`
+	ClearIntegrationRuns            bool
+	AddIntegrationRunIDs            []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs         []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                      bool
 	OwnerID                         *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups              bool
@@ -20024,6 +20107,15 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.AuditorEmail; v != nil {
 		m.SetAuditorEmail(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -20974,6 +21066,7 @@ type CreateReviewInput struct {
 	ExternalURI       *string                `json:"external_uri,omitempty"`
 	Metadata          map[string]interface{} `json:"metadata,omitempty"`
 	RawPayload        map[string]interface{} `json:"raw_payload,omitempty"`
+	IntegrationRunIDs []string               `json:"integration_run_ids,omitempty"`
 	OwnerID           *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs   []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string               `json:"editor_ids,omitempty"`
@@ -21065,6 +21158,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -21185,6 +21281,9 @@ type UpdateReviewInput struct {
 	Metadata                map[string]interface{} `json:"metadata,omitempty"`
 	ClearRawPayload         bool
 	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
@@ -21383,6 +21482,15 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -22594,6 +22702,7 @@ type CreateScanInput struct {
 	AssignedTo                 *string                `json:"assigned_to,omitempty"`
 	EnvironmentName            *string                `json:"environment_name,omitempty"`
 	ScopeName                  *string                `json:"scope_name,omitempty"`
+	DocumentKindName           *string                `json:"document_kind_name,omitempty"`
 	Target                     string                 `json:"target,omitempty"`
 	ScanType                   *enums.ScanType        `json:"scan_type,omitempty"`
 	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
@@ -22614,6 +22723,7 @@ type CreateScanInput struct {
 	AssignedToIdentityHolderID *string                `json:"assigned_to_identity_holder_id,omitempty"`
 	EnvironmentID              *string                `json:"environment_id,omitempty"`
 	ScopeID                    *string                `json:"scope_id,omitempty"`
+	DocumentKindID             *string                `json:"document_kind_id,omitempty"`
 	AssetIDs                   []string               `json:"asset_ids,omitempty"`
 	EntityIDs                  []string               `json:"entity_ids,omitempty"`
 	EvidenceIDs                []string               `json:"evidence_ids,omitempty"`
@@ -22653,6 +22763,9 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.DocumentKindName; v != nil {
+		m.SetDocumentKindName(*v)
 	}
 	m.SetTarget(i.Target)
 	if v := i.ScanType; v != nil {
@@ -22711,6 +22824,9 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if v := i.DocumentKindID; v != nil {
+		m.SetDocumentKindID(*v)
 	}
 	if v := i.AssetIDs; len(v) > 0 {
 		m.AddAssetIDs(v...)
@@ -22781,7 +22897,9 @@ type UpdateScanInput struct {
 	ClearEnvironmentName             bool
 	EnvironmentName                  *string `json:"environment_name,omitempty"`
 	ClearScopeName                   bool
-	ScopeName                        *string         `json:"scope_name,omitempty"`
+	ScopeName                        *string `json:"scope_name,omitempty"`
+	ClearDocumentKindName            bool
+	DocumentKindName                 *string         `json:"document_kind_name,omitempty"`
 	Target                           *string         `json:"target,omitempty"`
 	ScanType                         *enums.ScanType `json:"scan_type,omitempty"`
 	ClearMetadata                    bool
@@ -22820,6 +22938,8 @@ type UpdateScanInput struct {
 	EnvironmentID                    *string `json:"environment_id,omitempty"`
 	ClearScope                       bool
 	ScopeID                          *string `json:"scope_id,omitempty"`
+	ClearDocumentKind                bool
+	DocumentKindID                   *string `json:"document_kind_id,omitempty"`
 	ClearAssets                      bool
 	AddAssetIDs                      []string `json:"add_asset_ids,omitempty"`
 	RemoveAssetIDs                   []string `json:"remove_asset_ids,omitempty"`
@@ -22910,6 +23030,12 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearDocumentKindName {
+		m.ClearDocumentKindName()
+	}
+	if v := i.DocumentKindName; v != nil {
+		m.SetDocumentKindName(*v)
 	}
 	if v := i.Target; v != nil {
 		m.SetTarget(*v)
@@ -23024,6 +23150,12 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if i.ClearDocumentKind {
+		m.ClearDocumentKind()
+	}
+	if v := i.DocumentKindID; v != nil {
+		m.SetDocumentKindID(*v)
 	}
 	if i.ClearAssets {
 		m.ClearAssets()
@@ -24650,6 +24782,7 @@ type CreateSystemDetailInput struct {
 	LastReviewed          *models.DateTime              `json:"last_reviewed,omitempty"`
 	RevisionHistory       []interface{}                 `json:"revision_history,omitempty"`
 	OscalMetadataJSON     map[string]interface{}        `json:"oscal_metadata_json,omitempty"`
+	IntegrationRunIDs     []string                      `json:"integration_run_ids,omitempty"`
 	OwnerID               *string                       `json:"owner_id,omitempty"`
 	ProgramIDs            []string                      `json:"program_ids,omitempty"`
 	PlatformIDs           []string                      `json:"platform_ids,omitempty"`
@@ -24683,6 +24816,9 @@ func (i *CreateSystemDetailInput) Mutate(m *SystemDetailMutation) {
 	}
 	if v := i.OscalMetadataJSON; v != nil {
 		m.SetOscalMetadataJSON(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -24728,6 +24864,9 @@ type UpdateSystemDetailInput struct {
 	AppendRevisionHistory      []interface{}
 	ClearOscalMetadataJSON     bool
 	OscalMetadataJSON          map[string]interface{} `json:"oscal_metadata_json,omitempty"`
+	ClearIntegrationRuns       bool
+	AddIntegrationRunIDs       []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs    []string `json:"remove_integration_run_ids,omitempty"`
 	ClearPrograms              bool
 	AddProgramIDs              []string `json:"add_program_ids,omitempty"`
 	RemoveProgramIDs           []string `json:"remove_program_ids,omitempty"`
@@ -24800,6 +24939,15 @@ func (i *UpdateSystemDetailInput) Mutate(m *SystemDetailMutation) {
 	}
 	if v := i.OscalMetadataJSON; v != nil {
 		m.SetOscalMetadataJSON(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()

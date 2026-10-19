@@ -10443,6 +10443,71 @@ type ControlHistoryWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
+	// "source_definition_id" field predicates.
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIDNEQ          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        bool     `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       bool     `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+
+	// "source_definition_version" field predicates.
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNEQ          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        bool     `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       bool     `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+
+	// "source_instance_id" field predicates.
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIDNEQ          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        bool     `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       bool     `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+
+	// "managed_by" field predicates.
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNEQ          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        bool     `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       bool     `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+
+	// "integration_run_id" field predicates.
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIDNEQ          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        bool     `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
 	// "external_uuid" field predicates.
 	ExternalUUID             *string  `json:"externalUUID,omitempty"`
 	ExternalUUIDNEQ          *string  `json:"externalUUIDNEQ,omitempty"`
@@ -11171,6 +11236,171 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, controlhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
+	if i.SourceDefinitionID != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDEQ(*i.SourceDefinitionID))
+	}
+	if i.SourceDefinitionIDNEQ != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDNEQ(*i.SourceDefinitionIDNEQ))
+	}
+	if len(i.SourceDefinitionIDIn) > 0 {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDIn(i.SourceDefinitionIDIn...))
+	}
+	if len(i.SourceDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDNotIn(i.SourceDefinitionIDNotIn...))
+	}
+	if i.SourceDefinitionIDContains != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDContains(*i.SourceDefinitionIDContains))
+	}
+	if i.SourceDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDHasPrefix(*i.SourceDefinitionIDHasPrefix))
+	}
+	if i.SourceDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDHasSuffix(*i.SourceDefinitionIDHasSuffix))
+	}
+	if i.SourceDefinitionIDIsNil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDIsNil())
+	}
+	if i.SourceDefinitionIDNotNil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDNotNil())
+	}
+	if i.SourceDefinitionIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDEqualFold(*i.SourceDefinitionIDEqualFold))
+	}
+	if i.SourceDefinitionIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionIDContainsFold(*i.SourceDefinitionIDContainsFold))
+	}
+	if i.SourceDefinitionVersion != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionEQ(*i.SourceDefinitionVersion))
+	}
+	if i.SourceDefinitionVersionNEQ != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionNEQ(*i.SourceDefinitionVersionNEQ))
+	}
+	if len(i.SourceDefinitionVersionIn) > 0 {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionIn(i.SourceDefinitionVersionIn...))
+	}
+	if len(i.SourceDefinitionVersionNotIn) > 0 {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionNotIn(i.SourceDefinitionVersionNotIn...))
+	}
+	if i.SourceDefinitionVersionContains != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionContains(*i.SourceDefinitionVersionContains))
+	}
+	if i.SourceDefinitionVersionHasPrefix != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionHasPrefix(*i.SourceDefinitionVersionHasPrefix))
+	}
+	if i.SourceDefinitionVersionHasSuffix != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionHasSuffix(*i.SourceDefinitionVersionHasSuffix))
+	}
+	if i.SourceDefinitionVersionIsNil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionIsNil())
+	}
+	if i.SourceDefinitionVersionNotNil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionNotNil())
+	}
+	if i.SourceDefinitionVersionEqualFold != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionEqualFold(*i.SourceDefinitionVersionEqualFold))
+	}
+	if i.SourceDefinitionVersionContainsFold != nil {
+		predicates = append(predicates, controlhistory.SourceDefinitionVersionContainsFold(*i.SourceDefinitionVersionContainsFold))
+	}
+	if i.SourceInstanceID != nil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDEQ(*i.SourceInstanceID))
+	}
+	if i.SourceInstanceIDNEQ != nil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDNEQ(*i.SourceInstanceIDNEQ))
+	}
+	if len(i.SourceInstanceIDIn) > 0 {
+		predicates = append(predicates, controlhistory.SourceInstanceIDIn(i.SourceInstanceIDIn...))
+	}
+	if len(i.SourceInstanceIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.SourceInstanceIDNotIn(i.SourceInstanceIDNotIn...))
+	}
+	if i.SourceInstanceIDContains != nil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDContains(*i.SourceInstanceIDContains))
+	}
+	if i.SourceInstanceIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDHasPrefix(*i.SourceInstanceIDHasPrefix))
+	}
+	if i.SourceInstanceIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDHasSuffix(*i.SourceInstanceIDHasSuffix))
+	}
+	if i.SourceInstanceIDIsNil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDIsNil())
+	}
+	if i.SourceInstanceIDNotNil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDNotNil())
+	}
+	if i.SourceInstanceIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDEqualFold(*i.SourceInstanceIDEqualFold))
+	}
+	if i.SourceInstanceIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.SourceInstanceIDContainsFold(*i.SourceInstanceIDContainsFold))
+	}
+	if i.ManagedBy != nil {
+		predicates = append(predicates, controlhistory.ManagedByEQ(*i.ManagedBy))
+	}
+	if i.ManagedByNEQ != nil {
+		predicates = append(predicates, controlhistory.ManagedByNEQ(*i.ManagedByNEQ))
+	}
+	if len(i.ManagedByIn) > 0 {
+		predicates = append(predicates, controlhistory.ManagedByIn(i.ManagedByIn...))
+	}
+	if len(i.ManagedByNotIn) > 0 {
+		predicates = append(predicates, controlhistory.ManagedByNotIn(i.ManagedByNotIn...))
+	}
+	if i.ManagedByContains != nil {
+		predicates = append(predicates, controlhistory.ManagedByContains(*i.ManagedByContains))
+	}
+	if i.ManagedByHasPrefix != nil {
+		predicates = append(predicates, controlhistory.ManagedByHasPrefix(*i.ManagedByHasPrefix))
+	}
+	if i.ManagedByHasSuffix != nil {
+		predicates = append(predicates, controlhistory.ManagedByHasSuffix(*i.ManagedByHasSuffix))
+	}
+	if i.ManagedByIsNil {
+		predicates = append(predicates, controlhistory.ManagedByIsNil())
+	}
+	if i.ManagedByNotNil {
+		predicates = append(predicates, controlhistory.ManagedByNotNil())
+	}
+	if i.ManagedByEqualFold != nil {
+		predicates = append(predicates, controlhistory.ManagedByEqualFold(*i.ManagedByEqualFold))
+	}
+	if i.ManagedByContainsFold != nil {
+		predicates = append(predicates, controlhistory.ManagedByContainsFold(*i.ManagedByContainsFold))
+	}
+	if i.IntegrationRunID != nil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDEQ(*i.IntegrationRunID))
+	}
+	if i.IntegrationRunIDNEQ != nil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDNEQ(*i.IntegrationRunIDNEQ))
+	}
+	if len(i.IntegrationRunIDIn) > 0 {
+		predicates = append(predicates, controlhistory.IntegrationRunIDIn(i.IntegrationRunIDIn...))
+	}
+	if len(i.IntegrationRunIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.IntegrationRunIDNotIn(i.IntegrationRunIDNotIn...))
+	}
+	if i.IntegrationRunIDContains != nil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDContains(*i.IntegrationRunIDContains))
+	}
+	if i.IntegrationRunIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDHasPrefix(*i.IntegrationRunIDHasPrefix))
+	}
+	if i.IntegrationRunIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDHasSuffix(*i.IntegrationRunIDHasSuffix))
+	}
+	if i.IntegrationRunIDIsNil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDIsNil())
+	}
+	if i.IntegrationRunIDNotNil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDNotNil())
+	}
+	if i.IntegrationRunIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDEqualFold(*i.IntegrationRunIDEqualFold))
+	}
+	if i.IntegrationRunIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
 	if i.ExternalUUID != nil {
 		predicates = append(predicates, controlhistory.ExternalUUIDEQ(*i.ExternalUUID))
@@ -26837,6 +27067,71 @@ type GroupHistoryWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
+	// "source_definition_id" field predicates.
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIDNEQ          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        bool     `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       bool     `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+
+	// "source_definition_version" field predicates.
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNEQ          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        bool     `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       bool     `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+
+	// "source_instance_id" field predicates.
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIDNEQ          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        bool     `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       bool     `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+
+	// "managed_by" field predicates.
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNEQ          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        bool     `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       bool     `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+
+	// "integration_run_id" field predicates.
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIDNEQ          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        bool     `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -27285,6 +27580,171 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	}
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, grouphistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
+	if i.SourceDefinitionID != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDEQ(*i.SourceDefinitionID))
+	}
+	if i.SourceDefinitionIDNEQ != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDNEQ(*i.SourceDefinitionIDNEQ))
+	}
+	if len(i.SourceDefinitionIDIn) > 0 {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDIn(i.SourceDefinitionIDIn...))
+	}
+	if len(i.SourceDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDNotIn(i.SourceDefinitionIDNotIn...))
+	}
+	if i.SourceDefinitionIDContains != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDContains(*i.SourceDefinitionIDContains))
+	}
+	if i.SourceDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDHasPrefix(*i.SourceDefinitionIDHasPrefix))
+	}
+	if i.SourceDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDHasSuffix(*i.SourceDefinitionIDHasSuffix))
+	}
+	if i.SourceDefinitionIDIsNil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDIsNil())
+	}
+	if i.SourceDefinitionIDNotNil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDNotNil())
+	}
+	if i.SourceDefinitionIDEqualFold != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDEqualFold(*i.SourceDefinitionIDEqualFold))
+	}
+	if i.SourceDefinitionIDContainsFold != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionIDContainsFold(*i.SourceDefinitionIDContainsFold))
+	}
+	if i.SourceDefinitionVersion != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionEQ(*i.SourceDefinitionVersion))
+	}
+	if i.SourceDefinitionVersionNEQ != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionNEQ(*i.SourceDefinitionVersionNEQ))
+	}
+	if len(i.SourceDefinitionVersionIn) > 0 {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionIn(i.SourceDefinitionVersionIn...))
+	}
+	if len(i.SourceDefinitionVersionNotIn) > 0 {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionNotIn(i.SourceDefinitionVersionNotIn...))
+	}
+	if i.SourceDefinitionVersionContains != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionContains(*i.SourceDefinitionVersionContains))
+	}
+	if i.SourceDefinitionVersionHasPrefix != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionHasPrefix(*i.SourceDefinitionVersionHasPrefix))
+	}
+	if i.SourceDefinitionVersionHasSuffix != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionHasSuffix(*i.SourceDefinitionVersionHasSuffix))
+	}
+	if i.SourceDefinitionVersionIsNil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionIsNil())
+	}
+	if i.SourceDefinitionVersionNotNil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionNotNil())
+	}
+	if i.SourceDefinitionVersionEqualFold != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionEqualFold(*i.SourceDefinitionVersionEqualFold))
+	}
+	if i.SourceDefinitionVersionContainsFold != nil {
+		predicates = append(predicates, grouphistory.SourceDefinitionVersionContainsFold(*i.SourceDefinitionVersionContainsFold))
+	}
+	if i.SourceInstanceID != nil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDEQ(*i.SourceInstanceID))
+	}
+	if i.SourceInstanceIDNEQ != nil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDNEQ(*i.SourceInstanceIDNEQ))
+	}
+	if len(i.SourceInstanceIDIn) > 0 {
+		predicates = append(predicates, grouphistory.SourceInstanceIDIn(i.SourceInstanceIDIn...))
+	}
+	if len(i.SourceInstanceIDNotIn) > 0 {
+		predicates = append(predicates, grouphistory.SourceInstanceIDNotIn(i.SourceInstanceIDNotIn...))
+	}
+	if i.SourceInstanceIDContains != nil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDContains(*i.SourceInstanceIDContains))
+	}
+	if i.SourceInstanceIDHasPrefix != nil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDHasPrefix(*i.SourceInstanceIDHasPrefix))
+	}
+	if i.SourceInstanceIDHasSuffix != nil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDHasSuffix(*i.SourceInstanceIDHasSuffix))
+	}
+	if i.SourceInstanceIDIsNil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDIsNil())
+	}
+	if i.SourceInstanceIDNotNil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDNotNil())
+	}
+	if i.SourceInstanceIDEqualFold != nil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDEqualFold(*i.SourceInstanceIDEqualFold))
+	}
+	if i.SourceInstanceIDContainsFold != nil {
+		predicates = append(predicates, grouphistory.SourceInstanceIDContainsFold(*i.SourceInstanceIDContainsFold))
+	}
+	if i.ManagedBy != nil {
+		predicates = append(predicates, grouphistory.ManagedByEQ(*i.ManagedBy))
+	}
+	if i.ManagedByNEQ != nil {
+		predicates = append(predicates, grouphistory.ManagedByNEQ(*i.ManagedByNEQ))
+	}
+	if len(i.ManagedByIn) > 0 {
+		predicates = append(predicates, grouphistory.ManagedByIn(i.ManagedByIn...))
+	}
+	if len(i.ManagedByNotIn) > 0 {
+		predicates = append(predicates, grouphistory.ManagedByNotIn(i.ManagedByNotIn...))
+	}
+	if i.ManagedByContains != nil {
+		predicates = append(predicates, grouphistory.ManagedByContains(*i.ManagedByContains))
+	}
+	if i.ManagedByHasPrefix != nil {
+		predicates = append(predicates, grouphistory.ManagedByHasPrefix(*i.ManagedByHasPrefix))
+	}
+	if i.ManagedByHasSuffix != nil {
+		predicates = append(predicates, grouphistory.ManagedByHasSuffix(*i.ManagedByHasSuffix))
+	}
+	if i.ManagedByIsNil {
+		predicates = append(predicates, grouphistory.ManagedByIsNil())
+	}
+	if i.ManagedByNotNil {
+		predicates = append(predicates, grouphistory.ManagedByNotNil())
+	}
+	if i.ManagedByEqualFold != nil {
+		predicates = append(predicates, grouphistory.ManagedByEqualFold(*i.ManagedByEqualFold))
+	}
+	if i.ManagedByContainsFold != nil {
+		predicates = append(predicates, grouphistory.ManagedByContainsFold(*i.ManagedByContainsFold))
+	}
+	if i.IntegrationRunID != nil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDEQ(*i.IntegrationRunID))
+	}
+	if i.IntegrationRunIDNEQ != nil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDNEQ(*i.IntegrationRunIDNEQ))
+	}
+	if len(i.IntegrationRunIDIn) > 0 {
+		predicates = append(predicates, grouphistory.IntegrationRunIDIn(i.IntegrationRunIDIn...))
+	}
+	if len(i.IntegrationRunIDNotIn) > 0 {
+		predicates = append(predicates, grouphistory.IntegrationRunIDNotIn(i.IntegrationRunIDNotIn...))
+	}
+	if i.IntegrationRunIDContains != nil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDContains(*i.IntegrationRunIDContains))
+	}
+	if i.IntegrationRunIDHasPrefix != nil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDHasPrefix(*i.IntegrationRunIDHasPrefix))
+	}
+	if i.IntegrationRunIDHasSuffix != nil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDHasSuffix(*i.IntegrationRunIDHasSuffix))
+	}
+	if i.IntegrationRunIDIsNil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDIsNil())
+	}
+	if i.IntegrationRunIDNotNil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDNotNil())
+	}
+	if i.IntegrationRunIDEqualFold != nil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDEqualFold(*i.IntegrationRunIDEqualFold))
+	}
+	if i.IntegrationRunIDContainsFold != nil {
+		predicates = append(predicates, grouphistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, grouphistory.OwnerIDEQ(*i.OwnerID))
@@ -33324,6 +33784,71 @@ type MappedControlHistoryWhereInput struct {
 	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
 	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 
+	// "source_definition_id" field predicates.
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIDNEQ          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        bool     `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       bool     `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+
+	// "source_definition_version" field predicates.
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNEQ          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        bool     `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       bool     `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+
+	// "source_instance_id" field predicates.
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIDNEQ          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        bool     `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       bool     `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+
+	// "managed_by" field predicates.
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNEQ          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        bool     `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       bool     `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+
+	// "integration_run_id" field predicates.
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIDNEQ          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        bool     `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
 	// "system_owned" field predicates.
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -33405,6 +33930,19 @@ type MappedControlHistoryWhereInput struct {
 	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
 	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
+
+	// "external_id" field predicates.
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        bool     `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       bool     `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
 
 	// "tags" JSON-string-array predicates.
 	TagsHas *string `json:"tagsHas,omitempty"`
@@ -33700,6 +34238,171 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	if i.UpdatedByImpersonatorContainsFold != nil {
 		predicates = append(predicates, mappedcontrolhistory.UpdatedByImpersonatorContainsFold(*i.UpdatedByImpersonatorContainsFold))
 	}
+	if i.SourceDefinitionID != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDEQ(*i.SourceDefinitionID))
+	}
+	if i.SourceDefinitionIDNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDNEQ(*i.SourceDefinitionIDNEQ))
+	}
+	if len(i.SourceDefinitionIDIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDIn(i.SourceDefinitionIDIn...))
+	}
+	if len(i.SourceDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDNotIn(i.SourceDefinitionIDNotIn...))
+	}
+	if i.SourceDefinitionIDContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDContains(*i.SourceDefinitionIDContains))
+	}
+	if i.SourceDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDHasPrefix(*i.SourceDefinitionIDHasPrefix))
+	}
+	if i.SourceDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDHasSuffix(*i.SourceDefinitionIDHasSuffix))
+	}
+	if i.SourceDefinitionIDIsNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDIsNil())
+	}
+	if i.SourceDefinitionIDNotNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDNotNil())
+	}
+	if i.SourceDefinitionIDEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDEqualFold(*i.SourceDefinitionIDEqualFold))
+	}
+	if i.SourceDefinitionIDContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionIDContainsFold(*i.SourceDefinitionIDContainsFold))
+	}
+	if i.SourceDefinitionVersion != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionEQ(*i.SourceDefinitionVersion))
+	}
+	if i.SourceDefinitionVersionNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionNEQ(*i.SourceDefinitionVersionNEQ))
+	}
+	if len(i.SourceDefinitionVersionIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionIn(i.SourceDefinitionVersionIn...))
+	}
+	if len(i.SourceDefinitionVersionNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionNotIn(i.SourceDefinitionVersionNotIn...))
+	}
+	if i.SourceDefinitionVersionContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionContains(*i.SourceDefinitionVersionContains))
+	}
+	if i.SourceDefinitionVersionHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionHasPrefix(*i.SourceDefinitionVersionHasPrefix))
+	}
+	if i.SourceDefinitionVersionHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionHasSuffix(*i.SourceDefinitionVersionHasSuffix))
+	}
+	if i.SourceDefinitionVersionIsNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionIsNil())
+	}
+	if i.SourceDefinitionVersionNotNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionNotNil())
+	}
+	if i.SourceDefinitionVersionEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionEqualFold(*i.SourceDefinitionVersionEqualFold))
+	}
+	if i.SourceDefinitionVersionContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceDefinitionVersionContainsFold(*i.SourceDefinitionVersionContainsFold))
+	}
+	if i.SourceInstanceID != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDEQ(*i.SourceInstanceID))
+	}
+	if i.SourceInstanceIDNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDNEQ(*i.SourceInstanceIDNEQ))
+	}
+	if len(i.SourceInstanceIDIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDIn(i.SourceInstanceIDIn...))
+	}
+	if len(i.SourceInstanceIDNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDNotIn(i.SourceInstanceIDNotIn...))
+	}
+	if i.SourceInstanceIDContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDContains(*i.SourceInstanceIDContains))
+	}
+	if i.SourceInstanceIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDHasPrefix(*i.SourceInstanceIDHasPrefix))
+	}
+	if i.SourceInstanceIDHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDHasSuffix(*i.SourceInstanceIDHasSuffix))
+	}
+	if i.SourceInstanceIDIsNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDIsNil())
+	}
+	if i.SourceInstanceIDNotNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDNotNil())
+	}
+	if i.SourceInstanceIDEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDEqualFold(*i.SourceInstanceIDEqualFold))
+	}
+	if i.SourceInstanceIDContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceInstanceIDContainsFold(*i.SourceInstanceIDContainsFold))
+	}
+	if i.ManagedBy != nil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByEQ(*i.ManagedBy))
+	}
+	if i.ManagedByNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByNEQ(*i.ManagedByNEQ))
+	}
+	if len(i.ManagedByIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByIn(i.ManagedByIn...))
+	}
+	if len(i.ManagedByNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByNotIn(i.ManagedByNotIn...))
+	}
+	if i.ManagedByContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByContains(*i.ManagedByContains))
+	}
+	if i.ManagedByHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByHasPrefix(*i.ManagedByHasPrefix))
+	}
+	if i.ManagedByHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByHasSuffix(*i.ManagedByHasSuffix))
+	}
+	if i.ManagedByIsNil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByIsNil())
+	}
+	if i.ManagedByNotNil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByNotNil())
+	}
+	if i.ManagedByEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByEqualFold(*i.ManagedByEqualFold))
+	}
+	if i.ManagedByContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.ManagedByContainsFold(*i.ManagedByContainsFold))
+	}
+	if i.IntegrationRunID != nil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDEQ(*i.IntegrationRunID))
+	}
+	if i.IntegrationRunIDNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDNEQ(*i.IntegrationRunIDNEQ))
+	}
+	if len(i.IntegrationRunIDIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDIn(i.IntegrationRunIDIn...))
+	}
+	if len(i.IntegrationRunIDNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDNotIn(i.IntegrationRunIDNotIn...))
+	}
+	if i.IntegrationRunIDContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDContains(*i.IntegrationRunIDContains))
+	}
+	if i.IntegrationRunIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDHasPrefix(*i.IntegrationRunIDHasPrefix))
+	}
+	if i.IntegrationRunIDHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDHasSuffix(*i.IntegrationRunIDHasSuffix))
+	}
+	if i.IntegrationRunIDIsNil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDIsNil())
+	}
+	if i.IntegrationRunIDNotNil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDNotNil())
+	}
+	if i.IntegrationRunIDEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDEqualFold(*i.IntegrationRunIDEqualFold))
+	}
+	if i.IntegrationRunIDContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
 	if i.SystemOwned != nil {
 		predicates = append(predicates, mappedcontrolhistory.SystemOwnedEQ(*i.SystemOwned))
 	}
@@ -33897,6 +34600,39 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	}
 	if i.SourceNotNil {
 		predicates = append(predicates, mappedcontrolhistory.SourceNotNil())
+	}
+	if i.ExternalID != nil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDEQ(*i.ExternalID))
+	}
+	if i.ExternalIDNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDNEQ(*i.ExternalIDNEQ))
+	}
+	if len(i.ExternalIDIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDIn(i.ExternalIDIn...))
+	}
+	if len(i.ExternalIDNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDNotIn(i.ExternalIDNotIn...))
+	}
+	if i.ExternalIDContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDContains(*i.ExternalIDContains))
+	}
+	if i.ExternalIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDHasPrefix(*i.ExternalIDHasPrefix))
+	}
+	if i.ExternalIDHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDHasSuffix(*i.ExternalIDHasSuffix))
+	}
+	if i.ExternalIDIsNil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDIsNil())
+	}
+	if i.ExternalIDNotNil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDNotNil())
+	}
+	if i.ExternalIDEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDEqualFold(*i.ExternalIDEqualFold))
+	}
+	if i.ExternalIDContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.ExternalIDContainsFold(*i.ExternalIDContainsFold))
 	}
 
 	if i.TagsHas != nil {
@@ -40445,6 +41181,71 @@ type PlatformHistoryWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
+	// "source_definition_id" field predicates.
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIDNEQ          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        bool     `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       bool     `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+
+	// "source_definition_version" field predicates.
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNEQ          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        bool     `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       bool     `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+
+	// "source_instance_id" field predicates.
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIDNEQ          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        bool     `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       bool     `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+
+	// "managed_by" field predicates.
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNEQ          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        bool     `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       bool     `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+
+	// "integration_run_id" field predicates.
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIDNEQ          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        bool     `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -41367,6 +42168,171 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 	}
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, platformhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
+	if i.SourceDefinitionID != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDEQ(*i.SourceDefinitionID))
+	}
+	if i.SourceDefinitionIDNEQ != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDNEQ(*i.SourceDefinitionIDNEQ))
+	}
+	if len(i.SourceDefinitionIDIn) > 0 {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDIn(i.SourceDefinitionIDIn...))
+	}
+	if len(i.SourceDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDNotIn(i.SourceDefinitionIDNotIn...))
+	}
+	if i.SourceDefinitionIDContains != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDContains(*i.SourceDefinitionIDContains))
+	}
+	if i.SourceDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDHasPrefix(*i.SourceDefinitionIDHasPrefix))
+	}
+	if i.SourceDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDHasSuffix(*i.SourceDefinitionIDHasSuffix))
+	}
+	if i.SourceDefinitionIDIsNil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDIsNil())
+	}
+	if i.SourceDefinitionIDNotNil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDNotNil())
+	}
+	if i.SourceDefinitionIDEqualFold != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDEqualFold(*i.SourceDefinitionIDEqualFold))
+	}
+	if i.SourceDefinitionIDContainsFold != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionIDContainsFold(*i.SourceDefinitionIDContainsFold))
+	}
+	if i.SourceDefinitionVersion != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionEQ(*i.SourceDefinitionVersion))
+	}
+	if i.SourceDefinitionVersionNEQ != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionNEQ(*i.SourceDefinitionVersionNEQ))
+	}
+	if len(i.SourceDefinitionVersionIn) > 0 {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionIn(i.SourceDefinitionVersionIn...))
+	}
+	if len(i.SourceDefinitionVersionNotIn) > 0 {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionNotIn(i.SourceDefinitionVersionNotIn...))
+	}
+	if i.SourceDefinitionVersionContains != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionContains(*i.SourceDefinitionVersionContains))
+	}
+	if i.SourceDefinitionVersionHasPrefix != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionHasPrefix(*i.SourceDefinitionVersionHasPrefix))
+	}
+	if i.SourceDefinitionVersionHasSuffix != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionHasSuffix(*i.SourceDefinitionVersionHasSuffix))
+	}
+	if i.SourceDefinitionVersionIsNil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionIsNil())
+	}
+	if i.SourceDefinitionVersionNotNil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionNotNil())
+	}
+	if i.SourceDefinitionVersionEqualFold != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionEqualFold(*i.SourceDefinitionVersionEqualFold))
+	}
+	if i.SourceDefinitionVersionContainsFold != nil {
+		predicates = append(predicates, platformhistory.SourceDefinitionVersionContainsFold(*i.SourceDefinitionVersionContainsFold))
+	}
+	if i.SourceInstanceID != nil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDEQ(*i.SourceInstanceID))
+	}
+	if i.SourceInstanceIDNEQ != nil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDNEQ(*i.SourceInstanceIDNEQ))
+	}
+	if len(i.SourceInstanceIDIn) > 0 {
+		predicates = append(predicates, platformhistory.SourceInstanceIDIn(i.SourceInstanceIDIn...))
+	}
+	if len(i.SourceInstanceIDNotIn) > 0 {
+		predicates = append(predicates, platformhistory.SourceInstanceIDNotIn(i.SourceInstanceIDNotIn...))
+	}
+	if i.SourceInstanceIDContains != nil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDContains(*i.SourceInstanceIDContains))
+	}
+	if i.SourceInstanceIDHasPrefix != nil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDHasPrefix(*i.SourceInstanceIDHasPrefix))
+	}
+	if i.SourceInstanceIDHasSuffix != nil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDHasSuffix(*i.SourceInstanceIDHasSuffix))
+	}
+	if i.SourceInstanceIDIsNil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDIsNil())
+	}
+	if i.SourceInstanceIDNotNil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDNotNil())
+	}
+	if i.SourceInstanceIDEqualFold != nil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDEqualFold(*i.SourceInstanceIDEqualFold))
+	}
+	if i.SourceInstanceIDContainsFold != nil {
+		predicates = append(predicates, platformhistory.SourceInstanceIDContainsFold(*i.SourceInstanceIDContainsFold))
+	}
+	if i.ManagedBy != nil {
+		predicates = append(predicates, platformhistory.ManagedByEQ(*i.ManagedBy))
+	}
+	if i.ManagedByNEQ != nil {
+		predicates = append(predicates, platformhistory.ManagedByNEQ(*i.ManagedByNEQ))
+	}
+	if len(i.ManagedByIn) > 0 {
+		predicates = append(predicates, platformhistory.ManagedByIn(i.ManagedByIn...))
+	}
+	if len(i.ManagedByNotIn) > 0 {
+		predicates = append(predicates, platformhistory.ManagedByNotIn(i.ManagedByNotIn...))
+	}
+	if i.ManagedByContains != nil {
+		predicates = append(predicates, platformhistory.ManagedByContains(*i.ManagedByContains))
+	}
+	if i.ManagedByHasPrefix != nil {
+		predicates = append(predicates, platformhistory.ManagedByHasPrefix(*i.ManagedByHasPrefix))
+	}
+	if i.ManagedByHasSuffix != nil {
+		predicates = append(predicates, platformhistory.ManagedByHasSuffix(*i.ManagedByHasSuffix))
+	}
+	if i.ManagedByIsNil {
+		predicates = append(predicates, platformhistory.ManagedByIsNil())
+	}
+	if i.ManagedByNotNil {
+		predicates = append(predicates, platformhistory.ManagedByNotNil())
+	}
+	if i.ManagedByEqualFold != nil {
+		predicates = append(predicates, platformhistory.ManagedByEqualFold(*i.ManagedByEqualFold))
+	}
+	if i.ManagedByContainsFold != nil {
+		predicates = append(predicates, platformhistory.ManagedByContainsFold(*i.ManagedByContainsFold))
+	}
+	if i.IntegrationRunID != nil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDEQ(*i.IntegrationRunID))
+	}
+	if i.IntegrationRunIDNEQ != nil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDNEQ(*i.IntegrationRunIDNEQ))
+	}
+	if len(i.IntegrationRunIDIn) > 0 {
+		predicates = append(predicates, platformhistory.IntegrationRunIDIn(i.IntegrationRunIDIn...))
+	}
+	if len(i.IntegrationRunIDNotIn) > 0 {
+		predicates = append(predicates, platformhistory.IntegrationRunIDNotIn(i.IntegrationRunIDNotIn...))
+	}
+	if i.IntegrationRunIDContains != nil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDContains(*i.IntegrationRunIDContains))
+	}
+	if i.IntegrationRunIDHasPrefix != nil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDHasPrefix(*i.IntegrationRunIDHasPrefix))
+	}
+	if i.IntegrationRunIDHasSuffix != nil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDHasSuffix(*i.IntegrationRunIDHasSuffix))
+	}
+	if i.IntegrationRunIDIsNil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDIsNil())
+	}
+	if i.IntegrationRunIDNotNil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDNotNil())
+	}
+	if i.IntegrationRunIDEqualFold != nil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDEqualFold(*i.IntegrationRunIDEqualFold))
+	}
+	if i.IntegrationRunIDContainsFold != nil {
+		predicates = append(predicates, platformhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, platformhistory.OwnerIDEQ(*i.OwnerID))
@@ -44727,6 +45693,71 @@ type ProgramHistoryWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
+	// "source_definition_id" field predicates.
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIDNEQ          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        bool     `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       bool     `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+
+	// "source_definition_version" field predicates.
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNEQ          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        bool     `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       bool     `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+
+	// "source_instance_id" field predicates.
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIDNEQ          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        bool     `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       bool     `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+
+	// "managed_by" field predicates.
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNEQ          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        bool     `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       bool     `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+
+	// "integration_run_id" field predicates.
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIDNEQ          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        bool     `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -45260,6 +46291,171 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, programhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
+	if i.SourceDefinitionID != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDEQ(*i.SourceDefinitionID))
+	}
+	if i.SourceDefinitionIDNEQ != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDNEQ(*i.SourceDefinitionIDNEQ))
+	}
+	if len(i.SourceDefinitionIDIn) > 0 {
+		predicates = append(predicates, programhistory.SourceDefinitionIDIn(i.SourceDefinitionIDIn...))
+	}
+	if len(i.SourceDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, programhistory.SourceDefinitionIDNotIn(i.SourceDefinitionIDNotIn...))
+	}
+	if i.SourceDefinitionIDContains != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDContains(*i.SourceDefinitionIDContains))
+	}
+	if i.SourceDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDHasPrefix(*i.SourceDefinitionIDHasPrefix))
+	}
+	if i.SourceDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDHasSuffix(*i.SourceDefinitionIDHasSuffix))
+	}
+	if i.SourceDefinitionIDIsNil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDIsNil())
+	}
+	if i.SourceDefinitionIDNotNil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDNotNil())
+	}
+	if i.SourceDefinitionIDEqualFold != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDEqualFold(*i.SourceDefinitionIDEqualFold))
+	}
+	if i.SourceDefinitionIDContainsFold != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionIDContainsFold(*i.SourceDefinitionIDContainsFold))
+	}
+	if i.SourceDefinitionVersion != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionEQ(*i.SourceDefinitionVersion))
+	}
+	if i.SourceDefinitionVersionNEQ != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionNEQ(*i.SourceDefinitionVersionNEQ))
+	}
+	if len(i.SourceDefinitionVersionIn) > 0 {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionIn(i.SourceDefinitionVersionIn...))
+	}
+	if len(i.SourceDefinitionVersionNotIn) > 0 {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionNotIn(i.SourceDefinitionVersionNotIn...))
+	}
+	if i.SourceDefinitionVersionContains != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionContains(*i.SourceDefinitionVersionContains))
+	}
+	if i.SourceDefinitionVersionHasPrefix != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionHasPrefix(*i.SourceDefinitionVersionHasPrefix))
+	}
+	if i.SourceDefinitionVersionHasSuffix != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionHasSuffix(*i.SourceDefinitionVersionHasSuffix))
+	}
+	if i.SourceDefinitionVersionIsNil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionIsNil())
+	}
+	if i.SourceDefinitionVersionNotNil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionNotNil())
+	}
+	if i.SourceDefinitionVersionEqualFold != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionEqualFold(*i.SourceDefinitionVersionEqualFold))
+	}
+	if i.SourceDefinitionVersionContainsFold != nil {
+		predicates = append(predicates, programhistory.SourceDefinitionVersionContainsFold(*i.SourceDefinitionVersionContainsFold))
+	}
+	if i.SourceInstanceID != nil {
+		predicates = append(predicates, programhistory.SourceInstanceIDEQ(*i.SourceInstanceID))
+	}
+	if i.SourceInstanceIDNEQ != nil {
+		predicates = append(predicates, programhistory.SourceInstanceIDNEQ(*i.SourceInstanceIDNEQ))
+	}
+	if len(i.SourceInstanceIDIn) > 0 {
+		predicates = append(predicates, programhistory.SourceInstanceIDIn(i.SourceInstanceIDIn...))
+	}
+	if len(i.SourceInstanceIDNotIn) > 0 {
+		predicates = append(predicates, programhistory.SourceInstanceIDNotIn(i.SourceInstanceIDNotIn...))
+	}
+	if i.SourceInstanceIDContains != nil {
+		predicates = append(predicates, programhistory.SourceInstanceIDContains(*i.SourceInstanceIDContains))
+	}
+	if i.SourceInstanceIDHasPrefix != nil {
+		predicates = append(predicates, programhistory.SourceInstanceIDHasPrefix(*i.SourceInstanceIDHasPrefix))
+	}
+	if i.SourceInstanceIDHasSuffix != nil {
+		predicates = append(predicates, programhistory.SourceInstanceIDHasSuffix(*i.SourceInstanceIDHasSuffix))
+	}
+	if i.SourceInstanceIDIsNil {
+		predicates = append(predicates, programhistory.SourceInstanceIDIsNil())
+	}
+	if i.SourceInstanceIDNotNil {
+		predicates = append(predicates, programhistory.SourceInstanceIDNotNil())
+	}
+	if i.SourceInstanceIDEqualFold != nil {
+		predicates = append(predicates, programhistory.SourceInstanceIDEqualFold(*i.SourceInstanceIDEqualFold))
+	}
+	if i.SourceInstanceIDContainsFold != nil {
+		predicates = append(predicates, programhistory.SourceInstanceIDContainsFold(*i.SourceInstanceIDContainsFold))
+	}
+	if i.ManagedBy != nil {
+		predicates = append(predicates, programhistory.ManagedByEQ(*i.ManagedBy))
+	}
+	if i.ManagedByNEQ != nil {
+		predicates = append(predicates, programhistory.ManagedByNEQ(*i.ManagedByNEQ))
+	}
+	if len(i.ManagedByIn) > 0 {
+		predicates = append(predicates, programhistory.ManagedByIn(i.ManagedByIn...))
+	}
+	if len(i.ManagedByNotIn) > 0 {
+		predicates = append(predicates, programhistory.ManagedByNotIn(i.ManagedByNotIn...))
+	}
+	if i.ManagedByContains != nil {
+		predicates = append(predicates, programhistory.ManagedByContains(*i.ManagedByContains))
+	}
+	if i.ManagedByHasPrefix != nil {
+		predicates = append(predicates, programhistory.ManagedByHasPrefix(*i.ManagedByHasPrefix))
+	}
+	if i.ManagedByHasSuffix != nil {
+		predicates = append(predicates, programhistory.ManagedByHasSuffix(*i.ManagedByHasSuffix))
+	}
+	if i.ManagedByIsNil {
+		predicates = append(predicates, programhistory.ManagedByIsNil())
+	}
+	if i.ManagedByNotNil {
+		predicates = append(predicates, programhistory.ManagedByNotNil())
+	}
+	if i.ManagedByEqualFold != nil {
+		predicates = append(predicates, programhistory.ManagedByEqualFold(*i.ManagedByEqualFold))
+	}
+	if i.ManagedByContainsFold != nil {
+		predicates = append(predicates, programhistory.ManagedByContainsFold(*i.ManagedByContainsFold))
+	}
+	if i.IntegrationRunID != nil {
+		predicates = append(predicates, programhistory.IntegrationRunIDEQ(*i.IntegrationRunID))
+	}
+	if i.IntegrationRunIDNEQ != nil {
+		predicates = append(predicates, programhistory.IntegrationRunIDNEQ(*i.IntegrationRunIDNEQ))
+	}
+	if len(i.IntegrationRunIDIn) > 0 {
+		predicates = append(predicates, programhistory.IntegrationRunIDIn(i.IntegrationRunIDIn...))
+	}
+	if len(i.IntegrationRunIDNotIn) > 0 {
+		predicates = append(predicates, programhistory.IntegrationRunIDNotIn(i.IntegrationRunIDNotIn...))
+	}
+	if i.IntegrationRunIDContains != nil {
+		predicates = append(predicates, programhistory.IntegrationRunIDContains(*i.IntegrationRunIDContains))
+	}
+	if i.IntegrationRunIDHasPrefix != nil {
+		predicates = append(predicates, programhistory.IntegrationRunIDHasPrefix(*i.IntegrationRunIDHasPrefix))
+	}
+	if i.IntegrationRunIDHasSuffix != nil {
+		predicates = append(predicates, programhistory.IntegrationRunIDHasSuffix(*i.IntegrationRunIDHasSuffix))
+	}
+	if i.IntegrationRunIDIsNil {
+		predicates = append(predicates, programhistory.IntegrationRunIDIsNil())
+	}
+	if i.IntegrationRunIDNotNil {
+		predicates = append(predicates, programhistory.IntegrationRunIDNotNil())
+	}
+	if i.IntegrationRunIDEqualFold != nil {
+		predicates = append(predicates, programhistory.IntegrationRunIDEqualFold(*i.IntegrationRunIDEqualFold))
+	}
+	if i.IntegrationRunIDContainsFold != nil {
+		predicates = append(predicates, programhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, programhistory.OwnerIDEQ(*i.OwnerID))
@@ -47996,6 +49192,71 @@ type ReviewHistoryWhereInput struct {
 	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
 	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 
+	// "source_definition_id" field predicates.
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIDNEQ          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        bool     `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       bool     `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+
+	// "source_definition_version" field predicates.
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNEQ          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        bool     `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       bool     `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+
+	// "source_instance_id" field predicates.
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIDNEQ          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        bool     `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       bool     `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+
+	// "managed_by" field predicates.
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNEQ          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        bool     `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       bool     `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+
+	// "integration_run_id" field predicates.
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIDNEQ          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        bool     `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -48581,6 +49842,171 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 	}
 	if i.UpdatedByImpersonatorContainsFold != nil {
 		predicates = append(predicates, reviewhistory.UpdatedByImpersonatorContainsFold(*i.UpdatedByImpersonatorContainsFold))
+	}
+	if i.SourceDefinitionID != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDEQ(*i.SourceDefinitionID))
+	}
+	if i.SourceDefinitionIDNEQ != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDNEQ(*i.SourceDefinitionIDNEQ))
+	}
+	if len(i.SourceDefinitionIDIn) > 0 {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDIn(i.SourceDefinitionIDIn...))
+	}
+	if len(i.SourceDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDNotIn(i.SourceDefinitionIDNotIn...))
+	}
+	if i.SourceDefinitionIDContains != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDContains(*i.SourceDefinitionIDContains))
+	}
+	if i.SourceDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDHasPrefix(*i.SourceDefinitionIDHasPrefix))
+	}
+	if i.SourceDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDHasSuffix(*i.SourceDefinitionIDHasSuffix))
+	}
+	if i.SourceDefinitionIDIsNil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDIsNil())
+	}
+	if i.SourceDefinitionIDNotNil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDNotNil())
+	}
+	if i.SourceDefinitionIDEqualFold != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDEqualFold(*i.SourceDefinitionIDEqualFold))
+	}
+	if i.SourceDefinitionIDContainsFold != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionIDContainsFold(*i.SourceDefinitionIDContainsFold))
+	}
+	if i.SourceDefinitionVersion != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionEQ(*i.SourceDefinitionVersion))
+	}
+	if i.SourceDefinitionVersionNEQ != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionNEQ(*i.SourceDefinitionVersionNEQ))
+	}
+	if len(i.SourceDefinitionVersionIn) > 0 {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionIn(i.SourceDefinitionVersionIn...))
+	}
+	if len(i.SourceDefinitionVersionNotIn) > 0 {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionNotIn(i.SourceDefinitionVersionNotIn...))
+	}
+	if i.SourceDefinitionVersionContains != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionContains(*i.SourceDefinitionVersionContains))
+	}
+	if i.SourceDefinitionVersionHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionHasPrefix(*i.SourceDefinitionVersionHasPrefix))
+	}
+	if i.SourceDefinitionVersionHasSuffix != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionHasSuffix(*i.SourceDefinitionVersionHasSuffix))
+	}
+	if i.SourceDefinitionVersionIsNil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionIsNil())
+	}
+	if i.SourceDefinitionVersionNotNil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionNotNil())
+	}
+	if i.SourceDefinitionVersionEqualFold != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionEqualFold(*i.SourceDefinitionVersionEqualFold))
+	}
+	if i.SourceDefinitionVersionContainsFold != nil {
+		predicates = append(predicates, reviewhistory.SourceDefinitionVersionContainsFold(*i.SourceDefinitionVersionContainsFold))
+	}
+	if i.SourceInstanceID != nil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDEQ(*i.SourceInstanceID))
+	}
+	if i.SourceInstanceIDNEQ != nil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDNEQ(*i.SourceInstanceIDNEQ))
+	}
+	if len(i.SourceInstanceIDIn) > 0 {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDIn(i.SourceInstanceIDIn...))
+	}
+	if len(i.SourceInstanceIDNotIn) > 0 {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDNotIn(i.SourceInstanceIDNotIn...))
+	}
+	if i.SourceInstanceIDContains != nil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDContains(*i.SourceInstanceIDContains))
+	}
+	if i.SourceInstanceIDHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDHasPrefix(*i.SourceInstanceIDHasPrefix))
+	}
+	if i.SourceInstanceIDHasSuffix != nil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDHasSuffix(*i.SourceInstanceIDHasSuffix))
+	}
+	if i.SourceInstanceIDIsNil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDIsNil())
+	}
+	if i.SourceInstanceIDNotNil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDNotNil())
+	}
+	if i.SourceInstanceIDEqualFold != nil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDEqualFold(*i.SourceInstanceIDEqualFold))
+	}
+	if i.SourceInstanceIDContainsFold != nil {
+		predicates = append(predicates, reviewhistory.SourceInstanceIDContainsFold(*i.SourceInstanceIDContainsFold))
+	}
+	if i.ManagedBy != nil {
+		predicates = append(predicates, reviewhistory.ManagedByEQ(*i.ManagedBy))
+	}
+	if i.ManagedByNEQ != nil {
+		predicates = append(predicates, reviewhistory.ManagedByNEQ(*i.ManagedByNEQ))
+	}
+	if len(i.ManagedByIn) > 0 {
+		predicates = append(predicates, reviewhistory.ManagedByIn(i.ManagedByIn...))
+	}
+	if len(i.ManagedByNotIn) > 0 {
+		predicates = append(predicates, reviewhistory.ManagedByNotIn(i.ManagedByNotIn...))
+	}
+	if i.ManagedByContains != nil {
+		predicates = append(predicates, reviewhistory.ManagedByContains(*i.ManagedByContains))
+	}
+	if i.ManagedByHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.ManagedByHasPrefix(*i.ManagedByHasPrefix))
+	}
+	if i.ManagedByHasSuffix != nil {
+		predicates = append(predicates, reviewhistory.ManagedByHasSuffix(*i.ManagedByHasSuffix))
+	}
+	if i.ManagedByIsNil {
+		predicates = append(predicates, reviewhistory.ManagedByIsNil())
+	}
+	if i.ManagedByNotNil {
+		predicates = append(predicates, reviewhistory.ManagedByNotNil())
+	}
+	if i.ManagedByEqualFold != nil {
+		predicates = append(predicates, reviewhistory.ManagedByEqualFold(*i.ManagedByEqualFold))
+	}
+	if i.ManagedByContainsFold != nil {
+		predicates = append(predicates, reviewhistory.ManagedByContainsFold(*i.ManagedByContainsFold))
+	}
+	if i.IntegrationRunID != nil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDEQ(*i.IntegrationRunID))
+	}
+	if i.IntegrationRunIDNEQ != nil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDNEQ(*i.IntegrationRunIDNEQ))
+	}
+	if len(i.IntegrationRunIDIn) > 0 {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDIn(i.IntegrationRunIDIn...))
+	}
+	if len(i.IntegrationRunIDNotIn) > 0 {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDNotIn(i.IntegrationRunIDNotIn...))
+	}
+	if i.IntegrationRunIDContains != nil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDContains(*i.IntegrationRunIDContains))
+	}
+	if i.IntegrationRunIDHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDHasPrefix(*i.IntegrationRunIDHasPrefix))
+	}
+	if i.IntegrationRunIDHasSuffix != nil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDHasSuffix(*i.IntegrationRunIDHasSuffix))
+	}
+	if i.IntegrationRunIDIsNil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDIsNil())
+	}
+	if i.IntegrationRunIDNotNil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDNotNil())
+	}
+	if i.IntegrationRunIDEqualFold != nil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDEqualFold(*i.IntegrationRunIDEqualFold))
+	}
+	if i.IntegrationRunIDContainsFold != nil {
+		predicates = append(predicates, reviewhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, reviewhistory.OwnerIDEQ(*i.OwnerID))
@@ -55735,6 +57161,71 @@ type SystemDetailHistoryWhereInput struct {
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
 
+	// "source_definition_id" field predicates.
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIDNEQ          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        bool     `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       bool     `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+
+	// "source_definition_version" field predicates.
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNEQ          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        bool     `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       bool     `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+
+	// "source_instance_id" field predicates.
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIDNEQ          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        bool     `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       bool     `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+
+	// "managed_by" field predicates.
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNEQ          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        bool     `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       bool     `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+
+	// "integration_run_id" field predicates.
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIDNEQ          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        bool     `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -56135,6 +57626,171 @@ func (i *SystemDetailHistoryWhereInput) P() (predicate.SystemDetailHistory, erro
 	}
 	if i.DisplayIDContainsFold != nil {
 		predicates = append(predicates, systemdetailhistory.DisplayIDContainsFold(*i.DisplayIDContainsFold))
+	}
+	if i.SourceDefinitionID != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDEQ(*i.SourceDefinitionID))
+	}
+	if i.SourceDefinitionIDNEQ != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDNEQ(*i.SourceDefinitionIDNEQ))
+	}
+	if len(i.SourceDefinitionIDIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDIn(i.SourceDefinitionIDIn...))
+	}
+	if len(i.SourceDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDNotIn(i.SourceDefinitionIDNotIn...))
+	}
+	if i.SourceDefinitionIDContains != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDContains(*i.SourceDefinitionIDContains))
+	}
+	if i.SourceDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDHasPrefix(*i.SourceDefinitionIDHasPrefix))
+	}
+	if i.SourceDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDHasSuffix(*i.SourceDefinitionIDHasSuffix))
+	}
+	if i.SourceDefinitionIDIsNil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDIsNil())
+	}
+	if i.SourceDefinitionIDNotNil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDNotNil())
+	}
+	if i.SourceDefinitionIDEqualFold != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDEqualFold(*i.SourceDefinitionIDEqualFold))
+	}
+	if i.SourceDefinitionIDContainsFold != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionIDContainsFold(*i.SourceDefinitionIDContainsFold))
+	}
+	if i.SourceDefinitionVersion != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionEQ(*i.SourceDefinitionVersion))
+	}
+	if i.SourceDefinitionVersionNEQ != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionNEQ(*i.SourceDefinitionVersionNEQ))
+	}
+	if len(i.SourceDefinitionVersionIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionIn(i.SourceDefinitionVersionIn...))
+	}
+	if len(i.SourceDefinitionVersionNotIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionNotIn(i.SourceDefinitionVersionNotIn...))
+	}
+	if i.SourceDefinitionVersionContains != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionContains(*i.SourceDefinitionVersionContains))
+	}
+	if i.SourceDefinitionVersionHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionHasPrefix(*i.SourceDefinitionVersionHasPrefix))
+	}
+	if i.SourceDefinitionVersionHasSuffix != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionHasSuffix(*i.SourceDefinitionVersionHasSuffix))
+	}
+	if i.SourceDefinitionVersionIsNil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionIsNil())
+	}
+	if i.SourceDefinitionVersionNotNil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionNotNil())
+	}
+	if i.SourceDefinitionVersionEqualFold != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionEqualFold(*i.SourceDefinitionVersionEqualFold))
+	}
+	if i.SourceDefinitionVersionContainsFold != nil {
+		predicates = append(predicates, systemdetailhistory.SourceDefinitionVersionContainsFold(*i.SourceDefinitionVersionContainsFold))
+	}
+	if i.SourceInstanceID != nil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDEQ(*i.SourceInstanceID))
+	}
+	if i.SourceInstanceIDNEQ != nil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDNEQ(*i.SourceInstanceIDNEQ))
+	}
+	if len(i.SourceInstanceIDIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDIn(i.SourceInstanceIDIn...))
+	}
+	if len(i.SourceInstanceIDNotIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDNotIn(i.SourceInstanceIDNotIn...))
+	}
+	if i.SourceInstanceIDContains != nil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDContains(*i.SourceInstanceIDContains))
+	}
+	if i.SourceInstanceIDHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDHasPrefix(*i.SourceInstanceIDHasPrefix))
+	}
+	if i.SourceInstanceIDHasSuffix != nil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDHasSuffix(*i.SourceInstanceIDHasSuffix))
+	}
+	if i.SourceInstanceIDIsNil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDIsNil())
+	}
+	if i.SourceInstanceIDNotNil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDNotNil())
+	}
+	if i.SourceInstanceIDEqualFold != nil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDEqualFold(*i.SourceInstanceIDEqualFold))
+	}
+	if i.SourceInstanceIDContainsFold != nil {
+		predicates = append(predicates, systemdetailhistory.SourceInstanceIDContainsFold(*i.SourceInstanceIDContainsFold))
+	}
+	if i.ManagedBy != nil {
+		predicates = append(predicates, systemdetailhistory.ManagedByEQ(*i.ManagedBy))
+	}
+	if i.ManagedByNEQ != nil {
+		predicates = append(predicates, systemdetailhistory.ManagedByNEQ(*i.ManagedByNEQ))
+	}
+	if len(i.ManagedByIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.ManagedByIn(i.ManagedByIn...))
+	}
+	if len(i.ManagedByNotIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.ManagedByNotIn(i.ManagedByNotIn...))
+	}
+	if i.ManagedByContains != nil {
+		predicates = append(predicates, systemdetailhistory.ManagedByContains(*i.ManagedByContains))
+	}
+	if i.ManagedByHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.ManagedByHasPrefix(*i.ManagedByHasPrefix))
+	}
+	if i.ManagedByHasSuffix != nil {
+		predicates = append(predicates, systemdetailhistory.ManagedByHasSuffix(*i.ManagedByHasSuffix))
+	}
+	if i.ManagedByIsNil {
+		predicates = append(predicates, systemdetailhistory.ManagedByIsNil())
+	}
+	if i.ManagedByNotNil {
+		predicates = append(predicates, systemdetailhistory.ManagedByNotNil())
+	}
+	if i.ManagedByEqualFold != nil {
+		predicates = append(predicates, systemdetailhistory.ManagedByEqualFold(*i.ManagedByEqualFold))
+	}
+	if i.ManagedByContainsFold != nil {
+		predicates = append(predicates, systemdetailhistory.ManagedByContainsFold(*i.ManagedByContainsFold))
+	}
+	if i.IntegrationRunID != nil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDEQ(*i.IntegrationRunID))
+	}
+	if i.IntegrationRunIDNEQ != nil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDNEQ(*i.IntegrationRunIDNEQ))
+	}
+	if len(i.IntegrationRunIDIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDIn(i.IntegrationRunIDIn...))
+	}
+	if len(i.IntegrationRunIDNotIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDNotIn(i.IntegrationRunIDNotIn...))
+	}
+	if i.IntegrationRunIDContains != nil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDContains(*i.IntegrationRunIDContains))
+	}
+	if i.IntegrationRunIDHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDHasPrefix(*i.IntegrationRunIDHasPrefix))
+	}
+	if i.IntegrationRunIDHasSuffix != nil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDHasSuffix(*i.IntegrationRunIDHasSuffix))
+	}
+	if i.IntegrationRunIDIsNil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDIsNil())
+	}
+	if i.IntegrationRunIDNotNil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDNotNil())
+	}
+	if i.IntegrationRunIDEqualFold != nil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDEqualFold(*i.IntegrationRunIDEqualFold))
+	}
+	if i.IntegrationRunIDContainsFold != nil {
+		predicates = append(predicates, systemdetailhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, systemdetailhistory.OwnerIDEQ(*i.OwnerID))

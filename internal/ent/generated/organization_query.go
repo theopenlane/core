@@ -11180,6 +11180,7 @@ func (_q *OrganizationQuery) loadIntegrationRuns(ctx context.Context, query *Int
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(integrationrun.FieldOwnerID)
 	}

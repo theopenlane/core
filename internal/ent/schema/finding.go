@@ -438,7 +438,11 @@ func (Finding) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaFinding),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
-		entx.IntegrationMappingSchema().StockPersist(),
+		// scan-produced findings have no external id, so they match on their source and display name
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative("external_id").
+			LookupAlternative("source", "display_name"),
 	}
 }
 

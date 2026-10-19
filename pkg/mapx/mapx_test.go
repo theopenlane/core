@@ -3,6 +3,9 @@ package mapx
 import (
 	"reflect"
 	"testing"
+
+	"gotest.tools/v3/assert"
+	"gotest.tools/v3/assert/cmp"
 )
 
 func TestDeepCloneMapAny(t *testing.T) {
@@ -324,4 +327,45 @@ func TestGetOrInit(t *testing.T) {
 			t.Fatalf("expected a.n=1 b.n=2, got a.n=%d b.n=%d", a.n, b.n)
 		}
 	})
+}
+
+func TestValue(t *testing.T) {
+	m := map[string]any{"name": "aws", "count": 2}
+
+	assert.Check(t, cmp.Equal(Value[string](m, "name"), "aws"))
+	assert.Check(t, cmp.Equal(Value[int](m, "count"), 2))
+	assert.Check(t, cmp.Equal(Value[string](m, "count"), ""))
+	assert.Check(t, cmp.Equal(Value[string](m, "missing"), ""))
+}
+
+func TestStrings(t *testing.T) {
+	m := map[string]any{
+		"any":     []any{"CC6.1", "", 3, "CC6.2"},
+		"strings": []string{"a", "", "b"},
+		"other":   "CC6.1",
+	}
+
+	assert.Check(t, cmp.DeepEqual(Strings(m, "any"), []string{"CC6.1", "CC6.2"}))
+	assert.Check(t, cmp.DeepEqual(Strings(m, "strings"), []string{"a", "b"}))
+	assert.Check(t, Strings(m, "other") == nil)
+	assert.Check(t, Strings(m, "missing") == nil)
+}
+
+func TestMaps(t *testing.T) {
+	first := map[string]any{"id": "a"}
+	m := map[string]any{
+		"any":   []any{first, "skip", map[string]any{"id": "b"}},
+		"typed": []map[string]any{{"id": "c"}},
+		"other": "x",
+	}
+
+	maps := Maps(m, "any")
+	assert.Check(t, cmp.Len(maps, 2))
+
+	maps[0]["seen"] = true
+	assert.Check(t, cmp.Equal(first["seen"], true))
+
+	assert.Check(t, cmp.Len(Maps(m, "typed"), 1))
+	assert.Check(t, Maps(m, "other") == nil)
+	assert.Check(t, Maps(m, "missing") == nil)
 }

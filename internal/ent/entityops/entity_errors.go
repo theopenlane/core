@@ -121,8 +121,6 @@ const (
 	fieldEntityID = "entity_id"
 	// fieldEdge is the log field key for the edge name
 	fieldEdge = "edge"
-	// fieldOrgID is the log field key for the organization identifier
-	fieldOrgID = "org_id"
 	// fieldSourceOperation is the log field key for the originating mutation carried by the durable
 	// operation context (CREATE, UPDATE, DELETE)
 	fieldSourceOperation = "source_operation"
@@ -221,10 +219,6 @@ func errorEvent(ctx context.Context, ref SchemaRef, err error) *zerolog.Event {
 	oc, ok := gala.OperationContextFromContext(ctx)
 	if !ok {
 		return event
-	}
-
-	if oc.OwnerID != "" {
-		event = event.Str(fieldOrgID, oc.OwnerID)
 	}
 
 	if oc.Operation != "" {

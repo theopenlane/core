@@ -10,8 +10,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
-	"github.com/theopenlane/core/v2/internal/graphapi/common"
-	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
@@ -104,8 +102,12 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 		}
 	}
 
-	// run the cloning functions in parallel
-	if err := client.Pool.SubmitMultipleAndWait(funcs); err != nil {
+	// run the cloning functions in parallel, or one at a time when the caller is inside a transaction
+	if options.sequential {
+		for _, fn := range funcs {
+			fn()
+		}
+	} else if err := client.Pool.SubmitMultipleAndWait(funcs); err != nil {
 		return nil, nil, err
 	}
 
@@ -326,36 +328,4 @@ func CreateSubcontrolRevisionUpdateInput(sc *generated.Subcontrol, standardRevis
 	}
 
 	return input
-}
-
-// GetFieldsToUpdate returns the fields to update for the given control or subcontrol input
-// by converting the input to a map and checking for non-empty values
-// and then converting back to the appropriate type
-// it will return a boolean indicating if there are any fields to update
-func GetFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontrolInput](c *model.CloneControlUploadInput) (*T, bool, error) {
-	hasUpdate := false
-	updates := map[string]any{}
-
-	input, err := common.ConvertToObject[map[string]any](c.ControlInput)
-	if err != nil {
-		return nil, false, err
-	}
-
-	if input == nil {
-		return nil, false, nil
-	}
-
-	for k, v := range *input {
-		if !common.IsEmpty(v) {
-			hasUpdate = true
-			updates[k] = v
-		}
-	}
-
-	out, err := common.ConvertToObject[T](updates)
-	if err != nil {
-		return nil, false, err
-	}
-
-	return out, hasUpdate, nil
 }

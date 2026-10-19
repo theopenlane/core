@@ -54,6 +54,7 @@ type ScanQuery struct {
 	withAssignedToIdentityHolder *IdentityHolderQuery
 	withEnvironment              *CustomTypeEnumQuery
 	withScope                    *CustomTypeEnumQuery
+	withDocumentKind             *CustomTypeEnumQuery
 	withAssets                   *AssetQuery
 	withEntities                 *EntityQuery
 	withEvidence                 *EvidenceQuery
@@ -357,6 +358,28 @@ func (_q *ScanQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.From(scan.Table, scan.FieldID, selector),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.ScopeTable, scan.ScopeColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDocumentKind chains the current query on the "document_kind" edge.
+func (_q *ScanQuery) QueryDocumentKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.DocumentKindTable, scan.DocumentKindColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -897,6 +920,7 @@ func (_q *ScanQuery) Clone() *ScanQuery {
 		withAssignedToIdentityHolder: _q.withAssignedToIdentityHolder.Clone(),
 		withEnvironment:              _q.withEnvironment.Clone(),
 		withScope:                    _q.withScope.Clone(),
+		withDocumentKind:             _q.withDocumentKind.Clone(),
 		withAssets:                   _q.withAssets.Clone(),
 		withEntities:                 _q.withEntities.Clone(),
 		withEvidence:                 _q.withEvidence.Clone(),
@@ -1037,6 +1061,17 @@ func (_q *ScanQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *ScanQuery {
 		opt(query)
 	}
 	_q.withScope = query
+	return _q
+}
+
+// WithDocumentKind tells the query-builder to eager-load the nodes that are connected to
+// the "document_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithDocumentKind(opts ...func(*CustomTypeEnumQuery)) *ScanQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDocumentKind = query
 	return _q
 }
 
@@ -1290,7 +1325,7 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		nodes       = []*Scan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [27]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1302,6 +1337,7 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 			_q.withAssignedToIdentityHolder != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
+			_q.withDocumentKind != nil,
 			_q.withAssets != nil,
 			_q.withEntities != nil,
 			_q.withEvidence != nil,
@@ -1408,6 +1444,12 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 	if query := _q.withScope; query != nil {
 		if err := _q.loadScope(ctx, query, nodes, nil,
 			func(n *Scan, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDocumentKind; query != nil {
+		if err := _q.loadDocumentKind(ctx, query, nodes, nil,
+			func(n *Scan, e *CustomTypeEnum) { n.Edges.DocumentKind = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1995,6 +2037,35 @@ func (_q *ScanQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, 
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadDocumentKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].DocumentKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "document_kind_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2876,6 +2947,9 @@ func (_q *ScanQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withScope != nil {
 			_spec.Node.AddColumnOnce(scan.FieldScopeID)
+		}
+		if _q.withDocumentKind != nil {
+			_spec.Node.AddColumnOnce(scan.FieldDocumentKindID)
 		}
 		if _q.withGeneratedByPlatform != nil {
 			_spec.Node.AddColumnOnce(scan.FieldGeneratedByPlatformID)

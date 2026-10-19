@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -270,15 +271,6 @@ func newPayloadRun(ctx context.Context, ic IngestContext, batch ingestBatch, han
 		}, ctx, nil
 	}
 
-	if ic.Integration.InstallationMetadata.Display.ExternalID == "" {
-		return nil, ctx, ErrIngestInstanceIDRequired
-	}
-
-	filterExpr, err := resolveInstallationFilterExpr(ic.Integration, batch.OperationName)
-	if err != nil {
-		return nil, ctx, ErrIngestInstallationFilterConfigInvalid
-	}
-
 	run := &payloadRun{
 		ic:         ic,
 		batch:      batch,
@@ -297,16 +289,33 @@ func newPayloadRun(ctx context.Context, ic IngestContext, batch ingestBatch, han
 		tracked: make(map[string]*models.FailedRecord, len(ic.Integration.Health.FailedRecords)),
 	}
 
-	for i := range ic.Integration.Health.FailedRecords {
-		fr := ic.Integration.Health.FailedRecords[i]
-		run.tracked[trackingKey(fr.Schema, fr.Key)] = &fr
+	if ic.Integration != nil {
+		if ic.Integration.InstallationMetadata.Display.ExternalID == "" {
+			return nil, ctx, ErrIngestInstanceIDRequired
+		}
+
+		filterExpr, err := resolveInstallationFilterExpr(ic.Integration, batch.OperationName)
+		if err != nil {
+			return nil, ctx, ErrIngestInstallationFilterConfigInvalid
+		}
+
+		run.filterExpr = filterExpr
+		run.installation.ID = ic.Integration.ID
+		run.installation.Name = ic.Integration.Name
+		run.installation.InstanceID = ic.Integration.InstallationMetadata.Display.ExternalID
+		run.installation.PrimaryDirectory = ic.Integration.PrimaryDirectory
+
+		for i := range ic.Integration.Health.FailedRecords {
+			fr := ic.Integration.Health.FailedRecords[i]
+			run.tracked[trackingKey(fr.Schema, fr.Key)] = &fr
+		}
 	}
 
 	if !run.preload {
 		return run, ctx, nil
 	}
 
-	ids, err := ic.DB.Integration.Query().Where(integration.OwnerIDEQ(ic.Integration.OwnerID)).IDs(ctx)
+	ids, err := ic.DB.Integration.Query().Where(integration.OwnerIDEQ(ic.ownerID())).IDs(ctx)
 	if err != nil {
 		return nil, ctx, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 	}
@@ -357,6 +366,23 @@ func (run *payloadRun) applySet(ctx context.Context, payloadSet types.IngestPayl
 	}
 
 	return nil
+}
+
+// stampRuntimeProvenance writes the owner and source instance a runtime ingest writes for, which StampProvenance
+// only stamps from an installation
+func stampRuntimeProvenance(payload json.RawMessage, schema *entityops.Schema, ownerID, instanceID string) json.RawMessage {
+	for name, value := range map[string]string{schema.OwnerField: ownerID, entityops.FieldSourceInstanceID: instanceID} {
+		field, ok := schema.FieldByName(name)
+		if !ok || value == "" {
+			continue
+		}
+
+		if stamped, _, err := jsonx.SetObjectKey(payload, field.Name, value); err == nil {
+			payload = stamped
+		}
+	}
+
+	return payload
 }
 
 // resolveSetSchema checks the payload set's schema is declared by the operation and ingest-capable
@@ -411,12 +437,33 @@ func (run *payloadRun) prepare(ctx context.Context, payloadSet types.IngestPaylo
 		}
 
 		record.schema = sourceSchema
+		if run.ic.Integration == nil {
+			record.Payload = stampRuntimeProvenance(record.Payload, sourceSchema, run.ic.OwnerID, payloadSet.SourceInstanceID)
+		}
+
 		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, run.ic.Integration, run.definition.ID, run.batch.Options.RunID)
 
 		prepared = append(prepared, preparedIngestRecord{resource: envelope.Resource, record: record, links: mapping.Links})
 	}
 
 	return prepared
+}
+
+// stampRuntimeProvenance writes the owner and source instance a runtime ingest writes for, which StampProvenance
+// only stamps from an installation
+func stampRuntimeProvenance(payload json.RawMessage, schema *entityops.Schema, ownerID, instanceID string) json.RawMessage {
+	for name, value := range map[string]string{schema.OwnerField: ownerID, entityops.FieldSourceInstanceID: instanceID} {
+		field, ok := schema.FieldByName(name)
+		if !ok || value == "" {
+			continue
+		}
+
+		if stamped, _, err := jsonx.SetObjectKey(payload, field.Name, value); err == nil {
+			payload = stamped
+		}
+	}
+
+	return payload
 }
 
 // link resolves each variant group's link rules once and injects the link targets into its records
@@ -617,6 +664,14 @@ func (run *payloadRun) recordSuccess(outcome ingestOutcome, set *snapshotSet, tr
 // recordFailure tracks a persist failure and requeues the record when possible
 func (run *payloadRun) recordFailure(recordCtx context.Context, p preparedIngestRecord, recordKey, trackKey string, err error) {
 	wrapped := wrapIngestPersistError(err)
+
+	// runtime ingest has no installation to track or requeue against, the caller reports the failure and the user reimports
+	if run.ic.Integration == nil {
+		logx.FromContext(recordCtx).Error().Err(wrapped).Msg("ingest persist failed")
+		run.fail(p.record.Schema, p.resource, wrapped)
+
+		return
+	}
 
 	if trackKey != "" {
 		run.tracked[trackKey] = &models.FailedRecord{Schema: p.record.schema.Snake, Key: recordKey, RunID: run.batch.Options.RunID, Attempts: 1, LastError: wrapped.Error()}

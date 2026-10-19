@@ -53,6 +53,11 @@ func AssertExpressionsValid(t *testing.T, mappings []types.MappingRegistration) 
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
 		})
 
+		// an empty map expression passes the payload through unchanged, so there is nothing to compile
+		if m.Spec.MapExpr == "" {
+			continue
+		}
+
 		t.Run(name+"/map", func(t *testing.T) {
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
 		})

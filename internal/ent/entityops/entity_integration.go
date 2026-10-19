@@ -315,6 +315,134 @@ var ContactFields = struct {
 	Title:       FieldDescriptor{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title", Clearable: true},
 }
 
+// ControlFields indexes the provider-mappable fields of Control
+var ControlFields = struct {
+	// Aliases is the aliases field
+	Aliases FieldDescriptor
+	// AssessmentMethods is the assessment_methods field
+	AssessmentMethods FieldDescriptor
+	// AssessmentObjectives is the assessment_objectives field
+	AssessmentObjectives FieldDescriptor
+	// AuditorReferenceID is the auditor_reference_id field
+	AuditorReferenceID FieldDescriptor
+	// Category is the category field
+	Category FieldDescriptor
+	// CategoryID is the category_id field
+	CategoryID FieldDescriptor
+	// ControlKindID is the control_kind_id field
+	ControlKindID FieldDescriptor
+	// ControlKindName is the control_kind_name field
+	ControlKindName FieldDescriptor
+	// ControlOwnerID is the control_owner_id field
+	ControlOwnerID FieldDescriptor
+	// ControlQuestions is the control_questions field
+	ControlQuestions FieldDescriptor
+	// DelegateID is the delegate_id field
+	DelegateID FieldDescriptor
+	// Description is the description field
+	Description FieldDescriptor
+	// DescriptionJSON is the description_json field
+	DescriptionJSON FieldDescriptor
+	// EnvironmentID is the environment_id field
+	EnvironmentID FieldDescriptor
+	// EnvironmentName is the environment_name field
+	EnvironmentName FieldDescriptor
+	// EvidenceRequests is the evidence_requests field
+	EvidenceRequests FieldDescriptor
+	// ExampleEvidence is the example_evidence field
+	ExampleEvidence FieldDescriptor
+	// ExternalUUID is the external_uuid field
+	ExternalUUID FieldDescriptor
+	// ImplementationDescription is the implementation_description field
+	ImplementationDescription FieldDescriptor
+	// ImplementationGuidance is the implementation_guidance field
+	ImplementationGuidance FieldDescriptor
+	// ImplementationStatus is the implementation_status field
+	ImplementationStatus FieldDescriptor
+	// InternalNotes is the internal_notes field
+	InternalNotes FieldDescriptor
+	// MappedCategories is the mapped_categories field
+	MappedCategories FieldDescriptor
+	// PublicRepresentation is the public_representation field
+	PublicRepresentation FieldDescriptor
+	// RefCode is the ref_code field
+	RefCode FieldDescriptor
+	// ReferenceFrameworkRevision is the reference_framework_revision field
+	ReferenceFrameworkRevision FieldDescriptor
+	// ReferenceID is the reference_id field
+	ReferenceID FieldDescriptor
+	// References is the references field
+	References FieldDescriptor
+	// ResponsiblePartyID is the responsible_party_id field
+	ResponsiblePartyID FieldDescriptor
+	// ScopeID is the scope_id field
+	ScopeID FieldDescriptor
+	// ScopeName is the scope_name field
+	ScopeName FieldDescriptor
+	// Source is the source field
+	Source FieldDescriptor
+	// SourceName is the source_name field
+	SourceName FieldDescriptor
+	// StandardID is the standard_id field
+	StandardID FieldDescriptor
+	// Status is the status field
+	Status FieldDescriptor
+	// Subcategory is the subcategory field
+	Subcategory FieldDescriptor
+	// SystemInternalID is the system_internal_id field
+	SystemInternalID FieldDescriptor
+	// Tags is the tags field
+	Tags FieldDescriptor
+	// TestingProcedures is the testing_procedures field
+	TestingProcedures FieldDescriptor
+	// Title is the title field
+	Title FieldDescriptor
+	// TrustCenterVisibility is the trust_center_visibility field
+	TrustCenterVisibility FieldDescriptor
+}{
+	Aliases:                    FieldDescriptor{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true},
+	AssessmentMethods:          FieldDescriptor{Name: "assessment_methods", Label: "AssessmentMethods", Type: "[]models.AssessmentMethod", InputKey: "assessment_methods", Clearable: true},
+	AssessmentObjectives:       FieldDescriptor{Name: "assessment_objectives", Label: "AssessmentObjectives", Type: "[]models.AssessmentObjective", InputKey: "assessment_objectives", Clearable: true},
+	AuditorReferenceID:         FieldDescriptor{Name: "auditor_reference_id", Label: "AuditorReferenceID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "auditor_reference_id", Clearable: true},
+	Category:                   FieldDescriptor{Name: "category", Label: "Category", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category", Clearable: true},
+	CategoryID:                 FieldDescriptor{Name: "category_id", Label: "CategoryID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category_id", Clearable: true},
+	ControlKindID:              FieldDescriptor{Name: "control_kind_id", Label: "ControlKindID", Type: "string", MatchKey: true, InputKey: "control_kind_id", Clearable: true},
+	ControlKindName:            FieldDescriptor{Name: "control_kind_name", Label: "ControlKindName", Type: "string", MatchKey: true, InputKey: "control_kind_name", Clearable: true, CaseInsensitive: true},
+	ControlOwnerID:             FieldDescriptor{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "control_owner_id", Clearable: true},
+	ControlQuestions:           FieldDescriptor{Name: "control_questions", Label: "ControlQuestions", Type: "[]string", InputKey: "control_questions", Clearable: true},
+	DelegateID:                 FieldDescriptor{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
+	Description:                FieldDescriptor{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
+	DescriptionJSON:            FieldDescriptor{Name: "description_json", Label: "DescriptionJSON", Type: "[]interface {}", InputKey: "description_json", Clearable: true},
+	EnvironmentID:              FieldDescriptor{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
+	EnvironmentName:            FieldDescriptor{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
+	EvidenceRequests:           FieldDescriptor{Name: "evidence_requests", Label: "EvidenceRequests", Type: "[]models.EvidenceRequests", InputKey: "evidence_requests", Clearable: true},
+	ExampleEvidence:            FieldDescriptor{Name: "example_evidence", Label: "ExampleEvidence", Type: "[]models.ExampleEvidence", InputKey: "example_evidence", Clearable: true},
+	ExternalUUID:               FieldDescriptor{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
+	ImplementationDescription:  FieldDescriptor{Name: "implementation_description", Label: "ImplementationDescription", Type: "string", MatchKey: true, InputKey: "implementation_description", Clearable: true},
+	ImplementationGuidance:     FieldDescriptor{Name: "implementation_guidance", Label: "ImplementationGuidance", Type: "[]models.ImplementationGuidance", InputKey: "implementation_guidance", Clearable: true},
+	ImplementationStatus:       FieldDescriptor{Name: "implementation_status", Label: "ImplementationStatus", Type: "enums.ControlImplementationStatus", InputKey: "implementation_status", Clearable: true},
+	InternalNotes:              FieldDescriptor{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+	MappedCategories:           FieldDescriptor{Name: "mapped_categories", Label: "MappedCategories", Type: "[]string", InputKey: "mapped_categories", Clearable: true},
+	PublicRepresentation:       FieldDescriptor{Name: "public_representation", Label: "PublicRepresentation", Type: "string", MatchKey: true, InputKey: "public_representation", Clearable: true},
+	RefCode:                    FieldDescriptor{Name: "ref_code", Label: "RefCode", Type: "string", MatchKey: true, InputKey: "ref_code", WebhookPayload: true},
+	ReferenceFrameworkRevision: FieldDescriptor{Name: "reference_framework_revision", Label: "ReferenceFrameworkRevision", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "reference_framework_revision", Clearable: true},
+	ReferenceID:                FieldDescriptor{Name: "reference_id", Label: "ReferenceID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "reference_id", Clearable: true},
+	References:                 FieldDescriptor{Name: "references", Label: "References", Type: "[]models.Reference", InputKey: "references", Clearable: true},
+	ResponsiblePartyID:         FieldDescriptor{Name: "responsible_party_id", Label: "ResponsiblePartyID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "responsible_party_id", Clearable: true},
+	ScopeID:                    FieldDescriptor{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
+	ScopeName:                  FieldDescriptor{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
+	Source:                     FieldDescriptor{Name: "source", Label: "Source", Type: "enums.ControlSource", InputKey: "source", Clearable: true},
+	SourceName:                 FieldDescriptor{Name: "source_name", Label: "SourceName", Type: "string", MatchKey: true, InputKey: "source_name", Clearable: true},
+	StandardID:                 FieldDescriptor{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true, InputKey: "standard_id", Clearable: true},
+	Status:                     FieldDescriptor{Name: "status", Label: "Status", Type: "enums.ControlStatus", WorkflowEligible: true, InputKey: "status", Clearable: true, WebhookPayload: true},
+	Subcategory:                FieldDescriptor{Name: "subcategory", Label: "Subcategory", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "subcategory", Clearable: true},
+	SystemInternalID:           FieldDescriptor{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
+	Tags:                       FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+	TestingProcedures:          FieldDescriptor{Name: "testing_procedures", Label: "TestingProcedures", Type: "[]models.TestingProcedures", InputKey: "testing_procedures", Clearable: true},
+	Title:                      FieldDescriptor{Name: "title", Label: "Title", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "title", DisplayKey: true, Clearable: true, WebhookPayload: true},
+	TrustCenterVisibility:      FieldDescriptor{Name: "trust_center_visibility", Label: "TrustCenterVisibility", Type: "enums.TrustCenterControlVisibility", InputKey: "trust_center_visibility", Clearable: true},
+}
+
 // DirectoryAccountFields indexes the provider-mappable fields of DirectoryAccount
 var DirectoryAccountFields = struct {
 	// AccountType is the account_type field
@@ -874,6 +1002,41 @@ var FindingFields = struct {
 	Vector:                        FieldDescriptor{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector", Clearable: true},
 }
 
+// GroupFields indexes the provider-mappable fields of Group
+var GroupFields = struct {
+	// DisplayName is the display_name field
+	DisplayName FieldDescriptor
+	// Name is the name field
+	Name FieldDescriptor
+	// OscalContactUuids is the oscal_contact_uuids field
+	OscalContactUuids FieldDescriptor
+	// OscalPartyUUID is the oscal_party_uuid field
+	OscalPartyUUID FieldDescriptor
+	// OscalRole is the oscal_role field
+	OscalRole FieldDescriptor
+	// ScimActive is the scim_active field
+	ScimActive FieldDescriptor
+	// ScimDisplayName is the scim_display_name field
+	ScimDisplayName FieldDescriptor
+	// ScimExternalID is the scim_external_id field
+	ScimExternalID FieldDescriptor
+	// ScimGroupMailing is the scim_group_mailing field
+	ScimGroupMailing FieldDescriptor
+	// Tags is the tags field
+	Tags FieldDescriptor
+}{
+	DisplayName:       FieldDescriptor{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
+	Name:              FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+	OscalContactUuids: FieldDescriptor{Name: "oscal_contact_uuids", Label: "OscalContactUuids", Type: "[]string", InputKey: "oscal_contact_uuids", Clearable: true},
+	OscalPartyUUID:    FieldDescriptor{Name: "oscal_party_uuid", Label: "OscalPartyUUID", Type: "string", MatchKey: true, InputKey: "oscal_party_uuid", Clearable: true},
+	OscalRole:         FieldDescriptor{Name: "oscal_role", Label: "OscalRole", Type: "string", MatchKey: true, InputKey: "oscal_role", Clearable: true},
+	ScimActive:        FieldDescriptor{Name: "scim_active", Label: "ScimActive", Type: "bool", InputKey: "scim_active", Clearable: true},
+	ScimDisplayName:   FieldDescriptor{Name: "scim_display_name", Label: "ScimDisplayName", Type: "string", MatchKey: true, InputKey: "scim_display_name", Clearable: true},
+	ScimExternalID:    FieldDescriptor{Name: "scim_external_id", Label: "ScimExternalID", Type: "string", MatchKey: true, InputKey: "scim_external_id", Clearable: true},
+	ScimGroupMailing:  FieldDescriptor{Name: "scim_group_mailing", Label: "ScimGroupMailing", Type: "string", MatchKey: true, InputKey: "scim_group_mailing", Clearable: true},
+	Tags:              FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+}
+
 // InternalPolicyFields indexes the provider-mappable fields of InternalPolicy
 var InternalPolicyFields = struct {
 	// ApprovalRequired is the approval_required field
@@ -969,6 +1132,187 @@ var InternalPolicyFields = struct {
 	URL:                             FieldDescriptor{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
 }
 
+// MappedControlFields indexes the provider-mappable fields of MappedControl
+var MappedControlFields = struct {
+	// Confidence is the confidence field
+	Confidence FieldDescriptor
+	// ExternalID is the external_id field
+	ExternalID FieldDescriptor
+	// InternalNotes is the internal_notes field
+	InternalNotes FieldDescriptor
+	// MappingType is the mapping_type field
+	MappingType FieldDescriptor
+	// Relation is the relation field
+	Relation FieldDescriptor
+	// Source is the source field
+	Source FieldDescriptor
+	// SystemInternalID is the system_internal_id field
+	SystemInternalID FieldDescriptor
+	// Tags is the tags field
+	Tags FieldDescriptor
+}{
+	Confidence:       FieldDescriptor{Name: "confidence", Label: "Confidence", Type: "int", InputKey: "confidence", Clearable: true},
+	ExternalID:       FieldDescriptor{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
+	InternalNotes:    FieldDescriptor{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+	MappingType:      FieldDescriptor{Name: "mapping_type", Label: "MappingType", Type: "enums.MappingType", InputKey: "mapping_type"},
+	Relation:         FieldDescriptor{Name: "relation", Label: "Relation", Type: "string", MatchKey: true, InputKey: "relation", Clearable: true},
+	Source:           FieldDescriptor{Name: "source", Label: "Source", Type: "enums.MappingSource", InputKey: "source", Clearable: true},
+	SystemInternalID: FieldDescriptor{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
+	Tags:             FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+}
+
+// PlatformFields indexes the provider-mappable fields of Platform
+var PlatformFields = struct {
+	// AccessModelID is the access_model_id field
+	AccessModelID FieldDescriptor
+	// AccessModelName is the access_model_name field
+	AccessModelName FieldDescriptor
+	// BusinessOwner is the business_owner field
+	BusinessOwner FieldDescriptor
+	// BusinessOwnerGroupID is the business_owner_group_id field
+	BusinessOwnerGroupID FieldDescriptor
+	// BusinessOwnerIdentityHolderID is the business_owner_identity_holder_id field
+	BusinessOwnerIdentityHolderID FieldDescriptor
+	// BusinessOwnerUserID is the business_owner_user_id field
+	BusinessOwnerUserID FieldDescriptor
+	// BusinessPurpose is the business_purpose field
+	BusinessPurpose FieldDescriptor
+	// ContainsPii is the contains_pii field
+	ContainsPii FieldDescriptor
+	// CostCenter is the cost_center field
+	CostCenter FieldDescriptor
+	// CriticalityID is the criticality_id field
+	CriticalityID FieldDescriptor
+	// CriticalityName is the criticality_name field
+	CriticalityName FieldDescriptor
+	// Description is the description field
+	Description FieldDescriptor
+	// EncryptionStatusID is the encryption_status_id field
+	EncryptionStatusID FieldDescriptor
+	// EncryptionStatusName is the encryption_status_name field
+	EncryptionStatusName FieldDescriptor
+	// EnvironmentID is the environment_id field
+	EnvironmentID FieldDescriptor
+	// EnvironmentName is the environment_name field
+	EnvironmentName FieldDescriptor
+	// EstimatedMonthlyCost is the estimated_monthly_cost field
+	EstimatedMonthlyCost FieldDescriptor
+	// ExternalReferenceID is the external_reference_id field
+	ExternalReferenceID FieldDescriptor
+	// ExternalUUID is the external_uuid field
+	ExternalUUID FieldDescriptor
+	// InternalOwner is the internal_owner field
+	InternalOwner FieldDescriptor
+	// InternalOwnerGroupID is the internal_owner_group_id field
+	InternalOwnerGroupID FieldDescriptor
+	// InternalOwnerIdentityHolderID is the internal_owner_identity_holder_id field
+	InternalOwnerIdentityHolderID FieldDescriptor
+	// InternalOwnerUserID is the internal_owner_user_id field
+	InternalOwnerUserID FieldDescriptor
+	// Metadata is the metadata field
+	Metadata FieldDescriptor
+	// Name is the name field
+	Name FieldDescriptor
+	// PhysicalLocation is the physical_location field
+	PhysicalLocation FieldDescriptor
+	// PlatformDataClassificationID is the platform_data_classification_id field
+	PlatformDataClassificationID FieldDescriptor
+	// PlatformDataClassificationName is the platform_data_classification_name field
+	PlatformDataClassificationName FieldDescriptor
+	// PlatformKindID is the platform_kind_id field
+	PlatformKindID FieldDescriptor
+	// PlatformKindName is the platform_kind_name field
+	PlatformKindName FieldDescriptor
+	// PlatformOwnerID is the platform_owner_id field
+	PlatformOwnerID FieldDescriptor
+	// PurchaseDate is the purchase_date field
+	PurchaseDate FieldDescriptor
+	// Region is the region field
+	Region FieldDescriptor
+	// ScopeID is the scope_id field
+	ScopeID FieldDescriptor
+	// ScopeName is the scope_name field
+	ScopeName FieldDescriptor
+	// SecurityOwner is the security_owner field
+	SecurityOwner FieldDescriptor
+	// SecurityOwnerGroupID is the security_owner_group_id field
+	SecurityOwnerGroupID FieldDescriptor
+	// SecurityOwnerIdentityHolderID is the security_owner_identity_holder_id field
+	SecurityOwnerIdentityHolderID FieldDescriptor
+	// SecurityOwnerUserID is the security_owner_user_id field
+	SecurityOwnerUserID FieldDescriptor
+	// SecurityTierID is the security_tier_id field
+	SecurityTierID FieldDescriptor
+	// SecurityTierName is the security_tier_name field
+	SecurityTierName FieldDescriptor
+	// SourceIdentifier is the source_identifier field
+	SourceIdentifier FieldDescriptor
+	// SourceType is the source_type field
+	SourceType FieldDescriptor
+	// Status is the status field
+	Status FieldDescriptor
+	// Tags is the tags field
+	Tags FieldDescriptor
+	// TechnicalOwner is the technical_owner field
+	TechnicalOwner FieldDescriptor
+	// TechnicalOwnerGroupID is the technical_owner_group_id field
+	TechnicalOwnerGroupID FieldDescriptor
+	// TechnicalOwnerIdentityHolderID is the technical_owner_identity_holder_id field
+	TechnicalOwnerIdentityHolderID FieldDescriptor
+	// TechnicalOwnerUserID is the technical_owner_user_id field
+	TechnicalOwnerUserID FieldDescriptor
+}{
+	AccessModelID:                  FieldDescriptor{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true, InputKey: "access_model_id", Clearable: true},
+	AccessModelName:                FieldDescriptor{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, InputKey: "access_model_name", Clearable: true, CaseInsensitive: true},
+	BusinessOwner:                  FieldDescriptor{Name: "business_owner", Label: "BusinessOwner", Type: "string", MatchKey: true, InputKey: "business_owner", Clearable: true},
+	BusinessOwnerGroupID:           FieldDescriptor{Name: "business_owner_group_id", Label: "BusinessOwnerGroupID", Type: "string", MatchKey: true, InputKey: "business_owner_group_id", Clearable: true},
+	BusinessOwnerIdentityHolderID:  FieldDescriptor{Name: "business_owner_identity_holder_id", Label: "BusinessOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "business_owner_identity_holder_id", Clearable: true},
+	BusinessOwnerUserID:            FieldDescriptor{Name: "business_owner_user_id", Label: "BusinessOwnerUserID", Type: "string", MatchKey: true, InputKey: "business_owner_user_id", Clearable: true},
+	BusinessPurpose:                FieldDescriptor{Name: "business_purpose", Label: "BusinessPurpose", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "business_purpose", Clearable: true},
+	ContainsPii:                    FieldDescriptor{Name: "contains_pii", Label: "ContainsPii", Type: "bool", WorkflowEligible: true, InputKey: "contains_pii", Clearable: true},
+	CostCenter:                     FieldDescriptor{Name: "cost_center", Label: "CostCenter", Type: "string", MatchKey: true, InputKey: "cost_center", Clearable: true},
+	CriticalityID:                  FieldDescriptor{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, InputKey: "criticality_id", Clearable: true},
+	CriticalityName:                FieldDescriptor{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, InputKey: "criticality_name", Clearable: true, CaseInsensitive: true},
+	Description:                    FieldDescriptor{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
+	EncryptionStatusID:             FieldDescriptor{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, InputKey: "encryption_status_id", Clearable: true},
+	EncryptionStatusName:           FieldDescriptor{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, InputKey: "encryption_status_name", Clearable: true, CaseInsensitive: true},
+	EnvironmentID:                  FieldDescriptor{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
+	EnvironmentName:                FieldDescriptor{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
+	EstimatedMonthlyCost:           FieldDescriptor{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", InputKey: "estimated_monthly_cost", Clearable: true},
+	ExternalReferenceID:            FieldDescriptor{Name: "external_reference_id", Label: "ExternalReferenceID", Type: "string", MatchKey: true, InputKey: "external_reference_id", Clearable: true},
+	ExternalUUID:                   FieldDescriptor{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
+	InternalOwner:                  FieldDescriptor{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Clearable: true},
+	InternalOwnerGroupID:           FieldDescriptor{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Clearable: true},
+	InternalOwnerIdentityHolderID:  FieldDescriptor{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "internal_owner_identity_holder_id", Clearable: true},
+	InternalOwnerUserID:            FieldDescriptor{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
+	Metadata:                       FieldDescriptor{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
+	Name:                           FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+	PhysicalLocation:               FieldDescriptor{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true, InputKey: "physical_location", Clearable: true},
+	PlatformDataClassificationID:   FieldDescriptor{Name: "platform_data_classification_id", Label: "PlatformDataClassificationID", Type: "string", MatchKey: true, InputKey: "platform_data_classification_id", Clearable: true},
+	PlatformDataClassificationName: FieldDescriptor{Name: "platform_data_classification_name", Label: "PlatformDataClassificationName", Type: "string", MatchKey: true, InputKey: "platform_data_classification_name", Clearable: true, CaseInsensitive: true},
+	PlatformKindID:                 FieldDescriptor{Name: "platform_kind_id", Label: "PlatformKindID", Type: "string", MatchKey: true, InputKey: "platform_kind_id", Clearable: true},
+	PlatformKindName:               FieldDescriptor{Name: "platform_kind_name", Label: "PlatformKindName", Type: "string", MatchKey: true, InputKey: "platform_kind_name", Clearable: true, CaseInsensitive: true},
+	PlatformOwnerID:                FieldDescriptor{Name: "platform_owner_id", Label: "PlatformOwnerID", Type: "string", MatchKey: true, InputKey: "platform_owner_id", Clearable: true},
+	PurchaseDate:                   FieldDescriptor{Name: "purchase_date", Label: "PurchaseDate", Type: "models.DateTime", InputKey: "purchase_date", Clearable: true},
+	Region:                         FieldDescriptor{Name: "region", Label: "Region", Type: "string", MatchKey: true, InputKey: "region", Clearable: true},
+	ScopeID:                        FieldDescriptor{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
+	ScopeName:                      FieldDescriptor{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
+	SecurityOwner:                  FieldDescriptor{Name: "security_owner", Label: "SecurityOwner", Type: "string", MatchKey: true, InputKey: "security_owner", Clearable: true},
+	SecurityOwnerGroupID:           FieldDescriptor{Name: "security_owner_group_id", Label: "SecurityOwnerGroupID", Type: "string", MatchKey: true, InputKey: "security_owner_group_id", Clearable: true},
+	SecurityOwnerIdentityHolderID:  FieldDescriptor{Name: "security_owner_identity_holder_id", Label: "SecurityOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "security_owner_identity_holder_id", Clearable: true},
+	SecurityOwnerUserID:            FieldDescriptor{Name: "security_owner_user_id", Label: "SecurityOwnerUserID", Type: "string", MatchKey: true, InputKey: "security_owner_user_id", Clearable: true},
+	SecurityTierID:                 FieldDescriptor{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, InputKey: "security_tier_id", Clearable: true},
+	SecurityTierName:               FieldDescriptor{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name", Clearable: true, CaseInsensitive: true},
+	SourceIdentifier:               FieldDescriptor{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", Clearable: true},
+	SourceType:                     FieldDescriptor{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
+	Status:                         FieldDescriptor{Name: "status", Label: "Status", Type: "enums.PlatformStatus", WorkflowEligible: true, InputKey: "status"},
+	Tags:                           FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+	TechnicalOwner:                 FieldDescriptor{Name: "technical_owner", Label: "TechnicalOwner", Type: "string", MatchKey: true, InputKey: "technical_owner", Clearable: true},
+	TechnicalOwnerGroupID:          FieldDescriptor{Name: "technical_owner_group_id", Label: "TechnicalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "technical_owner_group_id", Clearable: true},
+	TechnicalOwnerIdentityHolderID: FieldDescriptor{Name: "technical_owner_identity_holder_id", Label: "TechnicalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "technical_owner_identity_holder_id", Clearable: true},
+	TechnicalOwnerUserID:           FieldDescriptor{Name: "technical_owner_user_id", Label: "TechnicalOwnerUserID", Type: "string", MatchKey: true, InputKey: "technical_owner_user_id", Clearable: true},
+}
+
 // ProcedureFields indexes the provider-mappable fields of Procedure
 var ProcedureFields = struct {
 	// ApprovalRequired is the approval_required field
@@ -1059,6 +1403,154 @@ var ProcedureFields = struct {
 	TagSuggestions:                  FieldDescriptor{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", InputKey: "tag_suggestions", Clearable: true},
 	Tags:                            FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 	URL:                             FieldDescriptor{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
+}
+
+// ProgramFields indexes the provider-mappable fields of Program
+var ProgramFields = struct {
+	// AuditFirm is the audit_firm field
+	AuditFirm FieldDescriptor
+	// Auditor is the auditor field
+	Auditor FieldDescriptor
+	// AuditorEmail is the auditor_email field
+	AuditorEmail FieldDescriptor
+	// AuditorReadComments is the auditor_read_comments field
+	AuditorReadComments FieldDescriptor
+	// AuditorReady is the auditor_ready field
+	AuditorReady FieldDescriptor
+	// AuditorWriteComments is the auditor_write_comments field
+	AuditorWriteComments FieldDescriptor
+	// Description is the description field
+	Description FieldDescriptor
+	// EndDate is the end_date field
+	EndDate FieldDescriptor
+	// ExternalUUID is the external_uuid field
+	ExternalUUID FieldDescriptor
+	// FieldworkEndDate is the fieldwork_end_date field
+	FieldworkEndDate FieldDescriptor
+	// FieldworkStartDate is the fieldwork_start_date field
+	FieldworkStartDate FieldDescriptor
+	// FrameworkName is the framework_name field
+	FrameworkName FieldDescriptor
+	// Name is the name field
+	Name FieldDescriptor
+	// ObservationPeriodEndDate is the observation_period_end_date field
+	ObservationPeriodEndDate FieldDescriptor
+	// ObservationPeriodStartDate is the observation_period_start_date field
+	ObservationPeriodStartDate FieldDescriptor
+	// ProgramKindID is the program_kind_id field
+	ProgramKindID FieldDescriptor
+	// ProgramKindName is the program_kind_name field
+	ProgramKindName FieldDescriptor
+	// ProgramOwnerID is the program_owner_id field
+	ProgramOwnerID FieldDescriptor
+	// StartDate is the start_date field
+	StartDate FieldDescriptor
+	// Status is the status field
+	Status FieldDescriptor
+	// Tags is the tags field
+	Tags FieldDescriptor
+}{
+	AuditFirm:                  FieldDescriptor{Name: "audit_firm", Label: "AuditFirm", Type: "string", MatchKey: true, InputKey: "audit_firm", Clearable: true},
+	Auditor:                    FieldDescriptor{Name: "auditor", Label: "Auditor", Type: "string", MatchKey: true, InputKey: "auditor", Clearable: true},
+	AuditorEmail:               FieldDescriptor{Name: "auditor_email", Label: "AuditorEmail", Type: "string", MatchKey: true, InputKey: "auditor_email", Clearable: true},
+	AuditorReadComments:        FieldDescriptor{Name: "auditor_read_comments", Label: "AuditorReadComments", Type: "bool", InputKey: "auditor_read_comments"},
+	AuditorReady:               FieldDescriptor{Name: "auditor_ready", Label: "AuditorReady", Type: "bool", InputKey: "auditor_ready"},
+	AuditorWriteComments:       FieldDescriptor{Name: "auditor_write_comments", Label: "AuditorWriteComments", Type: "bool", InputKey: "auditor_write_comments"},
+	Description:                FieldDescriptor{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
+	EndDate:                    FieldDescriptor{Name: "end_date", Label: "EndDate", Type: "time.Time", InputKey: "end_date", Clearable: true},
+	ExternalUUID:               FieldDescriptor{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
+	FieldworkEndDate:           FieldDescriptor{Name: "fieldwork_end_date", Label: "FieldworkEndDate", Type: "time.Time", InputKey: "fieldwork_end_date", Clearable: true},
+	FieldworkStartDate:         FieldDescriptor{Name: "fieldwork_start_date", Label: "FieldworkStartDate", Type: "time.Time", InputKey: "fieldwork_start_date", Clearable: true},
+	FrameworkName:              FieldDescriptor{Name: "framework_name", Label: "FrameworkName", Type: "string", MatchKey: true, InputKey: "framework_name", Clearable: true},
+	Name:                       FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+	ObservationPeriodEndDate:   FieldDescriptor{Name: "observation_period_end_date", Label: "ObservationPeriodEndDate", Type: "time.Time", InputKey: "observation_period_end_date", Clearable: true},
+	ObservationPeriodStartDate: FieldDescriptor{Name: "observation_period_start_date", Label: "ObservationPeriodStartDate", Type: "time.Time", InputKey: "observation_period_start_date", Clearable: true},
+	ProgramKindID:              FieldDescriptor{Name: "program_kind_id", Label: "ProgramKindID", Type: "string", MatchKey: true, InputKey: "program_kind_id", Clearable: true},
+	ProgramKindName:            FieldDescriptor{Name: "program_kind_name", Label: "ProgramKindName", Type: "string", MatchKey: true, InputKey: "program_kind_name", Clearable: true, CaseInsensitive: true},
+	ProgramOwnerID:             FieldDescriptor{Name: "program_owner_id", Label: "ProgramOwnerID", Type: "string", MatchKey: true, InputKey: "program_owner_id", Clearable: true},
+	StartDate:                  FieldDescriptor{Name: "start_date", Label: "StartDate", Type: "time.Time", InputKey: "start_date", Clearable: true},
+	Status:                     FieldDescriptor{Name: "status", Label: "Status", Type: "enums.ProgramStatus", InputKey: "status"},
+	Tags:                       FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+}
+
+// ReviewFields indexes the provider-mappable fields of Review
+var ReviewFields = struct {
+	// Approved is the approved field
+	Approved FieldDescriptor
+	// ApprovedAt is the approved_at field
+	ApprovedAt FieldDescriptor
+	// Category is the category field
+	Category FieldDescriptor
+	// Classification is the classification field
+	Classification FieldDescriptor
+	// Details is the details field
+	Details FieldDescriptor
+	// EnvironmentID is the environment_id field
+	EnvironmentID FieldDescriptor
+	// EnvironmentName is the environment_name field
+	EnvironmentName FieldDescriptor
+	// ExternalID is the external_id field
+	ExternalID FieldDescriptor
+	// ExternalOwnerID is the external_owner_id field
+	ExternalOwnerID FieldDescriptor
+	// ExternalURI is the external_uri field
+	ExternalURI FieldDescriptor
+	// InternalNotes is the internal_notes field
+	InternalNotes FieldDescriptor
+	// Metadata is the metadata field
+	Metadata FieldDescriptor
+	// RawPayload is the raw_payload field
+	RawPayload FieldDescriptor
+	// ReportedAt is the reported_at field
+	ReportedAt FieldDescriptor
+	// Reporter is the reporter field
+	Reporter FieldDescriptor
+	// ReviewedAt is the reviewed_at field
+	ReviewedAt FieldDescriptor
+	// ScopeID is the scope_id field
+	ScopeID FieldDescriptor
+	// ScopeName is the scope_name field
+	ScopeName FieldDescriptor
+	// Source is the source field
+	Source FieldDescriptor
+	// State is the state field
+	State FieldDescriptor
+	// Status is the status field
+	Status FieldDescriptor
+	// Summary is the summary field
+	Summary FieldDescriptor
+	// SystemInternalID is the system_internal_id field
+	SystemInternalID FieldDescriptor
+	// Tags is the tags field
+	Tags FieldDescriptor
+	// Title is the title field
+	Title FieldDescriptor
+}{
+	Approved:         FieldDescriptor{Name: "approved", Label: "Approved", Type: "bool", InputKey: "approved", Clearable: true},
+	ApprovedAt:       FieldDescriptor{Name: "approved_at", Label: "ApprovedAt", Type: "models.DateTime", InputKey: "approved_at", Clearable: true},
+	Category:         FieldDescriptor{Name: "category", Label: "Category", Type: "string", MatchKey: true, InputKey: "category", Clearable: true},
+	Classification:   FieldDescriptor{Name: "classification", Label: "Classification", Type: "string", MatchKey: true, InputKey: "classification", Clearable: true},
+	Details:          FieldDescriptor{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
+	EnvironmentID:    FieldDescriptor{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
+	EnvironmentName:  FieldDescriptor{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
+	ExternalID:       FieldDescriptor{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
+	ExternalOwnerID:  FieldDescriptor{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Clearable: true},
+	ExternalURI:      FieldDescriptor{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
+	InternalNotes:    FieldDescriptor{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+	Metadata:         FieldDescriptor{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
+	RawPayload:       FieldDescriptor{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Clearable: true},
+	ReportedAt:       FieldDescriptor{Name: "reported_at", Label: "ReportedAt", Type: "models.DateTime", InputKey: "reported_at", Clearable: true},
+	Reporter:         FieldDescriptor{Name: "reporter", Label: "Reporter", Type: "string", MatchKey: true, InputKey: "reporter", Clearable: true},
+	ReviewedAt:       FieldDescriptor{Name: "reviewed_at", Label: "ReviewedAt", Type: "models.DateTime", InputKey: "reviewed_at", Clearable: true},
+	ScopeID:          FieldDescriptor{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
+	ScopeName:        FieldDescriptor{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
+	Source:           FieldDescriptor{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
+	State:            FieldDescriptor{Name: "state", Label: "State", Type: "string", MatchKey: true, InputKey: "state", Clearable: true},
+	Status:           FieldDescriptor{Name: "status", Label: "Status", Type: "enums.ReviewStatus", InputKey: "status", Clearable: true},
+	Summary:          FieldDescriptor{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Clearable: true},
+	SystemInternalID: FieldDescriptor{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
+	Tags:             FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+	Title:            FieldDescriptor{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title"},
 }
 
 // RiskFields indexes the provider-mappable fields of Risk
@@ -1181,6 +1673,38 @@ var RiskFields = struct {
 	StakeholderUserID:           FieldDescriptor{Name: "stakeholder_user_id", Label: "StakeholderUserID", Type: "string", MatchKey: true, InputKey: "stakeholder_user_id", Clearable: true},
 	Status:                      FieldDescriptor{Name: "status", Label: "Status", Type: "enums.RiskStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 	Tags:                        FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+}
+
+// SystemDetailFields indexes the provider-mappable fields of SystemDetail
+var SystemDetailFields = struct {
+	// AuthorizationBoundary is the authorization_boundary field
+	AuthorizationBoundary FieldDescriptor
+	// Description is the description field
+	Description FieldDescriptor
+	// LastReviewed is the last_reviewed field
+	LastReviewed FieldDescriptor
+	// OscalMetadataJSON is the oscal_metadata_json field
+	OscalMetadataJSON FieldDescriptor
+	// RevisionHistory is the revision_history field
+	RevisionHistory FieldDescriptor
+	// SensitivityLevel is the sensitivity_level field
+	SensitivityLevel FieldDescriptor
+	// SystemName is the system_name field
+	SystemName FieldDescriptor
+	// Tags is the tags field
+	Tags FieldDescriptor
+	// Version is the version field
+	Version FieldDescriptor
+}{
+	AuthorizationBoundary: FieldDescriptor{Name: "authorization_boundary", Label: "AuthorizationBoundary", Type: "string", MatchKey: true, InputKey: "authorization_boundary", Clearable: true},
+	Description:           FieldDescriptor{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
+	LastReviewed:          FieldDescriptor{Name: "last_reviewed", Label: "LastReviewed", Type: "models.DateTime", InputKey: "last_reviewed", Clearable: true},
+	OscalMetadataJSON:     FieldDescriptor{Name: "oscal_metadata_json", Label: "OscalMetadataJSON", Type: "map[string]interface {}", InputKey: "oscal_metadata_json", Clearable: true},
+	RevisionHistory:       FieldDescriptor{Name: "revision_history", Label: "RevisionHistory", Type: "[]interface {}", InputKey: "revision_history", Clearable: true},
+	SensitivityLevel:      FieldDescriptor{Name: "sensitivity_level", Label: "SensitivityLevel", Type: "enums.SystemSensitivityLevel", InputKey: "sensitivity_level", Clearable: true},
+	SystemName:            FieldDescriptor{Name: "system_name", Label: "SystemName", Type: "string", MatchKey: true, InputKey: "system_name"},
+	Tags:                  FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+	Version:               FieldDescriptor{Name: "version", Label: "Version", Type: "string", MatchKey: true, InputKey: "version", Clearable: true},
 }
 
 // VulnerabilityFields indexes the provider-mappable fields of Vulnerability

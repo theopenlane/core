@@ -22,7 +22,7 @@ require (
 	github.com/theopenlane/go-client v0.14.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.40.0
-	github.com/theopenlane/utils v0.7.2
+	github.com/theopenlane/utils v0.7.3
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/term v0.47.0
 )
@@ -93,7 +93,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/vektah/gqlparser/v2 v2.5.58 // indirect
+	github.com/vektah/gqlparser/v2 v2.5.62 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect

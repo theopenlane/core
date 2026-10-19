@@ -4558,6 +4558,16 @@ type Control struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy *string `json:"managedBy,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID *string `json:"externalUUID,omitempty"`
 	// human readable title of the control for quick identification
@@ -4648,6 +4658,7 @@ type Control struct {
 	TrustCenterVisibility *enums.TrustCenterControlVisibility `json:"trustCenterVisibility,omitempty"`
 	// indicates the control is derived from the trust center standard, set by the system during control clone
 	IsTrustCenterControl *bool                       `json:"isTrustCenterControl,omitempty"`
+	IntegrationRuns      *IntegrationRunConnection   `json:"integrationRuns"`
 	Evidence             *EvidenceConnection         `json:"evidence"`
 	ControlObjectives    *ControlObjectiveConnection `json:"controlObjectives"`
 	Tasks                *TaskConnection             `json:"tasks"`
@@ -5713,6 +5724,66 @@ type ControlWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// source_definition_id field predicates
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIdneq          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+	// source_definition_version field predicates
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNeq          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+	// source_instance_id field predicates
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIdneq          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+	// managed_by field predicates
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNeq          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+	// integration_run_id field predicates
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIdneq          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 	// external_uuid field predicates
 	ExternalUUID             *string  `json:"externalUUID,omitempty"`
 	ExternalUUIDNeq          *string  `json:"externalUUIDNEQ,omitempty"`
@@ -6078,6 +6149,9 @@ type ControlWhereInput struct {
 	IsTrustCenterControlNeq    *bool `json:"isTrustCenterControlNEQ,omitempty"`
 	IsTrustCenterControlIsNil  *bool `json:"isTrustCenterControlIsNil,omitempty"`
 	IsTrustCenterControlNotNil *bool `json:"isTrustCenterControlNotNil,omitempty"`
+	// integration_runs edge predicates
+	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
+	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -6777,6 +6851,7 @@ type CreateControlInput struct {
 	RefCode string `json:"refCode"`
 	// visibility of the control on the trust center, controls the publishing state for trust center display
 	TrustCenterVisibility    *enums.TrustCenterControlVisibility `json:"trustCenterVisibility,omitempty"`
+	IntegrationRunIDs        []string                            `json:"integrationRunIDs,omitempty"`
 	EvidenceIDs              []string                            `json:"evidenceIDs,omitempty"`
 	ControlObjectiveIDs      []string                            `json:"controlObjectiveIDs,omitempty"`
 	TaskIDs                  []string                            `json:"taskIDs,omitempty"`
@@ -7689,6 +7764,7 @@ type CreateGroupInput struct {
 	ScimActive *bool `json:"scimActive,omitempty"`
 	// the SCIM group mailing list email
 	ScimGroupMailing                     *string                  `json:"scimGroupMailing,omitempty"`
+	IntegrationRunIDs                    []string                 `json:"integrationRunIDs,omitempty"`
 	OwnerID                              *string                  `json:"ownerID,omitempty"`
 	ProgramEditorIDs                     []string                 `json:"programEditorIDs,omitempty"`
 	ProgramBlockedGroupIDs               []string                 `json:"programBlockedGroupIDs,omitempty"`
@@ -8009,14 +8085,17 @@ type CreateMappedControlInput struct {
 	// percentage (0-100) of confidence in the mapping
 	Confidence *int64 `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
-	Source            *enums.MappingSource `json:"source,omitempty"`
-	OwnerID           *string              `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string             `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string             `json:"editorIDs,omitempty"`
-	FromControlIDs    []string             `json:"fromControlIDs,omitempty"`
-	ToControlIDs      []string             `json:"toControlIDs,omitempty"`
-	FromSubcontrolIDs []string             `json:"fromSubcontrolIDs,omitempty"`
-	ToSubcontrolIDs   []string             `json:"toSubcontrolIDs,omitempty"`
+	Source *enums.MappingSource `json:"source,omitempty"`
+	// stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+	ExternalID        *string  `json:"externalID,omitempty"`
+	IntegrationRunIDs []string `json:"integrationRunIDs,omitempty"`
+	OwnerID           *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string `json:"editorIDs,omitempty"`
+	FromControlIDs    []string `json:"fromControlIDs,omitempty"`
+	ToControlIDs      []string `json:"toControlIDs,omitempty"`
+	FromSubcontrolIDs []string `json:"fromSubcontrolIDs,omitempty"`
+	ToSubcontrolIDs   []string `json:"toSubcontrolIDs,omitempty"`
 	// the ref code(s) of the control(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1
 	FromControlRefCodes []string `json:"fromControlRefCodes,omitempty"`
 	// the ref code(s) of the subcontrol(s) prefixed with the standard for the from side of the mapping, e.g. SOC2::CC1.1-POF1
@@ -8495,6 +8574,7 @@ type CreatePlatformInput struct {
 	ExternalReferenceID *string `json:"externalReferenceID,omitempty"`
 	// additional metadata about the platform
 	Metadata                       map[string]any `json:"metadata,omitempty"`
+	IntegrationRunIDs              []string       `json:"integrationRunIDs,omitempty"`
 	OwnerID                        *string        `json:"ownerID,omitempty"`
 	BlockedGroupIDs                []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs                      []string       `json:"editorIDs,omitempty"`
@@ -8662,6 +8742,7 @@ type CreateProgramInput struct {
 	Auditor *string `json:"auditor,omitempty"`
 	// the email of the auditor conducting the audit
 	AuditorEmail        *string  `json:"auditorEmail,omitempty"`
+	IntegrationRunIDs   []string `json:"integrationRunIDs,omitempty"`
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs           []string `json:"editorIDs,omitempty"`
@@ -8837,6 +8918,7 @@ type CreateReviewInput struct {
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
 	RawPayload        map[string]any `json:"rawPayload,omitempty"`
+	IntegrationRunIDs []string       `json:"integrationRunIDs,omitempty"`
 	OwnerID           *string        `json:"ownerID,omitempty"`
 	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs         []string       `json:"editorIDs,omitempty"`
@@ -8990,6 +9072,8 @@ type CreateScanInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the scan
 	ScopeName *string `json:"scopeName,omitempty"`
+	// the document_kind of the scan
+	DocumentKindName *string `json:"documentKindName,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target string `json:"target"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
@@ -9019,6 +9103,7 @@ type CreateScanInput struct {
 	AssignedToIdentityHolderID *string           `json:"assignedToIdentityHolderID,omitempty"`
 	EnvironmentID              *string           `json:"environmentID,omitempty"`
 	ScopeID                    *string           `json:"scopeID,omitempty"`
+	DocumentKindID             *string           `json:"documentKindID,omitempty"`
 	AssetIDs                   []string          `json:"assetIDs,omitempty"`
 	EntityIDs                  []string          `json:"entityIDs,omitempty"`
 	EvidenceIDs                []string          `json:"evidenceIDs,omitempty"`
@@ -9241,6 +9326,7 @@ type CreateSystemDetailInput struct {
 	RevisionHistory []any `json:"revisionHistory,omitempty"`
 	// optional escape hatch for additional OSCAL metadata fields
 	OscalMetadataJSON map[string]any `json:"oscalMetadataJSON,omitempty"`
+	IntegrationRunIDs []string       `json:"integrationRunIDs,omitempty"`
 	OwnerID           *string        `json:"ownerID,omitempty"`
 	ProgramIDs        []string       `json:"programIDs,omitempty"`
 	PlatformIDs       []string       `json:"platformIDs,omitempty"`
@@ -17379,6 +17465,16 @@ type Group struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy *string `json:"managedBy,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the group - must be unique within the organization
@@ -17409,6 +17505,7 @@ type Group struct {
 	ScimActive *bool `json:"scimActive,omitempty"`
 	// the SCIM group mailing list email
 	ScimGroupMailing                   *string                          `json:"scimGroupMailing,omitempty"`
+	IntegrationRuns                    *IntegrationRunConnection        `json:"integrationRuns"`
 	Owner                              *Organization                    `json:"owner,omitempty"`
 	ProgramEditors                     *ProgramConnection               `json:"programEditors"`
 	ProgramBlockedGroups               *ProgramConnection               `json:"programBlockedGroups"`
@@ -18082,6 +18179,66 @@ type GroupWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// source_definition_id field predicates
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIdneq          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+	// source_definition_version field predicates
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNeq          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+	// source_instance_id field predicates
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIdneq          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+	// managed_by field predicates
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNeq          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+	// integration_run_id field predicates
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIdneq          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -18196,6 +18353,9 @@ type GroupWhereInput struct {
 	ScimGroupMailingNotNil       *bool    `json:"scimGroupMailingNotNil,omitempty"`
 	ScimGroupMailingEqualFold    *string  `json:"scimGroupMailingEqualFold,omitempty"`
 	ScimGroupMailingContainsFold *string  `json:"scimGroupMailingContainsFold,omitempty"`
+	// integration_runs edge predicates
+	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
+	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -19396,6 +19556,52 @@ type ImportDomainScanReviewVendorInput struct {
 	Domain *string `json:"domain,omitempty"`
 	// the vendor's detected categories
 	Categories []string `json:"categories,omitempty"`
+}
+
+// The accepted items of a parsed report to import into the organization
+type ImportReportScanInput struct {
+	// the report scan whose parsed results are imported
+	ScanID string `json:"scanID"`
+	// the accepted program; when given, the imported records are linked to it
+	Programs      *ImportReportScanSectionInput       `json:"programs,omitempty"`
+	Controls      *ImportReportScanSectionInput       `json:"controls,omitempty"`
+	Entities      *ImportReportScanSectionInput       `json:"entities,omitempty"`
+	Assets        *ImportReportScanSectionInput       `json:"assets,omitempty"`
+	Groups        *ImportReportScanSectionInput       `json:"groups,omitempty"`
+	Platforms     *ImportReportScanPlatformsInput     `json:"platforms,omitempty"`
+	SystemDetails *ImportReportScanSystemDetailsInput `json:"systemDetails,omitempty"`
+	Contacts      *ImportReportScanSectionInput       `json:"contacts,omitempty"`
+	Reviews       *ImportReportScanSectionInput       `json:"reviews,omitempty"`
+	Findings      *ImportReportScanSectionInput       `json:"findings,omitempty"`
+}
+
+type ImportReportScanPayload struct {
+	// whether the report was accepted for import
+	Accepted bool `json:"accepted"`
+}
+
+// The platforms a reviewer accepted, by name
+type ImportReportScanPlatformsInput struct {
+	// the names of the accepted platforms
+	Keys []string `json:"keys"`
+	// reviewer-edited platforms, each replacing the parsed platform with the same name
+	Edited []*CreatePlatformInput `json:"edited,omitempty"`
+}
+
+// The items a reviewer accepted from one section of a parsed report, by the key each item is imported by:
+// name for programs, entities, assets, groups and platforms, ref_code for controls, system_name for
+// system details, email for contacts, and external_id for reviews and findings
+type ImportReportScanSectionInput struct {
+	// the keys of the accepted items in the section
+	Keys []string `json:"keys"`
+}
+
+// The system details a reviewer accepted, by system name
+type ImportReportScanSystemDetailsInput struct {
+	// the system names of the accepted system details
+	Keys []string `json:"keys"`
+	// reviewer-edited system details
+	Edited []*ReportScanSystemDetailEdit `json:"edited,omitempty"`
 }
 
 type Integration struct {
@@ -21324,6 +21530,16 @@ type MappedControl struct {
 	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy *string `json:"managedBy,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -21339,14 +21555,17 @@ type MappedControl struct {
 	// percentage (0-100) of confidence in the mapping
 	Confidence *int64 `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
-	Source          *enums.MappingSource  `json:"source,omitempty"`
-	Owner           *Organization         `json:"owner,omitempty"`
-	BlockedGroups   *GroupConnection      `json:"blockedGroups"`
-	Editors         *GroupConnection      `json:"editors"`
-	FromControls    *ControlConnection    `json:"fromControls"`
-	ToControls      *ControlConnection    `json:"toControls"`
-	FromSubcontrols *SubcontrolConnection `json:"fromSubcontrols"`
-	ToSubcontrols   *SubcontrolConnection `json:"toSubcontrols"`
+	Source *enums.MappingSource `json:"source,omitempty"`
+	// stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+	ExternalID      *string                   `json:"externalID,omitempty"`
+	IntegrationRuns *IntegrationRunConnection `json:"integrationRuns"`
+	Owner           *Organization             `json:"owner,omitempty"`
+	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
+	Editors         *GroupConnection          `json:"editors"`
+	FromControls    *ControlConnection        `json:"fromControls"`
+	ToControls      *ControlConnection        `json:"toControls"`
+	FromSubcontrols *SubcontrolConnection     `json:"fromSubcontrols"`
+	ToSubcontrols   *SubcontrolConnection     `json:"toSubcontrols"`
 }
 
 func (MappedControl) IsNode() {}
@@ -21488,6 +21707,66 @@ type MappedControlWhereInput struct {
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
 	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
 	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
+	// source_definition_id field predicates
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIdneq          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+	// source_definition_version field predicates
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNeq          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+	// source_instance_id field predicates
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIdneq          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+	// managed_by field predicates
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNeq          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+	// integration_run_id field predicates
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIdneq          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -21562,6 +21841,21 @@ type MappedControlWhereInput struct {
 	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
 	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// integration_runs edge predicates
+	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
+	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -24843,6 +25137,16 @@ type Platform struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy *string `json:"managedBy,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the internal owner for the platform when no user, group, or identity holder is linked
@@ -24949,6 +25253,7 @@ type Platform struct {
 	ExternalReferenceID *string `json:"externalReferenceID,omitempty"`
 	// additional metadata about the platform
 	Metadata                     map[string]any                 `json:"metadata,omitempty"`
+	IntegrationRuns              *IntegrationRunConnection      `json:"integrationRuns"`
 	Owner                        *Organization                  `json:"owner,omitempty"`
 	BlockedGroups                *GroupConnection               `json:"blockedGroups"`
 	Editors                      *GroupConnection               `json:"editors"`
@@ -25136,6 +25441,66 @@ type PlatformWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// source_definition_id field predicates
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIdneq          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+	// source_definition_version field predicates
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNeq          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+	// source_instance_id field predicates
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIdneq          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+	// managed_by field predicates
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNeq          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+	// integration_run_id field predicates
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIdneq          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -25689,6 +26054,9 @@ type PlatformWhereInput struct {
 	ExternalReferenceIDNotNil       *bool    `json:"externalReferenceIDNotNil,omitempty"`
 	ExternalReferenceIDEqualFold    *string  `json:"externalReferenceIDEqualFold,omitempty"`
 	ExternalReferenceIDContainsFold *string  `json:"externalReferenceIDContainsFold,omitempty"`
+	// integration_runs edge predicates
+	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
+	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -26531,6 +26899,16 @@ type Program struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy *string `json:"managedBy,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the kind of the program
@@ -26573,6 +26951,7 @@ type Program struct {
 	AuditorEmail *string `json:"auditorEmail,omitempty"`
 	// the id of the user who is responsible for this program
 	ProgramOwnerID    *string                      `json:"programOwnerID,omitempty"`
+	IntegrationRuns   *IntegrationRunConnection    `json:"integrationRuns"`
 	Owner             *Organization                `json:"owner,omitempty"`
 	BlockedGroups     *GroupConnection             `json:"blockedGroups"`
 	Editors           *GroupConnection             `json:"editors"`
@@ -26912,6 +27291,66 @@ type ProgramWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// source_definition_id field predicates
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIdneq          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+	// source_definition_version field predicates
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNeq          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+	// source_instance_id field predicates
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIdneq          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+	// managed_by field predicates
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNeq          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+	// integration_run_id field predicates
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIdneq          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -27104,6 +27543,9 @@ type ProgramWhereInput struct {
 	ProgramOwnerIDNotNil       *bool    `json:"programOwnerIDNotNil,omitempty"`
 	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
 	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
+	// integration_runs edge predicates
+	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
+	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -27844,6 +28286,14 @@ type RemediationWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
+// A reviewer-edited system detail and the platform it runs on
+type ReportScanSystemDetailEdit struct {
+	// the edited system detail, replacing the parsed one with the same system name
+	SystemDetail *CreateSystemDetailInput `json:"systemDetail"`
+	// the name of the platform the system runs on
+	PlatformName *string `json:"platformName,omitempty"`
+}
+
 // Input for resendCampaignIncompleteTargets mutation
 type ResendCampaignIncompleteInput struct {
 	// ID of the campaign
@@ -27880,6 +28330,16 @@ type Review struct {
 	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy *string `json:"managedBy,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -27933,24 +28393,25 @@ type Review struct {
 	// raw metadata payload for the review from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload      map[string]any           `json:"rawPayload,omitempty"`
-	Owner           *Organization            `json:"owner,omitempty"`
-	BlockedGroups   *GroupConnection         `json:"blockedGroups"`
-	Editors         *GroupConnection         `json:"editors"`
-	Environment     *CustomTypeEnum          `json:"environment,omitempty"`
-	Scope           *CustomTypeEnum          `json:"scope,omitempty"`
-	Integrations    *IntegrationConnection   `json:"integrations"`
-	Findings        *FindingConnection       `json:"findings"`
-	Vulnerabilities *VulnerabilityConnection `json:"vulnerabilities"`
-	ActionPlans     *ActionPlanConnection    `json:"actionPlans"`
-	Remediations    *RemediationConnection   `json:"remediations"`
-	Controls        *ControlConnection       `json:"controls"`
-	Subcontrols     *SubcontrolConnection    `json:"subcontrols"`
-	Risks           *RiskConnection          `json:"risks"`
-	Programs        *ProgramConnection       `json:"programs"`
-	Assets          *AssetConnection         `json:"assets"`
-	Entities        *EntityConnection        `json:"entities"`
-	Tasks           *TaskConnection          `json:"tasks"`
+	RawPayload      map[string]any            `json:"rawPayload,omitempty"`
+	IntegrationRuns *IntegrationRunConnection `json:"integrationRuns"`
+	Owner           *Organization             `json:"owner,omitempty"`
+	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
+	Editors         *GroupConnection          `json:"editors"`
+	Environment     *CustomTypeEnum           `json:"environment,omitempty"`
+	Scope           *CustomTypeEnum           `json:"scope,omitempty"`
+	Integrations    *IntegrationConnection    `json:"integrations"`
+	Findings        *FindingConnection        `json:"findings"`
+	Vulnerabilities *VulnerabilityConnection  `json:"vulnerabilities"`
+	ActionPlans     *ActionPlanConnection     `json:"actionPlans"`
+	Remediations    *RemediationConnection    `json:"remediations"`
+	Controls        *ControlConnection        `json:"controls"`
+	Subcontrols     *SubcontrolConnection     `json:"subcontrols"`
+	Risks           *RiskConnection           `json:"risks"`
+	Programs        *ProgramConnection        `json:"programs"`
+	Assets          *AssetConnection          `json:"assets"`
+	Entities        *EntityConnection         `json:"entities"`
+	Tasks           *TaskConnection           `json:"tasks"`
 	// primary reviewer responsible for the record
 	Reviewer         *User                     `json:"reviewer,omitempty"`
 	Comments         *NoteConnection           `json:"comments"`
@@ -28097,6 +28558,66 @@ type ReviewWhereInput struct {
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
 	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
 	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
+	// source_definition_id field predicates
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIdneq          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+	// source_definition_version field predicates
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNeq          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+	// source_instance_id field predicates
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIdneq          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+	// managed_by field predicates
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNeq          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+	// integration_run_id field predicates
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIdneq          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -28364,6 +28885,9 @@ type ReviewWhereInput struct {
 	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+	// integration_runs edge predicates
+	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
+	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -29567,6 +30091,10 @@ type Scan struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the scan
 	ScopeID *string `json:"scopeID,omitempty"`
+	// the document_kind of the scan
+	DocumentKindName *string `json:"documentKindName,omitempty"`
+	// the document_kind of the scan
+	DocumentKindID *string `json:"documentKindID,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target string `json:"target"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
@@ -29602,6 +30130,7 @@ type Scan struct {
 	AssignedToIdentityHolder *IdentityHolder          `json:"assignedToIdentityHolder,omitempty"`
 	Environment              *CustomTypeEnum          `json:"environment,omitempty"`
 	Scope                    *CustomTypeEnum          `json:"scope,omitempty"`
+	DocumentKind             *CustomTypeEnum          `json:"documentKind,omitempty"`
 	Assets                   *AssetConnection         `json:"assets"`
 	Entities                 *EntityConnection        `json:"entities"`
 	Evidence                 *EvidenceConnection      `json:"evidence"`
@@ -29943,6 +30472,30 @@ type ScanWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// document_kind_name field predicates
+	DocumentKindName             *string  `json:"documentKindName,omitempty"`
+	DocumentKindNameNeq          *string  `json:"documentKindNameNEQ,omitempty"`
+	DocumentKindNameIn           []string `json:"documentKindNameIn,omitempty"`
+	DocumentKindNameNotIn        []string `json:"documentKindNameNotIn,omitempty"`
+	DocumentKindNameContains     *string  `json:"documentKindNameContains,omitempty"`
+	DocumentKindNameHasPrefix    *string  `json:"documentKindNameHasPrefix,omitempty"`
+	DocumentKindNameHasSuffix    *string  `json:"documentKindNameHasSuffix,omitempty"`
+	DocumentKindNameIsNil        *bool    `json:"documentKindNameIsNil,omitempty"`
+	DocumentKindNameNotNil       *bool    `json:"documentKindNameNotNil,omitempty"`
+	DocumentKindNameEqualFold    *string  `json:"documentKindNameEqualFold,omitempty"`
+	DocumentKindNameContainsFold *string  `json:"documentKindNameContainsFold,omitempty"`
+	// document_kind_id field predicates
+	DocumentKindID             *string  `json:"documentKindID,omitempty"`
+	DocumentKindIdneq          *string  `json:"documentKindIDNEQ,omitempty"`
+	DocumentKindIDIn           []string `json:"documentKindIDIn,omitempty"`
+	DocumentKindIDNotIn        []string `json:"documentKindIDNotIn,omitempty"`
+	DocumentKindIDContains     *string  `json:"documentKindIDContains,omitempty"`
+	DocumentKindIDHasPrefix    *string  `json:"documentKindIDHasPrefix,omitempty"`
+	DocumentKindIDHasSuffix    *string  `json:"documentKindIDHasSuffix,omitempty"`
+	DocumentKindIDIsNil        *bool    `json:"documentKindIDIsNil,omitempty"`
+	DocumentKindIDNotNil       *bool    `json:"documentKindIDNotNil,omitempty"`
+	DocumentKindIDEqualFold    *string  `json:"documentKindIDEqualFold,omitempty"`
+	DocumentKindIDContainsFold *string  `json:"documentKindIDContainsFold,omitempty"`
 	// target field predicates
 	Target             *string  `json:"target,omitempty"`
 	TargetNeq          *string  `json:"targetNEQ,omitempty"`
@@ -30060,6 +30613,9 @@ type ScanWhereInput struct {
 	// scope edge predicates
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
+	// document_kind edge predicates
+	HasDocumentKind     *bool                       `json:"hasDocumentKind,omitempty"`
+	HasDocumentKindWith []*CustomTypeEnumWhereInput `json:"hasDocumentKindWith,omitempty"`
 	// assets edge predicates
 	HasAssets     *bool              `json:"hasAssets,omitempty"`
 	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
@@ -31810,6 +32366,16 @@ type SystemDetail struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy *string `json:"managedBy,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// system name used in OSCAL metadata
@@ -31827,12 +32393,13 @@ type SystemDetail struct {
 	// structured revision history for OSCAL metadata
 	RevisionHistory []any `json:"revisionHistory,omitempty"`
 	// optional escape hatch for additional OSCAL metadata fields
-	OscalMetadataJSON map[string]any      `json:"oscalMetadataJSON,omitempty"`
-	Owner             *Organization       `json:"owner,omitempty"`
-	Programs          *ProgramConnection  `json:"programs"`
-	Platforms         *PlatformConnection `json:"platforms"`
-	Entities          *EntityConnection   `json:"entities"`
-	Assets            *AssetConnection    `json:"assets"`
+	OscalMetadataJSON map[string]any            `json:"oscalMetadataJSON,omitempty"`
+	IntegrationRuns   *IntegrationRunConnection `json:"integrationRuns"`
+	Owner             *Organization             `json:"owner,omitempty"`
+	Programs          *ProgramConnection        `json:"programs"`
+	Platforms         *PlatformConnection       `json:"platforms"`
+	Entities          *EntityConnection         `json:"entities"`
+	Assets            *AssetConnection          `json:"assets"`
 }
 
 func (SystemDetail) IsNode() {}
@@ -31984,6 +32551,66 @@ type SystemDetailWhereInput struct {
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// source_definition_id field predicates
+	SourceDefinitionID             *string  `json:"sourceDefinitionID,omitempty"`
+	SourceDefinitionIdneq          *string  `json:"sourceDefinitionIDNEQ,omitempty"`
+	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
+	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
+	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
+	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
+	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
+	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
+	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
+	SourceDefinitionIDEqualFold    *string  `json:"sourceDefinitionIDEqualFold,omitempty"`
+	SourceDefinitionIDContainsFold *string  `json:"sourceDefinitionIDContainsFold,omitempty"`
+	// source_definition_version field predicates
+	SourceDefinitionVersion             *string  `json:"sourceDefinitionVersion,omitempty"`
+	SourceDefinitionVersionNeq          *string  `json:"sourceDefinitionVersionNEQ,omitempty"`
+	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
+	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
+	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
+	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
+	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
+	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
+	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
+	SourceDefinitionVersionEqualFold    *string  `json:"sourceDefinitionVersionEqualFold,omitempty"`
+	SourceDefinitionVersionContainsFold *string  `json:"sourceDefinitionVersionContainsFold,omitempty"`
+	// source_instance_id field predicates
+	SourceInstanceID             *string  `json:"sourceInstanceID,omitempty"`
+	SourceInstanceIdneq          *string  `json:"sourceInstanceIDNEQ,omitempty"`
+	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
+	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
+	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
+	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
+	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
+	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
+	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
+	SourceInstanceIDEqualFold    *string  `json:"sourceInstanceIDEqualFold,omitempty"`
+	SourceInstanceIDContainsFold *string  `json:"sourceInstanceIDContainsFold,omitempty"`
+	// managed_by field predicates
+	ManagedBy             *string  `json:"managedBy,omitempty"`
+	ManagedByNeq          *string  `json:"managedByNEQ,omitempty"`
+	ManagedByIn           []string `json:"managedByIn,omitempty"`
+	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
+	ManagedByContains     *string  `json:"managedByContains,omitempty"`
+	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
+	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
+	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
+	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
+	ManagedByEqualFold    *string  `json:"managedByEqualFold,omitempty"`
+	ManagedByContainsFold *string  `json:"managedByContainsFold,omitempty"`
+	// integration_run_id field predicates
+	IntegrationRunID             *string  `json:"integrationRunID,omitempty"`
+	IntegrationRunIdneq          *string  `json:"integrationRunIDNEQ,omitempty"`
+	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
+	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
+	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
+	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
+	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
+	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
+	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
+	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
+	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -32057,6 +32684,9 @@ type SystemDetailWhereInput struct {
 	LastReviewedLte    *models.DateTime `json:"lastReviewedLTE,omitempty"`
 	LastReviewedIsNil  *bool            `json:"lastReviewedIsNil,omitempty"`
 	LastReviewedNotNil *bool            `json:"lastReviewedNotNil,omitempty"`
+	// integration_runs edge predicates
+	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
+	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -36959,6 +37589,9 @@ type UpdateControlInput struct {
 	// visibility of the control on the trust center, controls the publishing state for trust center display
 	TrustCenterVisibility          *enums.TrustCenterControlVisibility `json:"trustCenterVisibility,omitempty"`
 	ClearTrustCenterVisibility     *bool                               `json:"clearTrustCenterVisibility,omitempty"`
+	AddIntegrationRunIDs           []string                            `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs        []string                            `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns           *bool                               `json:"clearIntegrationRuns,omitempty"`
 	AddEvidenceIDs                 []string                            `json:"addEvidenceIDs,omitempty"`
 	RemoveEvidenceIDs              []string                            `json:"removeEvidenceIDs,omitempty"`
 	ClearEvidence                  *bool                               `json:"clearEvidence,omitempty"`
@@ -38478,6 +39111,9 @@ type UpdateGroupInput struct {
 	// the SCIM group mailing list email
 	ScimGroupMailing                           *string                       `json:"scimGroupMailing,omitempty"`
 	ClearScimGroupMailing                      *bool                         `json:"clearScimGroupMailing,omitempty"`
+	AddIntegrationRunIDs                       []string                      `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs                    []string                      `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns                       *bool                         `json:"clearIntegrationRuns,omitempty"`
 	OwnerID                                    *string                       `json:"ownerID,omitempty"`
 	ClearOwner                                 *bool                         `json:"clearOwner,omitempty"`
 	AddProgramEditorIDs                        []string                      `json:"addProgramEditorIDs,omitempty"`
@@ -39079,28 +39715,34 @@ type UpdateMappedControlInput struct {
 	Confidence      *int64 `json:"confidence,omitempty"`
 	ClearConfidence *bool  `json:"clearConfidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
-	Source                  *enums.MappingSource `json:"source,omitempty"`
-	ClearSource             *bool                `json:"clearSource,omitempty"`
-	OwnerID                 *string              `json:"ownerID,omitempty"`
-	ClearOwner              *bool                `json:"clearOwner,omitempty"`
-	AddBlockedGroupIDs      []string             `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string             `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool                `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string             `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string             `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool                `json:"clearEditors,omitempty"`
-	AddFromControlIDs       []string             `json:"addFromControlIDs,omitempty"`
-	RemoveFromControlIDs    []string             `json:"removeFromControlIDs,omitempty"`
-	ClearFromControls       *bool                `json:"clearFromControls,omitempty"`
-	AddToControlIDs         []string             `json:"addToControlIDs,omitempty"`
-	RemoveToControlIDs      []string             `json:"removeToControlIDs,omitempty"`
-	ClearToControls         *bool                `json:"clearToControls,omitempty"`
-	AddFromSubcontrolIDs    []string             `json:"addFromSubcontrolIDs,omitempty"`
-	RemoveFromSubcontrolIDs []string             `json:"removeFromSubcontrolIDs,omitempty"`
-	ClearFromSubcontrols    *bool                `json:"clearFromSubcontrols,omitempty"`
-	AddToSubcontrolIDs      []string             `json:"addToSubcontrolIDs,omitempty"`
-	RemoveToSubcontrolIDs   []string             `json:"removeToSubcontrolIDs,omitempty"`
-	ClearToSubcontrols      *bool                `json:"clearToSubcontrols,omitempty"`
+	Source      *enums.MappingSource `json:"source,omitempty"`
+	ClearSource *bool                `json:"clearSource,omitempty"`
+	// stable identifier assigned by the source that imported the mapping, used for integration ingest deduplication
+	ExternalID              *string  `json:"externalID,omitempty"`
+	ClearExternalID         *bool    `json:"clearExternalID,omitempty"`
+	AddIntegrationRunIDs    []string `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns    *bool    `json:"clearIntegrationRuns,omitempty"`
+	OwnerID                 *string  `json:"ownerID,omitempty"`
+	ClearOwner              *bool    `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs      []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool    `json:"clearEditors,omitempty"`
+	AddFromControlIDs       []string `json:"addFromControlIDs,omitempty"`
+	RemoveFromControlIDs    []string `json:"removeFromControlIDs,omitempty"`
+	ClearFromControls       *bool    `json:"clearFromControls,omitempty"`
+	AddToControlIDs         []string `json:"addToControlIDs,omitempty"`
+	RemoveToControlIDs      []string `json:"removeToControlIDs,omitempty"`
+	ClearToControls         *bool    `json:"clearToControls,omitempty"`
+	AddFromSubcontrolIDs    []string `json:"addFromSubcontrolIDs,omitempty"`
+	RemoveFromSubcontrolIDs []string `json:"removeFromSubcontrolIDs,omitempty"`
+	ClearFromSubcontrols    *bool    `json:"clearFromSubcontrols,omitempty"`
+	AddToSubcontrolIDs      []string `json:"addToSubcontrolIDs,omitempty"`
+	RemoveToSubcontrolIDs   []string `json:"removeToSubcontrolIDs,omitempty"`
+	ClearToSubcontrols      *bool    `json:"clearToSubcontrols,omitempty"`
 }
 
 // UpdateNarrativeInput is used for update Narrative object.
@@ -39857,6 +40499,9 @@ type UpdatePlatformInput struct {
 	// additional metadata about the platform
 	Metadata                          map[string]any `json:"metadata,omitempty"`
 	ClearMetadata                     *bool          `json:"clearMetadata,omitempty"`
+	AddIntegrationRunIDs              []string       `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs           []string       `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns              *bool          `json:"clearIntegrationRuns,omitempty"`
 	AddBlockedGroupIDs                []string       `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs             []string       `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups                *bool          `json:"clearBlockedGroups,omitempty"`
@@ -40184,6 +40829,9 @@ type UpdateProgramInput struct {
 	// the email of the auditor conducting the audit
 	AuditorEmail              *string                      `json:"auditorEmail,omitempty"`
 	ClearAuditorEmail         *bool                        `json:"clearAuditorEmail,omitempty"`
+	AddIntegrationRunIDs      []string                     `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs   []string                     `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns      *bool                        `json:"clearIntegrationRuns,omitempty"`
 	OwnerID                   *string                      `json:"ownerID,omitempty"`
 	ClearOwner                *bool                        `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs        []string                     `json:"addBlockedGroupIDs,omitempty"`
@@ -40474,6 +41122,9 @@ type UpdateReviewInput struct {
 	// raw payload received from the integration for auditing and troubleshooting
 	RawPayload              map[string]any   `json:"rawPayload,omitempty"`
 	ClearRawPayload         *bool            `json:"clearRawPayload,omitempty"`
+	AddIntegrationRunIDs    []string         `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs []string         `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns    *bool            `json:"clearIntegrationRuns,omitempty"`
 	AddBlockedGroupIDs      []string         `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs   []string         `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups      *bool            `json:"clearBlockedGroups,omitempty"`
@@ -40774,6 +41425,9 @@ type UpdateScanInput struct {
 	// the scope of the scan
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// the document_kind of the scan
+	DocumentKindName      *string `json:"documentKindName,omitempty"`
+	ClearDocumentKindName *bool   `json:"clearDocumentKindName,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target *string `json:"target,omitempty"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
@@ -40821,6 +41475,8 @@ type UpdateScanInput struct {
 	ClearEnvironment              *bool             `json:"clearEnvironment,omitempty"`
 	ScopeID                       *string           `json:"scopeID,omitempty"`
 	ClearScope                    *bool             `json:"clearScope,omitempty"`
+	DocumentKindID                *string           `json:"documentKindID,omitempty"`
+	ClearDocumentKind             *bool             `json:"clearDocumentKind,omitempty"`
 	AddAssetIDs                   []string          `json:"addAssetIDs,omitempty"`
 	RemoveAssetIDs                []string          `json:"removeAssetIDs,omitempty"`
 	ClearAssets                   *bool             `json:"clearAssets,omitempty"`
@@ -41213,20 +41869,23 @@ type UpdateSystemDetailInput struct {
 	AppendRevisionHistory []any `json:"appendRevisionHistory,omitempty"`
 	ClearRevisionHistory  *bool `json:"clearRevisionHistory,omitempty"`
 	// optional escape hatch for additional OSCAL metadata fields
-	OscalMetadataJSON      map[string]any `json:"oscalMetadataJSON,omitempty"`
-	ClearOscalMetadataJSON *bool          `json:"clearOscalMetadataJSON,omitempty"`
-	AddProgramIDs          []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs       []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms          *bool          `json:"clearPrograms,omitempty"`
-	AddPlatformIDs         []string       `json:"addPlatformIDs,omitempty"`
-	RemovePlatformIDs      []string       `json:"removePlatformIDs,omitempty"`
-	ClearPlatforms         *bool          `json:"clearPlatforms,omitempty"`
-	AddEntityIDs           []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs        []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities          *bool          `json:"clearEntities,omitempty"`
-	AddAssetIDs            []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs         []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets            *bool          `json:"clearAssets,omitempty"`
+	OscalMetadataJSON       map[string]any `json:"oscalMetadataJSON,omitempty"`
+	ClearOscalMetadataJSON  *bool          `json:"clearOscalMetadataJSON,omitempty"`
+	AddIntegrationRunIDs    []string       `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs []string       `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns    *bool          `json:"clearIntegrationRuns,omitempty"`
+	AddProgramIDs           []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool          `json:"clearPrograms,omitempty"`
+	AddPlatformIDs          []string       `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs       []string       `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms          *bool          `json:"clearPlatforms,omitempty"`
+	AddEntityIDs            []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs         []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities           *bool          `json:"clearEntities,omitempty"`
+	AddAssetIDs             []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs          []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets             *bool          `json:"clearAssets,omitempty"`
 }
 
 // UpdateTFASettingInput is used for update TFASetting object.

@@ -1,0 +1,97 @@
+"""
+The items a reviewer accepted from one section of a parsed report, by the key each item is imported by:
+name for programs, entities, assets, groups and platforms, ref_code for controls, system_name for
+system details, email for contacts, and external_id for reviews and findings
+"""
+input ImportReportScanSectionInput {
+    """
+    the keys of the accepted items in the section
+    """
+    keys: [String!]!
+}
+
+"""
+The platforms a reviewer accepted, by name
+"""
+input ImportReportScanPlatformsInput {
+    """
+    the names of the accepted platforms
+    """
+    keys: [String!]!
+    """
+    reviewer-edited platforms, each replacing the parsed platform with the same name
+    """
+    edited: [CreatePlatformInput!]
+}
+
+"""
+A reviewer-edited system detail and the platform it runs on
+"""
+input ReportScanSystemDetailEdit {
+    """
+    the edited system detail, replacing the parsed one with the same system name
+    """
+    systemDetail: CreateSystemDetailInput!
+    """
+    the name of the platform the system runs on
+    """
+    platformName: String
+}
+
+"""
+The system details a reviewer accepted, by system name
+"""
+input ImportReportScanSystemDetailsInput {
+    """
+    the system names of the accepted system details
+    """
+    keys: [String!]!
+    """
+    reviewer-edited system details
+    """
+    edited: [ReportScanSystemDetailEdit!]
+}
+
+"""
+The accepted items of a parsed report to import into the organization
+"""
+input ImportReportScanInput {
+    """
+    the report scan whose parsed results are imported
+    """
+    scanID: ID!
+    """
+    the accepted program; when given, the imported records are linked to it
+    """
+    programs: ImportReportScanSectionInput
+    controls: ImportReportScanSectionInput
+    entities: ImportReportScanSectionInput
+    assets: ImportReportScanSectionInput
+    groups: ImportReportScanSectionInput
+    platforms: ImportReportScanPlatformsInput
+    systemDetails: ImportReportScanSystemDetailsInput
+    contacts: ImportReportScanSectionInput
+    reviews: ImportReportScanSectionInput
+    findings: ImportReportScanSectionInput
+}
+
+type ImportReportScanPayload {
+    """
+    whether the report was accepted for import
+    """
+    accepted: Boolean!
+}
+
+extend type Mutation {
+    """
+    Accept the reviewed results of a parsed SOC 2 report and asynchronously import them: the program and its
+    framework controls for the tested categories, then the report's controls, vendors, assets, groups, platforms,
+    systems, contacts, reviews, findings and the mappings from its controls to the framework
+    """
+    importReportScan(
+        """
+        the accepted report results
+        """
+        input: ImportReportScanInput!
+    ): ImportReportScanPayload!
+}

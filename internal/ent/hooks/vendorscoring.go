@@ -207,7 +207,8 @@ func computeUnansweredPenalty(ctx context.Context, client *generated.Client, con
 	var penalty float64
 
 	for _, q := range cfg.Questions.All() {
-		if !q.Enabled {
+		// only a report review answers the review outcome, so a vendor without one is not penalized for it
+		if !q.Enabled || q.Key == models.ReviewOutcomeQuestionKey {
 			continue
 		}
 
