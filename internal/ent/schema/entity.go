@@ -434,8 +434,7 @@ func (Entity) Indexes() []ent.Index {
 		// names should be unique, but ignore deleted names
 		index.Fields("name", ownerFieldName).Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("reviewed_by_user_id"),
-		index.Fields("external_id", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL AND external_id IS NOT NULL")),
+		index.Fields("external_id", ownerFieldName).Annotations(entsql.IndexWhere("deleted_at is NULL AND external_id IS NOT NULL")),
 	}
 }
 

@@ -1,4 +1,4 @@
-h1:dEd9fUzXyJT4geTuR38BZABbdz9r4QfLBTC+tMZPFZI=
+h1:Gt6AJDllhlXCA3vZHHItpkDQwCBuU+drs8+i+fYbFBw=
 20260809191420_init.sql h1:ObM5szvl8p6UZgYQ950JUsGmmDrA6j3EN3HAeEXJc4w=
 20260809191425_init_history.sql h1:MqbWdqJijxlm1/ZFPqqkTgDz71pC6D4+fCSUCteBwKc=
 20260824131122_drop_scheduledjob_scheduledjobrun_jobresult_jobrunnerregistrationtoken_jobrunnertoken_jobrunner_jobtemplate.sql h1:CVj3t5qSt3lvOvUKqL8Hwxa3Vq/3SJ44BrGrLz85Jk4=
@@ -30,3 +30,5 @@ h1:dEd9fUzXyJT4geTuR38BZABbdz9r4QfLBTC+tMZPFZI=
 20261015102033_action_plan_internalowner_history.sql h1:UicHAYg00unf6gelUHngRZan7QhHcc+eYPtcwOlxW1k=
 20261016101235_nda_requests.sql h1:a+UFnoqIBjcyWl6EcwKs2sufLMZVvWLx5Iq8zq20HwI=
 20261016101250_nda_requests_history.sql h1:FPeLeYiDZNR7GH1aM0PpNq1TtsulhpvAOJum5Ekfz/k=
+20261019145441_systemownedentities.sql h1:5z4cqePI1l30BfSQWF5OdG5LrZIh9C+FsR4SX9GUU6Y=
+20261019145446_systemownedentities_history.sql h1:+LiYk4nWrTManfd9+wc6WiBz/Yzmt1bnqZ3xuATHqQE=
