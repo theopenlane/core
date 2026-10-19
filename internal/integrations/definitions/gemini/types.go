@@ -28,9 +28,9 @@ const (
 	VendorReviewPerformedBy = "openlane_vendor_report_review"
 
 	// submitInterval is the minimum time between report scans for one organization
-	submitInterval = 24 * time.Hour // nolint:unused for now TODO: update before merge
+	submitInterval = 24 * time.Hour //nolint:unused // for now TODO: update before merge
 	// vendorReviewInterval is the minimum time between vendor report reviews for one organization
-	vendorReviewInterval = time.Hour // nolint:unused for now TODO: update before merge
+	vendorReviewInterval = time.Hour //nolint:unused // for now TODO: update before merge
 
 	// reportMetadataKey is the Scan.Metadata key holding the parsed report sections
 	reportMetadataKey = "report"

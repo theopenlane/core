@@ -25,6 +25,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// standardMatchLimit is enough results to tell one matching standard from an ambiguous match
+const standardMatchLimit = 2
+
 // Cloner copies controls into an organization, skipping controls the organization already has, linking them
 // to the program instead, and refreshing those whose standard revision changed
 type Cloner struct {
@@ -64,7 +67,7 @@ func (c Cloner) FromStandard(ctx context.Context, filters CloneFilterOptions, pr
 		Where(stdWhereFilter...).
 		Select(standard.FieldID, standard.FieldIsPublic).
 		Order(standard.OrderOption(standard.ByVersion(sql.OrderDesc()))).
-		Limit(2).
+		Limit(standardMatchLimit).
 		All(ctx)
 	if err != nil {
 		logger.Error().Err(err).Msgf("error getting standard with ID")
