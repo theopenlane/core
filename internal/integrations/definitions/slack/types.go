@@ -24,9 +24,9 @@ var (
 // RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration
 type RuntimeSlackConfig struct {
 	// WebhookURL is the Slack incoming webhook URL used to deliver system notifications
-	WebhookURL string `json:"webhookURL,omitempty" koanf:"webhookURL" jsonschema:"description=Slack incoming webhook URL for fire-and-forget system notifications"`
+	WebhookURL string `json:"webhookURL,omitempty" koanf:"webhookURL" jsonschema:"description=Slack incoming webhook URL for fire-and-forget system notifications" sensitive:"true"`
 	// BotToken is a Slack Bot User OAuth Token (xoxb-...) for the platform-owned workspace
-	BotToken string `json:"botToken,omitempty" koanf:"botToken" jsonschema:"description=Bot User OAuth Token for full Web API access to the platform workspace"`
+	BotToken string `json:"botToken,omitempty" koanf:"botToken" jsonschema:"description=Bot User OAuth Token for full Web API access to the platform workspace" sensitive:"true"`
 	// DefaultChannel is the channel id used for system messages when no explicit channel is specified
 	DefaultChannel string `json:"defaultChannel,omitempty" koanf:"defaultChannel" jsonschema:"description=Default channel id for system messages when no explicit channel is provided"`
 }
@@ -36,8 +36,8 @@ func (c RuntimeSlackConfig) Provisioned() bool {
 	return c.WebhookURL != "" || c.BotToken != ""
 }
 
-// SlackClient is the unified Slack client used by every Slack operation
-type SlackClient struct { //nolint:revive
+// Client is the unified Slack client used by every Slack operation
+type Client struct {
 	// API is the Slack Web API client (present for bot-token runtime and customer installations)
 	API *slackgo.Client
 	// WebhookURL is the Slack incoming webhook used as a fallback when no API client is configured

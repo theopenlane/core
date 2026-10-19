@@ -3,8 +3,10 @@ package onedrive
 import (
 	"context"
 
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/microsoftgraph/msgraph-sdk-go/models"
+	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/ssoutils"
@@ -12,27 +14,29 @@ import (
 
 // verify confirms the user's drive is reachable and resolves the tenant from the access token claims
 func verify(ctx context.Context, req types.ConnectionRequest[oneDriveCred], c *DriveClient) (InstallationMetadata, error) {
-	if _, err := c.Graph.Me().Drive().Get(ctx, nil); err != nil {
+	drive, err := c.Graph.Me().Drive().Get(ctx, nil)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("onedrive: drive lookup failed")
 
 		return InstallationMetadata{}, ErrHealthCheckFailed
 	}
 
-	token, _, err := new(jwt.Parser).ParseUnverified(req.Credential.AccessToken, jwt.MapClaims{})
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("onedrive: error parsing JWT")
-
-		return InstallationMetadata{}, ErrTenantUnresolved
+	metadata := InstallationMetadata{
+		DriveID:   lo.FromPtr(drive.GetId()),
+		OwnerName: driveOwnerName(drive),
 	}
 
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return InstallationMetadata{}, ErrTenantUnresolved
+	// personal Microsoft accounts receive opaque access tokens, so tenant metadata is best effort
+	claims, err := microsoft.TokenClaims(req.Credential.AccessToken)
+	if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Msg("onedrive: access token is not a JWT, skipping tenant metadata")
+
+		return metadata, nil
 	}
 
 	tenantID, ok := claims["tid"].(string)
 	if !ok || tenantID == "" {
-		return InstallationMetadata{}, ErrTenantUnresolved
+		return metadata, nil
 	}
 
 	upn, ok := claims["upn"].(string)
@@ -40,8 +44,18 @@ func verify(ctx context.Context, req types.ConnectionRequest[oneDriveCred], c *D
 		upn, _ = claims["preferred_username"].(string)
 	}
 
-	return InstallationMetadata{
-		TenantID: tenantID,
-		Domain:   ssoutils.EmailDomain(upn),
-	}, nil
+	metadata.TenantID = tenantID
+	metadata.Domain = ssoutils.EmailDomain(upn)
+
+	return metadata, nil
+}
+
+// driveOwnerName returns the display name of the drive's owning user, empty when absent
+func driveOwnerName(drive models.Driveable) string {
+	owner := drive.GetOwner()
+	if owner == nil || owner.GetUser() == nil {
+		return ""
+	}
+
+	return lo.FromPtr(owner.GetUser().GetDisplayName())
 }

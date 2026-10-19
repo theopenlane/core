@@ -1114,6 +1114,58 @@ type ActionPlanWhereInput struct {
 	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
 	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
 
+	// "internal_owner" field predicates.
+	InternalOwner             *string  `json:"internalOwner,omitempty"`
+	InternalOwnerNEQ          *string  `json:"internalOwnerNEQ,omitempty"`
+	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
+	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
+	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
+	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
+	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
+	InternalOwnerIsNil        bool     `json:"internalOwnerIsNil,omitempty"`
+	InternalOwnerNotNil       bool     `json:"internalOwnerNotNil,omitempty"`
+	InternalOwnerEqualFold    *string  `json:"internalOwnerEqualFold,omitempty"`
+	InternalOwnerContainsFold *string  `json:"internalOwnerContainsFold,omitempty"`
+
+	// "internal_owner_user_id" field predicates.
+	InternalOwnerUserID             *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerUserIDNEQ          *string  `json:"internalOwnerUserIDNEQ,omitempty"`
+	InternalOwnerUserIDIn           []string `json:"internalOwnerUserIDIn,omitempty"`
+	InternalOwnerUserIDNotIn        []string `json:"internalOwnerUserIDNotIn,omitempty"`
+	InternalOwnerUserIDContains     *string  `json:"internalOwnerUserIDContains,omitempty"`
+	InternalOwnerUserIDHasPrefix    *string  `json:"internalOwnerUserIDHasPrefix,omitempty"`
+	InternalOwnerUserIDHasSuffix    *string  `json:"internalOwnerUserIDHasSuffix,omitempty"`
+	InternalOwnerUserIDIsNil        bool     `json:"internalOwnerUserIDIsNil,omitempty"`
+	InternalOwnerUserIDNotNil       bool     `json:"internalOwnerUserIDNotNil,omitempty"`
+	InternalOwnerUserIDEqualFold    *string  `json:"internalOwnerUserIDEqualFold,omitempty"`
+	InternalOwnerUserIDContainsFold *string  `json:"internalOwnerUserIDContainsFold,omitempty"`
+
+	// "internal_owner_group_id" field predicates.
+	InternalOwnerGroupID             *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerGroupIDNEQ          *string  `json:"internalOwnerGroupIDNEQ,omitempty"`
+	InternalOwnerGroupIDIn           []string `json:"internalOwnerGroupIDIn,omitempty"`
+	InternalOwnerGroupIDNotIn        []string `json:"internalOwnerGroupIDNotIn,omitempty"`
+	InternalOwnerGroupIDContains     *string  `json:"internalOwnerGroupIDContains,omitempty"`
+	InternalOwnerGroupIDHasPrefix    *string  `json:"internalOwnerGroupIDHasPrefix,omitempty"`
+	InternalOwnerGroupIDHasSuffix    *string  `json:"internalOwnerGroupIDHasSuffix,omitempty"`
+	InternalOwnerGroupIDIsNil        bool     `json:"internalOwnerGroupIDIsNil,omitempty"`
+	InternalOwnerGroupIDNotNil       bool     `json:"internalOwnerGroupIDNotNil,omitempty"`
+	InternalOwnerGroupIDEqualFold    *string  `json:"internalOwnerGroupIDEqualFold,omitempty"`
+	InternalOwnerGroupIDContainsFold *string  `json:"internalOwnerGroupIDContainsFold,omitempty"`
+
+	// "internal_owner_identity_holder_id" field predicates.
+	InternalOwnerIdentityHolderID             *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	InternalOwnerIdentityHolderIDNEQ          *string  `json:"internalOwnerIdentityHolderIDNEQ,omitempty"`
+	InternalOwnerIdentityHolderIDIn           []string `json:"internalOwnerIdentityHolderIDIn,omitempty"`
+	InternalOwnerIdentityHolderIDNotIn        []string `json:"internalOwnerIdentityHolderIDNotIn,omitempty"`
+	InternalOwnerIdentityHolderIDContains     *string  `json:"internalOwnerIdentityHolderIDContains,omitempty"`
+	InternalOwnerIdentityHolderIDHasPrefix    *string  `json:"internalOwnerIdentityHolderIDHasPrefix,omitempty"`
+	InternalOwnerIdentityHolderIDHasSuffix    *string  `json:"internalOwnerIdentityHolderIDHasSuffix,omitempty"`
+	InternalOwnerIdentityHolderIDIsNil        bool     `json:"internalOwnerIdentityHolderIDIsNil,omitempty"`
+	InternalOwnerIdentityHolderIDNotNil       bool     `json:"internalOwnerIdentityHolderIDNotNil,omitempty"`
+	InternalOwnerIdentityHolderIDEqualFold    *string  `json:"internalOwnerIdentityHolderIDEqualFold,omitempty"`
+	InternalOwnerIdentityHolderIDContainsFold *string  `json:"internalOwnerIdentityHolderIDContainsFold,omitempty"`
+
 	// "title" field predicates.
 	Title             *string  `json:"title,omitempty"`
 	TitleNEQ          *string  `json:"titleNEQ,omitempty"`
@@ -1250,6 +1302,18 @@ type ActionPlanWhereInput struct {
 	// "action_plan_kind" edge predicates.
 	HasActionPlanKind     *bool                       `json:"hasActionPlanKind,omitempty"`
 	HasActionPlanKindWith []*CustomTypeEnumWhereInput `json:"hasActionPlanKindWith,omitempty"`
+
+	// "internal_owner_user" edge predicates.
+	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
+	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
+
+	// "internal_owner_group" edge predicates.
+	HasInternalOwnerGroup     *bool              `json:"hasInternalOwnerGroup,omitempty"`
+	HasInternalOwnerGroupWith []*GroupWhereInput `json:"hasInternalOwnerGroupWith,omitempty"`
+
+	// "internal_owner_identity_holder" edge predicates.
+	HasInternalOwnerIdentityHolder     *bool                       `json:"hasInternalOwnerIdentityHolder,omitempty"`
+	HasInternalOwnerIdentityHolderWith []*IdentityHolderWhereInput `json:"hasInternalOwnerIdentityHolderWith,omitempty"`
 
 	// "risks" edge predicates.
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
@@ -2262,6 +2326,138 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	if i.WorkflowEligibleMarkerNotNil {
 		predicates = append(predicates, actionplan.WorkflowEligibleMarkerNotNil())
 	}
+	if i.InternalOwner != nil {
+		predicates = append(predicates, actionplan.InternalOwnerEQ(*i.InternalOwner))
+	}
+	if i.InternalOwnerNEQ != nil {
+		predicates = append(predicates, actionplan.InternalOwnerNEQ(*i.InternalOwnerNEQ))
+	}
+	if len(i.InternalOwnerIn) > 0 {
+		predicates = append(predicates, actionplan.InternalOwnerIn(i.InternalOwnerIn...))
+	}
+	if len(i.InternalOwnerNotIn) > 0 {
+		predicates = append(predicates, actionplan.InternalOwnerNotIn(i.InternalOwnerNotIn...))
+	}
+	if i.InternalOwnerContains != nil {
+		predicates = append(predicates, actionplan.InternalOwnerContains(*i.InternalOwnerContains))
+	}
+	if i.InternalOwnerHasPrefix != nil {
+		predicates = append(predicates, actionplan.InternalOwnerHasPrefix(*i.InternalOwnerHasPrefix))
+	}
+	if i.InternalOwnerHasSuffix != nil {
+		predicates = append(predicates, actionplan.InternalOwnerHasSuffix(*i.InternalOwnerHasSuffix))
+	}
+	if i.InternalOwnerIsNil {
+		predicates = append(predicates, actionplan.InternalOwnerIsNil())
+	}
+	if i.InternalOwnerNotNil {
+		predicates = append(predicates, actionplan.InternalOwnerNotNil())
+	}
+	if i.InternalOwnerEqualFold != nil {
+		predicates = append(predicates, actionplan.InternalOwnerEqualFold(*i.InternalOwnerEqualFold))
+	}
+	if i.InternalOwnerContainsFold != nil {
+		predicates = append(predicates, actionplan.InternalOwnerContainsFold(*i.InternalOwnerContainsFold))
+	}
+	if i.InternalOwnerUserID != nil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDEQ(*i.InternalOwnerUserID))
+	}
+	if i.InternalOwnerUserIDNEQ != nil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDNEQ(*i.InternalOwnerUserIDNEQ))
+	}
+	if len(i.InternalOwnerUserIDIn) > 0 {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDIn(i.InternalOwnerUserIDIn...))
+	}
+	if len(i.InternalOwnerUserIDNotIn) > 0 {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDNotIn(i.InternalOwnerUserIDNotIn...))
+	}
+	if i.InternalOwnerUserIDContains != nil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDContains(*i.InternalOwnerUserIDContains))
+	}
+	if i.InternalOwnerUserIDHasPrefix != nil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDHasPrefix(*i.InternalOwnerUserIDHasPrefix))
+	}
+	if i.InternalOwnerUserIDHasSuffix != nil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDHasSuffix(*i.InternalOwnerUserIDHasSuffix))
+	}
+	if i.InternalOwnerUserIDIsNil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDIsNil())
+	}
+	if i.InternalOwnerUserIDNotNil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDNotNil())
+	}
+	if i.InternalOwnerUserIDEqualFold != nil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDEqualFold(*i.InternalOwnerUserIDEqualFold))
+	}
+	if i.InternalOwnerUserIDContainsFold != nil {
+		predicates = append(predicates, actionplan.InternalOwnerUserIDContainsFold(*i.InternalOwnerUserIDContainsFold))
+	}
+	if i.InternalOwnerGroupID != nil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDEQ(*i.InternalOwnerGroupID))
+	}
+	if i.InternalOwnerGroupIDNEQ != nil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDNEQ(*i.InternalOwnerGroupIDNEQ))
+	}
+	if len(i.InternalOwnerGroupIDIn) > 0 {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDIn(i.InternalOwnerGroupIDIn...))
+	}
+	if len(i.InternalOwnerGroupIDNotIn) > 0 {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDNotIn(i.InternalOwnerGroupIDNotIn...))
+	}
+	if i.InternalOwnerGroupIDContains != nil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDContains(*i.InternalOwnerGroupIDContains))
+	}
+	if i.InternalOwnerGroupIDHasPrefix != nil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDHasPrefix(*i.InternalOwnerGroupIDHasPrefix))
+	}
+	if i.InternalOwnerGroupIDHasSuffix != nil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDHasSuffix(*i.InternalOwnerGroupIDHasSuffix))
+	}
+	if i.InternalOwnerGroupIDIsNil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDIsNil())
+	}
+	if i.InternalOwnerGroupIDNotNil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDNotNil())
+	}
+	if i.InternalOwnerGroupIDEqualFold != nil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDEqualFold(*i.InternalOwnerGroupIDEqualFold))
+	}
+	if i.InternalOwnerGroupIDContainsFold != nil {
+		predicates = append(predicates, actionplan.InternalOwnerGroupIDContainsFold(*i.InternalOwnerGroupIDContainsFold))
+	}
+	if i.InternalOwnerIdentityHolderID != nil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDEQ(*i.InternalOwnerIdentityHolderID))
+	}
+	if i.InternalOwnerIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDNEQ(*i.InternalOwnerIdentityHolderIDNEQ))
+	}
+	if len(i.InternalOwnerIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDIn(i.InternalOwnerIdentityHolderIDIn...))
+	}
+	if len(i.InternalOwnerIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDNotIn(i.InternalOwnerIdentityHolderIDNotIn...))
+	}
+	if i.InternalOwnerIdentityHolderIDContains != nil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDContains(*i.InternalOwnerIdentityHolderIDContains))
+	}
+	if i.InternalOwnerIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDHasPrefix(*i.InternalOwnerIdentityHolderIDHasPrefix))
+	}
+	if i.InternalOwnerIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDHasSuffix(*i.InternalOwnerIdentityHolderIDHasSuffix))
+	}
+	if i.InternalOwnerIdentityHolderIDIsNil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDIsNil())
+	}
+	if i.InternalOwnerIdentityHolderIDNotNil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDNotNil())
+	}
+	if i.InternalOwnerIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDEqualFold(*i.InternalOwnerIdentityHolderIDEqualFold))
+	}
+	if i.InternalOwnerIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, actionplan.InternalOwnerIdentityHolderIDContainsFold(*i.InternalOwnerIdentityHolderIDContainsFold))
+	}
 	if i.Title != nil {
 		predicates = append(predicates, actionplan.TitleEQ(*i.Title))
 	}
@@ -2661,6 +2857,63 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, actionplan.HasActionPlanKindWith(with...))
+	}
+	if i.HasInternalOwnerUser != nil {
+		p := actionplan.HasInternalOwnerUser()
+		if !*i.HasInternalOwnerUser {
+			p = actionplan.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasInternalOwnerUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, actionplan.HasInternalOwnerUserWith(with...))
+	}
+	if i.HasInternalOwnerGroup != nil {
+		p := actionplan.HasInternalOwnerGroup()
+		if !*i.HasInternalOwnerGroup {
+			p = actionplan.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasInternalOwnerGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, actionplan.HasInternalOwnerGroupWith(with...))
+	}
+	if i.HasInternalOwnerIdentityHolder != nil {
+		p := actionplan.HasInternalOwnerIdentityHolder()
+		if !*i.HasInternalOwnerIdentityHolder {
+			p = actionplan.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasInternalOwnerIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, actionplan.HasInternalOwnerIdentityHolderWith(with...))
 	}
 	if i.HasRisks != nil {
 		p := actionplan.HasRisks()
@@ -95650,6 +95903,12 @@ type TrustCenterNDARequestWhereInput struct {
 	ApprovedByUserIDEqualFold    *string  `json:"approvedByUserIDEqualFold,omitempty"`
 	ApprovedByUserIDContainsFold *string  `json:"approvedByUserIDContainsFold,omitempty"`
 
+	// "auto_approved" field predicates.
+	AutoApproved       *bool `json:"autoApproved,omitempty"`
+	AutoApprovedNEQ    *bool `json:"autoApprovedNEQ,omitempty"`
+	AutoApprovedIsNil  bool  `json:"autoApprovedIsNil,omitempty"`
+	AutoApprovedNotNil bool  `json:"autoApprovedNotNil,omitempty"`
+
 	// "signed_at" field predicates.
 	SignedAt       *models.DateTime `json:"signedAt,omitempty"`
 	SignedAtGT     *models.DateTime `json:"signedAtGT,omitempty"`
@@ -96216,6 +96475,18 @@ func (i *TrustCenterNDARequestWhereInput) P() (predicate.TrustCenterNDARequest, 
 	}
 	if i.ApprovedByUserIDContainsFold != nil {
 		predicates = append(predicates, trustcenterndarequest.ApprovedByUserIDContainsFold(*i.ApprovedByUserIDContainsFold))
+	}
+	if i.AutoApproved != nil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedEQ(*i.AutoApproved))
+	}
+	if i.AutoApprovedNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedNEQ(*i.AutoApprovedNEQ))
+	}
+	if i.AutoApprovedIsNil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedIsNil())
+	}
+	if i.AutoApprovedNotNil {
+		predicates = append(predicates, trustcenterndarequest.AutoApprovedNotNil())
 	}
 	if i.SignedAt != nil {
 		predicates = append(predicates, trustcenterndarequest.SignedAtEQ(*i.SignedAt))
@@ -96857,6 +97128,12 @@ type TrustCenterSettingWhereInput struct {
 	NoindexDefaultDomainNEQ    *bool `json:"noindexDefaultDomainNEQ,omitempty"`
 	NoindexDefaultDomainIsNil  bool  `json:"noindexDefaultDomainIsNil,omitempty"`
 	NoindexDefaultDomainNotNil bool  `json:"noindexDefaultDomainNotNil,omitempty"`
+
+	// "enable_auto_approval" field predicates.
+	EnableAutoApproval       *bool `json:"enableAutoApproval,omitempty"`
+	EnableAutoApprovalNEQ    *bool `json:"enableAutoApprovalNEQ,omitempty"`
+	EnableAutoApprovalIsNil  bool  `json:"enableAutoApprovalIsNil,omitempty"`
+	EnableAutoApprovalNotNil bool  `json:"enableAutoApprovalNotNil,omitempty"`
 
 	// "blocked_groups" edge predicates.
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
@@ -97922,6 +98199,18 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	}
 	if i.NoindexDefaultDomainNotNil {
 		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainNotNil())
+	}
+	if i.EnableAutoApproval != nil {
+		predicates = append(predicates, trustcentersetting.EnableAutoApprovalEQ(*i.EnableAutoApproval))
+	}
+	if i.EnableAutoApprovalNEQ != nil {
+		predicates = append(predicates, trustcentersetting.EnableAutoApprovalNEQ(*i.EnableAutoApprovalNEQ))
+	}
+	if i.EnableAutoApprovalIsNil {
+		predicates = append(predicates, trustcentersetting.EnableAutoApprovalIsNil())
+	}
+	if i.EnableAutoApprovalNotNil {
+		predicates = append(predicates, trustcentersetting.EnableAutoApprovalNotNil())
 	}
 
 	if i.HasBlockedGroups != nil {

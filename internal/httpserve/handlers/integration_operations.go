@@ -43,9 +43,10 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 
 	requestCtx := ctx.Request().Context()
 
-	caller, ok := auth.CallerFromContext(requestCtx)
-	if !ok {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser)
+	// the installation lookup is scoped to the caller's active organization, so a caller without one cannot run anything
+	ownerID, err := auth.GetOrganizationIDFromContext(requestCtx)
+	if err != nil {
+		return h.Unauthorized(ctx, err)
 	}
 
 	if req.IntegrationID == "" || req.Body.Operation == "" {
@@ -55,7 +56,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrIntegrationIDRequired)
 	}
 
-	integrationRef, def, operation, err := h.resolveInvocableOperation(requestCtx, caller.OrganizationID, req)
+	integrationRef, def, operation, err := h.resolveInvocableOperation(requestCtx, ownerID, req)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
@@ -72,6 +73,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 
 	result, err := h.IntegrationsRuntime.Dispatch(context.WithoutCancel(requestCtx), types.DispatchRequest{
 		IntegrationID: integrationRef.ID,
+		OwnerID:       integrationRef.OwnerID,
 		Operation:     req.Body.Operation,
 		Config:        jsonx.CloneRawMessage(req.Body.Config),
 		RunType:       enums.IntegrationRunTypeManual,
@@ -114,13 +116,22 @@ func (h *Handler) resolveInvocableOperation(ctx context.Context, ownerID string,
 	}
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(integrationRef.DefinitionID)
-	if !ok {
+
+	switch {
+	case integrationRef.SystemOwned:
+		logx.FromContext(ctx).Error().Interface("request", req).Msg("installation is system owned and cannot be invoked directly")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, ErrIntegrationNotFound
+	case !ok:
 		logx.FromContext(ctx).Error().Str("definitionID", integrationRef.DefinitionID).Msg("definition not found in registry")
 
 		return nil, types.Definition{}, types.OperationRegistration{}, ErrIntegrationNotFound
-	}
+	// system and runtime definitions have no installation surface, so an installation naming one is never customer-invocable
+	case !def.Installable():
+		logx.FromContext(ctx).Error().Str("definitionID", integrationRef.DefinitionID).Msg("definition is not installable and cannot be invoked directly")
 
-	if !def.Active {
+		return nil, types.Definition{}, types.OperationRegistration{}, ErrIntegrationNotFound
+	case !def.Active:
 		logx.FromContext(ctx).Error().Err(ErrProviderDisabled).Str("definitionID", integrationRef.DefinitionID).Msg("integration provider is disabled, not executing operation")
 
 		return nil, types.Definition{}, types.OperationRegistration{}, ErrProviderDisabled
@@ -135,6 +146,13 @@ func (h *Handler) resolveInvocableOperation(ctx context.Context, ownerID string,
 
 	if operation.Internal {
 		logx.FromContext(ctx).Error().Interface("request", req).Msg("operation is internal and cannot be invoked directly")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, operations.ErrDispatchInputInvalid
+	}
+
+	// the run endpoint is a customer-facing surface, so an operation hidden from customers is not invocable through it
+	if operation.CustomerSelectable != nil && !*operation.CustomerSelectable {
+		logx.FromContext(ctx).Error().Interface("request", req).Msg("operation is not customer selectable and cannot be invoked directly")
 
 		return nil, types.Definition{}, types.OperationRegistration{}, operations.ErrDispatchInputInvalid
 	}

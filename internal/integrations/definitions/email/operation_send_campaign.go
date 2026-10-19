@@ -48,7 +48,7 @@ type SendBrandedCampaignRequest struct {
 type SendBrandedCampaign struct{}
 
 // SendCampaignOp is the operation ref for the branded campaign dispatch operation
-var SendCampaignOp = types.OperationPayloadOf[SendBrandedCampaignRequest]().Handles(SendBrandedCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
+var SendCampaignOp = types.OperationPayloadOf[SendBrandedCampaignRequest]().Handles(SendBrandedCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true})
 
 // brandedCampaignEdges eager-loads the email template and its inline files
 func brandedCampaignEdges(q *generated.CampaignQuery) {
@@ -147,7 +147,7 @@ func sendBrandedCampaignTestEmail(ctx context.Context, db *generated.Client, cli
 	}
 
 	msg := messages[0]
-	msg.Tags = []newman.Tag{{Name: TagIsTest, Value: "true"}}
+	msg.Tags = []newman.Tag{{Name: TagIsTest, Value: TagTrueValue}}
 
 	if template != nil {
 		msg.Attachments = append(msg.Attachments, staticAttachmentsFromFiles(ctx, template.Edges.Files)...)

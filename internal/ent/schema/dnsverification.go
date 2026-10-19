@@ -129,7 +129,7 @@ func (DNSVerification) Hooks() []ent.Hook {
 func (DNSVerification) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
-		models.CatalogQuestionnaireDomainAddon,
+		models.CatalogAssessmentCustomDomainAddon,
 	}
 }
 

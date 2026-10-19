@@ -25,7 +25,6 @@ func TestGateSurfaceChange(t *testing.T) {
 		ID:          "acme",
 		Credentials: []SurfaceCredential{{Ref: "cred_a"}},
 		Operations:  []SurfaceOperation{{Name: "sync"}},
-		Webhooks:    []SurfaceWebhook{{Name: "github", Events: []string{"push"}}},
 	}
 
 	cases := []gateCase{
@@ -41,41 +40,28 @@ func TestGateSurfaceChange(t *testing.T) {
 				ID:          "acme",
 				Credentials: []SurfaceCredential{{Ref: "cred_a"}, {Ref: "cred_b"}},
 				Operations:  []SurfaceOperation{{Name: "sync"}, {Name: "sync.more"}},
-				Webhooks:    []SurfaceWebhook{{Name: "github", Events: []string{"pull", "push"}}, {Name: "gitlab"}},
 			},
 		},
 		{
-			name: "removed slot, operation, and webhook replaced passes",
+			name: "removed slot and operation replaced passes",
 			old:  committed,
 			next: Surface{
 				ID:          "acme",
 				Credentials: []SurfaceCredential{{Ref: "cred_v2", Replaces: []string{"cred_a"}}},
 				Operations:  []SurfaceOperation{{Name: "sync.v2", Replaces: []string{"sync"}}},
-				Webhooks:    []SurfaceWebhook{{Name: "github_v2", Replaces: []string{"github"}}},
 			},
 		},
 		{
 			name:    "unreplaced credential slot refuses",
 			old:     committed,
-			next:    Surface{ID: "acme", Operations: committed.Operations, Webhooks: committed.Webhooks},
+			next:    Surface{ID: "acme", Operations: committed.Operations},
 			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: credential cred_a",
 		},
 		{
 			name:    "unreplaced operation refuses",
 			old:     committed,
-			next:    Surface{ID: "acme", Credentials: committed.Credentials, Webhooks: committed.Webhooks},
+			next:    Surface{ID: "acme", Credentials: committed.Credentials},
 			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: operation sync",
-		},
-		{
-			name:    "unreplaced webhook refuses",
-			old:     committed,
-			next:    Surface{ID: "acme", Credentials: committed.Credentials, Operations: committed.Operations},
-			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: webhook github",
-		},
-		{
-			name: "removed event of a kept webhook passes",
-			old:  committed,
-			next: Surface{ID: "acme", Credentials: committed.Credentials, Operations: committed.Operations, Webhooks: []SurfaceWebhook{{Name: "github"}}},
 		},
 		{
 			name: "every unreplaced name across kinds is listed in one error",
@@ -83,14 +69,12 @@ func TestGateSurfaceChange(t *testing.T) {
 				ID:          "acme",
 				Credentials: []SurfaceCredential{{Ref: "cred_a"}, {Ref: "cred_b"}, {Ref: "cred_c"}},
 				Operations:  []SurfaceOperation{{Name: "sync"}, {Name: "sync.more"}},
-				Webhooks:    []SurfaceWebhook{{Name: "github", Events: []string{"pull", "push"}}, {Name: "gitlab"}},
 			},
 			next: Surface{
 				ID:          "acme",
 				Credentials: []SurfaceCredential{{Ref: "cred_d", Replaces: []string{"cred_c"}}},
-				Webhooks:    []SurfaceWebhook{{Name: "github"}},
 			},
-			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: credential cred_a, cred_b; operation sync, sync.more; webhook gitlab",
+			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: credential cred_a, cred_b; operation sync, sync.more",
 		},
 	}
 

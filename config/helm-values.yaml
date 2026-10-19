@@ -675,10 +675,6 @@ coreConfiguration:
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       appid: ""  # @schema type:string
     slackruntime:
-      # -- Slack incoming webhook URL for fire-and-forget system notifications
-      webhookURL: ""  # @schema type:string
-      # -- Bot User OAuth Token for full Web API access to the platform workspace
-      botToken: ""  # @schema type:string
       # -- Default channel id for system messages when no explicit channel is provided
       defaultChannel: ""  # @schema type:string
     googledrive:
@@ -688,19 +684,23 @@ coreConfiguration:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
     azureentraid:
-      clientid: ""  # @schema type:string
+      applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       defaulttenant: ""  # @schema type:string
+    azuresecuritycenter:
       applicationid: ""  # @schema type:string
-    microsoftteams:
-      clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      defaulttenant: ""  # @schema type:string
+      lighthouse:
+        managingtenantid: ""  # @schema type:string
+        principalid: ""  # @schema type:string
+    microsoftteams:
       applicationid: ""  # @schema type:string
+      redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
     onedrive:
-      clientid: ""  # @schema type:string
+      applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       contentmode: "iframe"  # @schema type:string; default:iframe
-      applicationid: ""  # @schema type:string
     oidclocal:
       enabled: false  # @schema type:boolean; default:false
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
@@ -711,6 +711,16 @@ coreConfiguration:
       testdir: "fixtures/email"  # @schema type:string; default:fixtures/email
       # -- Email service provider
       provider: "resend"  # @schema type:string; default:resend
+      # -- Resend provider configuration
+      resend:
+      # -- Postmark provider configuration
+      postmark:
+        # -- Postmark message stream ID (defaults to outbound)
+        messageStream: ""  # @schema type:string
+        # -- Enable Postmark open tracking
+        trackOpens: false  # @schema type:boolean
+        # -- Postmark link tracking mode
+        trackLinks: ""  # @schema type:string
       # -- Sender email address
       fromemail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
       # -- Support contact email address
@@ -1047,6 +1057,22 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_SLACK_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-slack-clientsecret"  # @schema type:string
+    # -- core-integrations-slackruntime-webhookurl secret configuration
+    core-integrations-slackruntime-webhookurl:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.slackruntime.webhookURL
+      secretKey: "CORE_INTEGRATIONS_SLACKRUNTIME_WEBHOOKURL"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-slackruntime-webhookurl"  # @schema type:string
+    # -- core-integrations-slackruntime-bottoken secret configuration
+    core-integrations-slackruntime-bottoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.slackruntime.botToken
+      secretKey: "CORE_INTEGRATIONS_SLACKRUNTIME_BOTTOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-slackruntime-bottoken"  # @schema type:string
     # -- core-integrations-googledrive-clientsecret secret configuration
     core-integrations-googledrive-clientsecret:
       # -- Enable this external secret
@@ -1071,6 +1097,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_AZUREENTRAID_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-azureentraid-clientsecret"  # @schema type:string
+    # -- core-integrations-azuresecuritycenter-clientsecret secret configuration
+    core-integrations-azuresecuritycenter-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.azuresecuritycenter.clientsecret
+      secretKey: "CORE_INTEGRATIONS_AZURESECURITYCENTER_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-azuresecuritycenter-clientsecret"  # @schema type:string
     # -- core-integrations-microsoftteams-clientsecret secret configuration
     core-integrations-microsoftteams-clientsecret:
       # -- Enable this external secret
@@ -1095,22 +1129,38 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_OIDCLOCAL_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-oidclocal-clientsecret"  # @schema type:string
-    # -- core-integrations-email-resendsecret secret configuration
-    core-integrations-email-resendsecret:
+    # -- core-integrations-email-resend-apikey secret configuration
+    core-integrations-email-resend-apikey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.email.resendsecret
-      secretKey: "CORE_INTEGRATIONS_EMAIL_RESENDSECRET"  # @schema type:string
+      # -- Environment variable key for integrations.email.resend.apiKey
+      secretKey: "CORE_INTEGRATIONS_EMAIL_RESEND_APIKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrations-email-resendsecret"  # @schema type:string
-    # -- core-integrations-email-apikey secret configuration
-    core-integrations-email-apikey:
+      remoteKey: "core-integrations-email-resend-apikey"  # @schema type:string
+    # -- core-integrations-email-resend-webhooksecret secret configuration
+    core-integrations-email-resend-webhooksecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.email.apikey
-      secretKey: "CORE_INTEGRATIONS_EMAIL_APIKEY"  # @schema type:string
+      # -- Environment variable key for integrations.email.resend.webhooksecret
+      secretKey: "CORE_INTEGRATIONS_EMAIL_RESEND_WEBHOOKSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrations-email-apikey"  # @schema type:string
+      remoteKey: "core-integrations-email-resend-webhooksecret"  # @schema type:string
+    # -- core-integrations-email-postmark-servertoken secret configuration
+    core-integrations-email-postmark-servertoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.email.postmark.serverToken
+      secretKey: "CORE_INTEGRATIONS_EMAIL_POSTMARK_SERVERTOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-email-postmark-servertoken"  # @schema type:string
+    # -- core-integrations-email-postmark-webhooksecret secret configuration
+    core-integrations-email-postmark-webhooksecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.email.postmark.webhooksecret
+      secretKey: "CORE_INTEGRATIONS_EMAIL_POSTMARK_WEBHOOKSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-email-postmark-webhooksecret"  # @schema type:string
     # -- core-cloudflare-apitoken secret configuration
     core-cloudflare-apitoken:
       # -- Enable this external secret

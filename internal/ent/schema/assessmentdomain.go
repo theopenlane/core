@@ -72,7 +72,7 @@ func (o AssessmentDomain) Mixin() []ent.Mixin {
 }
 
 func (AssessmentDomain) Modules() []models.OrgModule {
-	return []models.OrgModule{models.CatalogQuestionnaireDomainAddon}
+	return []models.OrgModule{models.CatalogAssessmentCustomDomainAddon}
 }
 
 func (AssessmentDomain) Policy() ent.Policy {

@@ -5,6 +5,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -63,6 +64,8 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 			},
 			Operations: append(AllSlackSystemMessages(),
 				MessageSendOp.Description("Send a Slack message via chat.postMessage").Registration(),
+				operations.NewChannelsListOperation(listTeams, ErrResultEncode).Permissions("team:read", "channels:read", "groups:read").Description("List the channels in the connected workspace").Registration(),
+				operations.NewTestMessageOperation(sendMessage).Permissions("chat:write", "chat:write.public").Description("Send a test message to a Slack channel to confirm the integration works").Registration(),
 				types.OperationRefOf[DirectorySync]().
 					Ingests(runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).

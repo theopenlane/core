@@ -139,6 +139,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldActionPlanKindName:              {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanKindName},
 			actionplanhistory.FieldActionPlanKindID:                {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanKindID},
 			actionplanhistory.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: actionplanhistory.FieldWorkflowEligibleMarker},
+			actionplanhistory.FieldInternalOwner:                   {Type: field.TypeString, Column: actionplanhistory.FieldInternalOwner},
+			actionplanhistory.FieldInternalOwnerUserID:             {Type: field.TypeString, Column: actionplanhistory.FieldInternalOwnerUserID},
+			actionplanhistory.FieldInternalOwnerGroupID:            {Type: field.TypeString, Column: actionplanhistory.FieldInternalOwnerGroupID},
+			actionplanhistory.FieldInternalOwnerIdentityHolderID:   {Type: field.TypeString, Column: actionplanhistory.FieldInternalOwnerIdentityHolderID},
 			actionplanhistory.FieldTitle:                           {Type: field.TypeString, Column: actionplanhistory.FieldTitle},
 			actionplanhistory.FieldDescription:                     {Type: field.TypeString, Column: actionplanhistory.FieldDescription},
 			actionplanhistory.FieldDueDate:                         {Type: field.TypeTime, Column: actionplanhistory.FieldDueDate},
@@ -2557,6 +2561,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequesthistory.FieldStatus:                {Type: field.TypeEnum, Column: trustcenterndarequesthistory.FieldStatus},
 			trustcenterndarequesthistory.FieldApprovedAt:            {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldApprovedAt},
 			trustcenterndarequesthistory.FieldApprovedByUserID:      {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldApprovedByUserID},
+			trustcenterndarequesthistory.FieldAutoApproved:          {Type: field.TypeBool, Column: trustcenterndarequesthistory.FieldAutoApproved},
 			trustcenterndarequesthistory.FieldSignedAt:              {Type: field.TypeTime, Column: trustcenterndarequesthistory.FieldSignedAt},
 			trustcenterndarequesthistory.FieldDocumentDataID:        {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldDocumentDataID},
 			trustcenterndarequesthistory.FieldFileID:                {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldFileID},
@@ -2612,6 +2617,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldNdaApproverGroupID},
 			trustcentersettinghistory.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
 			trustcentersettinghistory.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNoindexDefaultDomain},
+			trustcentersettinghistory.FieldEnableAutoApproval:                    {Type: field.TypeBool, Column: trustcentersettinghistory.FieldEnableAutoApproval},
+			trustcentersettinghistory.FieldAutoApprovalRules:                     {Type: field.TypeJSON, Column: trustcentersettinghistory.FieldAutoApprovalRules},
 		},
 	}
 	graph.Nodes[58] = &sqlgraph.Node{
@@ -3305,6 +3312,26 @@ func (f *ActionPlanHistoryFilter) WhereActionPlanKindID(p entql.StringP) {
 // WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
 func (f *ActionPlanHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(actionplanhistory.FieldWorkflowEligibleMarker))
+}
+
+// WhereInternalOwner applies the entql string predicate on the internal_owner field.
+func (f *ActionPlanHistoryFilter) WhereInternalOwner(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldInternalOwner))
+}
+
+// WhereInternalOwnerUserID applies the entql string predicate on the internal_owner_user_id field.
+func (f *ActionPlanHistoryFilter) WhereInternalOwnerUserID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldInternalOwnerUserID))
+}
+
+// WhereInternalOwnerGroupID applies the entql string predicate on the internal_owner_group_id field.
+func (f *ActionPlanHistoryFilter) WhereInternalOwnerGroupID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldInternalOwnerGroupID))
+}
+
+// WhereInternalOwnerIdentityHolderID applies the entql string predicate on the internal_owner_identity_holder_id field.
+func (f *ActionPlanHistoryFilter) WhereInternalOwnerIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldInternalOwnerIdentityHolderID))
 }
 
 // WhereTitle applies the entql string predicate on the title field.
@@ -13997,6 +14024,11 @@ func (f *TrustCenterNDARequestHistoryFilter) WhereApprovedByUserID(p entql.Strin
 	f.Where(p.Field(trustcenterndarequesthistory.FieldApprovedByUserID))
 }
 
+// WhereAutoApproved applies the entql bool predicate on the auto_approved field.
+func (f *TrustCenterNDARequestHistoryFilter) WhereAutoApproved(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequesthistory.FieldAutoApproved))
+}
+
 // WhereSignedAt applies the entql time.Time predicate on the signed_at field.
 func (f *TrustCenterNDARequestHistoryFilter) WhereSignedAt(p entql.TimeP) {
 	f.Where(p.Field(trustcenterndarequesthistory.FieldSignedAt))
@@ -14245,6 +14277,16 @@ func (f *TrustCenterSettingHistoryFilter) WhereStatusPageURL(p entql.StringP) {
 // WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
 func (f *TrustCenterSettingHistoryFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldNoindexDefaultDomain))
+}
+
+// WhereEnableAutoApproval applies the entql bool predicate on the enable_auto_approval field.
+func (f *TrustCenterSettingHistoryFilter) WhereEnableAutoApproval(p entql.BoolP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldEnableAutoApproval))
+}
+
+// WhereAutoApprovalRules applies the entql json.RawMessage predicate on the auto_approval_rules field.
+func (f *TrustCenterSettingHistoryFilter) WhereAutoApprovalRules(p entql.BytesP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldAutoApprovalRules))
 }
 
 // addPredicate implements the predicateAdder interface.

@@ -62,6 +62,10 @@ type ComplexityRoot struct {
 		ImprovementSuggestions          func(childComplexity int) int
 		IntegrationRunID                func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
+		InternalOwner                   func(childComplexity int) int
+		InternalOwnerGroupID            func(childComplexity int) int
+		InternalOwnerIdentityHolderID   func(childComplexity int) int
+		InternalOwnerUserID             func(childComplexity int) int
 		ManagedBy                       func(childComplexity int) int
 		ManagementMode                  func(childComplexity int) int
 		Metadata                        func(childComplexity int) int
@@ -2563,6 +2567,7 @@ type ComplexityRoot struct {
 		AccessLevel           func(childComplexity int) int
 		ApprovedAt            func(childComplexity int) int
 		ApprovedByUserID      func(childComplexity int) int
+		AutoApproved          func(childComplexity int) int
 		CompanyName           func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -2599,12 +2604,14 @@ type ComplexityRoot struct {
 	TrustCenterSettingHistory struct {
 		AccentColor                           func(childComplexity int) int
 		AllowSubscribers                      func(childComplexity int) int
+		AutoApprovalRules                     func(childComplexity int) int
 		BackgroundColor                       func(childComplexity int) int
 		CompanyDescription                    func(childComplexity int) int
 		CompanyDomain                         func(childComplexity int) int
 		CompanyName                           func(childComplexity int) int
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
+		EnableAutoApproval                    func(childComplexity int) int
 		Environment                           func(childComplexity int) int
 		FaviconLocalFileID                    func(childComplexity int) int
 		FaviconRemoteURL                      func(childComplexity int) int
@@ -3231,6 +3238,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanHistory.InternalNotes(childComplexity), true
+	case "ActionPlanHistory.internalOwner":
+		if e.ComplexityRoot.ActionPlanHistory.InternalOwner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.InternalOwner(childComplexity), true
+	case "ActionPlanHistory.internalOwnerGroupID":
+		if e.ComplexityRoot.ActionPlanHistory.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.InternalOwnerGroupID(childComplexity), true
+	case "ActionPlanHistory.internalOwnerIdentityHolderID":
+		if e.ComplexityRoot.ActionPlanHistory.InternalOwnerIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.InternalOwnerIdentityHolderID(childComplexity), true
+	case "ActionPlanHistory.internalOwnerUserID":
+		if e.ComplexityRoot.ActionPlanHistory.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.InternalOwnerUserID(childComplexity), true
 	case "ActionPlanHistory.managedBy":
 		if e.ComplexityRoot.ActionPlanHistory.ManagedBy == nil {
 			break
@@ -15698,6 +15729,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterNDARequestHistory.ApprovedByUserID(childComplexity), true
+	case "TrustCenterNDARequestHistory.autoApproved":
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.AutoApproved == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.AutoApproved(childComplexity), true
 	case "TrustCenterNDARequestHistory.companyName":
 		if e.ComplexityRoot.TrustCenterNDARequestHistory.CompanyName == nil {
 			break
@@ -15863,6 +15900,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.AllowSubscribers(childComplexity), true
+	case "TrustCenterSettingHistory.autoApprovalRules":
+		if e.ComplexityRoot.TrustCenterSettingHistory.AutoApprovalRules == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.AutoApprovalRules(childComplexity), true
 	case "TrustCenterSettingHistory.backgroundColor":
 		if e.ComplexityRoot.TrustCenterSettingHistory.BackgroundColor == nil {
 			break
@@ -15899,6 +15942,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.CreatedBy(childComplexity), true
+	case "TrustCenterSettingHistory.enableAutoApproval":
+		if e.ComplexityRoot.TrustCenterSettingHistory.EnableAutoApproval == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.EnableAutoApproval(childComplexity), true
 	case "TrustCenterSettingHistory.environment":
 		if e.ComplexityRoot.TrustCenterSettingHistory.Environment == nil {
 			break
@@ -18450,6 +18499,8 @@ scalar RiskThresholdsConfig
 The ` + "`" + `IntegrationHealth` + "`" + ` scalar type records the runtime health state of an installed integration, including the unhealthy reason, per-operation failure reasons, and the last successful health check time
 """
 scalar IntegrationHealth
+
+scalar TrustCenterNDARequestSetting
 `, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
@@ -18604,6 +18655,22 @@ type ActionPlanHistory implements Node {
   """
   workflowEligibleMarker: Boolean
   """
+  the internal owner for the action plan when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the action plan
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the action plan
+  """
+  internalOwnerGroupID: String
+  """
+  the internal owner identity holder id for the action plan
+  """
+  internalOwnerIdentityHolderID: String
+  """
   short title describing the action plan
   """
   title: String!
@@ -18743,6 +18810,7 @@ enum ActionPlanHistoryOrderField {
   MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
+  internal_owner
   title
   due_date
   PRIORITY
@@ -19187,6 +19255,62 @@ input ActionPlanHistoryWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: String
+  internalOwnerUserIDNEQ: String
+  internalOwnerUserIDIn: [String!]
+  internalOwnerUserIDNotIn: [String!]
+  internalOwnerUserIDContains: String
+  internalOwnerUserIDHasPrefix: String
+  internalOwnerUserIDHasSuffix: String
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: String
+  internalOwnerUserIDContainsFold: String
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: String
+  internalOwnerGroupIDNEQ: String
+  internalOwnerGroupIDIn: [String!]
+  internalOwnerGroupIDNotIn: [String!]
+  internalOwnerGroupIDContains: String
+  internalOwnerGroupIDHasPrefix: String
+  internalOwnerGroupIDHasSuffix: String
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: String
+  internalOwnerGroupIDContainsFold: String
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: String
+  internalOwnerIdentityHolderIDNEQ: String
+  internalOwnerIdentityHolderIDIn: [String!]
+  internalOwnerIdentityHolderIDNotIn: [String!]
+  internalOwnerIdentityHolderIDContains: String
+  internalOwnerIdentityHolderIDHasPrefix: String
+  internalOwnerIdentityHolderIDHasSuffix: String
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: String
+  internalOwnerIdentityHolderIDContainsFold: String
   """
   title field predicates
   """
@@ -48697,6 +48821,7 @@ type TrustCenterNDARequestHistory implements Node {
   ID of the user who approved the request
   """
   approvedByUserID: String
+  autoApproved: Boolean
   """
   timestamp when the NDA was signed
   """
@@ -49015,6 +49140,13 @@ input TrustCenterNDARequestHistoryWhereInput {
   approvedByUserIDEqualFold: String
   approvedByUserIDContainsFold: String
   """
+  auto_approved field predicates
+  """
+  autoApproved: Boolean
+  autoApprovedNEQ: Boolean
+  autoApprovedIsNil: Boolean
+  autoApprovedNotNil: Boolean
+  """
   signed_at field predicates
   """
   signedAt: DateTime
@@ -49182,6 +49314,14 @@ type TrustCenterSettingHistory implements Node {
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
 }
 """
 A connection to a list of items.
@@ -49721,6 +49861,13 @@ input TrustCenterSettingHistoryWhereInput {
   noindexDefaultDomainNEQ: Boolean
   noindexDefaultDomainIsNil: Boolean
   noindexDefaultDomainNotNil: Boolean
+  """
+  enable_auto_approval field predicates
+  """
+  enableAutoApproval: Boolean
+  enableAutoApprovalNEQ: Boolean
+  enableAutoApprovalIsNil: Boolean
+  enableAutoApprovalNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!
@@ -54383,6 +54530,14 @@ func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, f
 		return ec.fieldContext_ActionPlanHistory_actionPlanKindID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_ActionPlanHistory_workflowEligibleMarker(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_ActionPlanHistory_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_ActionPlanHistory_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_ActionPlanHistory_internalOwnerGroupID(ctx, field)
+	case "internalOwnerIdentityHolderID":
+		return ec.fieldContext_ActionPlanHistory_internalOwnerIdentityHolderID(ctx, field)
 	case "title":
 		return ec.fieldContext_ActionPlanHistory_title(ctx, field)
 	case "description":
@@ -59237,6 +59392,8 @@ func (ec *executionContext) childFields_TrustCenterNDARequestHistory(ctx context
 		return ec.fieldContext_TrustCenterNDARequestHistory_approvedAt(ctx, field)
 	case "approvedByUserID":
 		return ec.fieldContext_TrustCenterNDARequestHistory_approvedByUserID(ctx, field)
+	case "autoApproved":
+		return ec.fieldContext_TrustCenterNDARequestHistory_autoApproved(ctx, field)
 	case "signedAt":
 		return ec.fieldContext_TrustCenterNDARequestHistory_signedAt(ctx, field)
 	case "documentDataID":
@@ -59347,6 +59504,10 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_statusPageURL(ctx, field)
 	case "noindexDefaultDomain":
 		return ec.fieldContext_TrustCenterSettingHistory_noindexDefaultDomain(ctx, field)
+	case "enableAutoApproval":
+		return ec.fieldContext_TrustCenterSettingHistory_enableAutoApproval(ctx, field)
+	case "autoApprovalRules":
+		return ec.fieldContext_TrustCenterSettingHistory_autoApprovalRules(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistory", field.Name)
 }

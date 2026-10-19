@@ -535,6 +535,20 @@ var (
 			}
 		},
 	}
+	// ActionPlanHistoryOrderFieldInternalOwner orders ActionPlanHistory by internal_owner.
+	ActionPlanHistoryOrderFieldInternalOwner = &ActionPlanHistoryOrderField{
+		Value: func(_m *ActionPlanHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: actionplanhistory.FieldInternalOwner,
+		toTerm: actionplanhistory.ByInternalOwner,
+		toCursor: func(_m *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
 	// ActionPlanHistoryOrderFieldTitle orders ActionPlanHistory by title.
 	ActionPlanHistoryOrderFieldTitle = &ActionPlanHistoryOrderField{
 		Value: func(_m *ActionPlanHistory) (ent.Value, error) {
@@ -615,6 +629,8 @@ func (f ActionPlanHistoryOrderField) String() string {
 		str = "review_due"
 	case ActionPlanHistoryOrderFieldReviewFrequency.column:
 		str = "REVIEW_FREQUENCY"
+	case ActionPlanHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case ActionPlanHistoryOrderFieldTitle.column:
 		str = "title"
 	case ActionPlanHistoryOrderFieldDueDate.column:
@@ -657,6 +673,8 @@ func (f *ActionPlanHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ActionPlanHistoryOrderFieldReviewDue
 	case "REVIEW_FREQUENCY":
 		*f = *ActionPlanHistoryOrderFieldReviewFrequency
+	case "internal_owner":
+		*f = *ActionPlanHistoryOrderFieldInternalOwner
 	case "title":
 		*f = *ActionPlanHistoryOrderFieldTitle
 	case "due_date":

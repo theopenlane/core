@@ -315,6 +315,26 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldWorkflowEligibleMarker)
 				fieldSeen[actionplanhistory.FieldWorkflowEligibleMarker] = struct{}{}
 			}
+		case "internalOwner":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalOwner]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalOwner)
+				fieldSeen[actionplanhistory.FieldInternalOwner] = struct{}{}
+			}
+		case "internalOwnerUserID":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalOwnerUserID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalOwnerUserID)
+				fieldSeen[actionplanhistory.FieldInternalOwnerUserID] = struct{}{}
+			}
+		case "internalOwnerGroupID":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalOwnerGroupID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalOwnerGroupID)
+				fieldSeen[actionplanhistory.FieldInternalOwnerGroupID] = struct{}{}
+			}
+		case "internalOwnerIdentityHolderID":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalOwnerIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalOwnerIdentityHolderID)
+				fieldSeen[actionplanhistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
+			}
 		case "title":
 			if _, ok := fieldSeen[actionplanhistory.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldTitle)
@@ -12919,6 +12939,11 @@ func (_q *TrustCenterNDARequestHistoryQuery) collectField(ctx context.Context, o
 				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldApprovedByUserID)
 				fieldSeen[trustcenterndarequesthistory.FieldApprovedByUserID] = struct{}{}
 			}
+		case "autoApproved":
+			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldAutoApproved]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldAutoApproved)
+				fieldSeen[trustcenterndarequesthistory.FieldAutoApproved] = struct{}{}
+			}
 		case "signedAt":
 			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldSignedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldSignedAt)
@@ -13202,6 +13227,16 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldNoindexDefaultDomain]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNoindexDefaultDomain)
 				fieldSeen[trustcentersettinghistory.FieldNoindexDefaultDomain] = struct{}{}
+			}
+		case "enableAutoApproval":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldEnableAutoApproval]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldEnableAutoApproval)
+				fieldSeen[trustcentersettinghistory.FieldEnableAutoApproval] = struct{}{}
+			}
+		case "autoApprovalRules":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldAutoApprovalRules]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAutoApprovalRules)
+				fieldSeen[trustcentersettinghistory.FieldAutoApprovalRules] = struct{}{}
 			}
 		case "id":
 		case "__typename":

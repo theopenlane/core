@@ -155,6 +155,16 @@ func (c *Client) resolveActionPlanNotificationTargets(ctx context.Context, objec
 			return nil, err
 		}
 		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("INTERNAL_OWNER_USER"):
+		if obj.InternalOwnerUserID != "" {
+			return []string{obj.InternalOwnerUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("INTERNAL_OWNER_GROUP"):
+		if obj.InternalOwnerGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.InternalOwnerGroupID)
+		}
+		return nil, nil
 	default:
 		return nil, nil
 	}

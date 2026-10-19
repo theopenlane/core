@@ -202,6 +202,7 @@ type CreateActionPlanInput struct {
 	SystemInternalID                *string                       `json:"system_internal_id,omitempty"`
 	ActionPlanKindName              *string                       `json:"action_plan_kind_name,omitempty"`
 	WorkflowEligibleMarker          *bool                         `json:"workflow_eligible_marker,omitempty"`
+	InternalOwner                   *string                       `json:"internal_owner,omitempty"`
 	Title                           string                        `json:"title,omitempty"`
 	Description                     *string                       `json:"description,omitempty"`
 	DueDate                         *time.Time                    `json:"due_date,omitempty"`
@@ -221,6 +222,9 @@ type CreateActionPlanInput struct {
 	EditorIDs                       []string                      `json:"editor_ids,omitempty"`
 	ViewerIDs                       []string                      `json:"viewer_ids,omitempty"`
 	ActionPlanKindID                *string                       `json:"action_plan_kind_id,omitempty"`
+	InternalOwnerUserID             *string                       `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID            *string                       `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID   *string                       `json:"internal_owner_identity_holder_id,omitempty"`
 	RiskIDs                         []string                      `json:"risk_ids,omitempty"`
 	ControlIDs                      []string                      `json:"control_ids,omitempty"`
 	ProgramIDs                      []string                      `json:"program_ids,omitempty"`
@@ -304,6 +308,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
 	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
 	m.SetTitle(i.Title)
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
@@ -358,6 +365,15 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ActionPlanKindID; v != nil {
 		m.SetActionPlanKindID(*v)
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
 	}
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
@@ -457,7 +473,9 @@ type UpdateActionPlanInput struct {
 	ClearActionPlanKindName               bool
 	ActionPlanKindName                    *string `json:"action_plan_kind_name,omitempty"`
 	ClearWorkflowEligibleMarker           bool
-	WorkflowEligibleMarker                *bool   `json:"workflow_eligible_marker,omitempty"`
+	WorkflowEligibleMarker                *bool `json:"workflow_eligible_marker,omitempty"`
+	ClearInternalOwner                    bool
+	InternalOwner                         *string `json:"internal_owner,omitempty"`
 	Title                                 *string `json:"title,omitempty"`
 	ClearDescription                      bool
 	Description                           *string `json:"description,omitempty"`
@@ -495,6 +513,12 @@ type UpdateActionPlanInput struct {
 	RemoveViewerIDs                       []string `json:"remove_viewer_ids,omitempty"`
 	ClearActionPlanKind                   bool
 	ActionPlanKindID                      *string `json:"action_plan_kind_id,omitempty"`
+	ClearInternalOwnerUser                bool
+	InternalOwnerUserID                   *string `json:"internal_owner_user_id,omitempty"`
+	ClearInternalOwnerGroup               bool
+	InternalOwnerGroupID                  *string `json:"internal_owner_group_id,omitempty"`
+	ClearInternalOwnerIdentityHolder      bool
+	InternalOwnerIdentityHolderID         *string `json:"internal_owner_identity_holder_id,omitempty"`
 	ClearRisks                            bool
 	AddRiskIDs                            []string `json:"add_risk_ids,omitempty"`
 	RemoveRiskIDs                         []string `json:"remove_risk_ids,omitempty"`
@@ -693,6 +717,12 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
 	}
+	if i.ClearInternalOwner {
+		m.ClearInternalOwner()
+	}
+	if v := i.InternalOwner; v != nil {
+		m.SetInternalOwner(*v)
+	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
 	}
@@ -803,6 +833,24 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ActionPlanKindID; v != nil {
 		m.SetActionPlanKindID(*v)
+	}
+	if i.ClearInternalOwnerUser {
+		m.ClearInternalOwnerUser()
+	}
+	if v := i.InternalOwnerUserID; v != nil {
+		m.SetInternalOwnerUserID(*v)
+	}
+	if i.ClearInternalOwnerGroup {
+		m.ClearInternalOwnerGroup()
+	}
+	if v := i.InternalOwnerGroupID; v != nil {
+		m.SetInternalOwnerGroupID(*v)
+	}
+	if i.ClearInternalOwnerIdentityHolder {
+		m.ClearInternalOwnerIdentityHolder()
+	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
 	}
 	if i.ClearRisks {
 		m.ClearRisks()
@@ -27033,35 +27081,37 @@ func (c *TrustCenterNDARequestUpdateOne) SetInput(i UpdateTrustCenterNDARequestI
 
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
-	TrustCenterID                         *string                       `json:"trust_center_id,omitempty"`
-	Title                                 *string                       `json:"title,omitempty"`
-	CompanyName                           *string                       `json:"company_name,omitempty"`
-	CompanyDescription                    *string                       `json:"company_description,omitempty"`
-	Overview                              *string                       `json:"overview,omitempty"`
-	LogoRemoteURL                         *string                       `json:"logo_remote_url,omitempty"`
-	FaviconRemoteURL                      *string                       `json:"favicon_remote_url,omitempty"`
-	ThemeMode                             *enums.TrustCenterThemeMode   `json:"theme_mode,omitempty"`
-	PrimaryColor                          *string                       `json:"primary_color,omitempty"`
-	Font                                  *string                       `json:"font,omitempty"`
-	ForegroundColor                       *string                       `json:"foreground_color,omitempty"`
-	BackgroundColor                       *string                       `json:"background_color,omitempty"`
-	AccentColor                           *string                       `json:"accent_color,omitempty"`
-	SecondaryBackgroundColor              *string                       `json:"secondary_background_color,omitempty"`
-	SecondaryForegroundColor              *string                       `json:"secondary_foreground_color,omitempty"`
-	Environment                           *enums.TrustCenterEnvironment `json:"environment,omitempty"`
-	CompanyDomain                         *string                       `json:"company_domain,omitempty"`
-	SecurityContact                       *string                       `json:"security_contact,omitempty"`
-	NdaApprovalRequired                   *bool                         `json:"nda_approval_required,omitempty"`
-	AllowSubscribers                      *bool                         `json:"allow_subscribers,omitempty"`
-	NotifySubscribersOnSubprocessorChange *bool                         `json:"notify_subscribers_on_subprocessor_change,omitempty"`
-	StatusPageURL                         *string                       `json:"status_page_url,omitempty"`
-	NoindexDefaultDomain                  *bool                         `json:"noindex_default_domain,omitempty"`
-	BlockedGroupIDs                       []string                      `json:"blocked_group_ids,omitempty"`
-	EditorIDs                             []string                      `json:"editor_ids,omitempty"`
-	LogoFileID                            *string                       `json:"logo_file_id,omitempty"`
-	FaviconFileID                         *string                       `json:"favicon_file_id,omitempty"`
-	HeroImageFileID                       *string                       `json:"hero_image_file_id,omitempty"`
-	NdaApproverGroupID                    *string                       `json:"nda_approver_group_id,omitempty"`
+	TrustCenterID                         *string                              `json:"trust_center_id,omitempty"`
+	Title                                 *string                              `json:"title,omitempty"`
+	CompanyName                           *string                              `json:"company_name,omitempty"`
+	CompanyDescription                    *string                              `json:"company_description,omitempty"`
+	Overview                              *string                              `json:"overview,omitempty"`
+	LogoRemoteURL                         *string                              `json:"logo_remote_url,omitempty"`
+	FaviconRemoteURL                      *string                              `json:"favicon_remote_url,omitempty"`
+	ThemeMode                             *enums.TrustCenterThemeMode          `json:"theme_mode,omitempty"`
+	PrimaryColor                          *string                              `json:"primary_color,omitempty"`
+	Font                                  *string                              `json:"font,omitempty"`
+	ForegroundColor                       *string                              `json:"foreground_color,omitempty"`
+	BackgroundColor                       *string                              `json:"background_color,omitempty"`
+	AccentColor                           *string                              `json:"accent_color,omitempty"`
+	SecondaryBackgroundColor              *string                              `json:"secondary_background_color,omitempty"`
+	SecondaryForegroundColor              *string                              `json:"secondary_foreground_color,omitempty"`
+	Environment                           *enums.TrustCenterEnvironment        `json:"environment,omitempty"`
+	CompanyDomain                         *string                              `json:"company_domain,omitempty"`
+	SecurityContact                       *string                              `json:"security_contact,omitempty"`
+	NdaApprovalRequired                   *bool                                `json:"nda_approval_required,omitempty"`
+	AllowSubscribers                      *bool                                `json:"allow_subscribers,omitempty"`
+	NotifySubscribersOnSubprocessorChange *bool                                `json:"notify_subscribers_on_subprocessor_change,omitempty"`
+	StatusPageURL                         *string                              `json:"status_page_url,omitempty"`
+	NoindexDefaultDomain                  *bool                                `json:"noindex_default_domain,omitempty"`
+	EnableAutoApproval                    *bool                                `json:"enable_auto_approval,omitempty"`
+	AutoApprovalRules                     *models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
+	BlockedGroupIDs                       []string                             `json:"blocked_group_ids,omitempty"`
+	EditorIDs                             []string                             `json:"editor_ids,omitempty"`
+	LogoFileID                            *string                              `json:"logo_file_id,omitempty"`
+	FaviconFileID                         *string                              `json:"favicon_file_id,omitempty"`
+	HeroImageFileID                       *string                              `json:"hero_image_file_id,omitempty"`
+	NdaApproverGroupID                    *string                              `json:"nda_approver_group_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -27135,6 +27185,12 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.NoindexDefaultDomain; v != nil {
 		m.SetNoindexDefaultDomain(*v)
 	}
+	if v := i.EnableAutoApproval; v != nil {
+		m.SetEnableAutoApproval(*v)
+	}
+	if v := i.AutoApprovalRules; v != nil {
+		m.SetAutoApprovalRules(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -27207,6 +27263,10 @@ type UpdateTrustCenterSettingInput struct {
 	StatusPageURL                              *string `json:"status_page_url,omitempty"`
 	ClearNoindexDefaultDomain                  bool
 	NoindexDefaultDomain                       *bool `json:"noindex_default_domain,omitempty"`
+	ClearEnableAutoApproval                    bool
+	EnableAutoApproval                         *bool `json:"enable_auto_approval,omitempty"`
+	ClearAutoApprovalRules                     bool
+	AutoApprovalRules                          *models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs                      []string `json:"remove_blocked_group_ids,omitempty"`
@@ -27356,6 +27416,18 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.NoindexDefaultDomain; v != nil {
 		m.SetNoindexDefaultDomain(*v)
+	}
+	if i.ClearEnableAutoApproval {
+		m.ClearEnableAutoApproval()
+	}
+	if v := i.EnableAutoApproval; v != nil {
+		m.SetEnableAutoApproval(*v)
+	}
+	if i.ClearAutoApprovalRules {
+		m.ClearAutoApprovalRules()
+	}
+	if v := i.AutoApprovalRules; v != nil {
+		m.SetAutoApprovalRules(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

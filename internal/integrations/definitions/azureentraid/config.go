@@ -1,16 +1,6 @@
 package azureentraid
 
+import "github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
+
 // Config holds operator-level credentials for the Azure Entra ID definition
-type Config struct {
-	// ClientID is the Azure application (client) identifier registered for this integration
-	ClientID string `json:"clientid" koanf:"clientid"`
-	// ClientSecret is the Azure application client secret used for client credentials auth
-	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
-	// RedirectURL is the OAuth callback URL registered with the Azure application
-	RedirectURL string `json:"redirecturl" koanf:"redirecturl" default:"https://api.theopenlane.io/v1/integrations/auth/callback"`
-	// DefaultTenant pins the admin consent flow to a specific tenant ID or domain (e.g. for local dev/testing)
-	// when empty the generic /organizations endpoint is used
-	DefaultTenant string `json:"defaulttenant" koanf:"defaulttenant"`
-	// ApplicationID is the application ID registered in azure, used in the well-known configuration for domain validation
-	ApplicationID string `json:"applicationid" koanf:"applicationid"`
-}
+type Config = microsoft.AppConfig

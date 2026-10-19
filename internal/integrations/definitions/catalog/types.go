@@ -3,6 +3,7 @@ package catalog
 import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
@@ -37,6 +38,8 @@ type Config struct {
 	GoogleWorkspace googleworkspace.Config `json:"googleworkspace" koanf:"googleworkspace"`
 	// AzureEntraID holds OAuth credentials for the Azure Entra ID definition
 	AzureEntraID azureentraid.Config `json:"azureentraid" koanf:"azureentraid"`
+	// AzureSecurityCenter holds OAuth credentials for the Azure Security Center definition
+	AzureSecurityCenter azuresecuritycenter.Config `json:"azuresecuritycenter" koanf:"azuresecuritycenter"`
 	// MicrosoftTeams holds OAuth credentials for the Microsoft Teams definition
 	MicrosoftTeams microsoftteams.Config `json:"microsoftteams" koanf:"microsoftteams"`
 	// OneDrive holds OAuth credentials for the OneDrive definition

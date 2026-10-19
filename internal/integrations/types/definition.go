@@ -112,6 +112,11 @@ func (d Definition) ConnectionList() []Connection {
 	})
 }
 
+// Installable reports whether the definition declares any per-installation surface an organization can configure; operator-only definitions declare none
+func (d Definition) Installable() bool {
+	return len(d.Connections) > 0 || d.UserInput != nil || d.Installation != nil
+}
+
 // Connection returns the connection with the given name
 func (d Definition) Connection(name string) (Connection, bool) {
 	return lo.Find(d.ConnectionList(), func(c Connection) bool {

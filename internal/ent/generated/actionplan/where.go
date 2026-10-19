@@ -221,6 +221,26 @@ func WorkflowEligibleMarker(v bool) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
 }
 
+// InternalOwner applies equality check predicate on the "internal_owner" field. It's identical to InternalOwnerEQ.
+func InternalOwner(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserID applies equality check predicate on the "internal_owner_user_id" field. It's identical to InternalOwnerUserIDEQ.
+func InternalOwnerUserID(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupID applies equality check predicate on the "internal_owner_group_id" field. It's identical to InternalOwnerGroupIDEQ.
+func InternalOwnerGroupID(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerIdentityHolderID applies equality check predicate on the "internal_owner_identity_holder_id" field. It's identical to InternalOwnerIdentityHolderIDEQ.
+func InternalOwnerIdentityHolderID(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
 func Title(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldTitle, v))
@@ -2511,6 +2531,306 @@ func WorkflowEligibleMarkerNotNil() predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
+// InternalOwnerEQ applies the EQ predicate on the "internal_owner" field.
+func InternalOwnerEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerNEQ applies the NEQ predicate on the "internal_owner" field.
+func InternalOwnerNEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerIn applies the In predicate on the "internal_owner" field.
+func InternalOwnerIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerNotIn applies the NotIn predicate on the "internal_owner" field.
+func InternalOwnerNotIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerGT applies the GT predicate on the "internal_owner" field.
+func InternalOwnerGT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGT(FieldInternalOwner, v))
+}
+
+// InternalOwnerGTE applies the GTE predicate on the "internal_owner" field.
+func InternalOwnerGTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerLT applies the LT predicate on the "internal_owner" field.
+func InternalOwnerLT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLT(FieldInternalOwner, v))
+}
+
+// InternalOwnerLTE applies the LTE predicate on the "internal_owner" field.
+func InternalOwnerLTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerContains applies the Contains predicate on the "internal_owner" field.
+func InternalOwnerContains(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContains(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasPrefix applies the HasPrefix predicate on the "internal_owner" field.
+func InternalOwnerHasPrefix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasPrefix(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasSuffix applies the HasSuffix predicate on the "internal_owner" field.
+func InternalOwnerHasSuffix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasSuffix(FieldInternalOwner, v))
+}
+
+// InternalOwnerIsNil applies the IsNil predicate on the "internal_owner" field.
+func InternalOwnerIsNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIsNull(FieldInternalOwner))
+}
+
+// InternalOwnerNotNil applies the NotNil predicate on the "internal_owner" field.
+func InternalOwnerNotNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotNull(FieldInternalOwner))
+}
+
+// InternalOwnerEqualFold applies the EqualFold predicate on the "internal_owner" field.
+func InternalOwnerEqualFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEqualFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerContainsFold applies the ContainsFold predicate on the "internal_owner" field.
+func InternalOwnerContainsFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContainsFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserIDEQ applies the EQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDNEQ applies the NEQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIn applies the In predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDNotIn applies the NotIn predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDGT applies the GT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDGTE applies the GTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLT applies the LT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLTE applies the LTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContains applies the Contains predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContains(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContains(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasPrefix applies the HasPrefix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasPrefix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasPrefix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasSuffix applies the HasSuffix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasSuffix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasSuffix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIsNil applies the IsNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIsNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIsNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDNotNil applies the NotNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDEqualFold applies the EqualFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEqualFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEqualFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContainsFold applies the ContainsFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContainsFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContainsFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupIDEQ applies the EQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDNEQ applies the NEQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIn applies the In predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDNotIn applies the NotIn predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDGT applies the GT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDGTE applies the GTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLT applies the LT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLTE applies the LTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContains applies the Contains predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContains(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContains(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasPrefix applies the HasPrefix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasPrefix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasPrefix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasSuffix applies the HasSuffix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasSuffix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasSuffix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIsNil applies the IsNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIsNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIsNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDNotNil applies the NotNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDEqualFold applies the EqualFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEqualFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEqualFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContainsFold applies the ContainsFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContainsFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerIdentityHolderIDEQ applies the EQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNEQ(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIn applies the In predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotIn(vs ...string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDGT applies the GT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDGTE applies the GTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldGTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLT applies the LT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLT(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLTE applies the LTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLTE(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldLTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContains applies the Contains predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContains(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContains(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasPrefix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasPrefix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasSuffix(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldHasSuffix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIsNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIsNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEqualFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldEqualFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContainsFold(v string) predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldContainsFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // TitleEQ applies the EQ predicate on the "title" field.
 func TitleEQ(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldTitle, v))
@@ -3157,6 +3477,75 @@ func HasActionPlanKind() predicate.ActionPlan {
 func HasActionPlanKindWith(preds ...predicate.CustomTypeEnum) predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {
 		step := newActionPlanKindStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalOwnerUser applies the HasEdge predicate on the "internal_owner_user" edge.
+func HasInternalOwnerUser() predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerUserWith applies the HasEdge predicate on the "internal_owner_user" edge with a given conditions (other predicates).
+func HasInternalOwnerUserWith(preds ...predicate.User) predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := newInternalOwnerUserStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalOwnerGroup applies the HasEdge predicate on the "internal_owner_group" edge.
+func HasInternalOwnerGroup() predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerGroupWith applies the HasEdge predicate on the "internal_owner_group" edge with a given conditions (other predicates).
+func HasInternalOwnerGroupWith(preds ...predicate.Group) predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := newInternalOwnerGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalOwnerIdentityHolder applies the HasEdge predicate on the "internal_owner_identity_holder" edge.
+func HasInternalOwnerIdentityHolder() predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerIdentityHolderWith applies the HasEdge predicate on the "internal_owner_identity_holder" edge with a given conditions (other predicates).
+func HasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := newInternalOwnerIdentityHolderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

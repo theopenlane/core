@@ -26,6 +26,10 @@ mutation CreateActionPlan ($input: CreateActionPlanInput!) {
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -84,6 +88,10 @@ mutation CreateBulkActionPlan ($input: [CreateActionPlanInput!]) {
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -142,6 +150,10 @@ mutation CreateBulkCSVActionPlan ($input: Upload!) {
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -204,6 +216,10 @@ query GetActionPlanByID ($actionPlanId: ID!) {
 		improvementSuggestions
 		integrationRunID
 		internalNotes
+		internalOwner
+		internalOwnerGroupID
+		internalOwnerIdentityHolderID
+		internalOwnerUserID
 		managedBy
 		managementMode
 		metadata
@@ -309,6 +325,10 @@ mutation UpdateActionPlan ($updateActionPlanId: ID!, $input: UpdateActionPlanInp
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata
@@ -367,6 +387,10 @@ mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
 			improvementSuggestions
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			managementMode
 			metadata

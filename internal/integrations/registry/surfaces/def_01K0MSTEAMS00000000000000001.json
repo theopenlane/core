@@ -1,6 +1,6 @@
 {
-  "hash": "21393a9d159cc455a8257f6d3a5ec409e63532b738362b7d6bcc0a27165df3b0",
-  "version": "01M49CHH2NPBMN1CMF94JHK4SH",
+  "hash": "63c4ff5fec4040db3821728ad8910f8013e782cd3bb05490204c818b79ff3425",
+  "version": "01M52Y3C265Y1EAZ3P5YMBPJT1",
   "surface": {
     "id": "def_01K0MSTEAMS00000000000000001",
     "credentials": [
@@ -74,7 +74,13 @@
     ],
     "operations": [
       {
+        "name": "ChannelsListOperation"
+      },
+      {
         "name": "MessageSendOperation"
+      },
+      {
+        "name": "TestMessageSendOperation"
       }
     ]
   }

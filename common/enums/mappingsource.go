@@ -25,7 +25,9 @@ func (MappingSource) Values() []string { return stringValues(mappingSourceValues
 func (r MappingSource) String() string { return string(r) }
 
 // ToMappingSource converts a string to its corresponding MappingSource enum value.
-func ToMappingSource(r string) *MappingSource { return parse(r, mappingSourceValues, &MappingSourceInvalid) }
+func ToMappingSource(r string) *MappingSource {
+	return parse(r, mappingSourceValues, &MappingSourceInvalid)
+}
 
 // MarshalGQL implements the gqlgen Marshaler interface.
 func (r MappingSource) MarshalGQL(w io.Writer) { marshalGQL(r, w) }

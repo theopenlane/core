@@ -15,7 +15,7 @@ const incomingWebhookKey = "incoming_webhook"
 const incomingWebhookChannelKey = "channel_id"
 
 // verify probes the workspace with auth.test and returns the installation identity with its default channel
-func verify[T any](ctx context.Context, req types.ConnectionRequest[T], c *SlackClient) (InstallationMetadata, error) {
+func verify[T any](ctx context.Context, req types.ConnectionRequest[T], c *Client) (InstallationMetadata, error) {
 	resp, err := c.API.AuthTestContext(ctx)
 	if err != nil {
 		return InstallationMetadata{}, ErrAuthTestFailed

@@ -149,10 +149,16 @@ Config contains the configuration for the core server
         "googledrive": {},
         "googleworkspace": {},
         "azureentraid": {},
+        "azuresecuritycenter": {
+            "lighthouse": {}
+        },
         "microsoftteams": {},
         "onedrive": {},
         "oidclocal": {},
-        "email": {},
+        "email": {
+            "resend": {},
+            "postmark": {}
+        },
         "paymentreminder": {
             "paymentmethodinterval": 30,
             "deletiondays": 7,
@@ -1832,7 +1838,8 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**slackruntime**](#defsslackruntimeslackconfig)|`object`|||
 |[**googledrive**](#defsgoogledriveconfig)|`object`|||
 |[**googleworkspace**](#defsgoogleworkspaceconfig)|`object`|||
-|[**azureentraid**](#defsazureentraidconfig)|`object`|||
+|[**azureentraid**](#defsmicrosoftappconfig)|`object`|||
+|[**azuresecuritycenter**](#defsazuresecuritycenterconfig)|`object`|||
 |[**microsoftteams**](#defsmicrosoftteamsconfig)|`object`|||
 |[**onedrive**](#defsonedriveconfig)|`object`|||
 |[**oidclocal**](#defsoidclocalconfig)|`object`|||
@@ -1856,10 +1863,16 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "googledrive": {},
     "googleworkspace": {},
     "azureentraid": {},
+    "azuresecuritycenter": {
+        "lighthouse": {}
+    },
     "microsoftteams": {},
     "onedrive": {},
     "oidclocal": {},
-    "email": {},
+    "email": {
+        "resend": {},
+        "postmark": {}
+    },
     "paymentreminder": {
         "paymentmethodinterval": 30,
         "deletiondays": 7,
@@ -2000,18 +2013,52 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 **Additional Properties:** not allowed   
    
-<a name="defsazureentraidconfig"></a>
-### $defs/azureentraid\.Config: object
+<a name="defsmicrosoftappconfig"></a>
+### $defs/microsoft\.AppConfig: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientid**|`string`|||
+|**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**defaulttenant**|`string`|||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsazuresecuritycenterconfig"></a>
+### $defs/azuresecuritycenter\.Config: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
 |**applicationid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
+|[**lighthouse**](#defsmicrosoftlighthouseconfig)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "lighthouse": {}
+}
+```
+
+   
+<a name="defsmicrosoftlighthouseconfig"></a>
+#### $defs/microsoft\.LighthouseConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**managingtenantid**|`string`|||
+|**principalid**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2022,10 +2069,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientid**|`string`|||
+|**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
-|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2036,11 +2082,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientid**|`string`|||
+|**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**contentmode**|`string`|||
-|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2067,9 +2112,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**testdir**|`string`|Directory for dev-mode email output<br/>|no|
-|**resendsecret**|`string`|Resend webhook signing secret<br/>|no|
-|**apikey**|`string`|Email provider API key<br/>|yes|
-|**provider**|`string`|Email service provider<br/>Enum: `"resend"`<br/>|yes|
+|**provider**|`string`|Email service provider<br/>Enum: `"resend"`, `"postmark"`<br/>|yes|
+|[**resend**](#defsemailresendconfig)|`object`||yes|
+|[**postmark**](#defsemailpostmarkconfig)|`object`||yes|
 |**fromemail**|`string`|Sender email address<br/>|yes|
 |**supportemail**|`string`|Support contact email address<br/>|no|
 |**questionnaireemail**|`string`|Sender override for questionnaire auth emails<br/>|no|
@@ -2099,6 +2144,42 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**FooterTextColor**|`string`|Muted text color for headers footers and secondary content<br/>|no|
 |**AccentBorderColor**|`string`|Decorative accent color applied to borders only<br/>|no|
 |**Tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "resend": {},
+    "postmark": {}
+}
+```
+
+   
+<a name="defsemailresendconfig"></a>
+#### $defs/email\.ResendConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**apikey**|`string`|Resend API key<br/>|yes|
+|**webhooksecret**|`string`|Resend webhook signing secret<br/>|no|
+
+**Additional Properties:** not allowed   
+   
+<a name="defsemailpostmarkconfig"></a>
+#### $defs/email\.PostmarkConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**servertoken**|`string`|Postmark server API token<br/>|yes|
+|**messagestream**|`string`|Postmark message stream ID (defaults to outbound)<br/>|no|
+|**trackopens**|`boolean`|Enable Postmark open tracking<br/>|no|
+|**tracklinks**|`string`|Postmark link tracking mode<br/>Enum: `"None"`, `"HtmlAndText"`, `"HtmlOnly"`, `"TextOnly"`<br/>|no|
+|**webhooksecret**|`string`|Postmark webhook basic auth password<br/>|no|
 
 **Additional Properties:** not allowed   
    

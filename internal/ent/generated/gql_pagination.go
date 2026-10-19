@@ -1036,6 +1036,20 @@ var (
 			}
 		},
 	}
+	// ActionPlanOrderFieldInternalOwner orders ActionPlan by internal_owner.
+	ActionPlanOrderFieldInternalOwner = &ActionPlanOrderField{
+		Value: func(_m *ActionPlan) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: actionplan.FieldInternalOwner,
+		toTerm: actionplan.ByInternalOwner,
+		toCursor: func(_m *ActionPlan) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
 	// ActionPlanOrderFieldTitle orders ActionPlan by title.
 	ActionPlanOrderFieldTitle = &ActionPlanOrderField{
 		Value: func(_m *ActionPlan) (ent.Value, error) {
@@ -1114,6 +1128,8 @@ func (f ActionPlanOrderField) String() string {
 		str = "review_due"
 	case ActionPlanOrderFieldReviewFrequency.column:
 		str = "REVIEW_FREQUENCY"
+	case ActionPlanOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case ActionPlanOrderFieldTitle.column:
 		str = "title"
 	case ActionPlanOrderFieldDueDate.column:
@@ -1154,6 +1170,8 @@ func (f *ActionPlanOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ActionPlanOrderFieldReviewDue
 	case "REVIEW_FREQUENCY":
 		*f = *ActionPlanOrderFieldReviewFrequency
+	case "internal_owner":
+		*f = *ActionPlanOrderFieldInternalOwner
 	case "title":
 		*f = *ActionPlanOrderFieldTitle
 	case "due_date":
@@ -41005,6 +41023,9 @@ func (_q *ActionPlanQuery) clonePage() *ActionPlanQuery {
 		}
 	}
 	c.withActionPlanKind = _q.withActionPlanKind.clonePage()
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
 	c.withRisks = _q.withRisks.clonePage()
 	if _q.withNamedRisks != nil {
 		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))

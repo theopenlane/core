@@ -1,6 +1,6 @@
 {
-  "hash": "99ccec1a4b730ef8b97499831edadf5a347dc173089666220f92b560da436fc8",
-  "version": "01M49CHH2PQ6VZ1EN8863PXVPB",
+  "hash": "b466c8402d793245a7af0f26c2b13cbead466b9cfd9e1851e02bbbd0d29e459b",
+  "version": "01M532ZV2P247E2D3CF1PTFSK8",
   "surface": {
     "id": "def_01K0ONEDRIVE00000000000001",
     "credentials": [
@@ -65,6 +65,14 @@
               "domain": {
                 "type": "string",
                 "title": "Domain"
+              },
+              "driveId": {
+                "type": "string",
+                "title": "Drive ID"
+              },
+              "ownerName": {
+                "type": "string",
+                "title": "Owner Name"
               }
             },
             "additionalProperties": false,
@@ -102,11 +110,14 @@
                 "folderId": {
                   "type": "string",
                   "title": "Folder Path",
-                  "description": "Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."
+                  "description": "Folder path relative to drive root (e.g. Policies) containing policy documents"
                 }
               },
               "additionalProperties": false,
-              "type": "object"
+              "type": "object",
+              "required": [
+                "folderId"
+              ]
             }
           }
         }

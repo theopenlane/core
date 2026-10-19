@@ -40,6 +40,10 @@ type ActionPlanProjection struct {
 	ImprovementSuggestions          []string                     `json:"improvement_suggestions,omitempty"`
 	IntegrationRunID                string                       `json:"integration_run_id,omitempty"`
 	InternalNotes                   string                       `json:"internal_notes,omitempty"`
+	InternalOwner                   string                       `json:"internal_owner,omitempty"`
+	InternalOwnerGroupID            string                       `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID   string                       `json:"internal_owner_identity_holder_id,omitempty"`
+	InternalOwnerUserID             string                       `json:"internal_owner_user_id,omitempty"`
 	ManagedBy                       string                       `json:"managed_by,omitempty"`
 	ManagementMode                  enums.DocumentManagementMode `json:"management_mode,omitempty"`
 	Metadata                        map[string]interface{}       `json:"metadata,omitempty"`

@@ -227,7 +227,7 @@ func reconcileBrandingForTrustCenter(ctx context.Context, ownerID string) error 
 
 	ok, err := tx.OrgModule.Query().Where(
 		orgmodule.OwnerID(ownerID),
-		orgmodule.ModuleEQ(models.CatalogTrustcenterBrandingAddon),
+		orgmodule.ModuleEQ(models.CatalogBrandingTrustcenterAddon),
 		orgmodule.Active(true),
 	).Exist(ctx)
 	if err != nil {

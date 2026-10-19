@@ -161,11 +161,11 @@ func init() {
 	// actionplanhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	actionplanhistory.DefaultWorkflowEligibleMarker = actionplanhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanhistoryDescRequiresApproval is the schema descriptor for requires_approval field.
-	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[51].Descriptor()
+	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[55].Descriptor()
 	// actionplanhistory.DefaultRequiresApproval holds the default value on creation for the requires_approval field.
 	actionplanhistory.DefaultRequiresApproval = actionplanhistoryDescRequiresApproval.Default.(bool)
 	// actionplanhistoryDescBlocked is the schema descriptor for blocked field.
-	actionplanhistoryDescBlocked := actionplanhistoryFields[52].Descriptor()
+	actionplanhistoryDescBlocked := actionplanhistoryFields[56].Descriptor()
 	// actionplanhistory.DefaultBlocked holds the default value on creation for the blocked field.
 	actionplanhistory.DefaultBlocked = actionplanhistoryDescBlocked.Default.(bool)
 	// actionplanhistoryDescID is the schema descriptor for id field.
@@ -2504,6 +2504,10 @@ func init() {
 	trustcenterndarequesthistoryDescTags := trustcenterndarequesthistoryFields[11].Descriptor()
 	// trustcenterndarequesthistory.DefaultTags holds the default value on creation for the tags field.
 	trustcenterndarequesthistory.DefaultTags = trustcenterndarequesthistoryDescTags.Default.([]string)
+	// trustcenterndarequesthistoryDescAutoApproved is the schema descriptor for auto_approved field.
+	trustcenterndarequesthistoryDescAutoApproved := trustcenterndarequesthistoryFields[22].Descriptor()
+	// trustcenterndarequesthistory.DefaultAutoApproved holds the default value on creation for the auto_approved field.
+	trustcenterndarequesthistory.DefaultAutoApproved = trustcenterndarequesthistoryDescAutoApproved.Default.(bool)
 	// trustcenterndarequesthistoryDescID is the schema descriptor for id field.
 	trustcenterndarequesthistoryDescID := trustcenterndarequesthistoryFields[10].Descriptor()
 	// trustcenterndarequesthistory.DefaultID holds the default value on creation for the id field.
@@ -2553,6 +2557,10 @@ func init() {
 	trustcentersettinghistoryDescNoindexDefaultDomain := trustcentersettinghistoryFields[39].Descriptor()
 	// trustcentersettinghistory.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
 	trustcentersettinghistory.DefaultNoindexDefaultDomain = trustcentersettinghistoryDescNoindexDefaultDomain.Default.(bool)
+	// trustcentersettinghistoryDescAutoApprovalRules is the schema descriptor for auto_approval_rules field.
+	trustcentersettinghistoryDescAutoApprovalRules := trustcentersettinghistoryFields[41].Descriptor()
+	// trustcentersettinghistory.DefaultAutoApprovalRules holds the default value on creation for the auto_approval_rules field.
+	trustcentersettinghistory.DefaultAutoApprovalRules = trustcentersettinghistoryDescAutoApprovalRules.Default.(models.TrustCenterNDARequestSetting)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.
 	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[10].Descriptor()
 	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.

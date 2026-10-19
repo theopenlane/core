@@ -102,7 +102,7 @@ func trustCenterUpdateSubject(companyName, title string) string {
 // postContentBlocks renders the post body as it was written: HTML posts (the trust center editor stores rendered HTML) are sanitized with the shared email scrubber and injected as-is so authored formatting like lists and emphasis is preserved, while plain-text posts are escaped and wrapped into paragraphs
 func postContentBlocks(text string) []template.HTML {
 	if strings.Contains(text, "<") && strings.Contains(text, ">") {
-		return []template.HTML{template.HTML(EmailScrubber().Scrub(text))} //nolint:gosec
+		return []template.HTML{template.HTML(Scrubber().Scrub(text))} //nolint:gosec
 	}
 
 	return lo.FilterMap(strings.Split(text, "\n"), func(line string, _ int) (template.HTML, bool) {
