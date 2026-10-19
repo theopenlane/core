@@ -47,9 +47,10 @@ func Builder(cfg Config) registry.Builder {
 						},
 						Material: func(material auth.OAuthMaterial) (oneDriveCred, error) {
 							return oneDriveCred{
-								AccessToken:  material.AccessToken,
-								RefreshToken: material.RefreshToken,
-								Expiry:       material.Expiry,
+								AccessToken:   material.AccessToken,
+								RefreshToken:  material.RefreshToken,
+								Expiry:        material.Expiry,
+								ApplicationID: cfg.ApplicationID,
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,

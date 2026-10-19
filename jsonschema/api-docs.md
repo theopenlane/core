@@ -148,12 +148,16 @@ Config contains the configuration for the core server
         "slackruntime": {},
         "googledrive": {},
         "googleworkspace": {},
-        "azureentraid": {},
+        "azureentraid": {
+            "legacy": {}
+        },
         "azuresecuritycenter": {
             "lighthouse": {}
         },
         "microsoftteams": {},
-        "onedrive": {},
+        "onedrive": {
+            "legacy": {}
+        },
         "oidclocal": {},
         "email": {
             "resend": {},
@@ -1837,7 +1841,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**slackruntime**](#defsslackruntimeslackconfig)|`object`|||
 |[**googledrive**](#defsgoogledriveconfig)|`object`|||
 |[**googleworkspace**](#defsgoogleworkspaceconfig)|`object`|||
-|[**azureentraid**](#defsmicrosoftappconfig)|`object`|||
+|[**azureentraid**](#defsazureentraidconfig)|`object`|||
 |[**azuresecuritycenter**](#defsazuresecuritycenterconfig)|`object`|||
 |[**microsoftteams**](#defsmicrosoftteamsconfig)|`object`|||
 |[**onedrive**](#defsonedriveconfig)|`object`|||
@@ -1861,12 +1865,16 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "slackruntime": {},
     "googledrive": {},
     "googleworkspace": {},
-    "azureentraid": {},
+    "azureentraid": {
+        "legacy": {}
+    },
     "azuresecuritycenter": {
         "lighthouse": {}
     },
     "microsoftteams": {},
-    "onedrive": {},
+    "onedrive": {
+        "legacy": {}
+    },
     "oidclocal": {},
     "email": {
         "resend": {},
@@ -2012,8 +2020,8 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 **Additional Properties:** not allowed   
    
-<a name="defsmicrosoftappconfig"></a>
-### $defs/microsoft\.AppConfig: object
+<a name="defsazureentraidconfig"></a>
+### $defs/azureentraid\.Config: object
 
 **Properties**
 
@@ -2023,6 +2031,27 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**defaulttenant**|`string`|||
+|[**legacy**](#defsmicrosoftlegacyapp)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "legacy": {}
+}
+```
+
+   
+<a name="defsmicrosoftlegacyapp"></a>
+#### $defs/microsoft\.LegacyApp: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**applicationid**|`string`|||
+|**clientsecret**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2085,6 +2114,27 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**contentmode**|`string`|||
+|[**legacy**](#defsmicrosoftlegacyapp)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "legacy": {}
+}
+```
+
+   
+<a name="defsmicrosoftlegacyapp"></a>
+#### $defs/microsoft\.LegacyApp: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**applicationid**|`string`|||
+|**clientsecret**|`string`|||
 
 **Additional Properties:** not allowed   
    

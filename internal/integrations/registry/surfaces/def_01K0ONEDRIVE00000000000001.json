@@ -1,6 +1,6 @@
 {
-  "hash": "b466c8402d793245a7af0f26c2b13cbead466b9cfd9e1851e02bbbd0d29e459b",
-  "version": "01M532ZV2P247E2D3CF1PTFSK8",
+  "hash": "538ffe8bfbcad3aa2f4dc0f7ab33077fa818b8f04d407a9af4cf224fa33f3815",
+  "version": "01M5AYW49QDCD28TRAG3CYPP5R",
   "surface": {
     "id": "def_01K0ONEDRIVE00000000000001",
     "credentials": [
@@ -22,6 +22,9 @@
                 "expiry": {
                   "type": "string",
                   "format": "date-time"
+                },
+                "applicationId": {
+                  "type": "string"
                 }
               },
               "additionalProperties": false,

@@ -1199,6 +1199,12 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant }}
         defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.legacy }}
+        legacy:
+          {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.legacy.applicationid }}
+          applicationid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.legacy.applicationid | quote }}
+          {{- end }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter }}
       azuresecuritycenter:
@@ -1240,6 +1246,12 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.contentmode }}
         contentmode: {{ .Values.openlane.coreConfiguration.integrations.onedrive.contentmode | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.legacy }}
+        legacy:
+          {{- if .Values.openlane.coreConfiguration.integrations.onedrive.legacy.applicationid }}
+          applicationid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.legacy.applicationid | quote }}
+          {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.oidclocal }}

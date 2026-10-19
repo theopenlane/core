@@ -1,6 +1,6 @@
 {
-  "hash": "bd63c9b1289f6167c9e331e95fc942e517781b1509b4e26d8bcdf20ec314d3e5",
-  "version": "01M49CHH2NPBMN1CMF8MGZAXAZ",
+  "hash": "96b606996f8951b0af9291e0ea2ca98729a4899f7b7e6b86464e420862fa80fb",
+  "version": "01M5AYW49NAF0Q2VQGNK5M1VTT",
   "surface": {
     "id": "def_01K0AZENTRA0000000000000001",
     "credentials": [
@@ -16,6 +16,10 @@
                 "tenantId": {
                   "type": "string",
                   "title": "Tenant ID"
+                },
+                "applicationId": {
+                  "type": "string",
+                  "title": "Application ID"
                 }
               },
               "additionalProperties": false,

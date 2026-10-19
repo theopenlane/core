@@ -33,11 +33,13 @@ type DirectorySync struct {
 type entraIDCred struct {
 	// TenantID is the Azure Active Directory tenant identifier for this installation
 	TenantID string `json:"tenantId" jsonschema:"required,title=Tenant ID"`
+	// ApplicationID is the Azure app registration the tenant consented to, empty for installations that predate the tenant move
+	ApplicationID string `json:"applicationId,omitempty" jsonschema:"title=Application ID"`
 }
 
 // newEntraIDCred builds the Entra ID credential for a consented tenant
-func newEntraIDCred(tenantID string) entraIDCred {
-	return entraIDCred{TenantID: tenantID}
+func newEntraIDCred(tenantID, applicationID string) entraIDCred {
+	return entraIDCred{TenantID: tenantID, ApplicationID: applicationID}
 }
 
 // VerifiedDomain holds one verified domain entry for an Azure Entra ID tenant

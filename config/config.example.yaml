@@ -164,6 +164,9 @@ integrations:
         applicationid: ""
         clientsecret: ""
         defaulttenant: ""
+        legacy:
+            applicationid: ""
+            clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     azuresecuritycenter:
         applicationid: ""
@@ -252,6 +255,9 @@ integrations:
         applicationid: ""
         clientsecret: ""
         contentmode: iframe
+        legacy:
+            applicationid: ""
+            clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     organizationdelete:
         enabled: false

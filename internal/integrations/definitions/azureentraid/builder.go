@@ -31,7 +31,7 @@ func Builder(cfg Config) registry.Builder {
 				adminConsent.
 					Name("Azure Entra ID Admin Consent").
 					Description("Connect your Azure Entra ID tenant using admin consent.").
-					Authenticates(microsoft.AdminConsentFlow(cfg, newEntraIDCred)).
+					Authenticates(microsoft.AdminConsentFlow(cfg.AppConfig, newEntraIDCred)).
 					Provides(tokenCredentialClient(cfg)).
 					Provides(graphClient(cfg)).
 					Verified(verify).

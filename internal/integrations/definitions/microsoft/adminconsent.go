@@ -21,13 +21,13 @@ type adminConsentState struct {
 type adminConsent[T any] struct {
 	// cfg is the operator-level Azure application configuration
 	cfg AppConfig
-	// newCredential builds the definition's own credential from the consented tenant ID
-	newCredential func(tenantID string) T
+	// newCredential builds the definition's own credential from the consented tenant ID and the consented application ID
+	newCredential func(tenantID, applicationID string) T
 }
 
 // AdminConsentFlow builds an auth flow that uses the Azure admin consent endpoint
 // which grants application permissions so the client credentials flow can access the tenant
-func AdminConsentFlow[T any](cfg AppConfig, newCredential func(tenantID string) T) types.AuthFlow[T] {
+func AdminConsentFlow[T any](cfg AppConfig, newCredential func(tenantID, applicationID string) T) types.AuthFlow[T] {
 	consent := adminConsent[T]{cfg: cfg, newCredential: newCredential}
 
 	return types.NewAuthFlow[T](consent.start, consent.complete)
@@ -91,7 +91,7 @@ func (a adminConsent[T]) complete(ctx context.Context, state json.RawMessage, in
 		return types.AuthCompleteResult{}, ErrTenantIDNotFound
 	}
 
-	data, err := jsonx.ToRawMessage(a.newCredential(tenantID))
+	data, err := jsonx.ToRawMessage(a.newCredential(tenantID, a.cfg.ApplicationID))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error encoding auth result")
 		return types.AuthCompleteResult{}, ErrCredentialEncode

@@ -44,7 +44,7 @@ type securityCenterCred struct {
 }
 
 // newSecurityCenterCred builds the Security Center credential for a consented tenant
-func newSecurityCenterCred(tenantID string) securityCenterCred {
+func newSecurityCenterCred(tenantID, _ string) securityCenterCred {
 	return securityCenterCred{TenantID: tenantID}
 }
 

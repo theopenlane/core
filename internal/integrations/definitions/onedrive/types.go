@@ -29,6 +29,8 @@ type oneDriveCred struct {
 	RefreshToken string `json:"refreshToken,omitempty"`
 	// Expiry is the token expiration time
 	Expiry *time.Time `json:"expiry,omitempty"`
+	// ApplicationID is the Azure app registration that issued the tokens, empty for installations that predate the tenant move
+	ApplicationID string `json:"applicationId,omitempty"`
 }
 
 // DriveClient wraps the Graph client for OneDrive operations

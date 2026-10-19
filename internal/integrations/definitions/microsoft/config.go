@@ -2,6 +2,7 @@ package microsoft
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/cloud"
@@ -22,6 +23,28 @@ type AppConfig struct {
 
 	// endpoints redirects Microsoft endpoints, only set by the mock provider in tests
 	endpoints *endpointOverrides
+}
+
+// LegacyApp holds the retired Azure app registration that installations created before the app moved tenants still use
+type LegacyApp struct {
+	// ApplicationID is the Application (client) ID of the retired app registration
+	ApplicationID string `json:"applicationid" koanf:"applicationid"`
+	// ClientSecret is the client secret Value of the retired app registration
+	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
+}
+
+// ForApplication returns the app config for the registration an installation was created with, falling back to legacy when none was recorded
+func (c AppConfig) ForApplication(applicationID string, legacy LegacyApp) AppConfig {
+	if legacy.ApplicationID == "" {
+		return c
+	}
+
+	if applicationID == "" || strings.EqualFold(applicationID, legacy.ApplicationID) {
+		c.ApplicationID = legacy.ApplicationID
+		c.ClientSecret = legacy.ClientSecret
+	}
+
+	return c
 }
 
 // endpointOverrides points Microsoft clients at alternate login, ARM, and Graph hosts

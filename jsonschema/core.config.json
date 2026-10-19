@@ -61,6 +61,27 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "azureentraid.Config": {
+      "properties": {
+        "applicationid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        },
+        "defaulttenant": {
+          "type": "string"
+        },
+        "legacy": {
+          "$ref": "#/$defs/microsoft.LegacyApp"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "azuresecuritycenter.Config": {
       "properties": {
         "applicationid": {
@@ -172,7 +193,7 @@
           "$ref": "#/$defs/googleworkspace.Config"
         },
         "azureentraid": {
-          "$ref": "#/$defs/microsoft.AppConfig"
+          "$ref": "#/$defs/azureentraid.Config"
         },
         "azuresecuritycenter": {
           "$ref": "#/$defs/azuresecuritycenter.Config"
@@ -1228,18 +1249,12 @@
       },
       "type": "object"
     },
-    "microsoft.AppConfig": {
+    "microsoft.LegacyApp": {
       "properties": {
         "applicationid": {
           "type": "string"
         },
         "clientsecret": {
-          "type": "string"
-        },
-        "redirecturl": {
-          "type": "string"
-        },
-        "defaulttenant": {
           "type": "string"
         }
       },
@@ -1326,6 +1341,9 @@
         },
         "contentmode": {
           "type": "string"
+        },
+        "legacy": {
+          "$ref": "#/$defs/microsoft.LegacyApp"
         }
       },
       "additionalProperties": false,

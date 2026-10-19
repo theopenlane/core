@@ -26,7 +26,7 @@ func graphClient(cfg Config) func(context.Context, types.ConnectionRequest[entra
 			return nil, err
 		}
 
-		client, err := cfg.NewGraphClient(cred)
+		client, err := cfg.ForApplication(req.Credential.ApplicationID, cfg.Legacy).NewGraphClient(cred)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("azureentraid: failed to get graph client")
 			return nil, ErrTokenAcquireFailed
@@ -42,7 +42,7 @@ func tenantCredential(ctx context.Context, cfg Config, cred entraIDCred) (azcore
 		return nil, ErrCredentialMetadataRequired
 	}
 
-	tokenCred, err := microsoft.NewTokenCredential(cfg, cred.TenantID)
+	tokenCred, err := microsoft.NewTokenCredential(cfg.ForApplication(cred.ApplicationID, cfg.Legacy), cred.TenantID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("tenant_id", cred.TenantID).Msg("azureentraid: failed to create client secret credential")
 		return nil, ErrTokenAcquireFailed
