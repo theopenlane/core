@@ -100,7 +100,7 @@ func (n Note) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Note](
 				n,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}, TrustCenterFAQ{}, Review{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}, TrustCenterFAQ{}, Review{}, Vulnerability{}, Finding{}),
 				withOrganizationOwner(),
 				withOwnerRelation(fgax.OwnerRelation),
 				withAllowAnonymousTrustCenterAccess(true),
@@ -172,6 +172,22 @@ func (n Note) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Review{}.Name()),
 				entx.CSVRef().FromColumn("ReviewName").MatchOn("name"),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: Vulnerability{},
+			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: Finding{},
+			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Finding{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
