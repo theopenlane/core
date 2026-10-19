@@ -1,7 +1,13 @@
 -- +goose Up
+-- rename catalog pointer columns on "entity_history" table
+ALTER TABLE "entity_history" RENAME COLUMN "catalog_entity_id" TO "catalog_id";
+ALTER TABLE "entity_history" RENAME COLUMN "catalog_entity_key" TO "catalog_key";
 -- modify "entity_history" table
-ALTER TABLE "entity_history" DROP COLUMN "catalog_entity_id", DROP COLUMN "catalog_entity_key", ADD COLUMN "catalog_id" character varying NULL, ADD COLUMN "catalog_key" character varying NULL, ADD COLUMN "raw_ingest_payload" jsonb NULL;
+ALTER TABLE "entity_history" ADD COLUMN "raw_ingest_payload" jsonb NULL;
 
 -- +goose Down
 -- reverse: modify "entity_history" table
-ALTER TABLE "entity_history" DROP COLUMN "raw_ingest_payload", DROP COLUMN "catalog_key", DROP COLUMN "catalog_id", ADD COLUMN "catalog_entity_key" character varying NULL, ADD COLUMN "catalog_entity_id" character varying NULL;
+ALTER TABLE "entity_history" DROP COLUMN "raw_ingest_payload";
+-- reverse: rename catalog pointer columns on "entity_history" table
+ALTER TABLE "entity_history" RENAME COLUMN "catalog_key" TO "catalog_entity_key";
+ALTER TABLE "entity_history" RENAME COLUMN "catalog_id" TO "catalog_entity_id";
