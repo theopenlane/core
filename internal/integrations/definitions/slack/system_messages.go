@@ -63,8 +63,8 @@ type OrganizationsPendingDeletionMessage struct {
 }
 
 var (
-	NewUserOp = types.OperationPayloadOf[NewUserMessage]()
-
+	NewUserOp                      = types.OperationPayloadOf[NewUserMessage]()
+	IntegrationInstalledOp         = types.OperationPayloadOf[IntegrationInstalledMessage]()
 	DemoRequestOp                  = types.OperationPayloadOf[DemoRequestMessage]()
 	OrganizationsPendingDeletionOp = types.OperationPayloadOf[OrganizationsPendingDeletionMessage]()
 )
