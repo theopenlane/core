@@ -35,6 +35,11 @@ type entraIDCred struct {
 	TenantID string `json:"tenantId" jsonschema:"required,title=Tenant ID"`
 }
 
+// newEntraIDCred builds the Entra ID credential for a consented tenant
+func newEntraIDCred(tenantID string) entraIDCred {
+	return entraIDCred{TenantID: tenantID}
+}
+
 // VerifiedDomain holds one verified domain entry for an Azure Entra ID tenant
 type VerifiedDomain struct {
 	// Name is the domain name

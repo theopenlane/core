@@ -74,7 +74,7 @@ type cloudflareGroupMemberPayload struct {
 }
 
 // runDirectorySync collects Cloudflare account members and emits directory account ingest payloads
-func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *Client, _ DirectorySync) ([]types.IngestPayloadSet, error) {
 	accountID := client.Config.AccountID
 	if accountID == "" {
 		return nil, ErrAccountIDMissing
@@ -147,7 +147,7 @@ func isIncludedUserMember(member cloudflareMemberPayload, includedUsers map[stri
 }
 
 // listDirectoryUsers pages through all Cloudflare members for the given account
-func listDirectoryUsers(ctx context.Context, client *CloudflareClient, accountID string) ([]cloudflareMemberPayload, error) {
+func listDirectoryUsers(ctx context.Context, client *Client, accountID string) ([]cloudflareMemberPayload, error) {
 	iter := client.Accounts.Members.ListAutoPaging(ctx, accounts.MemberListParams{
 		AccountID: cf.F(accountID),
 	})
@@ -188,7 +188,7 @@ func listDirectoryUsers(ctx context.Context, client *CloudflareClient, accountID
 }
 
 // listDirectoryGroups pages through all Cloudflare user groups and permission groups
-func listDirectoryGroups(ctx context.Context, client *CloudflareClient, accountID string) ([]cloudflareGroupPayload, error) {
+func listDirectoryGroups(ctx context.Context, client *Client, accountID string) ([]cloudflareGroupPayload, error) {
 	iterUser := client.IAM.UserGroups.ListAutoPaging(ctx, iam.UserGroupListParams{
 		AccountID: cf.F(accountID),
 	})

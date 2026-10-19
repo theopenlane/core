@@ -18,8 +18,8 @@ import (
 // cloudflareRequestTimeout bounds every Cloudflare API request issued through the SDK client
 const cloudflareRequestTimeout = time.Minute
 
-// CloudflareClient wraps the Cloudflare SDK client with the account it's scoped to
-type CloudflareClient struct { //nolint:revive
+// Client wraps the Cloudflare SDK client with the account it's scoped to
+type Client struct {
 	*cf.Client
 	// Config holds the account scope and domain scan settings this client was built with
 	Config ClientConfig
@@ -36,7 +36,7 @@ type ClientConfig struct {
 }
 
 // buildClient constructs the Cloudflare API client for one installation
-func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*CloudflareClient, error) {
+func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*Client, error) {
 	if req.Credential.APIToken == "" {
 		return nil, ErrAPITokenMissing
 	}
@@ -46,7 +46,7 @@ func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema
 		return nil, err
 	}
 
-	return &CloudflareClient{
+	return &Client{
 		Client: cf.NewClient(
 			option.WithAPIToken(req.Credential.APIToken),
 			option.WithHTTPClient(httpClient),
@@ -75,7 +75,7 @@ func runtimeCloudflareClientBuilder() func(context.Context, json.RawMessage) (an
 			return nil, err
 		}
 
-		return &CloudflareClient{
+		return &Client{
 			Client: cf.NewClient(
 				option.WithAPIToken(cfg.APIToken),
 				option.WithHTTPClient(httpClient),

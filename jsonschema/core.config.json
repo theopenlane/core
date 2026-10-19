@@ -61,9 +61,9 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "azureentraid.Config": {
+    "azuresecuritycenter.Config": {
       "properties": {
-        "clientid": {
+        "applicationid": {
           "type": "string"
         },
         "clientsecret": {
@@ -75,8 +75,8 @@
         "defaulttenant": {
           "type": "string"
         },
-        "applicationid": {
-          "type": "string"
+        "lighthouse": {
+          "$ref": "#/$defs/microsoft.LighthouseConfig"
         }
       },
       "additionalProperties": false,
@@ -172,7 +172,10 @@
           "$ref": "#/$defs/googleworkspace.Config"
         },
         "azureentraid": {
-          "$ref": "#/$defs/azureentraid.Config"
+          "$ref": "#/$defs/microsoft.AppConfig"
+        },
+        "azuresecuritycenter": {
+          "$ref": "#/$defs/azuresecuritycenter.Config"
         },
         "microsoftteams": {
           "$ref": "#/$defs/microsoftteams.Config"
@@ -1225,9 +1228,9 @@
       },
       "type": "object"
     },
-    "microsoftteams.Config": {
+    "microsoft.AppConfig": {
       "properties": {
-        "clientid": {
+        "applicationid": {
           "type": "string"
         },
         "clientsecret": {
@@ -1236,7 +1239,34 @@
         "redirecturl": {
           "type": "string"
         },
+        "defaulttenant": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "microsoft.LighthouseConfig": {
+      "properties": {
+        "managingtenantid": {
+          "type": "string"
+        },
+        "principalid": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "microsoftteams.Config": {
+      "properties": {
         "applicationid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
           "type": "string"
         }
       },
@@ -1285,7 +1315,7 @@
     },
     "onedrive.Config": {
       "properties": {
-        "clientid": {
+        "applicationid": {
           "type": "string"
         },
         "clientsecret": {
@@ -1295,9 +1325,6 @@
           "type": "string"
         },
         "contentmode": {
-          "type": "string"
-        },
-        "applicationid": {
           "type": "string"
         }
       },

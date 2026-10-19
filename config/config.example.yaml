@@ -162,9 +162,16 @@ integrations:
         secretaccesskey: ""
     azureentraid:
         applicationid: ""
-        clientid: ""
         clientsecret: ""
         defaulttenant: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    azuresecuritycenter:
+        applicationid: ""
+        clientsecret: ""
+        defaulttenant: ""
+        lighthouse:
+            managingtenantid: ""
+            principalid: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     cloudflareruntime:
         accountid: ""
@@ -233,7 +240,6 @@ integrations:
         maxperrun: 100
     microsoftteams:
         applicationid: ""
-        clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     oidclocal:
@@ -244,7 +250,6 @@ integrations:
         redirecturl: http://localhost:17608/v1/integrations/auth/callback
     onedrive:
         applicationid: ""
-        clientid: ""
         clientsecret: ""
         contentmode: iframe
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback

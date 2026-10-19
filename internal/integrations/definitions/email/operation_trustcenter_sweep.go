@@ -35,7 +35,7 @@ const trustCenterNotificationGrace = time.Hour
 type TrustCenterNotificationSweep struct{}
 
 // TrustCenterNotificationOp is the operation ref for the global trust center notification sweep, which runs without a client
-var TrustCenterNotificationOp = types.OperationPayloadOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
+var TrustCenterNotificationOp = types.OperationPayloadOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback()
 
 // runTrustCenterNotificationSweep runs one trust center notification sweep cycle and encodes the processed count
 func runTrustCenterNotificationSweep(ctx context.Context, req types.OperationRequest, sweep TrustCenterNotificationSweep) (json.RawMessage, error) {

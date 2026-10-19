@@ -87,7 +87,7 @@ var DomainScanPollOp = types.OperationPayloadOf[DomainScanPoll]().
 	Internal()
 
 // runDomainScanPoll retrieves the configured URL Scanner result and encodes it
-func runDomainScanPoll(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanPoll) (json.RawMessage, error) {
+func runDomainScanPoll(ctx context.Context, _ types.OperationRequest, client *Client, cfg DomainScanPoll) (json.RawMessage, error) {
 	result, err := DomainScanPoll{}.Run(ctx, client, cfg)
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func runDomainScanPoll(ctx context.Context, _ types.OperationRequest, client *Cl
 }
 
 // Run retrieves a URL Scanner result by scan ID
-func (DomainScanPoll) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanPoll) (DomainScanPollResult, error) {
+func (DomainScanPoll) Run(ctx context.Context, client *Client, cfg DomainScanPoll) (DomainScanPollResult, error) {
 	result, taskErrors, err := getScanResultOnce(ctx, client, cfg.ScanResultID)
 	if err == nil {
 		return DomainScanPollResult{Result: result, TaskErrors: taskErrors}, nil
@@ -114,7 +114,7 @@ func (DomainScanPoll) Run(ctx context.Context, client *CloudflareClient, cfg Dom
 }
 
 // getScanResultOnce makes a single attempt at retrieving a URL Scanner result by scan ID
-func getScanResultOnce(ctx context.Context, client *CloudflareClient, scanID string) (*url_scanner.ScanGetResponse, ScanTaskErrors, error) {
+func getScanResultOnce(ctx context.Context, client *Client, scanID string) (*url_scanner.ScanGetResponse, ScanTaskErrors, error) {
 	result, err := client.URLScanner.Scans.Get(ctx, scanID, url_scanner.ScanGetParams{AccountID: cf.F(client.Config.AccountID)})
 	if err != nil {
 		return nil, nil, err

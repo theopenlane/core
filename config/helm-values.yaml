@@ -683,19 +683,23 @@ coreConfiguration:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
     azureentraid:
-      clientid: ""  # @schema type:string
+      applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       defaulttenant: ""  # @schema type:string
+    azuresecuritycenter:
       applicationid: ""  # @schema type:string
-    microsoftteams:
-      clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      defaulttenant: ""  # @schema type:string
+      lighthouse:
+        managingtenantid: ""  # @schema type:string
+        principalid: ""  # @schema type:string
+    microsoftteams:
       applicationid: ""  # @schema type:string
+      redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
     onedrive:
-      clientid: ""  # @schema type:string
+      applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       contentmode: "iframe"  # @schema type:string; default:iframe
-      applicationid: ""  # @schema type:string
     oidclocal:
       enabled: false  # @schema type:boolean; default:false
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
@@ -1092,6 +1096,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_AZUREENTRAID_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-azureentraid-clientsecret"  # @schema type:string
+    # -- core-integrations-azuresecuritycenter-clientsecret secret configuration
+    core-integrations-azuresecuritycenter-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.azuresecuritycenter.clientsecret
+      secretKey: "CORE_INTEGRATIONS_AZURESECURITYCENTER_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-azuresecuritycenter-clientsecret"  # @schema type:string
     # -- core-integrations-microsoftteams-clientsecret secret configuration
     core-integrations-microsoftteams-clientsecret:
       # -- Enable this external secret

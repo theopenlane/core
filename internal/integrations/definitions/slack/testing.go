@@ -141,8 +141,8 @@ func MockBotTokenCredential() types.CredentialSet {
 }
 
 // mockSlackClient builds a SlackClient whose API is pointed at the mock server
-func mockSlackClient(apiURL string) *SlackClient {
-	return &SlackClient{
+func mockSlackClient(apiURL string) *Client {
+	return &Client{
 		API:            slackgo.New("mock-token", slackgo.OptionAPIURL(apiURL)),
 		DefaultChannel: MockDefaultChannel,
 	}
