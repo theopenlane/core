@@ -97,21 +97,21 @@ type RiskThreshold struct {
 }
 
 const (
-	defaultVeryLowRiskMaxScore  = 3
-	defaultLowRiskMaxScore      = 5
-	defaultMediumRiskMaxScore   = 11
-	defaultHighRiskMaxScore     = 15
-	defaultCriticalRiskMaxScore = 20
+	defaultRiskVeryLowMaxScore  = 3
+	defaultRiskLowMaxScore      = 5
+	defaultRiskMediumMaxScore   = 11
+	defaultRiskHighMaxScore     = 15
+	defaultRiskCriticalMaxScore = 20
 )
 
 // DefaultRiskThresholds defines the system-default risk rating bands
 var DefaultRiskThresholds = []RiskThreshold{
 	{Rating: enums.VendorRiskRatingNone, MaxScore: 0},
-	{Rating: enums.VendorRiskRatingVeryLow, MaxScore: defaultVeryLowRiskMaxScore},
-	{Rating: enums.VendorRiskRatingLow, MaxScore: defaultLowRiskMaxScore},
-	{Rating: enums.VendorRiskRatingMedium, MaxScore: defaultMediumRiskMaxScore},
-	{Rating: enums.VendorRiskRatingHigh, MaxScore: defaultHighRiskMaxScore},
-	{Rating: enums.VendorRiskRatingCritical, MaxScore: defaultCriticalRiskMaxScore},
+	{Rating: enums.VendorRiskRatingVeryLow, MaxScore: defaultRiskVeryLowMaxScore},
+	{Rating: enums.VendorRiskRatingLow, MaxScore: defaultRiskLowMaxScore},
+	{Rating: enums.VendorRiskRatingMedium, MaxScore: defaultRiskMediumMaxScore},
+	{Rating: enums.VendorRiskRatingHigh, MaxScore: defaultRiskHighMaxScore},
+	{Rating: enums.VendorRiskRatingCritical, MaxScore: defaultRiskCriticalMaxScore},
 }
 
 // RiskThresholdsConfig is stored as a JSON field on VendorScoringConfig.
