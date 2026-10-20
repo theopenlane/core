@@ -1,17 +1,14 @@
 package onedrive
 
 import (
-	"fmt"
-
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
-
-const microsoftAuthBaseURL = "https://login.microsoftonline.com/%s/oauth2/v2.0"
 
 // Builder returns the OneDrive definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
@@ -37,10 +34,10 @@ func Builder(cfg Config) registry.Builder {
 					Description("Connect your Microsoft account using OAuth to access OneDrive documents.").
 					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
-							ClientID:     cfg.ClientID,
+							ClientID:     cfg.ApplicationID,
 							ClientSecret: cfg.ClientSecret,
-							AuthURL:      fmt.Sprintf(microsoftAuthBaseURL, "common") + "/authorize",
-							TokenURL:     fmt.Sprintf(microsoftAuthBaseURL, "common") + "/token",
+							AuthURL:      microsoft.AuthorizeURL(microsoft.CommonTenant),
+							TokenURL:     microsoft.TokenURL(microsoft.CommonTenant),
 							RedirectURL:  cfg.RedirectURL,
 							Scopes: []string{
 								"https://graph.microsoft.com/Files.Read",

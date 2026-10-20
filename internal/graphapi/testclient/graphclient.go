@@ -44073,8 +44073,8 @@ type GetEntityByID_Entity struct {
 	ApprovedForUse                        *bool                            "json:\"approvedForUse,omitempty\" graphql:\"approvedForUse\""
 	AutoRenews                            *bool                            "json:\"autoRenews,omitempty\" graphql:\"autoRenews\""
 	BillingModel                          *string                          "json:\"billingModel,omitempty\" graphql:\"billingModel\""
-	CatalogEntityID                       *string                          "json:\"catalogEntityID,omitempty\" graphql:\"catalogEntityID\""
-	CatalogEntityKey                      *string                          "json:\"catalogEntityKey,omitempty\" graphql:\"catalogEntityKey\""
+	CatalogID                             *string                          "json:\"catalogID,omitempty\" graphql:\"catalogID\""
+	CatalogKey                            *string                          "json:\"catalogKey,omitempty\" graphql:\"catalogKey\""
 	Contacts                              GetEntityByID_Entity_Contacts    "json:\"contacts\" graphql:\"contacts\""
 	ContractEndDate                       *models.DateTime                 "json:\"contractEndDate,omitempty\" graphql:\"contractEndDate\""
 	ContractRenewalAt                     *models.DateTime                 "json:\"contractRenewalAt,omitempty\" graphql:\"contractRenewalAt\""
@@ -44120,6 +44120,7 @@ type GetEntityByID_Entity struct {
 	ObservedAt                            *models.DateTime                 "json:\"observedAt,omitempty\" graphql:\"observedAt\""
 	OwnerID                               *string                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ProvidedServices                      []string                         "json:\"providedServices,omitempty\" graphql:\"providedServices\""
+	RawIngestPayload                      map[string]any                   "json:\"rawIngestPayload,omitempty\" graphql:\"rawIngestPayload\""
 	RenewalRisk                           *string                          "json:\"renewalRisk,omitempty\" graphql:\"renewalRisk\""
 	ReviewFrequency                       *enums.Frequency                 "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
 	ReviewedBy                            *string                          "json:\"reviewedBy,omitempty\" graphql:\"reviewedBy\""
@@ -44180,17 +44181,17 @@ func (t *GetEntityByID_Entity) GetBillingModel() *string {
 	}
 	return t.BillingModel
 }
-func (t *GetEntityByID_Entity) GetCatalogEntityID() *string {
+func (t *GetEntityByID_Entity) GetCatalogID() *string {
 	if t == nil {
 		t = &GetEntityByID_Entity{}
 	}
-	return t.CatalogEntityID
+	return t.CatalogID
 }
-func (t *GetEntityByID_Entity) GetCatalogEntityKey() *string {
+func (t *GetEntityByID_Entity) GetCatalogKey() *string {
 	if t == nil {
 		t = &GetEntityByID_Entity{}
 	}
-	return t.CatalogEntityKey
+	return t.CatalogKey
 }
 func (t *GetEntityByID_Entity) GetContacts() *GetEntityByID_Entity_Contacts {
 	if t == nil {
@@ -44461,6 +44462,12 @@ func (t *GetEntityByID_Entity) GetProvidedServices() []string {
 		t = &GetEntityByID_Entity{}
 	}
 	return t.ProvidedServices
+}
+func (t *GetEntityByID_Entity) GetRawIngestPayload() map[string]any {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.RawIngestPayload
 }
 func (t *GetEntityByID_Entity) GetRenewalRisk() *string {
 	if t == nil {
@@ -186043,8 +186050,8 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		approvedForUse
 		autoRenews
 		billingModel
-		catalogEntityID
-		catalogEntityKey
+		catalogID
+		catalogKey
 		contractEndDate
 		contractRenewalAt
 		contractStartDate
@@ -186085,6 +186092,7 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		observedAt
 		ownerID
 		providedServices
+		rawIngestPayload
 		renewalRisk
 		reviewFrequency
 		reviewedBy

@@ -421,13 +421,18 @@ tasks:
       - go run gotest.tools/gotestsum@latest --junitfile junit.xml --junitfile-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage.out -tags test
 
   go:testsum:ci:graph:
-    desc: runs tests only graph tests using gotestsum for CI
+    desc: runs tests only graph tests using gotestsum for CI, sharded by BUILDKITE_PARALLEL_JOB / BUILDKITE_PARALLEL_JOB_COUNT
     silent: true
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:graph']
     cmds:
-      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-graph.out -tags test
+      - |
+        SHARD="${BUILDKITE_PARALLEL_JOB:-0}"
+        SHARDS="${BUILDKITE_PARALLEL_JOB_COUNT:-1}"
+        TESTS=$(ls internal/graphapi/*_test.go | grep -v '/_' | xargs grep -hoE '^func Test[A-Za-z0-9_]+\(t \*testing\.T\)' | sed -E 's/^func (Test[^(]+).*/\1/' | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
+        echo "graphapi shard $SHARD of $SHARDS: $(echo "$TESTS" | tr '|' '\n' | grep -c .) tests"
+        go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile "junit-graph-${SHARD}.xml" --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -run "^(${TESTS})$" -timeout 20m -coverprofile="coverage-graph-${SHARD}.out" -tags test
 
   go:testsum:ci:events:
     desc: runs only the event driven (listener + integrations) graphapi tests using gotestsum for CI

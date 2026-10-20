@@ -104,9 +104,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/v2/pkg/celx"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // entityRef is a lightweight reference to an entity
@@ -2965,7 +2965,7 @@ var (
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
 		},
-		Catalog: &CatalogCapability{PointerField: "catalog_entity_id", VisibilityField: "externally_visible", KeyField: "catalog_entity_key", Fields: []string{"name", "display_name", "description", "domains", "aliases", "status_page_url", "provided_services", "links", "logo_remote_url"}},
+		Catalog: &CatalogCapability{PointerField: "catalog_id", VisibilityField: "externally_visible", KeyField: "catalog_key", Fields: []string{"display_name", "description", "domains", "aliases", "status_page_url", "provided_services", "links", "logo_remote_url"}},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "entity", Operation: refOpCreate}
 
@@ -2976,7 +2976,7 @@ var (
 
 			builder := client.Entity.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, "catalog_entity_id", "catalog_entity_key", FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, "catalog_id", "catalog_key", FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -6526,8 +6526,8 @@ func init() {
 		{Name: "approved_for_use", Label: "ApprovedForUse", Type: "bool", InputKey: "approved_for_use", Clearable: true},
 		{Name: "auto_renews", Label: "AutoRenews", Type: "bool", InputKey: "auto_renews", Clearable: true},
 		{Name: "billing_model", Label: "BillingModel", Type: "string", MatchKey: true, InputKey: "billing_model", Clearable: true},
-		{Name: "catalog_entity_id", Label: "CatalogEntityID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "catalog_entity_key", Label: "CatalogEntityKey", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "catalog_id", Label: "CatalogID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "catalog_key", Label: "CatalogKey", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "contract_end_date", Label: "ContractEndDate", Type: "models.DateTime", InputKey: "contract_end_date", Clearable: true},
 		{Name: "contract_renewal_at", Label: "ContractRenewalAt", Type: "models.DateTime", InputKey: "contract_renewal_at", Clearable: true},
 		{Name: "contract_start_date", Label: "ContractStartDate", Type: "models.DateTime", InputKey: "contract_start_date", Clearable: true},
@@ -6564,11 +6564,12 @@ func init() {
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Clearable: true},
 		{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Clearable: true},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true, SourceManaged: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true},
 		{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Clearable: true, SourceManaged: true},
+		{Name: "raw_ingest_payload", Label: "RawIngestPayload", Type: "map[string]interface {}", InputKey: "raw_ingest_payload", Clearable: true, Volatile: true},
 		{Name: "renewal_risk", Label: "RenewalRisk", Type: "string", MatchKey: true, InputKey: "renewal_risk", Clearable: true},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
 		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by", Clearable: true},
@@ -10872,12 +10873,12 @@ func init() {
 	}
 	SchemaEntity.Edges = []EdgeDescriptor{
 		{
-			Name:        "adopted_entities",
-			Label:       "AdoptedEntities",
+			Name:        "adopted",
+			Label:       "Adopted",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "adopted_entity_ids",
-			AddField:    "add_adopted_entity_ids",
+			CreateField: "adopted_ids",
+			AddField:    "add_adopted_ids",
 		},
 		{
 			Name:        "assessment_responses",
@@ -10920,13 +10921,13 @@ func init() {
 			AddField:    "add_campaign_ids",
 		},
 		{
-			Name:        "catalog_entity",
-			Label:       "CatalogEntity",
+			Name:        "catalog",
+			Label:       "Catalog",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
 			Unique:      true,
-			CreateField: "catalog_entity_id",
-			Field:       "catalog_entity_id",
+			CreateField: "catalog_id",
+			Field:       "catalog_id",
 		},
 		{
 			Name:        "contacts",
@@ -23135,7 +23136,7 @@ func init() {
 			return "", false, err
 		}
 
-		id, err := client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogEntityID(catalogID)).OnlyID(ctx)
+		id, err := client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogID(catalogID)).OnlyID(ctx)
 		switch {
 		case err == nil:
 			return id, false, nil
@@ -23144,10 +23145,10 @@ func init() {
 		}
 
 		if key != "" {
-			id, err = client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogEntityKey(key)).OnlyID(ctx)
+			id, err = client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogKey(key)).OnlyID(ctx)
 			switch {
 			case err == nil:
-				if err := client.Entity.UpdateOneID(id).SetCatalogEntityID(catalogID).Exec(ctx); err != nil {
+				if err := client.Entity.UpdateOneID(id).SetCatalogID(catalogID).Exec(ctx); err != nil {
 					return "", false, logPersistError(ctx, SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: id}, ErrUpdateFailed, err)
 				}
 
@@ -23205,7 +23206,7 @@ func init() {
 			return 0, logError(ctx, ref, ErrDecodeFailed, err)
 		}
 
-		updated, err := client.Entity.Update().Where(entity.CatalogEntityID(catalogID)).SetInput(input).Save(ctx)
+		updated, err := client.Entity.Update().Where(entity.CatalogID(catalogID)).SetInput(input).Save(ctx)
 		if err != nil {
 			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
 		}
@@ -23224,7 +23225,7 @@ func init() {
 			return 0, nil
 		}
 
-		pointers, err := client.Entity.Query().Where(entity.CatalogEntityKey(key), entity.CatalogEntityIDNotNil()).Select(entity.FieldCatalogEntityID).Strings(ctx)
+		pointers, err := client.Entity.Query().Where(entity.CatalogKey(key), entity.CatalogIDNotNil()).Select(entity.FieldCatalogID).Strings(ctx)
 		if err != nil {
 			return 0, logError(ctx, ref, ErrQueryFailed, err)
 		}
@@ -23235,8 +23236,8 @@ func init() {
 		}
 
 		relinked, err := client.Entity.Update().
-			Where(entity.IDNEQ(catalogID), entity.CatalogEntityKey(key), entity.Or(entity.CatalogEntityIDIsNil(), entity.CatalogEntityIDNotIn(live...))).
-			SetCatalogEntityID(catalogID).
+			Where(entity.IDNEQ(catalogID), entity.CatalogKey(key), entity.Or(entity.CatalogIDIsNil(), entity.CatalogIDNotIn(live...))).
+			SetCatalogID(catalogID).
 			Save(ctx)
 		if err != nil {
 			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
@@ -23266,10 +23267,10 @@ func init() {
 				})
 			case "billing_model":
 				where = entity.BillingModelEqualFold(candidate.Value)
-			case "catalog_entity_id":
-				where = entity.CatalogEntityIDEqualFold(candidate.Value)
-			case "catalog_entity_key":
-				where = entity.CatalogEntityKeyEqualFold(candidate.Value)
+			case "catalog_id":
+				where = entity.CatalogIDEqualFold(candidate.Value)
+			case "catalog_key":
+				where = entity.CatalogKeyEqualFold(candidate.Value)
 			case "created_by":
 				where = entity.CreatedByEqualFold(candidate.Value)
 			case "deleted_by":

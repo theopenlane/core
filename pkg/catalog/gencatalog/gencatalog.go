@@ -6,6 +6,42 @@ import models "github.com/theopenlane/core/common/models"
 
 var DefaultCatalog = models.Catalog{
 	Addons: map[string]models.Feature{
+		string(models.CatalogAssessmentCustomDomainAddon): models.Feature{
+			Audience: "private",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_assessment_custom_domain_monthly",
+				Nickname:   "price_questionnaire_custom_domain_monthly",
+				UnitAmount: int64(2500),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_assessment_custom_domain_yearly",
+				Nickname:   "price_questionnaire_custom_domain_yearly",
+				UnitAmount: int64(27000),
+			}}},
+			Description:          "Questionnaire custom domain",
+			DisplayName:          "Questionnaire custom domain",
+			LookupKey:            "assessment_custom_domain_addon",
+			MarketingDescription: "Use a custom domain for your hosted questionnaires",
+		},
+		string(models.CatalogBrandingTrustcenterAddon): models.Feature{
+			Audience: "private",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_branding_trustcenter_monthly",
+				Nickname:   "price_trustcenter_branding_monthly",
+				UnitAmount: int64(2500),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_branding_trustcenter_yearly",
+				Nickname:   "price_trustcenter_branding_annually",
+				UnitAmount: int64(27000),
+			}}},
+			Description:          "Trustcenter Branding",
+			DisplayName:          "Trustcenter Branding",
+			LookupKey:            "branding_trustcenter_addon",
+			MarketingDescription: "Customization option to remove the Openlane branding on your Trustcenter",
+		},
 		string(models.CatalogDomainScanningAddon): models.Feature{
 			Audience: "private",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
@@ -84,6 +120,25 @@ var DefaultCatalog = models.Catalog{
 			LookupKey:            "risk_management_addon",
 			MarketingDescription: "Comprehensive risk assessment and monitoring solution. Make data-driven decisions about your security posture.",
 			ProductID:            "prod_SeI54PHvjUiTKZ",
+		},
+		string(models.CatalogWorkflowAddon): models.Feature{
+			Audience: "private",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_workflow_monthly",
+				Nickname:   "price_workflow_monthly",
+				UnitAmount: int64(5000),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_workflow_annually",
+				Nickname:   "price_workflow_annually",
+				UnitAmount: int64(54000),
+			}}},
+			Description:          "Workflow Automation",
+			DisplayName:          "Workflow Automation",
+			IncludeWithTrial:     true,
+			LookupKey:            "workflow_addon",
+			MarketingDescription: "",
 		},
 	},
 	Modules: map[string]models.Feature{

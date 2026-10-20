@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // tailscaleGroupPayload is the envelope payload for one Tailscale role group record

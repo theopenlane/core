@@ -111,19 +111,19 @@ type IntegrationLifecycleSweep struct {
 
 var (
 	// PaymentReminderOp is the operation ref for the payment reminder sweep
-	PaymentReminderOp = types.OperationPayloadOf[PaymentReminderSweep](). //nolint:revive
+	PaymentReminderOp = types.OperationPayloadOf[PaymentReminderSweep]().
 				Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).
 				Schedule(&gala.Schedule{MinInterval: PaymentReminderMinInterval, MaxInterval: PaymentReminderMaxInterval}).
 				CustomerSelectable(false).
 				SkipDefaultLookback()
 	// OrganizationDeleteOp is the operation ref for the organization deletion sweep
-	OrganizationDeleteOp = types.OperationPayloadOf[OrganizationDeleteSweep](). //nolint:revive
+	OrganizationDeleteOp = types.OperationPayloadOf[OrganizationDeleteSweep]().
 				Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).
 				Schedule(&gala.Schedule{MinInterval: OrganizationDeleteMinInterval, MaxInterval: OrganizationDeleteMaxInterval}).
 				CustomerSelectable(false).
 				SkipDefaultLookback()
 	// IntegrationLifecycleOp is the operation ref for the integration lifecycle sweep
-	IntegrationLifecycleOp = types.OperationPayloadOf[IntegrationLifecycleSweep](). //nolint:revive
+	IntegrationLifecycleOp = types.OperationPayloadOf[IntegrationLifecycleSweep]().
 				Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).
 				Schedule(&gala.Schedule{MinInterval: IntegrationLifecycleMinInterval, MaxInterval: IntegrationLifecycleMaxInterval}).
 				CustomerSelectable(false).

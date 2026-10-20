@@ -13,9 +13,9 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
+	"github.com/theopenlane/logx"
 )
 
 var websocketConnectionTrackerContextKey = contextx.NewKey[time.Time]()

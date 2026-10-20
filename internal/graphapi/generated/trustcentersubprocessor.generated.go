@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_deletedIDs
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_notDeleted
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_error(ctx 
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_trustCenterSubprocessors(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_updatedIDs
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_notUpdated
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -224,7 +223,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_error(ctx 
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorCreatePayload) (ret graphql.Marshaler) {
@@ -279,7 +278,7 @@ func (ec *executionContext) _TrustCenterSubprocessorDeletePayload_deletedID(ctx 
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSubprocessorDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorUpdatePayload) (ret graphql.Marshaler) {
@@ -332,8 +331,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload(ctx contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterSubprocessorBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -352,14 +350,10 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload(ctx contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -370,8 +364,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload(ctx contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterSubprocessorBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -400,14 +393,10 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload(ctx contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -418,8 +407,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload(ctx contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterSubprocessorBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -453,14 +441,10 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload(ctx contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -471,8 +455,7 @@ func (ec *executionContext) _TrustCenterSubprocessorCreatePayload(ctx context.Co
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterSubprocessorCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -491,14 +474,10 @@ func (ec *executionContext) _TrustCenterSubprocessorCreatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -509,8 +488,7 @@ func (ec *executionContext) _TrustCenterSubprocessorDeletePayload(ctx context.Co
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterSubprocessorDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -529,14 +507,10 @@ func (ec *executionContext) _TrustCenterSubprocessorDeletePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -547,8 +521,7 @@ func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload(ctx context.Co
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterSubprocessorUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -567,14 +540,10 @@ func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -585,9 +554,7 @@ func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload(ctx context.Co
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSubprocessorBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterSubprocessorBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessorBulkCreatePayload(ctx, sel, v)
@@ -595,9 +562,7 @@ func (ec *executionContext) marshalNTrustCenterSubprocessorBulkCreatePayload2ᚖ
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSubprocessorBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterSubprocessorBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessorBulkDeletePayload(ctx, sel, v)
@@ -605,9 +570,7 @@ func (ec *executionContext) marshalNTrustCenterSubprocessorBulkDeletePayload2ᚖ
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSubprocessorBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterSubprocessorBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessorBulkUpdatePayload(ctx, sel, v)
@@ -615,9 +578,7 @@ func (ec *executionContext) marshalNTrustCenterSubprocessorBulkUpdatePayload2ᚖ
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSubprocessorCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterSubprocessorCreatePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessorCreatePayload(ctx, sel, v)
@@ -625,9 +586,7 @@ func (ec *executionContext) marshalNTrustCenterSubprocessorCreatePayload2ᚖgith
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSubprocessorDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterSubprocessorDeletePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessorDeletePayload(ctx, sel, v)
@@ -635,9 +594,7 @@ func (ec *executionContext) marshalNTrustCenterSubprocessorDeletePayload2ᚖgith
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSubprocessorUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterSubprocessorUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessorUpdatePayload(ctx, sel, v)

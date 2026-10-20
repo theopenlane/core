@@ -6,7 +6,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // QueryLogger is an interceptor that logs the duration of each query.

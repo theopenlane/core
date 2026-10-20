@@ -12,6 +12,7 @@ import (
 	slackgo "github.com/slack-go/slack"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -23,15 +24,15 @@ func TestMessageSendRunDestinations(t *testing.T) {
 	server := httptest.NewServer(recorded.handler(t))
 	defer server.Close()
 
-	client := &SlackClient{API: slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))}
+	client := &Client{API: slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))}
 
-	resultBytes, err := MessageSend{}.Run(context.Background(), types.OperationRequest{}, client, MessageSendOperation{
+	resultBytes, err := sendMessage(context.Background(), types.OperationRequest{}, client, MessageSendOperation{
 		Destinations: []string{"C11111", "C22222"},
 		Text:         "hello from destinations",
 	})
 	require.NoError(t, err)
 
-	var result MessageSend
+	var result operations.MessageSendResult
 	require.NoError(t, json.Unmarshal(resultBytes, &result))
 	require.Len(t, result.Deliveries, 2)
 	require.Equal(t, "C11111", result.Channel)
@@ -48,16 +49,16 @@ func TestMessageSendRunDedupesChannelAndDestinations(t *testing.T) {
 	server := httptest.NewServer(recorded.handler(t))
 	defer server.Close()
 
-	client := &SlackClient{API: slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))}
+	client := &Client{API: slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))}
 
-	resultBytes, err := MessageSend{}.Run(context.Background(), types.OperationRequest{}, client, MessageSendOperation{
+	resultBytes, err := sendMessage(context.Background(), types.OperationRequest{}, client, MessageSendOperation{
 		Channel:      "C11111",
 		Destinations: []string{"C11111", "C22222", "C22222"},
 		Text:         "hello dedupe",
 	})
 	require.NoError(t, err)
 
-	var result MessageSend
+	var result operations.MessageSendResult
 	require.NoError(t, json.Unmarshal(resultBytes, &result))
 	require.Len(t, result.Deliveries, 2)
 	require.Equal(t, []string{"C11111", "C22222"}, recorded.channelValues())
@@ -71,7 +72,7 @@ func TestResolveOperationTemplateNoop(t *testing.T) {
 		Text:    "hello",
 	}
 
-	err := templatekit.ResolveOperationTemplate(context.Background(), types.OperationRequest{}, cfg.TemplateID, cfg.TemplateKey, &cfg)
+	err := cfg.ResolveTemplate(context.Background(), types.OperationRequest{}, &cfg)
 	require.NoError(t, err)
 	require.Equal(t, "C11111", cfg.Channel)
 	require.Equal(t, "hello", cfg.Text)
@@ -87,7 +88,7 @@ func TestResolveOperationTemplateBothRefsUseResolutionPath(t *testing.T) {
 		Text:        "hello",
 	}
 
-	err := templatekit.ResolveOperationTemplate(context.Background(), types.OperationRequest{}, cfg.TemplateID, cfg.TemplateKey, &cfg)
+	err := cfg.ResolveTemplate(context.Background(), types.OperationRequest{}, &cfg)
 	require.ErrorIs(t, err, templatekit.ErrTemplateNotFound)
 }
 

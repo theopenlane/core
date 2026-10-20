@@ -7370,6 +7370,7 @@ type CreateEntityInput struct {
 	InternalNotes                         *string                `json:"internal_notes,omitempty"`
 	SystemInternalID                      *string                `json:"system_internal_id,omitempty"`
 	ExternallyVisible                     *bool                  `json:"externally_visible,omitempty"`
+	RawIngestPayload                      map[string]interface{} `json:"raw_ingest_payload,omitempty"`
 	EntityRelationshipStateName           *string                `json:"entity_relationship_state_name,omitempty"`
 	EntitySecurityQuestionnaireStatusName *string                `json:"entity_security_questionnaire_status_name,omitempty"`
 	EntitySourceTypeName                  *string                `json:"entity_source_type_name,omitempty"`
@@ -7475,6 +7476,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.ExternallyVisible; v != nil {
 		m.SetExternallyVisible(*v)
+	}
+	if v := i.RawIngestPayload; v != nil {
+		m.SetRawIngestPayload(v)
 	}
 	if v := i.EntityRelationshipStateName; v != nil {
 		m.SetEntityRelationshipStateName(*v)
@@ -7744,6 +7748,8 @@ type UpdateEntityInput struct {
 	SystemInternalID                           *string `json:"system_internal_id,omitempty"`
 	ClearExternallyVisible                     bool
 	ExternallyVisible                          *bool `json:"externally_visible,omitempty"`
+	ClearRawIngestPayload                      bool
+	RawIngestPayload                           map[string]interface{} `json:"raw_ingest_payload,omitempty"`
 	ClearEntityRelationshipStateName           bool
 	EntityRelationshipStateName                *string `json:"entity_relationship_state_name,omitempty"`
 	ClearEntitySecurityQuestionnaireStatusName bool
@@ -7985,6 +7991,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.ExternallyVisible; v != nil {
 		m.SetExternallyVisible(*v)
+	}
+	if i.ClearRawIngestPayload {
+		m.ClearRawIngestPayload()
+	}
+	if v := i.RawIngestPayload; v != nil {
+		m.SetRawIngestPayload(v)
 	}
 	if i.ClearEntityRelationshipStateName {
 		m.ClearEntityRelationshipStateName()

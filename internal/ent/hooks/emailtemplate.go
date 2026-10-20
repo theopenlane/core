@@ -22,11 +22,11 @@ func HookEmailTemplateSanitize() ent.Hook {
 			}
 
 			if name, ok := m.Name(); ok {
-				m.SetName(emaildef.EmailScrubber().Scrub(name))
+				m.SetName(emaildef.Scrubber().Scrub(name))
 			}
 
 			if desc, ok := m.Description(); ok {
-				m.SetDescription(emaildef.EmailScrubber().Scrub(desc))
+				m.SetDescription(emaildef.Scrubber().Scrub(desc))
 			}
 
 			return next.Mutate(ctx, m)
@@ -37,7 +37,7 @@ func HookEmailTemplateSanitize() ent.Hook {
 // scrubMapStrings recursively scrubs all string values in a map using the email
 // HTML scrubber. Nested maps are traversed; non-string values are left untouched
 func scrubMapStrings(m map[string]any) map[string]any {
-	scrubber := emaildef.EmailScrubber()
+	scrubber := emaildef.Scrubber()
 
 	for k, v := range m {
 		switch val := v.(type) {

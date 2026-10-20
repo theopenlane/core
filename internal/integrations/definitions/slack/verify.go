@@ -5,7 +5,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // incomingWebhookKey is the token response field Slack fills with the channel chosen during app install
@@ -15,7 +15,7 @@ const incomingWebhookKey = "incoming_webhook"
 const incomingWebhookChannelKey = "channel_id"
 
 // verify probes the workspace with auth.test and returns the installation identity with its default channel
-func verify[T any](ctx context.Context, req types.ConnectionRequest[T], c *SlackClient) (InstallationMetadata, error) {
+func verify[T any](ctx context.Context, req types.ConnectionRequest[T], c *Client) (InstallationMetadata, error) {
 	resp, err := c.API.AuthTestContext(ctx)
 	if err != nil {
 		return InstallationMetadata{}, ErrAuthTestFailed

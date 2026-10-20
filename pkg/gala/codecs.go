@@ -9,9 +9,9 @@ import (
 
 	"github.com/samber/do/v2"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // ContextKey identifies a restorable context value key

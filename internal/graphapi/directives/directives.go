@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/logx"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -30,6 +30,8 @@ const (
 	// ExternalSource is used to mark a field or object as being populated by an external source which
 	// would affect the ability to update the field
 	ExternalSource = "externalSource"
+	// CatalogManaged is used to mark a field whose value is copied from the catalog row on adopt and rewritten on refresh while the row stays linked
+	CatalogManaged = "catalogManaged"
 	// Modules is used to indicate the modules an organization must have enabled to access the object
 	Modules = "modules"
 )
@@ -145,6 +147,12 @@ var ExternalSourceDirectiveAnnotation = entgql.Directives(
 var ExternalSourceDirective = func(ctx context.Context, _ any, next graphql.Resolver, _ *enums.ControlSource) (any, error) {
 	// this is a no-op, this is only used for setting the annotations on the schema
 	// to affect the mutation inputs
+	return next(ctx)
+}
+
+// CatalogManagedDirective is the implementation for the catalogManaged directive, it is informational for clients
+// and performs no enforcement
+var CatalogManagedDirective = func(ctx context.Context, _ any, next graphql.Resolver) (any, error) {
 	return next(ctx)
 }
 

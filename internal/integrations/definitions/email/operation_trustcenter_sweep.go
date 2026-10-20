@@ -23,9 +23,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/logx"
 )
 
 // trustCenterNotificationGrace is the debounce window a post or subprocessor change must be stable for before subscribers are notified, giving authors time to make further edits
@@ -35,7 +35,7 @@ const trustCenterNotificationGrace = time.Hour
 type TrustCenterNotificationSweep struct{}
 
 // TrustCenterNotificationOp is the operation ref for the global trust center notification sweep, which runs without a client
-var TrustCenterNotificationOp = types.OperationPayloadOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
+var TrustCenterNotificationOp = types.OperationPayloadOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback()
 
 // runTrustCenterNotificationSweep runs one trust center notification sweep cycle and encodes the processed count
 func runTrustCenterNotificationSweep(ctx context.Context, req types.OperationRequest, sweep TrustCenterNotificationSweep) (json.RawMessage, error) {

@@ -27,11 +27,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/internal/objects/store"
 	"github.com/theopenlane/core/v2/internal/objects/upload"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // signedNDADocumentData captures the expected structure of the document data for a trust center NDA submission

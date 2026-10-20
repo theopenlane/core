@@ -14,9 +14,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/logx"
 )
 
 // maxQuestionnaireTags is the pre-allocation capacity for per-message newman tags
@@ -33,7 +33,7 @@ type SendQuestionnaireCampaignRequest struct {
 type SendQuestionnaireCampaign struct{}
 
 // SendQuestionnaireCampaignOp is the operation ref for the questionnaire campaign dispatch operation
-var SendQuestionnaireCampaignOp = types.OperationPayloadOf[SendQuestionnaireCampaignRequest]().Handles(SendQuestionnaireCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
+var SendQuestionnaireCampaignOp = types.OperationPayloadOf[SendQuestionnaireCampaignRequest]().Handles(SendQuestionnaireCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true})
 
 // Run loads the campaign and its assessment, iterates pending targets, creates assessment responses, generates anonymous JWT access tokens, and sends questionnaire access emails
 func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {

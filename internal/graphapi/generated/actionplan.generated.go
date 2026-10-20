@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -11300,7 +11299,7 @@ func (ec *executionContext) _ActionPlanBulkDeletePayload_deletedIDs(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_ActionPlanBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ActionPlanBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ActionPlanBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ActionPlanBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkDeletePayload) (ret graphql.Marshaler) {
@@ -11323,7 +11322,7 @@ func (ec *executionContext) _ActionPlanBulkDeletePayload_notDeletedIDs(ctx conte
 	)
 }
 func (ec *executionContext) fieldContext_ActionPlanBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ActionPlanBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ActionPlanBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ActionPlanBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkDeletePayload) (ret graphql.Marshaler) {
@@ -11346,7 +11345,7 @@ func (ec *executionContext) _ActionPlanBulkDeletePayload_error(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_ActionPlanBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ActionPlanBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ActionPlanBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _ActionPlanBulkUpdatePayload_actionPlans(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -11401,7 +11400,7 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload_updatedIDs(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ActionPlanBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ActionPlanBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ActionPlanBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -11424,7 +11423,7 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload_notUpdatedIDs(ctx conte
 	)
 }
 func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ActionPlanBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ActionPlanBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ActionPlanBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -11447,7 +11446,7 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload_error(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ActionPlanBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ActionPlanBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _ActionPlanCreatePayload_actionPlan(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanCreatePayload) (ret graphql.Marshaler) {
@@ -11502,7 +11501,7 @@ func (ec *executionContext) _ActionPlanDeletePayload_deletedID(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_ActionPlanDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ActionPlanDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ActionPlanDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ActionPlanUpdatePayload_actionPlan(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanUpdatePayload) (ret graphql.Marshaler) {
@@ -37547,8 +37546,7 @@ func (ec *executionContext) _ActionPlanBulkCreatePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, actionPlanBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -37567,14 +37565,10 @@ func (ec *executionContext) _ActionPlanBulkCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -37585,8 +37579,7 @@ func (ec *executionContext) _ActionPlanBulkDeletePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, actionPlanBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -37615,14 +37608,10 @@ func (ec *executionContext) _ActionPlanBulkDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -37633,8 +37622,7 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, actionPlanBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -37668,14 +37656,10 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -37686,8 +37670,7 @@ func (ec *executionContext) _ActionPlanCreatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, actionPlanCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -37706,14 +37689,10 @@ func (ec *executionContext) _ActionPlanCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -37724,8 +37703,7 @@ func (ec *executionContext) _ActionPlanDeletePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, actionPlanDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -37744,14 +37722,10 @@ func (ec *executionContext) _ActionPlanDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -37762,8 +37736,7 @@ func (ec *executionContext) _ActionPlanUpdatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, actionPlanUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -37782,14 +37755,10 @@ func (ec *executionContext) _ActionPlanUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -37803,8 +37772,7 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 	})
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		innerCtx := graphql.WithRootFieldContext(ctx, &graphql.RootFieldContext{
 			Object: field.Name,
@@ -41960,14 +41928,10 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -41978,9 +41942,7 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 func (ec *executionContext) marshalNActionPlanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ActionPlanBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._ActionPlanBulkCreatePayload(ctx, sel, v)
@@ -41988,9 +41950,7 @@ func (ec *executionContext) marshalNActionPlanBulkCreatePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNActionPlanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ActionPlanBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._ActionPlanBulkDeletePayload(ctx, sel, v)
@@ -41998,9 +41958,7 @@ func (ec *executionContext) marshalNActionPlanBulkDeletePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNActionPlanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ActionPlanBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._ActionPlanBulkUpdatePayload(ctx, sel, v)
@@ -42008,9 +41966,7 @@ func (ec *executionContext) marshalNActionPlanBulkUpdatePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNActionPlanCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ActionPlanCreatePayload!")
 		return graphql.Null
 	}
 	return ec._ActionPlanCreatePayload(ctx, sel, v)
@@ -42018,9 +41974,7 @@ func (ec *executionContext) marshalNActionPlanCreatePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNActionPlanDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ActionPlanDeletePayload!")
 		return graphql.Null
 	}
 	return ec._ActionPlanDeletePayload(ctx, sel, v)
@@ -42028,9 +41982,7 @@ func (ec *executionContext) marshalNActionPlanDeletePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNActionPlanUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ActionPlanUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._ActionPlanUpdatePayload(ctx, sel, v)

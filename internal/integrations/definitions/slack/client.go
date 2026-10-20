@@ -9,11 +9,11 @@ import (
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // oauthClient builds the SlackClient from the stored OAuth credential
-func oauthClient(_ context.Context, req types.ConnectionRequest[slackCred]) (*SlackClient, error) {
+func oauthClient(_ context.Context, req types.ConnectionRequest[slackCred]) (*Client, error) {
 	if req.Credential.AccessToken == "" {
 		return nil, ErrOAuthTokenMissing
 	}
@@ -22,7 +22,7 @@ func oauthClient(_ context.Context, req types.ConnectionRequest[slackCred]) (*Sl
 }
 
 // botTokenClient builds the SlackClient from the stored bot token credential
-func botTokenClient(_ context.Context, req types.ConnectionRequest[slackBotTokenCred]) (*SlackClient, error) {
+func botTokenClient(_ context.Context, req types.ConnectionRequest[slackBotTokenCred]) (*Client, error) {
 	if req.Credential.BotToken == "" {
 		return nil, ErrBotTokenMissing
 	}
@@ -31,13 +31,13 @@ func botTokenClient(_ context.Context, req types.ConnectionRequest[slackBotToken
 }
 
 // newSlackClient constructs the unified SlackClient for one customer installation
-func newSlackClient(token string, integration *generated.Integration) (*SlackClient, error) {
+func newSlackClient(token string, integration *generated.Integration) (*Client, error) {
 	var metadata InstallationMetadata
 	if err := jsonx.UnmarshalIfPresent(integration.InstallationMetadata.Attributes, &metadata); err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 	}
 
-	return &SlackClient{
+	return &Client{
 		API:            slackgo.New(token),
 		DefaultChannel: metadata.DefaultChannel,
 	}, nil
@@ -53,13 +53,13 @@ func runtimeSlackClientBuilder(devMode bool) func(context.Context, json.RawMessa
 
 		if !cfg.Provisioned() {
 			if devMode {
-				return &SlackClient{devMode: true}, nil
+				return &Client{devMode: true}, nil
 			}
 
 			return nil, ErrRuntimeConfigInvalid
 		}
 
-		client := &SlackClient{
+		client := &Client{
 			WebhookURL:     cfg.WebhookURL,
 			DefaultChannel: cfg.DefaultChannel,
 		}
@@ -73,7 +73,7 @@ func runtimeSlackClientBuilder(devMode bool) func(context.Context, json.RawMessa
 }
 
 // sendText delivers a plain-text system message through the active transport
-func (c *SlackClient) sendText(ctx context.Context, text, channel string) error {
+func (c *Client) sendText(ctx context.Context, text, channel string) error {
 	if text == "" {
 		return ErrMessageEmpty
 	}

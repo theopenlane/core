@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // OrgModuleQuery is the builder for querying OrgModule entities.

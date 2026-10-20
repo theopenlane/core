@@ -596,6 +596,8 @@ var EntityFields = struct {
 	ObservedAt FieldDescriptor
 	// ProvidedServices is the provided_services field
 	ProvidedServices FieldDescriptor
+	// RawIngestPayload is the raw_ingest_payload field
+	RawIngestPayload FieldDescriptor
 	// RenewalRisk is the renewal_risk field
 	RenewalRisk FieldDescriptor
 	// ReviewFrequency is the review_frequency field
@@ -669,10 +671,11 @@ var EntityFields = struct {
 	LogoRemoteURL:                         FieldDescriptor{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true, SourceManaged: true},
 	MfaEnforced:                           FieldDescriptor{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Clearable: true},
 	MfaSupported:                          FieldDescriptor{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Clearable: true},
-	Name:                                  FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true, SourceManaged: true},
+	Name:                                  FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true},
 	NextReviewAt:                          FieldDescriptor{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at", Clearable: true},
 	ObservedAt:                            FieldDescriptor{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
 	ProvidedServices:                      FieldDescriptor{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Clearable: true, SourceManaged: true},
+	RawIngestPayload:                      FieldDescriptor{Name: "raw_ingest_payload", Label: "RawIngestPayload", Type: "map[string]interface {}", InputKey: "raw_ingest_payload", Clearable: true, Volatile: true},
 	RenewalRisk:                           FieldDescriptor{Name: "renewal_risk", Label: "RenewalRisk", Type: "string", MatchKey: true, InputKey: "renewal_risk", Clearable: true},
 	ReviewFrequency:                       FieldDescriptor{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
 	ReviewedBy:                            FieldDescriptor{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by", Clearable: true},

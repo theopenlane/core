@@ -21,6 +21,10 @@ This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
 """
+Indicates the field's value is copied from the catalog row on adopt and rewritten on refresh while the row stays linked
+"""
+directive @catalogManaged on FIELD_DEFINITION
+"""
 Indicates the modules an organization must have enabled to access this object,
 at least one of the listed modules is required
 """

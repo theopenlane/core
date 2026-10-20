@@ -7,7 +7,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // slackUserPayload is the normalized payload for a Slack workspace user
@@ -51,7 +51,7 @@ type slackUserPayload struct {
 }
 
 // runDirectorySync collects Slack workspace users and emits directory account ingest payloads
-func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *SlackClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *Client, _ DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := client.API.GetUsersContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("slack directory sync: failed to fetch users")

@@ -14,8 +14,8 @@ import (
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 )
 
@@ -31,6 +31,9 @@ const (
 
 // defaultWaitIdleTimeout bounds WaitIdle when the caller's context has no deadline, so a stuck job fails fast
 const defaultWaitIdleTimeout = 2 * time.Minute
+
+// defaultStopWorkersTimeout bounds StopWorkers when the caller's context has no deadline, so a job ignoring cancellation cannot block shutdown
+const defaultStopWorkersTimeout = 2 * DefaultSoftStopTimeout
 
 // Config configures cohesive Gala startup
 type Config struct {
@@ -533,6 +536,13 @@ func (g *Gala) StartWorkers(ctx context.Context) error {
 func (g *Gala) StopWorkers(ctx context.Context) error {
 	if g.dispatchMode == DispatchModeInMemory {
 		return nil
+	}
+
+	if _, hasDeadline := ctx.Deadline(); !hasDeadline {
+		var cancel context.CancelFunc
+
+		ctx, cancel = context.WithTimeout(ctx, defaultStopWorkersTimeout)
+		defer cancel()
 	}
 
 	if err := g.jobClient.GetRiverClient().Stop(ctx); err != nil &&

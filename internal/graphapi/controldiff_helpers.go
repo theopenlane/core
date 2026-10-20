@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 var controlDiffFields = []string{

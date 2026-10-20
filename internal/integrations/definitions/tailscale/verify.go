@@ -7,7 +7,7 @@ import (
 	tsclient "github.com/tailscale/tailscale-client-go/v2"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // verify derives the Tailscale tailnet metadata from the credential's member users

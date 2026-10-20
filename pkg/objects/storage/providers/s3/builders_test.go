@@ -80,6 +80,20 @@ func TestNewS3ProviderWithAWSConfigCredentials(t *testing.T) {
 	assert.NotNil(t, provider)
 }
 
+func TestS3BuilderBuildWithAWSConfig(t *testing.T) {
+	awsCfg := aws.Config{
+		Region:      "us-east-1",
+		Credentials: credentials.NewStaticCredentialsProvider("key", "secret", ""),
+	}
+
+	provider, err := s3provider.NewS3Builder().WithOptions(s3provider.WithAWSConfig(awsCfg)).Build(context.Background(), storage.ProviderCredentials{}, storage.NewProviderOptions(
+		storage.WithBucket("bucket"),
+		storage.WithRegion("us-east-1"),
+	))
+	assert.NoError(t, err)
+	assert.NotNil(t, provider)
+}
+
 func TestS3BuilderProviderType(t *testing.T) {
 	builder := s3provider.NewS3Builder()
 	assert.Equal(t, string(storagetypes.S3Provider), builder.ProviderType())

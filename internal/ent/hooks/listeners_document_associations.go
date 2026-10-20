@@ -8,8 +8,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // init registers the document association listeners so gala setup picks them up automatically

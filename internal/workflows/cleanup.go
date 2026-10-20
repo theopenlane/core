@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/v2/pkg/mapx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // FindOrphanWorkflowInstanceIDs returns workflow instance IDs whose definitions are missing or soft-deleted.

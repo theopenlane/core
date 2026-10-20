@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -46,7 +45,7 @@ func (ec *executionContext) _ControlCategory_name(ctx context.Context, field gra
 	)
 }
 func (ec *executionContext) fieldContext_ControlCategory_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlCategory", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlCategory", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlCategory_referenceFramework(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategory) (ret graphql.Marshaler) {
@@ -69,7 +68,7 @@ func (ec *executionContext) _ControlCategory_referenceFramework(ctx context.Cont
 	)
 }
 func (ec *executionContext) fieldContext_ControlCategory_referenceFramework(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlCategory", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlCategory", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlCategoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryConnection) (ret graphql.Marshaler) {
@@ -156,7 +155,7 @@ func (ec *executionContext) _ControlCategoryConnection_totalCount(ctx context.Co
 	)
 }
 func (ec *executionContext) fieldContext_ControlCategoryConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlCategoryConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlCategoryConnection", field, false, false, "Int")
 }
 
 func (ec *executionContext) _ControlCategoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryEdge) (ret graphql.Marshaler) {
@@ -211,7 +210,7 @@ func (ec *executionContext) _ControlChange_refCode(ctx context.Context, field gr
 	)
 }
 func (ec *executionContext) fieldContext_ControlChange_refCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlChange", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlChange", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlChange_title(ctx context.Context, field graphql.CollectedField, obj *model.ControlChange) (ret graphql.Marshaler) {
@@ -234,7 +233,7 @@ func (ec *executionContext) _ControlChange_title(ctx context.Context, field grap
 	)
 }
 func (ec *executionContext) fieldContext_ControlChange_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlChange", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlChange", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlChange_diffs(ctx context.Context, field graphql.CollectedField, obj *model.ControlChange) (ret graphql.Marshaler) {
@@ -289,7 +288,7 @@ func (ec *executionContext) _ControlDiffPayload_standardID(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_ControlDiffPayload_standardID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ControlDiffPayload_oldRevision(ctx context.Context, field graphql.CollectedField, obj *model.ControlDiffPayload) (ret graphql.Marshaler) {
@@ -312,7 +311,7 @@ func (ec *executionContext) _ControlDiffPayload_oldRevision(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_ControlDiffPayload_oldRevision(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlDiffPayload_newRevision(ctx context.Context, field graphql.CollectedField, obj *model.ControlDiffPayload) (ret graphql.Marshaler) {
@@ -335,7 +334,7 @@ func (ec *executionContext) _ControlDiffPayload_newRevision(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_ControlDiffPayload_newRevision(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlDiffPayload_changes(ctx context.Context, field graphql.CollectedField, obj *model.ControlDiffPayload) (ret graphql.Marshaler) {
@@ -390,7 +389,7 @@ func (ec *executionContext) _ControlFieldDiff_field(ctx context.Context, field g
 	)
 }
 func (ec *executionContext) fieldContext_ControlFieldDiff_field(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlFieldDiff_oldValue(ctx context.Context, field graphql.CollectedField, obj *model.ControlFieldDiff) (ret graphql.Marshaler) {
@@ -413,7 +412,7 @@ func (ec *executionContext) _ControlFieldDiff_oldValue(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_ControlFieldDiff_oldValue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, errors.New("field of type Any does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, "Any")
 }
 
 func (ec *executionContext) _ControlFieldDiff_newValue(ctx context.Context, field graphql.CollectedField, obj *model.ControlFieldDiff) (ret graphql.Marshaler) {
@@ -436,7 +435,7 @@ func (ec *executionContext) _ControlFieldDiff_newValue(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_ControlFieldDiff_newValue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, errors.New("field of type Any does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, "Any")
 }
 
 func (ec *executionContext) _ControlFieldDiff_diff(ctx context.Context, field graphql.CollectedField, obj *model.ControlFieldDiff) (ret graphql.Marshaler) {
@@ -459,7 +458,7 @@ func (ec *executionContext) _ControlFieldDiff_diff(ctx context.Context, field gr
 	)
 }
 func (ec *executionContext) fieldContext_ControlFieldDiff_diff(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlGroup_category(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroup) (ret graphql.Marshaler) {
@@ -482,7 +481,7 @@ func (ec *executionContext) _ControlGroup_category(ctx context.Context, field gr
 	)
 }
 func (ec *executionContext) fieldContext_ControlGroup_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlGroup", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlGroup", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlGroup_controls(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroup) (ret graphql.Marshaler) {
@@ -665,7 +664,7 @@ func (ec *executionContext) _RelatedControlConnection_totalCount(ctx context.Con
 	)
 }
 func (ec *executionContext) fieldContext_RelatedControlConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("RelatedControlConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("RelatedControlConnection", field, false, false, "Int")
 }
 
 func (ec *executionContext) _RelatedControlEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.RelatedControlEdge) (ret graphql.Marshaler) {
@@ -752,7 +751,7 @@ func (ec *executionContext) _RelatedSubcontrolConnection_totalCount(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_RelatedSubcontrolConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("RelatedSubcontrolConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("RelatedSubcontrolConnection", field, false, false, "Int")
 }
 
 func (ec *executionContext) _RelatedSubcontrolEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.RelatedSubcontrolEdge) (ret graphql.Marshaler) {
@@ -877,6 +876,18 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 	return it, nil
 }
 
+// UnmarshalCloneControlInput unmarshals raw into the CloneControlInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCloneControlInput(ctx context.Context, raw any) (model.CloneControlInput, error) {
+	var out model.CloneControlInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CloneControlInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Context, obj any) (model.CloneControlUploadInput, error) {
 	var it model.CloneControlUploadInput
 	if obj == nil {
@@ -984,6 +995,18 @@ func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Co
 	return it, nil
 }
 
+// UnmarshalCloneControlUploadInput unmarshals raw into the CloneControlUploadInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCloneControlUploadInput(ctx context.Context, raw any) (model.CloneControlUploadInput, error) {
+	var out model.CloneControlUploadInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CloneControlUploadInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputControlCategoryOrder(ctx context.Context, obj any) (model.ControlCategoryOrder, error) {
 	var it model.ControlCategoryOrder
 	if obj == nil {
@@ -1023,6 +1046,18 @@ func (ec *executionContext) unmarshalInputControlCategoryOrder(ctx context.Conte
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalControlCategoryOrder unmarshals raw into the ControlCategoryOrder input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalControlCategoryOrder(ctx context.Context, raw any) (model.ControlCategoryOrder, error) {
+	var out model.ControlCategoryOrder
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ControlCategoryOrder", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputControlDiffInput(ctx context.Context, obj any) (model.ControlDiffInput, error) {
@@ -1069,6 +1104,18 @@ func (ec *executionContext) unmarshalInputControlDiffInput(ctx context.Context, 
 	return it, nil
 }
 
+// UnmarshalControlDiffInput unmarshals raw into the ControlDiffInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalControlDiffInput(ctx context.Context, raw any) (model.ControlDiffInput, error) {
+	var out model.ControlDiffInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ControlDiffInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -1083,8 +1130,7 @@ func (ec *executionContext) _ControlCategory(ctx context.Context, sel ast.Select
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlCategoryImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1108,14 +1154,10 @@ func (ec *executionContext) _ControlCategory(ctx context.Context, sel ast.Select
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1126,8 +1168,7 @@ func (ec *executionContext) _ControlCategoryConnection(ctx context.Context, sel 
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlCategoryConnectionImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1156,14 +1197,10 @@ func (ec *executionContext) _ControlCategoryConnection(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1174,8 +1211,7 @@ func (ec *executionContext) _ControlCategoryEdge(ctx context.Context, sel ast.Se
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlCategoryEdgeImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1194,14 +1230,10 @@ func (ec *executionContext) _ControlCategoryEdge(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1212,8 +1244,7 @@ func (ec *executionContext) _ControlChange(ctx context.Context, sel ast.Selectio
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlChangeImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1242,14 +1273,10 @@ func (ec *executionContext) _ControlChange(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1260,8 +1287,7 @@ func (ec *executionContext) _ControlDiffPayload(ctx context.Context, sel ast.Sel
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlDiffPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1295,14 +1321,10 @@ func (ec *executionContext) _ControlDiffPayload(ctx context.Context, sel ast.Sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1313,8 +1335,7 @@ func (ec *executionContext) _ControlFieldDiff(ctx context.Context, sel ast.Selec
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlFieldDiffImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1348,14 +1369,10 @@ func (ec *executionContext) _ControlFieldDiff(ctx context.Context, sel ast.Selec
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1366,8 +1383,7 @@ func (ec *executionContext) _ControlGroup(ctx context.Context, sel ast.Selection
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1391,14 +1407,10 @@ func (ec *executionContext) _ControlGroup(ctx context.Context, sel ast.Selection
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1409,8 +1421,7 @@ func (ec *executionContext) _ControlGroupConnection(ctx context.Context, sel ast
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupConnectionImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1429,14 +1440,10 @@ func (ec *executionContext) _ControlGroupConnection(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1447,8 +1454,7 @@ func (ec *executionContext) _ControlGroupEdge(ctx context.Context, sel ast.Selec
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupEdgeImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1472,14 +1478,10 @@ func (ec *executionContext) _ControlGroupEdge(ctx context.Context, sel ast.Selec
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1490,8 +1492,7 @@ func (ec *executionContext) _RelatedControlConnection(ctx context.Context, sel a
 	fields := graphql.CollectFields(ec.OperationContext, sel, relatedControlConnectionImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1515,14 +1516,10 @@ func (ec *executionContext) _RelatedControlConnection(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1533,8 +1530,7 @@ func (ec *executionContext) _RelatedControlEdge(ctx context.Context, sel ast.Sel
 	fields := graphql.CollectFields(ec.OperationContext, sel, relatedControlEdgeImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1553,14 +1549,10 @@ func (ec *executionContext) _RelatedControlEdge(ctx context.Context, sel ast.Sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1571,8 +1563,7 @@ func (ec *executionContext) _RelatedSubcontrolConnection(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, relatedSubcontrolConnectionImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1596,14 +1587,10 @@ func (ec *executionContext) _RelatedSubcontrolConnection(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1614,8 +1601,7 @@ func (ec *executionContext) _RelatedSubcontrolEdge(ctx context.Context, sel ast.
 	fields := graphql.CollectFields(ec.OperationContext, sel, relatedSubcontrolEdgeImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1634,14 +1620,10 @@ func (ec *executionContext) _RelatedSubcontrolEdge(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1652,9 +1634,7 @@ func (ec *executionContext) _RelatedSubcontrolEdge(ctx context.Context, sel ast.
 
 func (ec *executionContext) marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategory) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlCategory!")
 		return graphql.Null
 	}
 	return ec._ControlCategory(ctx, sel, v)
@@ -1662,9 +1642,7 @@ func (ec *executionContext) marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlan
 
 func (ec *executionContext) marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategoryEdge) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlCategoryEdge!")
 		return graphql.Null
 	}
 	return ec._ControlCategoryEdge(ctx, sel, v)
@@ -1703,9 +1681,7 @@ func (ec *executionContext) marshalNControlChange2ᚕᚖgithubᚗcomᚋtheopenla
 
 func (ec *executionContext) marshalNControlChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlChange(ctx context.Context, sel ast.SelectionSet, v *model.ControlChange) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlChange!")
 		return graphql.Null
 	}
 	return ec._ControlChange(ctx, sel, v)
@@ -1718,9 +1694,7 @@ func (ec *executionContext) unmarshalNControlDiffInput2githubᚗcomᚋtheopenlan
 
 func (ec *executionContext) marshalNControlDiffPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlDiffPayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlDiffPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlDiffPayload!")
 		return graphql.Null
 	}
 	return ec._ControlDiffPayload(ctx, sel, v)
@@ -1744,9 +1718,7 @@ func (ec *executionContext) marshalNControlFieldDiff2ᚕᚖgithubᚗcomᚋtheope
 
 func (ec *executionContext) marshalNControlFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiff(ctx context.Context, sel ast.SelectionSet, v *model.ControlFieldDiff) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlFieldDiff!")
 		return graphql.Null
 	}
 	return ec._ControlFieldDiff(ctx, sel, v)
@@ -1754,9 +1726,7 @@ func (ec *executionContext) marshalNControlFieldDiff2ᚖgithubᚗcomᚋtheopenla
 
 func (ec *executionContext) marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroup) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlGroup!")
 		return graphql.Null
 	}
 	return ec._ControlGroup(ctx, sel, v)
@@ -1764,9 +1734,7 @@ func (ec *executionContext) marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlane�
 
 func (ec *executionContext) marshalNControlGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupConnection) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlGroupConnection!")
 		return graphql.Null
 	}
 	return ec._ControlGroupConnection(ctx, sel, v)
@@ -1790,9 +1758,7 @@ func (ec *executionContext) marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheope
 
 func (ec *executionContext) marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupEdge) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlGroupEdge!")
 		return graphql.Null
 	}
 	return ec._ControlGroupEdge(ctx, sel, v)

@@ -3,7 +3,7 @@ package types //nolint:revive
 import (
 	"encoding/json"
 
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 const (

@@ -8,26 +8,20 @@ import (
 	"github.com/samber/lo"
 	slackgo "github.com/slack-go/slack"
 
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
-	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/logx"
 )
 
 // MessageSendOp is the operation ref for the Slack message send operation
-var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(MessageSend{}.Run).Permissions(scopes...) //nolint:revive
+var MessageSendOp = types.OperationPayloadOf[MessageSendOperation]().Handles(sendMessage).Permissions(scopes...)
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
-	// TemplateID references a notification template by database ID
-	TemplateID string `json:"templateId,omitempty" jsonschema:"title=Template ID"`
-	// TemplateKey references a notification template by key
-	TemplateKey string `json:"templateKey,omitempty" jsonschema:"title=Template Key"`
-	// Channel is the Slack channel identifier to post to
-	Channel string `json:"channel,omitempty" jsonschema:"title=Channel"`
+	operations.MessageContent
 	// Destinations are Slack channel identifiers to post the same message to
 	Destinations []string `json:"destinations,omitempty" jsonschema:"title=Destinations"`
-	// Text is the plain-text message content
-	Text string `json:"text,omitempty" jsonschema:"title=Message Text"`
 	// Blocks is a Block Kit payload for rich messages
 	Blocks []json.RawMessage `json:"blocks,omitempty" jsonschema:"title=Block Kit Payload"`
 	// ThreadTS is the thread timestamp for replies
@@ -36,27 +30,9 @@ type MessageSendOperation struct {
 	UnfurlLinks *bool `json:"unfurl_links,omitempty" jsonschema:"title=Unfurl Links"`
 }
 
-// MessageSend sends a Slack message via chat.postMessage
-type MessageSend struct {
-	// Channel is the first channel the message was posted to
-	Channel string `json:"channel,omitempty"`
-	// TS is the first message timestamp
-	TS string `json:"ts,omitempty"`
-	// Deliveries captures every channel delivery performed by the operation
-	Deliveries []MessageDelivery `json:"deliveries,omitempty"`
-}
-
-// MessageDelivery captures one Slack message delivery
-type MessageDelivery struct {
-	// Channel is the channel the message was posted to
-	Channel string `json:"channel"`
-	// TS is the message timestamp
-	TS string `json:"ts"`
-}
-
-// Run sends a Slack message via chat.postMessage
-func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *SlackClient, cfg MessageSendOperation) (json.RawMessage, error) {
-	if err := templatekit.ResolveOperationTemplate(ctx, req, cfg.TemplateID, cfg.TemplateKey, &cfg); err != nil {
+// sendMessage sends a Slack message via chat.postMessage
+func sendMessage(ctx context.Context, req types.OperationRequest, c *Client, cfg MessageSendOperation) (json.RawMessage, error) {
+	if err := cfg.ResolveTemplate(ctx, req, &cfg); err != nil {
 		return nil, err
 	}
 
@@ -99,26 +75,19 @@ func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *Slack
 		opts = append(opts, slackgo.MsgOptionDisableLinkUnfurl())
 	}
 
-	deliveries := make([]MessageDelivery, 0, len(destinations))
+	deliveries := make([]operations.MessageDelivery, 0, len(destinations))
 	for _, destination := range destinations {
 		respChannel, ts, err := c.API.PostMessageContext(ctx, destination, opts...)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("channel", destination).Msg("slack: message send failed")
 			return nil, ErrMessageSendFailed
 		}
 
-		deliveries = append(deliveries, MessageDelivery{
+		deliveries = append(deliveries, operations.MessageDelivery{
 			Channel: respChannel,
-			TS:      ts,
+			ID:      ts,
 		})
 	}
 
-	result := MessageSend{
-		Deliveries: deliveries,
-	}
-	if len(deliveries) > 0 {
-		result.Channel = deliveries[0].Channel
-		result.TS = deliveries[0].TS
-	}
-
-	return providerkit.EncodeResult(result, ErrResultEncode)
+	return providerkit.EncodeResult(operations.NewMessageSendResult(deliveries), ErrResultEncode)
 }

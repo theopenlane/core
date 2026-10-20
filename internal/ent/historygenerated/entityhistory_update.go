@@ -151,14 +151,17 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if _u.mutation.CatalogEntityIDCleared() {
-		_spec.ClearField(entityhistory.FieldCatalogEntityID, field.TypeString)
+	if _u.mutation.CatalogIDCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogID, field.TypeString)
 	}
 	if _u.mutation.ExternallyVisibleCleared() {
 		_spec.ClearField(entityhistory.FieldExternallyVisible, field.TypeBool)
 	}
-	if _u.mutation.CatalogEntityKeyCleared() {
-		_spec.ClearField(entityhistory.FieldCatalogEntityKey, field.TypeString)
+	if _u.mutation.CatalogKeyCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogKey, field.TypeString)
+	}
+	if _u.mutation.RawIngestPayloadCleared() {
+		_spec.ClearField(entityhistory.FieldRawIngestPayload, field.TypeJSON)
 	}
 	if _u.mutation.EntityRelationshipStateNameCleared() {
 		_spec.ClearField(entityhistory.FieldEntityRelationshipStateName, field.TypeString)
@@ -473,14 +476,17 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if _u.mutation.CatalogEntityIDCleared() {
-		_spec.ClearField(entityhistory.FieldCatalogEntityID, field.TypeString)
+	if _u.mutation.CatalogIDCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogID, field.TypeString)
 	}
 	if _u.mutation.ExternallyVisibleCleared() {
 		_spec.ClearField(entityhistory.FieldExternallyVisible, field.TypeBool)
 	}
-	if _u.mutation.CatalogEntityKeyCleared() {
-		_spec.ClearField(entityhistory.FieldCatalogEntityKey, field.TypeString)
+	if _u.mutation.CatalogKeyCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogKey, field.TypeString)
+	}
+	if _u.mutation.RawIngestPayloadCleared() {
+		_spec.ClearField(entityhistory.FieldRawIngestPayload, field.TypeJSON)
 	}
 	if _u.mutation.EntityRelationshipStateNameCleared() {
 		_spec.ClearField(entityhistory.FieldEntityRelationshipStateName, field.TypeString)

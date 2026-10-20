@@ -84,8 +84,8 @@ func (m *MockCloudflareRuntime) Close() {
 }
 
 // mockCloudflareClient builds a CloudflareClient whose API is pointed at the mock server
-func mockCloudflareClient(baseURL string) *CloudflareClient {
-	return &CloudflareClient{
+func mockCloudflareClient(baseURL string) *Client {
+	return &Client{
 		Client: cf.NewClient(
 			option.WithAPIToken(mockAPIToken),
 			option.WithBaseURL(baseURL),

@@ -12,15 +12,15 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 // RecurringCampaignSweep configures one recurring campaign sweep cycle
 type RecurringCampaignSweep struct{}
 
 // RecurringCampaignOp is the operation ref for the global recurring campaign sweep, which runs without a client
-var RecurringCampaignOp = types.OperationPayloadOf[RecurringCampaignSweep]().HandlesRequest(runRecurringCampaignSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
+var RecurringCampaignOp = types.OperationPayloadOf[RecurringCampaignSweep]().HandlesRequest(runRecurringCampaignSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback()
 
 // runRecurringCampaignSweep runs one recurring campaign sweep cycle and encodes the processed count
 func runRecurringCampaignSweep(ctx context.Context, req types.OperationRequest, sweep RecurringCampaignSweep) (json.RawMessage, error) {

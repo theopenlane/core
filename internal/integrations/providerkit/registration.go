@@ -5,11 +5,15 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // matchAllFilterExpr is the filter expression admitting every envelope to its mapping
@@ -83,7 +87,7 @@ func DirectoryMappings(accountExpr, groupExpr, membershipExpr string) []types.Ma
 	}
 }
 
-// FindingMapping returns the finding mapping linking findings to controls by ref code
+// FindingMapping returns the finding mapping linking findings to controls by ref code, assets by name, and the internal owner identity holder by email
 func FindingMapping(mapExpr string) types.MappingRegistration {
 	return types.MappingRegistration{
 		Schema: entityops.SchemaFinding.Name,
@@ -97,7 +101,56 @@ func FindingMapping(mapExpr string) types.MappingRegistration {
 					SourceField:  entityops.FindingFields.Category.InputKey,
 					SourceList:   entityops.FindingFields.Categories.InputKey,
 				},
+				{
+					TargetSchema: entityops.SchemaAsset.Name,
+					TargetField:  asset.FieldName,
+					SourceField:  entityops.FindingFields.ResourceName.InputKey,
+					SourceList:   entityops.FindingFields.Targets.InputKey,
+				},
+				internalOwnerIdentityHolderLink(finding.EdgeInternalOwnerIdentityHolder, entityops.FindingFields.InternalOwner.InputKey),
 			},
 		},
+	}
+}
+
+// CheckResultMapping returns the check result mapping linking check results to controls whose ref code is in the tags
+func CheckResultMapping(mapExpr string) types.MappingRegistration {
+	return types.MappingRegistration{
+		Schema: entityops.SchemaCheckResult.Name,
+		Spec: types.MappingOverride{
+			FilterExpr: matchAllFilterExpr,
+			MapExpr:    mapExpr,
+			Links: []types.LinkRule{
+				{
+					TargetSchema: entityops.SchemaControl.Name,
+					TargetField:  control.FieldRefCode,
+					SourceList:   entityops.CheckResultFields.Tags.InputKey,
+				},
+			},
+		},
+	}
+}
+
+// VulnerabilityMapping returns the vulnerability mapping linking the internal owner to an identity holder by email
+func VulnerabilityMapping(mapExpr string) types.MappingRegistration {
+	return types.MappingRegistration{
+		Schema: entityops.SchemaVulnerability.Name,
+		Spec: types.MappingOverride{
+			FilterExpr: matchAllFilterExpr,
+			MapExpr:    mapExpr,
+			Links: []types.LinkRule{
+				internalOwnerIdentityHolderLink(vulnerability.EdgeInternalOwnerIdentityHolder, entityops.VulnerabilityFields.InternalOwner.InputKey),
+			},
+		},
+	}
+}
+
+// internalOwnerIdentityHolderLink links the internal owner identity holder whose email equals the mapped internal_owner value
+func internalOwnerIdentityHolderLink(edge, sourceKey string) types.LinkRule {
+	return types.LinkRule{
+		TargetSchema: entityops.SchemaIdentityHolder.Name,
+		Edge:         edge,
+		TargetField:  identityholder.FieldEmail,
+		SourceField:  sourceKey,
 	}
 }

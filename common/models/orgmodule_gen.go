@@ -4,7 +4,9 @@ package models
 
 // modules and addons available in the catalog
 const (
+	CatalogAssessmentCustomDomainAddon   OrgModule = "assessment_custom_domain_addon"
 	CatalogBaseModule                    OrgModule = "base_module"
+	CatalogBrandingTrustcenterAddon      OrgModule = "branding_trustcenter_addon"
 	CatalogComplianceModule              OrgModule = "compliance_module"
 	CatalogDomainScanningAddon           OrgModule = "domain_scanning_addon"
 	CatalogEntityManagementModule        OrgModule = "entity_management_module"
@@ -14,18 +16,21 @@ const (
 	CatalogRiskManagementAddon           OrgModule = "risk_management_addon"
 	CatalogTrustCenterModule             OrgModule = "trust_center_module"
 	CatalogVulnerabilityManagementModule OrgModule = "vulnerability_management_module"
+	CatalogWorkflowAddon                 OrgModule = "workflow_addon"
 )
 
 // CatalogAnyModule is not in the catalog; a schema requiring it is satisfied by any enabled module other than the base module
 const CatalogAnyModule OrgModule = "any_module"
 
 // AllOrgModules contains every module and addon in the catalog
-var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule}
+var AllOrgModules = []OrgModule{CatalogAssessmentCustomDomainAddon, CatalogBaseModule, CatalogBrandingTrustcenterAddon, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule, CatalogWorkflowAddon}
 
 // OrgModuleByConstName maps the name of each module constant to the module it holds
 var OrgModuleByConstName = map[string]OrgModule{
 	"CatalogAnyModule":                     CatalogAnyModule,
+	"CatalogAssessmentCustomDomainAddon":   CatalogAssessmentCustomDomainAddon,
 	"CatalogBaseModule":                    CatalogBaseModule,
+	"CatalogBrandingTrustcenterAddon":      CatalogBrandingTrustcenterAddon,
 	"CatalogComplianceModule":              CatalogComplianceModule,
 	"CatalogDomainScanningAddon":           CatalogDomainScanningAddon,
 	"CatalogEntityManagementModule":        CatalogEntityManagementModule,
@@ -35,7 +40,8 @@ var OrgModuleByConstName = map[string]OrgModule{
 	"CatalogRiskManagementAddon":           CatalogRiskManagementAddon,
 	"CatalogTrustCenterModule":             CatalogTrustCenterModule,
 	"CatalogVulnerabilityManagementModule": CatalogVulnerabilityManagementModule,
+	"CatalogWorkflowAddon":                 CatalogWorkflowAddon,
 }
 
 // TrialModules contains the modules and addons included with a trial
-var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogTrustCenterModule}
+var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogTrustCenterModule, CatalogWorkflowAddon}

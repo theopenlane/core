@@ -28,6 +28,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	CatalogManaged   func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
 	ExternalReadOnly func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
 	ExternalSource   func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
 	Hidden           func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
@@ -704,8 +705,8 @@ type ComplexityRoot struct {
 		ApprovedForUse                        func(childComplexity int) int
 		AutoRenews                            func(childComplexity int) int
 		BillingModel                          func(childComplexity int) int
-		CatalogEntityID                       func(childComplexity int) int
-		CatalogEntityKey                      func(childComplexity int) int
+		CatalogID                             func(childComplexity int) int
+		CatalogKey                            func(childComplexity int) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
 		ContractStartDate                     func(childComplexity int) int
@@ -748,6 +749,7 @@ type ComplexityRoot struct {
 		Operation                             func(childComplexity int) int
 		OwnerID                               func(childComplexity int) int
 		ProvidedServices                      func(childComplexity int) int
+		RawIngestPayload                      func(childComplexity int) int
 		Ref                                   func(childComplexity int) int
 		RenewalRisk                           func(childComplexity int) int
 		ReviewFrequency                       func(childComplexity int) int
@@ -6299,18 +6301,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.BillingModel(childComplexity), true
-	case "EntityHistory.catalogEntityID":
-		if e.ComplexityRoot.EntityHistory.CatalogEntityID == nil {
+	case "EntityHistory.catalogID":
+		if e.ComplexityRoot.EntityHistory.CatalogID == nil {
 			break
 		}
 
-		return e.ComplexityRoot.EntityHistory.CatalogEntityID(childComplexity), true
-	case "EntityHistory.catalogEntityKey":
-		if e.ComplexityRoot.EntityHistory.CatalogEntityKey == nil {
+		return e.ComplexityRoot.EntityHistory.CatalogID(childComplexity), true
+	case "EntityHistory.catalogKey":
+		if e.ComplexityRoot.EntityHistory.CatalogKey == nil {
 			break
 		}
 
-		return e.ComplexityRoot.EntityHistory.CatalogEntityKey(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.CatalogKey(childComplexity), true
 	case "EntityHistory.contractEndDate":
 		if e.ComplexityRoot.EntityHistory.ContractEndDate == nil {
 			break
@@ -6563,6 +6565,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.ProvidedServices(childComplexity), true
+	case "EntityHistory.rawIngestPayload":
+		if e.ComplexityRoot.EntityHistory.RawIngestPayload == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.RawIngestPayload(childComplexity), true
 	case "EntityHistory.ref":
 		if e.ComplexityRoot.EntityHistory.Ref == nil {
 			break
@@ -17994,142 +18002,144 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	opCtx := graphql.GetOperationContext(ctx)
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
-	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
-		ec.unmarshalInputActionPlanHistoryOrder,
-		ec.unmarshalInputActionPlanHistoryWhereInput,
-		ec.unmarshalInputAssessmentHistoryOrder,
-		ec.unmarshalInputAssessmentHistoryWhereInput,
-		ec.unmarshalInputAssessmentPolicyHistoryOrder,
-		ec.unmarshalInputAssessmentPolicyHistoryWhereInput,
-		ec.unmarshalInputAssessmentResponseHistoryOrder,
-		ec.unmarshalInputAssessmentResponseHistoryWhereInput,
-		ec.unmarshalInputAssetHistoryOrder,
-		ec.unmarshalInputAssetHistoryWhereInput,
-		ec.unmarshalInputCampaignHistoryOrder,
-		ec.unmarshalInputCampaignHistoryWhereInput,
-		ec.unmarshalInputCampaignTargetHistoryOrder,
-		ec.unmarshalInputCampaignTargetHistoryWhereInput,
-		ec.unmarshalInputContactHistoryOrder,
-		ec.unmarshalInputContactHistoryWhereInput,
-		ec.unmarshalInputControlHistoryOrder,
-		ec.unmarshalInputControlHistoryWhereInput,
-		ec.unmarshalInputControlImplementationHistoryOrder,
-		ec.unmarshalInputControlImplementationHistoryWhereInput,
-		ec.unmarshalInputControlObjectiveHistoryOrder,
-		ec.unmarshalInputControlObjectiveHistoryWhereInput,
-		ec.unmarshalInputCustomDomainHistoryOrder,
-		ec.unmarshalInputCustomDomainHistoryWhereInput,
-		ec.unmarshalInputDiscussionHistoryOrder,
-		ec.unmarshalInputDiscussionHistoryWhereInput,
-		ec.unmarshalInputDocumentDataHistoryOrder,
-		ec.unmarshalInputDocumentDataHistoryWhereInput,
-		ec.unmarshalInputEmailTemplateHistoryOrder,
-		ec.unmarshalInputEmailTemplateHistoryWhereInput,
-		ec.unmarshalInputEntityHistoryOrder,
-		ec.unmarshalInputEntityHistoryWhereInput,
-		ec.unmarshalInputEntityTypeHistoryOrder,
-		ec.unmarshalInputEntityTypeHistoryWhereInput,
-		ec.unmarshalInputEvidenceHistoryOrder,
-		ec.unmarshalInputEvidenceHistoryWhereInput,
-		ec.unmarshalInputFileHistoryOrder,
-		ec.unmarshalInputFileHistoryWhereInput,
-		ec.unmarshalInputFindingControlHistoryOrder,
-		ec.unmarshalInputFindingControlHistoryWhereInput,
-		ec.unmarshalInputFindingHistoryOrder,
-		ec.unmarshalInputFindingHistoryWhereInput,
-		ec.unmarshalInputGroupHistoryOrder,
-		ec.unmarshalInputGroupHistoryWhereInput,
-		ec.unmarshalInputGroupMembershipHistoryOrder,
-		ec.unmarshalInputGroupMembershipHistoryWhereInput,
-		ec.unmarshalInputGroupSettingHistoryOrder,
-		ec.unmarshalInputGroupSettingHistoryWhereInput,
-		ec.unmarshalInputHushHistoryOrder,
-		ec.unmarshalInputHushHistoryWhereInput,
-		ec.unmarshalInputIdentityHolderHistoryOrder,
-		ec.unmarshalInputIdentityHolderHistoryWhereInput,
-		ec.unmarshalInputInternalPolicyHistoryOrder,
-		ec.unmarshalInputInternalPolicyHistoryWhereInput,
-		ec.unmarshalInputMappableDomainHistoryOrder,
-		ec.unmarshalInputMappableDomainHistoryWhereInput,
-		ec.unmarshalInputMappedControlHistoryOrder,
-		ec.unmarshalInputMappedControlHistoryWhereInput,
-		ec.unmarshalInputNarrativeHistoryOrder,
-		ec.unmarshalInputNarrativeHistoryWhereInput,
-		ec.unmarshalInputNoteHistoryOrder,
-		ec.unmarshalInputNoteHistoryWhereInput,
-		ec.unmarshalInputNotificationPreferenceHistoryOrder,
-		ec.unmarshalInputNotificationPreferenceHistoryWhereInput,
-		ec.unmarshalInputNotificationTemplateHistoryOrder,
-		ec.unmarshalInputNotificationTemplateHistoryWhereInput,
-		ec.unmarshalInputOrgMembershipHistoryOrder,
-		ec.unmarshalInputOrgMembershipHistoryWhereInput,
-		ec.unmarshalInputOrganizationHistoryOrder,
-		ec.unmarshalInputOrganizationHistoryWhereInput,
-		ec.unmarshalInputOrganizationSettingHistoryOrder,
-		ec.unmarshalInputOrganizationSettingHistoryWhereInput,
-		ec.unmarshalInputPlatformHistoryOrder,
-		ec.unmarshalInputPlatformHistoryWhereInput,
-		ec.unmarshalInputProcedureHistoryOrder,
-		ec.unmarshalInputProcedureHistoryWhereInput,
-		ec.unmarshalInputProgramHistoryOrder,
-		ec.unmarshalInputProgramHistoryWhereInput,
-		ec.unmarshalInputProgramMembershipHistoryOrder,
-		ec.unmarshalInputProgramMembershipHistoryWhereInput,
-		ec.unmarshalInputRemediationHistoryOrder,
-		ec.unmarshalInputRemediationHistoryWhereInput,
-		ec.unmarshalInputReviewHistoryOrder,
-		ec.unmarshalInputReviewHistoryWhereInput,
-		ec.unmarshalInputRiskHistoryOrder,
-		ec.unmarshalInputRiskHistoryWhereInput,
-		ec.unmarshalInputSLADefinitionHistoryOrder,
-		ec.unmarshalInputSLADefinitionHistoryWhereInput,
-		ec.unmarshalInputStandardHistoryOrder,
-		ec.unmarshalInputStandardHistoryWhereInput,
-		ec.unmarshalInputSubcontrolHistoryOrder,
-		ec.unmarshalInputSubcontrolHistoryWhereInput,
-		ec.unmarshalInputSubprocessorHistoryOrder,
-		ec.unmarshalInputSubprocessorHistoryWhereInput,
-		ec.unmarshalInputSystemDetailHistoryOrder,
-		ec.unmarshalInputSystemDetailHistoryWhereInput,
-		ec.unmarshalInputTaskHistoryOrder,
-		ec.unmarshalInputTaskHistoryWhereInput,
-		ec.unmarshalInputTemplateHistoryOrder,
-		ec.unmarshalInputTemplateHistoryWhereInput,
-		ec.unmarshalInputTrustCenterComplianceHistoryOrder,
-		ec.unmarshalInputTrustCenterComplianceHistoryWhereInput,
-		ec.unmarshalInputTrustCenterDocHistoryOrder,
-		ec.unmarshalInputTrustCenterDocHistoryWhereInput,
-		ec.unmarshalInputTrustCenterEntityHistoryOrder,
-		ec.unmarshalInputTrustCenterEntityHistoryWhereInput,
-		ec.unmarshalInputTrustCenterFAQHistoryOrder,
-		ec.unmarshalInputTrustCenterFAQHistoryWhereInput,
-		ec.unmarshalInputTrustCenterHistoryOrder,
-		ec.unmarshalInputTrustCenterHistoryWhereInput,
-		ec.unmarshalInputTrustCenterNDARequestHistoryOrder,
-		ec.unmarshalInputTrustCenterNDARequestHistoryWhereInput,
-		ec.unmarshalInputTrustCenterSettingHistoryOrder,
-		ec.unmarshalInputTrustCenterSettingHistoryWhereInput,
-		ec.unmarshalInputTrustCenterSubprocessorHistoryOrder,
-		ec.unmarshalInputTrustCenterSubprocessorHistoryWhereInput,
-		ec.unmarshalInputTrustCenterWatermarkConfigHistoryOrder,
-		ec.unmarshalInputTrustCenterWatermarkConfigHistoryWhereInput,
-		ec.unmarshalInputUserHistoryOrder,
-		ec.unmarshalInputUserHistoryWhereInput,
-		ec.unmarshalInputUserSettingHistoryOrder,
-		ec.unmarshalInputUserSettingHistoryWhereInput,
-		ec.unmarshalInputVendorRiskScoreHistoryOrder,
-		ec.unmarshalInputVendorRiskScoreHistoryWhereInput,
-		ec.unmarshalInputVendorScoringConfigHistoryOrder,
-		ec.unmarshalInputVendorScoringConfigHistoryWhereInput,
-		ec.unmarshalInputVulnerabilityHistoryOrder,
-		ec.unmarshalInputVulnerabilityHistoryWhereInput,
-		ec.unmarshalInputWorkflowAssignmentHistoryOrder,
-		ec.unmarshalInputWorkflowAssignmentHistoryWhereInput,
-		ec.unmarshalInputWorkflowAssignmentTargetHistoryOrder,
-		ec.unmarshalInputWorkflowAssignmentTargetHistoryWhereInput,
-		ec.unmarshalInputWorkflowDefinitionHistoryOrder,
-		ec.unmarshalInputWorkflowDefinitionHistoryWhereInput,
-	)
+	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
+		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("ActionPlanHistoryOrder", ec.unmarshalInputActionPlanHistoryOrder),
+			graphql.NewInputUnmarshaler("ActionPlanHistoryWhereInput", ec.unmarshalInputActionPlanHistoryWhereInput),
+			graphql.NewInputUnmarshaler("AssessmentHistoryOrder", ec.unmarshalInputAssessmentHistoryOrder),
+			graphql.NewInputUnmarshaler("AssessmentHistoryWhereInput", ec.unmarshalInputAssessmentHistoryWhereInput),
+			graphql.NewInputUnmarshaler("AssessmentPolicyHistoryOrder", ec.unmarshalInputAssessmentPolicyHistoryOrder),
+			graphql.NewInputUnmarshaler("AssessmentPolicyHistoryWhereInput", ec.unmarshalInputAssessmentPolicyHistoryWhereInput),
+			graphql.NewInputUnmarshaler("AssessmentResponseHistoryOrder", ec.unmarshalInputAssessmentResponseHistoryOrder),
+			graphql.NewInputUnmarshaler("AssessmentResponseHistoryWhereInput", ec.unmarshalInputAssessmentResponseHistoryWhereInput),
+			graphql.NewInputUnmarshaler("AssetHistoryOrder", ec.unmarshalInputAssetHistoryOrder),
+			graphql.NewInputUnmarshaler("AssetHistoryWhereInput", ec.unmarshalInputAssetHistoryWhereInput),
+			graphql.NewInputUnmarshaler("CampaignHistoryOrder", ec.unmarshalInputCampaignHistoryOrder),
+			graphql.NewInputUnmarshaler("CampaignHistoryWhereInput", ec.unmarshalInputCampaignHistoryWhereInput),
+			graphql.NewInputUnmarshaler("CampaignTargetHistoryOrder", ec.unmarshalInputCampaignTargetHistoryOrder),
+			graphql.NewInputUnmarshaler("CampaignTargetHistoryWhereInput", ec.unmarshalInputCampaignTargetHistoryWhereInput),
+			graphql.NewInputUnmarshaler("ContactHistoryOrder", ec.unmarshalInputContactHistoryOrder),
+			graphql.NewInputUnmarshaler("ContactHistoryWhereInput", ec.unmarshalInputContactHistoryWhereInput),
+			graphql.NewInputUnmarshaler("ControlHistoryOrder", ec.unmarshalInputControlHistoryOrder),
+			graphql.NewInputUnmarshaler("ControlHistoryWhereInput", ec.unmarshalInputControlHistoryWhereInput),
+			graphql.NewInputUnmarshaler("ControlImplementationHistoryOrder", ec.unmarshalInputControlImplementationHistoryOrder),
+			graphql.NewInputUnmarshaler("ControlImplementationHistoryWhereInput", ec.unmarshalInputControlImplementationHistoryWhereInput),
+			graphql.NewInputUnmarshaler("ControlObjectiveHistoryOrder", ec.unmarshalInputControlObjectiveHistoryOrder),
+			graphql.NewInputUnmarshaler("ControlObjectiveHistoryWhereInput", ec.unmarshalInputControlObjectiveHistoryWhereInput),
+			graphql.NewInputUnmarshaler("CustomDomainHistoryOrder", ec.unmarshalInputCustomDomainHistoryOrder),
+			graphql.NewInputUnmarshaler("CustomDomainHistoryWhereInput", ec.unmarshalInputCustomDomainHistoryWhereInput),
+			graphql.NewInputUnmarshaler("DiscussionHistoryOrder", ec.unmarshalInputDiscussionHistoryOrder),
+			graphql.NewInputUnmarshaler("DiscussionHistoryWhereInput", ec.unmarshalInputDiscussionHistoryWhereInput),
+			graphql.NewInputUnmarshaler("DocumentDataHistoryOrder", ec.unmarshalInputDocumentDataHistoryOrder),
+			graphql.NewInputUnmarshaler("DocumentDataHistoryWhereInput", ec.unmarshalInputDocumentDataHistoryWhereInput),
+			graphql.NewInputUnmarshaler("EmailTemplateHistoryOrder", ec.unmarshalInputEmailTemplateHistoryOrder),
+			graphql.NewInputUnmarshaler("EmailTemplateHistoryWhereInput", ec.unmarshalInputEmailTemplateHistoryWhereInput),
+			graphql.NewInputUnmarshaler("EntityHistoryOrder", ec.unmarshalInputEntityHistoryOrder),
+			graphql.NewInputUnmarshaler("EntityHistoryWhereInput", ec.unmarshalInputEntityHistoryWhereInput),
+			graphql.NewInputUnmarshaler("EntityTypeHistoryOrder", ec.unmarshalInputEntityTypeHistoryOrder),
+			graphql.NewInputUnmarshaler("EntityTypeHistoryWhereInput", ec.unmarshalInputEntityTypeHistoryWhereInput),
+			graphql.NewInputUnmarshaler("EvidenceHistoryOrder", ec.unmarshalInputEvidenceHistoryOrder),
+			graphql.NewInputUnmarshaler("EvidenceHistoryWhereInput", ec.unmarshalInputEvidenceHistoryWhereInput),
+			graphql.NewInputUnmarshaler("FileHistoryOrder", ec.unmarshalInputFileHistoryOrder),
+			graphql.NewInputUnmarshaler("FileHistoryWhereInput", ec.unmarshalInputFileHistoryWhereInput),
+			graphql.NewInputUnmarshaler("FindingControlHistoryOrder", ec.unmarshalInputFindingControlHistoryOrder),
+			graphql.NewInputUnmarshaler("FindingControlHistoryWhereInput", ec.unmarshalInputFindingControlHistoryWhereInput),
+			graphql.NewInputUnmarshaler("FindingHistoryOrder", ec.unmarshalInputFindingHistoryOrder),
+			graphql.NewInputUnmarshaler("FindingHistoryWhereInput", ec.unmarshalInputFindingHistoryWhereInput),
+			graphql.NewInputUnmarshaler("GroupHistoryOrder", ec.unmarshalInputGroupHistoryOrder),
+			graphql.NewInputUnmarshaler("GroupHistoryWhereInput", ec.unmarshalInputGroupHistoryWhereInput),
+			graphql.NewInputUnmarshaler("GroupMembershipHistoryOrder", ec.unmarshalInputGroupMembershipHistoryOrder),
+			graphql.NewInputUnmarshaler("GroupMembershipHistoryWhereInput", ec.unmarshalInputGroupMembershipHistoryWhereInput),
+			graphql.NewInputUnmarshaler("GroupSettingHistoryOrder", ec.unmarshalInputGroupSettingHistoryOrder),
+			graphql.NewInputUnmarshaler("GroupSettingHistoryWhereInput", ec.unmarshalInputGroupSettingHistoryWhereInput),
+			graphql.NewInputUnmarshaler("HushHistoryOrder", ec.unmarshalInputHushHistoryOrder),
+			graphql.NewInputUnmarshaler("HushHistoryWhereInput", ec.unmarshalInputHushHistoryWhereInput),
+			graphql.NewInputUnmarshaler("IdentityHolderHistoryOrder", ec.unmarshalInputIdentityHolderHistoryOrder),
+			graphql.NewInputUnmarshaler("IdentityHolderHistoryWhereInput", ec.unmarshalInputIdentityHolderHistoryWhereInput),
+			graphql.NewInputUnmarshaler("InternalPolicyHistoryOrder", ec.unmarshalInputInternalPolicyHistoryOrder),
+			graphql.NewInputUnmarshaler("InternalPolicyHistoryWhereInput", ec.unmarshalInputInternalPolicyHistoryWhereInput),
+			graphql.NewInputUnmarshaler("MappableDomainHistoryOrder", ec.unmarshalInputMappableDomainHistoryOrder),
+			graphql.NewInputUnmarshaler("MappableDomainHistoryWhereInput", ec.unmarshalInputMappableDomainHistoryWhereInput),
+			graphql.NewInputUnmarshaler("MappedControlHistoryOrder", ec.unmarshalInputMappedControlHistoryOrder),
+			graphql.NewInputUnmarshaler("MappedControlHistoryWhereInput", ec.unmarshalInputMappedControlHistoryWhereInput),
+			graphql.NewInputUnmarshaler("NarrativeHistoryOrder", ec.unmarshalInputNarrativeHistoryOrder),
+			graphql.NewInputUnmarshaler("NarrativeHistoryWhereInput", ec.unmarshalInputNarrativeHistoryWhereInput),
+			graphql.NewInputUnmarshaler("NoteHistoryOrder", ec.unmarshalInputNoteHistoryOrder),
+			graphql.NewInputUnmarshaler("NoteHistoryWhereInput", ec.unmarshalInputNoteHistoryWhereInput),
+			graphql.NewInputUnmarshaler("NotificationPreferenceHistoryOrder", ec.unmarshalInputNotificationPreferenceHistoryOrder),
+			graphql.NewInputUnmarshaler("NotificationPreferenceHistoryWhereInput", ec.unmarshalInputNotificationPreferenceHistoryWhereInput),
+			graphql.NewInputUnmarshaler("NotificationTemplateHistoryOrder", ec.unmarshalInputNotificationTemplateHistoryOrder),
+			graphql.NewInputUnmarshaler("NotificationTemplateHistoryWhereInput", ec.unmarshalInputNotificationTemplateHistoryWhereInput),
+			graphql.NewInputUnmarshaler("OrgMembershipHistoryOrder", ec.unmarshalInputOrgMembershipHistoryOrder),
+			graphql.NewInputUnmarshaler("OrgMembershipHistoryWhereInput", ec.unmarshalInputOrgMembershipHistoryWhereInput),
+			graphql.NewInputUnmarshaler("OrganizationHistoryOrder", ec.unmarshalInputOrganizationHistoryOrder),
+			graphql.NewInputUnmarshaler("OrganizationHistoryWhereInput", ec.unmarshalInputOrganizationHistoryWhereInput),
+			graphql.NewInputUnmarshaler("OrganizationSettingHistoryOrder", ec.unmarshalInputOrganizationSettingHistoryOrder),
+			graphql.NewInputUnmarshaler("OrganizationSettingHistoryWhereInput", ec.unmarshalInputOrganizationSettingHistoryWhereInput),
+			graphql.NewInputUnmarshaler("PlatformHistoryOrder", ec.unmarshalInputPlatformHistoryOrder),
+			graphql.NewInputUnmarshaler("PlatformHistoryWhereInput", ec.unmarshalInputPlatformHistoryWhereInput),
+			graphql.NewInputUnmarshaler("ProcedureHistoryOrder", ec.unmarshalInputProcedureHistoryOrder),
+			graphql.NewInputUnmarshaler("ProcedureHistoryWhereInput", ec.unmarshalInputProcedureHistoryWhereInput),
+			graphql.NewInputUnmarshaler("ProgramHistoryOrder", ec.unmarshalInputProgramHistoryOrder),
+			graphql.NewInputUnmarshaler("ProgramHistoryWhereInput", ec.unmarshalInputProgramHistoryWhereInput),
+			graphql.NewInputUnmarshaler("ProgramMembershipHistoryOrder", ec.unmarshalInputProgramMembershipHistoryOrder),
+			graphql.NewInputUnmarshaler("ProgramMembershipHistoryWhereInput", ec.unmarshalInputProgramMembershipHistoryWhereInput),
+			graphql.NewInputUnmarshaler("RemediationHistoryOrder", ec.unmarshalInputRemediationHistoryOrder),
+			graphql.NewInputUnmarshaler("RemediationHistoryWhereInput", ec.unmarshalInputRemediationHistoryWhereInput),
+			graphql.NewInputUnmarshaler("ReviewHistoryOrder", ec.unmarshalInputReviewHistoryOrder),
+			graphql.NewInputUnmarshaler("ReviewHistoryWhereInput", ec.unmarshalInputReviewHistoryWhereInput),
+			graphql.NewInputUnmarshaler("RiskHistoryOrder", ec.unmarshalInputRiskHistoryOrder),
+			graphql.NewInputUnmarshaler("RiskHistoryWhereInput", ec.unmarshalInputRiskHistoryWhereInput),
+			graphql.NewInputUnmarshaler("SLADefinitionHistoryOrder", ec.unmarshalInputSLADefinitionHistoryOrder),
+			graphql.NewInputUnmarshaler("SLADefinitionHistoryWhereInput", ec.unmarshalInputSLADefinitionHistoryWhereInput),
+			graphql.NewInputUnmarshaler("StandardHistoryOrder", ec.unmarshalInputStandardHistoryOrder),
+			graphql.NewInputUnmarshaler("StandardHistoryWhereInput", ec.unmarshalInputStandardHistoryWhereInput),
+			graphql.NewInputUnmarshaler("SubcontrolHistoryOrder", ec.unmarshalInputSubcontrolHistoryOrder),
+			graphql.NewInputUnmarshaler("SubcontrolHistoryWhereInput", ec.unmarshalInputSubcontrolHistoryWhereInput),
+			graphql.NewInputUnmarshaler("SubprocessorHistoryOrder", ec.unmarshalInputSubprocessorHistoryOrder),
+			graphql.NewInputUnmarshaler("SubprocessorHistoryWhereInput", ec.unmarshalInputSubprocessorHistoryWhereInput),
+			graphql.NewInputUnmarshaler("SystemDetailHistoryOrder", ec.unmarshalInputSystemDetailHistoryOrder),
+			graphql.NewInputUnmarshaler("SystemDetailHistoryWhereInput", ec.unmarshalInputSystemDetailHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TaskHistoryOrder", ec.unmarshalInputTaskHistoryOrder),
+			graphql.NewInputUnmarshaler("TaskHistoryWhereInput", ec.unmarshalInputTaskHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TemplateHistoryOrder", ec.unmarshalInputTemplateHistoryOrder),
+			graphql.NewInputUnmarshaler("TemplateHistoryWhereInput", ec.unmarshalInputTemplateHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterComplianceHistoryOrder", ec.unmarshalInputTrustCenterComplianceHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterComplianceHistoryWhereInput", ec.unmarshalInputTrustCenterComplianceHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterDocHistoryOrder", ec.unmarshalInputTrustCenterDocHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterDocHistoryWhereInput", ec.unmarshalInputTrustCenterDocHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterEntityHistoryOrder", ec.unmarshalInputTrustCenterEntityHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterEntityHistoryWhereInput", ec.unmarshalInputTrustCenterEntityHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterFAQHistoryOrder", ec.unmarshalInputTrustCenterFAQHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterFAQHistoryWhereInput", ec.unmarshalInputTrustCenterFAQHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterHistoryOrder", ec.unmarshalInputTrustCenterHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterHistoryWhereInput", ec.unmarshalInputTrustCenterHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterNDARequestHistoryOrder", ec.unmarshalInputTrustCenterNDARequestHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterNDARequestHistoryWhereInput", ec.unmarshalInputTrustCenterNDARequestHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterSettingHistoryOrder", ec.unmarshalInputTrustCenterSettingHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterSettingHistoryWhereInput", ec.unmarshalInputTrustCenterSettingHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterSubprocessorHistoryOrder", ec.unmarshalInputTrustCenterSubprocessorHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterSubprocessorHistoryWhereInput", ec.unmarshalInputTrustCenterSubprocessorHistoryWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterWatermarkConfigHistoryOrder", ec.unmarshalInputTrustCenterWatermarkConfigHistoryOrder),
+			graphql.NewInputUnmarshaler("TrustCenterWatermarkConfigHistoryWhereInput", ec.unmarshalInputTrustCenterWatermarkConfigHistoryWhereInput),
+			graphql.NewInputUnmarshaler("UserHistoryOrder", ec.unmarshalInputUserHistoryOrder),
+			graphql.NewInputUnmarshaler("UserHistoryWhereInput", ec.unmarshalInputUserHistoryWhereInput),
+			graphql.NewInputUnmarshaler("UserSettingHistoryOrder", ec.unmarshalInputUserSettingHistoryOrder),
+			graphql.NewInputUnmarshaler("UserSettingHistoryWhereInput", ec.unmarshalInputUserSettingHistoryWhereInput),
+			graphql.NewInputUnmarshaler("VendorRiskScoreHistoryOrder", ec.unmarshalInputVendorRiskScoreHistoryOrder),
+			graphql.NewInputUnmarshaler("VendorRiskScoreHistoryWhereInput", ec.unmarshalInputVendorRiskScoreHistoryWhereInput),
+			graphql.NewInputUnmarshaler("VendorScoringConfigHistoryOrder", ec.unmarshalInputVendorScoringConfigHistoryOrder),
+			graphql.NewInputUnmarshaler("VendorScoringConfigHistoryWhereInput", ec.unmarshalInputVendorScoringConfigHistoryWhereInput),
+			graphql.NewInputUnmarshaler("VulnerabilityHistoryOrder", ec.unmarshalInputVulnerabilityHistoryOrder),
+			graphql.NewInputUnmarshaler("VulnerabilityHistoryWhereInput", ec.unmarshalInputVulnerabilityHistoryWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentHistoryOrder", ec.unmarshalInputWorkflowAssignmentHistoryOrder),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentHistoryWhereInput", ec.unmarshalInputWorkflowAssignmentHistoryWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentTargetHistoryOrder", ec.unmarshalInputWorkflowAssignmentTargetHistoryOrder),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentTargetHistoryWhereInput", ec.unmarshalInputWorkflowAssignmentTargetHistoryWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowDefinitionHistoryOrder", ec.unmarshalInputWorkflowDefinitionHistoryOrder),
+			graphql.NewInputUnmarshaler("WorkflowDefinitionHistoryWhereInput", ec.unmarshalInputWorkflowDefinitionHistoryWhereInput),
+		)
+	}
 	first := true
 
 	switch opCtx.Operation.Operation {
@@ -18139,7 +18149,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			var data graphql.Marshaler
 			if first {
 				first = false
-				ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
+				ctx = graphql.WithLazyInputUnmarshalerIndex(ctx, inputUnmarshalers)
 				data = ec._Query(ctx, opCtx.Operation.SelectionSet)
 			} else {
 				if atomic.LoadInt32(&ec.PendingDeferred) > 0 {
@@ -18211,6 +18221,10 @@ Indicates that this field cannot be set on the input, and comes from an external
 This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
+"""
+Indicates the field's value is copied from the catalog row on adopt and rewritten on refresh while the row stays linked
+"""
+directive @catalogManaged on FIELD_DEFINITION
 """
 Indicates the modules an organization must have enabled to access this object,
 at least one of the listed modules is required
@@ -26148,17 +26162,21 @@ type EntityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
-  the system-owned catalog entity this entity was adopted from
+  the system-owned catalog row this row was adopted from
   """
-  catalogEntityID: String
+  catalogID: String
   """
   whether this system-owned row is published for organizations to adopt
   """
   externallyVisible: Boolean
   """
-  the lookup key of the catalog entity this entity was adopted from
+  the lookup key of the catalog row this row was adopted from
   """
-  catalogEntityKey: String
+  catalogKey: String
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
   """
   the relationship_state of the entity
   """
@@ -26822,19 +26840,19 @@ input EntityHistoryWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
-  catalog_entity_id field predicates
+  catalog_id field predicates
   """
-  catalogEntityID: String
-  catalogEntityIDNEQ: String
-  catalogEntityIDIn: [String!]
-  catalogEntityIDNotIn: [String!]
-  catalogEntityIDContains: String
-  catalogEntityIDHasPrefix: String
-  catalogEntityIDHasSuffix: String
-  catalogEntityIDIsNil: Boolean
-  catalogEntityIDNotNil: Boolean
-  catalogEntityIDEqualFold: String
-  catalogEntityIDContainsFold: String
+  catalogID: String
+  catalogIDNEQ: String
+  catalogIDIn: [String!]
+  catalogIDNotIn: [String!]
+  catalogIDContains: String
+  catalogIDHasPrefix: String
+  catalogIDHasSuffix: String
+  catalogIDIsNil: Boolean
+  catalogIDNotNil: Boolean
+  catalogIDEqualFold: String
+  catalogIDContainsFold: String
   """
   externally_visible field predicates
   """
@@ -26843,19 +26861,19 @@ input EntityHistoryWhereInput {
   externallyVisibleIsNil: Boolean
   externallyVisibleNotNil: Boolean
   """
-  catalog_entity_key field predicates
+  catalog_key field predicates
   """
-  catalogEntityKey: String
-  catalogEntityKeyNEQ: String
-  catalogEntityKeyIn: [String!]
-  catalogEntityKeyNotIn: [String!]
-  catalogEntityKeyContains: String
-  catalogEntityKeyHasPrefix: String
-  catalogEntityKeyHasSuffix: String
-  catalogEntityKeyIsNil: Boolean
-  catalogEntityKeyNotNil: Boolean
-  catalogEntityKeyEqualFold: String
-  catalogEntityKeyContainsFold: String
+  catalogKey: String
+  catalogKeyNEQ: String
+  catalogKeyIn: [String!]
+  catalogKeyNotIn: [String!]
+  catalogKeyContains: String
+  catalogKeyHasPrefix: String
+  catalogKeyHasSuffix: String
+  catalogKeyIsNil: Boolean
+  catalogKeyNotNil: Boolean
+  catalogKeyEqualFold: String
+  catalogKeyContainsFold: String
   """
   entity_relationship_state_name field predicates
   """
@@ -55442,12 +55460,14 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_EntityHistory_systemInternalID(ctx, field)
-	case "catalogEntityID":
-		return ec.fieldContext_EntityHistory_catalogEntityID(ctx, field)
+	case "catalogID":
+		return ec.fieldContext_EntityHistory_catalogID(ctx, field)
 	case "externallyVisible":
 		return ec.fieldContext_EntityHistory_externallyVisible(ctx, field)
-	case "catalogEntityKey":
-		return ec.fieldContext_EntityHistory_catalogEntityKey(ctx, field)
+	case "catalogKey":
+		return ec.fieldContext_EntityHistory_catalogKey(ctx, field)
+	case "rawIngestPayload":
+		return ec.fieldContext_EntityHistory_rawIngestPayload(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_EntityHistory_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":

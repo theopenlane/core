@@ -162,9 +162,16 @@ integrations:
         secretaccesskey: ""
     azureentraid:
         applicationid: ""
-        clientid: ""
         clientsecret: ""
         defaulttenant: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    azuresecuritycenter:
+        applicationid: ""
+        clientsecret: ""
+        defaulttenant: ""
+        lighthouse:
+            managingtenantid: ""
+            principalid: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     cloudflareruntime:
         accountid: ""
@@ -233,9 +240,64 @@ integrations:
         maxperrun: 100
     microsoftteams:
         applicationid: ""
-        clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    objectstore:
+        accesskeyid: ""
+        arn: ""
+        secretaccesskey: ""
+    objectstoreruntime:
+        import:
+            moveprocessed: false
+            prefix: ""
+        providers:
+            database:
+                backup: null
+                baseurl: http://localhost:17608/v1/files
+                bucket: ""
+                enabled: false
+                ensureavailable: false
+            disk:
+                backup: null
+                baseurl: http://localhost:17608/v1/files
+                bucket: ""
+                enabled: false
+                endpoint: ""
+                ensureavailable: false
+                proxypresignenabled: false
+            gcs:
+                backup: null
+                baseurl: http://localhost:17608/v1/files
+                bucket: ""
+                enabled: false
+                endpoint: ""
+                ensureavailable: false
+                projectid: ""
+                proxypresignenabled: false
+            r2:
+                backup: null
+                baseurl: http://localhost:17608/v1/files
+                bucket: ""
+                credentials:
+                    accesskeyid: ""
+                    accountid: ""
+                    secretaccesskey: ""
+                enabled: false
+                endpoint: ""
+                ensureavailable: false
+                proxypresignenabled: false
+            s3:
+                backup: null
+                baseurl: http://localhost:17608/v1/files
+                bucket: ""
+                credentials:
+                    accesskeyid: ""
+                    secretaccesskey: ""
+                enabled: false
+                endpoint: ""
+                ensureavailable: false
+                proxypresignenabled: false
+                region: ""
     oidclocal:
         clientid: local-core-oidc
         clientsecret: local-core-oidc-secret
@@ -244,7 +306,6 @@ integrations:
         redirecturl: http://localhost:17608/v1/integrations/auth/callback
     onedrive:
         applicationid: ""
-        clientid: ""
         clientsecret: ""
         contentmode: iframe
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback

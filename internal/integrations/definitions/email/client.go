@@ -6,12 +6,12 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/providers/mock"
 	"github.com/theopenlane/newman/providers/postmark"
 	"github.com/theopenlane/newman/providers/resend"
 	"github.com/theopenlane/newman/scrubber"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // Client wraps a newman.EmailSender with the RuntimeEmailConfig needed for template rendering and branding
@@ -91,8 +91,8 @@ func postmarkSender(cred PostmarkCredential) (newman.EmailSender, error) {
 // EmailHTMLScrubber is the shared scrubber instance used by email providers for render-time HTML sanitization, preserving email-safe layout elements while stripping dangerous content
 var EmailHTMLScrubber = scrubber.NewPolicyScrubber(scrubber.WithEmailDefaults())
 
-// EmailScrubber returns the shared HTML scrubber instance used for email content sanitization, the canonical policy for both storage-time and render-time processing
-func EmailScrubber() scrubber.Scrubber { //nolint:revive
+// Scrubber returns the shared HTML scrubber instance used for email content sanitization, the canonical policy for both storage-time and render-time processing
+func Scrubber() scrubber.Scrubber {
 	return EmailHTMLScrubber
 }
 

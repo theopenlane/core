@@ -12,11 +12,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // runAssetCollect collects Cloudflare domain registrations and emits asset ingest payloads
-func runAssetCollect(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, _ AssetSync) ([]types.IngestPayloadSet, error) {
+func runAssetCollect(ctx context.Context, _ types.OperationRequest, client *Client, _ AssetSync) ([]types.IngestPayloadSet, error) {
 	accountID := client.Config.AccountID
 	if accountID == "" {
 		return nil, ErrAccountIDMissing
@@ -50,7 +50,7 @@ type cloudflareRegistrationsResponse struct {
 	ResultInfo pagination.CursorPaginationResultInfo `json:"result_info"`
 }
 
-func fetchRegistrarRegistrations(ctx context.Context, client *CloudflareClient, accountID string) ([]registrar.Registration, error) {
+func fetchRegistrarRegistrations(ctx context.Context, client *Client, accountID string) ([]registrar.Registration, error) {
 	domains := make([]registrar.Registration, 0)
 
 	for cursor, page := "", 0; ; page++ {

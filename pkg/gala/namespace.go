@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/version"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // uniqueKeySeparator delimits unique key segments

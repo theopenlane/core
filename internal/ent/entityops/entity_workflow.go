@@ -12,7 +12,7 @@ import (
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 func workflowPayloadFieldValue(projectionType reflect.Type, field FieldDescriptor, raw json.RawMessage) (any, error) {

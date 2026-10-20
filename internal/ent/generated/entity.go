@@ -79,12 +79,14 @@ type Entity struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
-	// the system-owned catalog entity this entity was adopted from
-	CatalogEntityID string `json:"catalog_entity_id,omitempty"`
+	// the system-owned catalog row this row was adopted from
+	CatalogID string `json:"catalog_id,omitempty"`
 	// whether this system-owned row is published for organizations to adopt
 	ExternallyVisible bool `json:"externally_visible,omitempty"`
-	// the lookup key of the catalog entity this entity was adopted from
-	CatalogEntityKey string `json:"catalog_entity_key,omitempty"`
+	// the lookup key of the catalog row this row was adopted from
+	CatalogKey string `json:"catalog_key,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawIngestPayload map[string]interface{} `json:"raw_ingest_payload,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName string `json:"entity_relationship_state_name,omitempty"`
 	// the relationship_state of the entity
@@ -209,10 +211,10 @@ type EntityEdges struct {
 	ReviewedByGroup *Group `json:"reviewed_by_group,omitempty"`
 	// ReviewedByIdentityHolder holds the value of the reviewed_by_identity_holder edge.
 	ReviewedByIdentityHolder *IdentityHolder `json:"reviewed_by_identity_holder,omitempty"`
-	// the system-owned catalog entity this entity was adopted from
-	CatalogEntity *Entity `json:"catalog_entity,omitempty"`
-	// organization entities adopted from this catalog entity
-	AdoptedEntities []*Entity `json:"adopted_entities,omitempty"`
+	// the system-owned catalog row this row was adopted from
+	Catalog *Entity `json:"catalog,omitempty"`
+	// organization rows adopted from this catalog row
+	Adopted []*Entity `json:"adopted,omitempty"`
 	// EntityRelationshipState holds the value of the entity_relationship_state edge.
 	EntityRelationshipState *CustomTypeEnum `json:"entity_relationship_state,omitempty"`
 	// EntitySecurityQuestionnaireStatus holds the value of the entity_security_questionnaire_status edge.
@@ -286,7 +288,7 @@ type EntityEdges struct {
 	namedIntegrationRuns         map[string][]*IntegrationRun
 	namedBlockedGroups           map[string][]*Group
 	namedEditors                 map[string][]*Group
-	namedAdoptedEntities         map[string][]*Entity
+	namedAdopted                 map[string][]*Entity
 	namedContacts                map[string][]*Contact
 	namedDocuments               map[string][]*DocumentData
 	namedNotes                   map[string][]*Note
@@ -418,24 +420,24 @@ func (e EntityEdges) ReviewedByIdentityHolderOrErr() (*IdentityHolder, error) {
 	return nil, &NotLoadedError{edge: "reviewed_by_identity_holder"}
 }
 
-// CatalogEntityOrErr returns the CatalogEntity value or an error if the edge
+// CatalogOrErr returns the Catalog value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e EntityEdges) CatalogEntityOrErr() (*Entity, error) {
-	if e.CatalogEntity != nil {
-		return e.CatalogEntity, nil
+func (e EntityEdges) CatalogOrErr() (*Entity, error) {
+	if e.Catalog != nil {
+		return e.Catalog, nil
 	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
-	return nil, &NotLoadedError{edge: "catalog_entity"}
+	return nil, &NotLoadedError{edge: "catalog"}
 }
 
-// AdoptedEntitiesOrErr returns the AdoptedEntities value or an error if the edge
+// AdoptedOrErr returns the Adopted value or an error if the edge
 // was not loaded in eager-loading.
-func (e EntityEdges) AdoptedEntitiesOrErr() ([]*Entity, error) {
+func (e EntityEdges) AdoptedOrErr() ([]*Entity, error) {
 	if e.loadedTypes[11] {
-		return e.AdoptedEntities, nil
+		return e.Adopted, nil
 	}
-	return nil, &NotLoadedError{edge: "adopted_entities"}
+	return nil, &NotLoadedError{edge: "adopted"}
 }
 
 // EntityRelationshipStateOrErr returns the EntityRelationshipState value or an error if the edge
@@ -747,7 +749,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entity.FieldLastReviewedAt, entity.FieldSoc2PeriodEnd, entity.FieldContractStartDate, entity.FieldContractEndDate, entity.FieldNextReviewAt, entity.FieldContractRenewalAt, entity.FieldObservedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case entity.FieldTags, entity.FieldDomains, entity.FieldAliases, entity.FieldLinkedAssetIds, entity.FieldProvidedServices, entity.FieldLinks, entity.FieldVendorMetadata:
+		case entity.FieldTags, entity.FieldRawIngestPayload, entity.FieldDomains, entity.FieldAliases, entity.FieldLinkedAssetIds, entity.FieldProvidedServices, entity.FieldLinks, entity.FieldVendorMetadata:
 			values[i] = new([]byte)
 		case entity.FieldSystemOwned, entity.FieldExternallyVisible, entity.FieldApprovedForUse, entity.FieldHasSoc2, entity.FieldAutoRenews, entity.FieldSSOEnforced, entity.FieldMfaSupported, entity.FieldMfaEnforced:
 			values[i] = new(sql.NullBool)
@@ -755,7 +757,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore, entity.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldCatalogEntityID, entity.FieldCatalogEntityKey, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID, entity.FieldExternalID:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldCatalogID, entity.FieldCatalogKey, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID, entity.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -946,11 +948,11 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
 			}
-		case entity.FieldCatalogEntityID:
+		case entity.FieldCatalogID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field catalog_entity_id", values[i])
+				return fmt.Errorf("unexpected type %T for field catalog_id", values[i])
 			} else if value.Valid {
-				_m.CatalogEntityID = value.String
+				_m.CatalogID = value.String
 			}
 		case entity.FieldExternallyVisible:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -958,11 +960,19 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ExternallyVisible = value.Bool
 			}
-		case entity.FieldCatalogEntityKey:
+		case entity.FieldCatalogKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field catalog_entity_key", values[i])
+				return fmt.Errorf("unexpected type %T for field catalog_key", values[i])
 			} else if value.Valid {
-				_m.CatalogEntityKey = value.String
+				_m.CatalogKey = value.String
+			}
+		case entity.FieldRawIngestPayload:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field raw_ingest_payload", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RawIngestPayload); err != nil {
+					return fmt.Errorf("unmarshal field raw_ingest_payload: %w", err)
+				}
 			}
 		case entity.FieldEntityRelationshipStateName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1343,14 +1353,14 @@ func (_m *Entity) QueryReviewedByIdentityHolder() *IdentityHolderQuery {
 	return NewEntityClient(_m.config).QueryReviewedByIdentityHolder(_m)
 }
 
-// QueryCatalogEntity queries the "catalog_entity" edge of the Entity entity.
-func (_m *Entity) QueryCatalogEntity() *EntityQuery {
-	return NewEntityClient(_m.config).QueryCatalogEntity(_m)
+// QueryCatalog queries the "catalog" edge of the Entity entity.
+func (_m *Entity) QueryCatalog() *EntityQuery {
+	return NewEntityClient(_m.config).QueryCatalog(_m)
 }
 
-// QueryAdoptedEntities queries the "adopted_entities" edge of the Entity entity.
-func (_m *Entity) QueryAdoptedEntities() *EntityQuery {
-	return NewEntityClient(_m.config).QueryAdoptedEntities(_m)
+// QueryAdopted queries the "adopted" edge of the Entity entity.
+func (_m *Entity) QueryAdopted() *EntityQuery {
+	return NewEntityClient(_m.config).QueryAdopted(_m)
 }
 
 // QueryEntityRelationshipState queries the "entity_relationship_state" edge of the Entity entity.
@@ -1622,14 +1632,17 @@ func (_m *Entity) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	builder.WriteString("catalog_entity_id=")
-	builder.WriteString(_m.CatalogEntityID)
+	builder.WriteString("catalog_id=")
+	builder.WriteString(_m.CatalogID)
 	builder.WriteString(", ")
 	builder.WriteString("externally_visible=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ExternallyVisible))
 	builder.WriteString(", ")
-	builder.WriteString("catalog_entity_key=")
-	builder.WriteString(_m.CatalogEntityKey)
+	builder.WriteString("catalog_key=")
+	builder.WriteString(_m.CatalogKey)
+	builder.WriteString(", ")
+	builder.WriteString("raw_ingest_payload=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RawIngestPayload))
 	builder.WriteString(", ")
 	builder.WriteString("entity_relationship_state_name=")
 	builder.WriteString(_m.EntityRelationshipStateName)
@@ -1863,27 +1876,27 @@ func (_m *Entity) appendNamedEditors(name string, edges ...*Group) {
 	}
 }
 
-// NamedAdoptedEntities returns the AdoptedEntities named value or an error if the edge was not
+// NamedAdopted returns the Adopted named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *Entity) NamedAdoptedEntities(name string) ([]*Entity, error) {
-	if _m.Edges.namedAdoptedEntities == nil {
+func (_m *Entity) NamedAdopted(name string) ([]*Entity, error) {
+	if _m.Edges.namedAdopted == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedAdoptedEntities[name]
+	nodes, ok := _m.Edges.namedAdopted[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *Entity) appendNamedAdoptedEntities(name string, edges ...*Entity) {
-	if _m.Edges.namedAdoptedEntities == nil {
-		_m.Edges.namedAdoptedEntities = make(map[string][]*Entity)
+func (_m *Entity) appendNamedAdopted(name string, edges ...*Entity) {
+	if _m.Edges.namedAdopted == nil {
+		_m.Edges.namedAdopted = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedAdoptedEntities[name] = []*Entity{}
+		_m.Edges.namedAdopted[name] = []*Entity{}
 	} else {
-		_m.Edges.namedAdoptedEntities[name] = append(_m.Edges.namedAdoptedEntities[name], edges...)
+		_m.Edges.namedAdopted[name] = append(_m.Edges.namedAdopted[name], edges...)
 	}
 }
 

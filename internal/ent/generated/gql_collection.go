@@ -20529,7 +20529,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				fieldSeen[entity.FieldReviewedByIdentityHolderID] = struct{}{}
 			}
 
-		case "catalogEntity":
+		case "catalog":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -20538,13 +20538,13 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, entityImplementors)...); err != nil {
 				return err
 			}
-			_q.withCatalogEntity = query
-			if _, ok := fieldSeen[entity.FieldCatalogEntityID]; !ok {
-				selectedFields = append(selectedFields, entity.FieldCatalogEntityID)
-				fieldSeen[entity.FieldCatalogEntityID] = struct{}{}
+			_q.withCatalog = query
+			if _, ok := fieldSeen[entity.FieldCatalogID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCatalogID)
+				fieldSeen[entity.FieldCatalogID] = struct{}{}
 			}
 
-		case "adoptedEntities":
+		case "adopted":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -20573,13 +20573,13 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"catalog_entity_id"`
+							NodeID string `sql:"catalog_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(entity.AdoptedEntitiesColumn), ids...))
+							s.Where(sql.InValues(s.C(entity.AdoptedColumn), ids...))
 						})
-						if err := query.GroupBy(entity.AdoptedEntitiesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(entity.AdoptedColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -20598,7 +20598,7 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				} else {
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.AdoptedEntities)
+							n := len(nodes[i].Edges.Adopted)
 							if nodes[i].Edges.totalCount[11] == nil {
 								nodes[i].Edges.totalCount[11] = make(map[string]int)
 							}
@@ -20624,13 +20624,13 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(entity.AdoptedEntitiesColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(entity.AdoptedColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			_q.WithNamedAdoptedEntities(alias, func(wq *EntityQuery) {
+			_q.WithNamedAdopted(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -23184,20 +23184,25 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, entity.FieldSystemInternalID)
 				fieldSeen[entity.FieldSystemInternalID] = struct{}{}
 			}
-		case "catalogEntityID":
-			if _, ok := fieldSeen[entity.FieldCatalogEntityID]; !ok {
-				selectedFields = append(selectedFields, entity.FieldCatalogEntityID)
-				fieldSeen[entity.FieldCatalogEntityID] = struct{}{}
+		case "catalogID":
+			if _, ok := fieldSeen[entity.FieldCatalogID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCatalogID)
+				fieldSeen[entity.FieldCatalogID] = struct{}{}
 			}
 		case "externallyVisible":
 			if _, ok := fieldSeen[entity.FieldExternallyVisible]; !ok {
 				selectedFields = append(selectedFields, entity.FieldExternallyVisible)
 				fieldSeen[entity.FieldExternallyVisible] = struct{}{}
 			}
-		case "catalogEntityKey":
-			if _, ok := fieldSeen[entity.FieldCatalogEntityKey]; !ok {
-				selectedFields = append(selectedFields, entity.FieldCatalogEntityKey)
-				fieldSeen[entity.FieldCatalogEntityKey] = struct{}{}
+		case "catalogKey":
+			if _, ok := fieldSeen[entity.FieldCatalogKey]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCatalogKey)
+				fieldSeen[entity.FieldCatalogKey] = struct{}{}
+			}
+		case "rawIngestPayload":
+			if _, ok := fieldSeen[entity.FieldRawIngestPayload]; !ok {
+				selectedFields = append(selectedFields, entity.FieldRawIngestPayload)
+				fieldSeen[entity.FieldRawIngestPayload] = struct{}{}
 			}
 		case "entityRelationshipStateName":
 			if _, ok := fieldSeen[entity.FieldEntityRelationshipStateName]; !ok {

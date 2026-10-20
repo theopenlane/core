@@ -1,4 +1,8 @@
 """
+Indicates the field's value is copied from the catalog row on adopt and rewritten on refresh while the row stays linked
+"""
+directive @catalogManaged on FIELD_DEFINITION
+"""
 Indicates is the input field is read-only by non-system admin users for system-owned objects
 If an input is marked as @externalReadOnly, only system-admin users
 can set the field if the object is marked as source == ControlSourceFramework
@@ -14259,6 +14263,10 @@ input CreateEntityInput {
 	"""
 	externallyVisible: Boolean
 	"""
+	raw payload received from the integration for auditing and troubleshooting
+	"""
+	rawIngestPayload: Map
+	"""
 	the relationship_state of the entity
 	"""
 	entityRelationshipStateName: String
@@ -24470,17 +24478,21 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	systemInternalID: String @hidden(if: true)
 	"""
-	the system-owned catalog entity this entity was adopted from
+	the system-owned catalog row this row was adopted from
 	"""
-	catalogEntityID: ID
+	catalogID: ID
 	"""
 	whether this system-owned row is published for organizations to adopt
 	"""
 	externallyVisible: Boolean
 	"""
-	the lookup key of the catalog entity this entity was adopted from
+	the lookup key of the catalog row this row was adopted from
 	"""
-	catalogEntityKey: String
+	catalogKey: String
+	"""
+	raw payload received from the integration for auditing and troubleshooting
+	"""
+	rawIngestPayload: Map
 	"""
 	the relationship_state of the entity
 	"""
@@ -24770,10 +24782,10 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	reviewedByGroup: Group
 	reviewedByIdentityHolder: IdentityHolder
 	"""
-	the system-owned catalog entity this entity was adopted from
+	the system-owned catalog row this row was adopted from
 	"""
-	catalogEntity: Entity
-	adoptedEntities(
+	catalog: Entity
+	adopted(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -26444,19 +26456,19 @@ input EntityWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
-	catalog_entity_id field predicates
+	catalog_id field predicates
 	"""
-	catalogEntityID: ID
-	catalogEntityIDNEQ: ID
-	catalogEntityIDIn: [ID!]
-	catalogEntityIDNotIn: [ID!]
-	catalogEntityIDContains: ID
-	catalogEntityIDHasPrefix: ID
-	catalogEntityIDHasSuffix: ID
-	catalogEntityIDIsNil: Boolean
-	catalogEntityIDNotNil: Boolean
-	catalogEntityIDEqualFold: ID
-	catalogEntityIDContainsFold: ID
+	catalogID: ID
+	catalogIDNEQ: ID
+	catalogIDIn: [ID!]
+	catalogIDNotIn: [ID!]
+	catalogIDContains: ID
+	catalogIDHasPrefix: ID
+	catalogIDHasSuffix: ID
+	catalogIDIsNil: Boolean
+	catalogIDNotNil: Boolean
+	catalogIDEqualFold: ID
+	catalogIDContainsFold: ID
 	"""
 	externally_visible field predicates
 	"""
@@ -26465,19 +26477,19 @@ input EntityWhereInput {
 	externallyVisibleIsNil: Boolean
 	externallyVisibleNotNil: Boolean
 	"""
-	catalog_entity_key field predicates
+	catalog_key field predicates
 	"""
-	catalogEntityKey: String
-	catalogEntityKeyNEQ: String
-	catalogEntityKeyIn: [String!]
-	catalogEntityKeyNotIn: [String!]
-	catalogEntityKeyContains: String
-	catalogEntityKeyHasPrefix: String
-	catalogEntityKeyHasSuffix: String
-	catalogEntityKeyIsNil: Boolean
-	catalogEntityKeyNotNil: Boolean
-	catalogEntityKeyEqualFold: String
-	catalogEntityKeyContainsFold: String
+	catalogKey: String
+	catalogKeyNEQ: String
+	catalogKeyIn: [String!]
+	catalogKeyNotIn: [String!]
+	catalogKeyContains: String
+	catalogKeyHasPrefix: String
+	catalogKeyHasSuffix: String
+	catalogKeyIsNil: Boolean
+	catalogKeyNotNil: Boolean
+	catalogKeyEqualFold: String
+	catalogKeyContainsFold: String
 	"""
 	entity_relationship_state_name field predicates
 	"""
@@ -27012,15 +27024,15 @@ input EntityWhereInput {
 	hasReviewedByIdentityHolder: Boolean
 	hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
-	catalog_entity edge predicates
+	catalog edge predicates
 	"""
-	hasCatalogEntity: Boolean
-	hasCatalogEntityWith: [EntityWhereInput!]
+	hasCatalog: Boolean
+	hasCatalogWith: [EntityWhereInput!]
 	"""
-	adopted_entities edge predicates
+	adopted edge predicates
 	"""
-	hasAdoptedEntities: Boolean
-	hasAdoptedEntitiesWith: [EntityWhereInput!]
+	hasAdopted: Boolean
+	hasAdoptedWith: [EntityWhereInput!]
 	"""
 	entity_relationship_state edge predicates
 	"""
@@ -86910,6 +86922,11 @@ input UpdateEntityInput {
 	externallyVisible: Boolean
 	clearExternallyVisible: Boolean
 	"""
+	raw payload received from the integration for auditing and troubleshooting
+	"""
+	rawIngestPayload: Map
+	clearRawIngestPayload: Boolean
+	"""
 	the relationship_state of the entity
 	"""
 	entityRelationshipStateName: String
@@ -98018,7 +98035,7 @@ input WebauthnWhereInput {
 	"""
 	tagsHas: String
 }
-type WorkflowAssignment implements Node @modules(names: ["any_module"]) {
+type WorkflowAssignment implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -98238,7 +98255,7 @@ type WorkflowAssignmentRejectPayload {
 WorkflowAssignmentRejection captures details when an approval is rejected or denied.
 """
 scalar WorkflowAssignmentRejection
-type WorkflowAssignmentTarget implements Node @modules(names: ["any_module"]) {
+type WorkflowAssignmentTarget implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -98830,7 +98847,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
 	REJECTED
 	CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node @modules(names: ["any_module"]) {
+type WorkflowDefinition implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -99510,7 +99527,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
 	LIFECYCLE
 	NOTIFICATION
 }
-type WorkflowEvent implements Node @modules(names: ["any_module"]) {
+type WorkflowEvent implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -99809,7 +99826,7 @@ type WorkflowFieldMetadata {
 	"""
 	type: String!
 }
-type WorkflowInstance implements Node @modules(names: ["any_module"]) {
+type WorkflowInstance implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -100766,7 +100783,7 @@ type WorkflowMetadata {
 	"""
 	extensions: Map!
 }
-type WorkflowObjectRef implements Node @modules(names: ["any_module"]) {
+type WorkflowObjectRef implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -101541,7 +101558,7 @@ type WorkflowObjectTypeMetadata {
 	"""
 	resolverKeys: [String!]!
 }
-type WorkflowProposal implements Node @modules(names: ["any_module"]) {
+type WorkflowProposal implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time

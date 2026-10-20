@@ -15,7 +15,7 @@ import (
 	fgamodel "github.com/theopenlane/core/v2/fga/model"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 func validateTimeNotInPast[T time.Time | models.DateTime](t T, ok bool) error {

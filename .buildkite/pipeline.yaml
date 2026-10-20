@@ -297,11 +297,12 @@ steps:
   - group: ":test_tube: Tests"
     key: "go_tests"
     steps:
-      - label: ":golang: go test - graphapi only"
+      - label: ":golang: go test - graphapi only %n/%t"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         key: "go_test_graph"
+        parallelism: 4
         cancel_on_build_failing: true
         if_changed:
           include:
@@ -310,11 +311,7 @@ steps:
           exclude: # do not run tests if only cli files changed
             - cli/**
         env:
-          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
-        matrix:
-          setup:
-            version:
-              - 18-alpine
+          TEST_DB_URL: "docker://postgres:18-alpine"
         plugins:
           - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -332,7 +329,9 @@ steps:
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
                 - "CGO_ENABLED=0"
-        artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
+                - "BUILDKITE_PARALLEL_JOB"
+                - "BUILDKITE_PARALLEL_JOB_COUNT"
+        artifact_paths: ["coverage-graph-*.out", "junit-graph-*.xml"]
       - label: ":golang: go test - events only"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -483,12 +482,14 @@ steps:
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         commands: |
           #!/bin/bash
+          graph_junits=()
+          for f in junit-graph-*.xml; do graph_junits+=(-F "data=@$$f"); done
           curl \
             -X POST \
             --fail-with-body \
             -H "Authorization: Token token=\"$$ANALYTICS_KEY\"" \
             -F "data=@junit-no-api.xml" \
-            -F "data=@junit-graph.xml" \
+            "$${graph_junits[@]}" \
             -F "data=@junit-events.xml" \
             -F "data=@junit-handlers.xml" \
             -F "format=junit" \
@@ -502,13 +503,13 @@ steps:
             -F "run_env[url]=$BUILDKITE_BUILD_URL" \
             https://analytics-api.buildkite.com/v1/uploads
         plugins:
-          - artifacts#v1.9.4:
-              download: "junit-graph.xml"
+          - artifacts#v1.11.0:
+              download: "junit-graph-*.xml"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-no-api.xml"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-handlers.xml"
               step: "go_test_handlers"
       - label: ":github: upload PR reports"
@@ -526,29 +527,29 @@ steps:
         if: build.pull_request.id != null
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-handlers.out"
               step: "go_test_handlers"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-no-api.out"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
-              download: "coverage-graph.out"
+          - artifacts#v1.11.0:
+              download: "coverage-graph-*.out"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-handlers.xml"
               step: "go_test_handlers"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-no-api.xml"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
-              download: "junit-graph.xml"
+          - artifacts#v1.11.0:
+              download: "junit-graph-*.xml"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-events.out"
               step: "go_test_events"
               ignore_missing: true
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-events.xml"
               step: "go_test_events"
               ignore_missing: true
@@ -578,29 +579,29 @@ steps:
         if: build.branch == "main" && build.tag == null
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-no-api.out"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
-              download: "coverage-graph.out"
+          - artifacts#v1.11.0:
+              download: "coverage-graph-*.out"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-handlers.out"
               step: "go_test_handlers"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-handlers.xml"
               step: "go_test_handlers"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-no-api.xml"
               step: "go_test_no_api"
-          - artifacts#v1.9.4:
-              download: "junit-graph.xml"
+          - artifacts#v1.11.0:
+              download: "junit-graph-*.xml"
               step: "go_test_graph"
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "coverage-events.out"
               step: "go_test_events"
               ignore_missing: true
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download: "junit-events.xml"
               step: "go_test_events"
               ignore_missing: true
@@ -805,7 +806,7 @@ steps:
           #!/bin/bash
           chmod +x ${APP_NAME}
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
@@ -839,7 +840,7 @@ steps:
           #!/bin/bash
           chmod +x ${APP_NAME}
         plugins:
-          - artifacts#v1.9.4:
+          - artifacts#v1.11.0:
               download:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
@@ -919,6 +920,11 @@ steps:
               step: migrate
               atlas-env: dev
               config: "file://db/atlas.hcl"
+      - label: ":test_tube: Trigger UI E2E pipeline tests for ${BUILDKITE_TAG}"
+        trigger: openlane-ui-e2e
+        depends_on: "docker-build-and-tag"
+        if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
+        async: true
       - label: ":go: go-client schema update"
         trigger: go-client
         depends_on: "apollo-publish-schema"

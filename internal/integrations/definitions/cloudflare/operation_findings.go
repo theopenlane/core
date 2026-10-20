@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 const (
@@ -20,7 +20,7 @@ const (
 )
 
 // runFindingsCollect collects Cloudflare Security Center insights and emits finding ingest payloads
-func runFindingsCollect(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ FindingsSync) ([]types.IngestPayloadSet, error) {
+func runFindingsCollect(ctx context.Context, request types.OperationRequest, client *Client, _ FindingsSync) ([]types.IngestPayloadSet, error) {
 	accountID := client.Config.AccountID
 	if accountID == "" {
 		return nil, ErrAccountIDMissing
@@ -59,7 +59,7 @@ type cloudflareInsightsResponse struct {
 	Result security_center.InsightListResponse `json:"result"`
 }
 
-func fetchSecurityInsights(ctx context.Context, client *CloudflareClient, accountID string) ([]security_center.InsightListResponseIssue, error) {
+func fetchSecurityInsights(ctx context.Context, client *Client, accountID string) ([]security_center.InsightListResponseIssue, error) {
 	issues := make([]security_center.InsightListResponseIssue, 0)
 
 	defaultPage := int64(1)

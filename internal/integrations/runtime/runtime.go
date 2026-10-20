@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/keymaker"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/singleton"
+	"github.com/theopenlane/logx"
 )
 
 const (
@@ -109,6 +109,11 @@ func (r *Runtime) keymaker() *keymaker.Service {
 // Registry returns the definition registry
 func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
+}
+
+// Definitions implements types.RuntimeServices
+func (r *Runtime) Definitions() types.DefinitionLookup {
+	return r.Registry()
 }
 
 // NewForTesting constructs a Runtime backed by the supplied registry and a stub DB client

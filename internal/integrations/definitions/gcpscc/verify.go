@@ -9,7 +9,7 @@ import (
 	"google.golang.org/api/iterator"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // serviceAccountIdentity represents the identity fields extracted from a GCP service account key

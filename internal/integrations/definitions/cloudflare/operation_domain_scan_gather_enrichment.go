@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // domainScanEnrichmentTimeout bounds how long to spend gathering enrichment data
@@ -38,7 +38,7 @@ var DomainScanEnrichmentOp = types.OperationPayloadOf[DomainScanGatherEnrichment
 	Internal()
 
 // runDomainScanGatherEnrichment gathers enrichment data for the configured domain and encodes it
-func runDomainScanGatherEnrichment(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanGatherEnrichment) (json.RawMessage, error) {
+func runDomainScanGatherEnrichment(ctx context.Context, _ types.OperationRequest, client *Client, cfg DomainScanGatherEnrichment) (json.RawMessage, error) {
 	result, err := DomainScanGatherEnrichment{}.Run(ctx, client, cfg)
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func runDomainScanGatherEnrichment(ctx context.Context, _ types.OperationRequest
 }
 
 // Run gathers company profile, branding, compliance, and DNS vendor data for the domain
-func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanGatherEnrichment) (DomainScanGatherEnrichmentResult, error) {
+func (DomainScanGatherEnrichment) Run(ctx context.Context, client *Client, cfg DomainScanGatherEnrichment) (DomainScanGatherEnrichmentResult, error) {
 	ctx = logx.WithFields(ctx, logx.LogFields{
 		"domain": cfg.Domain,
 	})

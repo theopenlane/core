@@ -122,6 +122,22 @@ modules:
     audience: private
     product_id: prod_SeI46ZmXn9BpA1
 addons:
+  workflow_addon:
+    display_name: Workflow Automation
+    lookup_key: workflow_addon
+    description: Workflow Automation
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 5000
+        nickname: price_workflow_monthly
+        lookup_key: price_workflow_monthly
+      - interval: year
+        unit_amount: 54000
+        nickname: price_workflow_annually
+        lookup_key: price_workflow_annually
+    audience: private
+    include_with_trial: true
   domain_scanning_addon:
     display_name: Domain and Vulnerability Scanning
     lookup_key: domain_scanning_addon
@@ -195,3 +211,35 @@ addons:
         price_id: price_1RizV4Bvxky1R7SvG60NheSe
     audience: beta
     product_id: prod_SeI54PHvjUiTKZ
+  branding_trustcenter_addon:
+    display_name: Trustcenter Branding
+    lookup_key: branding_trustcenter_addon
+    description: Trustcenter Branding
+    marketing_description: Customization option to remove the Openlane branding on your Trustcenter
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 2500
+        nickname: price_trustcenter_branding_monthly
+        lookup_key: price_branding_trustcenter_monthly
+      - interval: year
+        unit_amount: 27000
+        nickname: price_trustcenter_branding_annually
+        lookup_key: price_branding_trustcenter_yearly
+    audience: private
+  assessment_custom_domain_addon:
+    display_name: Questionnaire custom domain
+    lookup_key: assessment_custom_domain_addon
+    description: Questionnaire custom domain
+    marketing_description: Use a custom domain for your hosted questionnaires
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 2500
+        nickname: price_questionnaire_custom_domain_monthly
+        lookup_key: price_assessment_custom_domain_monthly
+      - interval: year
+        unit_amount: 27000
+        nickname: price_questionnaire_custom_domain_yearly
+        lookup_key: price_assessment_custom_domain_yearly
+    audience: private

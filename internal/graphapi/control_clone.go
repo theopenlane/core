@@ -8,12 +8,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
-
-	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 type createProgramRequest interface {

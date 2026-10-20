@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 const (
@@ -48,7 +48,7 @@ type SendBrandedCampaignRequest struct {
 type SendBrandedCampaign struct{}
 
 // SendCampaignOp is the operation ref for the branded campaign dispatch operation
-var SendCampaignOp = types.OperationPayloadOf[SendBrandedCampaignRequest]().Handles(SendBrandedCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
+var SendCampaignOp = types.OperationPayloadOf[SendBrandedCampaignRequest]().Handles(SendBrandedCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true})
 
 // brandedCampaignEdges eager-loads the email template and its inline files
 func brandedCampaignEdges(q *generated.CampaignQuery) {
