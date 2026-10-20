@@ -30,7 +30,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/keystore"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // tokenCred is a previous version of the current token type whose token was numeric

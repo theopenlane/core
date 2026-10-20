@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // TrustCenterUpdateTemplate is the dispatcher registration key for the trust center post notification; trust center update campaigns render through it directly with no linked email template

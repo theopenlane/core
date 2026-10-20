@@ -60,6 +60,18 @@ func (ec *executionContext) unmarshalInputAssessmentPoliciesInput(ctx context.Co
 	return it, nil
 }
 
+// UnmarshalAssessmentPoliciesInput unmarshals raw into the AssessmentPoliciesInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalAssessmentPoliciesInput(ctx context.Context, raw any) (model.AssessmentPoliciesInput, error) {
+	var out model.AssessmentPoliciesInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "AssessmentPoliciesInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************

@@ -90,6 +90,18 @@ func (ec *executionContext) unmarshalInputCreateAssessmentDomainInput(ctx contex
 	return it, nil
 }
 
+// UnmarshalCreateAssessmentDomainInput unmarshals raw into the CreateAssessmentDomainInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateAssessmentDomainInput(ctx context.Context, raw any) (model.CreateAssessmentDomainInput, error) {
+	var out model.CreateAssessmentDomainInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateAssessmentDomainInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -104,8 +116,7 @@ func (ec *executionContext) _AssessmentDomainCreatePayload(ctx context.Context, 
 	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentDomainCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -124,14 +135,10 @@ func (ec *executionContext) _AssessmentDomainCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -142,9 +149,7 @@ func (ec *executionContext) _AssessmentDomainCreatePayload(ctx context.Context, 
 
 func (ec *executionContext) marshalNAssessmentDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentDomainCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "AssessmentDomainCreatePayload!")
 		return graphql.Null
 	}
 	return ec._AssessmentDomainCreatePayload(ctx, sel, v)

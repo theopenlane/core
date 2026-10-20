@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // systemVendorEntityType is the EntityType.Name that marks an Entity as a vendor

@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -44,7 +43,7 @@ func (ec *executionContext) _NoteDeletePayload_deletedID(ctx context.Context, fi
 	)
 }
 func (ec *executionContext) fieldContext_NoteDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("NoteDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("NoteDeletePayload", field, false, false, "ID")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -88,6 +87,18 @@ func (ec *executionContext) unmarshalInputUpdateDiscussionsInput(ctx context.Con
 	return it, nil
 }
 
+// UnmarshalUpdateDiscussionsInput unmarshals raw into the UpdateDiscussionsInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateDiscussionsInput(ctx context.Context, raw any) (model.UpdateDiscussionsInput, error) {
+	var out model.UpdateDiscussionsInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateDiscussionsInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -102,8 +113,7 @@ func (ec *executionContext) _NoteDeletePayload(ctx context.Context, sel ast.Sele
 	fields := graphql.CollectFields(ec.OperationContext, sel, noteDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -122,14 +132,10 @@ func (ec *executionContext) _NoteDeletePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -140,9 +146,7 @@ func (ec *executionContext) _NoteDeletePayload(ctx context.Context, sel ast.Sele
 
 func (ec *executionContext) marshalNNoteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NoteDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "NoteDeletePayload!")
 		return graphql.Null
 	}
 	return ec._NoteDeletePayload(ctx, sel, v)

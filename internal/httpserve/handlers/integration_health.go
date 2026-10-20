@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // CheckIntegrationHealth runs the installation health assessment, recording connection and

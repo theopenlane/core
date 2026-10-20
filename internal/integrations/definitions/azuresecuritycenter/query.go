@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 const (

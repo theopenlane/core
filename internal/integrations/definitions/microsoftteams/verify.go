@@ -7,7 +7,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // verify confirms the Graph profile is reachable and resolves the tenant from the access token claims

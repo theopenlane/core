@@ -47,7 +47,7 @@ func (ec *executionContext) _ControlEvidence_totalCount(ctx context.Context, fie
 	)
 }
 func (ec *executionContext) fieldContext_ControlEvidence_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, "Int")
 }
 
 func (ec *executionContext) _ControlEvidence_inheritedCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
@@ -70,7 +70,7 @@ func (ec *executionContext) _ControlEvidence_inheritedCount(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_ControlEvidence_inheritedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, "Int")
 }
 
 func (ec *executionContext) _ControlEvidence_worstStatus(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
@@ -93,7 +93,7 @@ func (ec *executionContext) _ControlEvidence_worstStatus(ctx context.Context, fi
 	)
 }
 func (ec *executionContext) fieldContext_ControlEvidence_worstStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, errors.New("field of type EvidenceEvidenceStatus does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, "EvidenceEvidenceStatus")
 }
 
 func (ec *executionContext) _ControlEvidence_approvedCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
@@ -116,7 +116,7 @@ func (ec *executionContext) _ControlEvidence_approvedCount(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_ControlEvidence_approvedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, "Int")
 }
 
 func (ec *executionContext) _ControlEvidence_countByStatus(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
@@ -171,7 +171,7 @@ func (ec *executionContext) _ControlInfo_id(ctx context.Context, field graphql.C
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ControlInfo_mappedControlReferenceIDs(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -194,7 +194,7 @@ func (ec *executionContext) _ControlInfo_mappedControlReferenceIDs(ctx context.C
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_mappedControlReferenceIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ControlInfo_inheritedFromSubcontrolIDs(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -217,7 +217,7 @@ func (ec *executionContext) _ControlInfo_inheritedFromSubcontrolIDs(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_inheritedFromSubcontrolIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ControlInfo_refCode(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -258,7 +258,7 @@ func (ec *executionContext) _ControlInfo_refCode(ctx context.Context, field grap
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_refCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlInfo_description(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -299,7 +299,7 @@ func (ec *executionContext) _ControlInfo_description(ctx context.Context, field 
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlInfo_title(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -340,7 +340,7 @@ func (ec *executionContext) _ControlInfo_title(ctx context.Context, field graphq
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlInfo_status(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -363,7 +363,7 @@ func (ec *executionContext) _ControlInfo_status(ctx context.Context, field graph
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ControlControlStatus does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "ControlControlStatus")
 }
 
 func (ec *executionContext) _ControlInfo_controlOwner(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -418,7 +418,7 @@ func (ec *executionContext) _ControlInfo_referenceFramework(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_referenceFramework(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlInfo_category(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -441,7 +441,7 @@ func (ec *executionContext) _ControlInfo_category(ctx context.Context, field gra
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlInfo_subcategory(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -464,7 +464,7 @@ func (ec *executionContext) _ControlInfo_subcategory(ctx context.Context, field 
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_subcategory(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlInfo_isSubcontrol(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -487,7 +487,7 @@ func (ec *executionContext) _ControlInfo_isSubcontrol(ctx context.Context, field
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_isSubcontrol(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type Boolean does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "Boolean")
 }
 
 func (ec *executionContext) _ControlInfo_parentControlID(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
@@ -510,7 +510,7 @@ func (ec *executionContext) _ControlInfo_parentControlID(ctx context.Context, fi
 	)
 }
 func (ec *executionContext) fieldContext_ControlInfo_parentControlID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ControlPolicies_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlPolicies) (ret graphql.Marshaler) {
@@ -533,7 +533,7 @@ func (ec *executionContext) _ControlPolicies_totalCount(ctx context.Context, fie
 	)
 }
 func (ec *executionContext) fieldContext_ControlPolicies_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlPolicies", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlPolicies", field, false, false, "Int")
 }
 
 func (ec *executionContext) _ControlPolicies_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.ControlPolicies) (ret graphql.Marshaler) {
@@ -588,7 +588,7 @@ func (ec *executionContext) _ControlReport_id(ctx context.Context, field graphql
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ControlReport_parentControlID(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -611,7 +611,7 @@ func (ec *executionContext) _ControlReport_parentControlID(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_parentControlID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ControlReport_refCode(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -652,7 +652,7 @@ func (ec *executionContext) _ControlReport_refCode(ctx context.Context, field gr
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_refCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlReport_description(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -693,7 +693,7 @@ func (ec *executionContext) _ControlReport_description(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlReport_title(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -734,7 +734,7 @@ func (ec *executionContext) _ControlReport_title(ctx context.Context, field grap
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlReport_status(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -757,7 +757,7 @@ func (ec *executionContext) _ControlReport_status(ctx context.Context, field gra
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type ControlControlStatus does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "ControlControlStatus")
 }
 
 func (ec *executionContext) _ControlReport_controlOwner(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -812,7 +812,7 @@ func (ec *executionContext) _ControlReport_referenceFramework(ctx context.Contex
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_referenceFramework(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlReport_category(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -835,7 +835,7 @@ func (ec *executionContext) _ControlReport_category(ctx context.Context, field g
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlReport_subcategory(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -858,7 +858,7 @@ func (ec *executionContext) _ControlReport_subcategory(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_subcategory(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlReport_relatedControls(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
@@ -1009,7 +1009,7 @@ func (ec *executionContext) _ControlReportCategory_category(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_ControlReportCategory_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReportCategory", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReportCategory", field, false, false, "String")
 }
 
 func (ec *executionContext) _ControlReportCategory_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlReportCategory) (ret graphql.Marshaler) {
@@ -1032,7 +1032,7 @@ func (ec *executionContext) _ControlReportCategory_totalCount(ctx context.Contex
 	)
 }
 func (ec *executionContext) fieldContext_ControlReportCategory_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReportCategory", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReportCategory", field, false, false, "Int")
 }
 
 func (ec *executionContext) _ControlReportCategory_controls(ctx context.Context, field graphql.CollectedField, obj *model.ControlReportCategory) (ret graphql.Marshaler) {
@@ -1151,7 +1151,7 @@ func (ec *executionContext) _ControlReportConnection_totalCount(ctx context.Cont
 	)
 }
 func (ec *executionContext) fieldContext_ControlReportConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReportConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReportConnection", field, false, false, "Int")
 }
 
 func (ec *executionContext) _ControlReportEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.ControlReportEdge) (ret graphql.Marshaler) {
@@ -1206,7 +1206,7 @@ func (ec *executionContext) _ControlReportEdge_cursor(ctx context.Context, field
 	)
 }
 func (ec *executionContext) fieldContext_ControlReportEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ControlReportEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
+	return graphql.NewScalarFieldContext("ControlReportEdge", field, false, false, "Cursor")
 }
 
 func (ec *executionContext) _EvidenceCountByStatus_status(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceCountByStatus) (ret graphql.Marshaler) {
@@ -1229,7 +1229,7 @@ func (ec *executionContext) _EvidenceCountByStatus_status(ctx context.Context, f
 	)
 }
 func (ec *executionContext) fieldContext_EvidenceCountByStatus_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("EvidenceCountByStatus", field, false, false, errors.New("field of type EvidenceEvidenceStatus does not have child fields"))
+	return graphql.NewScalarFieldContext("EvidenceCountByStatus", field, false, false, "EvidenceEvidenceStatus")
 }
 
 func (ec *executionContext) _EvidenceCountByStatus_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceCountByStatus) (ret graphql.Marshaler) {
@@ -1252,7 +1252,7 @@ func (ec *executionContext) _EvidenceCountByStatus_totalCount(ctx context.Contex
 	)
 }
 func (ec *executionContext) fieldContext_EvidenceCountByStatus_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("EvidenceCountByStatus", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("EvidenceCountByStatus", field, false, false, "Int")
 }
 
 func (ec *executionContext) _PolicySummary_id(ctx context.Context, field graphql.CollectedField, obj *model.PolicySummary) (ret graphql.Marshaler) {
@@ -1275,7 +1275,7 @@ func (ec *executionContext) _PolicySummary_id(ctx context.Context, field graphql
 	)
 }
 func (ec *executionContext) fieldContext_PolicySummary_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, "ID")
 }
 
 func (ec *executionContext) _PolicySummary_name(ctx context.Context, field graphql.CollectedField, obj *model.PolicySummary) (ret graphql.Marshaler) {
@@ -1298,7 +1298,7 @@ func (ec *executionContext) _PolicySummary_name(ctx context.Context, field graph
 	)
 }
 func (ec *executionContext) fieldContext_PolicySummary_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, "String")
 }
 
 func (ec *executionContext) _PolicySummary_status(ctx context.Context, field graphql.CollectedField, obj *model.PolicySummary) (ret graphql.Marshaler) {
@@ -1321,7 +1321,7 @@ func (ec *executionContext) _PolicySummary_status(ctx context.Context, field gra
 	)
 }
 func (ec *executionContext) fieldContext_PolicySummary_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, errors.New("field of type InternalPolicyDocumentStatus does not have child fields"))
+	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, "InternalPolicyDocumentStatus")
 }
 
 func (ec *executionContext) _PolicySummary_inheritedFromIDs(ctx context.Context, field graphql.CollectedField, obj *model.PolicySummary) (ret graphql.Marshaler) {
@@ -1344,7 +1344,7 @@ func (ec *executionContext) _PolicySummary_inheritedFromIDs(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_PolicySummary_inheritedFromIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, "ID")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -1392,6 +1392,18 @@ func (ec *executionContext) unmarshalInputControlReportOrder(ctx context.Context
 	return it, nil
 }
 
+// UnmarshalControlReportOrder unmarshals raw into the ControlReportOrder input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalControlReportOrder(ctx context.Context, raw any) (model.ControlReportOrder, error) {
+	var out model.ControlReportOrder
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ControlReportOrder", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -1406,8 +1418,7 @@ func (ec *executionContext) _ControlEvidence(ctx context.Context, sel ast.Select
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlEvidenceImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1446,14 +1457,10 @@ func (ec *executionContext) _ControlEvidence(ctx context.Context, sel ast.Select
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1464,8 +1471,7 @@ func (ec *executionContext) _ControlInfo(ctx context.Context, sel ast.SelectionS
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlInfoImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1544,14 +1550,10 @@ func (ec *executionContext) _ControlInfo(ctx context.Context, sel ast.SelectionS
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1562,8 +1564,7 @@ func (ec *executionContext) _ControlPolicies(ctx context.Context, sel ast.Select
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlPoliciesImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1587,14 +1588,10 @@ func (ec *executionContext) _ControlPolicies(ctx context.Context, sel ast.Select
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1605,8 +1602,7 @@ func (ec *executionContext) _ControlReport(ctx context.Context, sel ast.Selectio
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlReportImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1690,14 +1686,10 @@ func (ec *executionContext) _ControlReport(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1708,8 +1700,7 @@ func (ec *executionContext) _ControlReportCategory(ctx context.Context, sel ast.
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlReportCategoryImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1738,14 +1729,10 @@ func (ec *executionContext) _ControlReportCategory(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1756,8 +1743,7 @@ func (ec *executionContext) _ControlReportConnection(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlReportConnectionImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1786,14 +1772,10 @@ func (ec *executionContext) _ControlReportConnection(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1804,8 +1786,7 @@ func (ec *executionContext) _ControlReportEdge(ctx context.Context, sel ast.Sele
 	fields := graphql.CollectFields(ec.OperationContext, sel, controlReportEdgeImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1829,14 +1810,10 @@ func (ec *executionContext) _ControlReportEdge(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1847,8 +1824,7 @@ func (ec *executionContext) _EvidenceCountByStatus(ctx context.Context, sel ast.
 	fields := graphql.CollectFields(ec.OperationContext, sel, evidenceCountByStatusImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1872,14 +1848,10 @@ func (ec *executionContext) _EvidenceCountByStatus(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1890,8 +1862,7 @@ func (ec *executionContext) _PolicySummary(ctx context.Context, sel ast.Selectio
 	fields := graphql.CollectFields(ec.OperationContext, sel, policySummaryImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -1925,14 +1896,10 @@ func (ec *executionContext) _PolicySummary(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -1943,9 +1910,7 @@ func (ec *executionContext) _PolicySummary(ctx context.Context, sel ast.Selectio
 
 func (ec *executionContext) marshalNControlInfo2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlInfo(ctx context.Context, sel ast.SelectionSet, v *model.ControlInfo) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlInfo!")
 		return graphql.Null
 	}
 	return ec._ControlInfo(ctx, sel, v)
@@ -1969,9 +1934,7 @@ func (ec *executionContext) marshalNControlReport2ᚕᚖgithubᚗcomᚋtheopenla
 
 func (ec *executionContext) marshalNControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx context.Context, sel ast.SelectionSet, v *model.ControlReport) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlReport!")
 		return graphql.Null
 	}
 	return ec._ControlReport(ctx, sel, v)
@@ -1995,9 +1958,7 @@ func (ec *executionContext) marshalNControlReportCategory2ᚕᚖgithubᚗcomᚋt
 
 func (ec *executionContext) marshalNControlReportCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportCategory(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportCategory) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlReportCategory!")
 		return graphql.Null
 	}
 	return ec._ControlReportCategory(ctx, sel, v)
@@ -2005,9 +1966,7 @@ func (ec *executionContext) marshalNControlReportCategory2ᚖgithubᚗcomᚋtheo
 
 func (ec *executionContext) marshalNControlReportConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportConnection) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ControlReportConnection!")
 		return graphql.Null
 	}
 	return ec._ControlReportConnection(ctx, sel, v)
@@ -2030,9 +1989,7 @@ func (ec *executionContext) marshalNControlReportOrderField2githubᚗcomᚋtheop
 
 func (ec *executionContext) marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatus(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceCountByStatus) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "EvidenceCountByStatus!")
 		return graphql.Null
 	}
 	return ec._EvidenceCountByStatus(ctx, sel, v)
@@ -2040,9 +1997,7 @@ func (ec *executionContext) marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheo
 
 func (ec *executionContext) marshalNPolicySummary2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPolicySummary(ctx context.Context, sel ast.SelectionSet, v *model.PolicySummary) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "PolicySummary!")
 		return graphql.Null
 	}
 	return ec._PolicySummary(ctx, sel, v)

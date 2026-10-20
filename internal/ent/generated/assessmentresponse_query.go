@@ -24,7 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // AssessmentResponseQuery is the builder for querying AssessmentResponse entities.

@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -44,7 +43,7 @@ func (ec *executionContext) _WorkflowFieldMetadata_name(ctx context.Context, fie
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowFieldMetadata_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowFieldMetadata", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowFieldMetadata", field, false, false, "String")
 }
 
 func (ec *executionContext) _WorkflowFieldMetadata_label(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldMetadata) (ret graphql.Marshaler) {
@@ -67,7 +66,7 @@ func (ec *executionContext) _WorkflowFieldMetadata_label(ctx context.Context, fi
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowFieldMetadata_label(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowFieldMetadata", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowFieldMetadata", field, false, false, "String")
 }
 
 func (ec *executionContext) _WorkflowFieldMetadata_type(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldMetadata) (ret graphql.Marshaler) {
@@ -90,7 +89,7 @@ func (ec *executionContext) _WorkflowFieldMetadata_type(ctx context.Context, fie
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowFieldMetadata_type(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowFieldMetadata", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowFieldMetadata", field, false, false, "String")
 }
 
 func (ec *executionContext) _WorkflowMetadata_objectTypes(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowMetadata) (ret graphql.Marshaler) {
@@ -145,7 +144,7 @@ func (ec *executionContext) _WorkflowMetadata_extensions(ctx context.Context, fi
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowMetadata_extensions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowMetadata", field, false, false, errors.New("field of type Map does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowMetadata", field, false, false, "Map")
 }
 
 func (ec *executionContext) _WorkflowObjectTypeMetadata_type(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowObjectTypeMetadata) (ret graphql.Marshaler) {
@@ -168,7 +167,7 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata_type(ctx context.Context
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowObjectTypeMetadata_type(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, "String")
 }
 
 func (ec *executionContext) _WorkflowObjectTypeMetadata_label(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowObjectTypeMetadata) (ret graphql.Marshaler) {
@@ -191,7 +190,7 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata_label(ctx context.Contex
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowObjectTypeMetadata_label(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, "String")
 }
 
 func (ec *executionContext) _WorkflowObjectTypeMetadata_description(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowObjectTypeMetadata) (ret graphql.Marshaler) {
@@ -214,7 +213,7 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata_description(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowObjectTypeMetadata_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, "String")
 }
 
 func (ec *executionContext) _WorkflowObjectTypeMetadata_eligibleFields(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowObjectTypeMetadata) (ret graphql.Marshaler) {
@@ -269,7 +268,7 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata_eligibleEdges(ctx contex
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowObjectTypeMetadata_eligibleEdges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, "String")
 }
 
 func (ec *executionContext) _WorkflowObjectTypeMetadata_resolverKeys(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowObjectTypeMetadata) (ret graphql.Marshaler) {
@@ -292,7 +291,7 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata_resolverKeys(ctx context
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowObjectTypeMetadata_resolverKeys(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowObjectTypeMetadata", field, false, false, "String")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -313,8 +312,7 @@ func (ec *executionContext) _WorkflowFieldMetadata(ctx context.Context, sel ast.
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowFieldMetadataImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -343,14 +341,10 @@ func (ec *executionContext) _WorkflowFieldMetadata(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -361,8 +355,7 @@ func (ec *executionContext) _WorkflowMetadata(ctx context.Context, sel ast.Selec
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowMetadataImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -386,14 +379,10 @@ func (ec *executionContext) _WorkflowMetadata(ctx context.Context, sel ast.Selec
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -404,8 +393,7 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata(ctx context.Context, sel
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowObjectTypeMetadataImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -449,14 +437,10 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -483,9 +467,7 @@ func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚕᚖgithubᚗcomᚋt
 
 func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowFieldMetadata) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowFieldMetadata!")
 		return graphql.Null
 	}
 	return ec._WorkflowFieldMetadata(ctx, sel, v)
@@ -493,9 +475,7 @@ func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚖgithubᚗcomᚋtheo
 
 func (ec *executionContext) marshalNWorkflowMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowMetadata) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowMetadata!")
 		return graphql.Null
 	}
 	return ec._WorkflowMetadata(ctx, sel, v)
@@ -519,9 +499,7 @@ func (ec *executionContext) marshalNWorkflowObjectTypeMetadata2ᚕᚖgithubᚗco
 
 func (ec *executionContext) marshalNWorkflowObjectTypeMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowObjectTypeMetadata) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowObjectTypeMetadata!")
 		return graphql.Null
 	}
 	return ec._WorkflowObjectTypeMetadata(ctx, sel, v)

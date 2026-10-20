@@ -7,7 +7,7 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // verify resolves the Google Workspace customer the credential is scoped to

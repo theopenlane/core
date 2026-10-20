@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/logx"
 )
 
 // purgeOrganizationHistory is a wrapper around generated PurgeOrganizationHistory to prevent issues during codegen

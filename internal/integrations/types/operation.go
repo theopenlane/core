@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // OperationSettings holds the uniform per-installation settings every stored operation input carries; a stored-input config type embeds it so the settings reflect into the operation's schema beside its own fields

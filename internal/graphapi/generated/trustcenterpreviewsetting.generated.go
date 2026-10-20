@@ -195,6 +195,18 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(c
 	return it, nil
 }
 
+// UnmarshalCreateTrustCenterPreviewSettingInput unmarshals raw into the CreateTrustCenterPreviewSettingInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateTrustCenterPreviewSettingInput(ctx context.Context, raw any) (model.CreateTrustCenterPreviewSettingInput, error) {
+	var out model.CreateTrustCenterPreviewSettingInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateTrustCenterPreviewSettingInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -209,8 +221,7 @@ func (ec *executionContext) _TrustCenterPreviewSettingCreatePayload(ctx context.
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterPreviewSettingCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -229,14 +240,10 @@ func (ec *executionContext) _TrustCenterPreviewSettingCreatePayload(ctx context.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -252,9 +259,7 @@ func (ec *executionContext) unmarshalNCreateTrustCenterPreviewSettingInput2githu
 
 func (ec *executionContext) marshalNTrustCenterPreviewSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterPreviewSettingCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterPreviewSettingCreatePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterPreviewSettingCreatePayload(ctx, sel, v)

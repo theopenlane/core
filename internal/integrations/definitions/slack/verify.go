@@ -5,7 +5,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // incomingWebhookKey is the token response field Slack fills with the channel chosen during app install

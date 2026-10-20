@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/objects"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/auth"
 	mock_shared "github.com/theopenlane/core/v2/pkg/objects/mocks"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -29,6 +28,7 @@ import (
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/eddy/helpers"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/logx"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"

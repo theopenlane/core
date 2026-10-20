@@ -105,9 +105,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/v2/pkg/celx"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // entityRef is a lightweight reference to an entity

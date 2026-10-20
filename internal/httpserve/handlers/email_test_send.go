@@ -9,8 +9,8 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
+	"github.com/theopenlane/logx"
 )
 
 // EmailTestSendRequest is the request body for the test email send endpoint

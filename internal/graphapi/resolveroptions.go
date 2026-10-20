@@ -10,8 +10,8 @@ import (
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/mapx"
 	mwauth "github.com/theopenlane/core/v2/pkg/middleware/auth"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // WithTrustCenterCnameTarget sets the trust center cname target for the resolver

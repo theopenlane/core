@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/logx"
 )
 
 const (
