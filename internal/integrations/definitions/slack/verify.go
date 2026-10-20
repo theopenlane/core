@@ -5,7 +5,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/utils/jsonx"
 )
 
 // incomingWebhookKey is the token response field Slack fills with the channel chosen during app install
@@ -33,18 +32,22 @@ func verify[T any](ctx context.Context, req types.ConnectionRequest[T], c *Clien
 	return InstallationMetadata{TeamID: resp.TeamID, TeamName: resp.Team, DefaultChannel: channel}, nil
 }
 
-// defaultChannel prefers the channel chosen during app install over the one supplied as user input
+// defaultChannel prefers the channel the user chose as user input over the one chosen during app install
 func defaultChannel[T any](req types.ConnectionRequest[T]) (string, error) {
-	if cred, ok := any(req.Credential).(slackCred); ok && cred.DefaultChannel != "" {
-		return cred.DefaultChannel, nil
-	}
-
-	var input UserInput
-	if err := jsonx.UnmarshalIfPresent(req.Integration.UserInput.Data, &input); err != nil {
+	input, err := userInput.Decode(req.Integration)
+	if err != nil {
 		return "", ErrUserInputDecode
 	}
 
-	return input.DefaultChannel, nil
+	if input.DefaultChannel != "" {
+		return input.DefaultChannel, nil
+	}
+
+	if cred, ok := any(req.Credential).(slackCred); ok {
+		return cred.DefaultChannel, nil
+	}
+
+	return "", nil
 }
 
 // installChannel returns the channel id Slack reports on the token response when the installer picked one

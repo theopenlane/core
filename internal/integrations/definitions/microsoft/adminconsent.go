@@ -17,17 +17,23 @@ type adminConsentState struct {
 	State string `json:"state"`
 }
 
+// AdminConsent is the outcome of a completed admin consent that a definition builds its credential from
+type AdminConsent struct {
+	// TenantID is the tenant that granted consent
+	TenantID string
+}
+
 // adminConsent holds the per-definition inputs for the admin consent flow
 type adminConsent[T any] struct {
 	// cfg is the operator-level Azure application configuration
 	cfg AppConfig
-	// newCredential builds the definition's own credential from the consented tenant ID
-	newCredential func(tenantID string) T
+	// newCredential builds the definition's own credential from the completed consent
+	newCredential func(AdminConsent) T
 }
 
 // AdminConsentFlow builds an auth flow that uses the Azure admin consent endpoint
 // which grants application permissions so the client credentials flow can access the tenant
-func AdminConsentFlow[T any](cfg AppConfig, newCredential func(tenantID string) T) types.AuthFlow[T] {
+func AdminConsentFlow[T any](cfg AppConfig, newCredential func(AdminConsent) T) types.AuthFlow[T] {
 	consent := adminConsent[T]{cfg: cfg, newCredential: newCredential}
 
 	return types.NewAuthFlow[T](consent.start, consent.complete)
@@ -91,7 +97,7 @@ func (a adminConsent[T]) complete(ctx context.Context, state json.RawMessage, in
 		return types.AuthCompleteResult{}, ErrTenantIDNotFound
 	}
 
-	data, err := jsonx.ToRawMessage(a.newCredential(tenantID))
+	data, err := jsonx.ToRawMessage(a.newCredential(AdminConsent{TenantID: tenantID}))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error encoding auth result")
 		return types.AuthCompleteResult{}, ErrCredentialEncode

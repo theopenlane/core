@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/utils/jsonx"
 )
 
 var (
@@ -29,8 +29,8 @@ type UserInput struct {
 
 // requestedSubscriptions returns the subscription IDs the installation's user input limits collection to, empty for every accessible subscription
 func requestedSubscriptions(req types.OperationRequest) ([]string, error) {
-	var input UserInput
-	if err := jsonx.UnmarshalIfPresent(req.Integration.UserInput.Data, &input); err != nil {
+	input, err := userInput.Decode(req.Integration)
+	if err != nil {
 		return nil, err
 	}
 
@@ -44,8 +44,8 @@ type securityCenterCred struct {
 }
 
 // newSecurityCenterCred builds the Security Center credential for a consented tenant
-func newSecurityCenterCred(tenantID string) securityCenterCred {
-	return securityCenterCred{TenantID: tenantID}
+func newSecurityCenterCred(consent microsoft.AdminConsent) securityCenterCred {
+	return securityCenterCred{TenantID: consent.TenantID}
 }
 
 // lighthouseCred holds the per-installation credential for subscriptions delegated through Azure Lighthouse

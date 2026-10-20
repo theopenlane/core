@@ -3,6 +3,7 @@ package types //nolint:revive
 import (
 	"context"
 	"encoding/json"
+	"slices"
 
 	"github.com/samber/lo"
 
@@ -88,11 +89,14 @@ type InputRegistration struct {
 	Upgrade UpgradeFunc `json:"-"`
 	// Validate checks a schema-valid payload for semantic constraints, nil when none is declared
 	Validate ValidateFunc `json:"-"`
+	// ReadOnly lists the top-level properties set by operations rather than by a client save
+	ReadOnly []string `json:"-"`
 }
 
 // Clone returns a copy of the input registration with its own schema bytes
 func (r InputRegistration) Clone() InputRegistration {
 	r.Schema = jsonx.CloneRawMessage(r.Schema)
+	r.ReadOnly = slices.Clone(r.ReadOnly)
 
 	return r
 }
@@ -174,6 +178,16 @@ func (d Definition) ResolveWebhook(name string) (registration WebhookRegistratio
 type DefinitionProviderState struct {
 	// CredentialRef identifies the connection active for the installation
 	CredentialRef string `json:"credentialRef"`
+}
+
+// SelectedResource is one provider resource a user selected for an installation
+type SelectedResource struct {
+	// ID is the provider identifier of the resource
+	ID string `json:"id" jsonschema:"required,title=ID"`
+	// Name is the resource's display name at the time it was selected
+	Name string `json:"name,omitempty" jsonschema:"title=Name"`
+	// ParentID is the provider identifier of the resource's container or parent folder
+	ParentID string `json:"parentId,omitempty" jsonschema:"title=Parent ID"`
 }
 
 // ProviderState returns the persisted provider state for this definition

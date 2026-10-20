@@ -11,6 +11,7 @@ import (
 
 	"github.com/samber/lo"
 
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/utils/jsonx"
 )
@@ -59,7 +60,25 @@ func (r DefinitionRef) WebhookEventTopic(name string) gala.TopicName {
 func reflectedInput[T any](name string) InputRegistration {
 	schema := jsonx.SchemaFrom[T]()
 
-	return InputRegistration{Name: lo.CoalesceOrEmpty(name, jsonx.SchemaID(schema)), Schema: schema}
+	return InputRegistration{Name: lo.CoalesceOrEmpty(name, jsonx.SchemaID(schema)), Schema: schema, ReadOnly: readOnlyProperties(schema)}
+}
+
+// readOnlyProperties returns the top-level properties the reflected schema marks read-only
+func readOnlyProperties(schema json.RawMessage) []string {
+	root, _, err := jsonx.SchemaRoot(schema)
+	if err != nil || root.Properties == nil {
+		return nil
+	}
+
+	var names []string
+
+	for pair := root.Properties.Oldest(); pair != nil; pair = pair.Next() {
+		if pair.Value.ReadOnly {
+			names = append(names, pair.Key)
+		}
+	}
+
+	return names
 }
 
 // validated binds a typed validation closure as a ValidateFunc, decoding the payload into T first
@@ -126,6 +145,20 @@ func (r ConnectionRef[T]) Description(description string) ConnectionRef[T] {
 // Recommended marks the connection as the recommended method
 func (r ConnectionRef[T]) Recommended() ConnectionRef[T] {
 	r.connection.Recommended = true
+
+	return r
+}
+
+// Revision names the connection after its credential type with a V<n> suffix, so one credential type can back a connection per app registration while the unrevised connection keeps the original name
+func (r ConnectionRef[T]) Revision(n int) ConnectionRef[T] {
+	r.connection.Credential.Name = fmt.Sprintf("%sV%d", reflectedInput[T]("").Name, n)
+
+	return r
+}
+
+// Retired marks the connection as one existing installations still use but that can no longer be connected
+func (r ConnectionRef[T]) Retired() ConnectionRef[T] {
+	r.connection.Retired = true
 
 	return r
 }
@@ -313,6 +346,32 @@ func (r UserInputRef[T]) Validated(fn func(context.Context, InstallationRequest,
 	r.input.Validate = validated(fn)
 
 	return r
+}
+
+// Decode returns the installation's stored user input as T, the zero value when none is stored
+func (r UserInputRef[T]) Decode(integration *generated.Integration) (T, error) {
+	var input T
+	err := jsonx.UnmarshalIfPresent(integration.UserInput.Data, &input)
+
+	return input, err
+}
+
+// Save replaces the installation's stored user input with input under this layout's name
+func (r UserInputRef[T]) Save(ctx context.Context, db *generated.Client, integration *generated.Integration, input T) error {
+	data, err := jsonx.ToRawMessage(input)
+	if err != nil {
+		return err
+	}
+
+	next := IntegrationUserInput{Layout: r.input.Name, Data: data}
+
+	if err := db.Integration.UpdateOneID(integration.ID).SetUserInput(next).Exec(ctx); err != nil {
+		return err
+	}
+
+	integration.UserInput = next
+
+	return nil
 }
 
 // Registration returns the layout name, reflected schema, declared upgrade, and validation as an input registration

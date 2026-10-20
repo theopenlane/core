@@ -3,6 +3,7 @@ package googledrive
 import (
 	"time"
 
+	"golang.org/x/oauth2"
 	"google.golang.org/api/drive/v3"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -11,8 +12,10 @@ import (
 var (
 	// definitionID is the stable identifier for the Google Drive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GDRIVE00000000000000001")
-	// oauthConnection is the Google Drive OAuth connection
-	oauthConnection = types.ConnectionOf[googleDriveCred]()
+	// oauthConnection is the Google Drive OAuth connection scoped to drive.file
+	oauthConnection = types.ConnectionOf[googleDriveCred]().Revision(2)
+	// legacyConnection is the retired drive.readonly OAuth connection installations created before the drive.file migration still use
+	legacyConnection = types.ConnectionOf[googleDriveCred]()
 	// installation is the installation metadata layout
 	installation = types.InstallationOf[InstallationMetadata]()
 	// userInput is the installation user input layout
@@ -23,6 +26,10 @@ var (
 type DriveClient struct {
 	// Svc is the authenticated Google Drive service client
 	Svc *drive.Service
+	// TokenSource yields the refreshed OAuth token backing Svc
+	TokenSource oauth2.TokenSource
+	// Legacy reports the client was built for the retired drive.readonly connection
+	Legacy bool
 }
 
 // googleDriveCred holds the provider-owned credential material for a Google Drive installation
@@ -39,6 +46,8 @@ type googleDriveCred struct {
 type UserInput struct {
 	// Primary marks this installation as the authoritative Drive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
+	// SelectedDocuments lists the Google Docs selected in the Picker, set by the selection operation rather than the settings form
+	SelectedDocuments []types.SelectedResource `json:"selectedDocuments,omitempty" jsonschema:"title=Selected Documents,readOnly=true"`
 }
 
 // InstallationMetadata holds the stable Google Drive target selected for one installation

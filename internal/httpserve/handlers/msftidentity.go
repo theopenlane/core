@@ -30,8 +30,10 @@ type application struct {
 func (h *Handler) MSFTIdentityWellKnownHandler(ctx echo.Context) error {
 	appIDs := []string{
 		h.IntegrationsConfig.AzureEntraID.ApplicationID,
+		h.IntegrationsConfig.AzureEntraID.Legacy.ApplicationID,
 		h.IntegrationsConfig.AzureSecurityCenter.ApplicationID,
 		h.IntegrationsConfig.OneDrive.ApplicationID,
+		h.IntegrationsConfig.OneDrive.Legacy.ApplicationID,
 		h.IntegrationsConfig.MicrosoftTeams.ApplicationID,
 	}
 

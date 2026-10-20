@@ -283,6 +283,10 @@ func mergeInput(def types.Definition, current *ent.Integration, userInput json.R
 
 		if def.UserInput != nil {
 			nextInput.Layout = def.UserInput.Name
+
+			if current != nil {
+				nextInput.Data = keepReadOnlyInput(def.UserInput.ReadOnly, current.UserInput.Data, nextInput.Data)
+			}
 		}
 	}
 
@@ -291,6 +295,33 @@ func mergeInput(def types.Definition, current *ent.Integration, userInput json.R
 	}
 
 	return nextInput, nextConfig
+}
+
+// keepReadOnlyInput returns the submitted user input with every read-only property set to its stored value, since read-only properties are managed by operations and never by a client save
+func keepReadOnlyInput(readOnly []string, stored, submitted json.RawMessage) json.RawMessage {
+	if len(readOnly) == 0 {
+		return submitted
+	}
+
+	var storedDoc, submittedDoc map[string]json.RawMessage
+	if jsonx.UnmarshalIfPresent(stored, &storedDoc) != nil || jsonx.UnmarshalIfPresent(submitted, &submittedDoc) != nil {
+		return submitted
+	}
+
+	for _, key := range readOnly {
+		if value, ok := storedDoc[key]; ok {
+			submittedDoc[key] = value
+		} else {
+			delete(submittedDoc, key)
+		}
+	}
+
+	out, err := jsonx.ToRawMessage(submittedDoc)
+	if err != nil {
+		return submitted
+	}
+
+	return out
 }
 
 // mirrorUserInput sets the record fields the submitted user input carries: the installation name and its primary directory flag

@@ -15,8 +15,10 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0ONEDRIVE00000000000001")
 	// installation is the installation metadata layout
 	installation = types.InstallationOf[InstallationMetadata]()
-	// oauthConnection is the OneDrive OAuth connection
-	oauthConnection = types.ConnectionOf[oneDriveCred]()
+	// oauthConnection is the OneDrive OAuth connection under the current app registration
+	oauthConnection = types.ConnectionOf[oneDriveCred]().Revision(2)
+	// legacyConnection is the retired connection for installations authorized against the app registration used before the tenant move
+	legacyConnection = types.ConnectionOf[oneDriveCred]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )

@@ -1,11 +1,37 @@
 {
-  "hash": "b466c8402d793245a7af0f26c2b13cbead466b9cfd9e1851e02bbbd0d29e459b",
-  "version": "01M532ZV2P247E2D3CF1PTFSK8",
+  "hash": "ef53051572379905566918cd5b4df54b6475aa919d61bd6f8a124e44b45d28b8",
+  "version": "01M5DPJKBFQ7CN33WMJ7V7DY2Q",
   "surface": {
     "id": "def_01K0ONEDRIVE00000000000001",
     "credentials": [
       {
         "ref": "oneDriveCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/one-drive-cred",
+          "$ref": "#/$defs/oneDriveCred",
+          "$defs": {
+            "oneDriveCred": {
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "ref": "oneDriveCredV2",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/one-drive-cred",
@@ -82,7 +108,8 @@
       }
     },
     "connections": [
-      "oneDriveCred"
+      "oneDriveCred",
+      "oneDriveCredV2"
     ],
     "operations": [
       {

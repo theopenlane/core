@@ -164,6 +164,11 @@ integrations:
         applicationid: ""
         clientsecret: ""
         defaulttenant: ""
+        legacy:
+            applicationid: ""
+            clientsecret: ""
+            defaulttenant: ""
+            redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     azuresecuritycenter:
         applicationid: ""
@@ -229,6 +234,11 @@ integrations:
     googledrive:
         clientid: ""
         clientsecret: ""
+        legacy:
+            clientid: ""
+            clientsecret: ""
+            redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+        pickerapikey: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     googleworkspace:
         clientid: ""
@@ -241,6 +251,7 @@ integrations:
     microsoftteams:
         applicationid: ""
         clientsecret: ""
+        defaulttenant: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     objectstore:
         accesskeyid: ""
@@ -308,6 +319,12 @@ integrations:
         applicationid: ""
         clientsecret: ""
         contentmode: iframe
+        defaulttenant: ""
+        legacy:
+            applicationid: ""
+            clientsecret: ""
+            defaulttenant: ""
+            redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     organizationdelete:
         enabled: false

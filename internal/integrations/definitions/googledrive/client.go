@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/logx"
 )
 
-// clientBuilder returns the Google Drive client builder bound to the operator config
-func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[googleDriveCred]) (DriveClient, error) {
+// clientBuilder returns the Google Drive client builder refreshing tokens against app, legacy marking the retired drive.readonly connection
+func clientBuilder(app AppConfig, legacy bool) func(context.Context, types.ConnectionRequest[googleDriveCred]) (DriveClient, error) {
 	return func(ctx context.Context, req types.ConnectionRequest[googleDriveCred]) (DriveClient, error) {
 		cred := req.Credential
 
@@ -20,7 +20,7 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[goo
 			return DriveClient{}, ErrOAuthTokenMissing
 		}
 
-		ts := providerkit.GoogleTokenSource(ctx, cfg.ClientID, cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+		ts := providerkit.GoogleTokenSource(ctx, app.ClientID, app.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 
 		svc, err := drive.NewService(ctx, option.WithTokenSource(ts))
 		if err != nil {
@@ -29,6 +29,6 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[goo
 			return DriveClient{}, ErrDriveServiceBuildFailed
 		}
 
-		return DriveClient{Svc: svc}, nil
+		return DriveClient{Svc: svc, TokenSource: ts, Legacy: legacy}, nil
 	}
 }

@@ -63,6 +63,7 @@ func Builder(cfg Config) registry.Builder {
 				MessageSendOp.Permissions("ChannelMessage.Send").Description("Send a Teams channel message via Microsoft Graph").Registration(),
 				operations.NewChannelsListOperation(listTeams, ErrResultEncode).Permissions("Team.ReadBasic.All", "Channel.ReadBasic.All").Description("List the teams and channels the connected user can post to").Registration(),
 				operations.NewTestMessageOperation(sendMessage).Permissions("ChannelMessage.Send").Description("Send a test message to a Teams channel to confirm the integration works").Registration(),
+				operations.NewResourceSelectionOperation(storeDefaultChannel, 1).Description("Set the default team and channel messages post to when none is given").Registration(),
 			},
 		}, nil
 	})

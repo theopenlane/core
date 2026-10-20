@@ -1379,6 +1379,18 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.googledrive.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.googledrive.redirecturl | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.googledrive.pickerapikey }}
+        pickerapikey: {{ .Values.openlane.coreConfiguration.integrations.googledrive.pickerapikey | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.googledrive.legacy }}
+        legacy:
+          {{- if .Values.openlane.coreConfiguration.integrations.googledrive.legacy.clientid }}
+          clientid: {{ .Values.openlane.coreConfiguration.integrations.googledrive.legacy.clientid | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.googledrive.legacy.redirecturl }}
+          redirecturl: {{ .Values.openlane.coreConfiguration.integrations.googledrive.legacy.redirecturl | quote }}
+          {{- end }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace }}
       googleworkspace:
@@ -1399,6 +1411,18 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant }}
         defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.legacy }}
+        legacy:
+          {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.legacy.applicationid }}
+          applicationid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.legacy.applicationid | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.legacy.redirecturl }}
+          redirecturl: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.legacy.redirecturl | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.legacy.defaulttenant }}
+          defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.legacy.defaulttenant | quote }}
+          {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter }}
@@ -1430,6 +1454,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.defaulttenant }}
+        defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.defaulttenant | quote }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.onedrive }}
       onedrive:
@@ -1439,8 +1466,23 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.defaulttenant }}
+        defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.onedrive.defaulttenant | quote }}
+        {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.contentmode }}
         contentmode: {{ .Values.openlane.coreConfiguration.integrations.onedrive.contentmode | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.legacy }}
+        legacy:
+          {{- if .Values.openlane.coreConfiguration.integrations.onedrive.legacy.applicationid }}
+          applicationid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.legacy.applicationid | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.onedrive.legacy.redirecturl }}
+          redirecturl: {{ .Values.openlane.coreConfiguration.integrations.onedrive.legacy.redirecturl | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.onedrive.legacy.defaulttenant }}
+          defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.onedrive.legacy.defaulttenant | quote }}
+          {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.oidclocal }}

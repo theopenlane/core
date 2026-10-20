@@ -38,7 +38,16 @@ func sendMessage(ctx context.Context, req types.OperationRequest, c *Client, cfg
 
 	destinations := lo.Uniq(lo.Compact(append([]string{cfg.Channel}, cfg.Destinations...)))
 	if len(destinations) == 0 {
-		return nil, ErrChannelMissing
+		channel, err := installationDefaultChannel(req.Integration)
+		if err != nil {
+			return nil, err
+		}
+
+		if channel == "" {
+			return nil, ErrChannelMissing
+		}
+
+		destinations = []string{channel}
 	}
 
 	hasText := cfg.Text != ""

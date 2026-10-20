@@ -22,19 +22,31 @@ const (
 type FolderSync struct {
 	types.OperationSettings
 	// FolderID is the Google Drive folder ID or URL containing policy documents
-	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents,required"`
+	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents"`
 }
 
-// runFolderSync lists all Google Docs in the configured folder and returns ingest payload sets
-func runFolderSync(ctx context.Context, _ types.OperationRequest, svc DriveClient, cfg FolderSync) ([]types.IngestPayloadSet, error) {
-	folderID := parseFolderID(cfg.FolderID)
-	if folderID == "" {
-		logx.FromContext(ctx).Error().Bool("folder_id_present", cfg.FolderID != "").Msg("googledrive: no folder id in the installation user input, the integration needs to be reconfigured with a folder selected")
-
-		return nil, ErrFolderIDMissing
+// runFolderSync collects the Google Docs selected in the Picker, or every Google Doc in the configured folder, and returns ingest payload sets
+func runFolderSync(ctx context.Context, req types.OperationRequest, svc DriveClient, cfg FolderSync) ([]types.IngestPayloadSet, error) {
+	input, err := userInput.Decode(req.Integration)
+	if err != nil {
+		return nil, ErrUserInputDecode
 	}
 
-	files, err := listFolderDocs(ctx, svc, folderID)
+	var files []*drive.File
+
+	if len(input.SelectedDocuments) > 0 {
+		files, err = getSelectedDocs(ctx, svc, input.SelectedDocuments)
+	} else {
+		folderID := parseFolderID(cfg.FolderID)
+		if folderID == "" {
+			logx.FromContext(ctx).Error().Bool("folder_id_present", cfg.FolderID != "").Msg("googledrive: no documents selected and no folder configured, documents need to be selected in the picker")
+
+			return nil, ErrNoDocumentsSelected
+		}
+
+		files, err = listFolderDocs(ctx, svc, folderID)
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -56,6 +68,40 @@ func runFolderSync(ctx context.Context, _ types.OperationRequest, svc DriveClien
 			Envelopes: envelopes,
 		},
 	}, nil
+}
+
+// getSelectedDocs fetches metadata for each selected file, skipping files that are inaccessible or not Google Docs
+func getSelectedDocs(ctx context.Context, c DriveClient, selected []types.SelectedResource) ([]*drive.File, error) {
+	files := make([]*drive.File, 0, len(selected))
+
+	for _, resource := range selected {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+
+		fileID := resource.ID
+
+		file, err := c.Svc.Files.Get(fileID).
+			Fields("id,name,mimeType,modifiedTime,createdTime").
+			SupportsAllDrives(true).
+			Context(ctx).
+			Do()
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("file_id", fileID).Msg("googledrive: skipping selected file that could not be fetched")
+
+			continue
+		}
+
+		if file.MimeType != googleDocMIMEType {
+			logx.FromContext(ctx).Warn().Str("file_id", fileID).Str("mime_type", file.MimeType).Msg("googledrive: skipping selected file that is not a google doc")
+
+			continue
+		}
+
+		files = append(files, file)
+	}
+
+	return files, nil
 }
 
 // listFolderDocs pages through all Google Docs in the specified folder

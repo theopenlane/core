@@ -61,6 +61,27 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "azureentraid.Config": {
+      "properties": {
+        "applicationid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        },
+        "defaulttenant": {
+          "type": "string"
+        },
+        "legacy": {
+          "$ref": "#/$defs/microsoft.AppConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "azuresecuritycenter.Config": {
       "properties": {
         "applicationid": {
@@ -178,7 +199,7 @@
           "$ref": "#/$defs/googleworkspace.Config"
         },
         "azureentraid": {
-          "$ref": "#/$defs/microsoft.AppConfig"
+          "$ref": "#/$defs/azureentraid.Config"
         },
         "azuresecuritycenter": {
           "$ref": "#/$defs/azuresecuritycenter.Config"
@@ -1076,6 +1097,21 @@
         "redirecturl"
       ]
     },
+    "googledrive.AppConfig": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "googledrive.Config": {
       "properties": {
         "clientid": {
@@ -1086,6 +1122,12 @@
         },
         "redirecturl": {
           "type": "string"
+        },
+        "pickerapikey": {
+          "type": "string"
+        },
+        "legacy": {
+          "$ref": "#/$defs/googledrive.AppConfig"
         }
       },
       "additionalProperties": false,
@@ -1274,6 +1316,9 @@
         },
         "redirecturl": {
           "type": "string"
+        },
+        "defaulttenant": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1378,8 +1423,14 @@
         "redirecturl": {
           "type": "string"
         },
+        "defaulttenant": {
+          "type": "string"
+        },
         "contentmode": {
           "type": "string"
+        },
+        "legacy": {
+          "$ref": "#/$defs/microsoft.AppConfig"
         }
       },
       "additionalProperties": false,

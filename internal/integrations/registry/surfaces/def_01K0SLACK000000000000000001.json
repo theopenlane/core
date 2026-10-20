@@ -1,6 +1,6 @@
 {
-  "hash": "4cc1f932bdd920e483d08ce0436c0b31f958b49522511cce0d78b132d7b0bc16",
-  "version": "01M55EXDENYFQSSPB3VB0T8V6B",
+  "hash": "e63076851caf63e9f87b0b8fb7af66a74300e3915a5fd62fee9ea4fbfe9a14f1",
+  "version": "01M5D958QRHMN98E6K3J788ZNX",
   "surface": {
     "id": "def_01K0SLACK000000000000000001",
     "credentials": [
@@ -73,7 +73,7 @@
               "defaultChannel": {
                 "type": "string",
                 "title": "Default Channel",
-                "description": "Slack channel id used as the default delivery target for system notifications"
+                "description": "Slack channel id messages post to when no channel is given"
               }
             },
             "additionalProperties": false,
@@ -157,6 +157,9 @@
       },
       {
         "name": "OrganizationsPendingDeletionMessage"
+      },
+      {
+        "name": "ResourceSelection"
       },
       {
         "name": "TestMessageSendOperation"

@@ -66,6 +66,7 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 				MessageSendOp.Description("Send a Slack message via chat.postMessage").Registration(),
 				operations.NewChannelsListOperation(listTeams, ErrResultEncode).Permissions("team:read", "channels:read", "groups:read").Description("List the channels in the connected workspace").Registration(),
 				operations.NewTestMessageOperation(sendMessage).Permissions("chat:write", "chat:write.public").Description("Send a test message to a Slack channel to confirm the integration works").Registration(),
+				operations.NewResourceSelectionOperation(storeDefaultChannel, 1).Description("Set the default channel messages post to when no channel is given").Registration(),
 				types.OperationRefOf[DirectorySync]().
 					Ingests(runDirectorySync).
 					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).

@@ -25,4 +25,6 @@ var (
 	ErrCredentialEncode = errors.New("microsoftteams: credential encode failed")
 	// ErrTenantUnresolved indicates the access token did not carry a tenant identifier
 	ErrTenantUnresolved = errors.New("microsoftteams: tenant unresolved")
+	// ErrUserInputDecode indicates the installation user input could not be decoded
+	ErrUserInputDecode = errors.New("microsoftteams: user input decode failed")
 )
