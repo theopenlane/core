@@ -920,7 +920,7 @@ steps:
               step: migrate
               atlas-env: dev
               config: "file://db/atlas.hcl"
-      - label: ":test_tube: Trigger UI E2E pipeline tests"
+      - label: ":test_tube: Trigger UI E2E pipeline tests for ${BUILDKITE_TAG}"
         trigger: openlane-ui-e2e
         depends_on: "docker-build-and-tag"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
