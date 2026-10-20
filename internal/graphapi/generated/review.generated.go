@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _ReviewBulkDeletePayload_deletedIDs(ctx context.Cont
 	)
 }
 func (ec *executionContext) fieldContext_ReviewBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ReviewBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _ReviewBulkDeletePayload_notDeletedIDs(ctx context.C
 	)
 }
 func (ec *executionContext) fieldContext_ReviewBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ReviewBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _ReviewBulkDeletePayload_error(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_ReviewBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _ReviewBulkUpdatePayload_reviews(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _ReviewBulkUpdatePayload_updatedIDs(ctx context.Cont
 	)
 }
 func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ReviewBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ReviewBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ReviewBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _ReviewBulkUpdatePayload_notUpdatedIDs(ctx context.C
 	)
 }
 func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ReviewBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ReviewBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ReviewBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -224,7 +223,7 @@ func (ec *executionContext) _ReviewBulkUpdatePayload_error(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ReviewBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ReviewBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _ReviewCreatePayload_review(ctx context.Context, field graphql.CollectedField, obj *model.ReviewCreatePayload) (ret graphql.Marshaler) {
@@ -279,7 +278,7 @@ func (ec *executionContext) _ReviewDeletePayload_deletedID(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_ReviewDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ReviewDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ReviewDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ReviewUpdatePayload_review(ctx context.Context, field graphql.CollectedField, obj *model.ReviewUpdatePayload) (ret graphql.Marshaler) {
@@ -332,8 +331,7 @@ func (ec *executionContext) _ReviewBulkCreatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, reviewBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -352,14 +350,10 @@ func (ec *executionContext) _ReviewBulkCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -370,8 +364,7 @@ func (ec *executionContext) _ReviewBulkDeletePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, reviewBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -400,14 +393,10 @@ func (ec *executionContext) _ReviewBulkDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -418,8 +407,7 @@ func (ec *executionContext) _ReviewBulkUpdatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, reviewBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -453,14 +441,10 @@ func (ec *executionContext) _ReviewBulkUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -471,8 +455,7 @@ func (ec *executionContext) _ReviewCreatePayload(ctx context.Context, sel ast.Se
 	fields := graphql.CollectFields(ec.OperationContext, sel, reviewCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -491,14 +474,10 @@ func (ec *executionContext) _ReviewCreatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -509,8 +488,7 @@ func (ec *executionContext) _ReviewDeletePayload(ctx context.Context, sel ast.Se
 	fields := graphql.CollectFields(ec.OperationContext, sel, reviewDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -529,14 +507,10 @@ func (ec *executionContext) _ReviewDeletePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -547,8 +521,7 @@ func (ec *executionContext) _ReviewUpdatePayload(ctx context.Context, sel ast.Se
 	fields := graphql.CollectFields(ec.OperationContext, sel, reviewUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -567,14 +540,10 @@ func (ec *executionContext) _ReviewUpdatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -585,9 +554,7 @@ func (ec *executionContext) _ReviewUpdatePayload(ctx context.Context, sel ast.Se
 
 func (ec *executionContext) marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ReviewBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._ReviewBulkCreatePayload(ctx, sel, v)
@@ -595,9 +562,7 @@ func (ec *executionContext) marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNReviewBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ReviewBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._ReviewBulkDeletePayload(ctx, sel, v)
@@ -605,9 +570,7 @@ func (ec *executionContext) marshalNReviewBulkDeletePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNReviewBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ReviewBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._ReviewBulkUpdatePayload(ctx, sel, v)
@@ -615,9 +578,7 @@ func (ec *executionContext) marshalNReviewBulkUpdatePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNReviewCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ReviewCreatePayload!")
 		return graphql.Null
 	}
 	return ec._ReviewCreatePayload(ctx, sel, v)
@@ -625,9 +586,7 @@ func (ec *executionContext) marshalNReviewCreatePayload2ᚖgithubᚗcomᚋtheope
 
 func (ec *executionContext) marshalNReviewDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ReviewDeletePayload!")
 		return graphql.Null
 	}
 	return ec._ReviewDeletePayload(ctx, sel, v)
@@ -635,9 +594,7 @@ func (ec *executionContext) marshalNReviewDeletePayload2ᚖgithubᚗcomᚋtheope
 
 func (ec *executionContext) marshalNReviewUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ReviewUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._ReviewUpdatePayload(ctx, sel, v)

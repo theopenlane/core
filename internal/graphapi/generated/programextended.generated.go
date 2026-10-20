@@ -60,6 +60,18 @@ func (ec *executionContext) unmarshalInputAddProgramMembershipInput(ctx context.
 	return it, nil
 }
 
+// UnmarshalAddProgramMembershipInput unmarshals raw into the AddProgramMembershipInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalAddProgramMembershipInput(ctx context.Context, raw any) (model.AddProgramMembershipInput, error) {
+	var out model.AddProgramMembershipInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "AddProgramMembershipInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputCreateControlWithSubcontrolsInput(ctx context.Context, obj any) (model.CreateControlWithSubcontrolsInput, error) {
 	var it model.CreateControlWithSubcontrolsInput
 	if obj == nil {
@@ -95,6 +107,18 @@ func (ec *executionContext) unmarshalInputCreateControlWithSubcontrolsInput(ctx 
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalCreateControlWithSubcontrolsInput unmarshals raw into the CreateControlWithSubcontrolsInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateControlWithSubcontrolsInput(ctx context.Context, raw any) (model.CreateControlWithSubcontrolsInput, error) {
+	var out model.CreateControlWithSubcontrolsInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateControlWithSubcontrolsInput", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Context, obj any) (model.CreateFullProgramInput, error) {
@@ -169,6 +193,18 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 	return it, nil
 }
 
+// UnmarshalCreateFullProgramInput unmarshals raw into the CreateFullProgramInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateFullProgramInput(ctx context.Context, raw any) (model.CreateFullProgramInput, error) {
+	var out model.CreateFullProgramInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateFullProgramInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputCreateMemberWithProgramInput(ctx context.Context, obj any) (model.CreateMemberWithProgramInput, error) {
 	var it model.CreateMemberWithProgramInput
 	if obj == nil {
@@ -204,6 +240,18 @@ func (ec *executionContext) unmarshalInputCreateMemberWithProgramInput(ctx conte
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalCreateMemberWithProgramInput unmarshals raw into the CreateMemberWithProgramInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateMemberWithProgramInput(ctx context.Context, raw any) (model.CreateMemberWithProgramInput, error) {
+	var out model.CreateMemberWithProgramInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateMemberWithProgramInput", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx context.Context, obj any) (model.CreateProgramWithMembersInput, error) {
@@ -269,6 +317,18 @@ func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx cont
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalCreateProgramWithMembersInput unmarshals raw into the CreateProgramWithMembersInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateProgramWithMembersInput(ctx context.Context, raw any) (model.CreateProgramWithMembersInput, error) {
+	var out model.CreateProgramWithMembersInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateProgramWithMembersInput", raw, &out)
+	return out, err
 }
 
 // endregion **************************** input.gotpl *****************************

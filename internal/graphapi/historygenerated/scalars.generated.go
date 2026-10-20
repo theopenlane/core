@@ -43,17 +43,13 @@ func (ec *executionContext) unmarshalNAny2interface(ctx context.Context, v any) 
 
 func (ec *executionContext) marshalNAny2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "Any!")
 		return graphql.Null
 	}
 	_ = sel
 	res := graphql.MarshalAny(v)
 	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullFromMarshaler(ctx, "Any!")
 	}
 	return res
 }
@@ -86,9 +82,7 @@ func (ec *executionContext) unmarshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋc
 
 func (ec *executionContext) marshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DateTime!")
 		return graphql.Null
 	}
 	return v

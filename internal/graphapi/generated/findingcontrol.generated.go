@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _FindingControlBulkDeletePayload_deletedIDs(ctx cont
 	)
 }
 func (ec *executionContext) fieldContext_FindingControlBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _FindingControlBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _FindingControlBulkDeletePayload_notDeletedIDs(ctx c
 	)
 }
 func (ec *executionContext) fieldContext_FindingControlBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _FindingControlBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _FindingControlBulkDeletePayload_error(ctx context.C
 	)
 }
 func (ec *executionContext) fieldContext_FindingControlBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _FindingControlCreatePayload_findingControl(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlCreatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _FindingControlDeletePayload_deletedID(ctx context.C
 	)
 }
 func (ec *executionContext) fieldContext_FindingControlDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("FindingControlDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("FindingControlDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _FindingControlUpdatePayload_findingControl(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlUpdatePayload) (ret graphql.Marshaler) {
@@ -231,8 +230,7 @@ func (ec *executionContext) _FindingControlBulkCreatePayload(ctx context.Context
 	fields := graphql.CollectFields(ec.OperationContext, sel, findingControlBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -251,14 +249,10 @@ func (ec *executionContext) _FindingControlBulkCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -269,8 +263,7 @@ func (ec *executionContext) _FindingControlBulkDeletePayload(ctx context.Context
 	fields := graphql.CollectFields(ec.OperationContext, sel, findingControlBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -299,14 +292,10 @@ func (ec *executionContext) _FindingControlBulkDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -317,8 +306,7 @@ func (ec *executionContext) _FindingControlCreatePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, findingControlCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -337,14 +325,10 @@ func (ec *executionContext) _FindingControlCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -355,8 +339,7 @@ func (ec *executionContext) _FindingControlDeletePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, findingControlDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -375,14 +358,10 @@ func (ec *executionContext) _FindingControlDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -393,8 +372,7 @@ func (ec *executionContext) _FindingControlUpdatePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, findingControlUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -413,14 +391,10 @@ func (ec *executionContext) _FindingControlUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -431,9 +405,7 @@ func (ec *executionContext) _FindingControlUpdatePayload(ctx context.Context, se
 
 func (ec *executionContext) marshalNFindingControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "FindingControlBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._FindingControlBulkCreatePayload(ctx, sel, v)
@@ -441,9 +413,7 @@ func (ec *executionContext) marshalNFindingControlBulkCreatePayload2ᚖgithubᚗ
 
 func (ec *executionContext) marshalNFindingControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "FindingControlBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._FindingControlBulkDeletePayload(ctx, sel, v)
@@ -451,9 +421,7 @@ func (ec *executionContext) marshalNFindingControlBulkDeletePayload2ᚖgithubᚗ
 
 func (ec *executionContext) marshalNFindingControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "FindingControlCreatePayload!")
 		return graphql.Null
 	}
 	return ec._FindingControlCreatePayload(ctx, sel, v)
@@ -461,9 +429,7 @@ func (ec *executionContext) marshalNFindingControlCreatePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNFindingControlDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "FindingControlDeletePayload!")
 		return graphql.Null
 	}
 	return ec._FindingControlDeletePayload(ctx, sel, v)
@@ -471,9 +437,7 @@ func (ec *executionContext) marshalNFindingControlDeletePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNFindingControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "FindingControlUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._FindingControlUpdatePayload(ctx, sel, v)

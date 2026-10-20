@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -44,7 +43,7 @@ func (ec *executionContext) _SearchContext_entityID(ctx context.Context, field g
 	)
 }
 func (ec *executionContext) fieldContext_SearchContext_entityID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SearchContext", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("SearchContext", field, false, false, "String")
 }
 
 func (ec *executionContext) _SearchContext_entityType(ctx context.Context, field graphql.CollectedField, obj *models.SearchContext) (ret graphql.Marshaler) {
@@ -67,7 +66,7 @@ func (ec *executionContext) _SearchContext_entityType(ctx context.Context, field
 	)
 }
 func (ec *executionContext) fieldContext_SearchContext_entityType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SearchContext", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("SearchContext", field, false, false, "String")
 }
 
 func (ec *executionContext) _SearchContext_matchedFields(ctx context.Context, field graphql.CollectedField, obj *models.SearchContext) (ret graphql.Marshaler) {
@@ -90,7 +89,7 @@ func (ec *executionContext) _SearchContext_matchedFields(ctx context.Context, fi
 	)
 }
 func (ec *executionContext) fieldContext_SearchContext_matchedFields(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SearchContext", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("SearchContext", field, false, false, "String")
 }
 
 func (ec *executionContext) _SearchContext_snippets(ctx context.Context, field graphql.CollectedField, obj *models.SearchContext) (ret graphql.Marshaler) {
@@ -145,7 +144,7 @@ func (ec *executionContext) _SearchSnippet_field(ctx context.Context, field grap
 	)
 }
 func (ec *executionContext) fieldContext_SearchSnippet_field(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SearchSnippet", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("SearchSnippet", field, false, false, "String")
 }
 
 func (ec *executionContext) _SearchSnippet_text(ctx context.Context, field graphql.CollectedField, obj *models.SearchSnippet) (ret graphql.Marshaler) {
@@ -168,7 +167,7 @@ func (ec *executionContext) _SearchSnippet_text(ctx context.Context, field graph
 	)
 }
 func (ec *executionContext) fieldContext_SearchSnippet_text(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SearchSnippet", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("SearchSnippet", field, false, false, "String")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -189,8 +188,7 @@ func (ec *executionContext) _SearchContext(ctx context.Context, sel ast.Selectio
 	fields := graphql.CollectFields(ec.OperationContext, sel, searchContextImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -224,14 +222,10 @@ func (ec *executionContext) _SearchContext(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -242,8 +236,7 @@ func (ec *executionContext) _SearchSnippet(ctx context.Context, sel ast.Selectio
 	fields := graphql.CollectFields(ec.OperationContext, sel, searchSnippetImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -267,14 +260,10 @@ func (ec *executionContext) _SearchSnippet(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -285,9 +274,7 @@ func (ec *executionContext) _SearchSnippet(ctx context.Context, sel ast.Selectio
 
 func (ec *executionContext) marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSearchContext(ctx context.Context, sel ast.SelectionSet, v *models.SearchContext) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SearchContext!")
 		return graphql.Null
 	}
 	return ec._SearchContext(ctx, sel, v)
@@ -295,9 +282,7 @@ func (ec *executionContext) marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlane�
 
 func (ec *executionContext) marshalNSearchSnippet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSearchSnippet(ctx context.Context, sel ast.SelectionSet, v *models.SearchSnippet) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SearchSnippet!")
 		return graphql.Null
 	}
 	return ec._SearchSnippet(ctx, sel, v)

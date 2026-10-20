@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload_deletedIDs(ct
 	)
 }
 func (ec *executionContext) fieldContext_NotificationTemplateBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _NotificationTemplateBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload_notDeletedIDs
 	)
 }
 func (ec *executionContext) fieldContext_NotificationTemplateBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _NotificationTemplateBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload_error(ctx con
 	)
 }
 func (ec *executionContext) fieldContext_NotificationTemplateBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_notificationTemplates(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_updatedIDs(ct
 	)
 }
 func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("NotificationTemplateBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_notUpdatedIDs
 	)
 }
 func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("NotificationTemplateBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -224,7 +223,7 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_error(ctx con
 	)
 }
 func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("NotificationTemplateBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _NotificationTemplateCreatePayload_notificationTemplate(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateCreatePayload) (ret graphql.Marshaler) {
@@ -279,7 +278,7 @@ func (ec *executionContext) _NotificationTemplateDeletePayload_deletedID(ctx con
 	)
 }
 func (ec *executionContext) fieldContext_NotificationTemplateDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("NotificationTemplateDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("NotificationTemplateDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _NotificationTemplateUpdatePayload_notificationTemplate(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateUpdatePayload) (ret graphql.Marshaler) {
@@ -332,8 +331,7 @@ func (ec *executionContext) _NotificationTemplateBulkCreatePayload(ctx context.C
 	fields := graphql.CollectFields(ec.OperationContext, sel, notificationTemplateBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -352,14 +350,10 @@ func (ec *executionContext) _NotificationTemplateBulkCreatePayload(ctx context.C
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -370,8 +364,7 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload(ctx context.C
 	fields := graphql.CollectFields(ec.OperationContext, sel, notificationTemplateBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -400,14 +393,10 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload(ctx context.C
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -418,8 +407,7 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload(ctx context.C
 	fields := graphql.CollectFields(ec.OperationContext, sel, notificationTemplateBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -453,14 +441,10 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload(ctx context.C
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -471,8 +455,7 @@ func (ec *executionContext) _NotificationTemplateCreatePayload(ctx context.Conte
 	fields := graphql.CollectFields(ec.OperationContext, sel, notificationTemplateCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -491,14 +474,10 @@ func (ec *executionContext) _NotificationTemplateCreatePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -509,8 +488,7 @@ func (ec *executionContext) _NotificationTemplateDeletePayload(ctx context.Conte
 	fields := graphql.CollectFields(ec.OperationContext, sel, notificationTemplateDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -529,14 +507,10 @@ func (ec *executionContext) _NotificationTemplateDeletePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -547,8 +521,7 @@ func (ec *executionContext) _NotificationTemplateUpdatePayload(ctx context.Conte
 	fields := graphql.CollectFields(ec.OperationContext, sel, notificationTemplateUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -567,14 +540,10 @@ func (ec *executionContext) _NotificationTemplateUpdatePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -585,9 +554,7 @@ func (ec *executionContext) _NotificationTemplateUpdatePayload(ctx context.Conte
 
 func (ec *executionContext) marshalNNotificationTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationTemplateBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "NotificationTemplateBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._NotificationTemplateBulkCreatePayload(ctx, sel, v)
@@ -595,9 +562,7 @@ func (ec *executionContext) marshalNNotificationTemplateBulkCreatePayload2ᚖgit
 
 func (ec *executionContext) marshalNNotificationTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationTemplateBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "NotificationTemplateBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._NotificationTemplateBulkDeletePayload(ctx, sel, v)
@@ -605,9 +570,7 @@ func (ec *executionContext) marshalNNotificationTemplateBulkDeletePayload2ᚖgit
 
 func (ec *executionContext) marshalNNotificationTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationTemplateBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "NotificationTemplateBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._NotificationTemplateBulkUpdatePayload(ctx, sel, v)
@@ -615,9 +578,7 @@ func (ec *executionContext) marshalNNotificationTemplateBulkUpdatePayload2ᚖgit
 
 func (ec *executionContext) marshalNNotificationTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationTemplateCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "NotificationTemplateCreatePayload!")
 		return graphql.Null
 	}
 	return ec._NotificationTemplateCreatePayload(ctx, sel, v)
@@ -625,9 +586,7 @@ func (ec *executionContext) marshalNNotificationTemplateCreatePayload2ᚖgithub�
 
 func (ec *executionContext) marshalNNotificationTemplateDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationTemplateDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "NotificationTemplateDeletePayload!")
 		return graphql.Null
 	}
 	return ec._NotificationTemplateDeletePayload(ctx, sel, v)
@@ -635,9 +594,7 @@ func (ec *executionContext) marshalNNotificationTemplateDeletePayload2ᚖgithub�
 
 func (ec *executionContext) marshalNNotificationTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationTemplateUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "NotificationTemplateUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._NotificationTemplateUpdatePayload(ctx, sel, v)

@@ -161,6 +161,18 @@ func (ec *executionContext) unmarshalInputUpdateWorkflowProposalChangesInput(ctx
 	return it, nil
 }
 
+// UnmarshalUpdateWorkflowProposalChangesInput unmarshals raw into the UpdateWorkflowProposalChangesInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateWorkflowProposalChangesInput(ctx context.Context, raw any) (model.UpdateWorkflowProposalChangesInput, error) {
+	var out model.UpdateWorkflowProposalChangesInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateWorkflowProposalChangesInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -175,8 +187,7 @@ func (ec *executionContext) _WorkflowProposalSubmitPayload(ctx context.Context, 
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowProposalSubmitPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -195,14 +206,10 @@ func (ec *executionContext) _WorkflowProposalSubmitPayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -213,8 +220,7 @@ func (ec *executionContext) _WorkflowProposalUpdatePayload(ctx context.Context, 
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowProposalUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -233,14 +239,10 @@ func (ec *executionContext) _WorkflowProposalUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -251,8 +253,7 @@ func (ec *executionContext) _WorkflowProposalWithdrawPayload(ctx context.Context
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowProposalWithdrawPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -271,14 +272,10 @@ func (ec *executionContext) _WorkflowProposalWithdrawPayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -294,9 +291,7 @@ func (ec *executionContext) unmarshalNUpdateWorkflowProposalChangesInput2github�
 
 func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalSubmitPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalSubmitPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowProposalSubmitPayload!")
 		return graphql.Null
 	}
 	return ec._WorkflowProposalSubmitPayload(ctx, sel, v)
@@ -304,9 +299,7 @@ func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2ᚖgithubᚗco
 
 func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowProposalUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._WorkflowProposalUpdatePayload(ctx, sel, v)
@@ -314,9 +307,7 @@ func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2ᚖgithubᚗco
 
 func (ec *executionContext) marshalNWorkflowProposalWithdrawPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalWithdrawPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalWithdrawPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowProposalWithdrawPayload!")
 		return graphql.Null
 	}
 	return ec._WorkflowProposalWithdrawPayload(ctx, sel, v)

@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -109,7 +108,7 @@ func (ec *executionContext) _WorkflowInstanceBulkAdminPayload_updatedIDs(ctx con
 	)
 }
 func (ec *executionContext) fieldContext_WorkflowInstanceBulkAdminPayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WorkflowInstanceBulkAdminPayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("WorkflowInstanceBulkAdminPayload", field, false, false, "ID")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -151,6 +150,18 @@ func (ec *executionContext) unmarshalInputReassignWorkflowAssignmentInput(ctx co
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalReassignWorkflowAssignmentInput unmarshals raw into the ReassignWorkflowAssignmentInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalReassignWorkflowAssignmentInput(ctx context.Context, raw any) (model.ReassignWorkflowAssignmentInput, error) {
+	var out model.ReassignWorkflowAssignmentInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ReassignWorkflowAssignmentInput", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetInput(ctx context.Context, obj any) (model.WorkflowAssignmentTargetInput, error) {
@@ -197,6 +208,18 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetInput(ctx cont
 	return it, nil
 }
 
+// UnmarshalWorkflowAssignmentTargetInput unmarshals raw into the WorkflowAssignmentTargetInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalWorkflowAssignmentTargetInput(ctx context.Context, raw any) (model.WorkflowAssignmentTargetInput, error) {
+	var out model.WorkflowAssignmentTargetInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "WorkflowAssignmentTargetInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -211,8 +234,7 @@ func (ec *executionContext) _WorkflowAssignmentReassignPayload(ctx context.Conte
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowAssignmentReassignPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -231,14 +253,10 @@ func (ec *executionContext) _WorkflowAssignmentReassignPayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -249,8 +267,7 @@ func (ec *executionContext) _WorkflowInstanceAdminPayload(ctx context.Context, s
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowInstanceAdminPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -269,14 +286,10 @@ func (ec *executionContext) _WorkflowInstanceAdminPayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -287,8 +300,7 @@ func (ec *executionContext) _WorkflowInstanceBulkAdminPayload(ctx context.Contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, workflowInstanceBulkAdminPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -307,14 +319,10 @@ func (ec *executionContext) _WorkflowInstanceBulkAdminPayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -330,9 +338,7 @@ func (ec *executionContext) unmarshalNReassignWorkflowAssignmentInput2githubᚗc
 
 func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentReassignPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentReassignPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowAssignmentReassignPayload!")
 		return graphql.Null
 	}
 	return ec._WorkflowAssignmentReassignPayload(ctx, sel, v)
@@ -359,9 +365,7 @@ func (ec *executionContext) unmarshalNWorkflowAssignmentTargetInput2ᚖgithubᚗ
 
 func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowInstanceAdminPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowInstanceAdminPayload!")
 		return graphql.Null
 	}
 	return ec._WorkflowInstanceAdminPayload(ctx, sel, v)
@@ -369,9 +373,7 @@ func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcom
 
 func (ec *executionContext) marshalNWorkflowInstanceBulkAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowInstanceBulkAdminPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WorkflowInstanceBulkAdminPayload!")
 		return graphql.Null
 	}
 	return ec._WorkflowInstanceBulkAdminPayload(ctx, sel, v)
