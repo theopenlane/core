@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 // prefix is 0L-
