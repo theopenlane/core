@@ -828,8 +828,8 @@ github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.40.1-0.20261020042922-6d9e63f5212e h1:ouyTpE6iCA/cLhh9Z/J7tjjrCs+Y3jokOGL+eErCEVU=
 github.com/theopenlane/iam v0.40.1-0.20261020042922-6d9e63f5212e/go.mod h1:Exh45ci1TIHH1wMZcb/3ij4F36/61ultSiWjq6ol92I=
-github.com/theopenlane/logx v0.1.0 h1:DjjGAElteKebYOW68Ee5CVGqQmkaZDvCPmhtf6BweOM=
-github.com/theopenlane/logx v0.1.0/go.mod h1:HgQNNZ2iUGdampF15KRfKabbWIaGBLGIrsg1vkijvP8=
+github.com/theopenlane/logx v0.1.1-0.20261020041830-2c315b8141b3 h1:BKF4JrKF631NGmdQo7AfUTaBvUWX855GX687qadh0d0=
+github.com/theopenlane/logx v0.1.1-0.20261020041830-2c315b8141b3/go.mod h1:xhSn1p6b0XUcXKv7q6NC+I5neBAgrT9G2YDJ93WrzgA=
 github.com/theopenlane/newman v0.5.0 h1:r/aiqk4RpjwphpRgY9BXXT6AxyHXfoYGyjyv9E3VMMk=
 github.com/theopenlane/newman v0.5.0/go.mod h1:LmWeLO9H3ajIEQlNP9otcSpMCXB15dCu/WXjyYOs0i0=
 github.com/theopenlane/oscalot v0.1.0 h1:ExYiMU4Q1ezbGq77sxkgahmfmc46L+2NqB39fg0HXjU=

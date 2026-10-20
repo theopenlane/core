@@ -122,7 +122,7 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.18.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.40.1-0.20261020042922-6d9e63f5212e
-	github.com/theopenlane/logx v0.1.0
+	github.com/theopenlane/logx v0.1.1-0.20261020041830-2c315b8141b3
 	github.com/theopenlane/newman v0.5.0
 	github.com/theopenlane/riverboat v0.14.3
 	github.com/theopenlane/utils v0.7.3
