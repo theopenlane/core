@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/logx"
 )
 
 // ControlReportsByCategory is the resolver for the controlReportsByCategory field.

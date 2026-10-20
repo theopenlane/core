@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/ssoutils"
+	"github.com/theopenlane/logx"
 
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 )

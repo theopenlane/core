@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/fga/generate/modelparse"
 	fgamodel "github.com/theopenlane/core/v2/fga/model"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // RolesHandler lists available roles that can be assigned to users in addition to the base organization role

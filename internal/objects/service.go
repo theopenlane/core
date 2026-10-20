@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"

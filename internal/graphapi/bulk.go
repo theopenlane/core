@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

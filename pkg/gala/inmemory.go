@@ -3,7 +3,7 @@ package gala
 import (
 	"context"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 func newInMemoryGala(config Config) (*Gala, error) {

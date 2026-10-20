@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/logx"
 )
 
 // runWriteObject writes the configured document into the installation's bucket

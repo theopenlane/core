@@ -7,7 +7,7 @@ import (
 	"github.com/microsoftgraph/msgraph-sdk-go/users"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // directoryProbeReason is the user-facing reason recorded when the directory probe fails

@@ -12,13 +12,13 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/objects"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	disk "github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/providers/gcs"
 	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
 	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 const (

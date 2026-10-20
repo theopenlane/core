@@ -7,7 +7,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/accounts"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // verify probes the Cloudflare token and returns the account metadata it is scoped to

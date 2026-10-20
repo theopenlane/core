@@ -21,8 +21,8 @@ import (
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 // reminderStaggerDifference spaces successive deletion notice emails apart

@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/version"
+	"github.com/theopenlane/logx"
 )
 
 // integrationSeedTopic is the gala topic the integration loop seed is submitted on
