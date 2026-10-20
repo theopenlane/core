@@ -5,7 +5,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // init wires the workflow-owned context builders. Entity identity, fields, and edges are resolved

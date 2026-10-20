@@ -810,8 +810,6 @@ github.com/testcontainers/testcontainers-go v0.44.0 h1:/Fwh6HY1mIikhnm9e7HwoxGyc
 github.com/testcontainers/testcontainers-go v0.44.0/go.mod h1:IcnwQrYTO86xHXu5bvMaBH7ATlbS3Qn1M1QWW3c66rE=
 github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0 h1:ql9bhSEO9muf6BAy7AD2SJm8AHw+VvVe40PCqMsbVXM=
 github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0/go.mod h1:mYazHZ/v9091lsGp2eDj6al/cvQ5LPYQHFn127CReQA=
-github.com/theopenlane/core/common v1.1.0 h1:v3FRVRosZXmBRNemByOQUvu4e0HnxRW1UrRhpI9L8Og=
-github.com/theopenlane/core/common v1.1.0/go.mod h1:+dT0b10hcRPxCOsD7CmV4LTFw+3d8vVdOMVidfQBWSg=
 github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO6ggTSKi6r/7E=
 github.com/theopenlane/echo-prometheus v0.1.0/go.mod h1:Eiiv1ZLXKMsteQ3T+H1tFfSSZuXSvQfZp95qr5hmGkA=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
@@ -836,8 +834,8 @@ github.com/theopenlane/oscalot v0.1.0 h1:ExYiMU4Q1ezbGq77sxkgahmfmc46L+2NqB39fg0
 github.com/theopenlane/oscalot v0.1.0/go.mod h1:L7XzkqdBATqF2Du0uMTxoRr+eSfOHAwB6/ogwdwM0XE=
 github.com/theopenlane/riverboat v0.14.3 h1:UEY/PzRvGL9Vlj8VrcaKA+l9O+0S3vHH+aXJWlJ1xtQ=
 github.com/theopenlane/riverboat v0.14.3/go.mod h1:XR0EOH1cUmNP8BOpwlcIgrfz6/ysxxi0PXEJlypcCPQ=
-github.com/theopenlane/utils v0.7.3 h1:cnPRS7a7rJXfnQgiJKCaHL6KO9206It+8VM6QuA6KWA=
-github.com/theopenlane/utils v0.7.3/go.mod h1:y5oj2O0jL2OKMIQIDllcPSfpAuS3qazEmqJeXS+BfGo=
+github.com/theopenlane/utils v0.7.4 h1:3R+Mg8rh6xwZ/2itWPOdEn0kW9ZyUygJ0pB1xWxffO0=
+github.com/theopenlane/utils v0.7.4/go.mod h1:MThjVD/86ERwVyCu5g7yZqfz+r7AO9fRvsPZUh9xpl0=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
 github.com/tidwall/gjson v1.19.0 h1:xwxm7n691Uf3u5OFjzngavjGTh55KX5q/9w9xHW88JU=
 github.com/tidwall/gjson v1.19.0/go.mod h1:V37/opeE/JbLUOfH0QTXiNez2l0RUjYUhpT4szFQAfc=

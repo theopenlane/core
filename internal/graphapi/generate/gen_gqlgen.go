@@ -63,7 +63,7 @@ func gqlGenerate() {
 	csvGeneratedPackage := "github.com/theopenlane/core/v2/internal/ent/csvgenerated"
 	rulePackage := "github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	entityOpsPackage := "github.com/theopenlane/core/v2/internal/ent/entityops"
-	jsonxPackage := "github.com/theopenlane/core/v2/pkg/jsonx"
+	jsonxPackage := "github.com/theopenlane/utils/jsonx"
 
 	resolverPlugin := resolvergen.NewWithOptions(
 		resolvergen.WithEntGeneratedPackage(entPackage),

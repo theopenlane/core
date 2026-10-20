@@ -12,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // requireWorkflowObjectEditAccess checks that the user in the context has edit access to the given workflow object

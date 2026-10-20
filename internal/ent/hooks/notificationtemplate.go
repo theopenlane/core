@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // HookNotificationTemplateSanitize sanitizes template content fields on create and update

@@ -19,7 +19,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 func main() {
