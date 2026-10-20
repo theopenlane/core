@@ -22,9 +22,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/mapx"
 	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // init registers the questionnaire transform listeners so gala setup picks them up automatically

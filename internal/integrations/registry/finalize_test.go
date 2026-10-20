@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // finalizeConfig is a test stored-input config type with one specific key beside the uniform settings

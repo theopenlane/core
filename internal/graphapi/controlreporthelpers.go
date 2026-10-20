@@ -20,7 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // GraphQL field name constants for ControlReport are used in field-presence checks and

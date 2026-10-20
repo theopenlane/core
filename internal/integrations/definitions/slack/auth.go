@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // disconnectWorkspace returns the OAuth disconnect hook that points the user at the Slack app management page

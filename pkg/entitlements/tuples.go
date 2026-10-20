@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/v2/pkg/mapx"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 const (

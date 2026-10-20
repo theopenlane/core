@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // OAuthRegistrationOptions describes how one definition maps shared OAuth mechanics to its local credential type

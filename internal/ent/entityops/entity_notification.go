@@ -19,9 +19,9 @@ import (
 	group "github.com/theopenlane/core/v2/internal/ent/generated/group"
 	orgmembership "github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	gala "github.com/theopenlane/core/v2/pkg/gala"
-	jsonx "github.com/theopenlane/core/v2/pkg/jsonx"
 	slateparser "github.com/theopenlane/core/v2/pkg/slateparser"
 	logx "github.com/theopenlane/logx"
+	jsonx "github.com/theopenlane/utils/jsonx"
 )
 
 // NotificationContent is the in-code notification content contract; its fields mirror the

@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // refTestCredential is the credential type the credential ref tests reflect

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 var errEncodeTest = errors.New("encode failed")
