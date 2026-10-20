@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // deliveryEventKind is the provider-neutral delivery status carried by an inbound email webhook

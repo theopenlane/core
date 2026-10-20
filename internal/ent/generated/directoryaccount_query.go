@@ -27,7 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // DirectoryAccountQuery is the builder for querying DirectoryAccount entities.

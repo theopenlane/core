@@ -11,7 +11,7 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	fgamodel "github.com/theopenlane/core/v2/fga/model"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // ScopesHandler lists available scopes that can be used for api tokens

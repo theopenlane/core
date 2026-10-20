@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // ListenerID identifies a registered listener

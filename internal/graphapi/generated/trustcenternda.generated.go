@@ -154,6 +154,18 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDAInput(ctx context.
 	return it, nil
 }
 
+// UnmarshalCreateTrustCenterNDAInput unmarshals raw into the CreateTrustCenterNDAInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateTrustCenterNDAInput(ctx context.Context, raw any) (model.CreateTrustCenterNDAInput, error) {
+	var out model.CreateTrustCenterNDAInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateTrustCenterNDAInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputSubmitTrustCenterNDAResponseInput(ctx context.Context, obj any) (model.SubmitTrustCenterNDAResponseInput, error) {
 	var it model.SubmitTrustCenterNDAResponseInput
 	if obj == nil {
@@ -191,6 +203,18 @@ func (ec *executionContext) unmarshalInputSubmitTrustCenterNDAResponseInput(ctx 
 	return it, nil
 }
 
+// UnmarshalSubmitTrustCenterNDAResponseInput unmarshals raw into the SubmitTrustCenterNDAResponseInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalSubmitTrustCenterNDAResponseInput(ctx context.Context, raw any) (model.SubmitTrustCenterNDAResponseInput, error) {
+	var out model.SubmitTrustCenterNDAResponseInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "SubmitTrustCenterNDAResponseInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -205,8 +229,7 @@ func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload(ctx context.Con
 	fields := graphql.CollectFields(ec.OperationContext, sel, submitTrustCenterNDAResponsePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -225,14 +248,10 @@ func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload(ctx context.Con
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -243,8 +262,7 @@ func (ec *executionContext) _TrustCenterNDACreatePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterNDACreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -263,14 +281,10 @@ func (ec *executionContext) _TrustCenterNDACreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -281,8 +295,7 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterNDAUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -301,14 +314,10 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -329,9 +338,7 @@ func (ec *executionContext) unmarshalNSubmitTrustCenterNDAResponseInput2github�
 
 func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SubmitTrustCenterNDAResponsePayload!")
 		return graphql.Null
 	}
 	return ec._SubmitTrustCenterNDAResponsePayload(ctx, sel, v)
@@ -339,9 +346,7 @@ func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithu
 
 func (ec *executionContext) marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterNDACreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterNDACreatePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterNDACreatePayload(ctx, sel, v)
@@ -349,9 +354,7 @@ func (ec *executionContext) marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNTrustCenterNDAUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterNDAUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TrustCenterNDAUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._TrustCenterNDAUpdatePayload(ctx, sel, v)

@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // AssessmentResponseHistoryQuery is the builder for querying AssessmentResponseHistory entities.

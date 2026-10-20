@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload_deletedIDs(ctx c
 	)
 }
 func (ec *executionContext) fieldContext_ProgramMembershipBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ProgramMembershipBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload_notDeletedIDs(ct
 	)
 }
 func (ec *executionContext) fieldContext_ProgramMembershipBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ProgramMembershipBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload_error(ctx contex
 	)
 }
 func (ec *executionContext) fieldContext_ProgramMembershipBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_programMemberships(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_updatedIDs(ctx c
 	)
 }
 func (ec *executionContext) fieldContext_ProgramMembershipBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ProgramMembershipBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_notUpdatedIDs(ct
 	)
 }
 func (ec *executionContext) fieldContext_ProgramMembershipBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ProgramMembershipBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -224,7 +223,7 @@ func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_error(ctx contex
 	)
 }
 func (ec *executionContext) fieldContext_ProgramMembershipBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ProgramMembershipBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _ProgramMembershipCreatePayload_programMembership(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipCreatePayload) (ret graphql.Marshaler) {
@@ -279,7 +278,7 @@ func (ec *executionContext) _ProgramMembershipDeletePayload_deletedID(ctx contex
 	)
 }
 func (ec *executionContext) fieldContext_ProgramMembershipDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ProgramMembershipDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("ProgramMembershipDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _ProgramMembershipUpdatePayload_programMembership(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipUpdatePayload) (ret graphql.Marshaler) {
@@ -332,8 +331,7 @@ func (ec *executionContext) _ProgramMembershipBulkCreatePayload(ctx context.Cont
 	fields := graphql.CollectFields(ec.OperationContext, sel, programMembershipBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -352,14 +350,10 @@ func (ec *executionContext) _ProgramMembershipBulkCreatePayload(ctx context.Cont
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -370,8 +364,7 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload(ctx context.Cont
 	fields := graphql.CollectFields(ec.OperationContext, sel, programMembershipBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -400,14 +393,10 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload(ctx context.Cont
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -418,8 +407,7 @@ func (ec *executionContext) _ProgramMembershipBulkUpdatePayload(ctx context.Cont
 	fields := graphql.CollectFields(ec.OperationContext, sel, programMembershipBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -453,14 +441,10 @@ func (ec *executionContext) _ProgramMembershipBulkUpdatePayload(ctx context.Cont
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -471,8 +455,7 @@ func (ec *executionContext) _ProgramMembershipCreatePayload(ctx context.Context,
 	fields := graphql.CollectFields(ec.OperationContext, sel, programMembershipCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -491,14 +474,10 @@ func (ec *executionContext) _ProgramMembershipCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -509,8 +488,7 @@ func (ec *executionContext) _ProgramMembershipDeletePayload(ctx context.Context,
 	fields := graphql.CollectFields(ec.OperationContext, sel, programMembershipDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -529,14 +507,10 @@ func (ec *executionContext) _ProgramMembershipDeletePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -547,8 +521,7 @@ func (ec *executionContext) _ProgramMembershipUpdatePayload(ctx context.Context,
 	fields := graphql.CollectFields(ec.OperationContext, sel, programMembershipUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -567,14 +540,10 @@ func (ec *executionContext) _ProgramMembershipUpdatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -585,9 +554,7 @@ func (ec *executionContext) _ProgramMembershipUpdatePayload(ctx context.Context,
 
 func (ec *executionContext) marshalNProgramMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ProgramMembershipBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._ProgramMembershipBulkCreatePayload(ctx, sel, v)
@@ -595,9 +562,7 @@ func (ec *executionContext) marshalNProgramMembershipBulkCreatePayload2ᚖgithub
 
 func (ec *executionContext) marshalNProgramMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ProgramMembershipBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._ProgramMembershipBulkDeletePayload(ctx, sel, v)
@@ -605,9 +570,7 @@ func (ec *executionContext) marshalNProgramMembershipBulkDeletePayload2ᚖgithub
 
 func (ec *executionContext) marshalNProgramMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ProgramMembershipBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._ProgramMembershipBulkUpdatePayload(ctx, sel, v)
@@ -615,9 +578,7 @@ func (ec *executionContext) marshalNProgramMembershipBulkUpdatePayload2ᚖgithub
 
 func (ec *executionContext) marshalNProgramMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ProgramMembershipCreatePayload!")
 		return graphql.Null
 	}
 	return ec._ProgramMembershipCreatePayload(ctx, sel, v)
@@ -625,9 +586,7 @@ func (ec *executionContext) marshalNProgramMembershipCreatePayload2ᚖgithubᚗc
 
 func (ec *executionContext) marshalNProgramMembershipDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ProgramMembershipDeletePayload!")
 		return graphql.Null
 	}
 	return ec._ProgramMembershipDeletePayload(ctx, sel, v)
@@ -635,9 +594,7 @@ func (ec *executionContext) marshalNProgramMembershipDeletePayload2ᚖgithubᚗc
 
 func (ec *executionContext) marshalNProgramMembershipUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ProgramMembershipUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._ProgramMembershipUpdatePayload(ctx, sel, v)

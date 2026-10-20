@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -141,7 +140,7 @@ func (ec *executionContext) _CampaignLaunchPayload_queuedCount(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_CampaignLaunchPayload_queuedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CampaignLaunchPayload", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("CampaignLaunchPayload", field, false, false, "Int")
 }
 
 func (ec *executionContext) _CampaignLaunchPayload_skippedCount(ctx context.Context, field graphql.CollectedField, obj *model.CampaignLaunchPayload) (ret graphql.Marshaler) {
@@ -164,7 +163,7 @@ func (ec *executionContext) _CampaignLaunchPayload_skippedCount(ctx context.Cont
 	)
 }
 func (ec *executionContext) fieldContext_CampaignLaunchPayload_skippedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CampaignLaunchPayload", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("CampaignLaunchPayload", field, false, false, "Int")
 }
 
 func (ec *executionContext) _CampaignTestEmailPayload_campaign(ctx context.Context, field graphql.CollectedField, obj *model.CampaignTestEmailPayload) (ret graphql.Marshaler) {
@@ -219,7 +218,7 @@ func (ec *executionContext) _CampaignTestEmailPayload_queuedCount(ctx context.Co
 	)
 }
 func (ec *executionContext) fieldContext_CampaignTestEmailPayload_queuedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CampaignTestEmailPayload", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("CampaignTestEmailPayload", field, false, false, "Int")
 }
 
 func (ec *executionContext) _CampaignTestEmailPayload_skippedCount(ctx context.Context, field graphql.CollectedField, obj *model.CampaignTestEmailPayload) (ret graphql.Marshaler) {
@@ -242,7 +241,7 @@ func (ec *executionContext) _CampaignTestEmailPayload_skippedCount(ctx context.C
 	)
 }
 func (ec *executionContext) fieldContext_CampaignTestEmailPayload_skippedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CampaignTestEmailPayload", field, false, false, errors.New("field of type Int does not have child fields"))
+	return graphql.NewScalarFieldContext("CampaignTestEmailPayload", field, false, false, "Int")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -284,6 +283,18 @@ func (ec *executionContext) unmarshalInputCreateCampaignWithTargetsInput(ctx con
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalCreateCampaignWithTargetsInput unmarshals raw into the CreateCampaignWithTargetsInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateCampaignWithTargetsInput(ctx context.Context, raw any) (model.CreateCampaignWithTargetsInput, error) {
+	var out model.CreateCampaignWithTargetsInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateCampaignWithTargetsInput", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputLaunchCampaignInput(ctx context.Context, obj any) (model.LaunchCampaignInput, error) {
@@ -330,6 +341,18 @@ func (ec *executionContext) unmarshalInputLaunchCampaignInput(ctx context.Contex
 	return it, nil
 }
 
+// UnmarshalLaunchCampaignInput unmarshals raw into the LaunchCampaignInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalLaunchCampaignInput(ctx context.Context, raw any) (model.LaunchCampaignInput, error) {
+	var out model.LaunchCampaignInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "LaunchCampaignInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputResendCampaignIncompleteInput(ctx context.Context, obj any) (model.ResendCampaignIncompleteInput, error) {
 	var it model.ResendCampaignIncompleteInput
 	if obj == nil {
@@ -365,6 +388,18 @@ func (ec *executionContext) unmarshalInputResendCampaignIncompleteInput(ctx cont
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalResendCampaignIncompleteInput unmarshals raw into the ResendCampaignIncompleteInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalResendCampaignIncompleteInput(ctx context.Context, raw any) (model.ResendCampaignIncompleteInput, error) {
+	var out model.ResendCampaignIncompleteInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ResendCampaignIncompleteInput", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputSendCampaignTestEmailInput(ctx context.Context, obj any) (model.SendCampaignTestEmailInput, error) {
@@ -404,6 +439,18 @@ func (ec *executionContext) unmarshalInputSendCampaignTestEmailInput(ctx context
 	return it, nil
 }
 
+// UnmarshalSendCampaignTestEmailInput unmarshals raw into the SendCampaignTestEmailInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalSendCampaignTestEmailInput(ctx context.Context, raw any) (model.SendCampaignTestEmailInput, error) {
+	var out model.SendCampaignTestEmailInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "SendCampaignTestEmailInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -418,8 +465,7 @@ func (ec *executionContext) _CampaignCreateWithTargetsPayload(ctx context.Contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, campaignCreateWithTargetsPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -443,14 +489,10 @@ func (ec *executionContext) _CampaignCreateWithTargetsPayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -461,8 +503,7 @@ func (ec *executionContext) _CampaignLaunchPayload(ctx context.Context, sel ast.
 	fields := graphql.CollectFields(ec.OperationContext, sel, campaignLaunchPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -491,14 +532,10 @@ func (ec *executionContext) _CampaignLaunchPayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -509,8 +546,7 @@ func (ec *executionContext) _CampaignTestEmailPayload(ctx context.Context, sel a
 	fields := graphql.CollectFields(ec.OperationContext, sel, campaignTestEmailPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -539,14 +575,10 @@ func (ec *executionContext) _CampaignTestEmailPayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -557,9 +589,7 @@ func (ec *executionContext) _CampaignTestEmailPayload(ctx context.Context, sel a
 
 func (ec *executionContext) marshalNCampaignCreateWithTargetsPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignCreateWithTargetsPayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignCreateWithTargetsPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CampaignCreateWithTargetsPayload!")
 		return graphql.Null
 	}
 	return ec._CampaignCreateWithTargetsPayload(ctx, sel, v)
@@ -567,9 +597,7 @@ func (ec *executionContext) marshalNCampaignCreateWithTargetsPayload2ᚖgithub�
 
 func (ec *executionContext) marshalNCampaignLaunchPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignLaunchPayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignLaunchPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CampaignLaunchPayload!")
 		return graphql.Null
 	}
 	return ec._CampaignLaunchPayload(ctx, sel, v)
@@ -577,9 +605,7 @@ func (ec *executionContext) marshalNCampaignLaunchPayload2ᚖgithubᚗcomᚋtheo
 
 func (ec *executionContext) marshalNCampaignTestEmailPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTestEmailPayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignTestEmailPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CampaignTestEmailPayload!")
 		return graphql.Null
 	}
 	return ec._CampaignTestEmailPayload(ctx, sel, v)

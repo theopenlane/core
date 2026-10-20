@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/ssoutils"
+	"github.com/theopenlane/logx"
 )
 
 // verify resolves the connected Google account through the Drive About API

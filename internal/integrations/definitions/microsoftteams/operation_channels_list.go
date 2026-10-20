@@ -7,7 +7,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // listTeams lists the signed-in user's joined teams and their channels for choosing a message destination

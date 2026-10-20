@@ -23,11 +23,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 type detailsMutation interface {

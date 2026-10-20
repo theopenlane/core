@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // impersonationBlacklistTTL is how long a revoked impersonation session is kept on the token blacklist.

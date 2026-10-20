@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	wfworkflows "github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 // executeSendEmail dispatches a workflow send_email action through the integration

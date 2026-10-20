@@ -19,9 +19,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/logx"
 )
 
 // HookTrustCenterNDARequestCreate handles new NDA request creation

@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // registry stores topic codecs, policies, and listeners
@@ -180,7 +180,7 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 
 		handlerCtx.Caller = caller
 
-		handlerCtx.Context = logx.WithCallerIdentity(handlerCtx.Context)
+		handlerCtx.Context = auth.WithCallerIdentity(handlerCtx.Context)
 		handlerCtx.Context = logx.WithFields(handlerCtx.Context, map[string]any{
 			logx.FieldEventID: string(handlerCtx.Envelope.ID),
 			logx.FieldTopic:   string(handlerCtx.Envelope.Topic),

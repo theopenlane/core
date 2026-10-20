@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // OrganizationSettingQuery is the builder for querying OrganizationSetting entities.

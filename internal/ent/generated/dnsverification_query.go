@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // DNSVerificationQuery is the builder for querying DNSVerification entities.

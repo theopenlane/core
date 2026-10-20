@@ -21,7 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // TrustCenterDocQuery is the builder for querying TrustCenterDoc entities.

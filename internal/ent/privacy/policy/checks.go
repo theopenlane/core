@@ -21,8 +21,8 @@ import (
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/logx"
 )
 
 // CheckCreateAccess checks if the user has access to create an object in the org

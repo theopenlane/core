@@ -6,7 +6,7 @@ import (
 	slackgo "github.com/slack-go/slack"
 
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // channelsListPageSize is the number of conversations requested per page

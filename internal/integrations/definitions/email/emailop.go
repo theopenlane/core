@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/logx"
 )
 
 // templatePlaceholderOpen marks a still-unrendered template expression in a per-recipient value

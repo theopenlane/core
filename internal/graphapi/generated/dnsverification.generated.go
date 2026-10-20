@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload_deletedIDs(ctx con
 	)
 }
 func (ec *executionContext) fieldContext_DNSVerificationBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _DNSVerificationBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload_notDeletedIDs(ctx 
 	)
 }
 func (ec *executionContext) fieldContext_DNSVerificationBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _DNSVerificationBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload_error(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_DNSVerificationBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _DNSVerificationBulkUpdatePayload_dnsVerifications(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload_updatedIDs(ctx con
 	)
 }
 func (ec *executionContext) fieldContext_DNSVerificationBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DNSVerificationBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("DNSVerificationBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _DNSVerificationBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload_notUpdatedIDs(ctx 
 	)
 }
 func (ec *executionContext) fieldContext_DNSVerificationBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DNSVerificationBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("DNSVerificationBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _DNSVerificationBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -224,7 +223,7 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload_error(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_DNSVerificationBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DNSVerificationBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("DNSVerificationBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationCreatePayload) (ret graphql.Marshaler) {
@@ -279,7 +278,7 @@ func (ec *executionContext) _DNSVerificationDeletePayload_deletedID(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_DNSVerificationDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DNSVerificationDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("DNSVerificationDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _DNSVerificationUpdatePayload_dnsVerification(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationUpdatePayload) (ret graphql.Marshaler) {
@@ -332,8 +331,7 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload(ctx context.Contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, dNSVerificationBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -352,14 +350,10 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -370,8 +364,7 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload(ctx context.Contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, dNSVerificationBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -400,14 +393,10 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -418,8 +407,7 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload(ctx context.Contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, dNSVerificationBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -453,14 +441,10 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -471,8 +455,7 @@ func (ec *executionContext) _DNSVerificationCreatePayload(ctx context.Context, s
 	fields := graphql.CollectFields(ec.OperationContext, sel, dNSVerificationCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -491,14 +474,10 @@ func (ec *executionContext) _DNSVerificationCreatePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -509,8 +488,7 @@ func (ec *executionContext) _DNSVerificationDeletePayload(ctx context.Context, s
 	fields := graphql.CollectFields(ec.OperationContext, sel, dNSVerificationDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -529,14 +507,10 @@ func (ec *executionContext) _DNSVerificationDeletePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -547,8 +521,7 @@ func (ec *executionContext) _DNSVerificationUpdatePayload(ctx context.Context, s
 	fields := graphql.CollectFields(ec.OperationContext, sel, dNSVerificationUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -567,14 +540,10 @@ func (ec *executionContext) _DNSVerificationUpdatePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -585,9 +554,7 @@ func (ec *executionContext) _DNSVerificationUpdatePayload(ctx context.Context, s
 
 func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DNSVerificationBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._DNSVerificationBulkCreatePayload(ctx, sel, v)
@@ -595,9 +562,7 @@ func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithub�
 
 func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DNSVerificationBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._DNSVerificationBulkDeletePayload(ctx, sel, v)
@@ -605,9 +570,7 @@ func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithub�
 
 func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DNSVerificationBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._DNSVerificationBulkUpdatePayload(ctx, sel, v)
@@ -615,9 +578,7 @@ func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2ᚖgithub�
 
 func (ec *executionContext) marshalNDNSVerificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DNSVerificationCreatePayload!")
 		return graphql.Null
 	}
 	return ec._DNSVerificationCreatePayload(ctx, sel, v)
@@ -625,9 +586,7 @@ func (ec *executionContext) marshalNDNSVerificationCreatePayload2ᚖgithubᚗcom
 
 func (ec *executionContext) marshalNDNSVerificationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DNSVerificationDeletePayload!")
 		return graphql.Null
 	}
 	return ec._DNSVerificationDeletePayload(ctx, sel, v)
@@ -635,9 +594,7 @@ func (ec *executionContext) marshalNDNSVerificationDeletePayload2ᚖgithubᚗcom
 
 func (ec *executionContext) marshalNDNSVerificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DNSVerificationUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._DNSVerificationUpdatePayload(ctx, sel, v)

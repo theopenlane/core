@@ -6,7 +6,7 @@ import (
 	authentikSDK "goauthentik.io/api/v3"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // defaultBrandPageSize is the page size used when looking up the single default brand

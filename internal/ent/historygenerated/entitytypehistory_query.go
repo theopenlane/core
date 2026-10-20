@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // EntityTypeHistoryQuery is the builder for querying EntityTypeHistory entities.

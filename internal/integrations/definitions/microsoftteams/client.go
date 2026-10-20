@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // clientBuilder returns the Microsoft Graph client builder bound to the operator config

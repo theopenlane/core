@@ -14,8 +14,8 @@ import (
 	"github.com/coder/websocket"
 	"github.com/coder/websocket/wsjson"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/logx"
 )
 
 const (

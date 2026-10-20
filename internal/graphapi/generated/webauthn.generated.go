@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -44,7 +43,7 @@ func (ec *executionContext) _WebauthnDeletePayload_deletedID(ctx context.Context
 	)
 }
 func (ec *executionContext) fieldContext_WebauthnDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("WebauthnDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("WebauthnDeletePayload", field, false, false, "ID")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -65,8 +64,7 @@ func (ec *executionContext) _WebauthnDeletePayload(ctx context.Context, sel ast.
 	fields := graphql.CollectFields(ec.OperationContext, sel, webauthnDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -85,14 +83,10 @@ func (ec *executionContext) _WebauthnDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -103,9 +97,7 @@ func (ec *executionContext) _WebauthnDeletePayload(ctx context.Context, sel ast.
 
 func (ec *executionContext) marshalNWebauthnDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWebauthnDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.WebauthnDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "WebauthnDeletePayload!")
 		return graphql.Null
 	}
 	return ec._WebauthnDeletePayload(ctx, sel, v)

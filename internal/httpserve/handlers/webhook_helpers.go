@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
+	"github.com/theopenlane/logx"
 
 	em "github.com/theopenlane/core/v2/internal/entitlements/entmapping"
 )

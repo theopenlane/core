@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	features "github.com/theopenlane/core/v2/internal/entitlements/features"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"

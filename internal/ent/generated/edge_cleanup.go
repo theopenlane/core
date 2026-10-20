@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
@@ -106,7 +107,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 func APITokenEdgeCleanup(ctx context.Context, id string) error {

@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // NoteHistoryQuery is the builder for querying NoteHistory entities.
