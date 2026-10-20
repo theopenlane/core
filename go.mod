@@ -119,10 +119,10 @@ require (
 	github.com/theopenlane/eddy v0.1.0
 	github.com/theopenlane/entx v0.36.2
 	github.com/theopenlane/go-client v0.14.1
-	github.com/theopenlane/gqlgen-plugins v0.18.4-0.20261020050038-bee1eb97db9f
+	github.com/theopenlane/gqlgen-plugins v0.18.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.40.1-0.20261020042922-6d9e63f5212e
-	github.com/theopenlane/logx v0.1.1-0.20261020041830-2c315b8141b3
+	github.com/theopenlane/iam v0.40.1
+	github.com/theopenlane/logx v0.1.1
 	github.com/theopenlane/newman v0.5.0
 	github.com/theopenlane/riverboat v0.14.3
 	github.com/theopenlane/utils v0.7.3
@@ -237,6 +237,7 @@ require (
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-openapi/inflect v1.0.1 // indirect
 	github.com/go-openapi/jsonpointer v1.0.1 // indirect
+	github.com/go-openapi/testify/v2 v2.8.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
