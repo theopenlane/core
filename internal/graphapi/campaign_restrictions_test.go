@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/newman/providers/mock"
 )
@@ -203,8 +204,8 @@ func TestCampaignDispatchStatusRestrictions(t *testing.T) {
 				CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
 			}
 			req := types.OperationRequest{
-				Client: emailClient,
-				DB:     suite.Client.DB,
+				Client:   emailClient,
+				Services: entbridge.Services(suite.Client.DB),
 			}
 
 			configBytes, err := json.Marshal(cfg)
@@ -274,8 +275,8 @@ func TestCampaignDispatchMissingTemplate(t *testing.T) {
 		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
 	}
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
 	}
 
 	configBytes, err := json.Marshal(cfg)
@@ -358,7 +359,7 @@ func TestCampaignDispatchResendBehavior(t *testing.T) {
 				Resend:     false,
 			},
 		}
-		req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
+		req := types.OperationRequest{Client: emailClient, Services: entbridge.Services(suite.Client.DB)}
 
 		configBytes, err := json.Marshal(cfg)
 		assert.NilError(t, err)
@@ -391,7 +392,7 @@ func TestCampaignDispatchResendBehavior(t *testing.T) {
 				Resend:     true,
 			},
 		}
-		req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
+		req := types.OperationRequest{Client: emailClient, Services: entbridge.Services(suite.Client.DB)}
 
 		configBytes, err := json.Marshal(cfg)
 		assert.NilError(t, err)
@@ -484,7 +485,7 @@ func TestCampaignDispatchCompletedTargetsAlwaysSkipped(t *testing.T) {
 			Resend:     true,
 		},
 	}
-	req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
+	req := types.OperationRequest{Client: emailClient, Services: entbridge.Services(suite.Client.DB)}
 
 	configBytes, err := json.Marshal(cfg)
 	assert.NilError(t, err)

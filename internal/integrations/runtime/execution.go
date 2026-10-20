@@ -16,6 +16,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -327,7 +328,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 	ctx = intobvs.WithOperation(ctx, operation.Name)
 
 	if len(config) > 0 {
-		if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: integration}, operation.Input.Schema, nil, config, types.ErrOperationConfigInvalid); err != nil {
+		if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: entbridge.Installation(integration)}, operation.Input.Schema, nil, config, types.ErrOperationConfigInvalid); err != nil {
 			return nil, err
 		}
 	}
@@ -521,14 +522,15 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	}
 
 	req := types.OperationRequest{
-		Integration: integration,
+		Integration: entbridge.Installation(integration),
 		Client:      client,
 		Config:      jsonx.CloneRawMessage(config),
 		LastRunAt:   lastRunAt,
-		DB:          r.DB(),
 		Dispatch:    r.Dispatch,
 		Services:    r,
 	}
+
+	ctx = entbridge.WithRecord(ctx, integration)
 
 	if operation.IngestHandle == nil {
 		response, err := operation.Handle(ctx, req)

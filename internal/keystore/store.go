@@ -16,6 +16,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	enthush "github.com/theopenlane/core/v2/internal/ent/generated/hush"
 	entintegration "github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -206,7 +207,7 @@ func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, 
 	}
 
 	built, err := build(ctx, types.ConnectionInput{
-		Integration:  installation,
+		Integration:  entbridge.Installation(installation),
 		Credential:   cloneCredentialSet(credential),
 		TokenManager: s.db.TokenManager,
 	})

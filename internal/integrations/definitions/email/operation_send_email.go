@@ -7,6 +7,7 @@ import (
 
 	"github.com/theopenlane/newman"
 
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -32,7 +33,7 @@ type SendEmailRequest struct {
 
 // sendEmail resolves the email template, looks up the catalog dispatcher by Key, builds a typed payload from the template defaults + per-invocation recipient, and sends through the dispatcher
 func sendEmail(ctx context.Context, req types.OperationRequest, client *Client, cfg SendEmailRequest) (json.RawMessage, error) {
-	template, err := loadEmailTemplate(ctx, req.DB, cfg.OwnerID, cfg.TemplateID)
+	template, err := loadEmailTemplate(ctx, entbridge.DB(req.Services), cfg.OwnerID, cfg.TemplateID)
 	if err != nil {
 		return nil, err
 	}

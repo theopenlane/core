@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
@@ -37,7 +38,9 @@ var SendQuestionnaireCampaignOp = types.OperationPayloadOf[SendQuestionnaireCamp
 
 // Run loads the campaign and its assessment, iterates pending targets, creates assessment responses, generates anonymous JWT access tokens, and sends questionnaire access emails
 func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {
-	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput)
+	db := entbridge.DB(req.Services)
+
+	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, db, cfg.CampaignDispatchInput)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +49,7 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 		return nil, ErrCampaignMissingAssessment
 	}
 
-	assessmentObj, err := req.DB.Assessment.Query().
+	assessmentObj, err := db.Assessment.Query().
 		Where(assessment.IDEQ(camp.AssessmentID)).
 		Select(assessment.FieldName).
 		Only(ctx)
@@ -57,7 +60,7 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 	}
 
 	if cfg.TestEmail != "" {
-		if err := sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, cfg.TestEmail, "", true); err != nil {
+		if err := sendQuestionnaireToRecipient(ctx, req, db, client, camp, assessmentObj.Name, cfg.TestEmail, "", true); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed dispatching questionnaire test email")
 
 			return nil, fmt.Errorf("%w: %s", ErrQuestionnaireDispatchFailed, cfg.TestEmail)
@@ -67,7 +70,7 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 	}
 
 	return dispatchCampaignTargets(ctx, dispatchable, skipped, func(ctx context.Context, target *generated.CampaignTarget) error {
-		return sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, target.Email, target.ID, false)
+		return sendQuestionnaireToRecipient(ctx, req, db, client, camp, assessmentObj.Name, target.Email, target.ID, false)
 	})
 }
 

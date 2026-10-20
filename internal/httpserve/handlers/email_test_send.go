@@ -114,7 +114,7 @@ func (h *Handler) EmailTestSendHandler(ctx echo.Context) error {
 		logx.FromContext(requestCtx).Info().Str("dispatcher", op.Name).Str("to", req.To).Msg("sending test email")
 
 		// test sends must not mint real tracking links; PreHooks still run for org lookups
-		sendErr := dispatcher.SendByKey(shortlinks.ContextWithoutShortlinks(requestCtx), types.OperationRequest{DB: h.IntegrationsRuntime.DB()}, emailClient, payload, newman.WithTag(testTag))
+		sendErr := dispatcher.SendByKey(shortlinks.ContextWithoutShortlinks(requestCtx), types.OperationRequest{Services: h.IntegrationsRuntime}, emailClient, payload, newman.WithTag(testTag))
 		if sendErr != nil {
 			logx.FromContext(requestCtx).Error().Err(sendErr).Str("dispatcher", op.Name).Msg("test email failed")
 			results = append(results, EmailTestSendResult{Name: op.Name, Status: "FAIL", Error: sendErr.Error()})

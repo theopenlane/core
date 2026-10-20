@@ -171,7 +171,7 @@ func (e *WorkflowEngine) dispatchSendEmail(ctx context.Context, instance *genera
 	}
 
 	linkedID := emailTpl.IntegrationID
-	resolvedID, resolveErr := e.integrationRuntime.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), ownerID, func(inst *generated.Integration) bool {
+	resolvedID, resolveErr := e.integrationRuntime.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), ownerID, func(inst *types.Installation) bool {
 		return linkedID != "" && inst.ID == linkedID
 	})
 	if resolveErr != nil {

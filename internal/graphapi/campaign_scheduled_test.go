@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/newman/providers/mock"
 )
@@ -110,8 +111,8 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 		},
 	}
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
 	}
 
 	configBytes, err := json.Marshal(cfg)
@@ -205,8 +206,8 @@ func TestRecurringCampaignExhaustion(t *testing.T) {
 		},
 	}
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
 	}
 
 	configBytes, err := json.Marshal(cfg)

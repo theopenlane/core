@@ -7,7 +7,6 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
-	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -31,7 +30,7 @@ func botTokenClient(_ context.Context, req types.ConnectionRequest[slackBotToken
 }
 
 // newSlackClient constructs the unified SlackClient for one customer installation
-func newSlackClient(token string, integration *generated.Integration) (*Client, error) {
+func newSlackClient(token string, integration *types.Installation) (*Client, error) {
 	var metadata InstallationMetadata
 	if err := jsonx.UnmarshalIfPresent(integration.InstallationMetadata.Attributes, &metadata); err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)

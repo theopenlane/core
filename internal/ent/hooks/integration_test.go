@@ -12,6 +12,7 @@ import (
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/iam/auth"
@@ -79,7 +80,7 @@ func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
 	})
 	require.NoError(t, err)
 
-	resolved, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), orgID, func(inst *generated.Integration) bool {
+	resolved, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), orgID, func(inst *types.Installation) bool {
 		return inst.CampaignEmail
 	})
 	require.NoError(t, err)
@@ -90,7 +91,7 @@ func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
 		Save(ctx)
 	require.NoError(t, err)
 
-	resolved, err = rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), orgID, func(inst *generated.Integration) bool {
+	resolved, err = rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), orgID, func(inst *types.Installation) bool {
 		return inst.CampaignEmail
 	})
 	require.NoError(t, err)

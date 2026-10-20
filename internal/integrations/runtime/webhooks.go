@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -221,8 +222,8 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	}
 
 	return registration.Handle(ctx, types.WebhookHandleRequest{
-		Integration: integration,
-		Webhook:     webhook,
+		Integration: entbridge.Installation(integration),
+		Webhook:     entbridge.Webhook(webhook),
 		Event:       event,
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
 			_, ingestErr := operations.ProcessPayloadSets(ingestCtx, operations.IngestContext{

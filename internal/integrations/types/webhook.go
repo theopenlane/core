@@ -7,7 +7,6 @@ import (
 
 	"github.com/samber/lo"
 
-	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
@@ -24,9 +23,9 @@ type StaticWebhookEntry struct {
 // WebhookInboundRequest captures the inputs for verifying and resolving an inbound webhook request
 type WebhookInboundRequest struct {
 	// Integration is the installed integration receiving the webhook
-	Integration *generated.Integration
+	Integration *Installation
 	// Webhook is the persisted webhook configuration for the installation
-	Webhook *generated.IntegrationWebhook
+	Webhook *WebhookEndpoint
 	// Request is the inbound HTTP request
 	Request *http.Request
 	// Payload is the raw request body
@@ -48,9 +47,9 @@ type WebhookReceivedEvent struct {
 // WebhookHandleRequest captures the inputs required to process one webhook event
 type WebhookHandleRequest struct {
 	// Integration is the installed integration receiving the event
-	Integration *generated.Integration
+	Integration *Installation
 	// Webhook is the persisted webhook configuration for the installation
-	Webhook *generated.IntegrationWebhook
+	Webhook *WebhookEndpoint
 	// Event is the normalized webhook event envelope
 	Event WebhookReceivedEvent
 	// Ingest processes mapped provider payloads directly through the shared ingest pipeline
@@ -92,8 +91,8 @@ type WebhookRegistration struct {
 	EndpointURLTemplate string `json:"endpointUrlTemplate,omitempty"`
 	// StaticRoute is a fixed URL path registered instead of a per-installation endpoint
 	StaticRoute string `json:"staticRoute,omitempty"`
-	// ResolveIntegration locates the integration record from the inbound request
-	ResolveIntegration func(ctx context.Context, db *generated.Client, req WebhookInboundRequest) (*generated.Integration, error) `json:"-"`
+	// ResolveIntegration locates the installation id from the inbound request, returning ErrInstallationNotFound when none matches
+	ResolveIntegration func(ctx context.Context, services RuntimeServices, req WebhookInboundRequest) (string, error) `json:"-"`
 	// Verify authenticates the inbound webhook request
 	Verify WebhookVerifyFunc `json:"-"`
 	// Event resolves the inbound request into a supported event

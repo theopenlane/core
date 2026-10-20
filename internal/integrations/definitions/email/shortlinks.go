@@ -3,6 +3,7 @@ package email
 import (
 	"context"
 
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -10,11 +11,12 @@ import (
 
 // runtimeShortlinks returns the shortlinks client carried by the runtime DB client
 func runtimeShortlinks(req types.OperationRequest) *shortlinks.Client {
-	if req.DB == nil {
+	db := entbridge.DB(req.Services)
+	if db == nil {
 		return nil
 	}
 
-	return req.DB.Shortlinks
+	return db.Shortlinks
 }
 
 // linkRecipient is the address a link is attributed to

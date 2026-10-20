@@ -243,7 +243,7 @@ func TestExecuteOperationPassesRequestFields(t *testing.T) {
 		t.Fatalf("expected no error, got %v", err)
 	}
 
-	if captured.Integration != installation {
+	if captured.Integration == nil || captured.Integration.ID != installation.ID || captured.Integration.DefinitionID != installation.DefinitionID {
 		t.Fatal("expected installation to be passed through")
 	}
 

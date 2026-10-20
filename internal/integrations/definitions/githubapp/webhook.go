@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
@@ -293,22 +294,32 @@ func githubRepoFromWebhook(repo *githubWebhookRepository) string {
 	return repo.Name
 }
 
-// ResolveWebhookIntegration locates the GitHub App integration record from an inbound webhook payload
+// ResolveWebhookIntegration locates the GitHub App installation from an inbound webhook payload
 // by extracting the installation ID and querying the integration metadata
-func ResolveWebhookIntegration(ctx context.Context, db *ent.Client, req types.WebhookInboundRequest) (*ent.Integration, error) {
+func ResolveWebhookIntegration(ctx context.Context, services types.RuntimeServices, req types.WebhookInboundRequest) (string, error) {
 	installationID, err := extractWebhookInstallationID(req.Payload)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return db.Integration.Query().
+	db, err := entbridge.RequireDB(services)
+	if err != nil {
+		return "", err
+	}
+
+	id, err := db.Integration.Query().
 		Where(
 			integration.DefinitionIDEQ(DefinitionID.ID()),
 			func(s *sql.Selector) {
 				s.Where(sqljson.ValueEQ(integration.FieldInstallationMetadata, installationID, sqljson.Path("attributes", "installationId")))
 			},
 		).
-		Only(ctx)
+		OnlyID(ctx)
+	if ent.IsNotFound(err) {
+		return "", fmt.Errorf("%w: %w", types.ErrInstallationNotFound, err)
+	}
+
+	return id, err
 }
 
 // extractWebhookInstallationID extracts the GitHub App installation ID from the webhook payload envelope

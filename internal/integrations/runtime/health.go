@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/notifications"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keystore"
@@ -391,7 +392,7 @@ func (r *Runtime) runConnectionHealthCheck(ctx context.Context, installation *en
 	}
 
 	metadata, err := connection.Verify.Handle(ctx, types.ConnectionInput{
-		Integration:  installation,
+		Integration:  entbridge.Installation(installation),
 		Credential:   credential,
 		TokenManager: r.DB().TokenManager,
 		Client:       client,
@@ -415,9 +416,8 @@ func (r *Runtime) runOperationProbe(ctx context.Context, installation *ent.Integ
 	}
 
 	_, err = operation.HealthCheck(ctx, types.OperationRequest{
-		Integration: installation,
+		Integration: entbridge.Installation(installation),
 		Client:      client,
-		DB:          r.DB(),
 		Services:    r,
 	})
 

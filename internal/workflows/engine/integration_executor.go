@@ -293,7 +293,7 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelo
 }
 
 // preferDefaultMessaging selects an integration installation marked as the default for messaging operations
-func preferDefaultMessaging(inst *ent.Integration) bool {
+func preferDefaultMessaging(inst *types.Installation) bool {
 	var cfg struct {
 		DefaultMessaging bool `json:"defaultMessaging"`
 	}

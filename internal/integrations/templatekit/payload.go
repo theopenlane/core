@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -48,11 +49,12 @@ func ResolveOperationTemplate(ctx context.Context, req types.OperationRequest, t
 	}
 
 	ownerID := operationOwnerID(ctx, req)
-	if req.DB == nil || ownerID == "" {
+	db := entbridge.DB(req.Services)
+	if db == nil || ownerID == "" {
 		return ErrTemplateNotFound
 	}
 
-	template, err := LoadNotificationTemplate(ctx, req.DB, ownerID, templateID, templateKey)
+	template, err := LoadNotificationTemplate(ctx, db, ownerID, templateID, templateKey)
 	if err != nil {
 		return err
 	}

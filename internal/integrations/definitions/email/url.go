@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
@@ -69,7 +70,9 @@ type trustCenterResolveResult struct {
 
 // resolveTrustCenterAnonURL loads a trust center and generates an anonymous access token URL
 func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, requestID, trustCenterID, email string, purpose shortlinks.Purpose, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
-	tc, err := req.DB.TrustCenter.Query().
+	db := entbridge.DB(req.Services)
+
+	tc, err := db.TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
 		WithSetting().
@@ -84,10 +87,10 @@ func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, 
 		orgName = tc.Edges.Setting.CompanyName
 	}
 
-	duration := req.DB.TokenManager.Config().TrustCenterNDARequestAccessDuration
+	duration := db.TokenManager.Config().TrustCenterNDARequestAccessDuration
 	baseURL := buildURL(tc, defaultTrustCenterDomain)
 
-	result, err := urlx.GenerateAnonTokenURL(ctx, req.DB.TokenManager, req.DB.Shortlinks, baseURL, urlx.AnonTokenRequest{
+	result, err := urlx.GenerateAnonTokenURL(ctx, db.TokenManager, db.Shortlinks, baseURL, urlx.AnonTokenRequest{
 		Prefix:    authmanager.AnonTrustCenterJWTPrefix,
 		SubjectID: requestID,
 		OrgID:     tc.OwnerID,
@@ -186,7 +189,7 @@ func resolveQuestionnaireOrgName(ctx context.Context, req types.OperationRequest
 		return nil
 	}
 
-	org, err := req.DB.Organization.Query().
+	org, err := entbridge.DB(req.Services).Organization.Query().
 		Where(organization.IDEQ(orgID)).
 		Select(organization.FieldDisplayName, organization.FieldName).
 		Only(ctx)

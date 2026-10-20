@@ -381,7 +381,7 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 		return types.DispatchRequest{}, err
 	}
 
-	integrationID, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), campaignObj.OwnerID, func(inst *generated.Integration) bool {
+	integrationID, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), campaignObj.OwnerID, func(inst *types.Installation) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {

@@ -11,7 +11,9 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/storagetypes"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -41,7 +43,17 @@ func runImportRecords(ctx context.Context, request types.OperationRequest, clien
 		return nil, ErrPrefixRequired
 	}
 
-	if err := ensureLinkTargets(ctx, request); err != nil {
+	db, err := entbridge.RequireDB(request.Services)
+	if err != nil {
+		return nil, err
+	}
+
+	record, err := entbridge.Record(ctx, db, request.Integration)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := ensureLinkTargets(ctx, db, request.Integration); err != nil {
 		return nil, err
 	}
 
@@ -54,9 +66,9 @@ func runImportRecords(ctx context.Context, request types.OperationRequest, clien
 
 	ingest := operations.IngestContext{
 		Registry:     request.Services.Definitions(),
-		DB:           request.DB,
+		DB:           db,
 		Runtime:      request.Services.Gala(),
-		Integration:  request.Integration,
+		Integration:  record,
 		DefinitionID: DefinitionID.ID(),
 	}
 	options := operations.IngestOptionsFromOperationContext(oc)
@@ -102,16 +114,16 @@ func validateImportRecords(_ context.Context, _ types.InstallationRequest, cfg *
 
 // ensureLinkTargets creates the entity type the mapping links records to when it does not exist in the scope the link
 // resolver searches: system-owned for the ownerless runtime import, the installation's organization otherwise
-func ensureLinkTargets(ctx context.Context, request types.OperationRequest) error {
+func ensureLinkTargets(ctx context.Context, db *generated.Client, installation *types.Installation) error {
 	ownerScope := entitytype.SystemOwned(true)
-	create := request.DB.EntityType.Create().SetName(vendorEntityTypeName)
+	create := db.EntityType.Create().SetName(vendorEntityTypeName)
 
-	if request.Integration != nil {
-		ownerScope = entitytype.OwnerID(request.Integration.OwnerID)
-		create = create.SetOwnerID(request.Integration.OwnerID)
+	if installation != nil {
+		ownerScope = entitytype.OwnerID(installation.OwnerID)
+		create = create.SetOwnerID(installation.OwnerID)
 	}
 
-	exists, err := request.DB.EntityType.Query().Where(entitytype.NameEqualFold(vendorEntityTypeName), ownerScope).Exist(ctx)
+	exists, err := db.EntityType.Query().Where(entitytype.NameEqualFold(vendorEntityTypeName), ownerScope).Exist(ctx)
 	if err != nil {
 		return fmt.Errorf("%w: %w", ErrEntityTypeSeed, err)
 	}

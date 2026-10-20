@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -75,18 +76,20 @@ func campaignOverlay(camp *generated.Campaign) CampaignContext {
 
 // Run loads the campaign and pending targets, renders all messages, then sends via batch API or rate-limited individual sends depending on whether attachments are present
 func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
+	db := entbridge.DB(req.Services)
+
 	if cfg.TestEmail != "" {
-		return sendBrandedCampaignTestEmail(ctx, req.DB, client, cfg)
+		return sendBrandedCampaignTestEmail(ctx, db, client, cfg)
 	}
 
-	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput, brandedCampaignEdges)
+	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, db, cfg.CampaignDispatchInput, brandedCampaignEdges)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Msg("failed loading campaign with targets")
 
 		return nil, err
 	}
 
-	if err := loadCampaignTrustCenter(ctx, req.DB, camp); err != nil {
+	if err := loadCampaignTrustCenter(ctx, db, camp); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed loading trust center")
 
 		return nil, err
@@ -106,9 +109,9 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 		attachments = staticAttachmentsFromFiles(ctx, template.Edges.Files)
 	}
 
-	sentCount, sendFailed := sendCampaignMessages(ctx, req.DB, client, messages, targetIDs, attachments)
+	sentCount, sendFailed := sendCampaignMessages(ctx, db, client, messages, targetIDs, attachments)
 
-	if err := completeCampaignWhenAllSent(ctx, req.DB, camp); err != nil {
+	if err := completeCampaignWhenAllSent(ctx, db, camp); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed updating campaign completion status")
 	}
 

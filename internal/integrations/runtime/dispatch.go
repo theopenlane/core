@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -67,7 +68,7 @@ func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (type
 		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
 	}
 
-	if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: installation}, operation.Input.Schema, nil, req.Config, types.ErrOperationConfigInvalid); err != nil {
+	if err := operations.ValidateInput(ctx, types.InstallationRequest{Integration: entbridge.Installation(installation)}, operation.Input.Schema, nil, req.Config, types.ErrOperationConfigInvalid); err != nil {
 		if errors.Is(err, types.ErrOperationConfigInvalid) {
 			return types.DispatchResult{}, operations.ErrDispatchInputInvalid
 		}

@@ -19,6 +19,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/vendorenrich"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
@@ -49,9 +50,11 @@ type brandDesignScanOpts struct {
 
 // runBrandDesignScan runs only the brand design portion of the scan
 func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesignScanOpts) error {
+	db := entbridge.DB(s.services)
+
 	systemCtx := domainScanSystemContext(ctx, opts.organizationID)
 
-	if err := s.services.DB().Scan.UpdateOneID(opts.scanID).
+	if err := db.Scan.UpdateOneID(opts.scanID).
 		SetStatus(enums.ScanStatusProcessing).
 		Exec(systemCtx); err != nil {
 		return err
@@ -79,7 +82,7 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesign
 	if result.Enrichment.Branding == nil {
 		logx.FromContext(ctx).Info().Msg("domain scan: no brand design found")
 
-		err := s.services.DB().Scan.UpdateOneID(opts.scanID).
+		err := db.Scan.UpdateOneID(opts.scanID).
 			SetStatus(enums.ScanStatusCompleted).
 			Exec(systemCtx)
 		if err != nil {
@@ -93,7 +96,7 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesign
 		result.Enrichment.Branding.ApplyToPreviewTrustcenter = opts.applyBrandDesignToPreview
 		result.Enrichment.Branding.ApplyToLiveTrustcenter = opts.applyBrandDesignToLive
 
-		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), *result.Enrichment.Branding); err != nil {
+		if _, err := applyBrandingToTrustCenter(systemCtx, db, *result.Enrichment.Branding); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 		}
 	}
@@ -119,7 +122,7 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesign
 	metadata[DomainScanApplyBrandDesignToPreviewMetadataKey] = opts.applyBrandDesignToPreview
 	metadata[DomainScanApplyBrandDesignToLiveMetadataKey] = opts.applyBrandDesignToLive
 
-	if err := s.services.DB().Scan.UpdateOneID(opts.scanID).
+	if err := db.Scan.UpdateOneID(opts.scanID).
 		SetStatus(enums.ScanStatusCompleted).
 		SetMetadata(metadata).
 		Exec(systemCtx); err != nil {
@@ -152,7 +155,7 @@ func (s domainScanSaga) sendBrandDesignNotification(ctx context.Context, opts br
 		return err
 	}
 
-	_, err = s.services.DB().Notification.Create().
+	_, err = entbridge.DB(s.services).Notification.Create().
 		SetOwnerID(opts.organizationID).
 		SetNotificationType(enums.NotificationTypeOrganization).
 		SetObjectType("scan.created").
@@ -195,9 +198,11 @@ func domainScanListeners() types.GalaListenerRegistration {
 // from the same organization settings update), falling back to just internalScanID alone if it
 // has no group - e.g. a scan submitted individually via the REST domain-scan endpoint
 func (s domainScanSaga) domainScanGroupSiblings(ctx context.Context, organizationID, internalScanID string) ([]string, error) {
+	db := entbridge.DB(s.services)
+
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	scanRecord, err := s.services.DB().Scan.Get(systemCtx, internalScanID)
+	scanRecord, err := db.Scan.Get(systemCtx, internalScanID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("internal_scan_id", internalScanID).Msg("domain scan: failed fetching scan record for group resolution")
 
@@ -209,7 +214,7 @@ func (s domainScanSaga) domainScanGroupSiblings(ctx context.Context, organizatio
 		return []string{internalScanID}, nil
 	}
 
-	return s.services.DB().Scan.Query().
+	return db.Scan.Query().
 		Where(
 			scan.OwnerID(organizationID),
 			func(sel *sql.Selector) {
@@ -240,7 +245,7 @@ func (s domainScanSaga) submitAndScheduleDomainScan(ctx context.Context, organiz
 func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organizationID string, scanIDs map[string]string, forceRefresh bool, siblingScanIDs []string) error {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	if err := s.services.DB().Scan.Update().
+	if err := entbridge.DB(s.services).Scan.Update().
 		Where(scan.IDIn(siblingScanIDs...)).
 		SetStatus(enums.ScanStatusProcessing).
 		Exec(systemCtx); err != nil {
@@ -361,9 +366,11 @@ func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, o
 // persistDomainScanEnrichment stores the enrichment on the scan record; on failure it marks the
 // scan failed and checks sibling completion so the batch never stalls
 func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organizationID, internalScanID string, enrichment domainscan.Enrichment, siblingScanIDs []string) error {
+	db := entbridge.DB(s.services)
+
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	scanRecord, err := s.services.DB().Scan.Get(systemCtx, internalScanID)
+	scanRecord, err := db.Scan.Get(systemCtx, internalScanID)
 	if err != nil {
 		s.markDomainScanFailed(ctx, organizationID, internalScanID)
 
@@ -373,7 +380,7 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 	applyBrandDesignToPreview, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToPreviewMetadataKey].(bool)
 	applyBrandDesignToLive, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToLiveMetadataKey].(bool)
 
-	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
+	if err := db.Scan.UpdateOneID(internalScanID).
 		SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichment}).
 		Exec(systemCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed updating scan record with enrichment")
@@ -395,7 +402,7 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 	enrichment.Branding.ApplyToPreviewTrustcenter = applyBrandDesignToPreview
 	enrichment.Branding.ApplyToLiveTrustcenter = applyBrandDesignToLive
 
-	if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), *enrichment.Branding); err != nil {
+	if _, err := applyBrandingToTrustCenter(systemCtx, db, *enrichment.Branding); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 	}
 
@@ -562,7 +569,7 @@ func (s domainScanSaga) finalizeDomainScanWithoutResult(ctx context.Context, env
 func (s domainScanSaga) markDomainScanFailed(ctx context.Context, organizationID, internalScanID string) {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	if err := s.services.DB().Scan.UpdateOneID(internalScanID).SetStatus(enums.ScanStatusFailed).Exec(systemCtx); err != nil {
+	if err := entbridge.DB(s.services).Scan.UpdateOneID(internalScanID).SetStatus(enums.ScanStatusFailed).Exec(systemCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("internal_scan_id", internalScanID).Msg("domain scan: failed marking scan as failed")
 	}
 }
@@ -575,9 +582,11 @@ func (s domainScanSaga) markDomainScanFailed(ctx context.Context, organizationID
 // still yields DNS, company, and compliance data. Only a scan where every resource came back
 // empty is marked failed. Returns the status it applied
 func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, internalScanID string, siblingScanIDs []string, result *DomainScanPollResult) (enums.ScanStatus, error) {
+	db := entbridge.DB(s.services)
+
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	scanRecord, err := s.services.DB().Scan.Get(systemCtx, internalScanID)
+	scanRecord, err := db.Scan.Get(systemCtx, internalScanID)
 	if err != nil {
 		return enums.ScanStatusFailed, err
 	}
@@ -620,9 +629,9 @@ func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, 
 		return status, err
 	}
 
-	enriched.Data = vendorenrich.EnrichVendors(systemCtx, s.services.DB(), enriched.Data)
+	enriched.Data = vendorenrich.EnrichVendors(systemCtx, db, enriched.Data)
 
-	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
+	if err := db.Scan.UpdateOneID(internalScanID).
 		SetStatus(status).
 		SetMetadata(enriched.Data).
 		Exec(systemCtx); err != nil {
@@ -639,9 +648,10 @@ func (s domainScanSaga) maybeNotifyDomainScanGroup(ctx context.Context, organiza
 		return nil
 	}
 
+	db := entbridge.DB(s.services)
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	siblings, err := s.services.DB().Scan.Query().Where(scan.IDIn(siblingScanIDs...), scan.OwnerID(organizationID)).All(systemCtx)
+	siblings, err := db.Scan.Query().Where(scan.IDIn(siblingScanIDs...), scan.OwnerID(organizationID)).All(systemCtx)
 	if err != nil {
 		return err
 	}
@@ -696,7 +706,7 @@ func (s domainScanSaga) maybeNotifyDomainScanGroup(ctx context.Context, organiza
 		body = fmt.Sprintf("%s (%d domain(s) failed)", body, failed)
 	}
 
-	_, err = s.services.DB().Notification.Create().
+	_, err = db.Notification.Create().
 		SetOwnerID(organizationID).
 		SetNotificationType(enums.NotificationTypeOrganization).
 		SetObjectType("scan.created").

@@ -7,7 +7,6 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
@@ -118,7 +117,7 @@ func TestOperationOwnerID_FromRequestIntegration(t *testing.T) {
 	t.Parallel()
 
 	ownerID := operationOwnerID(context.Background(), types.OperationRequest{
-		Integration: &generated.Integration{OwnerID: "org-request"},
+		Integration: &types.Installation{OwnerID: "org-request"},
 	})
 	require.Equal(t, "org-request", ownerID)
 }

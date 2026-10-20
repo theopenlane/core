@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
-	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -88,16 +87,14 @@ type IngestContract struct {
 
 // OperationRequest bundles the inputs for executing one definition operation
 type OperationRequest struct {
-	// Integration is the target installation record
-	Integration *generated.Integration
+	// Integration is the target installation, nil for operations that run without one
+	Integration *Installation
 	// Client is the built client instance for this operation when one is registered
 	Client any
 	// Config is the operation-specific configuration payload
 	Config json.RawMessage
 	// LastRunAt is the finish time of the most recent successful run for this operation
 	LastRunAt *time.Time
-	// DB is the ent client for operations that need database access
-	DB *generated.Client
 	// Dispatch enqueues other integration operations through the runtime-managed dispatcher
 	Dispatch DispatchFunc
 	// Services exposes the full runtime service surface

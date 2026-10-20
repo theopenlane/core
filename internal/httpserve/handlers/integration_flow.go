@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -73,7 +74,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 	// required user input has to be satisfied before we hand out provider scopes, otherwise the
 	// install authorizes successfully and then fails every sync it runs
 	if def.UserInput != nil {
-		req := types.InstallationRequest{Integration: installationRec, UserInput: installationRec.UserInput.Data}
+		req := types.InstallationRequest{Integration: entbridge.Installation(installationRec), UserInput: installationRec.UserInput.Data}
 
 		if err := operations.ValidateInput(requestCtx, req, def.UserInput.Schema, def.UserInput.Validate, installationRec.UserInput.Data, integrationsruntime.ErrUserInputInvalid); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Msg("integration user input incomplete, refusing to start auth flow")

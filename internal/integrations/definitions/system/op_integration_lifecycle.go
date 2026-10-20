@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -18,7 +19,7 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 
 	systemCtx := auth.WithSystemSweepContext(ctx)
 
-	ids, err := req.DB.Integration.Query().
+	ids, err := entbridge.DB(req.Services).Integration.Query().
 		Where(integration.ExpiresAtLTE(time.Now())).
 		Order(integration.ByExpiresAt()).
 		Limit(s.MaxPerRun).

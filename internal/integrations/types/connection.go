@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/iam/tokens"
-
-	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // Connection is one way a user connects a definition
@@ -59,7 +57,7 @@ func (c Connection) Connection() Connection {
 // ConnectionRequest is what a client builder and the verification receive
 type ConnectionRequest[T any] struct {
 	// Integration is the target installation record
-	Integration *generated.Integration
+	Integration *Installation
 	// Credential is the decoded stored credential
 	Credential T
 	// TokenManager signs assertions for providers that authenticate via identity federation
@@ -69,7 +67,7 @@ type ConnectionRequest[T any] struct {
 // DisconnectRequest is what a connection's disconnect hook receives
 type DisconnectRequest[T any] struct {
 	// Integration is the installation record being disconnected
-	Integration *generated.Integration
+	Integration *Installation
 	// Credential is the decoded stored credential
 	Credential T
 	// UserInput is the stored installation-scoped user input document

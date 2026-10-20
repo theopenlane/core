@@ -8,7 +8,6 @@ import (
 
 	"github.com/samber/lo"
 
-	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
@@ -366,8 +365,8 @@ func TestWebhookEventTopic(t *testing.T) {
 func TestWebhookRegistrationRuntimeOwned(t *testing.T) {
 	t.Parallel()
 
-	resolve := func(context.Context, *generated.Client, WebhookInboundRequest) (*generated.Integration, error) {
-		return nil, nil
+	resolve := func(context.Context, RuntimeServices, WebhookInboundRequest) (string, error) {
+		return "", nil
 	}
 
 	tests := []struct {

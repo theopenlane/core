@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/consts"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -16,7 +17,7 @@ import (
 
 // Run executes one organization deletion sweep and returns the number of deleted organizations
 func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
-	db := req.DB
+	db := entbridge.DB(req.Services)
 	logger := logx.FromContext(ctx)
 
 	if o.MaxDeletesPerRun <= 0 {
@@ -95,7 +96,7 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 
 // clearRecoveredOrganizationDeletions clears pending deletion markers after billing recovers
 func clearRecoveredOrganizationDeletions(ctx context.Context, req types.OperationRequest) error {
-	db := req.DB
+	db := entbridge.DB(req.Services)
 	logger := logx.FromContext(ctx)
 
 	settings, err := db.OrganizationSetting.Query().

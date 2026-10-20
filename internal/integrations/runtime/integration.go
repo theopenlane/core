@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -89,7 +90,7 @@ func (r *Runtime) resolveCurrentIntegration(ctx context.Context, lookup Integrat
 }
 
 // ResolveOwnerIntegration returns the operational installation id for the definition and owner, or empty when none is selectable
-func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
+func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*types.Installation) bool) (string, error) {
 	integrations, err := r.DB().Integration.Query().
 		Where(
 			integration.OwnerIDEQ(ownerID),
@@ -105,7 +106,7 @@ func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, own
 	}
 
 	for _, p := range prefer {
-		if preferred, found := lo.Find(integrations, p); found {
+		if preferred, found := lo.Find(integrations, func(record *ent.Integration) bool { return p(entbridge.Installation(record)) }); found {
 			return preferred.ID, nil
 		}
 	}
@@ -239,7 +240,7 @@ func (r *Runtime) updateInstallationInput(ctx context.Context, installation *ent
 func installationInput(ctx context.Context, def types.Definition, current *ent.Integration, userInput json.RawMessage, operationConfig map[string]json.RawMessage) (types.IntegrationUserInput, types.IntegrationOperationConfig, error) {
 	nextInput, nextConfig := mergeInput(def, current, userInput, operationConfig)
 
-	req := types.InstallationRequest{Integration: current}
+	req := types.InstallationRequest{Integration: entbridge.Installation(current)}
 
 	if current != nil {
 		req.UserInput = current.UserInput.Data

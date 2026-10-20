@@ -5,6 +5,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"io"
 	"net/http"
 	"strings"
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -141,8 +143,8 @@ func verifyWebhookHMACSHA256(req *http.Request, payload []byte, secret string) e
 func verifyIntegrationWebhook(reg types.WebhookRegistration, req *http.Request, payload []byte, persistedWebhook *ent.IntegrationWebhook, integration *ent.Integration) error {
 	if reg.Verify != nil {
 		return reg.Verify(types.WebhookInboundRequest{
-			Integration: integration,
-			Webhook:     persistedWebhook,
+			Integration: entbridge.Installation(integration),
+			Webhook:     entbridge.Webhook(persistedWebhook),
 			Request:     req,
 			Payload:     payload,
 		})
@@ -166,8 +168,8 @@ func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, c
 	}
 
 	event, err := webhook.Event(types.WebhookInboundRequest{
-		Integration: integration,
-		Webhook:     persistedWebhook,
+		Integration: entbridge.Installation(integration),
+		Webhook:     entbridge.Webhook(persistedWebhook),
 		Request:     ctx.Request(),
 		Payload:     payload,
 	})
@@ -259,16 +261,23 @@ func (h *Handler) IntegrationStaticWebhookHandler(definitionID, webhookName stri
 // handleStaticWebhookWithIntegration handles static webhooks backed by a DB integration record.
 // Used by definitions like GitHub App where webhooks resolve to a per-customer installation
 func (h *Handler) handleStaticWebhookWithIntegration(webhookCtx context.Context, ctx echo.Context, webhookName string, webhookReg types.WebhookRegistration, req *http.Request, payload []byte) error {
-	integration, err := webhookReg.ResolveIntegration(webhookCtx, h.DBClient, types.WebhookInboundRequest{
+	integrationID, err := webhookReg.ResolveIntegration(webhookCtx, h.IntegrationsRuntime, types.WebhookInboundRequest{
 		Request: req,
 		Payload: payload,
 	})
 	if err != nil {
-		if ent.IsNotFound(err) {
+		if errors.Is(err, types.ErrInstallationNotFound) {
 			return h.Success(ctx, rout.Reply{Success: true})
 		}
 
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve integration for static webhook")
+
+		return h.BadRequest(ctx, ErrIntegrationNotFound)
+	}
+
+	integration, err := h.IntegrationsRuntime.ResolveIntegration(webhookCtx, integrationsruntime.IntegrationLookup{IntegrationID: integrationID})
+	if err != nil {
+		logx.FromContext(webhookCtx).Error().Err(err).Str("integration_id", integrationID).Msg("failed to load integration for static webhook")
 
 		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}

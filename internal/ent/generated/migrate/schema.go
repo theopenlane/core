@@ -2515,7 +2515,7 @@ var (
 			},
 			{
 				Name:    "entity_external_id_owner_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{EntitiesColumns[61], EntitiesColumns[78]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND external_id IS NOT NULL",

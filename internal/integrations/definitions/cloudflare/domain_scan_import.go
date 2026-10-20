@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -60,7 +61,7 @@ func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelo
 		"scan_ids":        envelope.ScanIDs,
 	})
 
-	summary, err := workflows.WithTx(ctx, s.services.DB(), nil, func(txCtx context.Context, tx *generated.Tx) (importSummary, error) {
+	summary, err := workflows.WithTx(ctx, entbridge.DB(s.services), nil, func(txCtx context.Context, tx *generated.Tx) (importSummary, error) {
 		return importDomainScanReview(txCtx, tx.Client(), envelope)
 	})
 	if err != nil {
@@ -96,7 +97,7 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 		body += "; updated trust center branding"
 	}
 
-	_, err = s.services.DB().Notification.Create().
+	_, err = entbridge.DB(s.services).Notification.Create().
 		SetOwnerID(organizationID).
 		SetNotificationType(enums.NotificationTypeOrganization).
 		SetObjectType("scan.import.completed").

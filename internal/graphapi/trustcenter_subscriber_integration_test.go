@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/newman/providers/mock"
 )
@@ -219,9 +220,9 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 	assert.NilError(t, err)
 
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
-		Config: configBytes,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
+		Config:   configBytes,
 	}
 
 	_, err = email.SendBrandedCampaign{}.Run(dbCtx, req, emailClient, cfg)

@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -68,7 +69,7 @@ func runDomainScanRequest(ctx context.Context, request types.OperationRequest, c
 		return nil, ErrInstallationRequired
 	}
 
-	scanRecord, err := findScanRecord(ctx, request.DB, cfg, organizationID)
+	scanRecord, err := findScanRecord(ctx, entbridge.DB(request.Services), cfg, organizationID)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +156,7 @@ func ensureScanRecord(ctx context.Context, request types.OperationRequest, cfg D
 			createCtx = entityops.WithEmissionVetoed(ctx)
 		}
 
-		return request.DB.Scan.Create().
+		return entbridge.DB(request.Services).Scan.Create().
 			SetOwnerID(organizationID).
 			SetTarget(cfg.Domain).
 			SetScanType(enums.ScanTypeDomain).

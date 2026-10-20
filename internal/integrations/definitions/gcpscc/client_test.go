@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -27,7 +26,7 @@ func TestServiceAccountCredentials(t *testing.T) {
 // TestServiceAccountClient verifies the service account client rejects an unusable key before building
 func TestServiceAccountClient(t *testing.T) {
 	_, err := serviceAccountClient(context.Background(), types.ConnectionRequest[CredentialSchema]{
-		Integration: &ent.Integration{},
+		Integration: &types.Installation{},
 		Credential:  CredentialSchema{ServiceAccountKey: ""},
 	})
 	require.ErrorIs(t, err, ErrServiceAccountKeyInvalid)
@@ -36,7 +35,7 @@ func TestServiceAccountClient(t *testing.T) {
 // TestWorkloadIdentityClient verifies the workload identity client requires a project number before building
 func TestWorkloadIdentityClient(t *testing.T) {
 	_, err := workloadIdentityClient(context.Background(), types.ConnectionRequest[WorkloadIdentityCredentialSchema]{
-		Integration: &ent.Integration{},
+		Integration: &types.Installation{},
 	})
 	require.ErrorIs(t, err, ErrProjectNumberRequired)
 }

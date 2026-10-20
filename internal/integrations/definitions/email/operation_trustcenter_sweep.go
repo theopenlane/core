@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
@@ -64,7 +65,9 @@ func (TrustCenterNotificationSweep) Run(ctx context.Context, req types.Operation
 
 // dispatchDuePosts notifies subscribers about published posts flagged for notification that have been stable for the grace window
 func dispatchDuePosts(ctx context.Context, req types.OperationRequest, cutoff, now time.Time) (int, error) {
-	posts, err := req.DB.Note.Query().
+	db := entbridge.DB(req.Services)
+
+	posts, err := db.Note.Query().
 		Where(
 			note.NotifySubscribers(true),
 			note.NotifiedAtIsNil(),
@@ -112,7 +115,7 @@ func dispatchDuePosts(ctx context.Context, req types.OperationRequest, cutoff, n
 			continue
 		}
 
-		if err := req.DB.Note.UpdateOneID(post.ID).SetNotifiedAt(now).Exec(ctx); err != nil {
+		if err := db.Note.UpdateOneID(post.ID).SetNotifiedAt(now).Exec(ctx); err != nil {
 			errs = append(errs, fmt.Errorf("marking post %s notified: %w", post.ID, err))
 		}
 
@@ -124,7 +127,9 @@ func dispatchDuePosts(ctx context.Context, req types.OperationRequest, cutoff, n
 
 // dispatchDueSubprocessorChanges notifies subscribers about subprocessor changes for trust centers that opted in, coalescing all changes since the last notification into one send per trust center
 func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequest, cutoff time.Time) (int, error) {
-	settings, err := req.DB.TrustCenterSetting.Query().
+	db := entbridge.DB(req.Services)
+
+	settings, err := db.TrustCenterSetting.Query().
 		Where(
 			trustcentersetting.NotifySubscribersOnSubprocessorChange(true),
 			trustcentersetting.TrustCenterIDNotNil(),
@@ -141,7 +146,7 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 
 	for _, setting := range settings {
 		if setting.SubprocessorsNotifiedAt == nil {
-			if err := req.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(cutoff).Exec(ctx); err != nil {
+			if err := db.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(cutoff).Exec(ctx); err != nil {
 				errs = append(errs, fmt.Errorf("initializing subprocessor notified baseline for trust center %s: %w", setting.TrustCenterID, err))
 			}
 
@@ -150,7 +155,7 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 
 		floor := *setting.SubprocessorsNotifiedAt
 
-		changed, err := req.DB.TrustCenterSubprocessor.Query().
+		changed, err := db.TrustCenterSubprocessor.Query().
 			Where(
 				trustcentersubprocessor.TrustCenterID(setting.TrustCenterID),
 				trustcentersubprocessor.UpdatedAtGT(floor),
@@ -182,7 +187,7 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 		entries := subprocessorEntries(changed, floor)
 
 		if len(entries) == 0 {
-			if err := req.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
+			if err := db.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
 				errs = append(errs, fmt.Errorf("advancing subprocessor notified baseline for trust center %s: %w", setting.TrustCenterID, err))
 			}
 
@@ -238,7 +243,7 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 			continue
 		}
 
-		if err := req.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
+		if err := db.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
 			errs = append(errs, fmt.Errorf("advancing subprocessor notified baseline for trust center %s: %w", setting.TrustCenterID, err))
 		}
 
@@ -250,7 +255,7 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 
 // loadTrustCenter loads a trust center with its custom domain, returning the resolved custom domain
 func loadTrustCenter(ctx context.Context, req types.OperationRequest, trustCenterID string) (*ent.TrustCenter, string, error) {
-	tc, err := req.DB.TrustCenter.Query().
+	tc, err := entbridge.DB(req.Services).TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
 		Only(ctx)
@@ -270,7 +275,7 @@ func loadTrustCenter(ctx context.Context, req types.OperationRequest, trustCente
 
 // createAndDispatchTrustCenterCampaign creates a trust center update campaign carrying the supplied content and dispatches it through the campaign send, which materializes subscriber targets
 func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.OperationRequest, ownerID, trustCenterID, name string, content map[string]any) error {
-	camp, err := req.DB.Campaign.Create().
+	camp, err := entbridge.DB(req.Services).Campaign.Create().
 		SetOwnerID(ownerID).
 		SetName(name).
 		SetCampaignType(enums.CampaignTypeTrustCenterUpdate).
@@ -292,7 +297,7 @@ func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.Operati
 		return err
 	}
 
-	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), ownerID, func(inst *ent.Integration) bool {
+	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), ownerID, func(inst *types.Installation) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {
@@ -362,7 +367,7 @@ func subprocessorNetChange(rows []*ent.TrustCenterSubprocessor, floor time.Time)
 
 // activeTrustCenterSubscribers returns the trust center's active, verified, subscribed recipients
 func activeTrustCenterSubscribers(ctx context.Context, req types.OperationRequest, trustCenterID string) ([]*ent.Subscriber, error) {
-	return req.DB.Subscriber.Query().
+	return entbridge.DB(req.Services).Subscriber.Query().
 		Where(
 			subscriber.TrustCenterID(trustCenterID),
 			subscriber.Active(true),

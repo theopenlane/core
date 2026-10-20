@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
@@ -16,8 +15,6 @@ type DefinitionLookup interface {
 
 // RuntimeServices exposes the runtime capabilities available to definition-declared gala listeners and operations
 type RuntimeServices interface {
-	// DB returns the runtime-managed ent client
-	DB() *generated.Client
 	// Gala returns the runtime-managed event runtime
 	Gala() *gala.Gala
 	// Definitions returns the registered definitions
@@ -29,5 +26,5 @@ type RuntimeServices interface {
 	// ReapExpiredInstallation soft-deletes one expired never-connected installation and its credentials, reporting whether it was reaped
 	ReapExpiredInstallation(ctx context.Context, integrationID string) (bool, error)
 	// ResolveOwnerIntegration returns the operational installation id for the definition and owner
-	ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*generated.Integration) bool) (string, error)
+	ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*Installation) bool) (string, error)
 }

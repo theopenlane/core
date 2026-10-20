@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -30,7 +31,7 @@ const reminderStaggerDifference = 30 * time.Second
 
 // Run executes one payment reminder sweep and returns the number of dispatched notifications
 func (p PaymentReminderSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
-	db := req.DB
+	db := entbridge.DB(req.Services)
 	logger := logx.FromContext(ctx)
 
 	if p.PaymentMethodInterval == 0 {

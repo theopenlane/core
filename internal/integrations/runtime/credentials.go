@@ -13,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -77,7 +78,7 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 		}
 
 		result, err = connection.Disconnect.Disconnect(ctx, types.ConnectionInput{
-			Integration: installation,
+			Integration: entbridge.Installation(installation),
 			Credential:  credential,
 			UserInput:   installation.UserInput.Data,
 		})
@@ -194,7 +195,7 @@ func (r *Runtime) installationRequest(ctx context.Context, installation *ent.Int
 	}
 
 	return types.InstallationRequest{
-		Integration: installation,
+		Integration: entbridge.Installation(installation),
 		Credentials: records,
 		UserInput:   installation.UserInput.Data,
 	}, records, nil

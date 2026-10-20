@@ -143,6 +143,16 @@ Provider operations and webhook handlers usually stop at provider-shaped payload
 1. Resolve the mapping's cross-object link rules and write the matched target ids into the payload
 1. Decode and persist the result into our internal data model
 
+## Definition Boundary
+
+The types a definition is written against (`types`) do not import ent. Requests carry ent-free views instead of ent rows:
+
+- `types.Installation` is a snapshot of the installation record (owner, user input, installation metadata, provider state, and so on). It is read-only; changes go through the runtime
+- `types.WebhookEndpoint` is the persisted webhook endpoint for an installation
+- Database access is not part of `OperationRequest` or `RuntimeServices`. A static webhook's `ResolveIntegration` returns the installation id (or `types.ErrInstallationNotFound`) rather than an ent row
+
+First-party definitions that need the ent client get it with `entbridge.DB(req.Services)`, and the runtime converts records with `entbridge.Installation` and `entbridge.Webhook`. Keeping ent out of `types` is what lets definitions eventually be authored outside this module; only built-in definitions and the runtime import `entbridge`.
+
 ## Stable Names and Schema-Derived IDs
 
 Many identifiers in a definition (credential slot names, operation names, webhook event names) end up stored in the database, used in routing, and returned in API responses. Renaming them is a breaking change, so how we produce them matters.

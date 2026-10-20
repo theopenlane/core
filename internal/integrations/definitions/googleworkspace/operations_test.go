@@ -9,14 +9,13 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 
 	"github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // directorySyncRequest builds an OperationRequest with the given installation metadata
 func directorySyncRequest(attributes string) types.OperationRequest {
 	return types.OperationRequest{
-		Integration: &ent.Integration{
+		Integration: &types.Installation{
 			ID: "install-1",
 			InstallationMetadata: openapi.IntegrationInstallationMetadata{
 				Attributes: json.RawMessage(attributes),

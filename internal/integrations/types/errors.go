@@ -7,6 +7,8 @@ var (
 	ErrClientCastFailed = errors.New("integrations: client cast failed")
 	// ErrOperationConfigInvalid indicates an operation config payload could not be decoded
 	ErrOperationConfigInvalid = errors.New("operation config invalid")
+	// ErrInstallationNotFound indicates no installation matched a lookup, such as an inbound webhook resolution
+	ErrInstallationNotFound = errors.New("integrations: installation not found")
 )
 
 // UnhealthyError marks an operation failure as terminal, requiring user action to recover

@@ -13,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -165,7 +166,7 @@ func (h *Handler) runInlineOperation(ctx echo.Context, req *RunIntegrationOperat
 	requestCtx := ctx.Request().Context()
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
-	if err := operations.ValidateInput(requestCtx, types.InstallationRequest{Integration: integrationRef}, operation.Input.Schema, nil, configDoc, types.ErrOperationConfigInvalid); err != nil {
+	if err := operations.ValidateInput(requestCtx, types.InstallationRequest{Integration: entbridge.Installation(integrationRef)}, operation.Input.Schema, nil, configDoc, types.ErrOperationConfigInvalid); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Msg("invalid operation config")
 
 		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)

@@ -10,6 +10,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -34,7 +35,7 @@ func runRecurringCampaignSweep(ctx context.Context, req types.OperationRequest, 
 
 // Run executes one recurring campaign sweep and returns the number of campaigns dispatched
 func (RecurringCampaignSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
-	db := req.DB
+	db := entbridge.DB(req.Services)
 	now := time.Now()
 	systemCtx := auth.WithSystemSweepContext(ctx)
 
@@ -112,7 +113,7 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		return err
 	}
 
-	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
+	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), camp.OwnerID, func(inst *types.Installation) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {
@@ -135,7 +136,7 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 	nowDT := models.DateTime(now)
 	exhausted := camp.RecurrenceEndAt != nil && !camp.RecurrenceEndAt.IsZero() && !nextRun.Before(time.Time(*camp.RecurrenceEndAt))
 
-	update := req.DB.Campaign.UpdateOneID(camp.ID).
+	update := entbridge.DB(req.Services).Campaign.UpdateOneID(camp.ID).
 		SetLastRunAt(nowDT)
 
 	switch {

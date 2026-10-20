@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/entbridge"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/newman/providers/mock"
 )
@@ -110,8 +111,8 @@ func TestCampaignEmailDispatch(t *testing.T) {
 
 	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
 	}
 
 	configBytes, err := json.Marshal(cfg)
@@ -268,8 +269,8 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 
 	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
 	}
 
 	configBytes, err := json.Marshal(cfg)
@@ -346,8 +347,8 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 
 	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
 	}
 
 	configBytes, err := json.Marshal(cfg)
@@ -408,8 +409,8 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 
 	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
 	}
 
 	configBytes, err := json.Marshal(cfg)
@@ -479,8 +480,8 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 		TestEmail:             recipient,
 	}
 	req := types.OperationRequest{
-		Client: emailClient,
-		DB:     suite.Client.DB,
+		Client:   emailClient,
+		Services: entbridge.Services(suite.Client.DB),
 	}
 
 	configBytes, err := json.Marshal(cfg)
@@ -640,7 +641,7 @@ func TestCustomCampaignCompletesWhenAllSent(t *testing.T) {
 
 			cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 
-			_, err = email.SendBrandedCampaign{}.Run(ctx, types.OperationRequest{Client: emailClient, DB: suite.Client.DB}, emailClient, cfg)
+			_, err = email.SendBrandedCampaign{}.Run(ctx, types.OperationRequest{Client: emailClient, Services: entbridge.Services(suite.Client.DB)}, emailClient, cfg)
 			assert.NilError(t, err)
 
 			completed := tc.expectedStatus == enums.CampaignStatusCompleted
@@ -707,7 +708,7 @@ func TestCampaignEmailDispatchWithoutTrustCenterModule(t *testing.T) {
 
 	userCtx := generated.NewContext(graphql.WithResponseContext(user.UserCtx, gqlerrors.ErrorPresenter, graphql.DefaultRecover), suite.Client.DB)
 
-	_, err = email.SendBrandedCampaign{}.Run(userCtx, types.OperationRequest{Client: emailClient, DB: suite.Client.DB}, emailClient, cfg)
+	_, err = email.SendBrandedCampaign{}.Run(userCtx, types.OperationRequest{Client: emailClient, Services: entbridge.Services(suite.Client.DB)}, emailClient, cfg)
 	assert.NilError(t, err)
 
 	messages := mockSender.Messages()
