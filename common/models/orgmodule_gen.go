@@ -44,4 +44,4 @@ var OrgModuleByConstName = map[string]OrgModule{
 }
 
 // TrialModules contains the modules and addons included with a trial
-var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogTrustCenterModule, CatalogWorkflowAddon}
+var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogTrustCenterModule}

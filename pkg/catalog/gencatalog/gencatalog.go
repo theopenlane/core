@@ -136,7 +136,6 @@ var DefaultCatalog = models.Catalog{
 			}}},
 			Description:          "Workflow Automation",
 			DisplayName:          "Workflow Automation",
-			IncludeWithTrial:     true,
 			LookupKey:            "workflow_addon",
 			MarketingDescription: "",
 		},
