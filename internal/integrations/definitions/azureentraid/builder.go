@@ -32,7 +32,7 @@ func Builder(cfg Config) registry.Builder {
 					Name("Azure Entra ID Admin Consent").
 					Description("Connect your Azure Entra ID tenant using admin consent.").
 					Recommended(), cfg.AppConfig),
-				consentConnection(legacyConsent.
+				consentConnection(legacyAdminConsent.
 					Name("Azure Entra ID Admin Consent (Legacy)").
 					Description("Tenants consented before the Openlane app registration moved to Partner Organization, reconnect to move to the current connection.").
 					Retired(), cfg.Legacy),

@@ -9,13 +9,18 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+const (
+	// oauthRevision is the revision used for the latest oauth connection
+	oauthRevision = 2
+)
+
 var (
 	// definitionID is the stable identifier for the Google Drive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GDRIVE00000000000000001")
 	// oauthConnection is the Google Drive OAuth connection scoped to drive.file
-	oauthConnection = types.ConnectionOf[googleDriveCred]().Revision(2)
-	// legacyConnection is the retired drive.readonly OAuth connection installations created before the drive.file migration still use
-	legacyConnection = types.ConnectionOf[googleDriveCred]()
+	oauthConnection = types.ConnectionOf[googleDriveCred]().Revision(oauthRevision)
+	// legacyOauthConnection is the retired drive.readonly OAuth connection installations created before the drive.file migration still use
+	legacyOauthConnection = types.ConnectionOf[googleDriveCred]()
 	// installation is the installation metadata layout
 	installation = types.InstallationOf[InstallationMetadata]()
 	// userInput is the installation user input layout

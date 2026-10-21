@@ -33,7 +33,7 @@ func Builder(cfg Config) registry.Builder {
 					Name("OneDrive OAuth").
 					Description("Connect your Microsoft account using OAuth to access OneDrive documents.").
 					Recommended(), cfg, cfg.AppConfig),
-				oneDriveConnection(legacyConnection.
+				oneDriveConnection(legacyOauthConnection.
 					Name("OneDrive OAuth (Legacy)").
 					Description("Installations authorized before the Openlane app registration moved to Partner Organization, reconnect to move to the current connection.").
 					Retired(), cfg, cfg.Legacy),

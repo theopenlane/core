@@ -6,13 +6,18 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+const (
+	// connectionRevision is the revision used for the connection
+	connectionRevision = 2
+)
+
 var (
 	// definitionID is the stable identifier for the Azure Entra ID integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
 	// adminConsent is the connection handle for the consented tenant credential under the current app registration
-	adminConsent = types.ConnectionOf[entraIDCred]().Revision(2)
-	// legacyConsent is the retired connection for tenants consented to the app registration used before the tenant move
-	legacyConsent = types.ConnectionOf[entraIDCred]()
+	adminConsent = types.ConnectionOf[entraIDCred]().Revision(connectionRevision)
+	// legacyAdminConsent is the retired connection for tenants consented to the app registration used before the tenant move
+	legacyAdminConsent = types.ConnectionOf[entraIDCred]()
 	// installation is the typed installation metadata handle for the Azure Entra ID definition
 	installation = types.InstallationOf[InstallationMetadata]()
 	// userInput is the installation user input layout
