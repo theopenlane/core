@@ -8,14 +8,16 @@ package graphapi
 import (
 	"context"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/urlx"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterDomain is the resolver for the createTrustCenterDomain field.
@@ -85,6 +87,7 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 			MappableDomainID: mappableDomainID,
 			TrustCenterID:    &trustCenter.ID,
 			DomainType:       &domainType,
+			Purpose:          lo.ToPtr(enums.DomainPurposeTrustcenter),
 		}).
 		Save(ctx)
 	if err != nil {

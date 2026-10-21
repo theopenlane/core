@@ -384,7 +384,8 @@
           "description": "TrustCenterCnameTarget is the cname target for the trust center\nUsed for mapping the vanity domains to the trust centers"
         },
         "assessmentcnametarget": {
-          "type": "string"
+          "type": "string",
+          "description": "AssessmentCnameTarget is the cname target for the assessment domains.\nUsed for mapping vanity domains for questionnaires"
         },
         "trustcenterpreviewzoneid": {
           "type": "string",

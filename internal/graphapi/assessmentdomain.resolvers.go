@@ -10,13 +10,13 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/urlx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateAssessmentDomain is the resolver for the createAssessmentDomain field.
@@ -43,17 +43,6 @@ func (r *mutationResolver) CreateAssessmentDomain(ctx context.Context, input mod
 		FirstID(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, action)
-	}
-
-	exists, err := transactionCtx.CustomDomain.Query().
-		Where(customdomain.PurposeEQ(enums.DomainPurposeAssessment)).
-		Exist(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action)
-	}
-
-	if exists {
-		return nil, parseRequestError(ctx, common.ErrAssessmentDomainAlreadyExists, action)
 	}
 
 	createInput := generated.CreateCustomDomainInput{

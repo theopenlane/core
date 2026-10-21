@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"entgo.io/ent"
@@ -10,13 +11,19 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/logx"
+)
+
+var (
+	// ErrDomainAlreadyExists is returned when a domain for a purpose and type already exists for the organization
+	ErrDomainAlreadyExists = errors.New("domain already exists for this organization")
 )
 
 // HookCustomDomain runs on create mutations
@@ -27,6 +34,33 @@ func HookCreateCustomDomain() ent.Hook {
 				domainType, ok := m.DomainType()
 				if !ok || domainType == enums.CustomDomainTypeUnknown {
 					m.SetDomainType(enums.CustomDomainTypeExternal)
+				}
+
+				purpose, ok := m.Purpose()
+				if !ok {
+					return nil, errors.New("domain purpose must be provided") //nolint:err113
+				}
+
+				if purpose == enums.DomainPurposeInvalid {
+					return nil, errors.New("unsupported domain purpose") //nolint:err113
+				}
+
+				// make sure we can only have one domain per purpose + domain type
+				// e.g only one external domain + trustcenter purpose
+				// then one preview + trustcenter purpose allowed
+				// but two of each cannot be allowed
+				exists, err := m.Client().CustomDomain.Query().Where(
+					customdomain.PurposeEQ(purpose),
+					customdomain.DomainTypeEQ(domainType),
+				).Exist(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Str("purpose", purpose.String()).
+						Msg("could not check if custom domain exists")
+					return nil, err
+				}
+
+				if exists {
+					return nil, ErrDomainAlreadyExists
 				}
 
 				v, err := next.Mutate(ctx, m)

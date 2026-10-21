@@ -9,8 +9,9 @@ import (
 	"github.com/lib/pq"
 	"github.com/theopenlane/core/common/models"
 
-	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/logx"
+
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 )
 
 const (
@@ -58,7 +59,6 @@ var (
 
 	// ErrMissingAssessmentCnameTarget is returned  when the assessment cname target is missing
 	ErrMissingAssessmentCnameTarget = errors.New("missing assessment cname target")
-	ErrAssessmentDomainAlreadyExists = errors.New("domain already exists for this organization")
 
 	// ErrTrustCenterDomainAlreadyExists is returned when the domain already exists for the trust center
 	ErrTrustCenterDomainAlreadyExists = errors.New("domain already exists for this trust center")
