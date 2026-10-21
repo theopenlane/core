@@ -284,9 +284,12 @@ func mergeInput(def types.Definition, current *ent.Integration, userInput json.R
 		if def.UserInput != nil {
 			nextInput.Layout = def.UserInput.Name
 
+			var stored json.RawMessage
 			if current != nil {
-				nextInput.Data = keepReadOnlyInput(def.UserInput.ReadOnly, current.UserInput.Data, nextInput.Data)
+				stored = current.UserInput.Data
 			}
+
+			nextInput.Data = keepReadOnlyInput(def.UserInput.ReadOnly(), stored, nextInput.Data)
 		}
 	}
 
@@ -303,25 +306,22 @@ func keepReadOnlyInput(readOnly []string, stored, submitted json.RawMessage) jso
 		return submitted
 	}
 
-	var storedDoc, submittedDoc map[string]json.RawMessage
-	if jsonx.UnmarshalIfPresent(stored, &storedDoc) != nil || jsonx.UnmarshalIfPresent(submitted, &submittedDoc) != nil {
+	var storedDoc map[string]json.RawMessage
+	if jsonx.UnmarshalIfPresent(stored, &storedDoc) != nil {
 		return submitted
 	}
 
-	for _, key := range readOnly {
-		if value, ok := storedDoc[key]; ok {
-			submittedDoc[key] = value
-		} else {
-			delete(submittedDoc, key)
+	return jsonx.EditObject(submitted, func(doc map[string]json.RawMessage) bool {
+		for _, key := range readOnly {
+			if value, ok := storedDoc[key]; ok {
+				doc[key] = value
+			} else {
+				delete(doc, key)
+			}
 		}
-	}
 
-	out, err := jsonx.ToRawMessage(submittedDoc)
-	if err != nil {
-		return submitted
-	}
-
-	return out
+		return true
+	})
 }
 
 // mirrorUserInput sets the record fields the submitted user input carries: the installation name and its primary directory flag

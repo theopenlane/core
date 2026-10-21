@@ -75,6 +75,7 @@ func getSelectedDocs(ctx context.Context, c DriveClient, selected []types.Select
 	files := make([]*drive.File, 0, len(selected))
 
 	for _, resource := range selected {
+		// check for error context, e.g. canceled or deadline exceeded before continuing
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}

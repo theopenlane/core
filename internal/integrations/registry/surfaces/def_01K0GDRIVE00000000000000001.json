@@ -1,6 +1,6 @@
 {
-  "hash": "cf2ffcc99b0468fbacc2fadab6cb457e29e656dcc16173192110bedd8e4a09ad",
-  "version": "01M5DPJKBE1QVC3T97QHS8CPAJ",
+  "hash": "e96f9c995a35def9acb3712b341c6cf0dd10ec82e74bfe6be47b218119c995b7",
+  "version": "01M5FWZ4MN4QGN3R2G1PV735H8",
   "surface": {
     "id": "def_01K0GDRIVE00000000000000001",
     "credentials": [
@@ -95,7 +95,8 @@
                   "$ref": "#/$defs/SelectedResource"
                 },
                 "type": "array",
-                "title": "Selected Documents"
+                "title": "Selected Documents",
+                "readOnly": true
               }
             },
             "additionalProperties": false,

@@ -52,7 +52,7 @@ type UserInput struct {
 	// Primary marks this installation as the authoritative Drive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
 	// SelectedDocuments lists the Google Docs selected in the Picker, set by the selection operation rather than the settings form
-	SelectedDocuments []types.SelectedResource `json:"selectedDocuments,omitempty" jsonschema:"title=Selected Documents,readOnly=true"`
+	SelectedDocuments []types.SelectedResource `json:"selectedDocuments,omitempty" jsonschema:"title=Selected Documents" jsonschema_extras:"readOnly=true"`
 }
 
 // InstallationMetadata holds the stable Google Drive target selected for one installation

@@ -60,25 +60,7 @@ func (r DefinitionRef) WebhookEventTopic(name string) gala.TopicName {
 func reflectedInput[T any](name string) InputRegistration {
 	schema := jsonx.SchemaFrom[T]()
 
-	return InputRegistration{Name: lo.CoalesceOrEmpty(name, jsonx.SchemaID(schema)), Schema: schema, ReadOnly: readOnlyProperties(schema)}
-}
-
-// readOnlyProperties returns the top-level properties the reflected schema marks read-only
-func readOnlyProperties(schema json.RawMessage) []string {
-	root, _, err := jsonx.SchemaRoot(schema)
-	if err != nil || root.Properties == nil {
-		return nil
-	}
-
-	var names []string
-
-	for pair := root.Properties.Oldest(); pair != nil; pair = pair.Next() {
-		if pair.Value.ReadOnly {
-			names = append(names, pair.Key)
-		}
-	}
-
-	return names
+	return InputRegistration{Name: lo.CoalesceOrEmpty(name, jsonx.SchemaID(schema)), Schema: schema}
 }
 
 // validated binds a typed validation closure as a ValidateFunc, decoding the payload into T first
