@@ -810,6 +810,8 @@ github.com/testcontainers/testcontainers-go v0.44.0 h1:/Fwh6HY1mIikhnm9e7HwoxGyc
 github.com/testcontainers/testcontainers-go v0.44.0/go.mod h1:IcnwQrYTO86xHXu5bvMaBH7ATlbS3Qn1M1QWW3c66rE=
 github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0 h1:ql9bhSEO9muf6BAy7AD2SJm8AHw+VvVe40PCqMsbVXM=
 github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0/go.mod h1:mYazHZ/v9091lsGp2eDj6al/cvQ5LPYQHFn127CReQA=
+github.com/theopenlane/core/common v1.2.0 h1:ed5OUsPdjzzfedWFZx2R4TOBF+r/vudZo0rP07SVCt4=
+github.com/theopenlane/core/common v1.2.0/go.mod h1:hCVv/MvyMfcPW9UD5y9+MxMnghFPOXOw5XiZNIWXFSA=
 github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO6ggTSKi6r/7E=
 github.com/theopenlane/echo-prometheus v0.1.0/go.mod h1:Eiiv1ZLXKMsteQ3T+H1tFfSSZuXSvQfZp95qr5hmGkA=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
