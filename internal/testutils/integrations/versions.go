@@ -12,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // VersionedRegistry registers builders on a registry whose definitions carry a version minted now, so a registry created later is newer than one created earlier

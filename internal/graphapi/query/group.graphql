@@ -9,8 +9,10 @@ mutation CreateBulkCSVGroup ($input: Upload!) {
 			displayName
 			gravatarLogoURL
 			id
+			integrationRunID
 			isManaged
 			logoURL
+			managedBy
 			name
 			oscalContactUuids
 			oscalPartyUUID
@@ -20,6 +22,9 @@ mutation CreateBulkCSVGroup ($input: Upload!) {
 			scimDisplayName
 			scimExternalID
 			scimGroupMailing
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			tags
 			updatedAt
 			updatedBy
@@ -63,8 +68,10 @@ mutation CreateBulkGroup ($input: [CreateGroupInput!]) {
 			displayName
 			gravatarLogoURL
 			id
+			integrationRunID
 			isManaged
 			logoURL
+			managedBy
 			name
 			oscalContactUuids
 			oscalPartyUUID
@@ -74,6 +81,9 @@ mutation CreateBulkGroup ($input: [CreateGroupInput!]) {
 			scimDisplayName
 			scimExternalID
 			scimGroupMailing
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			tags
 			updatedAt
 			updatedBy
@@ -117,8 +127,10 @@ mutation CreateGroup ($input: CreateGroupInput!) {
 			displayName
 			gravatarLogoURL
 			id
+			integrationRunID
 			isManaged
 			logoURL
+			managedBy
 			name
 			oscalContactUuids
 			oscalPartyUUID
@@ -128,6 +140,9 @@ mutation CreateGroup ($input: CreateGroupInput!) {
 			scimDisplayName
 			scimExternalID
 			scimGroupMailing
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			tags
 			updatedAt
 			updatedBy
@@ -295,8 +310,10 @@ query GetGroupByID ($groupId: ID!) {
 		displayName
 		gravatarLogoURL
 		id
+		integrationRunID
 		isManaged
 		logoURL
+		managedBy
 		name
 		oscalContactUuids
 		oscalPartyUUID
@@ -306,6 +323,9 @@ query GetGroupByID ($groupId: ID!) {
 		scimDisplayName
 		scimExternalID
 		scimGroupMailing
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		tags
 		updatedAt
 		updatedBy
@@ -452,8 +472,10 @@ mutation UpdateGroup ($updateGroupId: ID!, $input: UpdateGroupInput!) {
 			displayName
 			gravatarLogoURL
 			id
+			integrationRunID
 			isManaged
 			logoURL
+			managedBy
 			name
 			oscalContactUuids
 			oscalPartyUUID
@@ -463,6 +485,9 @@ mutation UpdateGroup ($updateGroupId: ID!, $input: UpdateGroupInput!) {
 			scimDisplayName
 			scimExternalID
 			scimGroupMailing
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			tags
 			updatedAt
 			updatedBy

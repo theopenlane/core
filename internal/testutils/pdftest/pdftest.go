@@ -29,7 +29,7 @@ func MinimalPDF(t *testing.T) []byte {
 	require.NoError(t, err)
 
 	var buf bytes.Buffer
-	require.NoError(t, api.Create(nil, bytes.NewReader(jsonData), &buf, nil))
+	require.NoError(t, api.Create(t.Context(), nil, bytes.NewReader(jsonData), &buf, nil))
 
 	return buf.Bytes()
 }
@@ -46,7 +46,7 @@ func EncryptPDF(t *testing.T, pdf []byte, userPW string) []byte {
 	conf.Permissions = model.PermissionsNone
 
 	var buf bytes.Buffer
-	require.NoError(t, api.Encrypt(bytes.NewReader(pdf), &buf, conf))
+	require.NoError(t, api.Encrypt(t.Context(), bytes.NewReader(pdf), &buf, conf))
 
 	return buf.Bytes()
 }

@@ -6,9 +6,11 @@ import (
 	"testing"
 
 	"gotest.tools/v3/assert"
+	"gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 )
@@ -118,17 +120,12 @@ func TestResolveDomainScanRefs(t *testing.T) {
 	}
 }
 
-func TestDomainScanMappingMatches(t *testing.T) {
+func TestDomainScanAssetKeys(t *testing.T) {
 	assets := []DomainScanImportAsset{
-		{Ref: "a1", Identifier: "cdn.iubenda.com"},
+		{Ref: "a1", Identifier: "CDN.iubenda.com."},
 		{Ref: "a2", Identifier: "iubenda.com"},
 		{Ref: "a3", Identifier: "theopenlane.io"},
 		{Ref: "a4", Identifier: ""},
-	}
-	assetIDByRef := map[string]string{
-		"a1": "asset-1",
-		"a2": "asset-2",
-		"a3": "asset-3",
 	}
 
 	tests := []struct {
@@ -139,12 +136,12 @@ func TestDomainScanMappingMatches(t *testing.T) {
 		{
 			name:   "matches subdomain and exact domain",
 			domain: "iubenda.com",
-			want:   []string{"asset-1", "asset-2"},
+			want:   []string{"cdn.iubenda.com", "iubenda.com"},
 		},
 		{
 			name:   "no match for unrelated domain",
 			domain: "theopenlane.io",
-			want:   []string{"asset-3"},
+			want:   []string{"theopenlane.io"},
 		},
 		{
 			name:   "empty domain matches nothing",
@@ -156,11 +153,86 @@ func TestDomainScanMappingMatches(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			domain := tt.domain
-			got := domainScanMappingMatches(assets, assetIDByRef, func(assetDomain string) bool {
+			got := domainScanAssetKeys(assets, func(assetDomain string) bool {
 				return domain != "" && (assetDomain == domain || strings.HasSuffix(assetDomain, "."+domain))
 			})
 
-			assert.DeepEqual(t, got, tt.want)
+			assert.Check(t, cmp.DeepEqual(got, tt.want))
 		})
 	}
+}
+
+func TestDomainScanVendorEnvelopes(t *testing.T) {
+	cfg := DomainScanImport{
+		ScanIDs: []string{"scan-1"},
+		Vendors: []DomainScanImportVendor{
+			{Ref: "v1", Name: "Acme", Domain: "Acme.com."},
+			{Ref: "v2", Name: "Globex", LegalName: "Globex Corp", Domain: "globex.com"},
+			{Ref: "v3", Name: "No Domain"},
+		},
+	}
+
+	envelopes, err := domainScanVendorEnvelopes(cfg, "type-vendor", nil, map[string]string{"globex.com": "vendor-globex"})
+	assert.NilError(t, err)
+	assert.Check(t, cmp.Len(envelopes, 3))
+
+	assert.Check(t, cmp.Equal(envelopes[0].Variant, domainScanImportVariant))
+	assert.Check(t, cmp.Equal(entityops.FieldValue(envelopes[0].Payload, "external_id"), "acme.com"))
+	assert.Check(t, strings.Contains(string(envelopes[0].Payload), `"domains":["acme.com"]`))
+
+	assert.Check(t, cmp.Equal(entityops.FieldValue(envelopes[1].Payload, "external_id"), "vendor-globex"))
+	assert.Check(t, cmp.Equal(entityops.FieldValue(envelopes[1].Payload, "name"), "Globex Corp"))
+	assert.Check(t, !strings.Contains(string(envelopes[1].Payload), `"domains"`))
+
+	assert.Check(t, cmp.Equal(entityops.FieldValue(envelopes[2].Payload, "external_id"), "no domain"))
+}
+
+func TestDomainScanPlatformAndSystemEnvelopesCarryLinkKeys(t *testing.T) {
+	cfg := DomainScanImport{
+		ScanIDs: []string{"scan-1"},
+		Vendors: []DomainScanImportVendor{{Ref: "v1", Name: "Acme", Domain: "acme.com"}},
+		Assets:  []DomainScanImportAsset{{Ref: "a1", Name: "app", Identifier: "App.Acme.com"}},
+		Platforms: []DomainScanImportPlatform{
+			{Ref: "p1", Name: "Production", EntityRefs: []string{"v1", "missing"}, AssetRefs: []string{"a1"}},
+		},
+		Systems: []DomainScanImportSystem{
+			{Name: "Billing", PlatformRefs: []string{"p1"}, EntityRefs: []string{"v1"}},
+		},
+	}
+
+	platforms, err := domainScanPlatformEnvelopes(cfg, map[string]string{"acme.com": "vendor-acme"})
+	assert.NilError(t, err)
+	assert.Check(t, cmp.Len(platforms, 1))
+	assert.Check(t, strings.Contains(string(platforms[0].Payload), `"vendor_keys":["vendor-acme"]`))
+	assert.Check(t, strings.Contains(string(platforms[0].Payload), `"asset_keys":["app.acme.com"]`))
+	assert.Check(t, strings.Contains(string(platforms[0].Payload), `"generated_scan_ids":["scan-1"]`))
+	assert.Check(t, !strings.Contains(string(platforms[0].Payload), `"entity_ids"`))
+
+	systems, err := domainScanSystemEnvelopes(cfg, nil)
+	assert.NilError(t, err)
+	assert.Check(t, cmp.Len(systems, 1))
+	assert.Check(t, strings.Contains(string(systems[0].Payload), `"platform_names":["Production"]`))
+	assert.Check(t, strings.Contains(string(systems[0].Payload), `"vendor_keys":["acme.com"]`))
+	assert.Check(t, !strings.Contains(string(systems[0].Payload), `"asset_keys"`))
+}
+
+func TestDomainScanFindingEnvelopes(t *testing.T) {
+	cfg := DomainScanImport{
+		ScanIDs: []string{"scan-1"},
+		Assets:  []DomainScanImportAsset{{Ref: "a1", Name: "app", Identifier: "app.acme.com"}},
+		Findings: []DomainScanImportFinding{
+			{Category: "Missing DMARC", Domain: "Acme.com."},
+			{Category: "Weak TLS"},
+		},
+	}
+
+	envelopes, err := domainScanFindingEnvelopes(cfg, "acme.com")
+	assert.NilError(t, err)
+	assert.Check(t, cmp.Len(envelopes, 2))
+
+	assert.Check(t, cmp.Equal(entityops.FieldValue(envelopes[0].Payload, "source"), domainScanFindingSource))
+	assert.Check(t, cmp.Equal(entityops.FieldValue(envelopes[0].Payload, "display_name"), "Missing DMARC (acme.com)"))
+	assert.Check(t, strings.Contains(string(envelopes[0].Payload), `"asset_keys":["app.acme.com"]`))
+
+	assert.Check(t, cmp.Equal(entityops.FieldValue(envelopes[1].Payload, "display_name"), "Weak TLS (acme.com)"))
 }

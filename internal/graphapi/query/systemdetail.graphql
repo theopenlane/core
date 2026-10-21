@@ -7,11 +7,16 @@ mutation CreateBulkCSVSystemDetail ($input: Upload!) {
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -30,11 +35,16 @@ mutation CreateBulkSystemDetail ($input: [CreateSystemDetailInput!]) {
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -53,11 +63,16 @@ mutation CreateSystemDetail ($input: CreateSystemDetailInput!) {
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -96,11 +111,16 @@ query GetAllSystemDetails ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				description
 				displayID
 				id
+				integrationRunID
 				lastReviewed
+				managedBy
 				oscalMetadataJSON
 				ownerID
 				revisionHistory
 				sensitivityLevel
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemName
 				tags
 				updatedAt
@@ -119,11 +139,16 @@ query GetSystemDetailByID ($systemDetailId: ID!) {
 		description
 		displayID
 		id
+		integrationRunID
 		lastReviewed
+		managedBy
 		oscalMetadataJSON
 		ownerID
 		revisionHistory
 		sensitivityLevel
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		systemName
 		tags
 		updatedAt
@@ -149,11 +174,16 @@ query GetSystemDetails ($first: Int, $last: Int, $after: Cursor, $before: Cursor
 				description
 				displayID
 				id
+				integrationRunID
 				lastReviewed
+				managedBy
 				oscalMetadataJSON
 				ownerID
 				revisionHistory
 				sensitivityLevel
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemName
 				tags
 				updatedAt
@@ -173,11 +203,16 @@ mutation UpdateBulkCSVSystemDetail ($input: Upload!) {
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -199,11 +234,16 @@ mutation UpdateBulkSystemDetail ($ids: [ID!]!, $input: UpdateSystemDetailInput!)
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt
@@ -225,11 +265,16 @@ mutation UpdateSystemDetail ($updateSystemDetailId: ID!, $input: UpdateSystemDet
 			description
 			displayID
 			id
+			integrationRunID
 			lastReviewed
+			managedBy
 			oscalMetadataJSON
 			ownerID
 			revisionHistory
 			sensitivityLevel
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemName
 			tags
 			updatedAt

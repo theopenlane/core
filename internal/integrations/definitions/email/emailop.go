@@ -11,9 +11,9 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // templatePlaceholderOpen marks a still-unrendered template expression in a per-recipient value
@@ -226,12 +226,17 @@ func (e Operation[T]) renderToMessage(client *Client, input T, extraOpts ...newm
 
 // Registration returns the types.OperationRegistration for wiring into the definition builder
 func (e Operation[T]) Registration() types.OperationRegistration {
-	return e.Op.Handles(func(ctx context.Context, req types.OperationRequest, client *Client, input T) (json.RawMessage, error) {
+	registration := e.Op.Handles(func(ctx context.Context, req types.OperationRequest, client *Client, input T) (json.RawMessage, error) {
 		return nil, e.dispatch(ctx, req, client, input)
 	}).
 		CustomerSelectable(e.CustomerSelectable != nil && *e.CustomerSelectable).
 		Description(e.Description).
 		Registration()
+
+	// sends carry per-recipient fields the authored schema leaves out, so dispatch must accept them
+	registration.Input.Schema = jsonx.AllowAdditionalProperties(registration.Input.Schema)
+
+	return registration
 }
 
 // RenderCatalogPreview renders a customer-selectable catalog entry to HTML for UI preview

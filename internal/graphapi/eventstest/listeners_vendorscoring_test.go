@@ -8,6 +8,7 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
+	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -124,7 +125,10 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		expected := answeredQuestionScore + (len(models.DefaultVendorScoringQuestions)-1)*unansweredPenalty
+		penalizedQuestions := lo.CountBy(models.DefaultVendorScoringQuestions, func(question models.VendorScoringQuestionDef) bool {
+			return question.Key != models.ReviewOutcomeQuestionKey
+		})
+		expected := answeredQuestionScore + (penalizedQuestions-1)*unansweredPenalty
 
 		recomputed, err := listenerPoll(func() (*generated.Entity, error) {
 			return suite.Client.DB.Entity.Get(ctx, entity.ID)

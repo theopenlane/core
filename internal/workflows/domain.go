@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // DeriveDomainKey generates a stable domain key from a sorted list of field names.

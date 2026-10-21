@@ -10,8 +10,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // registry stores topic codecs, policies, and listeners

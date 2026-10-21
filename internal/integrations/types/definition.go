@@ -7,7 +7,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // DefinitionSpec describes the catalog-visible metadata for one definition

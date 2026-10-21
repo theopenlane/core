@@ -7,8 +7,8 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // ValidateInput checks a payload against its schema and then its semantic validation, wrapping schema failures in sentinel

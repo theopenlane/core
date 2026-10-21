@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // LoadExample reads a JSON file from the given directory and returns it as a raw message
@@ -52,6 +52,11 @@ func AssertExpressionsValid(t *testing.T, mappings []types.MappingRegistration) 
 		t.Run(name+"/filter", func(t *testing.T) {
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
 		})
+
+		// an empty map expression passes the payload through unchanged, so there is nothing to compile
+		if m.Spec.MapExpr == "" {
+			continue
+		}
 
 		t.Run(name+"/map", func(t *testing.T) {
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))

@@ -4,6 +4,7 @@ package testharness
 
 import (
 	"bytes"
+	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
@@ -89,7 +90,7 @@ func TestPDFBytes() []byte {
 	jsonData, _ := json.Marshal(page)
 
 	var buf bytes.Buffer
-	_ = api.Create(nil, bytes.NewReader(jsonData), &buf, nil)
+	_ = api.Create(context.Background(), nil, bytes.NewReader(jsonData), &buf, nil)
 
 	return buf.Bytes()
 }

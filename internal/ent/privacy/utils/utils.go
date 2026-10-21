@@ -79,6 +79,10 @@ type MutationClient interface {
 
 // EntClientFromContext returns the ent client from the context, falling back to the REST transaction client
 func EntClientFromContext(ctx context.Context) *generated.Client {
+	if tx := generated.TxFromContext(ctx); tx != nil {
+		return tx.Client()
+	}
+
 	if client := generated.FromContext(ctx); client != nil {
 		return client
 	}

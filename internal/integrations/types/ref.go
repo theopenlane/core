@@ -12,7 +12,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // =========
@@ -383,6 +383,8 @@ type OperationRef[Config any] struct {
 	handle OperationHandler
 	// ingest executes the operation and returns typed payload sets for the ingest pipeline
 	ingest IngestHandler
+	// afterIngest runs once the operation's ingest finishes or fails
+	afterIngest AfterIngestHandler
 	// replaces lists the retired operation names this operation takes over
 	replaces []string
 	// policy controls synchronous execution behavior for the operation
@@ -492,6 +494,34 @@ func (r OperationRef[Config]) Ingests[C any](fn func(context.Context, OperationR
 		}
 
 		return fn(ctx, request, typed, cfg)
+	}
+
+	return r
+}
+
+// IngestsRequest binds fn as the ingest handler, run without a client, with the decoded config
+func (r OperationRef[Config]) IngestsRequest(fn func(context.Context, OperationRequest, Config) ([]IngestPayloadSet, error)) OperationRef[Config] {
+	r.ingest = func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error) {
+		cfg, err := decodeConfig[Config](request.Config)
+		if err != nil {
+			return nil, err
+		}
+
+		return fn(ctx, request, cfg)
+	}
+
+	return r
+}
+
+// AfterIngest binds fn to run with the decoded config once the operation's ingest finishes or fails
+func (r OperationRef[Config]) AfterIngest(fn func(context.Context, OperationRequest, Config, IngestOutcome) error) OperationRef[Config] {
+	r.afterIngest = func(ctx context.Context, request OperationRequest, outcome IngestOutcome) error {
+		cfg, err := decodeConfig[Config](request.Config)
+		if err != nil {
+			return err
+		}
+
+		return fn(ctx, request, cfg, outcome)
 	}
 
 	return r
@@ -660,6 +690,7 @@ func (r OperationRef[Config]) Registration() OperationRegistration {
 		HealthCheck:           r.healthCheck,
 		Handle:                r.handle,
 		IngestHandle:          r.ingest,
+		AfterIngest:           r.afterIngest,
 		DisabledForAll:        r.disabledForAll,
 		Input:                 r.input.Clone(),
 		Stored:                r.stored,

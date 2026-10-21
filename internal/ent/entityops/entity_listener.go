@@ -14,8 +14,8 @@ import (
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	gala "github.com/theopenlane/core/v2/pkg/gala"
-	jsonx "github.com/theopenlane/core/v2/pkg/jsonx"
 	logx "github.com/theopenlane/core/v2/pkg/logx"
+	jsonx "github.com/theopenlane/utils/jsonx"
 )
 
 // FieldMatch is one declarative proposed-value predicate on a mutation listener: the

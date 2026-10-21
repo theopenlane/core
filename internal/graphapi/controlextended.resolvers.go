@@ -69,11 +69,11 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	filters := controls.GetCloneFilterOptions(input)
+	filters := getCloneFilterOptions(input)
 
 	// if a standard is provided, clone those controls
 	if controls.FilterByStandard(filters) {
-		res, err := r.cloneControlsFromStandard(ctx, filters, input.ProgramID)
+		res, err := r.controlCloner().FromStandard(ctx, filters, input.ProgramID)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 		}
@@ -99,7 +99,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, parseRequestError(ctx, generated.ErrPermissionDenied, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
-	createdControls, err := r.cloneControls(ctx, existingControls, input.ProgramID)
+	createdControls, err := r.controlCloner().Controls(ctx, existingControls, input.ProgramID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
@@ -123,7 +123,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	convertedInput, err := controls.ConvertToCloneControlInput(data)
+	convertedInput, err := convertToCloneControlInput(data)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to convert clone control input")
 
@@ -166,7 +166,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		}
 
 		if isSubControl {
-			scInput, hasUpdate, convErr := controls.GetFieldsToUpdate[generated.UpdateSubcontrolInput](c)
+			scInput, hasUpdate, convErr := getFieldsToUpdate[generated.UpdateSubcontrolInput](c)
 			if convErr != nil {
 				logger.Error().Err(convErr).Msg("error preparing subcontrol update fields")
 			}
@@ -207,7 +207,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 			}
 		} else {
-			cInput, hasUpdate, convErr := controls.GetFieldsToUpdate[generated.UpdateControlInput](c)
+			cInput, hasUpdate, convErr := getFieldsToUpdate[generated.UpdateControlInput](c)
 			if convErr != nil {
 				logger.Error().Err(convErr).Msg("error preparing control update fields")
 			}

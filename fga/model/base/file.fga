@@ -28,6 +28,6 @@ type file
     define parent_viewer: can_view_file from parent_context or can_view_org from parent or can_view from parent
     define parent_context: [organization]
     # NOTE: organization is generally not considered a parent, but for backwards compatibility with files, we are keeping this here - do not replicate on other models
-    define parent: [user, program, organization, group, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export, trust_center_watermark_config, standard,trust_center_entity, entity, identity_holder, trust_center_subprocessor, scan, platform, review]
+    define parent: [user, program, organization, group, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export, trust_center_watermark_config, standard,trust_center_entity, entity, identity_holder, trust_center_subprocessor, scan, platform, review, subcontrol, trust_center_doc]
     define tc_doc_parent: [trust_center_doc]
 

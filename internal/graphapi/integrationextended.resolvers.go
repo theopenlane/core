@@ -14,9 +14,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // WebhookURLs is the resolver for the webhookURLs field.

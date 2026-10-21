@@ -27,11 +27,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/internal/objects/store"
 	"github.com/theopenlane/core/v2/internal/objects/upload"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // signedNDADocumentData captures the expected structure of the document data for a trust center NDA submission
@@ -245,7 +245,7 @@ func fetchNDATemplateFile(ctx context.Context, client *generated.Client, templat
 
 // appendAttestationPage merges the original PDF with a generated attestation certificate page
 func appendAttestationPage(ctx context.Context, originalPDF io.ReadSeeker, data *signedNDADocumentData) ([]byte, error) {
-	certPage, err := createAttestationCertificate(data)
+	certPage, err := createAttestationCertificate(ctx, data)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create attestation certificate page")
 
@@ -270,7 +270,7 @@ func appendAttestationPage(ctx context.Context, originalPDF io.ReadSeeker, data 
 func mergePDFs(ctx context.Context, readers ...io.ReadSeeker) ([]byte, error) {
 	var buf bytes.Buffer
 
-	if err := api.MergeRaw(readers, &buf, false, nil); err != nil {
+	if err := api.MergeRaw(ctx, readers, &buf, false, nil); err != nil {
 		if errors.Is(err, pdfcpu.ErrEncrypted) {
 			return nil, err
 		}
@@ -291,7 +291,7 @@ func decryptPDF(ctx context.Context, encrypted io.ReadSeeker) ([]byte, error) {
 
 	var buf bytes.Buffer
 
-	if err := api.Decrypt(encrypted, &buf, model.NewDefaultConfiguration()); err != nil {
+	if err := api.Decrypt(ctx, encrypted, &buf, model.NewDefaultConfiguration()); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("pdfcpu decrypt failed")
 
 		return nil, ErrFailedToDecryptNDAPDF
@@ -397,12 +397,12 @@ type attestationRowLayout struct {
 
 // createAttestationCertificate generates a single-page PDF with the signature certification details
 // rendered as a visible table with labeled rows, cell backgrounds, and grid lines
-func createAttestationCertificate(data *signedNDADocumentData) ([]byte, error) {
+func createAttestationCertificate(ctx context.Context, data *signedNDADocumentData) ([]byte, error) {
 	rows, tableHeight := layoutAttestationRows(attestationFieldsFrom(data))
-	textBoxes := buildAttestationText(rows)
+	textBoxes := buildAttestationText(ctx, rows)
 	boxes := buildAttestationBoxes(rows, tableHeight)
 
-	return renderAttestationPage(textBoxes, boxes)
+	return renderAttestationPage(ctx, textBoxes, boxes)
 }
 
 // attestationFieldsFrom extracts the label-value pairs from signed NDA metadata
@@ -438,8 +438,8 @@ func layoutAttestationRows(fields []attestationField) ([]attestationRowLayout, f
 }
 
 // buildAttestationText creates the header and per-row text elements for the attestation table
-func buildAttestationText(rows []attestationRowLayout) []attestationTextBox {
-	baselinePad := attestCellPadY + fontAscent(attestFontRegular, attestFieldSize)
+func buildAttestationText(ctx context.Context, rows []attestationRowLayout) []attestationTextBox {
+	baselinePad := attestCellPadY + fontAscent(ctx, attestFontRegular, attestFieldSize)
 
 	textBoxes := []attestationTextBox{
 		{
@@ -524,7 +524,7 @@ func buildAttestationBoxes(rows []attestationRowLayout, tableHeight float64) []a
 }
 
 // renderAttestationPage assembles the page JSON structure and calls pdfcpu's Create API
-func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSimpleBox) ([]byte, error) {
+func renderAttestationPage(ctx context.Context, textBoxes []attestationTextBox, boxes []attestationSimpleBox) ([]byte, error) {
 	page := attestationPage{
 		Paper:  "A4P",
 		Origin: "UpperLeft",
@@ -550,7 +550,7 @@ func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSi
 	}
 
 	var buf bytes.Buffer
-	if err := api.Create(nil, bytes.NewReader(jsonData), &buf, nil); err != nil {
+	if err := api.Create(ctx, nil, bytes.NewReader(jsonData), &buf, nil); err != nil {
 		log.Error().Err(err).Msg("pdfcpu create failed")
 
 		return nil, ErrFailedToGenerateAttestationPDF
@@ -561,8 +561,8 @@ func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSi
 
 // fontAscent returns fontName's ascent at fontSize, falling back to zero when the font has no
 // known metrics, which only happens for a font pdfcpu doesn't know about
-func fontAscent(fontName string, fontSize int) float64 {
-	ascent, err := font.Ascent(fontName, fontSize)
+func fontAscent(ctx context.Context, fontName string, fontSize int) float64 {
+	ascent, err := font.Ascent(ctx, fontName, fontSize)
 	if err != nil {
 		log.Error().Err(err).Str("font", fontName).Msg("failed to measure font ascent")
 
@@ -575,7 +575,7 @@ func fontAscent(fontName string, fontSize int) float64 {
 // textWidth measures text in fontName at fontSize, falling back to zero when a character isn't
 // mappable in the font; an unmeasurable string is treated as fitting rather than failing the render
 func textWidth(text, fontName string, fontSize int) float64 {
-	w, err := font.TextWidth(text, fontName, fontSize)
+	w, err := font.TextWidth(context.Background(), text, fontName, fontSize)
 	if err != nil {
 		log.Error().Err(err).Str("font", fontName).Msg("failed to measure text width")
 

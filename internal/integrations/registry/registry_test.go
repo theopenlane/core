@@ -8,7 +8,7 @@ import (
 
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // testCredential is the credential type behind the reusable test slot
@@ -458,6 +458,30 @@ func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
 	err := reg.Register(def)
 	if !errors.Is(err, ErrIngestSnapshotRequiresIngestHandle) {
 		t.Fatalf("expected ErrIngestSnapshotRequiresIngestHandle, got %v", err)
+	}
+}
+
+func TestIndexOperationsAfterIngestRequiresIngestHandle(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badafteringest"},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:   "bad_after_ingest",
+				Topic:  gala.TopicName("bad_after_ingest"),
+				Handle: newTestHandler(),
+				AfterIngest: func(context.Context, integrationtypes.OperationRequest, integrationtypes.IngestOutcome) error {
+					return nil
+				},
+			},
+		},
+	}
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrAfterIngestRequiresIngestHandle) {
+		t.Fatalf("expected ErrAfterIngestRequiresIngestHandle, got %v", err)
 	}
 }
 

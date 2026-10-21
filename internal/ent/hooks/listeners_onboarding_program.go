@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 func init() { registerListeners(OnboardingProgramListeners) }
@@ -100,37 +100,17 @@ func createProgram(ctx context.Context, client *generated.Client, orgID string, 
 		return err
 	}
 
+	// can't use worker pool here since we are in a tx, and the program was created in this tx
+	cloner := controls.Cloner{DB: client, OrgID: orgID, SkipProgramAccess: true}
+
 	for _, std := range standards {
 		filters := controls.CloneFilterOptions{StandardID: &std.ID}
 		if std.Framework == "soc2" {
 			filters.Categories = []string{"Security"}
 		}
 
-		where, err := controls.ControlFilterByStandard(ctx, filters, std)
-		if err != nil {
+		if _, err := cloner.FromStandard(ctx, filters, &program.ID); err != nil {
 			return err
-		}
-
-		sources, err := client.Control.Query().Where(where...).WithStandard().WithSubcontrols().All(ctx)
-		if err != nil {
-			return err
-		}
-
-		// can't use worker pool here since we are in a tx
-		for _, source := range sources {
-			input, _ := controls.CreateCloneControlInput(source, &program.ID, orgID)
-			cloned, err := client.Control.Create().SetInput(input).Save(ctx)
-			if err != nil {
-				return err
-			}
-
-			for _, subcontrol := range source.Edges.Subcontrols {
-				input := controls.CreateCloneSubcontrolInput(subcontrol, orgID, controls.SubcontrolToCreate{RefControl: source})
-				input.ControlID = cloned.ID
-				if err := client.Subcontrol.Create().SetInput(*input).Exec(ctx); err != nil {
-					return err
-				}
-			}
 		}
 	}
 

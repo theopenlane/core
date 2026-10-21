@@ -17,7 +17,7 @@ import (
 	enthush "github.com/theopenlane/core/v2/internal/ent/generated/hush"
 	entintegration "github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // Store persists and retrieves installation credentials via Ent-backed hush secrets

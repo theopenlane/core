@@ -876,3 +876,18 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
 	assert.Equal(t, "acct-1", entityops.FieldValue(stamped, "external_id"), "mapped non-provenance fields pass through")
 }
+
+func TestStampProvenanceRuntimeOwner(t *testing.T) {
+	t.Parallel()
+
+	payload := json.RawMessage(`{"ref_code":"CC1.1-01","owner_id":"org_other"}`)
+
+	stamped := stampRuntimeProvenance(payload, entityops.SchemaControl, "org_1", "file_1")
+	stamped = entityops.StampProvenance(stamped, entityops.SchemaControl, nil, "def_gemini", "run_1")
+
+	assert.Equal(t, "org_1", entityops.FieldValue(stamped, "owner_id"))
+	assert.Equal(t, "def_gemini", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID))
+	assert.Equal(t, "file_1", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID))
+	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
+	assert.Equal(t, "CC1.1-01", entityops.FieldValue(stamped, "ref_code"))
+}

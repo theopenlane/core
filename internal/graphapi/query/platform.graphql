@@ -25,10 +25,12 @@ mutation CreateBulkCSVPlatform ($input: Upload!) {
 			externalReferenceID
 			externalUUID
 			id
+			integrationRunID
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			metadata
 			name
 			ownerID
@@ -49,7 +51,10 @@ mutation CreateBulkCSVPlatform ($input: Upload!) {
 			securityOwnerUserID
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourceType
 			status
 			tags
@@ -92,10 +97,12 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 			externalReferenceID
 			externalUUID
 			id
+			integrationRunID
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			metadata
 			name
 			ownerID
@@ -116,7 +123,10 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 			securityOwnerUserID
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourceType
 			status
 			tags
@@ -326,10 +336,12 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				externalReferenceID
 				externalUUID
 				id
+				integrationRunID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
 				internalOwnerUserID
+				managedBy
 				metadata
 				name
 				ownerID
@@ -350,7 +362,10 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				securityOwnerUserID
 				securityTierID
 				securityTierName
+				sourceDefinitionID
+				sourceDefinitionVersion
 				sourceIdentifier
+				sourceInstanceID
 				sourceType
 				status
 				tags
@@ -433,10 +448,12 @@ query GetPlatformByID ($platformId: ID!) {
 		externalReferenceID
 		externalUUID
 		id
+		integrationRunID
 		internalOwner
 		internalOwnerGroupID
 		internalOwnerIdentityHolderID
 		internalOwnerUserID
+		managedBy
 		metadata
 		name
 		ownerID
@@ -457,7 +474,10 @@ query GetPlatformByID ($platformId: ID!) {
 		securityOwnerUserID
 		securityTierID
 		securityTierName
+		sourceDefinitionID
+		sourceDefinitionVersion
 		sourceIdentifier
+		sourceInstanceID
 		sourceType
 		status
 		tags
@@ -537,10 +557,12 @@ query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				externalReferenceID
 				externalUUID
 				id
+				integrationRunID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
 				internalOwnerUserID
+				managedBy
 				metadata
 				name
 				ownerID
@@ -561,7 +583,10 @@ query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				securityOwnerUserID
 				securityTierID
 				securityTierName
+				sourceDefinitionID
+				sourceDefinitionVersion
 				sourceIdentifier
+				sourceInstanceID
 				sourceType
 				status
 				tags

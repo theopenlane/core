@@ -740,7 +740,10 @@ func TestVendorScoringConfigFullQuestionnaireMode(t *testing.T) {
 	assert.Assert(t, entityResp.Entity.RiskScore != nil)
 	assert.Assert(t, entityResp.Entity.RiskScoreCoverage != nil)
 
-	unansweredCount := int64(len(models.DefaultVendorScoringQuestions) - 1)
+	penalizedQuestions := lo.CountBy(models.DefaultVendorScoringQuestions, func(question models.VendorScoringQuestionDef) bool {
+		return question.Key != models.ReviewOutcomeQuestionKey
+	})
+	unansweredCount := int64(penalizedQuestions - 1)
 	expectedTotal := int64(6) + (unansweredCount * 20)
 	assert.Check(t, is.Equal(expectedTotal, *entityResp.Entity.RiskScore))
 	assert.Check(t, is.Equal(int64(1), *entityResp.Entity.RiskScoreCoverage))

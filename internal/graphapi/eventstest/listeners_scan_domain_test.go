@@ -232,7 +232,9 @@ func TestImportDomainScanReviewRequiresCreatePermissions(t *testing.T) {
 			}, "import should create the vendor entity")
 
 			if tc.withPlatform {
-				assert.Check(t, domainScanPlatformLinked(ctx, t, platformName, domainScan.ID))
+				waitForCondition(t, func() bool {
+					return domainScanPlatformLinked(ctx, t, platformName, domainScan.ID)
+				}, "import should create the platform linked to the scan")
 			}
 		})
 	}

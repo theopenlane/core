@@ -247,6 +247,7 @@ func (r Review) Mixin() []ent.Mixin {
 	return mixinConfig{
 		// prefix: "RVW",
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: r},
 			newObjectOwnedMixin[generated.Review](r,
 				withParents(
 					Program{},
@@ -296,6 +297,9 @@ func (Review) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaReview),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative("external_id"),
 	}
 }
 

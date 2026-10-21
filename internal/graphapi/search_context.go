@@ -15,7 +15,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 const (

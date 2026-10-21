@@ -2,6 +2,7 @@ package email
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
@@ -14,6 +15,8 @@ type BrandedMessageRequest struct {
 	// RecipientInfo and CampaignContext are populated per-send (campaign target and dispatch context), not authored in the template, so they are excluded from the reflected catalog config schema via jsonschema:"-"
 	RecipientInfo   `jsonschema:"-"`
 	CampaignContext `jsonschema:"-"`
+	// Tables are data tables rendered after the intros; populated per-send by system emails rather than authored
+	Tables []MessageTable `json:"tables,omitempty" jsonschema:"-"`
 	// Subject is the email subject line
 	Subject string `json:"subject" jsonschema:"required,description=Email subject line"`
 	// Preheader is hidden preview text shown in the inbox list
@@ -24,8 +27,8 @@ type BrandedMessageRequest struct {
 	Intros []string `json:"intros,omitempty" jsonschema:"description=Body paragraphs rendered before the call-to-action"`
 	// ButtonText is the optional call-to-action button label
 	ButtonText string `json:"buttonText,omitempty" jsonschema:"description=Call-to-action button label"`
-	// ButtonLink is the URL the call-to-action button navigates to
-	ButtonLink string `json:"buttonLink,omitempty" jsonschema:"format=uri,description=Call-to-action button URL"`
+	// ButtonLink is the URL the call-to-action button navigates to; a path is resolved against the product URL
+	ButtonLink string `json:"buttonLink,omitempty" jsonschema:"description=Call-to-action button URL or product path"`
 	// Outros are fine-print paragraphs rendered after the call-to-action
 	Outros []string `json:"outros,omitempty" jsonschema:"description=Fine-print paragraphs rendered after the call-to-action"`
 	// LogoURL overrides the hero logo displayed in the email body for this send
@@ -66,6 +69,51 @@ type BrandedMessageRequest struct {
 	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"format=uri,description=Unsubscribe link shown in the footer"`
 	// Social is the ordered list of social footer entries rendered beneath the body
 	Social []SocialLink `json:"social,omitempty" jsonschema:"description=Social footer links rendered beneath the body"`
+}
+
+// absoluteProductLink prefixes a console-relative path with the product url so callers such
+// as notify specs can pass the path they already carry in notification data
+func absoluteProductLink(cfg RuntimeEmailConfig, link string) string {
+	if strings.HasPrefix(link, "/") {
+		return strings.TrimSuffix(cfg.ProductURL, "/") + link
+	}
+
+	return link
+}
+
+// MessageTable is a data table rendered in the email body: a header row plus rows of cells
+// in the same column order
+type MessageTable struct {
+	// Title is the heading shown above the table
+	Title string `json:"title,omitempty"`
+	// Columns are the header labels, in display order
+	Columns []string `json:"columns"`
+	// Rows are the cell values for each row, aligned to Columns
+	Rows [][]string `json:"rows"`
+	// Footer is the text shown below the table, before any call-to-action
+	Footer string `json:"footer,omitempty"`
+}
+
+// dataTable converts the table into the renderer's cell layout, where every cell carries its column label
+func (t MessageTable) dataTable() render.DataTable {
+	data := make([][]render.Cell, 0, len(t.Rows))
+
+	for _, row := range t.Rows {
+		cells := make([]render.Cell, 0, len(t.Columns))
+
+		for i, column := range t.Columns {
+			value := ""
+			if i < len(row) {
+				value = row[i]
+			}
+
+			cells = append(cells, render.Cell{Key: column, Value: value})
+		}
+
+		data = append(data, cells)
+	}
+
+	return render.DataTable{Title: t.Title, Data: data, Footer: t.Footer}
 }
 
 // BrandedMessageOp is the typed operation ref used for catalog dispatch
@@ -114,7 +162,7 @@ var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 	Subject: func(_ RuntimeEmailConfig, req BrandedMessageRequest) string {
 		return req.Subject
 	},
-	Build: func(_ RuntimeEmailConfig, req BrandedMessageRequest) render.ContentBody {
+	Build: func(cfg RuntimeEmailConfig, req BrandedMessageRequest) render.ContentBody {
 		body := render.ContentBody{
 			Preheader: req.Preheader,
 			Name:      req.FirstName,
@@ -125,9 +173,11 @@ var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 
 		if req.ButtonText != "" && req.ButtonLink != "" {
 			body.Actions = []render.Action{{
-				Button: render.Button{Text: req.ButtonText, Link: req.ButtonLink},
+				Button: render.Button{Text: req.ButtonText, Link: absoluteProductLink(cfg, req.ButtonLink)},
 			}}
 		}
+
+		body.Tables = lo.Map(req.Tables, func(table MessageTable, _ int) render.DataTable { return table.dataTable() })
 
 		return body
 	},

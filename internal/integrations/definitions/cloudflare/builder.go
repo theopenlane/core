@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // Builder returns the Cloudflare definition builder with the supplied runtime config applied
@@ -81,7 +81,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			GalaListeners: []types.GalaListenerRegistration{
 				domainScanListeners(),
 			},
-			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
+			Mappings: append(append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 				providerkit.FindingMapping(mapExprFinding),
 				types.MappingRegistration{
 					Schema: entityops.SchemaAsset.Name,
@@ -90,7 +90,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 						MapExpr:    mapExprAsset,
 					},
 				},
-			),
+			), domainScanImportMappings()...),
 		}
 
 		if runtime.Provisioned() {
