@@ -10,9 +10,6 @@ tool (
 	gotest.tools/gotestsum
 )
 
-// todo: remove after common is tagged
-replace github.com/theopenlane/core/common => ./common
-
 require (
 	ariga.io/atlas v1.3.0
 	ariga.io/entcache v0.1.0
@@ -116,7 +113,7 @@ require (
 	github.com/stripe/stripe-go/v86 v86.2.0
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
 	github.com/testcontainers/testcontainers-go v0.44.0
-	github.com/theopenlane/core/common v1.1.0
+	github.com/theopenlane/core/common v1.2.0
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
