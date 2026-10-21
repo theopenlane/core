@@ -67,7 +67,7 @@ func Builder(cfg Config) registry.Builder {
 func driveConnection(ref types.ConnectionRef[googleDriveCred], app AppConfig, scope string, legacy bool) types.ConnectionRef[googleDriveCred] {
 	return ref.
 		Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleDriveCred]{
-			Config: auth.OAuthConfig{ClientID: app.ClientID,
+			Config: auth.OAuthConfig{ClientID: app.ClientID, //nolint:gosec
 				ClientSecret: app.ClientSecret,
 				AuthURL:      "https://accounts.google.com/o/oauth2/v2/auth",
 				TokenURL:     "https://oauth2.googleapis.com/token",
