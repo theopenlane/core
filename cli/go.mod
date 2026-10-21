@@ -8,16 +8,16 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/goccy/go-yaml v1.19.2
 	github.com/knadh/koanf/parsers/yaml v1.1.1
-	github.com/knadh/koanf/providers/env/v2 v2.0.1
+	github.com/knadh/koanf/providers/env/v2 v2.0.2
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.2
-	github.com/knadh/koanf/v2 v2.3.7
+	github.com/knadh/koanf/v2 v2.3.8
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core/common v1.1.0
+	github.com/theopenlane/core/common v1.1.1
 	github.com/theopenlane/core/v2 v2.4.7
 	github.com/theopenlane/go-client v0.14.1
 	github.com/theopenlane/httpsling v0.3.0
