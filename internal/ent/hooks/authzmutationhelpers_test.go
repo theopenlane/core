@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/gertd/go-pluralize"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -154,6 +155,7 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 }
 
 func TestCheckForEdge(t *testing.T) {
+	pluralizer := pluralize.NewClient()
 	tests := []struct {
 		name        string
 		parentField string
@@ -206,7 +208,7 @@ func TestCheckForEdge(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := checkForEdge(tt.parentField, tt.edgeField)
+			got := checkForEdge(pluralizer, tt.parentField, tt.edgeField)
 			assert.Equal(t, tt.want, got)
 		})
 	}

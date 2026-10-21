@@ -7,11 +7,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	entintercept "github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	features "github.com/theopenlane/core/v2/internal/entitlements/features"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/logx"
@@ -82,7 +82,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				s.Where(sql.ExprP("1=0"))
 			})
 
-			entity := pluralize.NewClient().Plural(strings.ToLower(q.Type()))
+			entity := utils.PluralizerClientFromContext(ctx).Plural(strings.ToLower(q.Type()))
 
 			path := graphql.GetPath(ctx)
 
