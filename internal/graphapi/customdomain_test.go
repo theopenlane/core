@@ -12,6 +12,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -173,6 +174,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:          &enums.DomainPurposeTrustcenter,
+				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -183,6 +186,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:          &enums.DomainPurposeTrustcenter,
+				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -193,6 +198,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:          &enums.DomainPurposeTrustcenter,
+				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -204,6 +211,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "!invalid-domain",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:          &enums.DomainPurposeTrustcenter,
+				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -214,6 +223,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 			request: testclient.CreateCustomDomainInput{
 				CnameRecord: "test2.example.com",
 				OwnerID:     lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:     &enums.DomainPurposeTrustcenter,
+				DomainType:  &enums.CustomDomainTypeExternal,
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
