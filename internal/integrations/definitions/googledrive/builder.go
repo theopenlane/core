@@ -31,8 +31,7 @@ func Builder(cfg Config) registry.Builder {
 			Connections: []types.Connector{
 				driveConnection(oauthConnection.
 					Name("Google Drive OAuth").
-					Description("Connect your Google account using OAuth to access the Drive documents you select.").
-					Recommended(), cfg.AppConfig, "https://www.googleapis.com/auth/drive.file", false),
+					Description("Connect your Google account using OAuth to access the Drive documents you select."), cfg.AppConfig, "https://www.googleapis.com/auth/drive.file", false),
 				driveConnection(legacyOauthConnection.
 					Name("Google Drive OAuth (Legacy)").
 					Description("Read access to all Drive documents for installations connected before document selection, reconnect to move to the current connection.").
