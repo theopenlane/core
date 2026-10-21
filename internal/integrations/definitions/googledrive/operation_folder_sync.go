@@ -18,6 +18,9 @@ const (
 	googleDocMIMEType = "application/vnd.google-apps.document"
 )
 
+// folderSyncOperation is the operation ref for the folder sync ingest operation
+var folderSyncOperation = types.OperationRefOf[FolderSync]()
+
 // FolderSync lists Google Docs in a folder and emits ingest envelopes
 type FolderSync struct {
 	types.OperationSettings

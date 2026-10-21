@@ -73,6 +73,11 @@ func ExportOperationName() string {
 	return documentExportOperation.Name()
 }
 
+// PublicMetadata implements types.InstallationPublic
+func (m InstallationMetadata) PublicMetadata() map[string]any {
+	return map[string]any{"selectedDocuments": m.SelectedDocuments}
+}
+
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{

@@ -41,7 +41,7 @@ func Builder(cfg Config) registry.Builder {
 				documentExportOperation.Description("Export a Google Doc as HTML via the Drive files.export endpoint").Registration(),
 				pickerSessionOperation(cfg).Description("Return a short-lived access token and Picker settings for selecting Drive files in the console").Registration(),
 				operations.NewResourceSelectionOperation(storeSelectedDocuments, 0).Description("Store the Google Docs selected in the Picker as the documents to sync").Registration(),
-				types.OperationRefOf[FolderSync]().
+				folderSyncOperation.
 					Ingests(runFolderSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Ingest(types.IngestContract{Schema: entityops.SchemaInternalPolicy.Name}).

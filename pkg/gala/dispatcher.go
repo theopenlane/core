@@ -47,6 +47,7 @@ type riverJobController interface {
 	JobList(context.Context, *river.JobListParams) (*river.JobListResult, error)
 	JobCancel(context.Context, int64) (*rivertype.JobRow, error)
 	JobDelete(context.Context, int64) (*rivertype.JobRow, error)
+	JobRetry(context.Context, int64) (*rivertype.JobRow, error)
 	QueuePause(context.Context, string, *river.QueuePauseOpts) error
 	QueueResume(context.Context, string, *river.QueuePauseOpts) error
 }

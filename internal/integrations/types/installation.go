@@ -22,3 +22,9 @@ type InstallationIdentifiable interface {
 	// InstallationIdentity returns the normalized identity fields for UI display
 	InstallationIdentity() IntegrationInstallationIdentity
 }
+
+// InstallationPublic exposes installation metadata fields mirrored into the integration's metadata map for UI display
+type InstallationPublic interface {
+	// PublicMetadata returns the fields to mirror into the integration's metadata map
+	PublicMetadata() map[string]any
+}

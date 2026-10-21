@@ -14,6 +14,7 @@ import (
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/utils/jsonx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // =========
@@ -752,7 +753,7 @@ func (r InstallationRef[M]) Decode(integration *generated.Integration) (M, error
 	return metadata, err
 }
 
-// Save replaces the installation's stored metadata attributes with metadata under this layout's name, keeping the stored display identity
+// Save replaces the installation's stored metadata attributes with metadata under this layout's name, keeping the stored display identity and mirroring its public fields into the metadata map
 func (r InstallationRef[M]) Save(ctx context.Context, db *generated.Client, integration *generated.Integration, metadata M) error {
 	data, err := jsonx.ToRawMessage(metadata)
 	if err != nil {
@@ -761,11 +762,16 @@ func (r InstallationRef[M]) Save(ctx context.Context, db *generated.Client, inte
 
 	next := IntegrationInstallationMetadata{Layout: r.input.Name, Attributes: data, Display: integration.InstallationMetadata.Display}
 
-	if err := db.Integration.UpdateOneID(integration.ID).SetInstallationMetadata(next).Exec(ctx); err != nil {
+	mirrored := integration.Metadata
+	if public, ok := any(metadata).(InstallationPublic); ok {
+		mirrored = mapx.DeepMergeMapAny(integration.Metadata, public.PublicMetadata())
+	}
+
+	if err := db.Integration.UpdateOneID(integration.ID).SetInstallationMetadata(next).SetMetadata(mirrored).Exec(ctx); err != nil {
 		return err
 	}
 
-	integration.InstallationMetadata = next
+	integration.InstallationMetadata, integration.Metadata = next, mirrored
 
 	return nil
 }
