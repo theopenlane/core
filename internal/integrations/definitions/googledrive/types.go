@@ -51,8 +51,6 @@ type googleDriveCred struct {
 type UserInput struct {
 	// Primary marks this installation as the authoritative Drive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// SelectedDocuments lists the Google Docs selected in the Picker, set by the selection operation rather than the settings form
-	SelectedDocuments []types.SelectedResource `json:"selectedDocuments,omitempty" jsonschema:"title=Selected Documents" jsonschema_extras:"readOnly=true"`
 }
 
 // InstallationMetadata holds the stable Google Drive target selected for one installation
@@ -61,6 +59,8 @@ type InstallationMetadata struct {
 	AccountID string `json:"accountId,omitempty" jsonschema:"title=Account ID"`
 	// Domain is the primary domain of the Google Workspace account
 	Domain string `json:"domain,omitempty" jsonschema:"title=Domain"`
+	// SelectedDocuments lists the Google Docs selected in the Picker, set by the selection operation
+	SelectedDocuments []types.SelectedResource `json:"selectedDocuments,omitempty" jsonschema:"title=Selected Documents"`
 }
 
 // DefinitionID returns the stable definition identifier for the Google Drive integration

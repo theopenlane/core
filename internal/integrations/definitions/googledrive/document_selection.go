@@ -6,14 +6,14 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// storeSelectedDocuments saves the Google Docs selected in the Picker as the installation's selected documents user input
+// storeSelectedDocuments saves the Google Docs selected in the Picker as the installation's selected documents metadata
 func storeSelectedDocuments(ctx context.Context, req types.OperationRequest, resources []types.SelectedResource) error {
-	input, err := userInput.Decode(req.Integration)
+	metadata, err := installation.Decode(req.Integration)
 	if err != nil {
-		return ErrUserInputDecode
+		return ErrInstallationMetadataDecode
 	}
 
-	input.SelectedDocuments = resources
+	metadata.SelectedDocuments = resources
 
-	return userInput.Save(ctx, req.DB, req.Integration, input)
+	return installation.Save(ctx, req.DB, req.Integration, metadata)
 }

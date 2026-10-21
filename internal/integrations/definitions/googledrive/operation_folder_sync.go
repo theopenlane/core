@@ -27,15 +27,15 @@ type FolderSync struct {
 
 // runFolderSync collects the Google Docs selected in the Picker, or every Google Doc in the configured folder, and returns ingest payload sets
 func runFolderSync(ctx context.Context, req types.OperationRequest, svc DriveClient, cfg FolderSync) ([]types.IngestPayloadSet, error) {
-	input, err := userInput.Decode(req.Integration)
+	metadata, err := installation.Decode(req.Integration)
 	if err != nil {
-		return nil, ErrUserInputDecode
+		return nil, ErrInstallationMetadataDecode
 	}
 
 	var files []*drive.File
 
-	if len(input.SelectedDocuments) > 0 {
-		files, err = getSelectedDocs(ctx, svc, input.SelectedDocuments)
+	if len(metadata.SelectedDocuments) > 0 {
+		files, err = getSelectedDocs(ctx, svc, metadata.SelectedDocuments)
 	} else {
 		folderID := parseFolderID(cfg.FolderID)
 		if folderID == "" {

@@ -744,6 +744,32 @@ func (r InstallationRef[M]) Validated(fn func(context.Context, InstallationReque
 	return r
 }
 
+// Decode returns the installation's stored metadata attributes as M, the zero value when none is stored
+func (r InstallationRef[M]) Decode(integration *generated.Integration) (M, error) {
+	var metadata M
+	err := jsonx.UnmarshalIfPresent(integration.InstallationMetadata.Attributes, &metadata)
+
+	return metadata, err
+}
+
+// Save replaces the installation's stored metadata attributes with metadata under this layout's name, keeping the stored display identity
+func (r InstallationRef[M]) Save(ctx context.Context, db *generated.Client, integration *generated.Integration, metadata M) error {
+	data, err := jsonx.ToRawMessage(metadata)
+	if err != nil {
+		return err
+	}
+
+	next := IntegrationInstallationMetadata{Layout: r.input.Name, Attributes: data, Display: integration.InstallationMetadata.Display}
+
+	if err := db.Integration.UpdateOneID(integration.ID).SetInstallationMetadata(next).Exec(ctx); err != nil {
+		return err
+	}
+
+	integration.InstallationMetadata = next
+
+	return nil
+}
+
 // Registration returns the layout and its identity derivation as an installation registration
 func (r InstallationRef[M]) Registration() *InstallationRegistration {
 	_, identifiable := any(lo.Empty[M]()).(InstallationIdentifiable)

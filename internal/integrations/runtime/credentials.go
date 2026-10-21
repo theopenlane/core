@@ -237,6 +237,14 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 
 	metadata.Display.CredentialRef = connection.Credential.Name
 
+	// keep stored attributes the health check does not resolve, such as ones written by operations
+	attributes, _, err := jsonx.DeepMerge(installation.InstallationMetadata.Attributes, metadata.Attributes)
+	if err != nil {
+		return err
+	}
+
+	metadata.Attributes = attributes
+
 	displayMeta, _ := jsonx.ToMap(metadata.Display)
 	merged := mapx.DeepMergeMapAny(installation.Metadata, mapx.PruneMapZeroAny(displayMeta))
 

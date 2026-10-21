@@ -1,6 +1,6 @@
 {
-  "hash": "e96f9c995a35def9acb3712b341c6cf0dd10ec82e74bfe6be47b218119c995b7",
-  "version": "01M5FWZ4MN4QGN3R2G1PV735H8",
+  "hash": "023c70e12973fa3e3de4de9c074d8d699d7aa91a04edaccb4aa54e50ad42d4b2",
+  "version": "01M5G49E56STDPVRA0M6WQQJGF",
   "surface": {
     "id": "def_01K0GDRIVE00000000000000001",
     "credentials": [
@@ -63,40 +63,11 @@
         "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive/user-input",
         "$ref": "#/$defs/UserInput",
         "$defs": {
-          "SelectedResource": {
-            "properties": {
-              "id": {
-                "type": "string",
-                "title": "ID"
-              },
-              "name": {
-                "type": "string",
-                "title": "Name"
-              },
-              "parentId": {
-                "type": "string",
-                "title": "Parent ID"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object",
-            "required": [
-              "id"
-            ]
-          },
           "UserInput": {
             "properties": {
               "primary": {
                 "type": "boolean",
                 "title": "Primary"
-              },
-              "selectedDocuments": {
-                "items": {
-                  "$ref": "#/$defs/SelectedResource"
-                },
-                "type": "array",
-                "title": "Selected Documents",
-                "readOnly": true
               }
             },
             "additionalProperties": false,
@@ -120,10 +91,38 @@
               "domain": {
                 "type": "string",
                 "title": "Domain"
+              },
+              "selectedDocuments": {
+                "items": {
+                  "$ref": "#/$defs/SelectedResource"
+                },
+                "type": "array",
+                "title": "Selected Documents"
               }
             },
             "additionalProperties": false,
             "type": "object"
+          },
+          "SelectedResource": {
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "ID"
+              },
+              "name": {
+                "type": "string",
+                "title": "Name"
+              },
+              "parentId": {
+                "type": "string",
+                "title": "Parent ID"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "id"
+            ]
           }
         }
       }

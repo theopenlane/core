@@ -17,8 +17,8 @@ var (
 	ErrNoDocumentsSelected = errors.New("googledrive: no documents selected")
 	// ErrFolderListFailed indicates the Drive folder listing request failed
 	ErrFolderListFailed = errors.New("googledrive: folder list failed")
-	// ErrUserInputDecode indicates the installation user input could not be decoded
-	ErrUserInputDecode = errors.New("googledrive: user input decode failed")
+	// ErrInstallationMetadataDecode indicates the installation metadata could not be decoded
+	ErrInstallationMetadataDecode = errors.New("googledrive: installation metadata decode failed")
 	// ErrPayloadEncode indicates a provider payload could not be serialized
 	ErrPayloadEncode = errors.New("googledrive: payload encode failed")
 	// ErrPickerLegacyInstallation indicates the Picker was requested for an installation still on the legacy drive.readonly app

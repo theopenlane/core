@@ -97,24 +97,6 @@ func (r InputRegistration) Clone() InputRegistration {
 	return r
 }
 
-// ReadOnly returns the top-level properties the schema marks read-only, which are set by operations rather than by a client save
-func (r InputRegistration) ReadOnly() []string {
-	root, _, err := jsonx.SchemaRoot(r.Schema)
-	if err != nil || root.Properties == nil {
-		return nil
-	}
-
-	var names []string
-
-	for pair := root.Properties.Oldest(); pair != nil; pair = pair.Next() {
-		if pair.Value.ReadOnly {
-			names = append(names, pair.Key)
-		}
-	}
-
-	return names
-}
-
 // MetaInfo is data shown to the user during credential setup of an integration
 type MetaInfo struct {
 	// Value is the Value to show to the user
