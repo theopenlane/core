@@ -621,22 +621,6 @@ func (_m *Assessment) PolicyAttestations(
 	return _m.QueryPolicyAttestations().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *AssessmentDomain) Owner(ctx context.Context) (*Organization, error) {
-	result, err := _m.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (_m *AssessmentDomain) CustomDomain(ctx context.Context) (*CustomDomain, error) {
-	result, err := _m.Edges.CustomDomainOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryCustomDomain().Only(ctx)
-	}
-	return result, err
-}
-
 func (_m *AssessmentPolicy) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

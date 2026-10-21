@@ -10,6 +10,7 @@ mutation CreateBulkCSVCustomDomain ($input: Upload!) {
 			internalNotes
 			mappableDomainID
 			ownerID
+			purpose
 			systemInternalID
 			systemOwned
 			tags
@@ -32,6 +33,7 @@ mutation CreateBulkCustomDomain ($input: [CreateCustomDomainInput!]) {
 			internalNotes
 			mappableDomainID
 			ownerID
+			purpose
 			systemInternalID
 			systemOwned
 			tags
@@ -54,6 +56,7 @@ mutation CreateCustomDomain ($input: CreateCustomDomainInput!) {
 			internalNotes
 			mappableDomainID
 			ownerID
+			purpose
 			systemInternalID
 			systemOwned
 			tags
@@ -129,6 +132,7 @@ query GetCustomDomainByID ($customDomainId: ID!) {
 		internalNotes
 		mappableDomainID
 		ownerID
+		purpose
 		systemInternalID
 		systemOwned
 		tags
@@ -199,6 +203,7 @@ mutation UpdateCustomDomain ($updateCustomDomainId: ID!, $input: UpdateCustomDom
 			internalNotes
 			mappableDomainID
 			ownerID
+			purpose
 			systemInternalID
 			systemOwned
 			tags

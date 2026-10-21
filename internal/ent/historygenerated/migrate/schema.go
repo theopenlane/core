@@ -88,33 +88,6 @@ var (
 			},
 		},
 	}
-	// AssessmentDomainHistoryColumns holds the columns for the "assessment_domain_history" table.
-	AssessmentDomainHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "custom_domain_id", Type: field.TypeString},
-	}
-	// AssessmentDomainHistoryTable holds the schema information for the "assessment_domain_history" table.
-	AssessmentDomainHistoryTable = &schema.Table{
-		Name:       "assessment_domain_history",
-		Columns:    AssessmentDomainHistoryColumns,
-		PrimaryKey: []*schema.Column{AssessmentDomainHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "assessmentdomainhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{AssessmentDomainHistoryColumns[1]},
-			},
-		},
-	}
 	// AssessmentHistoryColumns holds the columns for the "assessment_history" table.
 	AssessmentHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -634,6 +607,7 @@ var (
 		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "domain_type", Type: field.TypeEnum, Enums: []string{"PREVIEW", "EXTERNAL", "UNKNOWN"}, Default: "UNKNOWN"},
+		{Name: "purpose", Type: field.TypeEnum, Nullable: true, Enums: []string{"TRUSTCENTER", "ASSESSMENT"}},
 	}
 	// CustomDomainHistoryTable holds the schema information for the "custom_domain_history" table.
 	CustomDomainHistoryTable = &schema.Table{
@@ -3244,7 +3218,6 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ActionPlanHistoryTable,
-		AssessmentDomainHistoryTable,
 		AssessmentHistoryTable,
 		AssessmentPolicyHistoryTable,
 		AssessmentResponseHistoryTable,
@@ -3317,9 +3290,6 @@ var (
 func init() {
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
-	}
-	AssessmentDomainHistoryTable.Annotation = &entsql.Annotation{
-		Table: "assessment_domain_history",
 	}
 	AssessmentHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_history",

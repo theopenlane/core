@@ -272,6 +272,20 @@ func (_c *CustomDomainHistoryCreate) SetNillableDomainType(v *enums.CustomDomain
 	return _c
 }
 
+// SetPurpose sets the "purpose" field.
+func (_c *CustomDomainHistoryCreate) SetPurpose(v enums.DomainPurpose) *CustomDomainHistoryCreate {
+	_c.mutation.SetPurpose(v)
+	return _c
+}
+
+// SetNillablePurpose sets the "purpose" field if the given value is not nil.
+func (_c *CustomDomainHistoryCreate) SetNillablePurpose(v *enums.DomainPurpose) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetPurpose(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CustomDomainHistoryCreate) SetID(v string) *CustomDomainHistoryCreate {
 	_c.mutation.SetID(v)
@@ -393,6 +407,11 @@ func (_c *CustomDomainHistoryCreate) check() error {
 			return &ValidationError{Name: "domain_type", err: fmt.Errorf(`historygenerated: validator failed for field "CustomDomainHistory.domain_type": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.Purpose(); ok {
+		if err := customdomainhistory.PurposeValidator(v); err != nil {
+			return &ValidationError{Name: "purpose", err: fmt.Errorf(`historygenerated: validator failed for field "CustomDomainHistory.purpose": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -507,6 +526,10 @@ func (_c *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlgra
 	if value, ok := _c.mutation.DomainType(); ok {
 		_spec.SetField(customdomainhistory.FieldDomainType, field.TypeEnum, value)
 		_node.DomainType = value
+	}
+	if value, ok := _c.mutation.Purpose(); ok {
+		_spec.SetField(customdomainhistory.FieldPurpose, field.TypeEnum, value)
+		_node.Purpose = value
 	}
 	return _node, _spec
 }

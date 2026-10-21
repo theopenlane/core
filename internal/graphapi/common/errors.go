@@ -58,9 +58,7 @@ var (
 
 	// ErrMissingAssessmentCnameTarget is returned  when the assessment cname target is missing
 	ErrMissingAssessmentCnameTarget = errors.New("missing assessment cname target")
-
-	// ErrAssessmentDomainAlreadyExists is returned when an assessment domain already exists
-	ErrAssessmentDomainAlreadyExists = errors.New("assessment domain already exists for this organization")
+	ErrAssessmentDomainAlreadyExists = errors.New("domain already exists for this organization")
 
 	// ErrTrustCenterDomainAlreadyExists is returned when the domain already exists for the trust center
 	ErrTrustCenterDomainAlreadyExists = errors.New("domain already exists for this trust center")

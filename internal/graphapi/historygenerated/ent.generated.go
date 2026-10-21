@@ -27,7 +27,6 @@ type QueryResolver interface {
 	Node(ctx context.Context, id string) (historygenerated.Noder, error)
 	Nodes(ctx context.Context, ids []string) ([]historygenerated.Noder, error)
 	ActionPlanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ActionPlanHistoryOrder, where *historygenerated.ActionPlanHistoryWhereInput) (*historygenerated.ActionPlanHistoryConnection, error)
-	AssessmentDomainHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentDomainHistoryOrder, where *historygenerated.AssessmentDomainHistoryWhereInput) (*historygenerated.AssessmentDomainHistoryConnection, error)
 	AssessmentHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentHistoryOrder, where *historygenerated.AssessmentHistoryWhereInput) (*historygenerated.AssessmentHistoryConnection, error)
 	AssessmentPolicyHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentPolicyHistoryOrder, where *historygenerated.AssessmentPolicyHistoryWhereInput) (*historygenerated.AssessmentPolicyHistoryConnection, error)
 	AssessmentResponseHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentResponseHistoryOrder, where *historygenerated.AssessmentResponseHistoryWhereInput) (*historygenerated.AssessmentResponseHistoryConnection, error)
@@ -160,60 +159,6 @@ func (ec *executionContext) field_Query_actionPlanHistories_args(ctx context.Con
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*historygenerated.ActionPlanHistoryWhereInput, error) {
 			return ec.unmarshalOActionPlanHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐActionPlanHistoryWhereInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_assessmentDomainHistories_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["after"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["first"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
-		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["before"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
-		func(ctx context.Context, v any) (*int, error) {
-			return ec.unmarshalOInt2ᚖint(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["last"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
-		func(ctx context.Context, v any) (*historygenerated.AssessmentDomainHistoryOrder, error) {
-			return ec.unmarshalOAssessmentDomainHistoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryOrder(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["orderBy"] = arg4
-	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
-		func(ctx context.Context, v any) (*historygenerated.AssessmentDomainHistoryWhereInput, error) {
-			return ec.unmarshalOAssessmentDomainHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -5351,401 +5296,6 @@ func (ec *executionContext) _ActionPlanHistoryEdge_cursor(ctx context.Context, f
 }
 func (ec *executionContext) fieldContext_ActionPlanHistoryEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ActionPlanHistoryEdge", field, false, false, "Cursor")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_id(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_id(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.ID, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalNID2string(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "ID")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_historyTime(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_historyTime(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.HistoryTime, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
-			return ec.marshalNTime2timeᚐTime(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_historyTime(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "Time")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_ref(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_ref(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Ref, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_ref(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "String")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_operation(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_operation(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Operation, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v history.OpType) graphql.Marshaler {
-			return ec.marshalNAssessmentDomainHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_operation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "AssessmentDomainHistoryOpType")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_createdAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_createdAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.CreatedAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
-			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "Time")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_updatedAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_updatedAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.UpdatedAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
-			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "Time")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_createdBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_createdBy(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.CreatedBy, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "String")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_updatedBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_updatedBy(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.UpdatedBy, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "String")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_updatedByImpersonator(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.UpdatedByImpersonator, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "String")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_ownerID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_ownerID(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.OwnerID, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_ownerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "String")
-}
-
-func (ec *executionContext) _AssessmentDomainHistory_customDomainID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistory_customDomainID(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.CustomDomainID, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalNString2string(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistory_customDomainID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistory", field, false, false, "String")
-}
-
-func (ec *executionContext) _AssessmentDomainHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistoryConnection) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistoryConnection_edges(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Edges, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []*historygenerated.AssessmentDomainHistoryEdge) graphql.Marshaler {
-			return ec.marshalOAssessmentDomainHistoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryEdge(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistoryConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AssessmentDomainHistoryConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_AssessmentDomainHistoryEdge(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _AssessmentDomainHistoryConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistoryConnection) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistoryConnection_pageInfo(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.PageInfo, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
-			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistoryConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AssessmentDomainHistoryConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_PageInfo(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _AssessmentDomainHistoryConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistoryConnection) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistoryConnection_totalCount(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.TotalCount, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
-			return ec.marshalNInt2int(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistoryConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistoryConnection", field, false, false, "Int")
-}
-
-func (ec *executionContext) _AssessmentDomainHistoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistoryEdge) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistoryEdge_node(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Node, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *historygenerated.AssessmentDomainHistory) graphql.Marshaler {
-			return ec.marshalOAssessmentDomainHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistory(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistoryEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AssessmentDomainHistoryEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_AssessmentDomainHistory(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _AssessmentDomainHistoryEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentDomainHistoryEdge) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentDomainHistoryEdge_cursor(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Cursor, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
-			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentDomainHistoryEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDomainHistoryEdge", field, false, false, "Cursor")
 }
 
 func (ec *executionContext) _AssessmentHistory_id(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentHistory) (ret graphql.Marshaler) {
@@ -15295,6 +14845,29 @@ func (ec *executionContext) _CustomDomainHistory_domainType(ctx context.Context,
 }
 func (ec *executionContext) fieldContext_CustomDomainHistory_domainType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("CustomDomainHistory", field, false, false, "CustomDomainHistoryCustomDomainType")
+}
+
+func (ec *executionContext) _CustomDomainHistory_purpose(ctx context.Context, field graphql.CollectedField, obj *historygenerated.CustomDomainHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CustomDomainHistory_purpose(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Purpose, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.DomainPurpose) graphql.Marshaler {
+			return ec.marshalOCustomDomainHistoryDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CustomDomainHistory_purpose(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CustomDomainHistory", field, false, false, "CustomDomainHistoryDomainPurpose")
 }
 
 func (ec *executionContext) _CustomDomainHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.CustomDomainHistoryConnection) (ret graphql.Marshaler) {
@@ -39510,50 +39083,6 @@ func (ec *executionContext) fieldContext_Query_actionPlanHistories(ctx context.C
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_actionPlanHistories_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_assessmentDomainHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Query_assessmentDomainHistories(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Query().AssessmentDomainHistories(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].(*historygenerated.AssessmentDomainHistoryOrder), fc.Args["where"].(*historygenerated.AssessmentDomainHistoryWhereInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *historygenerated.AssessmentDomainHistoryConnection) graphql.Marshaler {
-			return ec.marshalNAssessmentDomainHistoryConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryConnection(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Query_assessmentDomainHistories(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_AssessmentDomainHistoryConnection(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_assessmentDomainHistories_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -67161,766 +66690,6 @@ func UnmarshalActionPlanHistoryWhereInput(ctx context.Context, raw any) (history
 	return out, err
 }
 
-func (ec *executionContext) unmarshalInputAssessmentDomainHistoryOrder(ctx context.Context, obj any) (historygenerated.AssessmentDomainHistoryOrder, error) {
-	var it historygenerated.AssessmentDomainHistoryOrder
-	if obj == nil {
-		return it, nil
-	}
-
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	if _, present := asMap["direction"]; !present {
-		asMap["direction"] = "ASC"
-	}
-
-	fieldsInOrder := [...]string{"direction", "field"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "direction":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
-			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Direction = data
-		case "field":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			data, err := ec.unmarshalNAssessmentDomainHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryOrderField(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Field = data
-		}
-	}
-	return it, nil
-}
-
-// UnmarshalAssessmentDomainHistoryOrder unmarshals raw into the AssessmentDomainHistoryOrder input type, using the
-// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
-// object that was not passed as a field argument.
-//
-// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
-// and the returned error says so.
-func UnmarshalAssessmentDomainHistoryOrder(ctx context.Context, raw any) (historygenerated.AssessmentDomainHistoryOrder, error) {
-	var out historygenerated.AssessmentDomainHistoryOrder
-	err := graphql.UnmarshalNamedInputFromContext(ctx, "AssessmentDomainHistoryOrder", raw, &out)
-	return out, err
-}
-
-func (ec *executionContext) unmarshalInputAssessmentDomainHistoryWhereInput(ctx context.Context, obj any) (historygenerated.AssessmentDomainHistoryWhereInput, error) {
-	var it historygenerated.AssessmentDomainHistoryWhereInput
-	if obj == nil {
-		return it, nil
-	}
-
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "customDomainID", "customDomainIDNEQ", "customDomainIDIn", "customDomainIDNotIn", "customDomainIDContains", "customDomainIDHasPrefix", "customDomainIDHasSuffix", "customDomainIDEqualFold", "customDomainIDContainsFold"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "not":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			data, err := ec.unmarshalOAssessmentDomainHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryWhereInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Not = data
-		case "and":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			data, err := ec.unmarshalOAssessmentDomainHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.And = data
-		case "or":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			data, err := ec.unmarshalOAssessmentDomainHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryWhereInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Or = data
-		case "id":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
-		case "idNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDNEQ = data
-		case "idIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDIn = data
-		case "idNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDNotIn = data
-		case "idEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDEqualFold = data
-		case "idContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IDContainsFold = data
-		case "historyTime":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTime"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HistoryTime = data
-		case "historyTimeGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HistoryTimeGT = data
-		case "historyTimeGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HistoryTimeGTE = data
-		case "historyTimeLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HistoryTimeLT = data
-		case "historyTimeLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HistoryTimeLTE = data
-		case "ref":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ref"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Ref = data
-		case "refNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefNEQ = data
-		case "refIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefIn = data
-		case "refNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefNotIn = data
-		case "refContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefContains = data
-		case "refHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefHasPrefix = data
-		case "refHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefHasSuffix = data
-		case "refIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefIsNil = data
-		case "refNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefNotNil = data
-		case "refEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefEqualFold = data
-		case "refContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RefContainsFold = data
-		case "operation":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operation"))
-			data, err := ec.unmarshalOAssessmentDomainHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Operation = data
-		case "operationNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationNEQ"))
-			data, err := ec.unmarshalOAssessmentDomainHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OperationNEQ = data
-		case "operationIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationIn"))
-			data, err := ec.unmarshalOAssessmentDomainHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OperationIn = data
-		case "operationNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationNotIn"))
-			data, err := ec.unmarshalOAssessmentDomainHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OperationNotIn = data
-		case "createdAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAt = data
-		case "createdAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtGT = data
-		case "createdAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtGTE = data
-		case "createdAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtLT = data
-		case "createdAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtLTE = data
-		case "createdAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtIsNil = data
-		case "createdAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedAtNotNil = data
-		case "updatedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAt = data
-		case "updatedAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtGT = data
-		case "updatedAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtGTE = data
-		case "updatedAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtLT = data
-		case "updatedAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtLTE = data
-		case "updatedAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtIsNil = data
-		case "updatedAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedAtNotNil = data
-		case "createdBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
-		case "createdByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNEQ = data
-		case "createdByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByIn = data
-		case "createdByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNotIn = data
-		case "createdByContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByContains = data
-		case "createdByHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByHasPrefix = data
-		case "createdByHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByHasSuffix = data
-		case "createdByIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByIsNil = data
-		case "createdByNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNotNil = data
-		case "createdByEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByEqualFold = data
-		case "createdByContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByContainsFold = data
-		case "updatedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedBy = data
-		case "updatedByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNEQ = data
-		case "updatedByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIn = data
-		case "updatedByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotIn = data
-		case "updatedByContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByContains = data
-		case "updatedByHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByHasPrefix = data
-		case "updatedByHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByHasSuffix = data
-		case "updatedByIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIsNil = data
-		case "updatedByNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotNil = data
-		case "updatedByEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByEqualFold = data
-		case "updatedByContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByContainsFold = data
-		case "updatedByImpersonator":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonator = data
-		case "updatedByImpersonatorNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorNEQ = data
-		case "updatedByImpersonatorIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorIn = data
-		case "updatedByImpersonatorNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorNotIn = data
-		case "updatedByImpersonatorContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorContains = data
-		case "updatedByImpersonatorHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorHasPrefix = data
-		case "updatedByImpersonatorHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorHasSuffix = data
-		case "updatedByImpersonatorIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorIsNil = data
-		case "updatedByImpersonatorNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorNotNil = data
-		case "updatedByImpersonatorEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorEqualFold = data
-		case "updatedByImpersonatorContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByImpersonatorContainsFold = data
-		case "ownerID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerID = data
-		case "ownerIDNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDNEQ = data
-		case "ownerIDIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDIn = data
-		case "ownerIDNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDNotIn = data
-		case "ownerIDContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDContains = data
-		case "ownerIDHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDHasPrefix = data
-		case "ownerIDHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDHasSuffix = data
-		case "ownerIDIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDIsNil = data
-		case "ownerIDNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDNotNil = data
-		case "ownerIDEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDEqualFold = data
-		case "ownerIDContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.OwnerIDContainsFold = data
-		case "customDomainID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainID = data
-		case "customDomainIDNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDNEQ = data
-		case "customDomainIDIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDIn = data
-		case "customDomainIDNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDNotIn = data
-		case "customDomainIDContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDContains = data
-		case "customDomainIDHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDHasPrefix = data
-		case "customDomainIDHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDHasSuffix = data
-		case "customDomainIDEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDEqualFold = data
-		case "customDomainIDContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customDomainIDContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CustomDomainIDContainsFold = data
-		}
-	}
-	return it, nil
-}
-
-// UnmarshalAssessmentDomainHistoryWhereInput unmarshals raw into the AssessmentDomainHistoryWhereInput input type, using the
-// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
-// object that was not passed as a field argument.
-//
-// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
-// and the returned error says so.
-func UnmarshalAssessmentDomainHistoryWhereInput(ctx context.Context, raw any) (historygenerated.AssessmentDomainHistoryWhereInput, error) {
-	var out historygenerated.AssessmentDomainHistoryWhereInput
-	err := graphql.UnmarshalNamedInputFromContext(ctx, "AssessmentDomainHistoryWhereInput", raw, &out)
-	return out, err
-}
-
 func (ec *executionContext) unmarshalInputAssessmentHistoryOrder(ctx context.Context, obj any) (historygenerated.AssessmentHistoryOrder, error) {
 	var it historygenerated.AssessmentHistoryOrder
 	if obj == nil {
@@ -86939,7 +85708,7 @@ func (ec *executionContext) unmarshalInputCustomDomainHistoryWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "cnameRecord", "cnameRecordNEQ", "cnameRecordIn", "cnameRecordNotIn", "cnameRecordContains", "cnameRecordHasPrefix", "cnameRecordHasSuffix", "cnameRecordEqualFold", "cnameRecordContainsFold", "mappableDomainID", "mappableDomainIDNEQ", "mappableDomainIDIn", "mappableDomainIDNotIn", "mappableDomainIDContains", "mappableDomainIDHasPrefix", "mappableDomainIDHasSuffix", "mappableDomainIDEqualFold", "mappableDomainIDContainsFold", "dnsVerificationID", "dnsVerificationIDNEQ", "dnsVerificationIDIn", "dnsVerificationIDNotIn", "dnsVerificationIDContains", "dnsVerificationIDHasPrefix", "dnsVerificationIDHasSuffix", "dnsVerificationIDIsNil", "dnsVerificationIDNotNil", "dnsVerificationIDEqualFold", "dnsVerificationIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "domainType", "domainTypeNEQ", "domainTypeIn", "domainTypeNotIn"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "cnameRecord", "cnameRecordNEQ", "cnameRecordIn", "cnameRecordNotIn", "cnameRecordContains", "cnameRecordHasPrefix", "cnameRecordHasSuffix", "cnameRecordEqualFold", "cnameRecordContainsFold", "mappableDomainID", "mappableDomainIDNEQ", "mappableDomainIDIn", "mappableDomainIDNotIn", "mappableDomainIDContains", "mappableDomainIDHasPrefix", "mappableDomainIDHasSuffix", "mappableDomainIDEqualFold", "mappableDomainIDContainsFold", "dnsVerificationID", "dnsVerificationIDNEQ", "dnsVerificationIDIn", "dnsVerificationIDNotIn", "dnsVerificationIDContains", "dnsVerificationIDHasPrefix", "dnsVerificationIDHasSuffix", "dnsVerificationIDIsNil", "dnsVerificationIDNotNil", "dnsVerificationIDEqualFold", "dnsVerificationIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "domainType", "domainTypeNEQ", "domainTypeIn", "domainTypeNotIn", "purpose", "purposeNEQ", "purposeIn", "purposeNotIn", "purposeIsNil", "purposeNotNil"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -88045,6 +86814,48 @@ func (ec *executionContext) unmarshalInputCustomDomainHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.DomainTypeNotIn = data
+		case "purpose":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purpose"))
+			data, err := ec.unmarshalOCustomDomainHistoryDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Purpose = data
+		case "purposeNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purposeNEQ"))
+			data, err := ec.unmarshalOCustomDomainHistoryDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PurposeNEQ = data
+		case "purposeIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purposeIn"))
+			data, err := ec.unmarshalOCustomDomainHistoryDomainPurpose2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurposeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PurposeIn = data
+		case "purposeNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purposeNotIn"))
+			data, err := ec.unmarshalOCustomDomainHistoryDomainPurpose2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurposeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PurposeNotIn = data
+		case "purposeIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purposeIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PurposeIsNil = data
+		case "purposeNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purposeNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PurposeNotNil = data
 		}
 	}
 	return it, nil
@@ -184037,11 +182848,6 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._AssessmentHistory(ctx, sel, obj)
-	case *historygenerated.AssessmentDomainHistory:
-		if obj == nil {
-			return graphql.Null
-		}
-		return ec._AssessmentDomainHistory(ctx, sel, obj)
 	case *historygenerated.ActionPlanHistory:
 		if obj == nil {
 			return graphql.Null
@@ -184444,170 +183250,6 @@ func (ec *executionContext) _ActionPlanHistoryEdge(ctx context.Context, sel ast.
 			}
 		case "cursor":
 			out.Values[i] = ec._ActionPlanHistoryEdge_cursor(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
-
-var assessmentDomainHistoryImplementors = []string{"AssessmentDomainHistory", "Node"}
-
-func (ec *executionContext) _AssessmentDomainHistory(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.AssessmentDomainHistory) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentDomainHistoryImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("AssessmentDomainHistory")
-		case "id":
-			out.Values[i] = ec._AssessmentDomainHistory_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "historyTime":
-			out.Values[i] = ec._AssessmentDomainHistory_historyTime(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "ref":
-			out.Values[i] = ec._AssessmentDomainHistory_ref(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "operation":
-			out.Values[i] = ec._AssessmentDomainHistory_operation(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createdAt":
-			out.Values[i] = ec._AssessmentDomainHistory_createdAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "updatedAt":
-			out.Values[i] = ec._AssessmentDomainHistory_updatedAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "createdBy":
-			out.Values[i] = ec._AssessmentDomainHistory_createdBy(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "updatedBy":
-			out.Values[i] = ec._AssessmentDomainHistory_updatedBy(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "updatedByImpersonator":
-			out.Values[i] = ec._AssessmentDomainHistory_updatedByImpersonator(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "ownerID":
-			out.Values[i] = ec._AssessmentDomainHistory_ownerID(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "customDomainID":
-			out.Values[i] = ec._AssessmentDomainHistory_customDomainID(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
-
-var assessmentDomainHistoryConnectionImplementors = []string{"AssessmentDomainHistoryConnection"}
-
-func (ec *executionContext) _AssessmentDomainHistoryConnection(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.AssessmentDomainHistoryConnection) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentDomainHistoryConnectionImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("AssessmentDomainHistoryConnection")
-		case "edges":
-			out.Values[i] = ec._AssessmentDomainHistoryConnection_edges(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "pageInfo":
-			out.Values[i] = ec._AssessmentDomainHistoryConnection_pageInfo(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "totalCount":
-			out.Values[i] = ec._AssessmentDomainHistoryConnection_totalCount(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
-
-var assessmentDomainHistoryEdgeImplementors = []string{"AssessmentDomainHistoryEdge"}
-
-func (ec *executionContext) _AssessmentDomainHistoryEdge(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.AssessmentDomainHistoryEdge) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentDomainHistoryEdgeImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("AssessmentDomainHistoryEdge")
-		case "node":
-			out.Values[i] = ec._AssessmentDomainHistoryEdge_node(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "cursor":
-			out.Values[i] = ec._AssessmentDomainHistoryEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -187412,6 +186054,11 @@ func (ec *executionContext) _CustomDomainHistory(ctx context.Context, sel ast.Se
 		case "domainType":
 			out.Values[i] = ec._CustomDomainHistory_domainType(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "purpose":
+			out.Values[i] = ec._CustomDomainHistory_purpose(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		default:
@@ -194884,12 +193531,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_actionPlanHistories(ctx, field)
 				})
-		case "assessmentDomainHistories":
-			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
-				true, true,
-				func(ctx context.Context) graphql.Marshaler {
-					return ec._Query_assessmentDomainHistories(ctx, field)
-				})
 		case "assessmentHistories":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
 				true, true,
@@ -202076,43 +200717,6 @@ func (ec *executionContext) unmarshalNActionPlanHistoryWhereInput2ᚖgithubᚗco
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAssessmentDomainHistoryConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryConnection(ctx context.Context, sel ast.SelectionSet, v *historygenerated.AssessmentDomainHistoryConnection) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "AssessmentDomainHistoryConnection!")
-		return graphql.Null
-	}
-	return ec._AssessmentDomainHistoryConnection(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNAssessmentDomainHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (history.OpType, error) {
-	var res history.OpType
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNAssessmentDomainHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v history.OpType) graphql.Marshaler {
-	return v
-}
-
-func (ec *executionContext) unmarshalNAssessmentDomainHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryOrderField(ctx context.Context, v any) (*historygenerated.AssessmentDomainHistoryOrderField, error) {
-	var res = new(historygenerated.AssessmentDomainHistoryOrderField)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNAssessmentDomainHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryOrderField(ctx context.Context, sel ast.SelectionSet, v *historygenerated.AssessmentDomainHistoryOrderField) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "AssessmentDomainHistoryOrderField!")
-		return graphql.Null
-	}
-	return v
-}
-
-func (ec *executionContext) unmarshalNAssessmentDomainHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryWhereInput(ctx context.Context, v any) (*historygenerated.AssessmentDomainHistoryWhereInput, error) {
-	res, err := ec.unmarshalInputAssessmentDomainHistoryWhereInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNAssessmentHistoryAssessmentType2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentType(ctx context.Context, v any) (enums.AssessmentType, error) {
 	var res enums.AssessmentType
 	err := res.UnmarshalGQL(v)
@@ -202668,6 +201272,16 @@ func (ec *executionContext) unmarshalNCustomDomainHistoryCustomDomainType2github
 }
 
 func (ec *executionContext) marshalNCustomDomainHistoryCustomDomainType2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCustomDomainType(ctx context.Context, sel ast.SelectionSet, v enums.CustomDomainType) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNCustomDomainHistoryDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, v any) (enums.DomainPurpose, error) {
+	var res enums.DomainPurpose
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCustomDomainHistoryDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, sel ast.SelectionSet, v enums.DomainPurpose) graphql.Marshaler {
 	return v
 }
 
@@ -205861,118 +204475,6 @@ func (ec *executionContext) unmarshalOActionPlanHistoryWhereInput2ᚖgithubᚗco
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOAssessmentDomainHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistory(ctx context.Context, sel ast.SelectionSet, v *historygenerated.AssessmentDomainHistory) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._AssessmentDomainHistory(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOAssessmentDomainHistoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryEdge(ctx context.Context, sel ast.SelectionSet, v []*historygenerated.AssessmentDomainHistoryEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
-		fc := graphql.GetFieldContext(ctx)
-		fc.Result = &v[i]
-		return ec.marshalOAssessmentDomainHistoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryEdge(ctx, sel, v[i])
-	})
-
-	return ret
-}
-
-func (ec *executionContext) marshalOAssessmentDomainHistoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryEdge(ctx context.Context, sel ast.SelectionSet, v *historygenerated.AssessmentDomainHistoryEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._AssessmentDomainHistoryEdge(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOAssessmentDomainHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx context.Context, v any) ([]history.OpType, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]history.OpType, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNAssessmentDomainHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalOAssessmentDomainHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []history.OpType) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
-		fc := graphql.GetFieldContext(ctx)
-		fc.Result = &v[i]
-		return ec.marshalNAssessmentDomainHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, sel, v[i])
-	})
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
-func (ec *executionContext) unmarshalOAssessmentDomainHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (*history.OpType, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(history.OpType)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOAssessmentDomainHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v *history.OpType) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
-func (ec *executionContext) unmarshalOAssessmentDomainHistoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryOrder(ctx context.Context, v any) (*historygenerated.AssessmentDomainHistoryOrder, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputAssessmentDomainHistoryOrder(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalOAssessmentDomainHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryWhereInputᚄ(ctx context.Context, v any) ([]*historygenerated.AssessmentDomainHistoryWhereInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*historygenerated.AssessmentDomainHistoryWhereInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNAssessmentDomainHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryWhereInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOAssessmentDomainHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentDomainHistoryWhereInput(ctx context.Context, v any) (*historygenerated.AssessmentDomainHistoryWhereInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputAssessmentDomainHistoryWhereInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) marshalOAssessmentHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐAssessmentHistory(ctx context.Context, sel ast.SelectionSet, v *historygenerated.AssessmentHistory) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -208074,6 +206576,68 @@ func (ec *executionContext) unmarshalOCustomDomainHistoryCustomDomainType2ᚖgit
 }
 
 func (ec *executionContext) marshalOCustomDomainHistoryCustomDomainType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCustomDomainType(ctx context.Context, sel ast.SelectionSet, v *enums.CustomDomainType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOCustomDomainHistoryDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, v any) (enums.DomainPurpose, error) {
+	var res enums.DomainPurpose
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCustomDomainHistoryDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, sel ast.SelectionSet, v enums.DomainPurpose) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOCustomDomainHistoryDomainPurpose2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurposeᚄ(ctx context.Context, v any) ([]enums.DomainPurpose, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]enums.DomainPurpose, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCustomDomainHistoryDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOCustomDomainHistoryDomainPurpose2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurposeᚄ(ctx context.Context, sel ast.SelectionSet, v []enums.DomainPurpose) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCustomDomainHistoryDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOCustomDomainHistoryDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, v any) (*enums.DomainPurpose, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(enums.DomainPurpose)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCustomDomainHistoryDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, sel ast.SelectionSet, v *enums.DomainPurpose) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

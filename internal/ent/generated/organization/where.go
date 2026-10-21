@@ -4388,29 +4388,6 @@ func HasAssessmentPoliciesWith(preds ...predicate.AssessmentPolicy) predicate.Or
 	})
 }
 
-// HasAssessmentDomains applies the HasEdge predicate on the "assessment_domains" edge.
-func HasAssessmentDomains() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, AssessmentDomainsTable, AssessmentDomainsColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasAssessmentDomainsWith applies the HasEdge predicate on the "assessment_domains" edge with a given conditions (other predicates).
-func HasAssessmentDomainsWith(preds ...predicate.AssessmentDomain) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newAssessmentDomainsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasCustomTypeEnums applies the HasEdge predicate on the "custom_type_enums" edge.
 func HasCustomTypeEnums() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

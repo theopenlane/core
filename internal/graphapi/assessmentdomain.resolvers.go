@@ -11,6 +11,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
@@ -44,7 +45,8 @@ func (r *mutationResolver) CreateAssessmentDomain(ctx context.Context, input mod
 		return nil, parseRequestError(ctx, err, action)
 	}
 
-	exists, err := transactionCtx.AssessmentDomain.Query().
+	exists, err := transactionCtx.CustomDomain.Query().
+		Where(customdomain.PurposeEQ(enums.DomainPurposeAssessment)).
 		Exist(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, action)
@@ -58,6 +60,7 @@ func (r *mutationResolver) CreateAssessmentDomain(ctx context.Context, input mod
 		CnameRecord:      normalizedCname,
 		MappableDomainID: mappableDomainID,
 		DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
+		Purpose:          lo.ToPtr(enums.DomainPurposeAssessment),
 	}
 
 	customDomain, err := transactionCtx.CustomDomain.Create().
@@ -65,13 +68,6 @@ func (r *mutationResolver) CreateAssessmentDomain(ctx context.Context, input mod
 		Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "customdomain"})
-	}
-
-	_, err = transactionCtx.AssessmentDomain.Create().
-		SetCustomDomainID(customDomain.ID).
-		Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action)
 	}
 
 	return &model.AssessmentDomainCreatePayload{

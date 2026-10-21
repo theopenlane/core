@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
@@ -81,6 +82,11 @@ func (CustomDomain) Fields() []ent.Field {
 			Default(enums.CustomDomainTypeUnknown.String()).
 			Comment("the type of this custom domain").
 			GoType(enums.CustomDomainType("")),
+		field.Enum("purpose").
+			Immutable().
+			Comment("what this domain is used for").
+			Optional().
+			GoType(enums.DomainPurpose("")),
 	}
 }
 

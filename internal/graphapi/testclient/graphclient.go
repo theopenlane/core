@@ -31208,6 +31208,7 @@ type CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains struct {
 	InternalNotes         *string                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	MappableDomainID      string                 "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Purpose               *enums.DomainPurpose   "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                  "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -31270,6 +31271,12 @@ func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetO
 		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
 	}
 	return t.OwnerID
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetPurpose() *enums.DomainPurpose {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.Purpose
 }
 func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetSystemInternalID() *string {
 	if t == nil {
@@ -31335,6 +31342,7 @@ type CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains struct {
 	InternalNotes         *string                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	MappableDomainID      string                 "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Purpose               *enums.DomainPurpose   "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                  "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -31397,6 +31405,12 @@ func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetOwnerID
 		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
 	}
 	return t.OwnerID
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetPurpose() *enums.DomainPurpose {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.Purpose
 }
 func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetSystemInternalID() *string {
 	if t == nil {
@@ -31495,6 +31509,7 @@ type CreateCustomDomain_CreateCustomDomain_CustomDomain struct {
 	InternalNotes         *string                                                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	MappableDomainID      string                                                              "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Purpose               *enums.DomainPurpose                                                "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                                                             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                                                               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -31563,6 +31578,12 @@ func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetOwnerID() *strin
 		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
 	}
 	return t.OwnerID
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetPurpose() *enums.DomainPurpose {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.Purpose
 }
 func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetSystemInternalID() *string {
 	if t == nil {
@@ -32002,6 +32023,7 @@ type GetCustomDomainByID_CustomDomain struct {
 	MappableDomain        GetCustomDomainByID_CustomDomain_MappableDomain   "json:\"mappableDomain\" graphql:\"mappableDomain\""
 	MappableDomainID      string                                            "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Purpose               *enums.DomainPurpose                              "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string                                          "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32076,6 +32098,12 @@ func (t *GetCustomDomainByID_CustomDomain) GetOwnerID() *string {
 		t = &GetCustomDomainByID_CustomDomain{}
 	}
 	return t.OwnerID
+}
+func (t *GetCustomDomainByID_CustomDomain) GetPurpose() *enums.DomainPurpose {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.Purpose
 }
 func (t *GetCustomDomainByID_CustomDomain) GetSystemInternalID() *string {
 	if t == nil {
@@ -32351,6 +32379,7 @@ type UpdateCustomDomain_UpdateCustomDomain_CustomDomain struct {
 	InternalNotes         *string                                                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	MappableDomainID      string                                                              "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Purpose               *enums.DomainPurpose                                                "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                                                             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                                                               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32419,6 +32448,12 @@ func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetOwnerID() *strin
 		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
 	}
 	return t.OwnerID
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetPurpose() *enums.DomainPurpose {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.Purpose
 }
 func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetSystemInternalID() *string {
 	if t == nil {
@@ -182479,6 +182514,7 @@ const CreateBulkCSVCustomDomainDocument = `mutation CreateBulkCSVCustomDomain ($
 			internalNotes
 			mappableDomainID
 			ownerID
+			purpose
 			systemInternalID
 			systemOwned
 			tags
@@ -182520,6 +182556,7 @@ const CreateBulkCustomDomainDocument = `mutation CreateBulkCustomDomain ($input:
 			internalNotes
 			mappableDomainID
 			ownerID
+			purpose
 			systemInternalID
 			systemOwned
 			tags
@@ -182561,6 +182598,7 @@ const CreateCustomDomainDocument = `mutation CreateCustomDomain ($input: CreateC
 			internalNotes
 			mappableDomainID
 			ownerID
+			purpose
 			systemInternalID
 			systemOwned
 			tags
@@ -182691,6 +182729,7 @@ const GetCustomDomainByIDDocument = `query GetCustomDomainByID ($customDomainId:
 		internalNotes
 		mappableDomainID
 		ownerID
+		purpose
 		systemInternalID
 		systemOwned
 		tags
@@ -182801,6 +182840,7 @@ const UpdateCustomDomainDocument = `mutation UpdateCustomDomain ($updateCustomDo
 			internalNotes
 			mappableDomainID
 			ownerID
+			purpose
 			systemInternalID
 			systemOwned
 			tags

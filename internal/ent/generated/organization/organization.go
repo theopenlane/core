@@ -323,8 +323,6 @@ const (
 	EdgeAssessmentResponses = "assessment_responses"
 	// EdgeAssessmentPolicies holds the string denoting the assessment_policies edge name in mutations.
 	EdgeAssessmentPolicies = "assessment_policies"
-	// EdgeAssessmentDomains holds the string denoting the assessment_domains edge name in mutations.
-	EdgeAssessmentDomains = "assessment_domains"
 	// EdgeCustomTypeEnums holds the string denoting the custom_type_enums edge name in mutations.
 	EdgeCustomTypeEnums = "custom_type_enums"
 	// EdgeTagDefinitions holds the string denoting the tag_definitions edge name in mutations.
@@ -1309,13 +1307,6 @@ const (
 	AssessmentPoliciesInverseTable = "assessment_policies"
 	// AssessmentPoliciesColumn is the table column denoting the assessment_policies relation/edge.
 	AssessmentPoliciesColumn = "owner_id"
-	// AssessmentDomainsTable is the table that holds the assessment_domains relation/edge.
-	AssessmentDomainsTable = "assessment_domains"
-	// AssessmentDomainsInverseTable is the table name for the AssessmentDomain entity.
-	// It exists in this package in order to avoid circular dependency with the "assessmentdomain" package.
-	AssessmentDomainsInverseTable = "assessment_domains"
-	// AssessmentDomainsColumn is the table column denoting the assessment_domains relation/edge.
-	AssessmentDomainsColumn = "owner_id"
 	// CustomTypeEnumsTable is the table that holds the custom_type_enums relation/edge.
 	CustomTypeEnumsTable = "custom_type_enums"
 	// CustomTypeEnumsInverseTable is the table name for the CustomTypeEnum entity.
@@ -3531,20 +3522,6 @@ func ByAssessmentPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 	}
 }
 
-// ByAssessmentDomainsCount orders the results by assessment_domains count.
-func ByAssessmentDomainsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newAssessmentDomainsStep(), opts...)
-	}
-}
-
-// ByAssessmentDomains orders the results by assessment_domains terms.
-func ByAssessmentDomains(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newAssessmentDomainsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByCustomTypeEnumsCount orders the results by custom_type_enums count.
 func ByCustomTypeEnumsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -4802,13 +4779,6 @@ func newAssessmentPoliciesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssessmentPoliciesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentPoliciesTable, AssessmentPoliciesColumn),
-	)
-}
-func newAssessmentDomainsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(AssessmentDomainsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentDomainsTable, AssessmentDomainsColumn),
 	)
 }
 func newCustomTypeEnumsStep() *sqlgraph.Step {

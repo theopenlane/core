@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -125,13 +124,6 @@ func ActionPlanEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func AssessmentEdgeCleanup(ctx context.Context, id string) error {
-	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
-	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
-
-	return nil
-}
-
-func AssessmentDomainEdgeCleanup(ctx context.Context, id string) error {
 	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
 	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
@@ -1860,29 +1852,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 		if assessmentpolicyCount, err := FromContext(ctx).AssessmentPolicy.Delete().Where(assessmentpolicy.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", assessmentpolicyCount).Msg("error deleting assessmentpolicy")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).AssessmentDomain.Query().Where(assessmentdomain.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying assessmentdomain ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := AssessmentDomainEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up assessmentdomain edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).AssessmentDomain.Query().Where((assessmentdomain.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if err := PurgeAssessmentDomainHistory(ctx, assessmentdomain.HasOwnerWith(organization.ID(id))); err != nil {
-			return err
-		}
-		if assessmentdomainCount, err := FromContext(ctx).AssessmentDomain.Delete().Where(assessmentdomain.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", assessmentdomainCount).Msg("error deleting assessmentdomain")
 			return err
 		}
 	}

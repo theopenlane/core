@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -176,7 +175,6 @@ func checkColumn(t, c string) error {
 			apitoken.Table:                   apitoken.ValidColumn,
 			actionplan.Table:                 actionplan.ValidColumn,
 			assessment.Table:                 assessment.ValidColumn,
-			assessmentdomain.Table:           assessmentdomain.ValidColumn,
 			assessmentpolicy.Table:           assessmentpolicy.ValidColumn,
 			assessmentresponse.Table:         assessmentresponse.ValidColumn,
 			asset.Table:                      asset.ValidColumn,

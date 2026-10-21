@@ -10,7 +10,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
-	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentdomainhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
@@ -449,140 +448,6 @@ func newActionPlanHistoryPaginateArgs(rv map[string]any) *actionplanhistoryPagin
 	}
 	if v, ok := rv[whereField].(*ActionPlanHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithActionPlanHistoryFilter(v.Filter))
-	}
-	return args
-}
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (_q *AssessmentDomainHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*AssessmentDomainHistoryQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return _q, nil
-	}
-	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return _q, nil
-}
-
-func (_q *AssessmentDomainHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(assessmentdomainhistory.Columns))
-		selectedFields = []string{assessmentdomainhistory.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-		case "historyTime":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldHistoryTime]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldHistoryTime)
-				fieldSeen[assessmentdomainhistory.FieldHistoryTime] = struct{}{}
-			}
-		case "ref":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldRef]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldRef)
-				fieldSeen[assessmentdomainhistory.FieldRef] = struct{}{}
-			}
-		case "operation":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldOperation]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldOperation)
-				fieldSeen[assessmentdomainhistory.FieldOperation] = struct{}{}
-			}
-		case "createdAt":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldCreatedAt)
-				fieldSeen[assessmentdomainhistory.FieldCreatedAt] = struct{}{}
-			}
-		case "updatedAt":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldUpdatedAt)
-				fieldSeen[assessmentdomainhistory.FieldUpdatedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldCreatedBy)
-				fieldSeen[assessmentdomainhistory.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldUpdatedBy)
-				fieldSeen[assessmentdomainhistory.FieldUpdatedBy] = struct{}{}
-			}
-		case "updatedByImpersonator":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldUpdatedByImpersonator]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldUpdatedByImpersonator)
-				fieldSeen[assessmentdomainhistory.FieldUpdatedByImpersonator] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldOwnerID)
-				fieldSeen[assessmentdomainhistory.FieldOwnerID] = struct{}{}
-			}
-		case "customDomainID":
-			if _, ok := fieldSeen[assessmentdomainhistory.FieldCustomDomainID]; !ok {
-				selectedFields = append(selectedFields, assessmentdomainhistory.FieldCustomDomainID)
-				fieldSeen[assessmentdomainhistory.FieldCustomDomainID] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		_q.Select(selectedFields...)
-	}
-	return nil
-}
-
-type assessmentdomainhistoryPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []AssessmentDomainHistoryPaginateOption
-}
-
-func newAssessmentDomainHistoryPaginateArgs(rv map[string]any) *assessmentdomainhistoryPaginateArgs {
-	args := &assessmentdomainhistoryPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[orderByField]; ok {
-		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &AssessmentDomainHistoryOrder{Field: &AssessmentDomainHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
-			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithAssessmentDomainHistoryOrder(order))
-			}
-		case *AssessmentDomainHistoryOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithAssessmentDomainHistoryOrder(v))
-			}
-		}
-	}
-	if v, ok := rv[whereField].(*AssessmentDomainHistoryWhereInput); ok {
-		args.opts = append(args.opts, WithAssessmentDomainHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -3077,6 +2942,11 @@ func (_q *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[customdomainhistory.FieldDomainType]; !ok {
 				selectedFields = append(selectedFields, customdomainhistory.FieldDomainType)
 				fieldSeen[customdomainhistory.FieldDomainType] = struct{}{}
+			}
+		case "purpose":
+			if _, ok := fieldSeen[customdomainhistory.FieldPurpose]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldPurpose)
+				fieldSeen[customdomainhistory.FieldPurpose] = struct{}{}
 			}
 		case "id":
 		case "__typename":

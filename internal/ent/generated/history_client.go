@@ -16,9 +16,6 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*AssessmentMutation]() {
 		c.Assessment.Use(hook)
 	}
-	for _, hook := range history.Hooks[*AssessmentDomainMutation]() {
-		c.AssessmentDomain.Use(hook)
-	}
 	for _, hook := range history.Hooks[*AssessmentPolicyMutation]() {
 		c.AssessmentPolicy.Use(hook)
 	}

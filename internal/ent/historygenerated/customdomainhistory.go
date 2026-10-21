@@ -61,7 +61,9 @@ type CustomDomainHistory struct {
 	// the ID of the trust center the domain belongs to, if applicable
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// the type of this custom domain
-	DomainType   enums.CustomDomainType `json:"domain_type,omitempty"`
+	DomainType enums.CustomDomainType `json:"domain_type,omitempty"`
+	// what this domain is used for
+	Purpose      enums.DomainPurpose `json:"purpose,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -76,7 +78,7 @@ func (*CustomDomainHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case customdomainhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case customdomainhistory.FieldID, customdomainhistory.FieldRef, customdomainhistory.FieldCreatedBy, customdomainhistory.FieldUpdatedBy, customdomainhistory.FieldUpdatedByImpersonator, customdomainhistory.FieldDeletedBy, customdomainhistory.FieldOwnerID, customdomainhistory.FieldInternalNotes, customdomainhistory.FieldSystemInternalID, customdomainhistory.FieldCnameRecord, customdomainhistory.FieldMappableDomainID, customdomainhistory.FieldDNSVerificationID, customdomainhistory.FieldTrustCenterID, customdomainhistory.FieldDomainType:
+		case customdomainhistory.FieldID, customdomainhistory.FieldRef, customdomainhistory.FieldCreatedBy, customdomainhistory.FieldUpdatedBy, customdomainhistory.FieldUpdatedByImpersonator, customdomainhistory.FieldDeletedBy, customdomainhistory.FieldOwnerID, customdomainhistory.FieldInternalNotes, customdomainhistory.FieldSystemInternalID, customdomainhistory.FieldCnameRecord, customdomainhistory.FieldMappableDomainID, customdomainhistory.FieldDNSVerificationID, customdomainhistory.FieldTrustCenterID, customdomainhistory.FieldDomainType, customdomainhistory.FieldPurpose:
 			values[i] = new(sql.NullString)
 		case customdomainhistory.FieldHistoryTime, customdomainhistory.FieldCreatedAt, customdomainhistory.FieldUpdatedAt, customdomainhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -226,6 +228,12 @@ func (_m *CustomDomainHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.DomainType = enums.CustomDomainType(value.String)
 			}
+		case customdomainhistory.FieldPurpose:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field purpose", values[i])
+			} else if value.Valid {
+				_m.Purpose = enums.DomainPurpose(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -327,6 +335,9 @@ func (_m *CustomDomainHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("domain_type=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DomainType))
+	builder.WriteString(", ")
+	builder.WriteString("purpose=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Purpose))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -78,7 +77,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
-	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentdomainhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentpolicyhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
@@ -212,37 +210,6 @@ func PurgeAssessmentHistory(ctx context.Context, ps ...predicate.Assessment) err
 		s.Where(sql.In(assessmenthistory.FieldRef, refs))
 	}).Exec(history.WithContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error purging assessment history")
-
-		return err
-	}
-
-	return nil
-}
-
-// PurgeAssessmentDomainHistory removes the history rows belonging to every assessmentdomain matching
-// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
-// deletes that should keep their audit trail are unaffected.
-// This has to run before the assessmentdomain records themselves are deleted, the rows are matched
-// with a sub-select against the assessmentdomain table
-func PurgeAssessmentDomainHistory(ctx context.Context, ps ...predicate.AssessmentDomain) error {
-	if !contextx.PurgeHistoryEnabled(ctx) {
-		return nil
-	}
-
-	client := FromContext(ctx)
-	if client == nil || client.HistoryClient == nil {
-		return nil
-	}
-
-	refs := sql.Select(assessmentdomain.FieldID).From(sql.Table(assessmentdomain.Table))
-	for _, p := range ps {
-		p(refs)
-	}
-
-	if _, err := client.HistoryClient.AssessmentDomainHistory.Delete().Where(func(s *sql.Selector) {
-		s.Where(sql.In(assessmentdomainhistory.FieldRef, refs))
-	}).Exec(history.WithContext(ctx)); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error purging assessmentdomain history")
 
 		return err
 	}

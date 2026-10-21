@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -123,11 +122,6 @@ var assessmentImplementors = []string{"Assessment", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Assessment) IsNode() {}
-
-var assessmentdomainImplementors = []string{"AssessmentDomain", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*AssessmentDomain) IsNode() {}
 
 var assessmentpolicyImplementors = []string{"AssessmentPolicy", "Node"}
 
@@ -655,15 +649,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(assessment.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assessmentImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case assessmentdomain.Table:
-		query := c.AssessmentDomain.Query().
-			Where(assessmentdomain.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assessmentdomainImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1578,22 +1563,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Assessment.Query().
 			Where(assessment.IDIn(ids...))
 		query, err := query.CollectFields(ctx, assessmentImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case assessmentdomain.Table:
-		query := c.AssessmentDomain.Query().
-			Where(assessmentdomain.IDIn(ids...))
-		query, err := query.CollectFields(ctx, assessmentdomainImplementors...)
 		if err != nil {
 			return nil, err
 		}

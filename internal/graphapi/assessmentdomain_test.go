@@ -4,12 +4,14 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/theopenlane/core/common/enums"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	"github.com/theopenlane/core/v2/internal/testutils"
-	"gotest.tools/v3/assert"
-	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestMutationCreateAssessmentDomain(t *testing.T) {
@@ -36,6 +38,13 @@ func TestMutationCreateAssessmentDomain(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal(domain, resp.CreateAssessmentDomain.CustomDomain.CnameRecord))
+
+		customDomain, err := suite.Client.API.GetCustomDomainByID(org.Owner.UserCtx, resp.CreateAssessmentDomain.CustomDomain.ID)
+		assert.NilError(t, err)
+
+		assert.Check(t, is.Equal(enums.DomainPurposeAssessment, *customDomain.CustomDomain.Purpose))
+		assert.Check(t, is.Equal(enums.CustomDomainTypeExternal, customDomain.CustomDomain.DomainType))
+		assert.Check(t, is.Equal(mappableDomain.ID, customDomain.CustomDomain.MappableDomainID))
 	})
 
 	t.Run("member does not have permission to create an assessment domain", func(t *testing.T) {
@@ -44,6 +53,8 @@ func TestMutationCreateAssessmentDomain(t *testing.T) {
 			CnameRecord: gofakeit.DomainName(),
 		})
 		assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+
+		th.CleanupOrganizationDataWithContext(newOrg.Owner.UserCtx, t)
 	})
 
 	t.Run("only one assessment domain can be added in an organization", func(t *testing.T) {

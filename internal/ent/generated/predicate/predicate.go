@@ -15,9 +15,6 @@ type ActionPlan func(*sql.Selector)
 // Assessment is the predicate function for assessment builders.
 type Assessment func(*sql.Selector)
 
-// AssessmentDomain is the predicate function for assessmentdomain builders.
-type AssessmentDomain func(*sql.Selector)
-
 // AssessmentPolicy is the predicate function for assessmentpolicy builders.
 type AssessmentPolicy func(*sql.Selector)
 

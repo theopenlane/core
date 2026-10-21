@@ -148,40 +148,6 @@ func (r *queryResolver) Assessments(ctx context.Context, after *entgql.Cursor[st
 	return res, err
 }
 
-// AssessmentDomains is the resolver for the assessmentDomains field.
-func (r *queryResolver) AssessmentDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentDomainOrder, where *generated.AssessmentDomainWhereInput) (*generated.AssessmentDomainConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = []*generated.AssessmentDomainOrder{
-			{
-				Field:     generated.AssessmentDomainOrderFieldCreatedAt,
-				Direction: entgql.OrderDirectionDesc,
-			},
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).AssessmentDomain.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "assessmentdomain"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithAssessmentDomainOrder(orderBy),
-		generated.WithAssessmentDomainFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "assessmentdomain"})
-	}
-
-	return res, err
-}
-
 // AssessmentPolicies is the resolver for the assessmentPolicies field.
 func (r *queryResolver) AssessmentPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) (*generated.AssessmentPolicyConnection, error) {
 	// set page limit if nothing was set

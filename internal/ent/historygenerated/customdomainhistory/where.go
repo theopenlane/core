@@ -1303,6 +1303,46 @@ func DomainTypeNotIn(vs ...enums.CustomDomainType) predicate.CustomDomainHistory
 	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldDomainType, v...))
 }
 
+// PurposeEQ applies the EQ predicate on the "purpose" field.
+func PurposeEQ(v enums.DomainPurpose) predicate.CustomDomainHistory {
+	vc := v
+	return predicate.CustomDomainHistory(sql.FieldEQ(FieldPurpose, vc))
+}
+
+// PurposeNEQ applies the NEQ predicate on the "purpose" field.
+func PurposeNEQ(v enums.DomainPurpose) predicate.CustomDomainHistory {
+	vc := v
+	return predicate.CustomDomainHistory(sql.FieldNEQ(FieldPurpose, vc))
+}
+
+// PurposeIn applies the In predicate on the "purpose" field.
+func PurposeIn(vs ...enums.DomainPurpose) predicate.CustomDomainHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.CustomDomainHistory(sql.FieldIn(FieldPurpose, v...))
+}
+
+// PurposeNotIn applies the NotIn predicate on the "purpose" field.
+func PurposeNotIn(vs ...enums.DomainPurpose) predicate.CustomDomainHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldPurpose, v...))
+}
+
+// PurposeIsNil applies the IsNil predicate on the "purpose" field.
+func PurposeIsNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIsNull(FieldPurpose))
+}
+
+// PurposeNotNil applies the NotNil predicate on the "purpose" field.
+func PurposeNotNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotNull(FieldPurpose))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.CustomDomainHistory) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.AndPredicates(predicates...))

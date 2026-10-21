@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -130,7 +129,6 @@ const (
 	TypeAPIToken                   = "APIToken"
 	TypeActionPlan                 = "ActionPlan"
 	TypeAssessment                 = "Assessment"
-	TypeAssessmentDomain           = "AssessmentDomain"
 	TypeAssessmentPolicy           = "AssessmentPolicy"
 	TypeAssessmentResponse         = "AssessmentResponse"
 	TypeAsset                      = "Asset"
@@ -10760,879 +10758,6 @@ func (m *AssessmentMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Assessment edge %s", name)
-}
-
-// AssessmentDomainMutation represents an operation that mutates the AssessmentDomain nodes in the graph.
-type AssessmentDomainMutation struct {
-	config
-	op                      Op
-	typ                     string
-	id                      *string
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	clearedFields           map[string]struct{}
-	owner                   *string
-	clearedowner            bool
-	custom_domain           *string
-	clearedcustom_domain    bool
-	done                    bool
-	oldValue                func(context.Context) (*AssessmentDomain, error)
-	predicates              []predicate.AssessmentDomain
-}
-
-var _ ent.Mutation = (*AssessmentDomainMutation)(nil)
-
-// assessmentdomainOption allows management of the mutation configuration using functional options.
-type assessmentdomainOption func(*AssessmentDomainMutation)
-
-// newAssessmentDomainMutation creates new mutation for the AssessmentDomain entity.
-func newAssessmentDomainMutation(c config, op Op, opts ...assessmentdomainOption) *AssessmentDomainMutation {
-	m := &AssessmentDomainMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeAssessmentDomain,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withAssessmentDomainID sets the ID field of the mutation.
-func withAssessmentDomainID(id string) assessmentdomainOption {
-	return func(m *AssessmentDomainMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *AssessmentDomain
-		)
-		m.oldValue = func(ctx context.Context) (*AssessmentDomain, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().AssessmentDomain.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withAssessmentDomain sets the old AssessmentDomain of the mutation.
-func withAssessmentDomain(node *AssessmentDomain) assessmentdomainOption {
-	return func(m *AssessmentDomainMutation) {
-		m.oldValue = func(context.Context) (*AssessmentDomain, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m AssessmentDomainMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m AssessmentDomainMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("generated: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of AssessmentDomain entities.
-func (m *AssessmentDomainMutation) SetID(id string) {
-	m.id = &id
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *AssessmentDomainMutation) ID() (id string, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *AssessmentDomainMutation) IDs(ctx context.Context) ([]string, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []string{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().AssessmentDomain.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (m *AssessmentDomainMutation) SetCreatedAt(t time.Time) {
-	m.created_at = &t
-}
-
-// CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *AssessmentDomainMutation) CreatedAt() (r time.Time, exists bool) {
-	v := m.created_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedAt returns the old "created_at" field's value of the AssessmentDomain entity.
-// If the AssessmentDomain object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AssessmentDomainMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
-	}
-	return oldValue.CreatedAt, nil
-}
-
-// ClearCreatedAt clears the value of the "created_at" field.
-func (m *AssessmentDomainMutation) ClearCreatedAt() {
-	m.created_at = nil
-	m.clearedFields[assessmentdomain.FieldCreatedAt] = struct{}{}
-}
-
-// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
-func (m *AssessmentDomainMutation) CreatedAtCleared() bool {
-	_, ok := m.clearedFields[assessmentdomain.FieldCreatedAt]
-	return ok
-}
-
-// ResetCreatedAt resets all changes to the "created_at" field.
-func (m *AssessmentDomainMutation) ResetCreatedAt() {
-	m.created_at = nil
-	delete(m.clearedFields, assessmentdomain.FieldCreatedAt)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (m *AssessmentDomainMutation) SetUpdatedAt(t time.Time) {
-	m.updated_at = &t
-}
-
-// UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *AssessmentDomainMutation) UpdatedAt() (r time.Time, exists bool) {
-	v := m.updated_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedAt returns the old "updated_at" field's value of the AssessmentDomain entity.
-// If the AssessmentDomain object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AssessmentDomainMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
-	}
-	return oldValue.UpdatedAt, nil
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (m *AssessmentDomainMutation) ClearUpdatedAt() {
-	m.updated_at = nil
-	m.clearedFields[assessmentdomain.FieldUpdatedAt] = struct{}{}
-}
-
-// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
-func (m *AssessmentDomainMutation) UpdatedAtCleared() bool {
-	_, ok := m.clearedFields[assessmentdomain.FieldUpdatedAt]
-	return ok
-}
-
-// ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *AssessmentDomainMutation) ResetUpdatedAt() {
-	m.updated_at = nil
-	delete(m.clearedFields, assessmentdomain.FieldUpdatedAt)
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (m *AssessmentDomainMutation) SetCreatedBy(s string) {
-	m.created_by = &s
-}
-
-// CreatedBy returns the value of the "created_by" field in the mutation.
-func (m *AssessmentDomainMutation) CreatedBy() (r string, exists bool) {
-	v := m.created_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedBy returns the old "created_by" field's value of the AssessmentDomain entity.
-// If the AssessmentDomain object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AssessmentDomainMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
-	}
-	return oldValue.CreatedBy, nil
-}
-
-// ClearCreatedBy clears the value of the "created_by" field.
-func (m *AssessmentDomainMutation) ClearCreatedBy() {
-	m.created_by = nil
-	m.clearedFields[assessmentdomain.FieldCreatedBy] = struct{}{}
-}
-
-// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
-func (m *AssessmentDomainMutation) CreatedByCleared() bool {
-	_, ok := m.clearedFields[assessmentdomain.FieldCreatedBy]
-	return ok
-}
-
-// ResetCreatedBy resets all changes to the "created_by" field.
-func (m *AssessmentDomainMutation) ResetCreatedBy() {
-	m.created_by = nil
-	delete(m.clearedFields, assessmentdomain.FieldCreatedBy)
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (m *AssessmentDomainMutation) SetUpdatedBy(s string) {
-	m.updated_by = &s
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *AssessmentDomainMutation) UpdatedBy() (r string, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the AssessmentDomain entity.
-// If the AssessmentDomain object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AssessmentDomainMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *AssessmentDomainMutation) ClearUpdatedBy() {
-	m.updated_by = nil
-	m.clearedFields[assessmentdomain.FieldUpdatedBy] = struct{}{}
-}
-
-// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *AssessmentDomainMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[assessmentdomain.FieldUpdatedBy]
-	return ok
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *AssessmentDomainMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-	delete(m.clearedFields, assessmentdomain.FieldUpdatedBy)
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (m *AssessmentDomainMutation) SetUpdatedByImpersonator(s string) {
-	m.updated_by_impersonator = &s
-}
-
-// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
-func (m *AssessmentDomainMutation) UpdatedByImpersonator() (r string, exists bool) {
-	v := m.updated_by_impersonator
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the AssessmentDomain entity.
-// If the AssessmentDomain object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AssessmentDomainMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
-	}
-	return oldValue.UpdatedByImpersonator, nil
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (m *AssessmentDomainMutation) ClearUpdatedByImpersonator() {
-	m.updated_by_impersonator = nil
-	m.clearedFields[assessmentdomain.FieldUpdatedByImpersonator] = struct{}{}
-}
-
-// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
-func (m *AssessmentDomainMutation) UpdatedByImpersonatorCleared() bool {
-	_, ok := m.clearedFields[assessmentdomain.FieldUpdatedByImpersonator]
-	return ok
-}
-
-// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
-func (m *AssessmentDomainMutation) ResetUpdatedByImpersonator() {
-	m.updated_by_impersonator = nil
-	delete(m.clearedFields, assessmentdomain.FieldUpdatedByImpersonator)
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (m *AssessmentDomainMutation) SetOwnerID(s string) {
-	m.owner = &s
-}
-
-// OwnerID returns the value of the "owner_id" field in the mutation.
-func (m *AssessmentDomainMutation) OwnerID() (r string, exists bool) {
-	v := m.owner
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOwnerID returns the old "owner_id" field's value of the AssessmentDomain entity.
-// If the AssessmentDomain object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AssessmentDomainMutation) OldOwnerID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOwnerID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
-	}
-	return oldValue.OwnerID, nil
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (m *AssessmentDomainMutation) ClearOwnerID() {
-	m.owner = nil
-	m.clearedFields[assessmentdomain.FieldOwnerID] = struct{}{}
-}
-
-// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
-func (m *AssessmentDomainMutation) OwnerIDCleared() bool {
-	_, ok := m.clearedFields[assessmentdomain.FieldOwnerID]
-	return ok
-}
-
-// ResetOwnerID resets all changes to the "owner_id" field.
-func (m *AssessmentDomainMutation) ResetOwnerID() {
-	m.owner = nil
-	delete(m.clearedFields, assessmentdomain.FieldOwnerID)
-}
-
-// SetCustomDomainID sets the "custom_domain_id" field.
-func (m *AssessmentDomainMutation) SetCustomDomainID(s string) {
-	m.custom_domain = &s
-}
-
-// CustomDomainID returns the value of the "custom_domain_id" field in the mutation.
-func (m *AssessmentDomainMutation) CustomDomainID() (r string, exists bool) {
-	v := m.custom_domain
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCustomDomainID returns the old "custom_domain_id" field's value of the AssessmentDomain entity.
-// If the AssessmentDomain object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AssessmentDomainMutation) OldCustomDomainID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCustomDomainID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCustomDomainID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCustomDomainID: %w", err)
-	}
-	return oldValue.CustomDomainID, nil
-}
-
-// ResetCustomDomainID resets all changes to the "custom_domain_id" field.
-func (m *AssessmentDomainMutation) ResetCustomDomainID() {
-	m.custom_domain = nil
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (m *AssessmentDomainMutation) ClearOwner() {
-	m.clearedowner = true
-	m.clearedFields[assessmentdomain.FieldOwnerID] = struct{}{}
-}
-
-// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
-func (m *AssessmentDomainMutation) OwnerCleared() bool {
-	return m.OwnerIDCleared() || m.clearedowner
-}
-
-// OwnerIDs returns the "owner" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// OwnerID instead. It exists only for internal usage by the builders.
-func (m *AssessmentDomainMutation) OwnerIDs() (ids []string) {
-	if id := m.owner; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetOwner resets all changes to the "owner" edge.
-func (m *AssessmentDomainMutation) ResetOwner() {
-	m.owner = nil
-	m.clearedowner = false
-}
-
-// ClearCustomDomain clears the "custom_domain" edge to the CustomDomain entity.
-func (m *AssessmentDomainMutation) ClearCustomDomain() {
-	m.clearedcustom_domain = true
-	m.clearedFields[assessmentdomain.FieldCustomDomainID] = struct{}{}
-}
-
-// CustomDomainCleared reports if the "custom_domain" edge to the CustomDomain entity was cleared.
-func (m *AssessmentDomainMutation) CustomDomainCleared() bool {
-	return m.clearedcustom_domain
-}
-
-// CustomDomainIDs returns the "custom_domain" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// CustomDomainID instead. It exists only for internal usage by the builders.
-func (m *AssessmentDomainMutation) CustomDomainIDs() (ids []string) {
-	if id := m.custom_domain; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetCustomDomain resets all changes to the "custom_domain" edge.
-func (m *AssessmentDomainMutation) ResetCustomDomain() {
-	m.custom_domain = nil
-	m.clearedcustom_domain = false
-}
-
-// Where appends a list predicates to the AssessmentDomainMutation builder.
-func (m *AssessmentDomainMutation) Where(ps ...predicate.AssessmentDomain) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the AssessmentDomainMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *AssessmentDomainMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.AssessmentDomain, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *AssessmentDomainMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *AssessmentDomainMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (AssessmentDomain).
-func (m *AssessmentDomainMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *AssessmentDomainMutation) Fields() []string {
-	fields := make([]string, 0, 7)
-	if m.created_at != nil {
-		fields = append(fields, assessmentdomain.FieldCreatedAt)
-	}
-	if m.updated_at != nil {
-		fields = append(fields, assessmentdomain.FieldUpdatedAt)
-	}
-	if m.created_by != nil {
-		fields = append(fields, assessmentdomain.FieldCreatedBy)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, assessmentdomain.FieldUpdatedBy)
-	}
-	if m.updated_by_impersonator != nil {
-		fields = append(fields, assessmentdomain.FieldUpdatedByImpersonator)
-	}
-	if m.owner != nil {
-		fields = append(fields, assessmentdomain.FieldOwnerID)
-	}
-	if m.custom_domain != nil {
-		fields = append(fields, assessmentdomain.FieldCustomDomainID)
-	}
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *AssessmentDomainMutation) Field(name string) (ent.Value, bool) {
-	switch name {
-	case assessmentdomain.FieldCreatedAt:
-		return m.CreatedAt()
-	case assessmentdomain.FieldUpdatedAt:
-		return m.UpdatedAt()
-	case assessmentdomain.FieldCreatedBy:
-		return m.CreatedBy()
-	case assessmentdomain.FieldUpdatedBy:
-		return m.UpdatedBy()
-	case assessmentdomain.FieldUpdatedByImpersonator:
-		return m.UpdatedByImpersonator()
-	case assessmentdomain.FieldOwnerID:
-		return m.OwnerID()
-	case assessmentdomain.FieldCustomDomainID:
-		return m.CustomDomainID()
-	}
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *AssessmentDomainMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	switch name {
-	case assessmentdomain.FieldCreatedAt:
-		return m.OldCreatedAt(ctx)
-	case assessmentdomain.FieldUpdatedAt:
-		return m.OldUpdatedAt(ctx)
-	case assessmentdomain.FieldCreatedBy:
-		return m.OldCreatedBy(ctx)
-	case assessmentdomain.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
-	case assessmentdomain.FieldUpdatedByImpersonator:
-		return m.OldUpdatedByImpersonator(ctx)
-	case assessmentdomain.FieldOwnerID:
-		return m.OldOwnerID(ctx)
-	case assessmentdomain.FieldCustomDomainID:
-		return m.OldCustomDomainID(ctx)
-	}
-	return nil, fmt.Errorf("unknown AssessmentDomain field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *AssessmentDomainMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	case assessmentdomain.FieldCreatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedAt(v)
-		return nil
-	case assessmentdomain.FieldUpdatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedAt(v)
-		return nil
-	case assessmentdomain.FieldCreatedBy:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedBy(v)
-		return nil
-	case assessmentdomain.FieldUpdatedBy:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
-		return nil
-	case assessmentdomain.FieldUpdatedByImpersonator:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedByImpersonator(v)
-		return nil
-	case assessmentdomain.FieldOwnerID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOwnerID(v)
-		return nil
-	case assessmentdomain.FieldCustomDomainID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCustomDomainID(v)
-		return nil
-	}
-	return fmt.Errorf("unknown AssessmentDomain field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *AssessmentDomainMutation) AddedFields() []string {
-	return nil
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *AssessmentDomainMutation) AddedField(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *AssessmentDomainMutation) AddField(name string, value ent.Value) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown AssessmentDomain numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *AssessmentDomainMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(assessmentdomain.FieldCreatedAt) {
-		fields = append(fields, assessmentdomain.FieldCreatedAt)
-	}
-	if m.FieldCleared(assessmentdomain.FieldUpdatedAt) {
-		fields = append(fields, assessmentdomain.FieldUpdatedAt)
-	}
-	if m.FieldCleared(assessmentdomain.FieldCreatedBy) {
-		fields = append(fields, assessmentdomain.FieldCreatedBy)
-	}
-	if m.FieldCleared(assessmentdomain.FieldUpdatedBy) {
-		fields = append(fields, assessmentdomain.FieldUpdatedBy)
-	}
-	if m.FieldCleared(assessmentdomain.FieldUpdatedByImpersonator) {
-		fields = append(fields, assessmentdomain.FieldUpdatedByImpersonator)
-	}
-	if m.FieldCleared(assessmentdomain.FieldOwnerID) {
-		fields = append(fields, assessmentdomain.FieldOwnerID)
-	}
-	return fields
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *AssessmentDomainMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *AssessmentDomainMutation) ClearField(name string) error {
-	switch name {
-	case assessmentdomain.FieldCreatedAt:
-		m.ClearCreatedAt()
-		return nil
-	case assessmentdomain.FieldUpdatedAt:
-		m.ClearUpdatedAt()
-		return nil
-	case assessmentdomain.FieldCreatedBy:
-		m.ClearCreatedBy()
-		return nil
-	case assessmentdomain.FieldUpdatedBy:
-		m.ClearUpdatedBy()
-		return nil
-	case assessmentdomain.FieldUpdatedByImpersonator:
-		m.ClearUpdatedByImpersonator()
-		return nil
-	case assessmentdomain.FieldOwnerID:
-		m.ClearOwnerID()
-		return nil
-	}
-	return fmt.Errorf("unknown AssessmentDomain nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *AssessmentDomainMutation) ResetField(name string) error {
-	switch name {
-	case assessmentdomain.FieldCreatedAt:
-		m.ResetCreatedAt()
-		return nil
-	case assessmentdomain.FieldUpdatedAt:
-		m.ResetUpdatedAt()
-		return nil
-	case assessmentdomain.FieldCreatedBy:
-		m.ResetCreatedBy()
-		return nil
-	case assessmentdomain.FieldUpdatedBy:
-		m.ResetUpdatedBy()
-		return nil
-	case assessmentdomain.FieldUpdatedByImpersonator:
-		m.ResetUpdatedByImpersonator()
-		return nil
-	case assessmentdomain.FieldOwnerID:
-		m.ResetOwnerID()
-		return nil
-	case assessmentdomain.FieldCustomDomainID:
-		m.ResetCustomDomainID()
-		return nil
-	}
-	return fmt.Errorf("unknown AssessmentDomain field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *AssessmentDomainMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
-	if m.owner != nil {
-		edges = append(edges, assessmentdomain.EdgeOwner)
-	}
-	if m.custom_domain != nil {
-		edges = append(edges, assessmentdomain.EdgeCustomDomain)
-	}
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *AssessmentDomainMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case assessmentdomain.EdgeOwner:
-		if id := m.owner; id != nil {
-			return []ent.Value{*id}
-		}
-	case assessmentdomain.EdgeCustomDomain:
-		if id := m.custom_domain; id != nil {
-			return []ent.Value{*id}
-		}
-	}
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *AssessmentDomainMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *AssessmentDomainMutation) RemovedIDs(name string) []ent.Value {
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *AssessmentDomainMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
-	if m.clearedowner {
-		edges = append(edges, assessmentdomain.EdgeOwner)
-	}
-	if m.clearedcustom_domain {
-		edges = append(edges, assessmentdomain.EdgeCustomDomain)
-	}
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *AssessmentDomainMutation) EdgeCleared(name string) bool {
-	switch name {
-	case assessmentdomain.EdgeOwner:
-		return m.clearedowner
-	case assessmentdomain.EdgeCustomDomain:
-		return m.clearedcustom_domain
-	}
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *AssessmentDomainMutation) ClearEdge(name string) error {
-	switch name {
-	case assessmentdomain.EdgeOwner:
-		m.ClearOwner()
-		return nil
-	case assessmentdomain.EdgeCustomDomain:
-		m.ClearCustomDomain()
-		return nil
-	}
-	return fmt.Errorf("unknown AssessmentDomain unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *AssessmentDomainMutation) ResetEdge(name string) error {
-	switch name {
-	case assessmentdomain.EdgeOwner:
-		m.ResetOwner()
-		return nil
-	case assessmentdomain.EdgeCustomDomain:
-		m.ResetCustomDomain()
-		return nil
-	}
-	return fmt.Errorf("unknown AssessmentDomain edge %s", name)
 }
 
 // AssessmentPolicyMutation represents an operation that mutates the AssessmentPolicy nodes in the graph.
@@ -46413,6 +45538,7 @@ type CustomDomainMutation struct {
 	cname_record            *string
 	trust_center_id         *string
 	domain_type             *enums.CustomDomainType
+	purpose                 *enums.DomainPurpose
 	clearedFields           map[string]struct{}
 	owner                   *string
 	clearedowner            bool
@@ -47339,6 +46465,55 @@ func (m *CustomDomainMutation) ResetDomainType() {
 	m.domain_type = nil
 }
 
+// SetPurpose sets the "purpose" field.
+func (m *CustomDomainMutation) SetPurpose(ep enums.DomainPurpose) {
+	m.purpose = &ep
+}
+
+// Purpose returns the value of the "purpose" field in the mutation.
+func (m *CustomDomainMutation) Purpose() (r enums.DomainPurpose, exists bool) {
+	v := m.purpose
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPurpose returns the old "purpose" field's value of the CustomDomain entity.
+// If the CustomDomain object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CustomDomainMutation) OldPurpose(ctx context.Context) (v enums.DomainPurpose, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPurpose is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPurpose requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPurpose: %w", err)
+	}
+	return oldValue.Purpose, nil
+}
+
+// ClearPurpose clears the value of the "purpose" field.
+func (m *CustomDomainMutation) ClearPurpose() {
+	m.purpose = nil
+	m.clearedFields[customdomain.FieldPurpose] = struct{}{}
+}
+
+// PurposeCleared returns if the "purpose" field was cleared in this mutation.
+func (m *CustomDomainMutation) PurposeCleared() bool {
+	_, ok := m.clearedFields[customdomain.FieldPurpose]
+	return ok
+}
+
+// ResetPurpose resets all changes to the "purpose" field.
+func (m *CustomDomainMutation) ResetPurpose() {
+	m.purpose = nil
+	delete(m.clearedFields, customdomain.FieldPurpose)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *CustomDomainMutation) ClearOwner() {
 	m.clearedowner = true
@@ -47454,7 +46629,7 @@ func (m *CustomDomainMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CustomDomainMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, customdomain.FieldCreatedAt)
 	}
@@ -47506,6 +46681,9 @@ func (m *CustomDomainMutation) Fields() []string {
 	if m.domain_type != nil {
 		fields = append(fields, customdomain.FieldDomainType)
 	}
+	if m.purpose != nil {
+		fields = append(fields, customdomain.FieldPurpose)
+	}
 	return fields
 }
 
@@ -47548,6 +46726,8 @@ func (m *CustomDomainMutation) Field(name string) (ent.Value, bool) {
 		return m.TrustCenterID()
 	case customdomain.FieldDomainType:
 		return m.DomainType()
+	case customdomain.FieldPurpose:
+		return m.Purpose()
 	}
 	return nil, false
 }
@@ -47591,6 +46771,8 @@ func (m *CustomDomainMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldTrustCenterID(ctx)
 	case customdomain.FieldDomainType:
 		return m.OldDomainType(ctx)
+	case customdomain.FieldPurpose:
+		return m.OldPurpose(ctx)
 	}
 	return nil, fmt.Errorf("unknown CustomDomain field %s", name)
 }
@@ -47719,6 +46901,13 @@ func (m *CustomDomainMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDomainType(v)
 		return nil
+	case customdomain.FieldPurpose:
+		v, ok := value.(enums.DomainPurpose)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPurpose(v)
+		return nil
 	}
 	return fmt.Errorf("unknown CustomDomain field %s", name)
 }
@@ -47791,6 +46980,9 @@ func (m *CustomDomainMutation) ClearedFields() []string {
 	if m.FieldCleared(customdomain.FieldTrustCenterID) {
 		fields = append(fields, customdomain.FieldTrustCenterID)
 	}
+	if m.FieldCleared(customdomain.FieldPurpose) {
+		fields = append(fields, customdomain.FieldPurpose)
+	}
 	return fields
 }
 
@@ -47846,6 +47038,9 @@ func (m *CustomDomainMutation) ClearField(name string) error {
 		return nil
 	case customdomain.FieldTrustCenterID:
 		m.ClearTrustCenterID()
+		return nil
+	case customdomain.FieldPurpose:
+		m.ClearPurpose()
 		return nil
 	}
 	return fmt.Errorf("unknown CustomDomain nullable field %s", name)
@@ -47905,6 +47100,9 @@ func (m *CustomDomainMutation) ResetField(name string) error {
 		return nil
 	case customdomain.FieldDomainType:
 		m.ResetDomainType()
+		return nil
+	case customdomain.FieldPurpose:
+		m.ResetPurpose()
 		return nil
 	}
 	return fmt.Errorf("unknown CustomDomain field %s", name)
@@ -162931,9 +162129,6 @@ type OrganizationMutation struct {
 	assessment_policies                           map[string]struct{}
 	removedassessment_policies                    map[string]struct{}
 	clearedassessment_policies                    bool
-	assessment_domains                            map[string]struct{}
-	removedassessment_domains                     map[string]struct{}
-	clearedassessment_domains                     bool
 	custom_type_enums                             map[string]struct{}
 	removedcustom_type_enums                      map[string]struct{}
 	clearedcustom_type_enums                      bool
@@ -171282,60 +170477,6 @@ func (m *OrganizationMutation) ResetAssessmentPolicies() {
 	m.removedassessment_policies = nil
 }
 
-// AddAssessmentDomainIDs adds the "assessment_domains" edge to the AssessmentDomain entity by ids.
-func (m *OrganizationMutation) AddAssessmentDomainIDs(ids ...string) {
-	if m.assessment_domains == nil {
-		m.assessment_domains = make(map[string]struct{})
-	}
-	for i := range ids {
-		m.assessment_domains[ids[i]] = struct{}{}
-	}
-}
-
-// ClearAssessmentDomains clears the "assessment_domains" edge to the AssessmentDomain entity.
-func (m *OrganizationMutation) ClearAssessmentDomains() {
-	m.clearedassessment_domains = true
-}
-
-// AssessmentDomainsCleared reports if the "assessment_domains" edge to the AssessmentDomain entity was cleared.
-func (m *OrganizationMutation) AssessmentDomainsCleared() bool {
-	return m.clearedassessment_domains
-}
-
-// RemoveAssessmentDomainIDs removes the "assessment_domains" edge to the AssessmentDomain entity by IDs.
-func (m *OrganizationMutation) RemoveAssessmentDomainIDs(ids ...string) {
-	if m.removedassessment_domains == nil {
-		m.removedassessment_domains = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.assessment_domains, ids[i])
-		m.removedassessment_domains[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedAssessmentDomains returns the removed IDs of the "assessment_domains" edge to the AssessmentDomain entity.
-func (m *OrganizationMutation) RemovedAssessmentDomainsIDs() (ids []string) {
-	for id := range m.removedassessment_domains {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// AssessmentDomainsIDs returns the "assessment_domains" edge IDs in the mutation.
-func (m *OrganizationMutation) AssessmentDomainsIDs() (ids []string) {
-	for id := range m.assessment_domains {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetAssessmentDomains resets all changes to the "assessment_domains" edge.
-func (m *OrganizationMutation) ResetAssessmentDomains() {
-	m.assessment_domains = nil
-	m.clearedassessment_domains = false
-	m.removedassessment_domains = nil
-}
-
 // AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by ids.
 func (m *OrganizationMutation) AddCustomTypeEnumIDs(ids ...string) {
 	if m.custom_type_enums == nil {
@@ -173045,7 +172186,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 159)
+	edges := make([]string, 0, 158)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -173453,9 +172594,6 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.assessment_policies != nil {
 		edges = append(edges, organization.EdgeAssessmentPolicies)
-	}
-	if m.assessment_domains != nil {
-		edges = append(edges, organization.EdgeAssessmentDomains)
 	}
 	if m.custom_type_enums != nil {
 		edges = append(edges, organization.EdgeCustomTypeEnums)
@@ -174340,12 +173478,6 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeAssessmentDomains:
-		ids := make([]ent.Value, 0, len(m.assessment_domains))
-		for id := range m.assessment_domains {
-			ids = append(ids, id)
-		}
-		return ids
 	case organization.EdgeCustomTypeEnums:
 		ids := make([]ent.Value, 0, len(m.custom_type_enums))
 		for id := range m.custom_type_enums {
@@ -174484,7 +173616,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 159)
+	edges := make([]string, 0, 158)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -174883,9 +174015,6 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedassessment_policies != nil {
 		edges = append(edges, organization.EdgeAssessmentPolicies)
-	}
-	if m.removedassessment_domains != nil {
-		edges = append(edges, organization.EdgeAssessmentDomains)
 	}
 	if m.removedcustom_type_enums != nil {
 		edges = append(edges, organization.EdgeCustomTypeEnums)
@@ -175758,12 +174887,6 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeAssessmentDomains:
-		ids := make([]ent.Value, 0, len(m.removedassessment_domains))
-		for id := range m.removedassessment_domains {
-			ids = append(ids, id)
-		}
-		return ids
 	case organization.EdgeCustomTypeEnums:
 		ids := make([]ent.Value, 0, len(m.removedcustom_type_enums))
 		for id := range m.removedcustom_type_enums {
@@ -175902,7 +175025,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 159)
+	edges := make([]string, 0, 158)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -176311,9 +175434,6 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedassessment_policies {
 		edges = append(edges, organization.EdgeAssessmentPolicies)
 	}
-	if m.clearedassessment_domains {
-		edges = append(edges, organization.EdgeAssessmentDomains)
-	}
 	if m.clearedcustom_type_enums {
 		edges = append(edges, organization.EdgeCustomTypeEnums)
 	}
@@ -176659,8 +175779,6 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedassessment_responses
 	case organization.EdgeAssessmentPolicies:
 		return m.clearedassessment_policies
-	case organization.EdgeAssessmentDomains:
-		return m.clearedassessment_domains
 	case organization.EdgeCustomTypeEnums:
 		return m.clearedcustom_type_enums
 	case organization.EdgeTagDefinitions:
@@ -177137,9 +176255,6 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeAssessmentPolicies:
 		m.ResetAssessmentPolicies()
-		return nil
-	case organization.EdgeAssessmentDomains:
-		m.ResetAssessmentDomains()
 		return nil
 	case organization.EdgeCustomTypeEnums:
 		m.ResetCustomTypeEnums()

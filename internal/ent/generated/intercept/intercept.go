@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -247,33 +246,6 @@ func (f TraverseAssessment) Traverse(ctx context.Context, q generated.Query) err
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.AssessmentQuery", q)
-}
-
-// The AssessmentDomainFunc type is an adapter to allow the use of ordinary function as a Querier.
-type AssessmentDomainFunc func(context.Context, *generated.AssessmentDomainQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f AssessmentDomainFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.AssessmentDomainQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.AssessmentDomainQuery", q)
-}
-
-// The TraverseAssessmentDomain type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseAssessmentDomain func(context.Context, *generated.AssessmentDomainQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseAssessmentDomain) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseAssessmentDomain) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.AssessmentDomainQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.AssessmentDomainQuery", q)
 }
 
 // The AssessmentPolicyFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2904,8 +2876,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ActionPlanQuery, predicate.ActionPlan, actionplan.OrderOption]{typ: generated.TypeActionPlan, tq: q}, nil
 	case *generated.AssessmentQuery:
 		return &query[*generated.AssessmentQuery, predicate.Assessment, assessment.OrderOption]{typ: generated.TypeAssessment, tq: q}, nil
-	case *generated.AssessmentDomainQuery:
-		return &query[*generated.AssessmentDomainQuery, predicate.AssessmentDomain, assessmentdomain.OrderOption]{typ: generated.TypeAssessmentDomain, tq: q}, nil
 	case *generated.AssessmentPolicyQuery:
 		return &query[*generated.AssessmentPolicyQuery, predicate.AssessmentPolicy, assessmentpolicy.OrderOption]{typ: generated.TypeAssessmentPolicy, tq: q}, nil
 	case *generated.AssessmentResponseQuery:

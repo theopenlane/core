@@ -290,54 +290,6 @@ var (
 			},
 		},
 	}
-	// AssessmentDomainsColumns holds the columns for the "assessment_domains" table.
-	AssessmentDomainsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "custom_domain_id", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// AssessmentDomainsTable holds the schema information for the "assessment_domains" table.
-	AssessmentDomainsTable = &schema.Table{
-		Name:       "assessment_domains",
-		Columns:    AssessmentDomainsColumns,
-		PrimaryKey: []*schema.Column{AssessmentDomainsColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "assessment_domains_custom_domains_custom_domain",
-				Columns:    []*schema.Column{AssessmentDomainsColumns[6]},
-				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "assessment_domains_organizations_assessment_domains",
-				Columns:    []*schema.Column{AssessmentDomainsColumns[7]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "assessment_domain_custom_domain_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{AssessmentDomainsColumns[6]},
-			},
-			{
-				Name:    "assessment_domain_owner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{AssessmentDomainsColumns[7]},
-			},
-			{
-				Name:    "assessmentdomain_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{AssessmentDomainsColumns[7]},
-			},
-		},
-	}
 	// AssessmentPoliciesColumns holds the columns for the "assessment_policies" table.
 	AssessmentPoliciesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1432,6 +1384,7 @@ var (
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "domain_type", Type: field.TypeEnum, Enums: []string{"PREVIEW", "EXTERNAL", "UNKNOWN"}, Default: "UNKNOWN"},
+		{Name: "purpose", Type: field.TypeEnum, Nullable: true, Enums: []string{"TRUSTCENTER", "ASSESSMENT"}},
 		{Name: "mappable_domain_id", Type: field.TypeString},
 		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
 		{Name: "dns_verification_custom_domains", Type: field.TypeString, Nullable: true},
@@ -1446,31 +1399,31 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "custom_domains_mappable_domains_mappable_domain",
-				Columns:    []*schema.Column{CustomDomainsColumns[15]},
+				Columns:    []*schema.Column{CustomDomainsColumns[16]},
 				RefColumns: []*schema.Column{MappableDomainsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "custom_domains_dns_verifications_dns_verification",
-				Columns:    []*schema.Column{CustomDomainsColumns[16]},
-				RefColumns: []*schema.Column{DNSVerificationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "custom_domains_dns_verifications_custom_domains",
 				Columns:    []*schema.Column{CustomDomainsColumns[17]},
 				RefColumns: []*schema.Column{DNSVerificationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "custom_domains_mappable_domains_custom_domains",
+				Symbol:     "custom_domains_dns_verifications_custom_domains",
 				Columns:    []*schema.Column{CustomDomainsColumns[18]},
+				RefColumns: []*schema.Column{DNSVerificationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "custom_domains_mappable_domains_custom_domains",
+				Columns:    []*schema.Column{CustomDomainsColumns[19]},
 				RefColumns: []*schema.Column{MappableDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "custom_domains_organizations_custom_domains",
-				Columns:    []*schema.Column{CustomDomainsColumns[19]},
+				Columns:    []*schema.Column{CustomDomainsColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1479,17 +1432,17 @@ var (
 			{
 				Name:    "custom_domain_mappable_domain_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CustomDomainsColumns[15]},
+				Columns: []*schema.Column{CustomDomainsColumns[16]},
 			},
 			{
 				Name:    "custom_domain_dns_verification_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CustomDomainsColumns[16]},
+				Columns: []*schema.Column{CustomDomainsColumns[17]},
 			},
 			{
 				Name:    "custom_domain_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CustomDomainsColumns[19]},
+				Columns: []*schema.Column{CustomDomainsColumns[20]},
 			},
 			{
 				Name:    "customdomain_cname_record",
@@ -15818,7 +15771,6 @@ var (
 		APITokensTable,
 		ActionPlansTable,
 		AssessmentsTable,
-		AssessmentDomainsTable,
 		AssessmentPoliciesTable,
 		AssessmentResponsesTable,
 		AssetsTable,
@@ -16162,8 +16114,6 @@ func init() {
 	ActionPlansTable.ForeignKeys[10].RefTable = UsersTable
 	AssessmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	AssessmentsTable.ForeignKeys[1].RefTable = TemplatesTable
-	AssessmentDomainsTable.ForeignKeys[0].RefTable = CustomDomainsTable
-	AssessmentDomainsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	AssessmentPoliciesTable.ForeignKeys[0].RefTable = AssessmentsTable
 	AssessmentPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
 	AssessmentPoliciesTable.ForeignKeys[2].RefTable = OrganizationsTable

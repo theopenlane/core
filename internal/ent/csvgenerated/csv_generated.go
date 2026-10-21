@@ -914,11 +914,6 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
-	"AssessmentDomain": {
-		SchemaName: "AssessmentDomain",
-		Rules: []CSVReferenceRule{
-		},
-	},
 	"AssessmentPolicy": {
 		SchemaName: "AssessmentPolicy",
 		Rules: []CSVReferenceRule{
@@ -2322,16 +2317,6 @@ type AssessmentCSVUpdateInput struct {
 
 // CSVInputWrapper marks AssessmentCSVUpdateInput for CSV header preprocessing.
 func (AssessmentCSVUpdateInput) CSVInputWrapper() {}
-
-// AssessmentDomainCSVUpdateInput wraps UpdateAssessmentDomainInput with CSV reference columns for bulk updates.
-type AssessmentDomainCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID string `csv:"ID"`
-	Input generated.UpdateAssessmentDomainInput
-}
-
-// CSVInputWrapper marks AssessmentDomainCSVUpdateInput for CSV header preprocessing.
-func (AssessmentDomainCSVUpdateInput) CSVInputWrapper() {}
 
 // AssessmentPolicyCSVInput wraps CreateAssessmentPolicyInput with CSV reference columns.
 type AssessmentPolicyCSVInput struct {

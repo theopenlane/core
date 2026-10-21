@@ -18,8 +18,6 @@ type Tx struct {
 	ActionPlan *ActionPlanClient
 	// Assessment is the client for interacting with the Assessment builders.
 	Assessment *AssessmentClient
-	// AssessmentDomain is the client for interacting with the AssessmentDomain builders.
-	AssessmentDomain *AssessmentDomainClient
 	// AssessmentPolicy is the client for interacting with the AssessmentPolicy builders.
 	AssessmentPolicy *AssessmentPolicyClient
 	// AssessmentResponse is the client for interacting with the AssessmentResponse builders.
@@ -348,7 +346,6 @@ func (tx *Tx) init() {
 	tx.APIToken = NewAPITokenClient(tx.config)
 	tx.ActionPlan = NewActionPlanClient(tx.config)
 	tx.Assessment = NewAssessmentClient(tx.config)
-	tx.AssessmentDomain = NewAssessmentDomainClient(tx.config)
 	tx.AssessmentPolicy = NewAssessmentPolicyClient(tx.config)
 	tx.AssessmentResponse = NewAssessmentResponseClient(tx.config)
 	tx.Asset = NewAssetClient(tx.config)

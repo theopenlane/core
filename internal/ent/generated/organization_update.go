@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -2386,21 +2385,6 @@ func (_u *OrganizationUpdate) AddAssessmentPolicies(v ...*AssessmentPolicy) *Org
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentPolicyIDs(ids...)
-}
-
-// AddAssessmentDomainIDs adds the "assessment_domains" edge to the AssessmentDomain entity by IDs.
-func (_u *OrganizationUpdate) AddAssessmentDomainIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddAssessmentDomainIDs(ids...)
-	return _u
-}
-
-// AddAssessmentDomains adds the "assessment_domains" edges to the AssessmentDomain entity.
-func (_u *OrganizationUpdate) AddAssessmentDomains(v ...*AssessmentDomain) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddAssessmentDomainIDs(ids...)
 }
 
 // AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
@@ -5541,27 +5525,6 @@ func (_u *OrganizationUpdate) RemoveAssessmentPolicies(v ...*AssessmentPolicy) *
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssessmentPolicyIDs(ids...)
-}
-
-// ClearAssessmentDomains clears all "assessment_domains" edges to the AssessmentDomain entity.
-func (_u *OrganizationUpdate) ClearAssessmentDomains() *OrganizationUpdate {
-	_u.mutation.ClearAssessmentDomains()
-	return _u
-}
-
-// RemoveAssessmentDomainIDs removes the "assessment_domains" edge to AssessmentDomain entities by IDs.
-func (_u *OrganizationUpdate) RemoveAssessmentDomainIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveAssessmentDomainIDs(ids...)
-	return _u
-}
-
-// RemoveAssessmentDomains removes "assessment_domains" edges to AssessmentDomain entities.
-func (_u *OrganizationUpdate) RemoveAssessmentDomains(v ...*AssessmentDomain) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveAssessmentDomainIDs(ids...)
 }
 
 // ClearCustomTypeEnums clears all "custom_type_enums" edges to the CustomTypeEnum entity.
@@ -12253,51 +12216,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.AssessmentDomainsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentDomainsTable,
-			Columns: []string{organization.AssessmentDomainsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentdomain.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedAssessmentDomainsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentDomainsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentDomainsTable,
-			Columns: []string{organization.AssessmentDomainsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentdomain.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.AssessmentDomainsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentDomainsTable,
-			Columns: []string{organization.AssessmentDomainsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentdomain.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.CustomTypeEnumsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -15587,21 +15505,6 @@ func (_u *OrganizationUpdateOne) AddAssessmentPolicies(v ...*AssessmentPolicy) *
 	return _u.AddAssessmentPolicyIDs(ids...)
 }
 
-// AddAssessmentDomainIDs adds the "assessment_domains" edge to the AssessmentDomain entity by IDs.
-func (_u *OrganizationUpdateOne) AddAssessmentDomainIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddAssessmentDomainIDs(ids...)
-	return _u
-}
-
-// AddAssessmentDomains adds the "assessment_domains" edges to the AssessmentDomain entity.
-func (_u *OrganizationUpdateOne) AddAssessmentDomains(v ...*AssessmentDomain) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddAssessmentDomainIDs(ids...)
-}
-
 // AddCustomTypeEnumIDs adds the "custom_type_enums" edge to the CustomTypeEnum entity by IDs.
 func (_u *OrganizationUpdateOne) AddCustomTypeEnumIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddCustomTypeEnumIDs(ids...)
@@ -18740,27 +18643,6 @@ func (_u *OrganizationUpdateOne) RemoveAssessmentPolicies(v ...*AssessmentPolicy
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssessmentPolicyIDs(ids...)
-}
-
-// ClearAssessmentDomains clears all "assessment_domains" edges to the AssessmentDomain entity.
-func (_u *OrganizationUpdateOne) ClearAssessmentDomains() *OrganizationUpdateOne {
-	_u.mutation.ClearAssessmentDomains()
-	return _u
-}
-
-// RemoveAssessmentDomainIDs removes the "assessment_domains" edge to AssessmentDomain entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveAssessmentDomainIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveAssessmentDomainIDs(ids...)
-	return _u
-}
-
-// RemoveAssessmentDomains removes "assessment_domains" edges to AssessmentDomain entities.
-func (_u *OrganizationUpdateOne) RemoveAssessmentDomains(v ...*AssessmentDomain) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveAssessmentDomainIDs(ids...)
 }
 
 // ClearCustomTypeEnums clears all "custom_type_enums" edges to the CustomTypeEnum entity.
@@ -25475,51 +25357,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(assessmentpolicy.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.AssessmentDomainsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentDomainsTable,
-			Columns: []string{organization.AssessmentDomainsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentdomain.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedAssessmentDomainsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentDomainsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentDomainsTable,
-			Columns: []string{organization.AssessmentDomainsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentdomain.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.AssessmentDomainsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentDomainsTable,
-			Columns: []string{organization.AssessmentDomainsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentdomain.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

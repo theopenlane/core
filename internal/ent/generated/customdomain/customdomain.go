@@ -52,6 +52,8 @@ const (
 	FieldTrustCenterID = "trust_center_id"
 	// FieldDomainType holds the string denoting the domain_type field in the database.
 	FieldDomainType = "domain_type"
+	// FieldPurpose holds the string denoting the purpose field in the database.
+	FieldPurpose = "purpose"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeMappableDomain holds the string denoting the mappable_domain edge name in mutations.
@@ -103,6 +105,7 @@ var Columns = []string{
 	FieldDNSVerificationID,
 	FieldTrustCenterID,
 	FieldDomainType,
+	FieldPurpose,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "custom_domains"
@@ -163,6 +166,16 @@ func DomainTypeValidator(dt enums.CustomDomainType) error {
 		return nil
 	default:
 		return fmt.Errorf("customdomain: invalid enum value for domain_type field: %q", dt)
+	}
+}
+
+// PurposeValidator is a validator for the "purpose" field enum values. It is called by the builders before save.
+func PurposeValidator(pu enums.DomainPurpose) error {
+	switch pu.String() {
+	case "TRUSTCENTER", "ASSESSMENT":
+		return nil
+	default:
+		return fmt.Errorf("customdomain: invalid enum value for purpose field: %q", pu)
 	}
 }
 
@@ -254,6 +267,11 @@ func ByDomainType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDomainType, opts...).ToFunc()
 }
 
+// ByPurpose orders the results by the purpose field.
+func ByPurpose(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPurpose, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -301,4 +319,11 @@ var (
 	_ graphql.Marshaler = (*enums.CustomDomainType)(nil)
 	// enums.CustomDomainType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.CustomDomainType)(nil)
+)
+
+var (
+	// enums.DomainPurpose must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DomainPurpose)(nil)
+	// enums.DomainPurpose must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DomainPurpose)(nil)
 )
