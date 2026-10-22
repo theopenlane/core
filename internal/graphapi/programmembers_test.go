@@ -7,10 +7,11 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func TestMutationCreateProgramMembers(t *testing.T) {
@@ -240,4 +241,42 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: pm.ProgramID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup org members
 	(&th.Cleanup[*generated.OrgMembershipDeleteOne]{Client: suite.Client.DB.OrgMembership, IDs: []string{pm.Edges.OrgMembership.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+}
+
+func TestMutationRemove_ProgramMember(t *testing.T) {
+	orgUser := suite.SeedFreshMinimalOrgUsers(t, false)
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(orgUser.Owner.UserCtx, t)
+	var memberID string
+
+	t.Run("add a new member", func(t *testing.T) {
+		role := enums.RoleMember
+		resp, err := suite.Client.API.AddUserToProgramWithRole(orgUser.Owner.UserCtx, testclient.CreateProgramMembershipInput{
+			UserID:    orgUser.Member.ID,
+			ProgramID: program.ID,
+			Role:      &role,
+		})
+		assert.NilError(t, err)
+		memberID = resp.CreateProgramMembership.ProgramMembership.ID
+
+		members, err := suite.Client.API.GetProgramMembersByProgramID(orgUser.Owner.UserCtx, &testclient.ProgramMembershipWhereInput{
+			ProgramID: &program.ID,
+		})
+		assert.NilError(t, err)
+
+		assert.Assert(t, is.Len(members.ProgramMemberships.Edges, 2))
+
+		respProgram, err := suite.Client.API.GetProgramByID(orgUser.Member.UserCtx, program.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(respProgram.Program.ID, program.ID))
+	})
+
+	t.Run("remove member", func(t *testing.T) {
+		_, err := suite.Client.API.DeleteProgramMembership(orgUser.Owner.UserCtx, memberID)
+		assert.NilError(t, err)
+
+		_, err = suite.Client.API.GetProgramByID(orgUser.Member.UserCtx, program.ID)
+		assert.Assert(t, err != nil)
+	})
+
+	th.CleanupOrganizationDataWithContext(orgUser.Owner.UserCtx, t)
 }
